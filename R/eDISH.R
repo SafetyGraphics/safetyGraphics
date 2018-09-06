@@ -2,7 +2,7 @@
 #'
 #' This function creates an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH)
 #'
-#' @param A data frame containing the labs data. Data must be structured as one record per study participant per time point per lab measure. 
+#' @param data A data frame containing the labs data. Data must be structured as one record per study participant per time point per lab measure. 
 #' 
 #' @import htmlwidgets
 #'

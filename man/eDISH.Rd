@@ -7,7 +7,7 @@
 eDISH(data)
 }
 \arguments{
-\item{A}{data frame containing the labs data. Data must be structured as one record per study participant per time point per lab measure.}
+\item{data}{A data frame containing the labs data. Data must be structured as one record per study participant per time point per lab measure.}
 }
 \description{
 This function creates an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH)
