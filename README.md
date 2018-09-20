@@ -1,4 +1,5 @@
-# eDish in R
+# ReDish 
+
 The **ReDish** package* provides a framework for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH) in R. A prototype of the interactive graphic available [here](https://asa-dia-interactivesafetygraphics.github.io/safety-eDISH/test/) and is shown below.
 
 ![edishgif](https://user-images.githubusercontent.com/3680095/45834450-02b3a000-bcbc-11e8-8172-324c2fe43521.gif)
