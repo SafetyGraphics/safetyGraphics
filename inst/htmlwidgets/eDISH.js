@@ -15,7 +15,7 @@ HTMLWidgets.widget({
 
         el.innerHTML = "<div class='edish'></div>";
 
-        let settings = {
+        var settings = {
             max_width: 600,
             value_col: 'AVAL',
             measure_col: 'PARAM',
@@ -50,13 +50,13 @@ HTMLWidgets.widget({
               'ALP':'Alkaline Phosphatase (U/L)'
             }
         };
-        
+
          rSettings.data = HTMLWidgets.dataframeToD3(rSettings.data);
 
 
          console.log(settings);
          console.log(rSettings);
-         
+
         safetyedish('.edish', settings).init(rSettings.data);
 
       },
