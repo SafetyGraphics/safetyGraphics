@@ -11,10 +11,8 @@ HTMLWidgets.widget({
     return {
 
       renderValue: function(rSettings) {
-
-
         el.innerHTML = "<div class='edish'></div>";
-
+        
         var settings = {
             max_width: 600,
             value_col: 'AVAL',
@@ -41,7 +39,7 @@ HTMLWidgets.widget({
                 {
                     value_col: 'AGEGR1',
                     label: 'Age group'
-                },
+                }
             ],
             measure_values:{
               'ALT':'Alanine Aminotransferase (U/L)',
@@ -52,7 +50,6 @@ HTMLWidgets.widget({
         };
 
          rSettings.data = HTMLWidgets.dataframeToD3(rSettings.data);
-
 
          console.log(settings);
          console.log(rSettings);
