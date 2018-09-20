@@ -275,6 +275,21 @@
         };
     })();
 
+    var defineProperty = function(obj, key, value) {
+        if (key in obj) {
+            Object.defineProperty(obj, key, {
+                value: value,
+                enumerable: true,
+                configurable: true,
+                writable: true
+            });
+        } else {
+            obj[key] = value;
+        }
+
+        return obj;
+    };
+
     /*------------------------------------------------------------------------------------------------\
   Clone a variable (http://stackoverflow.com/a/728694).
 \------------------------------------------------------------------------------------------------*/
@@ -343,23 +358,19 @@
             cuts: {
                 ALT: {
                     relative_baseline: 3.8,
-                    relative_uln: 3,
-                    absolute: 1.0
+                    relative_uln: 3
                 },
                 AST: {
                     relative_baseline: 3.8,
-                    relative_uln: 3,
-                    absolute: 1.0
+                    relative_uln: 3
                 },
                 TB: {
                     relative_baseline: 4.8,
-                    relative_uln: 2,
-                    absolute: 40
+                    relative_uln: 2
                 },
                 ALP: {
                     relative_baseline: 3.8,
-                    relative_uln: 1,
-                    absolute: 1.0
+                    relative_uln: 1
                 },
                 xMeasure: null, //set in syncSettings
                 yMeasure: null, //set in syncSettings
@@ -373,11 +384,10 @@
             },
             imputation_values: null,
             missingValues: ['', 'NA', 'N/A'],
-            display: 'relative_uln', //or "relative_baseline" or "absolute"
+            display: 'relative_uln', //or "relative_baseline"
             display_options: [
                 { label: 'Upper limit of normal adjusted (eDish)', value: 'relative_uln' },
-                { label: 'Baseline adjusted (mDish)', value: 'relative_baseline' },
-                { label: 'Raw Values', value: 'absolute' }
+                { label: 'Baseline adjusted (mDish)', value: 'relative_baseline' }
             ],
             baseline_visitn: '1',
             measureBounds: [0.01, 0.99],
@@ -386,8 +396,10 @@
             point_size: 'Uniform',
             visit_window: 30,
             showTitle: true,
+            warningText:
+                'Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.',
+            //all values set in onLayout/quadrants/*.js
             quadrants: [
-                //all values set in onLayout/quadrants/*.js
                 {
                     label: "Possible Hy's Law Range",
                     position: 'upper-right',
@@ -814,7 +826,9 @@
             )
             .values()
             .sort();
-        var specifiedMeasures = Object.values(config.measure_values);
+        var specifiedMeasures = Object.keys(config.measure_values).map(function(e) {
+            return config.measure_values[e];
+        });
         var missingMeasures = [];
         Object.keys(config.measure_values).forEach(function(d) {
             if (measures.indexOf(config.measure_values[d]) == -1) {
@@ -986,7 +1000,9 @@
         var config = this.config;
 
         //filter the lab data to only the required measures
-        var included_measures = Object.values(config.measure_values);
+        var included_measures = Object.keys(config.measure_values).map(function(e) {
+            return config.measure_values[e];
+        });
 
         var sub = this.imputed_data
             .filter(function(f) {
@@ -1335,16 +1351,18 @@
         splot
             .append('h3')
             .attr('class', 'id')
-            .html('Lab Values vs. Upper Limit of Normal by Visit')
+            .html('Standardized Lab Values by Visit')
             .style('border-top', '2px solid black')
             .style('border-bottom', '2px solid black')
             .style('padding', '.2em');
+
+        splot.append('div').attr('class', 'chart');
 
         var mtable = this.participantDetails.wrap.append('div').attr('class', 'measureTable');
         mtable
             .append('h3')
             .attr('class', 'id')
-            .html('Lab Summary Table')
+            .html('Raw Lab Values Summary Table')
             .style('border-top', '2px solid black')
             .style('border-bottom', '2px solid black')
             .style('padding', '.2em');
@@ -1423,7 +1441,7 @@
             .text('Note: Baseline defined as Visit ' + chart.config.baseline_visitn)
             .style('display', config.display == 'relative_baseline' ? null : 'none');
 
-        displayControl.select('select').on('change', function(d) {
+        displayControl.on('change', function(d) {
             var currentLabel = this.value;
             var currentValue = config.display_options.find(function(f) {
                 return f.label == currentLabel;
@@ -1478,6 +1496,22 @@
                 .append('span')
                 .text('Use controls to update chart or click a point to see participant details.')
                 .style('font-size', '0.8em');
+        }
+    }
+
+    function initWarning() {
+        if (this.config.warningText) {
+            this.warningDiv = this.controls.wrap
+                .insert('div', '*')
+                .attr('class', 'warning')
+                .style('border', '1px solid #faebcc')
+                .style('border-radius', '0.2em')
+                .style('margin-right', '1em')
+                .style('margin-bottom', '1em')
+                .style('padding', '0.4em')
+                .style('color', '#8a6d3b')
+                .style('background-color', '#fcf8e3')
+                .text(this.config.warningText);
         }
     }
 
@@ -1537,9 +1571,10 @@
     }
 
     function onLayout() {
-        addRRatioSpan.call(this);
         layoutPanels.call(this);
+        initWarning.call(this);
         initTitle.call(this);
+        addRRatioSpan.call(this);
         initQuadrants.call(this);
         initRugs.call(this);
         initVisitPath.call(this);
@@ -1982,10 +2017,10 @@
                 return lower_limits[d.description.split('-')[0]];
             });
 
-        controlWraps.select('select').on('change', function(d) {
+        controlWraps.select('input').on('change', function(d) {
             var dimension = d.description.split('-')[0].toLowerCase();
             var min = chart[dimension + '_dom'][0];
-            var input = d3.select(this).select('input');
+            var input = d3.select(this);
 
             //Prevent a cutpoint less than the lower domain.
             if (input.property('value') < min) input.property('value', min);
@@ -2038,7 +2073,6 @@
     }
 
     function onDraw() {
-        console.log('drawing');
         //clear participant Details
         clearParticipantDetails.call(this);
 
@@ -2541,6 +2575,83 @@
         }
     }
 
+    function insertAfter(newNode, referenceNode) {
+        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    }
+
+    var defaultSettings = {
+        max_width: 400,
+        aspect: 4,
+        x: {
+            column: null,
+            type: 'ordinal',
+            label: 'Visit'
+        },
+        y: defineProperty(
+            {
+                column: 'absolute',
+                type: 'linear',
+                label: 'Lab Value',
+                domain: [0, null],
+                format: '.1f'
+            },
+            'domain',
+            [0, null]
+        ),
+        marks: [
+            {
+                type: 'line',
+                per: []
+            },
+            {
+                type: 'circle',
+                radius: 4,
+                per: []
+            }
+        ],
+        margin: { top: 20 },
+        gridlines: 'xy',
+        colors: ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628']
+    };
+
+    function init$1(d) {
+        //layout the new cells on the DOM (slightly easier than using D3)
+        var summaryRow_node = this.parentNode;
+        var chartRow_node = document.createElement('tr');
+        var chartCell_node = document.createElement('td');
+        insertAfter(chartRow_node, summaryRow_node);
+        chartRow_node.appendChild(chartCell_node);
+
+        //layout the svg with D3
+        var cellCount = d3.select(summaryRow_node).selectAll('td')[0].length;
+        var chartCell = d3
+            .select(chartCell_node)
+            .attr('colspan', cellCount)
+            .text('test');
+
+        //update the defaultSettings
+        var config = d.eDish.config;
+        defaultSettings.x.column = config.visitn_col;
+        defaultSettings.marks[0].per = [config.id_col, config.measure_col];
+        defaultSettings.marks[1].per = [config.id_col, config.visitn_col, config.measure_col];
+
+        //draw the chart
+        var lineChart = webcharts.createChart(chartCell_node, defaultSettings);
+        console.log(d);
+        lineChart.init(d.raw);
+    }
+
+    function addSparkClick() {
+        if (this.data.raw.length > 0) {
+            this.tbody
+                .selectAll('tr')
+                .select('td.spark')
+                .on('click', function(d) {
+                    init$1.call(this, d);
+                });
+        }
+    }
+
     function drawMeasureTable(d) {
         var chart = this;
         var config = chart.config;
@@ -2572,6 +2683,7 @@
             })
             .rollup(function(d) {
                 var measureObj = {};
+                measureObj.eDish = chart;
                 measureObj.key = d[0][config.measure_col];
                 measureObj.raw = d;
                 measureObj.values = d.map(function(d) {
@@ -2602,14 +2714,25 @@
                 return m.values;
             })
             .sort(function(a, b) {
-                var a_order = Object.values(config.measure_values).indexOf(a.key);
-                var b_order = Object.values(config.measure_values).indexOf(b.key);
+                var a_order = Object.keys(config.measure_values)
+                    .map(function(e) {
+                        return config.measure_values[e];
+                    })
+                    .indexOf(a.key);
+                var b_order = Object.keys(config.measure_values)
+                    .map(function(e) {
+                        return config.measure_values[e];
+                    })
+                    .indexOf(b.key);
                 return b_order - a_order;
             });
 
         //draw the measure table
         this.participantDetails.wrap.selectAll('*').style('display', null);
-        this.measureTable.on('draw', addSparkLines);
+        this.measureTable.on('draw', function() {
+            addSparkLines.call(this);
+            addSparkClick.call(this);
+        });
         this.measureTable.draw(nested);
     }
 
@@ -2675,20 +2798,24 @@
             .attr('div', 'value');
     }
 
-    var defaultSettings = {
+    var defaultSettings$1 = {
         max_width: 600,
         x: {
             column: null,
             type: 'ordinal',
             label: 'Visit'
         },
-        y: {
-            column: 'relative_uln',
-            type: 'linear',
-            label: 'Lab Value (x ULN)',
-            domain: null,
-            format: '.1f'
-        },
+        y: defineProperty(
+            {
+                column: 'relative_uln',
+                type: 'linear',
+                label: 'Lab Value (x ULN)',
+                domain: null,
+                format: '.1f'
+            },
+            'domain',
+            [0, null]
+        ),
         marks: [
             {
                 type: 'line',
@@ -2700,34 +2827,139 @@
                 per: []
             }
         ],
+        margin: { top: 20 },
         gridlines: 'xy',
         color_by: null,
         colors: ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628'],
         aspect: 2
     };
 
-    function onResize$1() {
-        this.marks[1].circles.attr('fill-opacity', function(d) {
-            return d.values.raw[0].flagged ? 1 : 0;
+    var controlInputs$1 = [
+        {
+            type: 'subsetter',
+            label: 'Select Labs',
+            value_col: null,
+            multiple: true
+        },
+        {
+            type: 'dropdown',
+            label: 'Y-axis Display Type',
+            description: null,
+            option: 'displayLabel',
+            start: null,
+            values: null,
+            require: true
+        }
+    ];
+
+    function onLayout$1() {
+        var spaghetti = this;
+        var eDish = this.parent;
+
+        //customize the display control
+        var displayControlWrap = spaghetti.controls.wrap
+            .selectAll('div')
+            .filter(function(controlInput) {
+                return controlInput.label === 'Y-axis Display Type';
+            });
+
+        var displayControl = displayControlWrap.select('select');
+
+        //set the start value
+        var start_value = eDish.config.display_options.find(function(f) {
+            return f.value == eDish.config.display;
+        }).label;
+
+        displayControl.selectAll('option').attr('selected', function(d) {
+            return d == start_value ? 'selected' : null;
+        });
+
+        displayControl.on('change', function(d) {
+            var currentLabel = this.value;
+            var currentValue = eDish.config.display_options.find(function(f) {
+                return f.label == currentLabel;
+            }).value;
+            spaghetti.config.y.column = currentValue;
+            spaghetti.draw();
         });
     }
 
-    function init$1(d) {
-        var chart = this;
+    function onPreprocess$1() {
         var config = this.config;
+        var unit = this.config.y.column == 'relative_uln' ? ' [xULN]' : ' [xBaseline]';
+        config.y.label = 'Standardized Lab Values' + unit;
+    }
 
+    function drawCutLine(d) {
+        //bit of a hack to make this work with paths and circles
+        var spaghetti = this;
+        var config = this.config;
+        var raw = d.values.raw ? d.values.raw[0] : d.values[0].values.raw[0];
+        var cut = raw[config.y.column + '_cut'];
+        var param = raw[config.color_by];
+        spaghetti.cutLine = spaghetti.svg
+            .append('line')
+            .attr('y1', spaghetti.y(cut))
+            .attr('y2', spaghetti.y(cut))
+            .attr('x1', 0)
+            .attr('x2', spaghetti.plot_width)
+            .attr('stroke', spaghetti.colorScale(param))
+            .attr('stroke-dasharray', '3 3');
+        spaghetti.cutLabel = spaghetti.svg
+            .append('text')
+            .attr('y', spaghetti.y(cut))
+            .attr('dy', '-0.2em')
+            .attr('x', spaghetti.plot_width)
+            .attr('text-anchor', 'end')
+            .attr('alignment-baseline', 'baseline')
+            .attr('fill', spaghetti.colorScale(param))
+            .text(d3.format('0.1f')(cut));
+    }
+
+    function onResize$1() {
+        var spaghetti = this;
+        var y_col = this.config.y.column;
+        this.marks[1].circles.attr('fill-opacity', function(d) {
+            return d.values.raw[0][y_col + '_flagged'] ? 1 : 0;
+        });
+
+        this.marks[1].circles
+            .on('mouseover', function(d) {
+                drawCutLine.call(spaghetti, d);
+            })
+            .on('mouseout', function() {
+                spaghetti.cutLine.remove();
+                spaghetti.cutLabel.remove();
+            });
+
+        this.marks[0].paths
+            .on('mouseover', function(d) {
+                drawCutLine.call(spaghetti, d);
+            })
+            .on('mouseout', function() {
+                spaghetti.cutLine.remove();
+                spaghetti.cutLabel.remove();
+            });
+    }
+
+    function onDraw$1() {
+        var spaghetti = this;
+        var max_value = d3.max(spaghetti.filtered_data, function(f) {
+            return f[spaghetti.config.y.column];
+        });
+        var max_cut = d3.max(spaghetti.filtered_data, function(f) {
+            return f[spaghetti.config.y.column + '_cut'];
+        });
+        var y_max = d3.max([max_value, max_cut]);
+        spaghetti.config.y.domain = [0, y_max];
+        spaghetti.y_dom = spaghetti.config.y.domain;
+    }
+
+    function init$2(d) {
+        var chart = this; //the full eDish object
+        var config = this.config; //the eDish config
         var matches = d.values.raw[0].raw.filter(function(f) {
             return f.key_measure;
-        });
-        //flag variables above the cut-off
-        matches.forEach(function(d) {
-            var measure = d[config['measure_col']];
-            var label = Object.keys(config.measure_values).find(function(key) {
-                return config.measure_values[key] == measure;
-            });
-            d.cut = config.cuts[label].relative_uln;
-
-            d.flagged = d.relative_uln >= d.cut;
         });
 
         if ('spaghetti' in chart) {
@@ -2735,23 +2967,69 @@
         }
 
         //sync settings
-        defaultSettings.x.column = config.visitn_col;
-        defaultSettings.y.domain = d3.extent(chart.imputed_data, function(f) {
-            return f.relative_uln;
+        defaultSettings$1.x.column = config.visitn_col;
+        defaultSettings$1.color_by = config.measure_col;
+        defaultSettings$1.marks[0].per = [config.id_col, config.measure_col];
+        defaultSettings$1.marks[1].per = [config.id_col, config.visitn_col, config.measure_col];
+
+        //flag variables above the cut-off
+        matches.forEach(function(d) {
+            var measure = d[config['measure_col']];
+            var label = Object.keys(config.measure_values).find(function(key) {
+                return config.measure_values[key] == measure;
+            });
+
+            d.relative_uln_cut = config.cuts[label].relative_uln;
+            d.relative_baseline_cut = config.cuts[label].relative_baseline;
+
+            d.relative_uln_flagged = d.relative_uln >= d.relative_uln_cut;
+            d.relative_baseline_flagged = d.relative_baseline >= d.relative_baseline_cut;
         });
 
-        defaultSettings.color_by = config.measure_col;
-        defaultSettings.marks[0].per = [config.id_col, config.measure_col];
-        defaultSettings.marks[1].per = [config.id_col, config.visitn_col, config.measure_col];
+        //update the controls
+        var spaghettiElement = this.element + ' .participantDetails .spaghettiPlot .chart';
+
+        //Add y axis type options
+        controlInputs$1.find(function(f) {
+            return f.label == 'Y-axis Display Type';
+        }).values = config.display_options.map(function(m) {
+            return m.label;
+        });
+
+        //sync parameter filter
+        controlInputs$1.find(function(f) {
+            return f.label == 'Select Labs';
+        }).value_col =
+            config.measure_col;
+
+        var spaghettiControls = webcharts.createControls(spaghettiElement, {
+            location: 'top',
+            inputs: controlInputs$1
+        });
 
         //draw that chart
-
         chart.spaghetti = webcharts.createChart(
-            this.element + ' .participantDetails .spaghettiPlot',
-            defaultSettings
+            spaghettiElement,
+            defaultSettings$1,
+            spaghettiControls
         );
+
+        chart.spaghetti.parent = chart; //link the full eDish object
+        chart.spaghetti.on('layout', onLayout$1);
+        chart.spaghetti.on('preprocess', onPreprocess$1);
+        chart.spaghetti.on('draw', onDraw$1);
         chart.spaghetti.on('resize', onResize$1);
         chart.spaghetti.init(matches);
+
+        //add a footnote
+        chart.spaghetti.wrap
+            .append('div')
+            .attr('class', 'footnote')
+            .style('font-size', '0.7em')
+            .style('padding-top', '0.1em')
+            .text(
+                'Filled points are above the current reference value. Mouseover a line to see the reference line for that lab.'
+            );
     }
 
     function addPointClick() {
@@ -2777,7 +3055,7 @@
 
             drawVisitPath.call(chart, d); //draw the path showing participant's pattern over time
             drawMeasureTable.call(chart, d); //draw table showing measure values with sparklines
-            init$1.call(chart, d);
+            init$2.call(chart, d);
             makeParticipantHeader.call(chart, d);
             drawRugs.call(chart, d, 'x');
             drawRugs.call(chart, d, 'y');
@@ -2851,7 +3129,7 @@
 
     function toggleLegend() {
         var hideLegend = this.config.color_by == 'NONE';
-        this.wrap.select('.legend').style('display', hideLegend ? 'None' : null);
+        this.wrap.select('.legend').style('display', hideLegend ? 'None' : 'block');
     }
 
     function dragStarted() {
@@ -2922,7 +3200,7 @@
 
     // credit to https://bl.ocks.org/dimitardanailov/99950eee511375b97de749b597147d19
 
-    function init$2() {
+    function init$3() {
         var drag = d3.behavior
             .drag()
             .origin(function(d) {
@@ -3086,7 +3364,7 @@
             });
     }
 
-    function init$3() {
+    function init$4() {
         // Draw box plots
         this.svg.selectAll('g.boxplot').remove();
 
@@ -3260,7 +3538,6 @@
     }
 
     function onResize() {
-        console.log('resizing');
         //add point interactivity, custom title and formatting
         addPointMouseover.call(this);
         addPointClick.call(this);
@@ -3274,13 +3551,13 @@
         //draw the quadrants and add drag interactivity
         updateSummaryTable.call(this);
         drawQuadrants.call(this);
-        init$2.call(this);
+        init$3.call(this);
 
         // hide the legend if no group options are given
         toggleLegend.call(this);
 
         // add boxplots
-        init$3.call(this);
+        init$4.call(this);
 
         //axis formatting
         adjustTicks.call(this);
@@ -3315,4 +3592,3 @@
 
     return safetyedish$1;
 });
-
