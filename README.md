@@ -15,7 +15,7 @@ Initializing the graphic will only require a few lines of code for data sets usi
 ```r
 devtools::install_github("ASA-DIA-InteractiveSafetyGraphics/ReDish", ref="v0.1.0")
 library("ReDish")
-eDish(adlbc)
+eDish(data=adlbc)
 ```
 
 Fully customizable settings and an easy-to-use Shiny app facilitating custom configuration and data mapping will be included in the first full release. 
