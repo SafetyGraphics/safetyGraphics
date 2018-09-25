@@ -20,8 +20,8 @@ eDISH <- function(data) {
     rSettings,
    # width = width,
    # height = height,
-    package = 'ReDish' #,
-   # sizingPolicy = htmlwidgets::sizingPolicy(viewer.fill=FALSE)
+    package = 'ReDish',
+    sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress = TRUE)
   )
 }
 
