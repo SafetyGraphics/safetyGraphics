@@ -397,7 +397,7 @@
             visit_window: 30,
             showTitle: true,
             warningText:
-                'Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.',
+                'This graphic has been thoroughly tested, but is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.',
             //all values set in onLayout/quadrants/*.js
             quadrants: [
                 {
@@ -1480,8 +1480,6 @@
             this.titleDiv = this.controls.wrap
                 .insert('div', '*')
                 .attr('class', 'title')
-                .style('border-top', '1px solid black')
-                .style('border-bottom', '1px solid black')
                 .style('margin-right', '1em')
                 .style('margin-bottom', '1em');
 
@@ -1499,25 +1497,159 @@
         }
     }
 
+    function add(messageText, type, label, messages) {
+        var messageObj = {
+            id: messages.list.length + 1,
+            type: type,
+            message: messageText,
+            label: label,
+            hidden: false
+        };
+        messages.list.push(messageObj);
+        messages.update(messages);
+    }
+
+    function remove(id, label, messages) {
+        // hide the the message(s) by id or label
+        if (id) {
+            var matches = messages.list.filter(function(f) {
+                return +f.id == +id;
+            });
+        } else if (label.length) {
+            var matches = messages.list.filter(function(f) {
+                return label == 'all' ? true : f.label == label;
+            });
+        }
+        matches.forEach(function(d) {
+            d.hidden = true;
+        });
+        messages.update(messages);
+    }
+
+    function update(messages) {
+        function jsUcfirst(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        var visibleMessages = messages.list.filter(function(f) {
+            return f.hidden == false;
+        });
+
+        //update title
+        messages.header.title.text('Messages (' + visibleMessages.length + ')');
+
+        //
+        var messageDivs = messages.wrap.selectAll('div.message').data(visibleMessages, function(d) {
+            return d.id;
+        });
+
+        messageDivs
+            .enter()
+            .append('div')
+            .attr('class', function(d) {
+                return d.type + ' message';
+            })
+            .html(function(d) {
+                return '<strong>' + jsUcfirst(d.type) + '</strong>: ' + d.message;
+            })
+            .style('border-radius', '.5em')
+            .style('margin-right', '1em')
+            .style('margin-bottom', '1em')
+            .style('padding', '0.4em');
+
+        messageDivs.each(function(d) {
+            var type = d.type;
+            var thisMessage = d3.select(this);
+            if (type == 'caution') {
+                thisMessage
+                    .style('border', '1px solid #faebcc')
+                    .style('color', '#8a6d3b')
+                    .style('background-color', '#fcf8e3');
+            } else if (type == 'warning') {
+                thisMessage
+                    .style('border', '1px solid #ebccd1')
+                    .style('color', '#a94442')
+                    .style('background-color', '#f2dede');
+            } else {
+                thisMessage
+                    .style('border', '1px solid #999')
+                    .style('color', '#999')
+                    .style('background-color', null);
+            }
+        });
+
+        messageDivs.exit().remove();
+    }
+
+    function init$1() {
+        var chart = this;
+        this.messages = {
+            add: add,
+            remove: remove,
+            update: update
+        };
+        //  this.messages.add = addMessage;
+        //  this.messages.remove = removeMessage;
+        this.messages.list = [];
+        this.messages.wrap = this.controls.wrap.insert('div', '*').style('margin', '0 1em 1em 0');
+        this.messages.header = this.messages.wrap
+            .append('div')
+            .style('border-top', '1px solid black')
+            .style('border-bottom', '1px solid black')
+            .style('font-weight', 'strong')
+            .style('margin', '0 1em 1em 0');
+
+        this.messages.header.title = this.messages.header
+            .append('div')
+            .attr('class', 'title')
+            .style('display', 'inline-block')
+            .text('Messages (0)');
+
+        this.messages.header.clear = this.messages.header
+            .append('div')
+            .text('Clear')
+            .style('font-size', '0.8em')
+            .style('vertical-align', 'center')
+            .style('display', 'inline-block')
+            .style('float', 'right')
+            .style('color', 'blue')
+            .style('cursor', 'pointer')
+            .style('text-decoration', 'underline')
+            .on('click', function() {
+                chart.messages.remove(null, 'all', chart.messages);
+            });
+    }
+
     function initWarning() {
         if (this.config.warningText) {
-            this.warningDiv = this.controls.wrap
-                .insert('div', '*')
-                .attr('class', 'warning')
-                .style('border', '1px solid #faebcc')
-                .style('border-radius', '0.2em')
-                .style('margin-right', '1em')
-                .style('margin-bottom', '1em')
-                .style('padding', '0.4em')
-                .style('color', '#8a6d3b')
-                .style('background-color', '#fcf8e3')
-                .text(this.config.warningText);
+            this.messages.add(
+                this.config.warningText,
+                'caution',
+                'validationCaution',
+                this.messages
+            );
         }
     }
 
-    function initFilterLabel() {
+    function initControlLabels() {
         var config = this.config;
-        //check to see if at least 1 filter exists
+
+        //Add settings label
+        var first_control = this.controls.wrap.select('div.control-group');
+        this.controls.setting_header = first_control
+            .insert('div', '*')
+            .attr('class', 'subtitle')
+            .style('border-top', '1px solid black')
+            .style('border-bottom', '1px solid black')
+            .style('margin-right', '1em')
+            .style('margin-bottom', '1em');
+        this.controls.setting_header
+            .append('span')
+            .text('Settings')
+            .style('font-weight', 'strong')
+            .style('display', 'block');
+
+        //Add filter label if at least 1 filter exists
         if (config.r_ratio_filter || config.filters.length > 0) {
             //insert a header before the first filter
             var control_wraps = this.controls.wrap.selectAll('div');
@@ -1539,7 +1671,6 @@
             this.controls.filter_header
                 .append('span')
                 .text('Filters')
-                .style('font-size', '1.5em')
                 .style('font-weight', 'strong')
                 .style('display', 'block');
             var population = d3
@@ -1572,6 +1703,7 @@
 
     function onLayout() {
         layoutPanels.call(this);
+        init$1.call(this);
         initWarning.call(this);
         initTitle.call(this);
         addRRatioSpan.call(this);
@@ -1581,7 +1713,7 @@
         initParticipantDetails.call(this);
         initResetButton.call(this);
         initDisplayControl.call(this);
-        initFilterLabel.call(this);
+        initControlLabels.call(this);
     }
 
     function updateAxisSettings() {
@@ -1822,17 +1954,18 @@
             return f[config.x.column] <= 0 || f[config.y.column] <= 0;
         });
 
-        this.wrap.select('.se-footnote').remove();
+        this.messages.remove(null, 'missingData', this.messages); //hide any previous missing data messages
         if (missing_count > 0) {
             this.wrap
                 .append('span')
                 .classed('se-footnote', true)
-                .text(
-                    'Data not shown for ' +
-                        missing_count +
-                        ' participant(s) with invalid data. This could be due to negative or 0 lab values or to missing baseline values when viewing mDish.'
-                );
+                .text();
 
+            var warningText =
+                'Data not shown for ' +
+                missing_count +
+                ' participant(s) with invalid data. This could be due to negative or 0 lab values or to missing baseline values when viewing mDish.';
+            this.messages.add(warningText, 'warning', 'missingData', this.messages);
             this.raw_data = this.raw_data.filter(function(f) {
                 return (f[config.x.column] > 0) & (f[config.y.column] > 0);
             });
@@ -2409,6 +2542,96 @@
             .attr('font-size', 8);
     }
 
+    function makeNestedData(d) {
+        var chart = this;
+        var config = chart.config;
+        var allMatches = d.values.raw[0].raw;
+
+        var ranges = d3
+            .nest()
+            .key(function(d) {
+                return d[config.measure_col];
+            })
+            .rollup(function(d) {
+                var vals = d
+                    .map(function(m) {
+                        return m[config.value_col];
+                    })
+                    .sort(function(a, b) {
+                        return a - b;
+                    });
+                var lower_extent = d3.quantile(vals, config.measureBounds[0]),
+                    upper_extent = d3.quantile(vals, config.measureBounds[1]);
+                return [lower_extent, upper_extent];
+            })
+            .entries(chart.initial_data);
+        console.log(chart);
+        //make nest by measure
+        var nested = d3
+            .nest()
+            .key(function(d) {
+                return d[config.measure_col];
+            })
+            .rollup(function(d) {
+                var measureObj = {};
+                measureObj.eDish = chart;
+                measureObj.key = d[0][config.measure_col];
+                measureObj.raw = d;
+                measureObj.values = d.map(function(d) {
+                    return +d[config.value_col];
+                });
+                measureObj.max = +d3.format('0.2f')(d3.max(measureObj.values));
+                measureObj.min = +d3.format('0.2f')(d3.min(measureObj.values));
+                measureObj.median = +d3.format('0.2f')(d3.median(measureObj.values));
+                measureObj.n = measureObj.values.length;
+                measureObj.spark = 'spark!';
+                measureObj.population_extent = ranges.find(function(f) {
+                    return measureObj.key == f.key;
+                }).values;
+                var hasColor =
+                    chart.spaghetti.colorScale.domain().indexOf(d[0][config.measure_col]) > -1;
+                measureObj.color = hasColor
+                    ? chart.spaghetti.colorScale(d[0][config.measure_col])
+                    : 'black';
+                measureObj.spark_data = d.map(function(m) {
+                    var obj = {
+                        id: +m[config.id_col],
+                        lab: +m[config.measure_col],
+                        visitn: +m[config.visitn_col],
+                        value: +m[config.value_col],
+                        lln: +m[config.normal_col_low],
+                        uln: +m[config.normal_col_high],
+                        population_extent: measureObj.population_extent,
+                        outlier_low: +m[config.value_col] < +m[config.normal_col_low],
+                        outlier_high: +m[config.value_col] > +m[config.normal_col_high]
+                    };
+                    obj.outlier = obj.outlier_low || obj.outlier_high;
+                    return obj;
+                });
+                return measureObj;
+            })
+            .entries(allMatches);
+
+        var nested = nested
+            .map(function(m) {
+                return m.values;
+            })
+            .sort(function(a, b) {
+                var a_order = Object.keys(config.measure_values)
+                    .map(function(e) {
+                        return config.measure_values[e];
+                    })
+                    .indexOf(a.key);
+                var b_order = Object.keys(config.measure_values)
+                    .map(function(e) {
+                        return config.measure_values[e];
+                    })
+                    .indexOf(b.key);
+                return b_order - a_order;
+            });
+        return nested;
+    }
+
     function addSparkLines(d) {
         if (this.data.raw.length > 0) {
             //don't try to draw sparklines if the table is empty
@@ -2421,13 +2644,21 @@
                     var cell = d3
                             .select(this)
                             .select('td.spark')
+                            .classed('minimized', true)
                             .text(''),
+                        toggle = cell
+                            .append('span')
+                            .html('&#x25BD;')
+                            .style('cursor', 'pointer')
+                            .style('color', '#999')
+                            .style('vertical-align', 'middle'),
                         width = 100,
                         height = 25,
                         offset = 4,
                         overTime = row_d.spark_data.sort(function(a, b) {
                             return +a.visitn - +b.visitn;
-                        });
+                        }),
+                        color = row_d.color;
                     var x = d3.scale
                         .ordinal()
                         .domain(
@@ -2436,6 +2667,7 @@
                             })
                         )
                         .rangePoints([offset, width - offset]);
+
                     //y-domain includes 99th population percentile + any participant outliers
                     var y_min = d3.min(d3.merge([row_d.values, row_d.population_extent])) * 0.99;
                     var y_max = d3.max(d3.merge([row_d.values, row_d.population_extent])) * 1.01;
@@ -2443,6 +2675,7 @@
                         .linear()
                         .domain([y_min, y_max])
                         .range([height - offset, offset]);
+
                     //render the svg
                     var svg = cell
                         .append('svg')
@@ -2515,62 +2748,28 @@
                             class: 'sparkLine',
                             d: draw_sparkline,
                             fill: 'none',
-                            stroke: '#999'
+                            stroke: color
                         });
 
-                    /*
-            draw_lln = d3.svg
-                .line()
-                .interpolate('cardinal')
-                .x(d => x(d.visitn))
-                .y(d => y(d.lln)),
-            lln = svg
-                .append('path')
-                .datum(overTime)
-                .attr({
-                    class: 'sparkLine',
-                    d: draw_lln,
-                    fill: 'none',
-                    stroke: 'green'
-                }),
-            */
-                    //draw min and max points
-                    var minimumData = overTime.filter(function(di) {
-                        return (
-                            di.value ===
-                            d3.min(
-                                overTime.map(function(dii) {
-                                    return dii.value;
-                                })
-                            )
-                        );
-                    })[0];
-                    var minimumMonth = svg.append('circle').attr({
-                        class: 'circle minimum',
-                        cx: x(minimumData.visitn),
-                        cy: y(minimumData.value),
-                        r: '2px',
-                        stroke: 'blue',
-                        fill: 'none'
+                    //draw outliers
+                    var outliers = overTime.filter(function(f) {
+                        return f.outlier;
                     });
-                    var maximumData = overTime.filter(function(di) {
-                        return (
-                            di.value ===
-                            d3.max(
-                                overTime.map(function(dii) {
-                                    return dii.value;
-                                })
-                            )
-                        );
-                    })[0];
-                    var maximumMonth = svg.append('circle').attr({
-                        class: 'circle maximum',
-                        cx: x(maximumData.visitn),
-                        cy: y(maximumData.value),
-                        r: '2px',
-                        stroke: 'orange',
-                        fill: 'none'
-                    });
+                    var outlier_circles = svg
+                        .selectAll('circle.outlier')
+                        .data(outliers)
+                        .enter()
+                        .append('circle')
+                        .attr('class', 'circle outlier')
+                        .attr('cx', function(d) {
+                            return x(d.visitn);
+                        })
+                        .attr('cy', function(d) {
+                            return y(d.value);
+                        })
+                        .attr('r', '2px')
+                        .attr('stroke', color)
+                        .attr('fill', color);
                 });
         }
     }
@@ -2580,41 +2779,108 @@
     }
 
     var defaultSettings = {
-        max_width: 400,
+        max_width: 800,
         aspect: 4,
         x: {
-            column: null,
+            column: 'visitn',
             type: 'ordinal',
             label: 'Visit'
         },
-        y: defineProperty(
-            {
-                column: 'absolute',
-                type: 'linear',
-                label: 'Lab Value',
-                domain: [0, null],
-                format: '.1f'
-            },
-            'domain',
-            [0, null]
-        ),
+        y: {
+            column: 'value',
+            type: 'linear',
+            label: '',
+            //    domain: [0, null],
+            format: '.1f'
+        },
         marks: [
             {
                 type: 'line',
-                per: []
+                per: ['lab']
             },
             {
                 type: 'circle',
                 radius: 4,
-                per: []
+                per: ['lab', 'visitn'],
+                values: { outlier: [true] },
+                attributes: {
+                    stroke: 'orange',
+                    fill: 'orange',
+                    'fill-opacity': 1
+                },
+                tooltip: 'Visit: [visitn]\nValue: [value]\nULN: [uln]\nLLN: [lln]'
             }
         ],
         margin: { top: 20 },
-        gridlines: 'xy',
-        colors: ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628']
+        gridlines: 'x',
+        colors: ['black']
     };
 
-    function init$1(d) {
+    function setDomain$1(d) {
+        //y-domain includes 99th population percentile + any participant outliers
+        var raw_values = this.raw_data.map(function(m) {
+            return m.value;
+        });
+        var population_extent = this.raw_data[0].population_extent;
+        var y_min = d3.min(d3.merge([raw_values, population_extent])) * 0.99;
+        var y_max = d3.max(d3.merge([raw_values, population_extent])) * 1.01;
+        this.y.domain([y_min, y_max]);
+        this.y_dom = [y_min, y_max];
+    }
+
+    function drawPopulationExtent() {
+        var lineChart = this;
+        console.log(this);
+        this.svg
+            .selectAll('line.guidelines')
+            .data(lineChart.raw_data[0].population_extent)
+            .enter()
+            .append('line')
+            .attr('class', 'guidelines')
+            .attr('x1', 0)
+            .attr('x2', lineChart.plot_width)
+            .attr('y1', function(d) {
+                return lineChart.y(d);
+            })
+            .attr('y2', function(d) {
+                return lineChart.y(d);
+            })
+            .attr('stroke', '#ccc')
+            .attr('stroke-dasharray', '2 2');
+    }
+
+    function drawNormalRange() {
+        var lineChart = this;
+        var upper = this.raw_data.map(function(m) {
+            return { visitn: m.visitn, value: m.uln };
+        });
+        var lower = this.raw_data
+            .map(function(m) {
+                return { visitn: m.visitn, value: m.lln };
+            })
+            .reverse();
+        var normal_data = d3.merge([upper, lower]);
+        var drawnormal = d3.svg
+            .line()
+            .x(function(d) {
+                return lineChart.x(d.visitn) + lineChart.x.rangeBand() / 2;
+            })
+            .y(function(d) {
+                return lineChart.y(d.value);
+            });
+        var normalpath = this.svg
+            .append('path')
+            .datum(normal_data)
+            .attr({
+                class: 'normalrange',
+                d: drawnormal,
+                fill: '#eee',
+                stroke: 'none'
+            });
+        normalpath.moveToBack();
+    }
+
+    function init$2(d) {
         //layout the new cells on the DOM (slightly easier than using D3)
         var summaryRow_node = this.parentNode;
         var chartRow_node = document.createElement('tr');
@@ -2622,23 +2888,29 @@
         insertAfter(chartRow_node, summaryRow_node);
         chartRow_node.appendChild(chartCell_node);
 
+        //update the row styles
+        d3
+            .select(chartRow_node)
+            .style('background', 'none')
+            .style('border-bottom', '0.5px solid black');
+
         //layout the svg with D3
         var cellCount = d3.select(summaryRow_node).selectAll('td')[0].length;
-        var chartCell = d3
-            .select(chartCell_node)
-            .attr('colspan', cellCount)
-            .text('test');
-
-        //update the defaultSettings
-        var config = d.eDish.config;
-        defaultSettings.x.column = config.visitn_col;
-        defaultSettings.marks[0].per = [config.id_col, config.measure_col];
-        defaultSettings.marks[1].per = [config.id_col, config.visitn_col, config.measure_col];
+        var chartCell = d3.select(chartCell_node).attr('colspan', cellCount);
 
         //draw the chart
         var lineChart = webcharts.createChart(chartCell_node, defaultSettings);
-        console.log(d);
-        lineChart.init(d.raw);
+        lineChart.on('draw', function() {
+            setDomain$1.call(this);
+        });
+        lineChart.on('resize', function() {
+            drawPopulationExtent.call(this);
+            drawNormalRange.call(this);
+        });
+        lineChart.init(d.spark_data);
+
+        lineChart.row = chartRow_node;
+        return lineChart;
     }
 
     function addSparkClick() {
@@ -2647,91 +2919,71 @@
                 .selectAll('tr')
                 .select('td.spark')
                 .on('click', function(d) {
-                    init$1.call(this, d);
+                    if (d3.select(this).classed('minimized')) {
+                        d3.select(this).classed('minimized', false);
+                        d3.select(this.parentNode).style('border-bottom', 'none');
+
+                        this.lineChart = init$2.call(this, d);
+                        d3
+                            .select(this)
+                            .select('svg')
+                            .style('display', 'none');
+
+                        d3
+                            .select(this)
+                            .select('span')
+                            .html('&#x25B3; Minimize Chart');
+                    } else {
+                        d3.select(this).classed('minimized', true);
+
+                        d3.select(this.parentNode).style('border-bottom', '0.5px solid black');
+
+                        d3
+                            .select(this)
+                            .select('span')
+                            .html('&#x25BD;');
+
+                        d3
+                            .select(this)
+                            .select('svg')
+                            .style('display', null);
+
+                        d3.select(this.lineChart.row).remove();
+                        this.lineChart.destroy();
+                    }
                 });
         }
     }
 
-    function drawMeasureTable(d) {
-        var chart = this;
-        var config = chart.config;
-        var allMatches = d.values.raw[0].raw;
-        var ranges = d3
-            .nest()
-            .key(function(d) {
-                return d[config.measure_col];
-            })
-            .rollup(function(d) {
-                var vals = d
-                    .map(function(m) {
-                        return m[config.value_col];
-                    })
-                    .sort(function(a, b) {
-                        return a - b;
-                    });
-                var lower_extent = d3.quantile(vals, config.measureBounds[0]),
-                    upper_extent = d3.quantile(vals, config.measureBounds[1]);
-                return [lower_extent, upper_extent];
-            })
-            .entries(chart.initial_data);
+    function addFootnote() {
+        var footnoteText = [
+            'Y-Axis for each chart is based on the range of values for the entire population. Points shown for values outside the normal range. Click a sparkline to see a larger version of the chart.'
+        ];
+        var footnotes = this.wrap.selectAll('span.footnote').data(footnoteText, function(d) {
+            return d;
+        });
 
-        //make nest by measure
-        var nested = d3
-            .nest()
-            .key(function(d) {
-                return d[config.measure_col];
-            })
-            .rollup(function(d) {
-                var measureObj = {};
-                measureObj.eDish = chart;
-                measureObj.key = d[0][config.measure_col];
-                measureObj.raw = d;
-                measureObj.values = d.map(function(d) {
-                    return +d[config.value_col];
-                });
-                measureObj.max = +d3.format('0.2f')(d3.max(measureObj.values));
-                measureObj.min = +d3.format('0.2f')(d3.min(measureObj.values));
-                measureObj.median = +d3.format('0.2f')(d3.median(measureObj.values));
-                measureObj.n = measureObj.values.length;
-                measureObj.spark = 'spark!';
-                measureObj.population_extent = ranges.find(function(f) {
-                    return measureObj.key == f.key;
-                }).values;
-                measureObj.spark_data = d.map(function(m) {
-                    return {
-                        visitn: +m[config.visitn_col],
-                        value: +m[config.value_col],
-                        lln: +m[config.normal_col_low],
-                        uln: +m[config.normal_col_high]
-                    };
-                });
-                return measureObj;
-            })
-            .entries(allMatches);
-
-        var nested = nested
-            .map(function(m) {
-                return m.values;
-            })
-            .sort(function(a, b) {
-                var a_order = Object.keys(config.measure_values)
-                    .map(function(e) {
-                        return config.measure_values[e];
-                    })
-                    .indexOf(a.key);
-                var b_order = Object.keys(config.measure_values)
-                    .map(function(e) {
-                        return config.measure_values[e];
-                    })
-                    .indexOf(b.key);
-                return b_order - a_order;
+        footnotes
+            .enter()
+            .append('span')
+            .attr('class', 'footnote')
+            .style('font-size', '0.7em')
+            .style('padding-top', '0.1em')
+            .text(function(d) {
+                return d;
             });
 
+        footnotes.exit().remove();
+    }
+
+    function drawMeasureTable(d) {
+        var nested = makeNestedData.call(this, d);
+
         //draw the measure table
-        this.participantDetails.wrap.selectAll('*').style('display', null);
         this.measureTable.on('draw', function() {
             addSparkLines.call(this);
             addSparkClick.call(this);
+            addFootnote.call(this);
         });
         this.measureTable.draw(nested);
     }
@@ -2919,9 +3171,13 @@
     function onResize$1() {
         var spaghetti = this;
         var y_col = this.config.y.column;
-        this.marks[1].circles.attr('fill-opacity', function(d) {
-            return d.values.raw[0][y_col + '_flagged'] ? 1 : 0;
-        });
+        this.marks[1].circles
+            .attr('stroke-opacity', function(d) {
+                return d.values.raw[0][y_col + '_flagged'] ? 1 : 0;
+            })
+            .attr('fill-opacity', function(d) {
+                return d.values.raw[0][y_col + '_flagged'] ? 1 : 0;
+            });
 
         this.marks[1].circles
             .on('mouseover', function(d) {
@@ -2944,6 +3200,9 @@
 
     function onDraw$1() {
         var spaghetti = this;
+        var eDish = this.parent;
+
+        //make sure y domain includes the current cut point for all measures
         var max_value = d3.max(spaghetti.filtered_data, function(f) {
             return f[spaghetti.config.y.column];
         });
@@ -2953,9 +3212,16 @@
         var y_max = d3.max([max_value, max_cut]);
         spaghetti.config.y.domain = [0, y_max];
         spaghetti.y_dom = spaghetti.config.y.domain;
+
+        //initialize the measureTable
+        if (spaghetti.config.firstDraw) {
+            console.log('making measure table');
+            drawMeasureTable.call(eDish, this.participant_data);
+            spaghetti.config.firstDraw = false;
+        }
     }
 
-    function init$2(d) {
+    function init$3(d) {
         var chart = this; //the full eDish object
         var config = this.config; //the eDish config
         var matches = d.values.raw[0].raw.filter(function(f) {
@@ -2971,6 +3237,7 @@
         defaultSettings$1.color_by = config.measure_col;
         defaultSettings$1.marks[0].per = [config.id_col, config.measure_col];
         defaultSettings$1.marks[1].per = [config.id_col, config.visitn_col, config.measure_col];
+        defaultSettings$1.firstDraw = true; //only initailize the measure table on first draw
 
         //flag variables above the cut-off
         matches.forEach(function(d) {
@@ -3015,6 +3282,7 @@
         );
 
         chart.spaghetti.parent = chart; //link the full eDish object
+        chart.spaghetti.participant_data = d; //include the passed data (used to initialize the measure table)
         chart.spaghetti.on('layout', onLayout$1);
         chart.spaghetti.on('preprocess', onPreprocess$1);
         chart.spaghetti.on('draw', onDraw$1);
@@ -3028,7 +3296,7 @@
             .style('font-size', '0.7em')
             .style('padding-top', '0.1em')
             .text(
-                'Filled points are above the current reference value. Mouseover a line to see the reference line for that lab.'
+                'Points are shown for values above the current reference value. Mouseover a line to see the reference line for that lab.'
             );
     }
 
@@ -3054,11 +3322,13 @@
                 .attr('stroke-width', 3);
 
             drawVisitPath.call(chart, d); //draw the path showing participant's pattern over time
-            drawMeasureTable.call(chart, d); //draw table showing measure values with sparklines
-            init$2.call(chart, d);
-            makeParticipantHeader.call(chart, d);
             drawRugs.call(chart, d, 'x');
             drawRugs.call(chart, d, 'y');
+
+            chart.participantDetails.wrap.selectAll('*').style('display', null);
+            makeParticipantHeader.call(chart, d);
+            init$3.call(chart, d);
+            //    drawMeasureTable.call(chart, d); //draw table showing measure values with sparklines
         });
     }
 
@@ -3200,7 +3470,7 @@
 
     // credit to https://bl.ocks.org/dimitardanailov/99950eee511375b97de749b597147d19
 
-    function init$3() {
+    function init$4() {
         var drag = d3.behavior
             .drag()
             .origin(function(d) {
@@ -3364,7 +3634,7 @@
             });
     }
 
-    function init$4() {
+    function init$5() {
         // Draw box plots
         this.svg.selectAll('g.boxplot').remove();
 
@@ -3551,13 +3821,13 @@
         //draw the quadrants and add drag interactivity
         updateSummaryTable.call(this);
         drawQuadrants.call(this);
-        init$3.call(this);
+        init$4.call(this);
 
         // hide the legend if no group options are given
         toggleLegend.call(this);
 
         // add boxplots
-        init$4.call(this);
+        init$5.call(this);
 
         //axis formatting
         adjustTicks.call(this);
