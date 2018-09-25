@@ -12,3 +12,4 @@ dependencies:
     version: 0.13.0
     src: htmlwidgets/lib/safety-eDISH-0.13.0
     script: safetyedish.js
+
