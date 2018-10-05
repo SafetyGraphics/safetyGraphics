@@ -32,6 +32,7 @@
 #'  No warning is displayed if \code{warningText = ""}. Default: \code{"Caution: This interactive graphic is 
 #'  not validated. Any clinical recommendations based on this tool should be confirmed using your organizations 
 #'  standard operating procedures."}.
+#' @param settings Optional list of settings arguments.  If provided, all other function parameters are ignored. Default: \code{NULL}.
 #'  
 #' @import htmlwidgets
 #'
@@ -58,38 +59,47 @@ eDISH <- function(data,
                   r_ratio_filter = TRUE,
                   r_ratio_cut = 0,
                   showTitle = TRUE,
-                  warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.") {
+                  warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.",
+                  settings = NULL) {
 
 
-  # forward options using x
-  rSettings = list(
-    data = data,
-    settings = jsonlite::toJSON(
-      list(
-        id_col = id_col, 
-        value_col = value_col,
-        measure_col = measure_col,
-        unit_col = unit_col,
-        normal_col_low = normal_col_low,
-        normal_col_high = normal_col_high,
-        visit_col = visit_col,
-        visitn_col = visitn_col,
-        baseline_visitn = baseline_visitn,
-        filters = filters,
-        group_cols = group_cols,
-        measure_values = measure_values,
-        x_options = x_options,
-        y_options = y_options,
-        visit_window = visit_window,
-        r_ratio_filter = r_ratio_filter,
-        r_ratio_cut = r_ratio_cut,
-        showTitle = showTitle,
-        warningText = warningText
-      ),
-      auto_unbox = TRUE,
-      dataframe = "rows"
+  # forward options using rSettings
+  if (is.null(settings)){
+    rSettings = list(
+      data = data,
+      settings = jsonlite::toJSON(
+        list(
+          id_col = id_col, 
+          value_col = value_col,
+          measure_col = measure_col,
+          unit_col = unit_col,
+          normal_col_low = normal_col_low,
+          normal_col_high = normal_col_high,
+          visit_col = visit_col,
+          visitn_col = visitn_col,
+          baseline_visitn = baseline_visitn,
+          filters = filters,
+          group_cols = group_cols,
+          measure_values = measure_values,
+          x_options = x_options,
+          y_options = y_options,
+          visit_window = visit_window,
+          r_ratio_filter = r_ratio_filter,
+          r_ratio_cut = r_ratio_cut,
+          showTitle = showTitle,
+          warningText = warningText
+        ),
+        auto_unbox = TRUE,
+        dataframe = "rows"
+      )
+    )    
+  } else{
+    rSettings = list(
+      data = data,
+      settings = jsonlite::toJSON(settings)
     )
-  )
+  }
+
 
   # create widget
   htmlwidgets::createWidget(

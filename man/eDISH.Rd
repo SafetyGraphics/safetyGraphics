@@ -14,7 +14,8 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
   "Alkaline phosphatase (ALP)"), x_options = c("ALT", "AST", "ALP"),
   y_options = c("TB", "ALP"), visit_window = 30,
   r_ratio_filter = TRUE, r_ratio_cut = 0, showTitle = TRUE,
-  warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.")
+  warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.",
+  settings = NULL)
 }
 \arguments{
 \item{data}{A data frame containing the labs data. Data must be structured as one record per study participant per time point per lab measure.}
@@ -66,6 +67,8 @@ User can update this setting via the UI when \code{r_ratio_filter = TRUE}. Defau
 No warning is displayed if \code{warningText = ""}. Default: \code{"Caution: This interactive graphic is 
 not validated. Any clinical recommendations based on this tool should be confirmed using your organizations 
 standard operating procedures."}.}
+
+\item{settings}{Optional list of settings arguments.  If provided, all other function parameters are ignored. Default: \code{NULL}.}
 }
 \description{
 This function creates an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH)
