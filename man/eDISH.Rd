@@ -12,9 +12,8 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
   "Aminotransferase, alanine (ALT)", AST =
   "Aminotransferase, aspartate (AST)", TB = "Total Bilirubin", ALP =
   "Alkaline phosphatase (ALP)"), x_options = c("ALT", "AST", "ALP"),
-  y_options = "TB", measure_bounds = c(0.01, 0.99),
-  visit_window = 30, r_ratio_filter = TRUE, r_ratio_cut = 0,
-  showTitle = TRUE,
+  y_options = c("TB", "ALP"), visit_window = 30,
+  r_ratio_filter = TRUE, r_ratio_cut = 0, showTitle = TRUE,
   warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.")
 }
 \arguments{
@@ -40,7 +39,7 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
 
 \item{filters}{An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.}
 
-\item{group_cols}{An optional vector of names of grouping variables. Default: \code{NULL}.}
+\item{group_cols}{An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.}
 
 \item{measure_values}{A list defining the data values from \code{measure_col} for the lab measures 
 used in eDish evaluations. Default: \code{list(ALT = 'Aminotransferase, alanine (ALT)', 
@@ -50,10 +49,7 @@ AST = 'Aminotransferase, aspartate (AST)', TB = 'Total Bilirubin', ALP = 'Alkali
 When multiple options are specified, a control allowing the user to interactively change the x variable is shown. Default: \code{c("ALT", "AST", "ALP")}.}
 
 \item{y_options}{Specifies variable options for the y-axis using the key values from \code{measure_values} (e.g. "TB"). 
-When multiple options are specified, a control allowing the user to interactively change the y variable is shown. Default: \code{"TB"}.}
-
-\item{measure_bounds}{Sets upper and lower percentiles used for defining outliers in the "Lab Summary Table"
-in the participant details section. Default: \code{c(0.01, 0.99)}.}
+When multiple options are specified, a control allowing the user to interactively change the y variable is shown. Default: \code{c("TB", "ALP")}.}
 
 \item{visit_window}{Default visit window used to highlight eDish points where x and y measures occurred within the specified number of days. 
 Editable by user after render. Default: \code{30}.}

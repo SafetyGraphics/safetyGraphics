@@ -13,16 +13,14 @@
 #' @param visitn_col Visit number variable name. Default: \code{"VISITN"}. 
 #' @param baseline_visitn Value of baseline visit number. Used to calculate mDish. Default: \code{1}. 
 #' @param filters An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.
-#' @param group_cols  An optional vector of names of grouping variables. Default: \code{NULL}.
+#' @param group_cols An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.
 #' @param measure_values A list defining the data values from \code{measure_col} for the lab measures 
 #' used in eDish evaluations. Default: \code{list(ALT = 'Aminotransferase, alanine (ALT)', 
 #' AST = 'Aminotransferase, aspartate (AST)', TB = 'Total Bilirubin', ALP = 'Alkaline phosphatase (ALP)')}.
 #' @param x_options Specifies variable options for the x-axis using the key values from \code{measure_values} (e.g. "ALT"). 
 #' When multiple options are specified, a control allowing the user to interactively change the x variable is shown. Default: \code{c("ALT", "AST", "ALP")}.
 #' @param y_options Specifies variable options for the y-axis using the key values from \code{measure_values} (e.g. "TB"). 
-#' When multiple options are specified, a control allowing the user to interactively change the y variable is shown. Default: \code{"TB"}.
-#' @param measure_bounds Sets upper and lower percentiles used for defining outliers in the "Lab Summary Table"
-#' in the participant details section. Default: \code{c(0.01, 0.99)}.
+#' When multiple options are specified, a control allowing the user to interactively change the y variable is shown. Default: \code{c("TB", "ALP")}.
 #' @param visit_window Default visit window used to highlight eDish points where x and y measures occurred within the specified number of days. 
 #' Editable by user after render. Default: \code{30}.
 #' @param r_ratio_filter Specifies whether the R Ratio filter should be shown. R ratio is defined as: 
@@ -55,8 +53,7 @@ eDISH <- function(data,
                                         TB = "Total Bilirubin",
                                         ALP = "Alkaline phosphatase (ALP)"),
                   x_options = c("ALT", "AST", "ALP"),
-                  y_options = "TB", 
-                  measure_bounds = c(0.01, 0.99),
+                  y_options = c("TB", "ALP"), # temporarily making this a vector of length 2 until JS side fixed
                   visit_window = 30,
                   r_ratio_filter = TRUE,
                   r_ratio_cut = 0,
@@ -83,7 +80,6 @@ eDISH <- function(data,
         measure_values = measure_values,
         x_options = x_options,
         y_options = y_options,
-        measure_bounds = measure_bounds,
         visit_window = visit_window,
         r_ratio_filter = r_ratio_filter,
         r_ratio_cut = r_ratio_cut,
