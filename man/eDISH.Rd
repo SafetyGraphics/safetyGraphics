@@ -7,8 +7,8 @@
 eDISH(data, id_col = "USUBJID", value_col = "STRESN",
   measure_col = "TEST", unit_col = "STRESU",
   normal_col_low = "STNRLO", normal_col_high = "STNRHI",
-  visitn_col = "VISITN", baseline_visitn = 1, filters = NULL,
-  group_cols = NULL, measure_values = list(ALT =
+  visit_col = "VISIT", visitn_col = "VISITN", baseline_visitn = 1,
+  filters = NULL, group_cols = NULL, measure_values = list(ALT =
   "Aminotransferase, alanine (ALT)", AST =
   "Aminotransferase, aspartate (AST)", TB = "Total Bilirubin", ALP =
   "Alkaline phosphatase (ALP)"), x_options = c("ALT", "AST", "ALP"),
@@ -31,6 +31,8 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
 \item{normal_col_low}{Lower limit of normal variable name. Default: \code{"STNRLO"}.}
 
 \item{normal_col_high}{Upper limit of normal variable name. Default: \code{"STNRHI"}.}
+
+\item{visit_col}{Visit variable name. Default: \code{"VISIT"}.}
 
 \item{visitn_col}{Visit number variable name. Default: \code{"VISITN"}.}
 

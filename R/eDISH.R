@@ -9,6 +9,7 @@
 #' @param unit_col Lab measure unit variable name. Default: \code{"STRESU"}.
 #' @param normal_col_low Lower limit of normal variable name. Default: \code{"STNRLO"}.
 #' @param normal_col_high Upper limit of normal variable name. Default: \code{"STNRHI"}. 
+#' @param visit_col Visit variable name. Default: \code{"VISIT"}.
 #' @param visitn_col Visit number variable name. Default: \code{"VISITN"}. 
 #' @param baseline_visitn Value of baseline visit number. Used to calculate mDish. Default: \code{1}. 
 #' @param filters An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.
@@ -44,6 +45,7 @@ eDISH <- function(data,
                   unit_col = "STRESU",
                   normal_col_low = "STNRLO",
                   normal_col_high = "STNRHI",
+                  visit_col = "VISIT",
                   visitn_col = "VISITN",
                   baseline_visitn = 1,
                   filters = NULL,
@@ -61,34 +63,6 @@ eDISH <- function(data,
                   showTitle = TRUE,
                   warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.") {
 
-  
-  # # define filters object
-  # filters <- filters
-  # if (is.null(filters)){
-  #   if (is.null(filters_value_col)){
-  #     filters <- NULL    # no filters specified
-  #   } else {
-  #     if (is.null(filters_label)){
-  #       filters_label = filters_value_col
-  #     }
-  #     filters <- data.frame(value_col = filters_value_col,   
-  #                           label = filters_label)
-  #   }
-  # }
-  # 
-  # # define group_cols object
-  # group_cols <- group_cols
-  # if (is.null(group_cols)){
-  #   if (is.null(group_cols_value_col)){
-  #     group_cols <- NULL    # no group_cols specified
-  #   } else {
-  #     if (is.null(group_cols_label)){
-  #       group_cols_label = group_cols_value_col
-  #     }
-  #     group_cols <- data.frame(value_col = group_cols_value_col,   
-  #                           label = group_cols_label)
-  #   }
-  # }
 
   # forward options using x
   rSettings = list(
@@ -101,6 +75,7 @@ eDISH <- function(data,
         unit_col = unit_col,
         normal_col_low = normal_col_low,
         normal_col_high = normal_col_high,
+        visit_col = visit_col,
         visitn_col = visitn_col,
         baseline_visitn = baseline_visitn,
         filters = filters,
