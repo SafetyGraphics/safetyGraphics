@@ -34,6 +34,21 @@
 #'  standard operating procedures."}.
 #' @param settings Optional list of settings arguments.  If provided, all other function parameters are ignored. Default: \code{NULL}.
 #'  
+#' @examples 
+#' \dontrun{
+#' eDISH(data=adlbc, 
+#'       id_col = "USUBJID",
+#'       value_col = "AVAL", 
+#'       measure_col = "PARAM", 
+#'       visitn_col = "VISITNUM", 
+#'       normal_col_low = "A1LO", 
+#'       normal_col_high = "A1HI", 
+#'       measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
+#'                             AST = "Aspartate Aminotransferase (U/L)",
+#'                             TB = "Bilirubin (umol/L)",
+#'                             ALP = "Alkaline Phosphatase (U/L)"))
+#' }
+#' 
 #' @import htmlwidgets
 #'
 #' @export
@@ -90,7 +105,8 @@ eDISH <- function(data,
           warningText = warningText
         ),
         auto_unbox = TRUE,
-        dataframe = "rows"
+        dataframe = "rows",
+        null = "null"
       )
     )    
   } else{

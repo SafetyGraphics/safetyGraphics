@@ -73,3 +73,19 @@ standard operating procedures."}.}
 \description{
 This function creates an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH)
 }
+\examples{
+\dontrun{
+eDISH(data=adlbc, 
+      id_col = "USUBJID",
+      value_col = "AVAL", 
+      measure_col = "PARAM", 
+      visitn_col = "VISITNUM", 
+      normal_col_low = "A1LO", 
+      normal_col_high = "A1HI", 
+      measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
+                            AST = "Aspartate Aminotransferase (U/L)",
+                            TB = "Bilirubin (umol/L)",
+                            ALP = "Alkaline Phosphatase (U/L)"))
+}
+
+}
