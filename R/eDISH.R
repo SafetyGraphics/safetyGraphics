@@ -32,10 +32,12 @@
 #'  No warning is displayed if \code{warningText = ""}. Default: \code{"Caution: This interactive graphic is 
 #'  not validated. Any clinical recommendations based on this tool should be confirmed using your organizations 
 #'  standard operating procedures."}.
-#' @param settings Optional list of settings arguments.  If provided, all other function parameters are ignored. Default: \code{NULL}.
+#' @param settings Optional list of settings arguments to be converted to JSON using \code{jsonlite::toJSON(settings, auto_unbox = TRUE, dataframe = "rows", null = "null")}.  If provided, all other function parameters are ignored. Default: \code{NULL}.
 #'  
 #' @examples 
 #' \dontrun{
+#' 
+#' ## Create eDISH figure customized to user data
 #' eDISH(data=adlbc, 
 #'       id_col = "USUBJID",
 #'       value_col = "AVAL", 
@@ -47,6 +49,20 @@
 #'                             AST = "Aspartate Aminotransferase (U/L)",
 #'                             TB = "Bilirubin (umol/L)",
 #'                             ALP = "Alkaline Phosphatase (U/L)"))
+#' 
+#' ## Create eDISH figure using a premade settings list
+#' settingsl <- list(id_col = "USUBJID",
+#'       value_col = "AVAL", 
+#'       measure_col = "PARAM", 
+#'       visitn_col = "VISITNUM", 
+#'       normal_col_low = "A1LO", 
+#'       normal_col_high = "A1HI", 
+#'       measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
+#'                              +                             AST = "Aspartate Aminotransferase (U/L)",
+#'                              +                             TB = "Bilirubin (umol/L)",
+#'                              +                             ALP = "Alkaline Phosphatase (U/L)"))
+#' eDISH(data=adlbc, settings = settingsl)
+#' 
 #' }
 #' 
 #' @import htmlwidgets
@@ -112,7 +128,10 @@ eDISH <- function(data,
   } else{
     rSettings = list(
       data = data,
-      settings = jsonlite::toJSON(settings)
+      settings = jsonlite::toJSON(settings,
+                                  auto_unbox = TRUE,
+                                  dataframe = "rows",
+                                  null = "null")
     )
   }
 
