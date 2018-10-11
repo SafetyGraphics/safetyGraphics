@@ -4,11 +4,11 @@ dependencies:
     src: htmlwidgets/lib/d3-3.5.17
     script: d3.v3.min.js
   - name: webcharts
-    version: 1.10.0
-    src: htmlwidgets/lib/webcharts-1.10.0
+    version: 1.11.1
+    src: htmlwidgets/lib/webcharts-1.11.1
     script: webcharts.js
     stylesheet: webcharts.css
   - name: safety-eDish
     version: 0.13.0
-    src: htmlwidgets/lib/safety-eDISH-0.13.0
+    src: htmlwidgets/lib/safety-eDISH-0.14.0
     script: safetyedish.js

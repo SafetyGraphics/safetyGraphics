@@ -1,10 +1,10 @@
 (function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined'
-        ? (module.exports = factory(require('webcharts')))
+        ? (module.exports = factory(require('webcharts'), require('d3')))
         : typeof define === 'function' && define.amd
-            ? define(['webcharts'], factory)
-            : (global.safetyedish = factory(global.webCharts));
-})(this, function(webcharts) {
+            ? define(['webcharts', 'd3'], factory)
+            : (global.safetyedish = factory(global.webCharts, global.d3));
+})(this, function(webcharts, d3$1) {
     'use strict';
 
     if (typeof Object.assign != 'function') {
@@ -337,7 +337,6 @@
             visit_col: 'VISIT',
             visitn_col: 'VISITNUM',
             studyday_col: 'DY',
-            unit_col: 'STRESU',
             normal_col_low: 'STNRLO',
             normal_col_high: 'STNRHI',
             id_col: 'USUBJID',
@@ -354,7 +353,8 @@
             },
             x_options: ['ALT', 'AST', 'ALP'],
             y_options: ['TB'],
-            size_options: ['ALT', 'AST', 'ALP', 'TB'],
+            point_size: 'Uniform',
+            point_size_options: ['ALT', 'AST', 'ALP', 'TB'],
             cuts: {
                 ALT: {
                     relative_baseline: 3.8,
@@ -393,11 +393,10 @@
             measureBounds: [0.01, 0.99],
             populationProfileURL: null,
             participantProfileURL: null,
-            point_size: 'Uniform',
             visit_window: 30,
             showTitle: true,
             warningText:
-                'This graphic has been thoroughly tested, but is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.',
+                "This graphic has been thoroughly tested, but is not validated. Any clinical recommendations based on this tool should be confirmed using your organization's standard operating procedures.",
             //all values set in onLayout/quadrants/*.js
             quadrants: [
                 {
@@ -473,6 +472,10 @@
         settings.marks[0].per[0] = settings.id_col;
 
         //set grouping config
+        if (typeof settings.group_cols == 'string') {
+            settings.group_cols = [{ value_col: settings.group_cols, label: settings.group_cols }];
+        }
+
         if (!(settings.group_cols instanceof Array && settings.group_cols.length)) {
             settings.group_cols = [{ value_col: 'NONE', label: 'None' }];
         } else {
@@ -510,7 +513,9 @@
                     value_col: filter.value_col ? filter.value_col : filter,
                     label: filter.label
                         ? filter.label
-                        : filter.value_col ? filter.value_col : filter
+                        : filter.value_col
+                            ? filter.value_col
+                            : filter
                 };
 
                 if (
@@ -533,7 +538,9 @@
                         value_col: group.value_col ? group.value_col : filter,
                         label: group.label
                             ? group.label
-                            : group.value_col ? group.value_col : filter
+                            : group.value_col
+                                ? group.value_col
+                                : filter
                     };
                     if (
                         defaultDetails.find(function(f) {
@@ -563,11 +570,17 @@
                         value_col: detail.value_col ? detail.value_col : detail,
                         label: detail.label
                             ? detail.label
-                            : detail.value_col ? detail.value_col : detail
+                            : detail.value_col
+                                ? detail.value_col
+                                : detail
                     });
             });
             settings.details = defaultDetails;
         }
+
+        //parse x_ and y_options to array if needed
+        if (typeof settings.x_options == 'string') settings.x_options = [settings.x_options];
+        if (typeof settings.y_options == 'string') settings.y_options = [settings.y_options];
 
         // track initial Cutpoint (lets us detect when cutpoint should change)
         settings.cuts.x = settings.x.column;
@@ -636,7 +649,7 @@
                 label: 'Point Size',
                 description: 'Parameter to set point radius',
                 options: ['point_size'],
-                start: 'None', // set in syncControlInputs()
+                start: null, // set in syncControlInputs()
                 values: ['Uniform'],
                 require: true
             },
@@ -771,12 +784,14 @@
             return ci.label === 'Point Size';
         });
 
-        settings.size_options.forEach(function(d) {
+        pointSizeControl.start = settings.point_size || 'Uniform';
+
+        settings.point_size_options.forEach(function(d) {
             pointSizeControl.values.push(d);
         });
 
         //drop the pointSize control if NONE is the only option
-        if (settings.size_options.length == 0)
+        if (settings.point_size_options.length == 0)
             controlInputs = controlInputs.filter(function(controlInput) {
                 return controlInput.label != 'Point Size';
             });
@@ -801,7 +816,9 @@
                     value_col: filter.value_col ? filter.value_col : filter,
                     label: filter.label
                         ? filter.label
-                        : filter.value_col ? filter.value_col : filter
+                        : filter.value_col
+                            ? filter.value_col
+                            : filter
                 };
                 return filter;
             });
@@ -848,7 +865,7 @@
 
         //check that x_options, y_options and size_options all have value keys/values in measure_values
         var valid_options = Object.keys(config.measure_values);
-        var all_options = ['x_options', 'y_options', 'size_options'];
+        var all_options = ['x_options', 'y_options', 'point_size_options'];
         all_options.forEach(function(options) {
             config[options].forEach(function(option) {
                 if (valid_options.indexOf(option) == -1) {
@@ -996,6 +1013,41 @@
         });
     }
 
+    function dropRows() {
+        var _this = this;
+
+        var config = this.config;
+        this.dropped_rows = [];
+
+        /////////////////////////
+        // Remove invalid rows
+        /////////////////////////
+
+        this.imputed_data = this.initial_data
+            .filter(function(d) {
+                //Remove non-numeric value_col
+                var numericValueCol = /^-?(\d*\.?\d+|\d+\.?\d*)(E-?\d+)?$/.test(
+                    d[_this.config.value_col]
+                );
+                if (!numericValueCol) {
+                    d.dropReason = 'Value Column ("' + config.value_col + '") is not numeric.';
+                    _this.dropped_rows.push(d);
+                }
+                return numericValueCol;
+            })
+            .filter(function(d) {
+                //Remove non-numeric visit_col
+                var numericVisitCol = /^-?(\d*\.?\d+|\d+\.?\d*)(E-?\d+)?$/.test(
+                    d[_this.config.visitn_col]
+                );
+                if (!numericVisitCol) {
+                    d.dropReason = 'Visit Column ("' + config.visitn_col + '") is not numeric.';
+                    _this.dropped_rows.push(d);
+                }
+                return numericVisitCol;
+            });
+    }
+
     function deriveVariables() {
         var config = this.config;
 
@@ -1075,11 +1127,8 @@
     }
 
     function cleanData() {
-        var _this = this;
+        this.imputedData = dropRows.call(this);
 
-        this.imputed_data = this.initial_data.filter(function(d) {
-            return /^-?(\d*\.?\d+|\d+\.?\d*)(E-?\d+)?$/.test(d[_this.config.value_col]);
-        });
         this.imputed_data.forEach(function(d) {
             d.impute_flag = false;
         });
@@ -1489,21 +1538,17 @@
                 .style('font-size', '1.5em')
                 .style('font-weight', 'strong')
                 .style('display', 'block');
-
-            this.titleDiv
-                .append('span')
-                .text('Use controls to update chart or click a point to see participant details.')
-                .style('font-size', '0.8em');
         }
     }
 
-    function add(messageText, type, label, messages) {
+    function add(messageText, type, label, messages, callback) {
         var messageObj = {
             id: messages.list.length + 1,
             type: type,
             message: messageText,
             label: label,
-            hidden: false
+            hidden: false,
+            callback: callback
         };
         messages.list.push(messageObj);
         messages.update(messages);
@@ -1576,6 +1621,10 @@
                     .style('color', '#999')
                     .style('background-color', null);
             }
+
+            if (d.callback) {
+                d.callback.call(this);
+            }
         });
 
         messageDivs.exit().remove();
@@ -1620,7 +1669,7 @@
             });
     }
 
-    function initWarning() {
+    function initCustomWarning() {
         if (this.config.warningText) {
             this.messages.add(
                 this.config.warningText,
@@ -1628,6 +1677,80 @@
                 'validationCaution',
                 this.messages
             );
+        }
+    }
+
+    function downloadCSV(data, cols) {
+        var CSVarray = [];
+
+        //add headers to CSV array
+        var cols = cols ? cols : Object.keys(data[0]);
+        var headers = cols.map(function(header) {
+            return '"' + header.replace(/"/g, '""') + '"';
+        });
+        CSVarray.push(headers);
+        //add rows to CSV array
+        data.forEach(function(d, i) {
+            var row = cols.map(function(col) {
+                var value = d[col];
+
+                if (typeof value === 'string') value = value.replace(/"/g, '""');
+
+                return '"' + value + '"';
+            });
+
+            CSVarray.push(row);
+        });
+
+        //transform blob array into a blob of characters
+        var blob = new Blob([CSVarray.join('\n')], {
+            type: 'text/csv;charset=utf-8;'
+        });
+
+        var fileName =
+            'eDishDroppedRows_' + d3$1.time.format('%Y-%m-%dT%H-%M-%S')(new Date()) + '.csv';
+        var link = d3.select(this);
+
+        if (navigator.msSaveBlob)
+            //IE
+            navigator.msSaveBlob(blob, fileName);
+        else if (link.node().download !== undefined) {
+            //21st century browsers
+            var url = URL.createObjectURL(blob);
+            link.node().setAttribute('href', url);
+            link.node().setAttribute('download', fileName);
+        }
+    }
+
+    function initDroppedRowsWarning() {
+        var chart = this;
+        if (this.dropped_rows.length > 0) {
+            var warningText =
+                this.dropped_rows.length +
+                ' rows were removed because of invalid data. Click <a class="rowDownload">here</a> to download a csv with a brief explanation of why each row was removed.';
+
+            this.messages.add(warningText, 'caution', 'droppedRows', this.messages, function() {
+                //custom callback to activate the droppedRows download
+                d3.select(this)
+                    .select('a.rowDownload')
+                    .style('color', 'blue')
+                    .style('text-decoration', 'underline')
+                    .style('cursor', 'pointer')
+                    .datum(chart.dropped_rows)
+                    .on('click', function(d) {
+                        var systemVars = d3.merge([
+                            ['dropReason', 'NONE'],
+                            Object.keys(chart.config.measure_values)
+                        ]);
+                        var cols = d3.merge([
+                            ['dropReason'],
+                            Object.keys(d[0]).filter(function(f) {
+                                return systemVars.indexOf(f) == -1;
+                            })
+                        ]);
+                        downloadCSV.call(this, d, cols);
+                    });
+            });
         }
     }
 
@@ -1652,14 +1775,17 @@
         //Add filter label if at least 1 filter exists
         if (config.r_ratio_filter || config.filters.length > 0) {
             //insert a header before the first filter
-            var control_wraps = this.controls.wrap.selectAll('div');
-            var first_filter = config.r_ratio_filter
-                ? control_wraps.filter(function(controlInput) {
-                      return controlInput.label === 'Minimum R Ratio';
-                  })
-                : control_wraps.filter(function(controlInput) {
-                      return controlInput.type === 'subsetter';
-                  });
+            var control_wraps = this.controls.wrap
+                .selectAll('div')
+                .filter(function(controlInput) {
+                    return (
+                        controlInput.label === 'Minimum R Ratio' ||
+                        controlInput.type === 'subsetter'
+                    );
+                })
+                .classed('subsetter', true);
+
+            var first_filter = this.controls.wrap.select('div.subsetter');
 
             this.controls.filter_header = first_filter
                 .insert('div', '*')
@@ -1701,11 +1827,25 @@
         }
     }
 
+    function addFootnote() {
+        this.wrap
+            .append('div')
+            .attr('class', 'footnote')
+            .text('Use controls to update chart or click a point to see participant details.')
+            .style('font-size', '0.7em')
+            .style('padding-top', '0.1em');
+    }
+
     function onLayout() {
         layoutPanels.call(this);
+
+        //init messages section
         init$1.call(this);
-        initWarning.call(this);
+        initCustomWarning.call(this);
+        initDroppedRowsWarning.call(this);
         initTitle.call(this);
+
+        addFootnote.call(this);
         addRRatioSpan.call(this);
         initQuadrants.call(this);
         initRugs.call(this);
@@ -1723,7 +1863,9 @@
                 ? ' [xULN]'
                 : config.display == 'relative_baseline'
                     ? ' [xBaseline]'
-                    : config.display == 'absolute' ? ' [raw values]' : null;
+                    : config.display == 'absolute'
+                        ? ' [raw values]'
+                        : null;
 
         //Update axis labels.
         config.x.label = config.measure_values[config.x.column] + unit;
@@ -1816,7 +1958,6 @@
             'visit_col',
             'visitn_col',
             'studyday_col',
-            'unit_col',
             'normal_col_low',
             'normal_col_high'
         ];
@@ -2393,7 +2534,6 @@
         var matches = allMatches.filter(function(f) {
             return f[config.measure_col] == x_measure || f[config.measure_col] == y_measure;
         });
-
         //get coordinates by visit
         var visits = d3
             .set(
@@ -2477,8 +2617,7 @@
 
         var totalLength = path.node().getTotalLength();
 
-        path
-            .attr('stroke-dasharray', totalLength + ' ' + totalLength)
+        path.attr('stroke-dasharray', totalLength + ' ' + totalLength)
             .attr('stroke-dashoffset', totalLength)
             .transition()
             .duration(2000)
@@ -2714,8 +2853,7 @@
                         });
 
                     //draw lines at the population guidelines
-                    svg
-                        .selectAll('lines.guidelines')
+                    svg.selectAll('lines.guidelines')
                         .data(row_d.population_extent)
                         .enter()
                         .append('line')
@@ -2804,8 +2942,6 @@
                 per: ['lab', 'visitn'],
                 values: { outlier: [true] },
                 attributes: {
-                    stroke: 'orange',
-                    fill: 'orange',
                     'fill-opacity': 1
                 },
                 tooltip: 'Visit: [visitn]\nValue: [value]\nULN: [uln]\nLLN: [lln]'
@@ -2813,7 +2949,7 @@
         ],
         margin: { top: 20 },
         gridlines: 'x',
-        colors: ['black']
+        colors: []
     };
 
     function setDomain$1(d) {
@@ -2889,8 +3025,7 @@
         chartRow_node.appendChild(chartCell_node);
 
         //update the row styles
-        d3
-            .select(chartRow_node)
+        d3.select(chartRow_node)
             .style('background', 'none')
             .style('border-bottom', '0.5px solid black');
 
@@ -2899,6 +3034,7 @@
         var chartCell = d3.select(chartCell_node).attr('colspan', cellCount);
 
         //draw the chart
+        defaultSettings.colors = [d.color];
         var lineChart = webcharts.createChart(chartCell_node, defaultSettings);
         lineChart.on('draw', function() {
             setDomain$1.call(this);
@@ -2924,13 +3060,11 @@
                         d3.select(this.parentNode).style('border-bottom', 'none');
 
                         this.lineChart = init$2.call(this, d);
-                        d3
-                            .select(this)
+                        d3.select(this)
                             .select('svg')
                             .style('display', 'none');
 
-                        d3
-                            .select(this)
+                        d3.select(this)
                             .select('span')
                             .html('&#x25B3; Minimize Chart');
                     } else {
@@ -2938,13 +3072,11 @@
 
                         d3.select(this.parentNode).style('border-bottom', '0.5px solid black');
 
-                        d3
-                            .select(this)
+                        d3.select(this)
                             .select('span')
                             .html('&#x25BD;');
 
-                        d3
-                            .select(this)
+                        d3.select(this)
                             .select('svg')
                             .style('display', null);
 
@@ -2955,7 +3087,7 @@
         }
     }
 
-    function addFootnote() {
+    function addFootnote$1() {
         var footnoteText = [
             'Y-Axis for each chart is based on the range of values for the entire population. Points shown for values outside the normal range. Click a sparkline to see a larger version of the chart.'
         ];
@@ -2983,7 +3115,7 @@
         this.measureTable.on('draw', function() {
             addSparkLines.call(this);
             addSparkClick.call(this);
-            addFootnote.call(this);
+            addFootnote$1.call(this);
         });
         this.measureTable.draw(nested);
     }
@@ -3034,16 +3166,14 @@
             .style('text-align', 'center')
             .style('padding', '0.5em');
 
-        lis
-            .append('div')
+        lis.append('div')
             .text(function(d) {
                 return d.label;
             })
             .attr('div', 'label')
             .style('font-size', '0.8em');
 
-        lis
-            .append('div')
+        lis.append('div')
             .text(function(d) {
                 return raw[d.value_col];
             })
@@ -3106,7 +3236,7 @@
 
     function onLayout$1() {
         var spaghetti = this;
-        var eDish = this.parent;
+        var eDish = this.edish;
 
         //customize the display control
         var displayControlWrap = spaghetti.controls.wrap
@@ -3200,7 +3330,7 @@
 
     function onDraw$1() {
         var spaghetti = this;
-        var eDish = this.parent;
+        var eDish = this.edish;
 
         //make sure y domain includes the current cut point for all measures
         var max_value = d3.max(spaghetti.filtered_data, function(f) {
@@ -3266,8 +3396,7 @@
         //sync parameter filter
         controlInputs$1.find(function(f) {
             return f.label == 'Select Labs';
-        }).value_col =
-            config.measure_col;
+        }).value_col = config.measure_col;
 
         var spaghettiControls = webcharts.createControls(spaghettiElement, {
             location: 'top',
@@ -3281,7 +3410,7 @@
             spaghettiControls
         );
 
-        chart.spaghetti.parent = chart; //link the full eDish object
+        chart.spaghetti.edish = chart; //link the full eDish object
         chart.spaghetti.participant_data = d; //include the passed data (used to initialize the measure table)
         chart.spaghetti.on('layout', onLayout$1);
         chart.spaghetti.on('preprocess', onPreprocess$1);
@@ -3314,8 +3443,7 @@
                 .attr('fill', 'white')
                 .classed('disabled', true); //disable mouseover while viewing participant details
 
-            d3
-                .select(this)
+            d3.select(this)
                 .attr('stroke', function(d) {
                     return chart.colorScale(d.values.raw[0][config.color_by]);
                 }) //highlight selected point
@@ -3328,7 +3456,6 @@
             chart.participantDetails.wrap.selectAll('*').style('display', null);
             makeParticipantHeader.call(chart, d);
             init$3.call(chart, d);
-            //    drawMeasureTable.call(chart, d); //draw table showing measure values with sparklines
         });
     }
 
@@ -3406,8 +3533,7 @@
         var dimension = d3.select(this).classed('x') ? 'x' : 'y';
         var chart = d3.select(this).datum().chart;
 
-        d3
-            .select(this)
+        d3.select(this)
             .select('line.cut-line')
             .attr('stroke-width', '2')
             .attr('stroke-dasharray', '2,2');
@@ -3457,8 +3583,7 @@
     function dragEnded() {
         var chart = d3.select(this).datum().chart;
 
-        d3
-            .select(this)
+        d3.select(this)
             .select('line.cut-line')
             .attr('stroke-width', '1')
             .attr('stroke-dasharray', '5,5');
@@ -3656,12 +3781,10 @@
             true,
             this.config.y.type == 'log'
         );
-        ybox
-            .select('g.boxplot')
-            .attr(
-                'transform',
-                'translate(' + (this.plot_width + this.config.margin.right / 2) + ',0)'
-            );
+        ybox.select('g.boxplot').attr(
+            'transform',
+            'translate(' + (this.plot_width + this.config.margin.right / 2) + ',0)'
+        );
 
         //X-axis box plot
         var xValues = this.current_data.map(function(d) {
@@ -3681,9 +3804,10 @@
             false, // horizontal?
             this.config.y.type == 'log' // log?
         );
-        xbox
-            .select('g.boxplot')
-            .attr('transform', 'translate(0,' + -(this.config.margin.top / 2) + ')');
+        xbox.select('g.boxplot').attr(
+            'transform',
+            'translate(0,' + -(this.config.margin.top / 2) + ')'
+        );
     }
 
     function setPointSize() {
