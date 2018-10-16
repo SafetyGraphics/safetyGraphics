@@ -51,16 +51,25 @@
 #'                             ALP = "Alkaline Phosphatase (U/L)"))
 #' 
 #' ## Create eDISH figure using a premade settings list
+#' group_cols_vec <- c("TRTP","SEX", "AGEGR1")
+#' 
+#' filters_df <- data.frame(
+#'   value_col=c("TRTA", "SEX", "RACE", "AGEGR1"),
+#'   label = c("Treatment", "Sex", "RACE", "Age group")
+#' )
+#' 
 #' settingsl <- list(id_col = "USUBJID",
 #'       value_col = "AVAL", 
 #'       measure_col = "PARAM", 
 #'       visitn_col = "VISITNUM", 
 #'       normal_col_low = "A1LO", 
 #'       normal_col_high = "A1HI", 
+#'       group_cols = group_cols_vec,
+#'       filters = filters_df,
 #'       measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
-#'                              +                             AST = "Aspartate Aminotransferase (U/L)",
-#'                              +                             TB = "Bilirubin (umol/L)",
-#'                              +                             ALP = "Alkaline Phosphatase (U/L)"))
+#'                             AST = "Aspartate Aminotransferase (U/L)",
+#'                             TB = "Bilirubin (umol/L)",
+#'                             ALP = "Alkaline Phosphatase (U/L)"))
 #' eDISH(data=adlbc, settings = settingsl)
 #' 
 #' }
