@@ -10,6 +10,7 @@
 #' @param normal_col_high Upper limit of normal variable name. Default: \code{"STNRHI"}. 
 #' @param visit_col Visit variable name. Default: \code{"VISIT"}.
 #' @param visitn_col Visit number variable name. Default: \code{"VISITN"}. 
+#' @param visitday_col  Visit day variable name. Default: \code{"DY"}. 
 #' @param baseline_visitn Value of baseline visit number. Used to calculate mDish. Default: \code{1}. 
 #' @param filters An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.
 #' @param group_cols An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.
@@ -41,7 +42,9 @@
 #'       id_col = "USUBJID",
 #'       value_col = "AVAL", 
 #'       measure_col = "PARAM", 
+#'       visit_col = "VISIT",
 #'       visitn_col = "VISITNUM", 
+#'       studyday_col = "ADY",
 #'       normal_col_low = "A1LO", 
 #'       normal_col_high = "A1HI", 
 #'       measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
@@ -53,7 +56,9 @@
 #' settingsl <- list(id_col = "USUBJID",
 #'       value_col = "AVAL", 
 #'       measure_col = "PARAM", 
-#'       visitn_col = "VISITNUM", 
+#'       visit_col = "VISIT",
+#'       visitn_col = "VISITNUM",
+#'       studyday_col = "ADY", 
 #'       normal_col_low = "A1LO", 
 #'       normal_col_high = "A1HI", 
 #'       measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
