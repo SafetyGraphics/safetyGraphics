@@ -4,11 +4,113 @@
 \alias{eDISH}
 \title{Create an eDISH widget}
 \usage{
-eDISH(data)
+eDISH(data, id_col = "USUBJID", value_col = "STRESN",
+  measure_col = "TEST", unit_col = "STRESU",
+  normal_col_low = "STNRLO", normal_col_high = "STNRHI",
+  visit_col = "VISIT", visitn_col = "VISITN", baseline_visitn = 1,
+  filters = NULL, group_cols = NULL, measure_values = list(ALT =
+  "Aminotransferase, alanine (ALT)", AST =
+  "Aminotransferase, aspartate (AST)", TB = "Total Bilirubin", ALP =
+  "Alkaline phosphatase (ALP)"), x_options = c("ALT", "AST", "ALP"),
+  y_options = c("TB", "ALP"), visit_window = 30,
+  r_ratio_filter = TRUE, r_ratio_cut = 0, showTitle = TRUE,
+  warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.",
+  settings = NULL)
 }
 \arguments{
 \item{data}{A data frame containing the labs data. Data must be structured as one record per study participant per time point per lab measure.}
+
+\item{id_col}{Unique subject identifier variable name. Default: \code{"USUBJID"}.}
+
+\item{value_col}{Lab result variable name. Default: \code{"STRESN"}.}
+
+\item{measure_col}{Lab measure variable name. Default: \code{"TEST"}.}
+
+\item{unit_col}{Lab measure unit variable name. Default: \code{"STRESU"}.}
+
+\item{normal_col_low}{Lower limit of normal variable name. Default: \code{"STNRLO"}.}
+
+\item{normal_col_high}{Upper limit of normal variable name. Default: \code{"STNRHI"}.}
+
+\item{visit_col}{Visit variable name. Default: \code{"VISIT"}.}
+
+\item{visitn_col}{Visit number variable name. Default: \code{"VISITN"}.}
+
+\item{baseline_visitn}{Value of baseline visit number. Used to calculate mDish. Default: \code{1}.}
+
+\item{filters}{An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.}
+
+\item{group_cols}{An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.}
+
+\item{measure_values}{A list defining the data values from \code{measure_col} for the lab measures 
+used in eDish evaluations. Default: \code{list(ALT = 'Aminotransferase, alanine (ALT)', 
+AST = 'Aminotransferase, aspartate (AST)', TB = 'Total Bilirubin', ALP = 'Alkaline phosphatase (ALP)')}.}
+
+\item{x_options}{Specifies variable options for the x-axis using the key values from \code{measure_values} (e.g. "ALT"). 
+When multiple options are specified, a control allowing the user to interactively change the x variable is shown. Default: \code{c("ALT", "AST", "ALP")}.}
+
+\item{y_options}{Specifies variable options for the y-axis using the key values from \code{measure_values} (e.g. "TB"). 
+When multiple options are specified, a control allowing the user to interactively change the y variable is shown. Default: \code{c("TB", "ALP")}.}
+
+\item{visit_window}{Default visit window used to highlight eDish points where x and y measures occurred within the specified number of days. 
+Editable by user after render. Default: \code{30}.}
+
+\item{r_ratio_filter}{Specifies whether the R Ratio filter should be shown. R ratio is defined as: 
+(ALT value/ULN for ALT) / (ALP value/ULN for ALP). Default: \code{TRUE}.}
+
+\item{r_ratio_cut}{Default cut point for R Ratio filter. Ignored when \code{r_ratio_filter = FALSE}. 
+User can update this setting via the UI when \code{r_ratio_filter = TRUE}. Default: \code{0}.}
+
+\item{showTitle}{Specifies whether the title should be drawn above the controls. Default: \code{TRUE}.}
+
+\item{warningText}{Informational text to be displayed near the top of the controls (beneath the title, if any).
+No warning is displayed if \code{warningText = ""}. Default: \code{"Caution: This interactive graphic is 
+not validated. Any clinical recommendations based on this tool should be confirmed using your organizations 
+standard operating procedures."}.}
+
+\item{settings}{Optional list of settings arguments to be converted to JSON using \code{jsonlite::toJSON(settings, auto_unbox = TRUE, dataframe = "rows", null = "null")}.  If provided, all other function parameters are ignored. Default: \code{NULL}.}
 }
 \description{
 This function creates an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH)
+}
+\examples{
+\dontrun{
+
+## Create eDISH figure customized to user data
+eDISH(data=adlbc, 
+      id_col = "USUBJID",
+      value_col = "AVAL", 
+      measure_col = "PARAM", 
+      visitn_col = "VISITNUM", 
+      normal_col_low = "A1LO", 
+      normal_col_high = "A1HI", 
+      measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
+                            AST = "Aspartate Aminotransferase (U/L)",
+                            TB = "Bilirubin (umol/L)",
+                            ALP = "Alkaline Phosphatase (U/L)"))
+
+## Create eDISH figure using a premade settings list
+group_cols_vec <- c("TRTP","SEX", "AGEGR1")
+
+filters_df <- data.frame(
+  value_col=c("TRTA", "SEX", "RACE", "AGEGR1"),
+  label = c("Treatment", "Sex", "RACE", "Age group")
+)
+
+settingsl <- list(id_col = "USUBJID",
+      value_col = "AVAL", 
+      measure_col = "PARAM", 
+      visitn_col = "VISITNUM", 
+      normal_col_low = "A1LO", 
+      normal_col_high = "A1HI", 
+      group_cols = group_cols_vec,
+      filters = filters_df,
+      measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
+                            AST = "Aspartate Aminotransferase (U/L)",
+                            TB = "Bilirubin (umol/L)",
+                            ALP = "Alkaline Phosphatase (U/L)"))
+eDISH(data=adlbc, settings = settingsl)
+
+}
+
 }
