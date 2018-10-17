@@ -1,10 +1,10 @@
 (function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined'
-        ? (module.exports = factory(require('webcharts')))
+        ? (module.exports = factory(require('webcharts'), require('d3')))
         : typeof define === 'function' && define.amd
-            ? define(['webcharts'], factory)
-            : (global.safetyedish = factory(global.webCharts));
-})(this, function(webcharts) {
+            ? define(['webcharts', 'd3'], factory)
+            : (global.safetyedish = factory(global.webCharts, global.d3));
+})(this, function(webcharts, d3$1) {
     'use strict';
 
     if (typeof Object.assign != 'function') {
@@ -275,6 +275,21 @@
         };
     })();
 
+    var defineProperty = function(obj, key, value) {
+        if (key in obj) {
+            Object.defineProperty(obj, key, {
+                value: value,
+                enumerable: true,
+                configurable: true,
+                writable: true
+            });
+        } else {
+            obj[key] = value;
+        }
+
+        return obj;
+    };
+
     /*------------------------------------------------------------------------------------------------\
   Clone a variable (http://stackoverflow.com/a/728694).
 \------------------------------------------------------------------------------------------------*/
@@ -322,7 +337,6 @@
             visit_col: 'VISIT',
             visitn_col: 'VISITNUM',
             studyday_col: 'DY',
-            unit_col: 'STRESU',
             normal_col_low: 'STNRLO',
             normal_col_high: 'STNRHI',
             id_col: 'USUBJID',
@@ -331,6 +345,10 @@
             details: null,
             r_ratio_filter: true,
             r_ratio_cut: 0,
+            analysisFlag: {
+                value_col: null,
+                values: []
+            },
             measure_values: {
                 ALT: 'Aminotransferase, alanine (ALT)',
                 AST: 'Aminotransferase, aspartate (AST)',
@@ -339,27 +357,24 @@
             },
             x_options: ['ALT', 'AST', 'ALP'],
             y_options: ['TB'],
-            size_options: ['ALT', 'AST', 'ALP', 'TB'],
+            point_size: 'Uniform',
+            point_size_options: ['ALT', 'AST', 'ALP', 'TB'],
             cuts: {
                 ALT: {
                     relative_baseline: 3.8,
-                    relative_uln: 3,
-                    absolute: 1.0
+                    relative_uln: 3
                 },
                 AST: {
                     relative_baseline: 3.8,
-                    relative_uln: 3,
-                    absolute: 1.0
+                    relative_uln: 3
                 },
                 TB: {
                     relative_baseline: 4.8,
-                    relative_uln: 2,
-                    absolute: 40
+                    relative_uln: 2
                 },
                 ALP: {
                     relative_baseline: 3.8,
-                    relative_uln: 1,
-                    absolute: 1.0
+                    relative_uln: 1
                 },
                 xMeasure: null, //set in syncSettings
                 yMeasure: null, //set in syncSettings
@@ -372,22 +387,21 @@
                 ALP: 'data-driven'
             },
             imputation_values: null,
-            missingValues: ['', 'NA', 'N/A'],
-            display: 'relative_uln', //or "relative_baseline" or "absolute"
+            display: 'relative_uln', //or "relative_baseline"
             display_options: [
                 { label: 'Upper limit of normal adjusted (eDish)', value: 'relative_uln' },
-                { label: 'Baseline adjusted (mDish)', value: 'relative_baseline' },
-                { label: 'Raw Values', value: 'absolute' }
+                { label: 'Baseline adjusted (mDish)', value: 'relative_baseline' }
             ],
             baseline_visitn: '1',
             measureBounds: [0.01, 0.99],
             populationProfileURL: null,
             participantProfileURL: null,
-            point_size: 'Uniform',
             visit_window: 30,
             showTitle: true,
+            warningText:
+                "This graphic has been thoroughly tested, but is not validated. Any clinical recommendations based on this tool should be confirmed using your organization's standard operating procedures.",
+            //all values set in onLayout/quadrants/*.js
             quadrants: [
-                //all values set in onLayout/quadrants/*.js
                 {
                     label: "Possible Hy's Law Range",
                     position: 'upper-right',
@@ -461,6 +475,10 @@
         settings.marks[0].per[0] = settings.id_col;
 
         //set grouping config
+        if (typeof settings.group_cols == 'string') {
+            settings.group_cols = [{ value_col: settings.group_cols, label: settings.group_cols }];
+        }
+
         if (!(settings.group_cols instanceof Array && settings.group_cols.length)) {
             settings.group_cols = [{ value_col: 'NONE', label: 'None' }];
         } else {
@@ -498,7 +516,9 @@
                     value_col: filter.value_col ? filter.value_col : filter,
                     label: filter.label
                         ? filter.label
-                        : filter.value_col ? filter.value_col : filter
+                        : filter.value_col
+                            ? filter.value_col
+                            : filter
                 };
 
                 if (
@@ -521,7 +541,9 @@
                         value_col: group.value_col ? group.value_col : filter,
                         label: group.label
                             ? group.label
-                            : group.value_col ? group.value_col : filter
+                            : group.value_col
+                                ? group.value_col
+                                : filter
                     };
                     if (
                         defaultDetails.find(function(f) {
@@ -551,11 +573,17 @@
                         value_col: detail.value_col ? detail.value_col : detail,
                         label: detail.label
                             ? detail.label
-                            : detail.value_col ? detail.value_col : detail
+                            : detail.value_col
+                                ? detail.value_col
+                                : detail
                     });
             });
             settings.details = defaultDetails;
         }
+
+        //parse x_ and y_options to array if needed
+        if (typeof settings.x_options == 'string') settings.x_options = [settings.x_options];
+        if (typeof settings.y_options == 'string') settings.y_options = [settings.y_options];
 
         // track initial Cutpoint (lets us detect when cutpoint should change)
         settings.cuts.x = settings.x.column;
@@ -624,7 +652,7 @@
                 label: 'Point Size',
                 description: 'Parameter to set point radius',
                 options: ['point_size'],
-                start: 'None', // set in syncControlInputs()
+                start: null, // set in syncControlInputs()
                 values: ['Uniform'],
                 require: true
             },
@@ -759,12 +787,14 @@
             return ci.label === 'Point Size';
         });
 
-        settings.size_options.forEach(function(d) {
+        pointSizeControl.start = settings.point_size || 'Uniform';
+
+        settings.point_size_options.forEach(function(d) {
             pointSizeControl.values.push(d);
         });
 
         //drop the pointSize control if NONE is the only option
-        if (settings.size_options.length == 0)
+        if (settings.point_size_options.length == 0)
             controlInputs = controlInputs.filter(function(controlInput) {
                 return controlInput.label != 'Point Size';
             });
@@ -789,7 +819,9 @@
                     value_col: filter.value_col ? filter.value_col : filter,
                     label: filter.label
                         ? filter.label
-                        : filter.value_col ? filter.value_col : filter
+                        : filter.value_col
+                            ? filter.value_col
+                            : filter
                 };
                 return filter;
             });
@@ -814,7 +846,9 @@
             )
             .values()
             .sort();
-        var specifiedMeasures = Object.values(config.measure_values);
+        var specifiedMeasures = Object.keys(config.measure_values).map(function(e) {
+            return config.measure_values[e];
+        });
         var missingMeasures = [];
         Object.keys(config.measure_values).forEach(function(d) {
             if (measures.indexOf(config.measure_values[d]) == -1) {
@@ -834,7 +868,7 @@
 
         //check that x_options, y_options and size_options all have value keys/values in measure_values
         var valid_options = Object.keys(config.measure_values);
-        var all_options = ['x_options', 'y_options', 'size_options'];
+        var all_options = ['x_options', 'y_options', 'point_size_options'];
         all_options.forEach(function(options) {
             config[options].forEach(function(option) {
                 if (valid_options.indexOf(option) == -1) {
@@ -982,11 +1016,48 @@
         });
     }
 
+    function dropRows() {
+        var _this = this;
+
+        var config = this.config;
+        this.dropped_rows = [];
+
+        /////////////////////////
+        // Remove invalid rows
+        /////////////////////////
+
+        this.imputed_data = this.initial_data
+            .filter(function(d) {
+                //Remove non-numeric value_col
+                var numericValueCol = /^-?(\d*\.?\d+|\d+\.?\d*)(E-?\d+)?$/.test(
+                    d[_this.config.value_col]
+                );
+                if (!numericValueCol) {
+                    d.dropReason = 'Value Column ("' + config.value_col + '") is not numeric.';
+                    _this.dropped_rows.push(d);
+                }
+                return numericValueCol;
+            })
+            .filter(function(d) {
+                //Remove non-numeric visit_col
+                var numericVisitCol = /^-?(\d*\.?\d+|\d+\.?\d*)(E-?\d+)?$/.test(
+                    d[_this.config.visitn_col]
+                );
+                if (!numericVisitCol) {
+                    d.dropReason = 'Visit Column ("' + config.visitn_col + '") is not numeric.';
+                    _this.dropped_rows.push(d);
+                }
+                return numericVisitCol;
+            });
+    }
+
     function deriveVariables() {
         var config = this.config;
 
         //filter the lab data to only the required measures
-        var included_measures = Object.values(config.measure_values);
+        var included_measures = Object.keys(config.measure_values).map(function(e) {
+            return config.measure_values[e];
+        });
 
         var sub = this.imputed_data
             .filter(function(f) {
@@ -1030,6 +1101,7 @@
                 d.absolute = d[config.value_col];
 
                 //get the value relative to the ULN (% of the upper limit of normal) for the measure
+                d.uln = d[config.normal_col_high];
                 d.relative_uln = d[config.value_col] / d[config.normal_col_high];
 
                 //get value relative to baseline
@@ -1058,18 +1130,28 @@
             );
     }
 
-    function cleanData() {
-        var _this = this;
-
-        this.imputed_data = this.initial_data.filter(function(d) {
-            return /^-?(\d*\.?\d+|\d+\.?\d*)(E-?\d+)?$/.test(d[_this.config.value_col]);
+    function makeAnalysisFlag() {
+        var config = this.config;
+        this.imputed_data = this.imputed_data.map(function(d) {
+            var hasAnalysisSetting =
+                (config.analysisFlag.value_col != null) & (config.analysisFlag.values.length > 0);
+            d.analysisFlag = hasAnalysisSetting
+                ? config.analysisFlag.values.indexOf(d[config.analysisFlag.value_col]) > -1
+                : true;
+            return d;
         });
+    }
+
+    function cleanData() {
+        this.imputedData = dropRows.call(this);
+
         this.imputed_data.forEach(function(d) {
             d.impute_flag = false;
         });
 
         imputeData.call(this);
         deriveVariables.call(this);
+        makeAnalysisFlag.call(this);
     }
 
     function onInit() {
@@ -1335,16 +1417,18 @@
         splot
             .append('h3')
             .attr('class', 'id')
-            .html('Lab Values vs. Upper Limit of Normal by Visit')
+            .html('Standardized Lab Values by Visit')
             .style('border-top', '2px solid black')
             .style('border-bottom', '2px solid black')
             .style('padding', '.2em');
+
+        splot.append('div').attr('class', 'chart');
 
         var mtable = this.participantDetails.wrap.append('div').attr('class', 'measureTable');
         mtable
             .append('h3')
             .attr('class', 'id')
-            .html('Lab Summary Table')
+            .html('Raw Lab Values Summary Table')
             .style('border-top', '2px solid black')
             .style('border-bottom', '2px solid black')
             .style('padding', '.2em');
@@ -1423,7 +1507,7 @@
             .text('Note: Baseline defined as Visit ' + chart.config.baseline_visitn)
             .style('display', config.display == 'relative_baseline' ? null : 'none');
 
-        displayControl.select('select').on('change', function(d) {
+        displayControl.on('change', function(d) {
             var currentLabel = this.value;
             var currentValue = config.display_options.find(function(f) {
                 return f.label == currentLabel;
@@ -1462,8 +1546,6 @@
             this.titleDiv = this.controls.wrap
                 .insert('div', '*')
                 .attr('class', 'title')
-                .style('border-top', '1px solid black')
-                .style('border-bottom', '1px solid black')
                 .style('margin-right', '1em')
                 .style('margin-bottom', '1em');
 
@@ -1473,27 +1555,281 @@
                 .style('font-size', '1.5em')
                 .style('font-weight', 'strong')
                 .style('display', 'block');
-
-            this.titleDiv
-                .append('span')
-                .text('Use controls to update chart or click a point to see participant details.')
-                .style('font-size', '0.8em');
         }
     }
 
-    function initFilterLabel() {
+    function add(messageText, type, label, messages, callback) {
+        var messageObj = {
+            id: messages.list.length + 1,
+            type: type,
+            message: messageText,
+            label: label,
+            hidden: false,
+            callback: callback
+        };
+        messages.list.push(messageObj);
+        messages.update(messages);
+    }
+
+    function remove(id, label, messages) {
+        // hide the the message(s) by id or label
+        if (id) {
+            var matches = messages.list.filter(function(f) {
+                return +f.id == +id;
+            });
+        } else if (label.length) {
+            var matches = messages.list.filter(function(f) {
+                return label == 'all' ? true : f.label == label;
+            });
+        }
+        matches.forEach(function(d) {
+            d.hidden = true;
+        });
+        messages.update(messages);
+    }
+
+    function update(messages) {
+        function jsUcfirst(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        var visibleMessages = messages.list.filter(function(f) {
+            return f.hidden == false;
+        });
+
+        //update title
+        messages.header.title.text('Messages (' + visibleMessages.length + ')');
+
+        //
+        var messageDivs = messages.wrap.selectAll('div.message').data(visibleMessages, function(d) {
+            return d.id;
+        });
+
+        var newMessages = messageDivs
+            .enter()
+            .append('div')
+            .attr('class', function(d) {
+                return d.type + ' message ' + d.label;
+            })
+            .html(function(d) {
+                var messageText = '<strong>' + jsUcfirst(d.type) + '</strong>: ' + d.message;
+                return messageText.split('.')[0] + '.';
+            })
+            .style('border-radius', '.5em')
+            .style('margin-right', '1em')
+            .style('margin-bottom', '0.5em')
+            .style('padding', '0.2em')
+            .style('font-size', '0.9em');
+
+        newMessages
+            .append('div.expand')
+            .html('•••')
+            .style('background', 'white')
+            .style('display', 'inline-block')
+            .style('border', '1px solid #999')
+            .style('padding', '0 0.2em')
+            .style('margin-left', '0.3em')
+            .style('font-size', '0.4em')
+            .style('border-radius', '0.6em')
+            .style('cursor', 'pointer')
+            .on('click', function(d) {
+                console.log(d);
+                d3.select(this.parentNode)
+                    .html(function(d) {
+                        return '<strong>' + jsUcfirst(d.type) + '</strong>: ' + d.message;
+                    })
+                    .each(function(d) {
+                        if (d.callback) {
+                            console.log('callback');
+                            d.callback.call(this.parentNode);
+                        }
+                    });
+            });
+
+        messageDivs.each(function(d) {
+            var type = d.type;
+            var thisMessage = d3.select(this);
+            if (type == 'caution') {
+                thisMessage
+                    .style('border', '1px solid #faebcc')
+                    .style('color', '#8a6d3b')
+                    .style('background-color', '#fcf8e3');
+            } else if (type == 'warning') {
+                thisMessage
+                    .style('border', '1px solid #ebccd1')
+                    .style('color', '#a94442')
+                    .style('background-color', '#f2dede');
+            } else {
+                thisMessage
+                    .style('border', '1px solid #999')
+                    .style('color', '#999')
+                    .style('background-color', null);
+            }
+
+            if (d.callback) {
+                d.callback.call(this);
+            }
+        });
+
+        messageDivs.exit().remove();
+    }
+
+    function init$1() {
+        var chart = this;
+        this.messages = {
+            add: add,
+            remove: remove,
+            update: update
+        };
+        //  this.messages.add = addMessage;
+        //  this.messages.remove = removeMessage;
+        this.messages.list = [];
+        this.messages.wrap = this.controls.wrap.insert('div', '*').style('margin', '0 1em 1em 0');
+        this.messages.header = this.messages.wrap
+            .append('div')
+            .style('border-top', '1px solid black')
+            .style('border-bottom', '1px solid black')
+            .style('font-weight', 'strong')
+            .style('margin', '0 1em 1em 0');
+
+        this.messages.header.title = this.messages.header
+            .append('div')
+            .attr('class', 'title')
+            .style('display', 'inline-block')
+            .text('Messages (0)');
+
+        this.messages.header.clear = this.messages.header
+            .append('div')
+            .text('Clear')
+            .style('font-size', '0.8em')
+            .style('vertical-align', 'center')
+            .style('display', 'inline-block')
+            .style('float', 'right')
+            .style('color', 'blue')
+            .style('cursor', 'pointer')
+            .style('text-decoration', 'underline')
+            .on('click', function() {
+                chart.messages.remove(null, 'all', chart.messages);
+            });
+    }
+
+    function initCustomWarning() {
+        if (this.config.warningText) {
+            this.messages.add(
+                this.config.warningText,
+                'caution',
+                'validationCaution',
+                this.messages
+            );
+        }
+    }
+
+    function downloadCSV(data, cols) {
+        var CSVarray = [];
+
+        //add headers to CSV array
+        var cols = cols ? cols : Object.keys(data[0]);
+        var headers = cols.map(function(header) {
+            return '"' + header.replace(/"/g, '""') + '"';
+        });
+        CSVarray.push(headers);
+        //add rows to CSV array
+        data.forEach(function(d, i) {
+            var row = cols.map(function(col) {
+                var value = d[col];
+
+                if (typeof value === 'string') value = value.replace(/"/g, '""');
+
+                return '"' + value + '"';
+            });
+
+            CSVarray.push(row);
+        });
+
+        //transform blob array into a blob of characters
+        var blob = new Blob([CSVarray.join('\n')], {
+            type: 'text/csv;charset=utf-8;'
+        });
+
+        var fileName =
+            'eDishDroppedRows_' + d3$1.time.format('%Y-%m-%dT%H-%M-%S')(new Date()) + '.csv';
+        var link = d3.select(this);
+
+        if (navigator.msSaveBlob)
+            //IE
+            navigator.msSaveBlob(blob, fileName);
+        else if (link.node().download !== undefined) {
+            //21st century browsers
+            var url = URL.createObjectURL(blob);
+            link.node().setAttribute('href', url);
+            link.node().setAttribute('download', fileName);
+        }
+    }
+
+    function initDroppedRowsWarning() {
+        var chart = this;
+        if (this.dropped_rows.length > 0) {
+            var warningText =
+                this.dropped_rows.length +
+                ' rows were removed. This is probably because of non-numeric or missing data provided for key variables. Click <a class="rowDownload">here</a> to download a csv with a brief explanation of why each row was removed.';
+
+            this.messages.add(warningText, 'caution', 'droppedRows', this.messages, function() {
+                //custom callback to activate the droppedRows download
+                d3.select(this)
+                    .select('a.rowDownload')
+                    .style('color', 'blue')
+                    .style('text-decoration', 'underline')
+                    .style('cursor', 'pointer')
+                    .datum(chart.dropped_rows)
+                    .on('click', function(d) {
+                        var systemVars = d3.merge([
+                            ['dropReason', 'NONE'],
+                            Object.keys(chart.config.measure_values)
+                        ]);
+                        var cols = d3.merge([
+                            ['dropReason'],
+                            Object.keys(d[0]).filter(function(f) {
+                                return systemVars.indexOf(f) == -1;
+                            })
+                        ]);
+                        downloadCSV.call(this, d, cols);
+                    });
+            });
+        }
+    }
+
+    function initControlLabels() {
         var config = this.config;
-        //check to see if at least 1 filter exists
+
+        //Add settings label
+        var first_control = this.controls.wrap.select('div.control-group');
+        this.controls.setting_header = first_control
+            .insert('div', '*')
+            .attr('class', 'subtitle')
+            .style('border-top', '1px solid black')
+            .style('border-bottom', '1px solid black')
+            .style('margin-right', '1em')
+            .style('margin-bottom', '1em');
+        this.controls.setting_header
+            .append('span')
+            .text('Settings')
+            .style('font-weight', 'strong')
+            .style('display', 'block');
+
+        //Add filter label if at least 1 filter exists
         if (config.r_ratio_filter || config.filters.length > 0) {
             //insert a header before the first filter
-            var control_wraps = this.controls.wrap.selectAll('div');
-            var first_filter = config.r_ratio_filter
-                ? control_wraps.filter(function(controlInput) {
-                      return controlInput.label === 'Minimum R Ratio';
-                  })
-                : control_wraps.filter(function(controlInput) {
-                      return controlInput.type === 'subsetter';
-                  });
+            var control_wraps = this.controls.wrap
+                .selectAll('div')
+                .filter(function(controlInput) {
+                    return (
+                        controlInput.label === 'Minimum R Ratio' ||
+                        controlInput.type === 'subsetter'
+                    );
+                })
+                .classed('subsetter', true);
+
+            var first_filter = this.controls.wrap.select('div.subsetter');
 
             this.controls.filter_header = first_filter
                 .insert('div', '*')
@@ -1505,7 +1841,6 @@
             this.controls.filter_header
                 .append('span')
                 .text('Filters')
-                .style('font-size', '1.5em')
                 .style('font-weight', 'strong')
                 .style('display', 'block');
             var population = d3
@@ -1536,17 +1871,33 @@
         }
     }
 
+    function addFootnote() {
+        this.wrap
+            .append('div')
+            .attr('class', 'footnote')
+            .text('Use controls to update chart or click a point to see participant details.')
+            .style('font-size', '0.7em')
+            .style('padding-top', '0.1em');
+    }
+
     function onLayout() {
-        addRRatioSpan.call(this);
         layoutPanels.call(this);
+
+        //init messages section
+        init$1.call(this);
+        initCustomWarning.call(this);
+        initDroppedRowsWarning.call(this);
         initTitle.call(this);
+
+        addFootnote.call(this);
+        addRRatioSpan.call(this);
         initQuadrants.call(this);
         initRugs.call(this);
         initVisitPath.call(this);
         initParticipantDetails.call(this);
         initResetButton.call(this);
         initDisplayControl.call(this);
-        initFilterLabel.call(this);
+        initControlLabels.call(this);
     }
 
     function updateAxisSettings() {
@@ -1556,7 +1907,9 @@
                 ? ' [xULN]'
                 : config.display == 'relative_baseline'
                     ? ' [xBaseline]'
-                    : config.display == 'absolute' ? ' [raw values]' : null;
+                    : config.display == 'absolute'
+                        ? ' [raw values]'
+                        : null;
 
         //Update axis labels.
         config.x.label = config.measure_values[config.x.column] + unit;
@@ -1649,7 +2002,6 @@
             'visit_col',
             'visitn_col',
             'studyday_col',
-            'unit_col',
             'normal_col_low',
             'normal_col_high'
         ];
@@ -1669,7 +2021,7 @@
         //merge in the absolute and relative values
         colList = d3.merge([
             colList,
-            ['absolute', 'relative_uln', 'relative_baseline', 'baseline_raw']
+            ['absolute', 'relative_uln', 'relative_baseline', 'baseline_absolute', 'analysisFlag']
         ]);
 
         //get maximum values for each measure type
@@ -1684,13 +2036,27 @@
                 participant_obj.days_y = null;
                 Object.keys(config.measure_values).forEach(function(mKey) {
                     //get all raw data for the current measure
-                    var matches = d.filter(function(f) {
-                        return config.measure_values[mKey] == f[config.measure_col];
-                    }); //get matching measures
+                    var matches = d
+                        .filter(function(f) {
+                            return config.measure_values[mKey] == f[config.measure_col];
+                        }) //get matching measures
+                        .filter(function(f) {
+                            return f.analysisFlag;
+                        });
 
                     if (matches.length == 0) {
-                        console.log('No matches found');
+                        if (config.debug) {
+                            console.warn(
+                                'No analysis records found for ' +
+                                    d[0][config.id_col] +
+                                    ' for ' +
+                                    mKey
+                            );
+                        }
+
                         participant_obj.drop_participant = true;
+                        participant_obj.drop_reason =
+                            'No analysis results found for 1+ key measure, including ' + mKey + '.';
                         return participant_obj;
                     } else {
                         participant_obj.drop_participant = false;
@@ -1747,9 +2113,22 @@
                 })
             );
 
+        chart.dropped_participants = flat_data
+            .filter(function(f) {
+                return f.values.drop_participant;
+            })
+            .map(function(d) {
+                return {
+                    id: d.key,
+                    drop_reason: d.values.drop_reason,
+                    allrecords: chart.initial_data.filter(function(f) {
+                        return f[config.id_col] == d.key;
+                    })
+                };
+            });
         var flat_data = flat_data
             .filter(function(f) {
-                return f.values.drop_participant == false;
+                return !f.values.drop_participant;
             })
             .map(function(m) {
                 m.values[config.id_col] = m.key;
@@ -1780,28 +2159,108 @@
                 : '';
     }
 
+    function showMissingDataWarning() {
+        var chart = this;
+        var config = chart.config;
+
+        if (config.debug) {
+            //confirm participants are only dropped once (?!)
+            var unique_dropped_participants = d3
+                .set(
+                    this.dropped_participants.map(function(m) {
+                        return m.id;
+                    })
+                )
+                .values().length;
+            console.log(
+                'Of ' +
+                    this.dropped_participants.length +
+                    ' dropped participants, ' +
+                    unique_dropped_participants +
+                    ' are unique.'
+            );
+            console.log(this.dropped_participants);
+        }
+
+        chart.messages.remove(null, 'droppedPts', chart.messages); //remove message from previous render
+        if (this.dropped_participants.length > 0) {
+            var warningText =
+                this.dropped_participants.length +
+                ' participants are not plotted. They likely have invalid or missing data for key variables in the current chart. Click <a class="ptDownload">here</a> to download a csv with a brief explanation of why each participant was not plotted.';
+
+            this.messages.add(warningText, 'caution', 'droppedPts', this.messages, function() {
+                //custom callback to activate the droppedRows download
+                d3.select(this)
+                    .select('a.ptDownload')
+                    .style('color', 'blue')
+                    .style('text-decoration', 'underline')
+                    .style('cursor', 'pointer')
+                    .datum(chart.dropped_participants)
+                    .on('click', function(d) {
+                        var cols = ['id', 'drop_reason'];
+                        downloadCSV.call(this, d, cols);
+                    });
+            });
+        }
+    }
+
     function dropMissingValues() {
+        var chart = this;
         var config = this.config;
         //drop records with missing or invalid (negative) values
         var missing_count = d3.sum(this.raw_data, function(f) {
             return f[config.x.column] <= 0 || f[config.y.column] <= 0;
         });
 
-        this.wrap.select('.se-footnote').remove();
         if (missing_count > 0) {
-            this.wrap
-                .append('span')
-                .classed('se-footnote', true)
-                .text(
-                    'Data not shown for ' +
-                        missing_count +
-                        ' participant(s) with invalid data. This could be due to negative or 0 lab values or to missing baseline values when viewing mDish.'
-                );
+            this.raw_data = this.raw_data.map(function(d) {
+                d.nonPositiveFlag = d[config.x.column] <= 0 || d[config.y.column] <= 0;
+                var type = config.display == 'relative_uln' ? 'eDish' : 'mDish';
+                // generate an informative reason the participant was dropped
+                var dropText =
+                    type +
+                    ' values could not be generated for ' +
+                    config.x.column +
+                    ' or ' +
+                    config.y.column +
+                    '. ';
 
-            this.raw_data = this.raw_data.filter(function(f) {
-                return (f[config.x.column] > 0) & (f[config.y.column] > 0);
+                // x type is mdish and baseline is missing
+                if ((type == 'mDish') & !d[config.x.column + '_baseline_absolute']) {
+                    dropText = dropText + 'Baseline for ' + config.x.column + ' is missing. ';
+                }
+
+                // y type is mdish and baseline is missing
+                if ((type == 'mDish') & !d[config.y.column + '_baseline_absolute']) {
+                    dropText = dropText + 'Baseline for ' + config.y.column + ' is missing. ';
+                }
+
+                d.drop_reason = d.nonPositiveFlag ? dropText : '';
+                return d;
+            });
+
+            this.dropped_participants = d3.merge([
+                this.dropped_participants,
+                this.raw_data
+                    .filter(function(f) {
+                        return f.nonPositiveFlag;
+                    })
+                    .map(function(m) {
+                        return { id: m[config.id_col], drop_reason: m.drop_reason };
+                    })
+            ]);
+
+            this.dropped_participants.map(function(m) {
+                m.raw = chart.initial_data.filter(function(f) {
+                    return f[config.id_col] == m.id;
+                });
             });
         }
+
+        this.raw_data = this.raw_data.filter(function(f) {
+            return !f.nonPositiveFlag;
+        });
+        showMissingDataWarning.call(this);
     }
 
     function onPreprocess() {
@@ -1982,10 +2441,10 @@
                 return lower_limits[d.description.split('-')[0]];
             });
 
-        controlWraps.select('select').on('change', function(d) {
+        controlWraps.select('input').on('change', function(d) {
             var dimension = d.description.split('-')[0].toLowerCase();
             var min = chart[dimension + '_dom'][0];
-            var input = d3.select(this).select('input');
+            var input = d3.select(this);
 
             //Prevent a cutpoint less than the lower domain.
             if (input.property('value') < min) input.property('value', min);
@@ -2038,7 +2497,6 @@
     }
 
     function onDraw() {
-        console.log('drawing');
         //clear participant Details
         clearParticipantDetails.call(this);
 
@@ -2226,7 +2684,6 @@
         var matches = allMatches.filter(function(f) {
             return f[config.measure_col] == x_measure || f[config.measure_col] == y_measure;
         });
-
         //get coordinates by visit
         var visits = d3
             .set(
@@ -2310,8 +2767,7 @@
 
         var totalLength = path.node().getTotalLength();
 
-        path
-            .attr('stroke-dasharray', totalLength + ' ' + totalLength)
+        path.attr('stroke-dasharray', totalLength + ' ' + totalLength)
             .attr('stroke-dashoffset', totalLength)
             .transition()
             .duration(2000)
@@ -2375,6 +2831,96 @@
             .attr('font-size', 8);
     }
 
+    function makeNestedData(d) {
+        var chart = this;
+        var config = chart.config;
+        var allMatches = d.values.raw[0].raw;
+
+        var ranges = d3
+            .nest()
+            .key(function(d) {
+                return d[config.measure_col];
+            })
+            .rollup(function(d) {
+                var vals = d
+                    .map(function(m) {
+                        return m[config.value_col];
+                    })
+                    .sort(function(a, b) {
+                        return a - b;
+                    });
+                var lower_extent = d3.quantile(vals, config.measureBounds[0]),
+                    upper_extent = d3.quantile(vals, config.measureBounds[1]);
+                return [lower_extent, upper_extent];
+            })
+            .entries(chart.initial_data);
+
+        //make nest by measure
+        var nested = d3
+            .nest()
+            .key(function(d) {
+                return d[config.measure_col];
+            })
+            .rollup(function(d) {
+                var measureObj = {};
+                measureObj.eDish = chart;
+                measureObj.key = d[0][config.measure_col];
+                measureObj.raw = d;
+                measureObj.values = d.map(function(d) {
+                    return +d[config.value_col];
+                });
+                measureObj.max = +d3.format('0.2f')(d3.max(measureObj.values));
+                measureObj.min = +d3.format('0.2f')(d3.min(measureObj.values));
+                measureObj.median = +d3.format('0.2f')(d3.median(measureObj.values));
+                measureObj.n = measureObj.values.length;
+                measureObj.spark = 'spark!';
+                measureObj.population_extent = ranges.find(function(f) {
+                    return measureObj.key == f.key;
+                }).values;
+                var hasColor =
+                    chart.spaghetti.colorScale.domain().indexOf(d[0][config.measure_col]) > -1;
+                measureObj.color = hasColor
+                    ? chart.spaghetti.colorScale(d[0][config.measure_col])
+                    : 'black';
+                measureObj.spark_data = d.map(function(m) {
+                    var obj = {
+                        id: +m[config.id_col],
+                        lab: +m[config.measure_col],
+                        visitn: +m[config.visitn_col],
+                        value: +m[config.value_col],
+                        lln: +m[config.normal_col_low],
+                        uln: +m[config.normal_col_high],
+                        population_extent: measureObj.population_extent,
+                        outlier_low: +m[config.value_col] < +m[config.normal_col_low],
+                        outlier_high: +m[config.value_col] > +m[config.normal_col_high]
+                    };
+                    obj.outlier = obj.outlier_low || obj.outlier_high;
+                    return obj;
+                });
+                return measureObj;
+            })
+            .entries(allMatches);
+
+        var nested = nested
+            .map(function(m) {
+                return m.values;
+            })
+            .sort(function(a, b) {
+                var a_order = Object.keys(config.measure_values)
+                    .map(function(e) {
+                        return config.measure_values[e];
+                    })
+                    .indexOf(a.key);
+                var b_order = Object.keys(config.measure_values)
+                    .map(function(e) {
+                        return config.measure_values[e];
+                    })
+                    .indexOf(b.key);
+                return b_order - a_order;
+            });
+        return nested;
+    }
+
     function addSparkLines(d) {
         if (this.data.raw.length > 0) {
             //don't try to draw sparklines if the table is empty
@@ -2387,13 +2933,21 @@
                     var cell = d3
                             .select(this)
                             .select('td.spark')
+                            .classed('minimized', true)
                             .text(''),
+                        toggle = cell
+                            .append('span')
+                            .html('&#x25BD;')
+                            .style('cursor', 'pointer')
+                            .style('color', '#999')
+                            .style('vertical-align', 'middle'),
                         width = 100,
                         height = 25,
                         offset = 4,
                         overTime = row_d.spark_data.sort(function(a, b) {
                             return +a.visitn - +b.visitn;
-                        });
+                        }),
+                        color = row_d.color;
                     var x = d3.scale
                         .ordinal()
                         .domain(
@@ -2402,6 +2956,7 @@
                             })
                         )
                         .rangePoints([offset, width - offset]);
+
                     //y-domain includes 99th population percentile + any participant outliers
                     var y_min = d3.min(d3.merge([row_d.values, row_d.population_extent])) * 0.99;
                     var y_max = d3.max(d3.merge([row_d.values, row_d.population_extent])) * 1.01;
@@ -2409,6 +2964,7 @@
                         .linear()
                         .domain([y_min, y_max])
                         .range([height - offset, offset]);
+
                     //render the svg
                     var svg = cell
                         .append('svg')
@@ -2427,7 +2983,10 @@
                             return { visitn: m.visitn, value: m.lln };
                         })
                         .reverse();
-                    var normal_data = d3.merge([upper, lower]);
+                    var normal_data = d3.merge([upper, lower]).filter(function(m) {
+                        return m.value;
+                    });
+
                     var drawnormal = d3.svg
                         .line()
                         .x(function(d) {
@@ -2436,6 +2995,7 @@
                         .y(function(d) {
                             return y(d.value);
                         });
+
                     var normalpath = svg
                         .append('path')
                         .datum(normal_data)
@@ -2447,8 +3007,7 @@
                         });
 
                     //draw lines at the population guidelines
-                    svg
-                        .selectAll('lines.guidelines')
+                    svg.selectAll('lines.guidelines')
                         .data(row_d.population_extent)
                         .enter()
                         .append('line')
@@ -2481,135 +3040,258 @@
                             class: 'sparkLine',
                             d: draw_sparkline,
                             fill: 'none',
-                            stroke: '#999'
+                            stroke: color
                         });
 
-                    /*
-            draw_lln = d3.svg
-                .line()
-                .interpolate('cardinal')
-                .x(d => x(d.visitn))
-                .y(d => y(d.lln)),
-            lln = svg
-                .append('path')
-                .datum(overTime)
-                .attr({
-                    class: 'sparkLine',
-                    d: draw_lln,
-                    fill: 'none',
-                    stroke: 'green'
-                }),
-            */
-                    //draw min and max points
-                    var minimumData = overTime.filter(function(di) {
-                        return (
-                            di.value ===
-                            d3.min(
-                                overTime.map(function(dii) {
-                                    return dii.value;
-                                })
-                            )
-                        );
-                    })[0];
-                    var minimumMonth = svg.append('circle').attr({
-                        class: 'circle minimum',
-                        cx: x(minimumData.visitn),
-                        cy: y(minimumData.value),
-                        r: '2px',
-                        stroke: 'blue',
-                        fill: 'none'
+                    //draw outliers
+                    var outliers = overTime.filter(function(f) {
+                        return f.outlier;
                     });
-                    var maximumData = overTime.filter(function(di) {
-                        return (
-                            di.value ===
-                            d3.max(
-                                overTime.map(function(dii) {
-                                    return dii.value;
-                                })
-                            )
-                        );
-                    })[0];
-                    var maximumMonth = svg.append('circle').attr({
-                        class: 'circle maximum',
-                        cx: x(maximumData.visitn),
-                        cy: y(maximumData.value),
-                        r: '2px',
-                        stroke: 'orange',
-                        fill: 'none'
-                    });
+                    var outlier_circles = svg
+                        .selectAll('circle.outlier')
+                        .data(outliers)
+                        .enter()
+                        .append('circle')
+                        .attr('class', 'circle outlier')
+                        .attr('cx', function(d) {
+                            return x(d.visitn);
+                        })
+                        .attr('cy', function(d) {
+                            return y(d.value);
+                        })
+                        .attr('r', '2px')
+                        .attr('stroke', color)
+                        .attr('fill', color);
                 });
         }
     }
 
-    function drawMeasureTable(d) {
-        var chart = this;
-        var config = chart.config;
-        var allMatches = d.values.raw[0].raw;
-        var ranges = d3
-            .nest()
-            .key(function(d) {
-                return d[config.measure_col];
-            })
-            .rollup(function(d) {
-                var vals = d
-                    .map(function(m) {
-                        return m[config.value_col];
-                    })
-                    .sort(function(a, b) {
-                        return a - b;
-                    });
-                var lower_extent = d3.quantile(vals, config.measureBounds[0]),
-                    upper_extent = d3.quantile(vals, config.measureBounds[1]);
-                return [lower_extent, upper_extent];
-            })
-            .entries(chart.initial_data);
+    function insertAfter(newNode, referenceNode) {
+        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    }
 
-        //make nest by measure
-        var nested = d3
-            .nest()
-            .key(function(d) {
-                return d[config.measure_col];
-            })
-            .rollup(function(d) {
-                var measureObj = {};
-                measureObj.key = d[0][config.measure_col];
-                measureObj.raw = d;
-                measureObj.values = d.map(function(d) {
-                    return +d[config.value_col];
-                });
-                measureObj.max = +d3.format('0.2f')(d3.max(measureObj.values));
-                measureObj.min = +d3.format('0.2f')(d3.min(measureObj.values));
-                measureObj.median = +d3.format('0.2f')(d3.median(measureObj.values));
-                measureObj.n = measureObj.values.length;
-                measureObj.spark = 'spark!';
-                measureObj.population_extent = ranges.find(function(f) {
-                    return measureObj.key == f.key;
-                }).values;
-                measureObj.spark_data = d.map(function(m) {
-                    return {
-                        visitn: +m[config.visitn_col],
-                        value: +m[config.value_col],
-                        lln: +m[config.normal_col_low],
-                        uln: +m[config.normal_col_high]
-                    };
-                });
-                return measureObj;
-            })
-            .entries(allMatches);
+    var defaultSettings = {
+        max_width: 800,
+        aspect: 4,
+        x: {
+            column: 'visitn',
+            type: 'ordinal',
+            label: 'Visit'
+        },
+        y: {
+            column: 'value',
+            type: 'linear',
+            label: '',
+            //    domain: [0, null],
+            format: '.1f'
+        },
+        marks: [
+            {
+                type: 'line',
+                per: ['lab']
+            },
+            {
+                type: 'circle',
+                radius: 4,
+                per: ['lab', 'visitn'],
+                values: { outlier: [true] },
+                attributes: {
+                    'fill-opacity': 1
+                },
+                tooltip: 'Visit: [visitn]\nValue: [value]\nULN: [uln]\nLLN: [lln]'
+            }
+        ],
+        margin: { top: 20 },
+        gridlines: 'x',
+        colors: []
+    };
 
-        var nested = nested
+    function setDomain$1(d) {
+        //y-domain includes 99th population percentile + any participant outliers
+        var raw_values = this.raw_data.map(function(m) {
+            return m.value;
+        });
+        var population_extent = this.raw_data[0].population_extent;
+        var y_min = d3.min(d3.merge([raw_values, population_extent])) * 0.99;
+        var y_max = d3.max(d3.merge([raw_values, population_extent])) * 1.01;
+        this.y.domain([y_min, y_max]);
+        this.y_dom = [y_min, y_max];
+    }
+
+    function drawPopulationExtent() {
+        var lineChart = this;
+        this.svg
+            .selectAll('line.guidelines')
+            .data(lineChart.raw_data[0].population_extent)
+            .enter()
+            .append('line')
+            .attr('class', 'guidelines')
+            .attr('x1', 0)
+            .attr('x2', lineChart.plot_width)
+            .attr('y1', function(d) {
+                return lineChart.y(d);
+            })
+            .attr('y2', function(d) {
+                return lineChart.y(d);
+            })
+            .attr('stroke', '#ccc')
+            .attr('stroke-dasharray', '2 2');
+    }
+
+    function drawNormalRange() {
+        var lineChart = this;
+        var upper = this.raw_data.map(function(m) {
+            return { visitn: m.visitn, value: m.uln };
+        });
+        var lower = this.raw_data
             .map(function(m) {
-                return m.values;
+                return { visitn: m.visitn, value: m.lln };
             })
-            .sort(function(a, b) {
-                var a_order = Object.values(config.measure_values).indexOf(a.key);
-                var b_order = Object.values(config.measure_values).indexOf(b.key);
-                return b_order - a_order;
+            .reverse();
+        var normal_data = d3.merge([upper, lower]).filter(function(f) {
+            return f.value;
+        });
+        var drawnormal = d3.svg
+            .line()
+            .x(function(d) {
+                return lineChart.x(d.visitn) + lineChart.x.rangeBand() / 2;
+            })
+            .y(function(d) {
+                return lineChart.y(d.value);
+            });
+        var normalpath = this.svg
+            .append('path')
+            .datum(normal_data)
+            .attr({
+                class: 'normalrange',
+                d: drawnormal,
+                fill: '#eee',
+                stroke: 'none'
+            });
+        normalpath.moveToBack();
+    }
+
+    function init$2(d) {
+        //layout the new cells on the DOM (slightly easier than using D3)
+        var summaryRow_node = this.parentNode;
+        var chartRow_node = document.createElement('tr');
+        var chartCell_node = document.createElement('td');
+        insertAfter(chartRow_node, summaryRow_node);
+        chartRow_node.appendChild(chartCell_node);
+
+        //update the row styles
+        d3.select(chartRow_node)
+            .style('background', 'none')
+            .style('border-bottom', '0.5px solid black');
+
+        //layout the svg with D3
+        var cellCount = d3.select(summaryRow_node).selectAll('td')[0].length;
+        var chartCell = d3.select(chartCell_node).attr('colspan', cellCount);
+
+        //draw the chart
+        defaultSettings.colors = [d.color];
+        var lineChart = webcharts.createChart(chartCell_node, defaultSettings);
+        lineChart.on('draw', function() {
+            setDomain$1.call(this);
+        });
+        lineChart.on('resize', function() {
+            drawPopulationExtent.call(this);
+            drawNormalRange.call(this);
+        });
+        lineChart.init(d.spark_data);
+
+        lineChart.row = chartRow_node;
+        return lineChart;
+    }
+
+    function addSparkClick() {
+        if (this.data.raw.length > 0) {
+            this.tbody
+                .selectAll('tr')
+                .select('td.spark')
+                .on('click', function(d) {
+                    if (d3.select(this).classed('minimized')) {
+                        d3.select(this).classed('minimized', false);
+                        d3.select(this.parentNode).style('border-bottom', 'none');
+
+                        this.lineChart = init$2.call(this, d);
+                        d3.select(this)
+                            .select('svg')
+                            .style('display', 'none');
+
+                        d3.select(this)
+                            .select('span')
+                            .html('&#x25B3; Minimize Chart');
+                    } else {
+                        d3.select(this).classed('minimized', true);
+
+                        d3.select(this.parentNode).style('border-bottom', '0.5px solid black');
+
+                        d3.select(this)
+                            .select('span')
+                            .html('&#x25BD;');
+
+                        d3.select(this)
+                            .select('svg')
+                            .style('display', null);
+
+                        d3.select(this.lineChart.row).remove();
+                        this.lineChart.destroy();
+                    }
+                });
+        }
+    }
+
+    function addFootnote$1() {
+        var footnoteText = [
+            'The y-axis for each chart is set to the ' +
+                this.edish.config.measureBounds
+                    .map(function(bound) {
+                        var percentile = '' + Math.round(bound * 100);
+                        var lastDigit = +percentile.substring(percentile.length - 1);
+                        var text =
+                            percentile +
+                            ([0, 4, 5, 6, 7, 8, 9].indexOf(lastDigit) > -1
+                                ? 'th'
+                                : lastDigit === 3
+                                    ? 'rd'
+                                    : lastDigit === 2
+                                        ? 'nd'
+                                        : 'st');
+                        return text;
+                    })
+                    .join(' and ') +
+                " percentiles of the entire population's results for that measure. " +
+                'Values outside the normal range are plotted as individual points. ' +
+                'Click a sparkline to view a more detailed version of the chart.'
+        ];
+        var footnotes = this.wrap.selectAll('span.footnote').data(footnoteText, function(d) {
+            return d;
+        });
+
+        footnotes
+            .enter()
+            .append('span')
+            .attr('class', 'footnote')
+            .style('font-size', '0.7em')
+            .style('padding-top', '0.1em')
+            .text(function(d) {
+                return d;
             });
 
+        footnotes.exit().remove();
+    }
+
+    function drawMeasureTable(d) {
+        var nested = makeNestedData.call(this, d);
+
         //draw the measure table
-        this.participantDetails.wrap.selectAll('*').style('display', null);
-        this.measureTable.on('draw', addSparkLines);
+        this.measureTable.edish = this;
+        this.measureTable.on('draw', function() {
+            addSparkLines.call(this);
+            addSparkClick.call(this);
+            addFootnote$1.call(this);
+        });
         this.measureTable.draw(nested);
     }
 
@@ -2659,36 +3341,38 @@
             .style('text-align', 'center')
             .style('padding', '0.5em');
 
-        lis
-            .append('div')
+        lis.append('div')
             .text(function(d) {
                 return d.label;
             })
             .attr('div', 'label')
             .style('font-size', '0.8em');
 
-        lis
-            .append('div')
+        lis.append('div')
             .text(function(d) {
                 return raw[d.value_col];
             })
             .attr('div', 'value');
     }
 
-    var defaultSettings = {
+    var defaultSettings$1 = {
         max_width: 600,
         x: {
             column: null,
             type: 'ordinal',
             label: 'Visit'
         },
-        y: {
-            column: 'relative_uln',
-            type: 'linear',
-            label: 'Lab Value (x ULN)',
-            domain: null,
-            format: '.1f'
-        },
+        y: defineProperty(
+            {
+                column: 'relative_uln',
+                type: 'linear',
+                label: 'Lab Value (x ULN)',
+                domain: null,
+                format: '.1f'
+            },
+            'domain',
+            [0, null]
+        ),
         marks: [
             {
                 type: 'line',
@@ -2700,34 +3384,152 @@
                 per: []
             }
         ],
+        margin: { top: 20 },
         gridlines: 'xy',
         color_by: null,
         colors: ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628'],
         aspect: 2
     };
 
-    function onResize$1() {
-        this.marks[1].circles.attr('fill-opacity', function(d) {
-            return d.values.raw[0].flagged ? 1 : 0;
+    var controlInputs$1 = [
+        {
+            type: 'subsetter',
+            label: 'Select Labs',
+            value_col: null,
+            multiple: true
+        },
+        {
+            type: 'dropdown',
+            label: 'Y-axis Display Type',
+            description: null,
+            option: 'displayLabel',
+            start: null,
+            values: null,
+            require: true
+        }
+    ];
+
+    function onLayout$1() {
+        var spaghetti = this;
+        var eDish = this.edish;
+
+        //customize the display control
+        var displayControlWrap = spaghetti.controls.wrap
+            .selectAll('div')
+            .filter(function(controlInput) {
+                return controlInput.label === 'Y-axis Display Type';
+            });
+
+        var displayControl = displayControlWrap.select('select');
+
+        //set the start value
+        var start_value = eDish.config.display_options.find(function(f) {
+            return f.value == eDish.config.display;
+        }).label;
+
+        displayControl.selectAll('option').attr('selected', function(d) {
+            return d == start_value ? 'selected' : null;
+        });
+
+        displayControl.on('change', function(d) {
+            var currentLabel = this.value;
+            var currentValue = eDish.config.display_options.find(function(f) {
+                return f.label == currentLabel;
+            }).value;
+            spaghetti.config.y.column = currentValue;
+            spaghetti.draw();
         });
     }
 
-    function init$1(d) {
-        var chart = this;
+    function onPreprocess$1() {
         var config = this.config;
+        var unit = this.config.y.column == 'relative_uln' ? ' [xULN]' : ' [xBaseline]';
+        config.y.label = 'Standardized Lab Values' + unit;
+    }
 
+    function drawCutLine(d) {
+        //bit of a hack to make this work with paths and circles
+        var spaghetti = this;
+        var config = this.config;
+        var raw = d.values.raw ? d.values.raw[0] : d.values[0].values.raw[0];
+        var cut = raw[config.y.column + '_cut'];
+        var param = raw[config.color_by];
+        spaghetti.cutLine = spaghetti.svg
+            .append('line')
+            .attr('y1', spaghetti.y(cut))
+            .attr('y2', spaghetti.y(cut))
+            .attr('x1', 0)
+            .attr('x2', spaghetti.plot_width)
+            .attr('stroke', spaghetti.colorScale(param))
+            .attr('stroke-dasharray', '3 3');
+        spaghetti.cutLabel = spaghetti.svg
+            .append('text')
+            .attr('y', spaghetti.y(cut))
+            .attr('dy', '-0.2em')
+            .attr('x', spaghetti.plot_width)
+            .attr('text-anchor', 'end')
+            .attr('alignment-baseline', 'baseline')
+            .attr('fill', spaghetti.colorScale(param))
+            .text(d3.format('0.1f')(cut));
+    }
+
+    function onResize$1() {
+        var spaghetti = this;
+        var y_col = this.config.y.column;
+        this.marks[1].circles
+            .attr('stroke-opacity', function(d) {
+                return d.values.raw[0][y_col + '_flagged'] ? 1 : 0;
+            })
+            .attr('fill-opacity', function(d) {
+                return d.values.raw[0][y_col + '_flagged'] ? 1 : 0;
+            });
+
+        this.marks[1].circles
+            .on('mouseover', function(d) {
+                drawCutLine.call(spaghetti, d);
+            })
+            .on('mouseout', function() {
+                spaghetti.cutLine.remove();
+                spaghetti.cutLabel.remove();
+            });
+
+        this.marks[0].paths
+            .on('mouseover', function(d) {
+                drawCutLine.call(spaghetti, d);
+            })
+            .on('mouseout', function() {
+                spaghetti.cutLine.remove();
+                spaghetti.cutLabel.remove();
+            });
+    }
+
+    function onDraw$1() {
+        var spaghetti = this;
+        var eDish = this.edish;
+
+        //make sure y domain includes the current cut point for all measures
+        var max_value = d3.max(spaghetti.filtered_data, function(f) {
+            return f[spaghetti.config.y.column];
+        });
+        var max_cut = d3.max(spaghetti.filtered_data, function(f) {
+            return f[spaghetti.config.y.column + '_cut'];
+        });
+        var y_max = d3.max([max_value, max_cut]);
+        spaghetti.config.y.domain = [0, y_max];
+        spaghetti.y_dom = spaghetti.config.y.domain;
+
+        //initialize the measureTable
+        if (spaghetti.config.firstDraw) {
+            drawMeasureTable.call(eDish, this.participant_data);
+            spaghetti.config.firstDraw = false;
+        }
+    }
+
+    function init$3(d) {
+        var chart = this; //the full eDish object
+        var config = this.config; //the eDish config
         var matches = d.values.raw[0].raw.filter(function(f) {
             return f.key_measure;
-        });
-        //flag variables above the cut-off
-        matches.forEach(function(d) {
-            var measure = d[config['measure_col']];
-            var label = Object.keys(config.measure_values).find(function(key) {
-                return config.measure_values[key] == measure;
-            });
-            d.cut = config.cuts[label].relative_uln;
-
-            d.flagged = d.relative_uln >= d.cut;
         });
 
         if ('spaghetti' in chart) {
@@ -2735,23 +3537,70 @@
         }
 
         //sync settings
-        defaultSettings.x.column = config.visitn_col;
-        defaultSettings.y.domain = d3.extent(chart.imputed_data, function(f) {
-            return f.relative_uln;
+        defaultSettings$1.x.column = config.visitn_col;
+        defaultSettings$1.color_by = config.measure_col;
+        defaultSettings$1.marks[0].per = [config.id_col, config.measure_col];
+        defaultSettings$1.marks[1].per = [config.id_col, config.visitn_col, config.measure_col];
+        defaultSettings$1.firstDraw = true; //only initailize the measure table on first draw
+
+        //flag variables above the cut-off
+        matches.forEach(function(d) {
+            var measure = d[config['measure_col']];
+            var label = Object.keys(config.measure_values).find(function(key) {
+                return config.measure_values[key] == measure;
+            });
+
+            d.relative_uln_cut = config.cuts[label].relative_uln;
+            d.relative_baseline_cut = config.cuts[label].relative_baseline;
+
+            d.relative_uln_flagged = d.relative_uln >= d.relative_uln_cut;
+            d.relative_baseline_flagged = d.relative_baseline >= d.relative_baseline_cut;
         });
 
-        defaultSettings.color_by = config.measure_col;
-        defaultSettings.marks[0].per = [config.id_col, config.measure_col];
-        defaultSettings.marks[1].per = [config.id_col, config.visitn_col, config.measure_col];
+        //update the controls
+        var spaghettiElement = this.element + ' .participantDetails .spaghettiPlot .chart';
+
+        //Add y axis type options
+        controlInputs$1.find(function(f) {
+            return f.label == 'Y-axis Display Type';
+        }).values = config.display_options.map(function(m) {
+            return m.label;
+        });
+
+        //sync parameter filter
+        controlInputs$1.find(function(f) {
+            return f.label == 'Select Labs';
+        }).value_col = config.measure_col;
+
+        var spaghettiControls = webcharts.createControls(spaghettiElement, {
+            location: 'top',
+            inputs: controlInputs$1
+        });
 
         //draw that chart
-
         chart.spaghetti = webcharts.createChart(
-            this.element + ' .participantDetails .spaghettiPlot',
-            defaultSettings
+            spaghettiElement,
+            defaultSettings$1,
+            spaghettiControls
         );
+
+        chart.spaghetti.edish = chart; //link the full eDish object
+        chart.spaghetti.participant_data = d; //include the passed data (used to initialize the measure table)
+        chart.spaghetti.on('layout', onLayout$1);
+        chart.spaghetti.on('preprocess', onPreprocess$1);
+        chart.spaghetti.on('draw', onDraw$1);
         chart.spaghetti.on('resize', onResize$1);
         chart.spaghetti.init(matches);
+
+        //add a footnote
+        chart.spaghetti.wrap
+            .append('div')
+            .attr('class', 'footnote')
+            .style('font-size', '0.7em')
+            .style('padding-top', '0.1em')
+            .text(
+                'Points are shown for values above the current reference value. Mouseover a line to see the reference line for that lab.'
+            );
     }
 
     function addPointClick() {
@@ -2768,19 +3617,19 @@
                 .attr('fill', 'white')
                 .classed('disabled', true); //disable mouseover while viewing participant details
 
-            d3
-                .select(this)
+            d3.select(this)
                 .attr('stroke', function(d) {
                     return chart.colorScale(d.values.raw[0][config.color_by]);
                 }) //highlight selected point
                 .attr('stroke-width', 3);
 
             drawVisitPath.call(chart, d); //draw the path showing participant's pattern over time
-            drawMeasureTable.call(chart, d); //draw table showing measure values with sparklines
-            init$1.call(chart, d);
-            makeParticipantHeader.call(chart, d);
             drawRugs.call(chart, d, 'x');
             drawRugs.call(chart, d, 'y');
+
+            chart.participantDetails.wrap.selectAll('*').style('display', null);
+            makeParticipantHeader.call(chart, d);
+            init$3.call(chart, d);
         });
     }
 
@@ -2851,15 +3700,14 @@
 
     function toggleLegend() {
         var hideLegend = this.config.color_by == 'NONE';
-        this.wrap.select('.legend').style('display', hideLegend ? 'None' : null);
+        this.wrap.select('.legend').style('display', hideLegend ? 'None' : 'block');
     }
 
     function dragStarted() {
         var dimension = d3.select(this).classed('x') ? 'x' : 'y';
         var chart = d3.select(this).datum().chart;
 
-        d3
-            .select(this)
+        d3.select(this)
             .select('line.cut-line')
             .attr('stroke-width', '2')
             .attr('stroke-dasharray', '2,2');
@@ -2909,8 +3757,7 @@
     function dragEnded() {
         var chart = d3.select(this).datum().chart;
 
-        d3
-            .select(this)
+        d3.select(this)
             .select('line.cut-line')
             .attr('stroke-width', '1')
             .attr('stroke-dasharray', '5,5');
@@ -2922,7 +3769,7 @@
 
     // credit to https://bl.ocks.org/dimitardanailov/99950eee511375b97de749b597147d19
 
-    function init$2() {
+    function init$4() {
         var drag = d3.behavior
             .drag()
             .origin(function(d) {
@@ -3086,7 +3933,7 @@
             });
     }
 
-    function init$3() {
+    function init$5() {
         // Draw box plots
         this.svg.selectAll('g.boxplot').remove();
 
@@ -3108,12 +3955,10 @@
             true,
             this.config.y.type == 'log'
         );
-        ybox
-            .select('g.boxplot')
-            .attr(
-                'transform',
-                'translate(' + (this.plot_width + this.config.margin.right / 2) + ',0)'
-            );
+        ybox.select('g.boxplot').attr(
+            'transform',
+            'translate(' + (this.plot_width + this.config.margin.right / 2) + ',0)'
+        );
 
         //X-axis box plot
         var xValues = this.current_data.map(function(d) {
@@ -3133,9 +3978,10 @@
             false, // horizontal?
             this.config.y.type == 'log' // log?
         );
-        xbox
-            .select('g.boxplot')
-            .attr('transform', 'translate(0,' + -(this.config.margin.top / 2) + ')');
+        xbox.select('g.boxplot').attr(
+            'transform',
+            'translate(0,' + -(this.config.margin.top / 2) + ')'
+        );
     }
 
     function setPointSize() {
@@ -3260,7 +4106,6 @@
     }
 
     function onResize() {
-        console.log('resizing');
         //add point interactivity, custom title and formatting
         addPointMouseover.call(this);
         addPointClick.call(this);
@@ -3274,13 +4119,13 @@
         //draw the quadrants and add drag interactivity
         updateSummaryTable.call(this);
         drawQuadrants.call(this);
-        init$2.call(this);
+        init$4.call(this);
 
         // hide the legend if no group options are given
         toggleLegend.call(this);
 
         // add boxplots
-        init$3.call(this);
+        init$5.call(this);
 
         //axis formatting
         adjustTicks.call(this);
@@ -3315,4 +4160,3 @@
 
     return safetyedish$1;
 });
-
