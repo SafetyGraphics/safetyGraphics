@@ -5,10 +5,10 @@
 \title{Create an eDISH widget}
 \usage{
 eDISH(data, id_col = "USUBJID", value_col = "STRESN",
-  measure_col = "TEST", unit_col = "STRESU",
-  normal_col_low = "STNRLO", normal_col_high = "STNRHI",
-  visit_col = "VISIT", visitn_col = "VISITN", baseline_visitn = 1,
-  filters = NULL, group_cols = NULL, measure_values = list(ALT =
+  measure_col = "TEST", normal_col_low = "STNRLO",
+  normal_col_high = "STNRHI", visit_col = "VISIT",
+  visitn_col = "VISITN", baseline_visitn = 1, filters = NULL,
+  group_cols = NULL, measure_values = list(ALT =
   "Aminotransferase, alanine (ALT)", AST =
   "Aminotransferase, aspartate (AST)", TB = "Total Bilirubin", ALP =
   "Alkaline phosphatase (ALP)"), x_options = c("ALT", "AST", "ALP"),
@@ -25,8 +25,6 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
 \item{value_col}{Lab result variable name. Default: \code{"STRESN"}.}
 
 \item{measure_col}{Lab measure variable name. Default: \code{"TEST"}.}
-
-\item{unit_col}{Lab measure unit variable name. Default: \code{"STRESU"}.}
 
 \item{normal_col_low}{Lower limit of normal variable name. Default: \code{"STNRLO"}.}
 

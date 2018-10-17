@@ -6,7 +6,6 @@
 #' @param id_col Unique subject identifier variable name. Default: \code{"USUBJID"}.
 #' @param value_col Lab result variable name. Default: \code{"STRESN"}. 
 #' @param measure_col Lab measure variable name. Default: \code{"TEST"}.
-#' @param unit_col Lab measure unit variable name. Default: \code{"STRESU"}.
 #' @param normal_col_low Lower limit of normal variable name. Default: \code{"STNRLO"}.
 #' @param normal_col_high Upper limit of normal variable name. Default: \code{"STNRHI"}. 
 #' @param visit_col Visit variable name. Default: \code{"VISIT"}.
@@ -72,7 +71,6 @@ eDISH <- function(data,
                   id_col = "USUBJID",
                   value_col = "STRESN",
                   measure_col = "TEST",
-                  unit_col = "STRESU",
                   normal_col_low = "STNRLO",
                   normal_col_high = "STNRHI",
                   visit_col = "VISIT",
@@ -103,7 +101,6 @@ eDISH <- function(data,
           id_col = id_col, 
           value_col = value_col,
           measure_col = measure_col,
-          unit_col = unit_col,
           normal_col_low = normal_col_low,
           normal_col_high = normal_col_high,
           visit_col = visit_col,
