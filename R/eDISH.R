@@ -21,6 +21,7 @@
 #' When multiple options are specified, a control allowing the user to interactively change the x variable is shown. Default: \code{c("ALT", "AST", "ALP")}.
 #' @param y_options Specifies variable options for the y-axis using the key values from \code{measure_values} (e.g. "TB"). 
 #' When multiple options are specified, a control allowing the user to interactively change the y variable is shown. Default: \code{c("TB", "ALP")}.
+#' @param analysisFlag An optional list defining which column \code{value_col} and values \code{values} should be used to records for use in eDish and mDish analyses. Default: \code{NULL}.
 #' @param visit_window Default visit window used to highlight eDish points where x and y measures occurred within the specified number of days. 
 #' Editable by user after render. Default: \code{30}.
 #' @param r_ratio_filter Specifies whether the R Ratio filter should be shown. R ratio is defined as: 
@@ -84,12 +85,13 @@ eDISH <- function(data,
                   baseline_visitn = 1,
                   filters = NULL,
                   group_cols = NULL,
+                  analysisFlag= NULL,
                   measure_values = list(ALT = "Aminotransferase, alanine (ALT)",
                                         AST = "Aminotransferase, aspartate (AST)",
                                         TB = "Total Bilirubin",
                                         ALP = "Alkaline phosphatase (ALP)"),
                   x_options = c("ALT", "AST", "ALP"),
-                  y_options =  "ALP", # temporarily making this a vector of length 2 until JS side fixed
+                  y_options =  "TB", 
                   visit_window = 30,
                   r_ratio_filter = TRUE,
                   r_ratio_cut = 0,
@@ -111,9 +113,11 @@ eDISH <- function(data,
           normal_col_high = normal_col_high,
           visit_col = visit_col,
           visitn_col = visitn_col,
+          studyday_col = studyday_col,
           baseline_visitn = baseline_visitn,
           filters = filters,
           group_cols = group_cols,
+          analysisFlag = analysisFlag,
           measure_values = measure_values,
           x_options = x_options,
           y_options = y_options,
