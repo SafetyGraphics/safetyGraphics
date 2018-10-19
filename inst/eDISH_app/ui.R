@@ -1,7 +1,7 @@
 library(shiny)
 
-navbarPage("eDISH Shiny app",
-           tabPanel("Data",
+navbarPage("eDISH Shiny app", id = "inTabset",
+           tabPanel(title = "Data", value = "data",
                     fluidRow(
                       column(3,
                              wellPanel(
@@ -20,13 +20,14 @@ navbarPage("eDISH Shiny app",
                              fluidRow(
                                br(),
                                tags$style(type='text/css', '#detectStandard_msg {font-size:23px;}'),
-                               uiOutput("detectStandard_msg")
+                               uiOutput("detectStandard_msg"),
+                               actionButton("view_chart","View Chart")
                              )
                       )
                     )
            ),
            #  dataUploadUI("dataupload")),
-           tabPanel("Settings",
+           tabPanel(title = "Settings", value = "settings",
                     fluidPage(
                       wellPanel(
                         fluidRow(
@@ -41,5 +42,8 @@ navbarPage("eDISH Shiny app",
                       renderSettingsUI("settingsUI")
                     )
            ),
-           tabPanel("Charts"))
+           tabPanel(title = "Charts", value = "charts",
+                    eDISHOutput("chart")
+                    )
+           )
 
