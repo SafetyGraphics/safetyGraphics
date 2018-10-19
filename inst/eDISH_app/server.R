@@ -139,9 +139,6 @@ function(input, output, session){
   observeEvent(input$view_chart, {
     updateTabsetPanel(session, "inTabset", selected = "charts")
   })
-  
-  
-  # Call data upload module
-  # callModule(dataUpload, 'dataUpload')
+
   
 }
