@@ -43,12 +43,24 @@ function(input, output, session){
     
   })
   
-  observe({print(names(dd$data))})
   
   # upon a dataset being uploaded and set to "labs", generate data preview
+  # NOTE - data preview is rendering after every upload - need to fix
   observeEvent(input$file_1=="labs",{
-    output$data_preview <- DT::renderDataTable(DT::datatable(dd$data[[1]]))
+    output$data_preview <- DT::renderDataTable({
+      DT::datatable(dd$data[[1]],
+                    extensions = "Scroller", options = list(scrollY=300))
+      })
   }, ignoreInit = TRUE)
+  
+  
+  # temporarily force adlbc to be our selected data
+  # need to write code to:
+  #  - only allow 1 dataset to be set to LABS
+  #  - detect which data is set to labs
+  # placeholder:
+  data <- reactive({ReDish::adlbc})
+  
   
   # upon a dataset being set to "labs", run detectStandard() function
   # temporarily only look at first uploaded dataset until we can:
@@ -75,18 +87,6 @@ function(input, output, session){
     }
   })
   
-  # temporarily force adlbc to be our selected data
-  # need to write code to:
-  #  - only allow 1 dataset to be set to LABS
-  #  - detect which data is set to labs
-  # placeholder:
-  data <- reactive({ReDish::adlbc})
-  
-  # upon a dropdown being set to LABS, run the detectDataStandard() function to detect standard & generate msg
-  # i believe we will use eventReactive() to capture the return value
-  # will have to code this to look thru all the dropdowns, but currently only looking at first dropdown
-  # placeholder:
- # standard <- reactive({"ADaM"})
   
   # use generateSettings() to produce a settings obj
   # placeholder:
@@ -107,13 +107,39 @@ function(input, output, session){
   
 
   # based on selected data set, and given a data standard/settings obj, generate settings page.
-  observeEvent(input$generateSettings, {
+  # trigger this event EITHER from press of button (if selecting standard manually), 
+  #     or based on the automatic standard detection
+  observeEvent(input$generateSettings, { 
 
+    # note that UI for renderSettings module defines all the inputs. but maybe we want to do that in general 
+    #  ui function outside of module?? A little confused about the module UI showing up pror to obeserving button click...
     settingsUI_inputs <-  callModule(renderSettings, "settingsUI", data=data, standard=standard, settings=settings)
 
   },
   ignoreInit = TRUE)
 
+  
+  # update settings object as user changes settings selections
+  
+  
+  # run validateSettings(data, standard, settings) and return a status
+  # placeholder status here:
+  status <- reactive("valid")
+  
+  # if status=="valid", generate chart
+  observeEvent(status()=="valid", {
+
+    ## call generate chart module
+    output$chart <- renderEDISH({
+      eDISH(data = data(),
+            settings = settings())
+    })
+  })
+  
+  observeEvent(input$view_chart, {
+    updateTabsetPanel(session, "inTabset", selected = "charts")
+  })
+  
   
   # Call data upload module
   # callModule(dataUpload, 'dataUpload')
