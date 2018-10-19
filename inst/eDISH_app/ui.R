@@ -2,9 +2,28 @@ library(shiny)
 
 navbarPage("eDISH Shiny app",
            tabPanel("Data",
-                    fluidRow(column(3, offset = 1, 
-                                    fileInput("datafile", "Upload a data set",accept = c(".sas7bdat", ".csv"), multiple = TRUE)),
-                             column(3, div(id = "placeholderDataSelect")))
+                    fluidRow(
+                      column(3,
+                             wellPanel(
+                               h3("Data upload"), 
+                               fileInput("datafile", "Upload a csv or sas7bdat file",accept = c(".sas7bdat", ".csv"), multiple = TRUE),
+                               div(id = "placeholderDataSelect")
+                             )
+                      ),
+                      column(6, 
+                             fluidRow(
+                               wellPanel( 
+                               h3("Data preview"), 
+                               DT::dataTableOutput("data_preview")
+                             )
+                             ),
+                             fluidRow(
+                               br(),
+                               tags$style(type='text/css', '#detectStandard_msg {font-size:23px;}'),
+                               uiOutput("detectStandard_msg")
+                             )
+                      )
+                    )
            ),
            #  dataUploadUI("dataupload")),
            tabPanel("Settings",
@@ -20,7 +39,7 @@ navbarPage("eDISH Shiny app",
                         )
                       ),
                       renderSettingsUI("settingsUI")
-                      )
-                    ),
+                    )
+           ),
            tabPanel("Charts"))
 

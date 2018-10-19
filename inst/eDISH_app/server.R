@@ -22,7 +22,7 @@ function(input, output, session){
     names(data_list) <- input$datafile$name
     
     # append to existing reactiveValues list
-    dd$data <- c(data_list, dd$data)  
+    dd$data <- c(dd$data, data_list)  
     
     # set dd$current to FALSE for previous & TRUE for current uploads
     dd$current <- c(rep(FALSE, length(dd$current)), rep(TRUE, length(data_list)))
@@ -43,6 +43,38 @@ function(input, output, session){
     
   })
   
+  observe({print(names(dd$data))})
+  
+  # upon a dataset being uploaded and set to "labs", generate data preview
+  observeEvent(input$file_1=="labs",{
+    output$data_preview <- DT::renderDataTable(DT::datatable(dd$data[[1]]))
+  }, ignoreInit = TRUE)
+  
+  # upon a dataset being set to "labs", run detectStandard() function
+  # temporarily only look at first uploaded dataset until we can:
+  #    - only allow 1 dataset to be set to "labs"
+  #    - look thru dynamically generated UI elements to see WHICH is being set to labs, and run detectStandard() on that
+  standard <- eventReactive(input$file_1=="labs", {
+    # ds <- detectStandard(dd$data[1])
+    # return(ds$standard)
+      "AdAM"    
+  }, ignoreInit = TRUE)
+  
+  # output UI message based on detectStandard() result 
+  observe({
+    if (is.null(standard())){
+      return()
+    } else if (standard()=="None") {
+      output$detectStandard_msg <- renderUI({
+        HTML("No standard detected. Please use settings tab to configure chart.")
+        })
+    } else {
+      output$detectStandard_msg <- renderUI({
+        HTML(paste("Matched",standard(),"data standard. eDISH chart available."))
+      })
+    }
+  })
+  
   # temporarily force adlbc to be our selected data
   # need to write code to:
   #  - only allow 1 dataset to be set to LABS
@@ -54,7 +86,7 @@ function(input, output, session){
   # i believe we will use eventReactive() to capture the return value
   # will have to code this to look thru all the dropdowns, but currently only looking at first dropdown
   # placeholder:
-  standard <- reactive({"ADaM"})
+ # standard <- reactive({"ADaM"})
   
   # use generateSettings() to produce a settings obj
   # placeholder:
