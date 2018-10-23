@@ -5,15 +5,15 @@
 \title{Create an eDISH widget}
 \usage{
 eDISH(data, id_col = "USUBJID", value_col = "STRESN",
-  measure_col = "TEST", unit_col = "STRESU",
-  normal_col_low = "STNRLO", normal_col_high = "STNRHI",
-  visit_col = "VISIT", visitn_col = "VISITN", baseline_visitn = 1,
-  filters = NULL, group_cols = NULL, measure_values = list(ALT =
-  "Aminotransferase, alanine (ALT)", AST =
+  measure_col = "TEST", normal_col_low = "STNRLO",
+  normal_col_high = "STNRHI", visit_col = "VISIT",
+  visitn_col = "VISITN", studyday_col = "DY", baseline_visitn = 1,
+  filters = NULL, group_cols = NULL, analysisFlag = NULL,
+  measure_values = list(ALT = "Aminotransferase, alanine (ALT)", AST =
   "Aminotransferase, aspartate (AST)", TB = "Total Bilirubin", ALP =
   "Alkaline phosphatase (ALP)"), x_options = c("ALT", "AST", "ALP"),
-  y_options = c("TB", "ALP"), visit_window = 30,
-  r_ratio_filter = TRUE, r_ratio_cut = 0, showTitle = TRUE,
+  y_options = "TB", visit_window = 30, r_ratio_filter = TRUE,
+  r_ratio_cut = 0, showTitle = TRUE,
   warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.",
   settings = NULL)
 }
@@ -25,8 +25,6 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
 \item{value_col}{Lab result variable name. Default: \code{"STRESN"}.}
 
 \item{measure_col}{Lab measure variable name. Default: \code{"TEST"}.}
-
-\item{unit_col}{Lab measure unit variable name. Default: \code{"STRESU"}.}
 
 \item{normal_col_low}{Lower limit of normal variable name. Default: \code{"STNRLO"}.}
 
@@ -41,6 +39,8 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
 \item{filters}{An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.}
 
 \item{group_cols}{An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.}
+
+\item{analysisFlag}{An optional list defining which column \code{value_col} and values \code{values} should be used to records for use in eDish and mDish analyses. Default: \code{NULL}.}
 
 \item{measure_values}{A list defining the data values from \code{measure_col} for the lab measures 
 used in eDish evaluations. Default: \code{list(ALT = 'Aminotransferase, alanine (ALT)', 
@@ -69,6 +69,8 @@ not validated. Any clinical recommendations based on this tool should be confirm
 standard operating procedures."}.}
 
 \item{settings}{Optional list of settings arguments to be converted to JSON using \code{jsonlite::toJSON(settings, auto_unbox = TRUE, dataframe = "rows", null = "null")}.  If provided, all other function parameters are ignored. Default: \code{NULL}.}
+
+\item{visitday_col}{Visit day variable name. Default: \code{"DY"}.}
 }
 \description{
 This function creates an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH)
@@ -81,9 +83,13 @@ eDISH(data=adlbc,
       id_col = "USUBJID",
       value_col = "AVAL", 
       measure_col = "PARAM", 
+      visit_col = "VISIT",
       visitn_col = "VISITNUM", 
+      studyday_col = "ADY",
       normal_col_low = "A1LO", 
       normal_col_high = "A1HI", 
+      analysisFlag = list(value_col="EPOCH",
+                          values=c("Analysis")),
       measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
                             AST = "Aspartate Aminotransferase (U/L)",
                             TB = "Bilirubin (umol/L)",
@@ -93,7 +99,9 @@ eDISH(data=adlbc,
 settingsl <- list(id_col = "USUBJID",
       value_col = "AVAL", 
       measure_col = "PARAM", 
-      visitn_col = "VISITNUM", 
+      visit_col = "VISIT",
+      visitn_col = "VISITNUM",
+      studyday_col = "ADY", 
       normal_col_low = "A1LO", 
       normal_col_high = "A1HI", 
       measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
