@@ -15,7 +15,7 @@ navbarPage("eDISH Shiny app", id = "inTabset",
                              fluidRow(
                                wellPanel( 
                                h3("Data preview"), 
-                               DT::dataTableOutput("data_preview")
+                               div(DT::dataTableOutput("data_preview"), style = "font-size: 75%")
                              )
                              ),
                              fluidRow(

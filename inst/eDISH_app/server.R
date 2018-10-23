@@ -54,7 +54,10 @@ function(input, output, session){
     index <- which(names(dd$data)==input$select_file)[1]
     if (!is.na(index)){
       DT::datatable(dd$data[[index]],
-                    extensions = "Scroller", options = list(scrollY=300)) 
+                    rownames = FALSE,
+                    style="bootstrap",
+                    class="compact",
+                    extensions = "Scroller", options = list(scrollY=500, scrollX=TRUE)) 
     }
       })
 
