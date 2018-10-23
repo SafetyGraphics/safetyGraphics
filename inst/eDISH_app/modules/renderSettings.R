@@ -33,7 +33,9 @@ renderSettingsUI <- function(id){
                      #,
                      #selectInput("measure_values","Measure values", choices = NULL)
                      
-              )))),
+              ))
+          )
+        ),
         tagList(
           column(6, 
                  wellPanel(
@@ -46,20 +48,25 @@ renderSettingsUI <- function(id){
           ),
           column(6, 
                  wellPanel(
-                   h3("Appearance Settings"),
-                   sliderInput(ns("visit_window"),"visit_window", value = 30, min=0, max=50),
-                   checkboxInput(ns("r_ratio_filter"),"r_ratio_filter", value = TRUE),
-                   conditionalPanel(
-                     condition="input.r_ratio_filter==true", ns=ns,
-                     sliderInput(ns("r_ratio_cut"),"r_ratio_cut", value = 0, min=0, max =1)
-                   ),
-                   checkboxInput(ns("showTitle"),"showTitle", value = TRUE),
-                   textAreaInput (ns("warningText"),"warningText", 
-                                  value = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.")
-                 )
-          )))
-    )
+                   a(id = ns("toggle_expand_appearance_settings"), "Appearance Settings", href = "#"),
+                   shinyjs::hidden(
+                     div(id = ns("expand_appearance_settings"), 
+                         #  h3("Appearance Settings"),
+                         sliderInput(ns("visit_window"),"visit_window", value = 30, min=0, max=50),
+                         checkboxInput(ns("r_ratio_filter"),"r_ratio_filter", value = TRUE),
+                         conditionalPanel(
+                           condition="input.r_ratio_filter==true", ns=ns,
+                           sliderInput(ns("r_ratio_cut"),"r_ratio_cut", value = 0, min=0, max =1)
+                         ),
+                         checkboxInput(ns("showTitle"),"showTitle", value = TRUE),
+                         textAreaInput (ns("warningText"),"warningText", 
+                                        value = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.")
+                     )
+                   )))
+        )
+      ))
   )
+  
 }
 
 
@@ -89,7 +96,7 @@ renderSettings <- function(input, output, session, data, standard, settings, gsB
   updateSelectInput(session, "measure_values", selected = NULL)
   updateSelectInput(session, "filters", selected = NULL, choices = colnames)
   updateSelectInput(session, "group_cols", selected = NULL, choices = colnames)
-   
+  
   ### return all inputs from module to be used in global env.
   return(reactive(input))  
 }

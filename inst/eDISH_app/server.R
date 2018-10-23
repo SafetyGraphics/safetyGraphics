@@ -46,12 +46,13 @@ function(input, output, session){
   
   # upon a dataset being uploaded and set to "labs", generate data preview
   # NOTE - data preview is rendering after every upload - need to fix
-  observeEvent(input$file_1=="labs",{
-    output$data_preview <- DT::renderDataTable({
-      DT::datatable(dd$data[[1]],
-                    extensions = "Scroller", options = list(scrollY=300))
+  output$data_preview <- DT::renderDataTable({
+      req(input$file_1)
+      if (input$file_1 =="labs"){
+        DT::datatable(dd$data[[1]],
+                      extensions = "Scroller", options = list(scrollY=300)) 
+      }
       })
-  }, ignoreInit = TRUE)
   
   
   # temporarily force adlbc to be our selected data
@@ -73,18 +74,13 @@ function(input, output, session){
   }, ignoreInit = TRUE)
   
   # output UI message based on detectStandard() result 
-  observe({
-    if (is.null(standard())){
-      return()
-    } else if (standard()=="None") {
-      output$detectStandard_msg <- renderUI({
-        HTML("No standard detected. Please use settings tab to configure chart.")
-        })
-    } else {
-      output$detectStandard_msg <- renderUI({
-        HTML(paste("Matched",standard(),"data standard. eDISH chart available."))
-      })
-    }
+   output$detectStandard_msg <- renderUI({
+     req(standard())
+     if (standard()=="None"){
+       HTML("No standard detected. Please use settings tab to configure chart.")
+     } else {
+       HTML(paste("Matched",standard(),"data standard. eDISH chart available."))
+     }
   })
   
   
@@ -129,7 +125,7 @@ function(input, output, session){
   # if status=="valid", generate chart
   observeEvent(status()=="valid", {
 
-    ## call generate chart module
+    ## future: wrap into module called generateChart()
     output$chart <- renderEDISH({
       eDISH(data = data(),
             settings = settings())
@@ -140,5 +136,7 @@ function(input, output, session){
     updateTabsetPanel(session, "inTabset", selected = "charts")
   })
 
+  
+  session$onSessionEnded(stopApp)
   
 }
