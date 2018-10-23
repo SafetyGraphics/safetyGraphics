@@ -47,16 +47,15 @@ function(input, output, session){
     
   })
 
-  
-  index <- reactive({which(names(dd$data)==input$select_file)[1]})
  
   # upon a dataset being uploaded and set to "labs", generate data preview
   # NOTE - data preview is rendering after every upload - need to fix
   output$data_preview <- DT::renderDataTable({
-      if (!is.na(index())){
-        DT::datatable(dd$data[[index()]],
-                      extensions = "Scroller", options = list(scrollY=300))
-      }
+    index <- which(names(dd$data)==input$select_file)[1]
+    if (!is.na(index)){
+      DT::datatable(dd$data[[index]],
+                    extensions = "Scroller", options = list(scrollY=300)) 
+    }
       })
 
 
