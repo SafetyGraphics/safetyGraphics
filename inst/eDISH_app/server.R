@@ -29,51 +29,56 @@ function(input, output, session){
     
     
     # generate UI elements - 1 for each uploaded dataset - for selecting which one will be used for eDISH plot
-    insertUI(
-      selector = "#placeholderDataSelect",
-      where = "beforeEnd",
-      ui = lapply(which(dd$current==TRUE), function(i){
-        if (i==1){   # if the VERY FIRST UPLOAD, default to "labs" data
-          selectInput(inputId = paste0("file_", i), label = names(dd$data)[i], choices=c("labs","other"), selected="labs")
-        } else {  # all other current uploads default to "other"
-          selectInput(inputId = paste0("file_", i), label = names(dd$data)[i], choices=c("labs","other"), selected="other")
-        } 
-      }) 
-    )
+    # insertUI(
+    #   selector = "#placeholderDataSelect",
+    #   where = "beforeEnd",
+    #   ui = lapply(which(dd$current==TRUE), function(i){
+    #     if (i==1){   # if the VERY FIRST UPLOAD, default to "labs" data
+    #       selectInput(inputId = paste0("file_", i), label = names(dd$data)[i], choices=c("labs","other"), selected="labs")
+    #     } else {  # all other current uploads default to "other"
+    #       selectInput(inputId = paste0("file_", i), label = names(dd$data)[i], choices=c("labs","other"), selected="other")
+    #     } 
+    #   }) 
+    # )
+    
+    
+    updateRadioButtons(session, "select_file", "Select file for eDISH chart",
+                              choices = names(dd$data))
     
   })
+
   
-  
+  index <- reactive({which(names(dd$data)==input$select_file)[1]})
+ 
   # upon a dataset being uploaded and set to "labs", generate data preview
   # NOTE - data preview is rendering after every upload - need to fix
   output$data_preview <- DT::renderDataTable({
-      req(input$file_1)
-      if (input$file_1 =="labs"){
-        DT::datatable(dd$data[[1]],
-                      extensions = "Scroller", options = list(scrollY=300)) 
+      if (!is.na(index())){
+        DT::datatable(dd$data[[index()]],
+                      extensions = "Scroller", options = list(scrollY=300))
       }
       })
-  
-  
+
+
   # temporarily force adlbc to be our selected data
   # need to write code to:
   #  - only allow 1 dataset to be set to LABS
   #  - detect which data is set to labs
   # placeholder:
-  data <- reactive({ReDish::adlbc})
-  
-  
+  data_temp <- reactive({ReDish::adlbc})
+
+
   # upon a dataset being set to "labs", run detectStandard() function
   # temporarily only look at first uploaded dataset until we can:
   #    - only allow 1 dataset to be set to "labs"
   #    - look thru dynamically generated UI elements to see WHICH is being set to labs, and run detectStandard() on that
-  standard <- eventReactive(input$file_1=="labs", {
+  standard <- eventReactive(! input$select_file =="No files available", {
     # ds <- detectStandard(dd$data[1])
     # return(ds$standard)
-      "AdAM"    
+      "AdAM"
   }, ignoreInit = TRUE)
-  
-  # output UI message based on detectStandard() result 
+
+  # output UI message based on detectStandard() result
    output$detectStandard_msg <- renderUI({
      req(standard())
      if (standard()=="None"){
@@ -82,17 +87,17 @@ function(input, output, session){
        HTML(paste("Matched",standard(),"data standard. eDISH chart available."))
      }
   })
-  
-  
+
+
   # use generateSettings() to produce a settings obj
   # placeholder:
   settings <- reactive({
     settingsl <- list(id_col = "USUBJID",
-                      value_col = "AVAL", 
-                      measure_col = "PARAM", 
-                      visitn_col = "VISITNUM", 
-                      normal_col_low = "A1LO", 
-                      normal_col_high = "A1HI", 
+                      value_col = "AVAL",
+                      measure_col = "PARAM",
+                      visitn_col = "VISITNUM",
+                      normal_col_low = "A1LO",
+                      normal_col_high = "A1HI",
                       group_cols = NULL,
                       filters = NULL,
                       measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
@@ -100,38 +105,38 @@ function(input, output, session){
                                             TB = "Bilirubin (umol/L)",
                                             ALP = "Alkaline Phosphatase (U/L)"))
   })
-  
+
 
   # based on selected data set, and given a data standard/settings obj, generate settings page.
-  # trigger this event EITHER from press of button (if selecting standard manually), 
+  # trigger this event EITHER from press of button (if selecting standard manually),
   #     or based on the automatic standard detection
-  observeEvent(input$generateSettings, { 
+  observeEvent(input$generateSettings, {
 
-    # note that UI for renderSettings module defines all the inputs. but maybe we want to do that in general 
+    # note that UI for renderSettings module defines all the inputs. but maybe we want to do that in general
     #  ui function outside of module?? A little confused about the module UI showing up pror to obeserving button click...
-    settingsUI_inputs <-  callModule(renderSettings, "settingsUI", data=data, standard=standard, settings=settings)
+    settingsUI_inputs <-  callModule(renderSettings, "settingsUI", data=data_temp, standard=standard, settings=settings)
 
   },
   ignoreInit = TRUE)
 
-  
+
   # update settings object as user changes settings selections
-  
-  
+
+
   # run validateSettings(data, standard, settings) and return a status
   # placeholder status here:
   status <- reactive("valid")
-  
+
   # if status=="valid", generate chart
   observeEvent(status()=="valid", {
 
     ## future: wrap into module called generateChart()
     output$chart <- renderEDISH({
-      eDISH(data = data(),
+      eDISH(data = data_temp(),
             settings = settings())
     })
   })
-  
+
   observeEvent(input$view_chart, {
     updateTabsetPanel(session, "inTabset", selected = "charts")
   })
