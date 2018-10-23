@@ -70,7 +70,7 @@ renderSettingsUI <- function(id){
 }
 
 
-renderSettings <- function(input, output, session, data, standard, settings, gsButton){
+renderSettings <- function(input, output, session, data, standard, settings){
   
   ns <- session$ns
   
