@@ -1,6 +1,6 @@
 Package: ReDish
 Title: Create an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH).
-Version: 0.0.1
+Version: 0.2.1
 Authors@R: c(
 	person("Becca", "Krouse", email = "rebecca_krouse@rhoworld.com", role = c("cre","aut")),
 	person("Jeremy", "Wildfire", role = "aut"),
