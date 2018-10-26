@@ -1,5 +1,7 @@
-context("Tests for the getSetting() function")
+context("Tests for the getSettingValue() function")
 library(ReDish)
+
+testSettings <- generateSettings(standard="SDTM")
 
 test_that("function throws an error if the settings object isn't a list",{
   expect_error(getSettingValue(key="testKey",settings=c("NotAList")))
@@ -7,8 +9,6 @@ test_that("function throws an error if the settings object isn't a list",{
 })
 
 test_that("different data types for `key` parameter work as expected",{
-  testSettings <- generateSettings(standard="SDTM")
-  
   expect_equal(getSettingValue(key=c("id_col"),settings=testSettings),"USUBJID")
   expect_equal(getSettingValue(key=list("id_col"),settings=testSettings),"USUBJID")
   expect_equal(getSettingValue(key="id_col",settings=testSettings),"USUBJID")

@@ -18,8 +18,8 @@ test_that("a list with the expected properties and structure is returned for all
 })
 
 test_that("a warning is thrown if chart isn't eDish",{
-  expect_warning(generateSettings(chart="aeexplorer"))
-  expect_warning(generateSettings(chart=""))
+  expect_error(generateSettings(chart="aeexplorer"))
+  expect_error(generateSettings(chart=""))
   expect_silent(generateSettings(chart="eDish"))
   expect_silent(generateSettings(chart="edish"))
   expect_silent(generateSettings(chart="EdIsH"))

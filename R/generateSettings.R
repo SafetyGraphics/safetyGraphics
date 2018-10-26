@@ -8,7 +8,7 @@
 
 generateSettings <- function(standard="None", chart="eDish"){
   if(tolower(chart)!="edish"){
-    warning(paste0("Can't generate settings for the specified chart ('",chart,"'). Only the 'eDish' chart is supported for now."))
+    stop(paste0("Can't generate settings for the specified chart ('",chart,"'). Only the 'eDish' chart is supported for now."))
   }
   
   #A shell setting object without any data mapping completed
