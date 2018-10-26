@@ -37,12 +37,12 @@ generateSettings <- function(standard="None", chart="eDish"){
     warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures."
   )
     
-  if(standard=="ADaM"){
+  if(tolower(standard)=="adam"){
     settings[["id_col"]]<-"USUBJID"
     settings[["value_col"]]<-"AVAL"
     settings[["measure_col"]]<-"PARAM"
     settings[["normal_col_low"]]<-"A1LO"
-    settings[["normal_col_high"]]<-"AIHI"
+    settings[["normal_col_high"]]<-"A1HI"
     settings[["studyday_col"]]<-"ADY"
     settings[["visit_col"]]<-"VISIT"
     settings[["visitn_col"]]<-"VISITNUM"
@@ -52,7 +52,7 @@ generateSettings <- function(standard="None", chart="eDish"){
     settings[["measure_values"]][["ALP"]]<-"Alkaline phosphatase (ALP)"
   }
   
-  if(standard=="SDTM"){
+  if(tolower(standard)=="sdtm"){
     settings[["id_col"]]<-"USUBJID"
     settings[["value_col"]]<-"STRESN"
     settings[["measure_col"]]<-"TEST"

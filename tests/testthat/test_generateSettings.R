@@ -37,9 +37,19 @@ test_that("data mappings are null when setting=none, character otherwise",{
     expect_is(sdtm_settings[[name]],"character")
   }
   
+  sdtm_settings2 <- generateSettings(standard="SdTm")
+  for(name in column_setting_names){
+    expect_is(sdtm_settings2[[name]],"character")
+  }
+  
   adam_settings <- generateSettings(standard="ADaM")
   for(name in column_setting_names){
     expect_is(adam_settings[[name]],"character")
+  }
+  
+  adam_settings2 <- generateSettings(standard="ADAM")
+  for(name in column_setting_names){
+    expect_is(adam_settings2[[name]],"character")
   }
   
 })

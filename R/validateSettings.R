@@ -7,43 +7,41 @@
 #' @return A list containing the appropriate settings for the selected chart
 
 validateSettings <- function(data, settings, chart="eDish"){
-  settingStatus<-list()
-  names<-names(data)  
   
-  settingsShell <- generateSettings(standard="None")
-  options <- names(shellSettings)
-  dataOptions <- c(options[grep("_col",options)],"filters")
-  settingStatus[["dataColumns"]] <- dataOptions %>% 
-  map(function(option){
-    return(list(
-      option = option,
-      value = settings[[option]],
-      type = typeof(settings[[option]])
-    ))
-  })%>%
-  map_if(
-    function(optionList){
-      return(optionList$type=="character")
-    },
-    function(optionList){
-      optionList[["valid"]] <-optionList[["value"]] %in% names
-      return(optionList)
+  checkColumnSetting <- function(key){
+    current <- list(key=key)
+    current$text_key <-  paste( unlist(current$key), collapse='|')
+    current$check <- "'_col' parameter from setting setting found in data?"
+    current$value <- getSettingValue(key=key,settings=settings)
+    if(is.null(current$value)){
+      current$value <- "--No Value Given--"
+      current$valid <- TRUE
+      current$message <- ""
+      return(current)
+    }else{
+      current$valid <- current$value %in% validCols
+      current$message <- ifelse(current$valid,"",paste0(current$value," column not found in data."))
+      return(current)        
     }
-  )
+  }
   
   
-    
-  # Check that all columns in the setting object are found in the data frame
-  allColumnsFound <- TRUE
-  dataMappingSettings <- c("id_col","value_col","measure_col","normal_col_low","normal_col_high","study_day_col","") 
-  columnsFromSettings <- c()
-      
-  # Check that field level data specified in the setting object is found in the data frame
-  allFieldsFound <- TRUE
-  dataFieldSettings <- c()
-  fieldsFromSettings <- c()
+  settingStatus<-list()
   
+  #Check that non-null setting columns are found in the data
+  validCols <- names(data)
+  columnChecks <- getSettingKeys(patterns="_col",settings=settings) %>% map(checkColumnSetting)
   
+  #Combine different check types in to a master list
+  settingStatus$checkList<-c(columnChecks)
   
+  #valid=true if all checks pass, false otherwise 
+  settingStatus$valid <- settingStatus$checkList%>%map_lgl(~.x[["valid"]])%>%all 
+  
+  #create summary string
+  failCount <- settingStatus$settingChecks%>%map_dbl(~!.x[["valid"]])%>%sum
+  checkCount <- length(settingStatus$settingChecks)
+  settingStatus$status <- paste0(failCount," of ",checkCount," checks failed.")
   return (settingStatus)
 }
+
