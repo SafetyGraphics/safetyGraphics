@@ -39,8 +39,8 @@ validateSettings <- function(data, settings, chart="eDish"){
   settingStatus$valid <- settingStatus$checkList%>%map_lgl(~.x[["valid"]])%>%all 
   
   #create summary string
-  failCount <- settingStatus$settingChecks%>%map_dbl(~!.x[["valid"]])%>%sum
-  checkCount <- length(settingStatus$settingChecks)
+  failCount <- settingStatus$checkList%>%map_dbl(~!.x[["valid"]])%>%sum
+  checkCount <- length(settingStatus$checkList)
   settingStatus$status <- paste0(failCount," of ",checkCount," checks failed.")
   return (settingStatus)
 }
