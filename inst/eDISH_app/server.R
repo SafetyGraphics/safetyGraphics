@@ -47,28 +47,27 @@ function(input, output, session){
     
   })
 
- 
+
+  # get index in list of selected dataset
+  data_selected_index <- reactive({
+    which(isolate({names(dd$data)})==input$select_file)[1]
+  })
+  
   # upon a dataset being uploaded and selected, generate data preview
   output$data_preview <- DT::renderDataTable({
-    selected <- input$select_file
-    isolate({
-      index <- which(names(dd$data)==selected)[1]
-      if (!is.na(index)){
-        DT::datatable(dd$data[[index]],
+     index <- data_selected_index()
+     if (!is.na(index)){
+        DT::datatable(data = isolate({dd$data[[index]]}),
                      rownames = FALSE,
                      style="bootstrap",
                      class="compact",
                       extensions = "Scroller", options = list(scrollY=500, scrollX=TRUE)) 
       }
-    })
-      })
+  })
 
 
   # temporarily force adlbc to be our selected data
-  # need to write code to:
-  #  - only allow 1 dataset to be set to LABS
-  #  - detect which data is set to labs
-  # placeholder:
+  # placeholder code:
   data_temp <- reactive({ReDish::adlbc})
 
 
