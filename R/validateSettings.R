@@ -8,32 +8,17 @@
 
 validateSettings <- function(data, settings, chart="eDish"){
   
-  checkColumnSetting <- function(key){
-    current <- list(key=key)
-    current$text_key <-  paste( unlist(current$key), collapse='|')
-    current$check <- "'_col' parameter from setting setting found in data?"
-    current$value <- getSettingValue(key=key,settings=settings)
-    if(is.null(current$value)){
-      current$value <- "--No Value Given--"
-      current$valid <- TRUE
-      current$message <- ""
-      return(current)
-    }else{
-      current$valid <- current$value %in% validCols
-      current$message <- ifelse(current$valid,"",paste0(current$value," column not found in data."))
-      return(current)        
-    }
-  }
-  
-  
   settingStatus<-list()
   
   #Check that non-null setting columns are found in the data
-  validCols <- names(data)
-  columnChecks <- getSettingKeys(patterns="_col",settings=settings) %>% map(checkColumnSetting)
+  columnChecks <- getSettingKeys(patterns="_col",settings=settings) %>% map(checkColumnSetting, settings=settings, data=data)
+  
+  #Check that specified field/column combinations are found in the data
+  fieldChecks <- getSettingKeys(patterns="_values",settings=settings, matchLists=TRUE) %>% map(checkFieldSettings, settings=settings, data=data )
+  fieldChecks_flat <- unlist(fieldChecks, recursive=FALSE)
   
   #Combine different check types in to a master list
-  settingStatus$checkList<-c(columnChecks)
+  settingStatus$checkList<-c(columnChecks, fieldChecks_flat)
   
   #valid=true if all checks pass, false otherwise 
   settingStatus$valid <- settingStatus$checkList%>%map_lgl(~.x[["valid"]])%>%all 

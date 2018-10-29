@@ -1,4 +1,4 @@
-getSettingKeys<-function(patterns, settings, parents=NULL){
+getSettingKeys<-function(patterns, settings, parents=NULL, matchLists=FALSE){
   stopifnot(typeof(patterns)=="character", typeof(settings)=="list", is.null(parents)||typeof(parents)=="list")
   matches<-list()
   
@@ -28,7 +28,7 @@ getSettingKeys<-function(patterns, settings, parents=NULL){
       }
       
       #if the parameter is a list, iterate
-      if(typeof(value) == "list"){
+      if(typeof(value) == "list" & !matchLists){
         nestedMatches <- getSettingKeys(patterns=patterns, settings=value, parents=keys)
         matches <- do.call(c, list(matches,nestedMatches)) 
       } else {

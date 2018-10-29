@@ -46,10 +46,10 @@ generateSettings <- function(standard="None", chart="eDish"){
     settings[["studyday_col"]]<-"ADY"
     settings[["visit_col"]]<-"VISIT"
     settings[["visitn_col"]]<-"VISITNUM"
-    settings[["measure_values"]][["ALT"]]<-"Aminotransferase, alanine (ALT)"
-    settings[["measure_values"]][["AST"]]<-"Aminotransferase, aspartate (AST)"
-    settings[["measure_values"]][["TB"]]<-"Total Bilirubin"
-    settings[["measure_values"]][["ALP"]]<-"Alkaline phosphatase (ALP)"
+    settings[["measure_values"]][["ALT"]]<-"Alanine Aminotransferase (U/L)"
+    settings[["measure_values"]][["AST"]]<-"Aspartate Aminotransferase (U/L)"
+    settings[["measure_values"]][["TB"]]<-"Bilirubin (umol/L)"
+    settings[["measure_values"]][["ALP"]]<-"Alkaline Phosphatase (U/L)"
   }
   
   if(tolower(standard)=="sdtm"){
