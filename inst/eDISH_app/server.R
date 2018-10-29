@@ -48,17 +48,19 @@ function(input, output, session){
   })
 
  
-  # upon a dataset being uploaded and set to "labs", generate data preview
-  # NOTE - data preview is rendering after every upload - need to fix
+  # upon a dataset being uploaded and selected, generate data preview
   output$data_preview <- DT::renderDataTable({
-    index <- which(names(dd$data)==input$select_file)[1]
-    if (!is.na(index)){
-      DT::datatable(dd$data[[index]],
-                    rownames = FALSE,
-                    style="bootstrap",
-                    class="compact",
-                    extensions = "Scroller", options = list(scrollY=500, scrollX=TRUE)) 
-    }
+    selected <- input$select_file
+    isolate({
+      index <- which(names(dd$data)==selected)[1]
+      if (!is.na(index)){
+        DT::datatable(dd$data[[index]],
+                     rownames = FALSE,
+                     style="bootstrap",
+                     class="compact",
+                      extensions = "Scroller", options = list(scrollY=500, scrollX=TRUE)) 
+      }
+    })
       })
 
 
@@ -131,8 +133,8 @@ function(input, output, session){
 
   # if status=="valid", generate chart
   observeEvent(status()=="valid", {
-
-    ## future: wrap into module called generateChart()
+  
+     ## future: wrap into module called generateChart()
     output$chart <- renderEDISH({
       eDISH(data = data_temp(),
             settings = settings())
