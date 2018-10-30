@@ -48,38 +48,36 @@ function(input, output, session){
   })
 
 
-  # get index in list of selected dataset
-  data_selected_index <- reactive({
-    which(isolate({names(dd$data)})==input$select_file)[1]
-  })
-  
-  # upon a dataset being uploaded and selected, generate data preview
+  # get selected dataset when selection changes
+  data_selected <- eventReactive(input$select_file, {
+    if (! input$select_file == "No files available"){
+      isolate({index <- which(names(dd$data)==input$select_file)[1]})
+      dd$data[[index]]
+    } else{
+      return()
+    }
+    })
+
+ # upon a dataset being uploaded and selected, generate data preview
   output$data_preview <- DT::renderDataTable({
-     index <- data_selected_index()
-     if (!is.na(index)){
-        DT::datatable(data = isolate({dd$data[[index]]}),
+      DT::datatable(data = data_selected(),
                      rownames = FALSE,
                      style="bootstrap",
                      class="compact",
-                      extensions = "Scroller", options = list(scrollY=500, scrollX=TRUE)) 
-      }
+                      extensions = "Scroller", options = list(scrollY=500, scrollX=TRUE))
   })
 
 
   # temporarily force adlbc to be our selected data
-  # placeholder code:
   data_temp <- reactive({ReDish::adlbc})
 
 
-  # upon a dataset being set to "labs", run detectStandard() function
-  # temporarily only look at first uploaded dataset until we can:
-  #    - only allow 1 dataset to be set to "labs"
-  #    - look thru dynamically generated UI elements to see WHICH is being set to labs, and run detectStandard() on that
-  standard <- eventReactive(! input$select_file =="No files available", {
-    # ds <- detectStandard(dd$data[1])
-    # return(ds$standard)
-      "AdAM"
-  }, ignoreInit = TRUE)
+  # upon a dataset being selected, run detectStandard() function
+  standard <- reactive({
+     req(data_selected())
+     detectStandard(data_selected())$standard
+  })
+
 
   # output UI message based on detectStandard() result
    output$detectStandard_msg <- renderUI({
@@ -91,23 +89,12 @@ function(input, output, session){
      }
   })
 
-
-  # use generateSettings() to produce a settings obj
-  # placeholder:
+  # upon a dataset being selected, use generateSettings() to produce a settings obj
   settings <- reactive({
-    settingsl <- list(id_col = "USUBJID",
-                      value_col = "AVAL",
-                      measure_col = "PARAM",
-                      visitn_col = "VISITNUM",
-                      normal_col_low = "A1LO",
-                      normal_col_high = "A1HI",
-                      group_cols = NULL,
-                      filters = NULL,
-                      measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
-                                            AST = "Aspartate Aminotransferase (U/L)",
-                                            TB = "Bilirubin (umol/L)",
-                                            ALP = "Alkaline Phosphatase (U/L)"))
+    req(data_selected())
+    generateSettings(standard = standard(), chart = "eDish")
   })
+  
 
 
   # based on selected data set, and given a data standard/settings obj, generate settings page.
@@ -117,7 +104,7 @@ function(input, output, session){
 
     # note that UI for renderSettings module defines all the inputs. but maybe we want to do that in general
     #  ui function outside of module?? A little confused about the module UI showing up pror to obeserving button click...
-    settingsUI_inputs <-  callModule(renderSettings, "settingsUI", data=data_temp, standard=standard, settings=settings)
+    settingsUI_inputs <-  callModule(renderSettings, "settingsUI", data=data_selected, standard=standard, settings=settings)
 
   },
   ignoreInit = TRUE)
