@@ -64,7 +64,7 @@ function(input, output, session){
                      rownames = FALSE,
                      style="bootstrap",
                      class="compact",
-                      extensions = "Scroller", options = list(scrollY=500, scrollX=TRUE))
+                      extensions = "Scroller", options = list(scrollY=400, scrollX=TRUE))
   })
 
 
@@ -95,34 +95,36 @@ function(input, output, session){
     generateSettings(standard = standard(), chart = "eDish")
   })
   
-
-
-  # based on selected data set, and given a data standard/settings obj, generate settings page.
-  # trigger this event EITHER from press of button (if selecting standard manually),
-  #     or based on the automatic standard detection
-  observeEvent(input$generateSettings, {
-
-    # note that UI for renderSettings module defines all the inputs. but maybe we want to do that in general
-    #  ui function outside of module?? A little confused about the module UI showing up pror to obeserving button click...
-    settingsUI_inputs <-  callModule(renderSettings, "settingsUI", data=data_selected, standard=standard, settings=settings)
-
-  },
-  ignoreInit = TRUE)
-
-
-  # update settings object as user changes settings selections
-
+  # update settings obj from manual selection
+  
 
   # run validateSettings(data, standard, settings) and return a status
   # placeholder status here:
-  status <- reactive("valid")
+  status <- reactive({
+    req(data_selected())
+    req(settings())
+    validateSettings(data_selected(), settings(), chart="eDish")$valid
+  })
+
+  # based on selected data set & generated/selected settings obj, generate settings page.
+  # trigger this event EITHER from press of button (if selecting standard manually),
+  #     or based on validateSettings() returning valid==TRUE
+  observeEvent(input$generateSettings | status()==TRUE, {
+
+    # note that UI for renderSettings module defines all the inputs. but maybe we want to do that in general
+    #  ui function outside of module?? A little confused about the module UI showing up pror to obeserving button click...
+    settingsUI_inputs <-  callModule(renderSettings, "settingsUI", data=data_selected, settings=settings)
+
+  })
 
   # if status=="valid", generate chart
-  observeEvent(status()=="valid", {
+  observeEvent(status()==TRUE, {
   
      ## future: wrap into module called generateChart()
     output$chart <- renderEDISH({
-      eDISH(data = data_temp(),
+      req(data_selected())
+      req(settings())
+      eDISH(data = data_selected(),
             settings = settings())
     })
   })
