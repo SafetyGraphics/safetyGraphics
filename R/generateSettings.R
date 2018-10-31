@@ -2,9 +2,22 @@
 #'
 #' This function returns a settings object for the eDish chart based on the specified data standard. 
 #'
+#' The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, eDish is the only chart supported.
+#'
 #' @param standard The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"SDTM"}
 #' @param chart The chart for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.
 #' @return A list containing the appropriate settings for the selected chart
+#' 
+#' @examples 
+#' 
+#' generateSettings(standard="SDTM") 
+#' generateSettings(standard="SdTm") #also ok
+#' generateSettings(standard="AdAM")
+#' generateSettings(standard="a different standard") #returns shell settings list with no data mapping
+#' 
+#' /dontrun{
+#' generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far. 
+#' }
 
 generateSettings <- function(standard="None", chart="eDish"){
   if(tolower(chart)!="edish"){

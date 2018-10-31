@@ -1,3 +1,19 @@
+#' Check that a setting parameter has a matching data field 
+#'
+#' Checks that a single parameter from the settings list matches a field value in a specified data set
+#'
+#' This function compares settings with field values as part of the \code{validateSettings()} function. More specifically, the function checks whether the \code{fieldKey} in a \code{settings} object matches a column/field combination in \code{"data"}. The function makes 2 major assumptions about the structure of the settings object. First, it assumes that the first value in fieldKey is "settingName_values" and there is a corresponding "settingName_col" setting that defines the column to search for field-level data. Second, it expects that the value specified by key/settings is a list, and that each value in the list is a field of the variable above. 
+#' 
+#' @param fieldKey a list (like those provided by \code{getSettingKeys())} defining the position of parameter in the settings object.
+#' @param settings The settings list used to generate a chart like \code{eDISH()}
+#' @param data A data frame to check for the specified field
+#' @return A list containing the results of the check following the format specified in \code{validateSettings()[["checkList"]]}
+#' 
+#' 
+#' #' @examples 
+#' testSettings<-generateSettings(standard="AdAM")
+#' checkFieldSettings(fieldKey=list("measure_values"),settings=testSettings, adlbc) #list of 4 checks. all pass ($valid ==TRUE)
+
 checkFieldSettings <- function(fieldKey, settings, data){
   stopifnot(typeof(fieldKey)=="list", typeof(settings)=="list")
   
@@ -10,8 +26,9 @@ checkFieldSettings <- function(fieldKey, settings, data){
   # get a list of fields from the settings object
   fieldList<-getSettingValue(key=fieldKey, settings=settings)   # save the value for the  measureKey as measureList 
   stopifnot(typeof(fieldList)=="list")   # save the value for the  measureKey as measureList 
-
+  
   # compare the fields in the settings to the fields in the data. 
+  
   fieldChecks <- fieldList %>% names %>% map(function(key){
     current <- list()
     current$key<-fieldKey
