@@ -90,42 +90,67 @@ function(input, output, session){
   })
 
   # upon a dataset being selected, use generateSettings() to produce a settings obj
-  settings <- reactive({
+  settings_list <- reactiveValues(settings = NULL)
+  observe({
     req(data_selected())
-    generateSettings(standard = standard(), chart = "eDish")
-  })
-  
-  # update settings obj from manual selection
-  
+    standard()
+    settings_list$settings <- generateSettings(standard = standard(), chart = "eDish")
+  }) 
+
 
   # run validateSettings(data, standard, settings) and return a status
-  # placeholder status here:
+  # this bombs if standard="none" because we are not yet updating settings obj based on
+  #   user input. Once we allow that, run validateSettings under either:
+  #     (1) standard is AdAM or SDTM & settings obj generated automatically
+  #     (2) user needs to update settings in UI manually (due to standard="none" currently, could be more conditions in future)
   status <- reactive({
     req(data_selected())
-    req(settings())
-    validateSettings(data_selected(), settings(), chart="eDish")$valid
+    req(settings_list$settings)
+    req(!standard()=="None")
+    validateSettings(data_selected(), settings_list$settings, chart="eDish")$valid
   })
 
   # based on selected data set & generated/selected settings obj, generate settings page.
   # trigger this event EITHER from press of button (if selecting standard manually),
   #     or based on validateSettings() returning valid==TRUE
-  observeEvent(input$generateSettings | status()==TRUE, {
-
-    # note that UI for renderSettings module defines all the inputs. but maybe we want to do that in general
-    #  ui function outside of module?? A little confused about the module UI showing up pror to obeserving button click...
-    settingsUI_inputs <-  callModule(renderSettings, "settingsUI", data=data_selected, settings=settings)
-
+  settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
+  observeEvent(input$generateSettings>0 | status()==TRUE, {
+ 
+    isolate({
+      settingsUI_list$settings <- callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings)
+      })
   })
 
-  # if status=="valid", generate chart
-  observeEvent(status()==TRUE, {
+
+  # validate new settings
+  # note - originally thought we'd work w/ one settings object. However, if we update the reactive settings values using
+  # user selections, the settings UI module above will invalidate and the whole thing will re-execute. 
+  # As a solution, I moved to having a second settings object that comes from the user dropdowns for 
+  # downstream server-side stuff..
+  #
+  # ALSO there is not a direct mapping between the Shiny UI and the settings obj.  (e.g. measure_values are input$ALT, etc) 
+  # so we need to deal w/ that conversion
+  status2 <- reactive({
+    req(data_selected())
+    req(settingsUI_list$settings) 
+    validateSettings(data_selected(), settingsUI_list$settings, chart="eDish")$valid
+  })
   
+  observe({
+    print(settingsUI_list$settings$id_col)
+    print(settingsUI_list$settings$measure_col)
+    print(status2())
+  })
+  
+  # if status2=="valid", generate chart
+  observeEvent(status2()==TRUE, {
+
      ## future: wrap into module called generateChart()
     output$chart <- renderEDISH({
       req(data_selected())
-      req(settings())
+      req(settingsUI_list$settings)
       eDISH(data = data_selected(),
-            settings = settings())
+            settings = reactiveValuesToList(settingsUI_list$settings))
     })
   })
 
