@@ -68,10 +68,6 @@ function(input, output, session){
   })
 
 
-  # temporarily force adlbc to be our selected data
-  data_temp <- reactive({ReDish::adlbc})
-
-
   # upon a dataset being selected, run detectStandard() function
   standard <- reactive({
      req(data_selected())
@@ -116,9 +112,8 @@ function(input, output, session){
   settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
   observeEvent(input$generateSettings>0 | status()==TRUE, {
  
-    isolate({
-      settingsUI_list$settings <- callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings)
-      })
+    settingsUI_list$settings <- callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings)
+
   })
 
 
