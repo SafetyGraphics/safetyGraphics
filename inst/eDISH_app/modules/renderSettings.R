@@ -27,10 +27,9 @@ renderSettingsUI <- function(id){
                      selectInput(ns("normal_col_high"),"Upper limit of normal", choices = NULL),
                      selectInput(ns("visit_col"),"Visit", choices = NULL),
                      selectInput(ns("visitn_col"),"Visit number", choices = NULL),
-                     # selectInput("studyday_col","studyday_col", choices = NULL),
+                     selectInput("studyday_col","studyday_col", choices = NULL),
                      selectInput(ns("baseline_visitn"),"Baseline visit number", choices = NULL)#,
-                     #  selectInput("anlyFlag","anlyFlag", choices = NULL)
-                     #,
+                     selectInput("anlyFlag","anlyFlag", choices = NULL),
                      #selectInput("measure_values","Measure values", choices = NULL)
                      
               ))
@@ -48,10 +47,7 @@ renderSettingsUI <- function(id){
           ),
           column(6, 
                  wellPanel(
-                   a(id = ns("toggle_expand_appearance_settings"), "Appearance Settings", href = "#"),
-                   shinyjs::hidden(
-                     div(id = ns("expand_appearance_settings"), 
-                         #  h3("Appearance Settings"),
+                     h3("Appearance Settings"),
                          sliderInput(ns("visit_window"),"visit_window", value = 30, min=0, max=50),
                          checkboxInput(ns("r_ratio_filter"),"r_ratio_filter", value = TRUE),
                          conditionalPanel(
@@ -62,29 +58,32 @@ renderSettingsUI <- function(id){
                          textAreaInput (ns("warningText"),"warningText", 
                                         value = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.")
                      )
-                   )))
         )
       ))
+  )
   )
   
 }
 
 
-renderSettings <- function(input, output, session, data, standard, settings){
+renderSettings <- function(input, output, session, data, settings){
   
   ns <- session$ns
   
+  req(data())
+  req(settings)
+  
   colnames <- names(data())
-  settings <- settings()
+  settings <- settings
   keys <- unique(data()[,settings$measure_col]) 
   
   updateSelectInput(session, "id_col", choices = unique(c(settings$id_col,colnames)))
   updateSelectInput(session, "value_col", choices = unique(c(settings$value_col,colnames)))
   updateSelectInput(session, "measure_col", choices = unique(c(settings$measure_col,colnames)))
-  updateSelectInput(session, "ALT", choices = keys, selected = keys[1])
-  updateSelectInput(session, "AST", choices = keys, selected = keys[2])
-  updateSelectInput(session, "TB", choices = keys, selected = keys[3])
-  updateSelectInput(session, "ALP", choices = keys, selected = keys[4])
+  updateSelectInput(session, "ALT", choices = keys, selected = settings$measure_values$ALT)
+  updateSelectInput(session, "AST", choices = keys, selected = settings$measure_values$AST)
+  updateSelectInput(session, "TB", choices = keys, selected = settings$measure_values$TB)
+  updateSelectInput(session, "ALP", choices = keys, selected = settings$measure_values$ALP)
   
   updateSelectInput(session, "normal_col_low", choices = unique(c(settings$normal_col_low,colnames)))
   updateSelectInput(session, "normal_col_high", choices = unique(c(settings$normal_col_high,colnames)))
@@ -97,6 +96,7 @@ renderSettings <- function(input, output, session, data, standard, settings){
   updateSelectInput(session, "filters", selected = NULL, choices = colnames)
   updateSelectInput(session, "group_cols", selected = NULL, choices = colnames)
   
+
   ### return all inputs from module to be used in global env.
-  return(reactive(input))  
+  return(input)
 }
