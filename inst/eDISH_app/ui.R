@@ -7,7 +7,6 @@ navbarPage("eDISH Shiny app", id = "inTabset",
                              wellPanel(
                                h3("Data upload"), 
                                fileInput("datafile", "Upload a csv or sas7bdat file",accept = c(".sas7bdat", ".csv"), multiple = TRUE),
-                              # div(id = "placeholderDataSelect")
                               radioButtons("select_file","Select file for eDISH chart", choices = "No files available")
                              )
                       ),
@@ -27,7 +26,6 @@ navbarPage("eDISH Shiny app", id = "inTabset",
                       )
                     )
            ),
-           #  dataUploadUI("dataupload")),
            tabPanel(title = "Settings", value = "settings",
                     fluidPage(
                       wellPanel(
@@ -40,7 +38,13 @@ navbarPage("eDISH Shiny app", id = "inTabset",
                           )
                         )
                       ),
-                      renderSettingsUI("settingsUI")
+                      renderSettingsUI("settingsUI"),
+                      fluidRow(
+                        column(3,
+                               wellPanel(
+                                 actionButton("generateChart","Generate Chart"))
+                        )
+                      )
                     )
            ),
            tabPanel(title = "Charts", value = "charts",
