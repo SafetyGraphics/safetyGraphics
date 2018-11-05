@@ -28,27 +28,29 @@ checkFieldSettings <- function(fieldKey, settings, data){
   stopifnot(typeof(fieldList)=="list")   # save the value for the  measureKey as measureList 
   
   # compare the fields in the settings to the fields in the data. 
-  
-  fieldChecks <- fieldList %>% names %>% map(function(key){
-    current <- list()
-    current$key<-fieldKey
-    nextKey<-length(current$key)+1
-    current$key[[nextKey]]<-key
-
-    current$text_key <-  paste( unlist(current$key), collapse='|')
-    current$check <- "'_values' field from setting found in data?"
-    current$value <- getSettingValue(key=current$key,settings=settings)
-    if(is.null(current$value)){
-      current$value <- "--No Value Given--"
-      current$valid <- TRUE
-      current$message <- ""
-      return(current)
-    }else{
-      current$valid <- current$value %in% validFields
-      current$message <- ifelse(current$valid,"",paste0(current$value," field not found in the ",columnName," column"))
-      return(current)        
+  fieldCheck <- function(key){
+    function(key){
+      current <- list()
+      current$key<-fieldKey
+      nextKey<-length(current$key)+1
+      current$key[[nextKey]]<-key
+      
+      current$text_key <-  paste( unlist(current$key), collapse='|')
+      current$check <- "'_values' field from setting found in data?"
+      current$value <- getSettingValue(key=current$key,settings=settings)
+      if(is.null(current$value)){
+        current$value <- "--No Value Given--"
+        current$valid <- TRUE
+        current$message <- ""
+        return(current)
+      }else{
+        current$valid <- current$value %in% validFields
+        current$message <- ifelse(current$valid,"",paste0(current$value," field not found in the ",columnName," column"))
+        return(current)        
+      }
     }
-  }) 
+  }
+  fieldChecks <- fieldList %>% names %>% map(fieldCheck(key)) 
 
   return(fieldChecks)        
 }
