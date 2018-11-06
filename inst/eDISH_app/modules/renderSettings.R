@@ -98,7 +98,7 @@ renderSettings <- function(input, output, session, data, settings){
       updateSelectInput(session, "measure_col", choices = colnames)
     } 
   })
-  
+   
   observe({
     if (input$measure_col==""|is.null(input$measure_col)){
       choices <- unique(c(settings$measure_values$ALT, data()[,settings$measure_col])) 
