@@ -92,6 +92,7 @@ function(input, output, session){
     standard()
     settings_list$settings <- generateSettings(standard = standard(), chart = "eDish")
   }) 
+  
 
   # run validateSettings(data, standard, settings) and return a status
   # this bombs if standard="none" because we are not yet updating settings obj based on
@@ -106,36 +107,54 @@ function(input, output, session){
   })
 
   # based on selected data set & generated/selected settings obj, generate settings page.
+  # note that module is being triggered when selected dataset changes OR when settings list changes
+  #   this could cause the module to trigger twice unecessarily in some cases because the settings are generated
+  #   AFTER the data is changed.  
   settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
- # observeEvent(status()==TRUE, {
- observe({
-   #req(status())
+
+ inputs <- reactive({
    req(settings_list$settings)
-   input <- callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings)
-   isolate({settingsUI_list$settings <- input})
-  })
+   input <- callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings) 
+ })
+ 
+ # note this is getting triggered every time an input changes - even as the inputs fill in
+ #   probably want to change that
+ #  for example - (1) when UI created, (2) when main pieces of UI filled, (3) when dependent pieces of UI filled (e.g. ALT, etc)
+ observe({
+   req(inputs())
+   settingsUI_list$settings$id_col <- inputs()$id_col
+   settingsUI_list$settings$value_col <- inputs()$value_col
+   settingsUI_list$settings$measure_col <- inputs()$measure_col
+   settingsUI_list$settings$normal_col_low <- inputs()$normal_col_low
+   settingsUI_list$settings$normal_col_high <- inputs()$normal_col_high
+   settingsUI_list$settings$studyday_col <- inputs()$studyday_col
+   settingsUI_list$settings$visit_col <- inputs()$visit_col
+   settingsUI_list$settings$visitn_col <- inputs()$visitn_col
+   settingsUI_list$settings$baseline_visitn <- inputs()$baseline_visitn
+   settingsUI_list$settings$filters$value_col <- inputs()$filters
+   settingsUI_list$settings$filters$label <- inputs()$filters
+   settingsUI_list$settings$measure_values$ALT <- inputs()$ALT
+   settingsUI_list$settings$measure_values$AST <- inputs()$AST
+   settingsUI_list$settings$measure_values$TB <- inputs()$TB
+   settingsUI_list$settings$measure_values$ALP <- inputs()$ALP
+   settingsUI_list$settings$x_options <- inputs()$x_options
+   settingsUI_list$settings$y_options <- inputs()$y_options
+   settingsUI_list$settings$visit_window <- inputs()$visit_window
+   settingsUI_list$settings$r_ratio_filter <- inputs()$r_ratio_filter
+   settingsUI_list$settings$r_ratio_cut <- inputs()$r_ratio_cut
+   settingsUI_list$settings$showTitle <- inputs()$showTitle
+   settingsUI_list$settings$warningText <- inputs()$warningText
+ })
 
-
-  # validate new settings
-  # note - originally thought we'd work w/ one settings object. However, if we update the reactive settings values using
-  # user selections, the settings UI module above will invalidate and the whole thing will re-execute. 
-  # As a solution, I moved to having a second settings object that comes from the user dropdowns for 
-  # downstream server-side stuff..
-  #
-  # ALSO there is not a direct mapping between the Shiny UI and the settings obj.  (e.g. measure_values are input$ALT, etc) 
-  # so we need to deal w/ that conversion
-  status2 <- reactive({
+ # validate new settings 
+  status2 <- eventReactive(settingsUI_list$settings,{
     req(data_selected())
-    req(settingsUI_list$settings) 
+    req(settingsUI_list$settings)
+    settingsUI_list$settings$id_col
     validateSettings(data_selected(), settingsUI_list$settings, chart="eDish")$valid
-  })
-  
-  observe({
-    print(settingsUI_list$settings$id_col)
-    print(settingsUI_list$settings$measure_col)
-    print(settingsUI_list$settings$ALT)
-  })
-  
+   })
+
+
   # if status2=="valid", generate chart
   observeEvent(status2()==TRUE, {
 
@@ -143,8 +162,7 @@ function(input, output, session){
     output$chart <- renderEDISH({
       req(data_selected())
       req(settingsUI_list$settings)
-      eDISH(data = data_selected(),
-            settings = reactiveValuesToList(settingsUI_list$settings))
+      eDISH(data = data_selected(), settings = settingsUI_list$settings)
     })
   })
 
