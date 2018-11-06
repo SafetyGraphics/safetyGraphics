@@ -93,8 +93,6 @@ function(input, output, session){
     settings_list$settings <- generateSettings(standard = standard(), chart = "eDish")
   }) 
 
-  observe({print(is.null(settings_list$settings$id_col))})
-
   # run validateSettings(data, standard, settings) and return a status
   # this bombs if standard="none" because we are not yet updating settings obj based on
   #   user input. Once we allow that, run validateSettings under either:
@@ -111,7 +109,8 @@ function(input, output, session){
   settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
  # observeEvent(status()==TRUE, {
  observe({
-   req(status())
+   #req(status())
+   req(settings_list$settings)
    input <- callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings)
    isolate({settingsUI_list$settings <- input})
   })
@@ -132,6 +131,7 @@ function(input, output, session){
   })
   
   observe({
+    print(settingsUI_list$settings$id_col)
     print(settingsUI_list$settings$measure_col)
     print(settingsUI_list$settings$ALT)
   })
