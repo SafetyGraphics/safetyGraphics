@@ -26,25 +26,9 @@ navbarPage("eDISH Shiny app", id = "inTabset",
                       )
                     )
            ),
-           tabPanel(title = "Settings", value = "settings",
+           tabPanel(title = "Settings", id = "settings",
                     fluidPage(
-                      wellPanel(
-                        fluidRow(
-                          column(3, 
-                                 h3("Data Standard"),
-                                 selectInput("standard","Data Standard", choices = c("ADaM","SDTM","Other"), selected = "ADaM"),
-                                 # temporarily (?) trigger settings generation 
-                                 actionButton("generateSettings","Generate settings")
-                          )
-                        )
-                      ),
-                      renderSettingsUI("settingsUI"),
-                      fluidRow(
-                        column(3,
-                               wellPanel(
-                                 actionButton("generateChart","Generate Chart"))
-                        )
-                      )
+                      renderSettingsUI("settingsUI")
                     )
            ),
            tabPanel(title = "Charts", value = "charts",
