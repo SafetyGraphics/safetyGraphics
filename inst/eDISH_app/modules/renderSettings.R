@@ -27,10 +27,9 @@ renderSettingsUI <- function(id){
                      selectInput(ns("normal_col_high"),"Upper limit of normal", choices = NULL),
                      selectInput(ns("visit_col"),"Visit", choices = NULL),
                      selectInput(ns("visitn_col"),"Visit number", choices = NULL),
-                     selectInput("studyday_col","studyday_col", choices = NULL),
                      selectInput(ns("baseline_visitn"),"Baseline visit number", choices = NULL),
-                     selectInput("anlyFlag","anlyFlag", choices = NULL)
-                     #selectInput("measure_values","Measure values", choices = NULL)
+                     selectInput(ns("studyday_col"),"studyday_col", choices = NULL),
+                     selectInput(ns("anlyFlag"),"anlyFlag", choices = NULL)
                      
               ))
           )
@@ -40,7 +39,7 @@ renderSettingsUI <- function(id){
                  wellPanel(
                    h3("Measure Settings"),
                    selectInput(ns("filters"),"Filters", choices = NULL, multiple = TRUE),
-                   selectInput(ns("group_cols"),"Group columns", choices = NULL, multiple = TRUE),
+                #   selectInput(ns("group_cols"),"Group columns", choices = NULL, multiple = TRUE),
                    selectInput(ns("x_options"),"x_options", choices = c("ALT", "AST", "ALP"), selected = c("ALT", "AST", "ALP"), multiple = TRUE),
                    selectInput(ns("y_options"),"y_options", choices = c("ALT", "AST", "ALP"), selected = c("TB","ALP"), multiple = TRUE)
                  )
@@ -70,6 +69,7 @@ renderSettings <- function(input, output, session, data, settings){
   
   ns <- session$ns
   
+
   req(data())
   req(settings)
   
@@ -81,72 +81,140 @@ renderSettings <- function(input, output, session, data, settings){
     } else {
       updateSelectInput(session, "id_col", choices = colnames())
     } 
-  })
-  
-  observe({
+
     if (! is.null(settings$value_col)){
       updateSelectInput(session, "value_col", choices = unique(c(settings$value_col,colnames())))
     } else {
       updateSelectInput(session, "value_col", choices = colnames())
     } 
-  })
 
-  observe({
     if (! is.null(settings$measure_col)){
       updateSelectInput(session, "measure_col", choices = unique(c(settings$measure_col,colnames())))
     } else {
       updateSelectInput(session, "measure_col", choices = colnames())
     } 
+
+    if (! is.null(settings$normal_col_low)){
+      updateSelectInput(session, "normal_col_low", choices = unique(c(settings$normal_col_low,colnames())))
+    } else {
+      updateSelectInput(session, "normal_col_low", choices = colnames())
+    } 
+
+    if (! is.null(settings$normal_col_high)){
+      updateSelectInput(session, "normal_col_high", choices = unique(c(settings$normal_col_high,colnames())))
+    } else {
+      updateSelectInput(session, "normal_col_high", choices = colnames())
+    } 
+
+    if (! is.null(settings$visit_col)){
+      updateSelectInput(session, "visit_col", choices = unique(c(settings$visit_col,colnames())))
+    } else {
+      updateSelectInput(session, "visit_col", choices = colnames())
+    } 
+
+    if (! is.null(settings$visitn_col)){
+      updateSelectInput(session, "visitn_col", choices = unique(c(settings$visitn_col,colnames())))
+    } else {
+      updateSelectInput(session, "visitn_col", choices = colnames())
+    } 
+
+    if (! is.null(settings$studyday_col)){
+      updateSelectInput(session, "studyday_col", choices = unique(c(settings$studyday_col,colnames())))
+    } else {
+      updateSelectInput(session, "studyday_col", choices = colnames())
+    } 
+    
+    if (! is.null(settings$anlyFlag)){
+      updateSelectInput(session, "anlyFlag", choices = unique(c(settings$anlyFlag,colnames())))
+    } else {
+      updateSelectInput(session, "anlyFlag", choices = colnames())
+    } 
+    
+    if (! is.null(settings$filters$value_col)){
+      updateSelectInput(session, "filters", choices = unique(c(settings$filters$value_col,colnames())))
+    } else {
+      updateSelectInput(session, "filters", choices = colnames())
+    }
+    
+    # suppressing until we merge with updated JS which allows group_cols length 1
+    # if (! is.null(settings$group_cols)){
+    #   updateSelectInput(session, "group_cols", choices = unique(c(settings$group_cols,colnames())))
+    # } else {
+    #   updateSelectInput(session, "group_cols", choices = colnames())
+    # }
   })
-   
-  # observe({
-  #   if (input$measure_col==""|is.null(input$measure_col)){
-  #     choices <- unique(c(settings$measure_values$ALT, data()[,settings$measure_col])) 
-  #   } else {
-  #     choices <- unique(data()[,input$measure_col])
-  #   }
-  #   updateSelectInput(session, "ALT", choices = choices)
-  # })
-  # 
-  # observe({
-  #   if (input$measure_col==""|is.null(input$measure_col)){
-  #     choices <- unique(c(settings$measure_values$AST, data()[,settings$measure_col])) 
-  #   } else {
-  #     choices <- unique(data()[,input$measure_col])
-  #   }
-  #    updateSelectInput(session, "AST", choices = choices)
-  # })
-  # 
-  # observe({
-  #   if (input$measure_col==""|is.null(input$measure_col)){
-  #     choices <- unique(c(settings$measure_values$TB, data()[,settings$measure_col])) 
-  #   } else {
-  #     choices <- unique(data()[,input$measure_col])
-  #   }
-  #    updateSelectInput(session, "TB", choices = choices)
-  # })
-  # 
-  # observe({
-  #   if (input$measure_col==""|is.null(input$measure_col)){
-  #     choices <- unique(c(settings$measure_values$ALP, data()[,settings$measure_col])) 
-  #   } else {
-  #     choices <- unique(data()[,input$measure_col])
-  #   }
-  #  updateSelectInput(session, "ALP", choices = choices)
-  # })
 
   
-  # updateSelectInput(session, "normal_col_low", choices = unique(c(settings$normal_col_low,colnames)))
-  # updateSelectInput(session, "normal_col_high", choices = unique(c(settings$normal_col_high,colnames)))
-  # updateSelectInput(session, "visit_col", choices = unique(c(settings$visit_col,colnames)))
-  # updateSelectInput(session, "visitn_col", choices = unique(c(settings$visitn_col,colnames)))
-  # updateSelectInput(session, "studyday_col", selected = NULL)
-  # updateSelectInput(session, "baseline_visitn", selected = 1, choices = unique(data()$VISITNUM))
-  # updateSelectInput(session, "anlyFlag", selected = NULL)
-  # updateSelectInput(session, "measure_values", selected = NULL)
-  # updateSelectInput(session, "filters", selected = NULL, choices = colnames)
-  # updateSelectInput(session, "group_cols", selected = NULL, choices = colnames)
-  
+  observe({
+    req(input$measure_col)
+    if (!is.null(settings$measure_col)){
+      if (input$measure_col==settings$measure_col){
+          choices <- unique(c(settings$measure_values$ALT, as.character(data()[,settings$measure_col])))
+      } else {
+        choices <- unique(data()[,input$measure_col])
+      }
+    } else {
+      choices <- unique(data()[,input$measure_col])
+    }
+    updateSelectInput(session, "ALT", choices = choices)
+  })
+
+  observe({
+    req(input$measure_col)
+    if (!is.null(settings$measure_col)){
+      if (input$measure_col==settings$measure_col){
+        choices <- unique(c(settings$measure_values$AST, as.character(data()[,settings$measure_col])))
+      } else {
+        choices <- unique(data()[,input$measure_col])
+      }
+    } else {
+      choices <- unique(data()[,input$measure_col])
+    }
+    updateSelectInput(session, "AST", choices = choices)
+  })
+
+  observe({
+    req(input$measure_col)
+    if (!is.null(settings$measure_col)){
+      if (input$measure_col==settings$measure_col){
+        choices <- unique(c(settings$measure_values$TB, as.character(data()[,settings$measure_col])))
+      } else {
+        choices <- unique(data()[,input$measure_col])
+      }
+    } else {
+      choices <- unique(data()[,input$measure_col])
+    }
+    updateSelectInput(session, "TB", choices = choices)
+  })
+
+  observe({
+    req(input$measure_col)
+    if (!is.null(settings$measure_col)){
+      if (input$measure_col==settings$measure_col){
+        choices <- unique(c(settings$measure_values$ALP, as.character(data()[,settings$measure_col])))
+      } else {
+        choices <- unique(data()[,input$measure_col])
+      }
+    } else {
+      choices <- unique(data()[,input$measure_col])
+    }
+    updateSelectInput(session, "ALP", choices = choices)
+  })
+
+  observe({
+    req(input$visitn_col)
+    if (!is.null(settings$visitn_col)){
+      if (input$visitn_col==settings$visitn_col){
+        choices <- unique(c(settings$baseline_visitn, data()[,settings$visitn_col]))
+      } else {
+        choices <- unique(data()[,input$visitn_col])
+      }
+    } else {
+      choices <- unique(data()[,input$visitn_col])
+    }
+    updateSelectInput(session, "baseline_visitn", choices = choices)
+  })
+
 
   ### return all inputs from module to be used in global env.
   return(input)
