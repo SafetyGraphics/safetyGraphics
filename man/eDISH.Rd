@@ -34,6 +34,8 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
 
 \item{visitn_col}{Visit number variable name. Default: \code{"VISITN"}.}
 
+\item{studyday_col}{Visit day variable name. Default: \code{"DY"}.}
+
 \item{baseline_visitn}{Value of baseline visit number. Used to calculate mDish. Default: \code{1}.}
 
 \item{filters}{An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.}
@@ -69,8 +71,6 @@ not validated. Any clinical recommendations based on this tool should be confirm
 standard operating procedures."}.}
 
 \item{settings}{Optional list of settings arguments to be converted to JSON using \code{jsonlite::toJSON(settings, auto_unbox = TRUE, dataframe = "rows", null = "null")}.  If provided, all other function parameters are ignored. Default: \code{NULL}.}
-
-\item{visitday_col}{Visit day variable name. Default: \code{"DY"}.}
 }
 \description{
 This function creates an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH)
@@ -88,8 +88,6 @@ eDISH(data=adlbc,
       studyday_col = "ADY",
       normal_col_low = "A1LO", 
       normal_col_high = "A1HI", 
-      analysisFlag = list(value_col="EPOCH",
-                          values=c("Analysis")),
       measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
                             AST = "Aspartate Aminotransferase (U/L)",
                             TB = "Bilirubin (umol/L)",
