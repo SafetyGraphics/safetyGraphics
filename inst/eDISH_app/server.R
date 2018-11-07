@@ -122,29 +122,57 @@ function(input, output, session){
  #  for example - (1) when UI created, (2) when main pieces of UI filled, (3) when dependent pieces of UI filled (e.g. ALT, etc)
  observe({
    req(inputs())
-   settingsUI_list$settings$id_col <- inputs()$id_col
-   settingsUI_list$settings$value_col <- inputs()$value_col
-   settingsUI_list$settings$measure_col <- inputs()$measure_col
-   settingsUI_list$settings$normal_col_low <- inputs()$normal_col_low
-   settingsUI_list$settings$normal_col_high <- inputs()$normal_col_high
-   settingsUI_list$settings$studyday_col <- inputs()$studyday_col
-   settingsUI_list$settings$visit_col <- inputs()$visit_col
-   settingsUI_list$settings$visitn_col <- inputs()$visitn_col
-   settingsUI_list$settings$baseline_visitn <- inputs()$baseline_visitn
-   settingsUI_list$settings$filters$value_col <- inputs()$filters
-   settingsUI_list$settings$filters$label <- inputs()$filters
-   settingsUI_list$settings$measure_values$ALT <- inputs()$ALT
-   settingsUI_list$settings$measure_values$AST <- inputs()$AST
-   settingsUI_list$settings$measure_values$TB <- inputs()$TB
-   settingsUI_list$settings$measure_values$ALP <- inputs()$ALP
-   settingsUI_list$settings$x_options <- inputs()$x_options
-   settingsUI_list$settings$y_options <- inputs()$y_options
-   settingsUI_list$settings$visit_window <- inputs()$visit_window
-   settingsUI_list$settings$r_ratio_filter <- inputs()$r_ratio_filter
-   settingsUI_list$settings$r_ratio_cut <- inputs()$r_ratio_cut
-   settingsUI_list$settings$showTitle <- inputs()$showTitle
-   settingsUI_list$settings$warningText <- inputs()$warningText
+   inputs()$id_col
+   inputs()$value_col
+   inputs()$measure_col
+   inputs()$normal_col_low
+   inputs()$normal_col_high
+   inputs()$studyday_col
+   inputs()$visit_col
+   inputs()$visitn_col
+   inputs()$baseline_visitn
+   inputs()$ALT
+   inputs()$AST
+   inputs()$TB
+   inputs()$ALP
+   inputs()$x_options
+   inputs()$y_options
+   inputs()$visit_window
+   inputs()$r_ratio_filter
+   inputs()$r_ratio_cut
+   inputs()$showTitle
+   inputs()$warningText
+   isolate({
+     settingsUI_list$settings$id_col <- inputs()$id_col
+     settingsUI_list$settings$value_col <- inputs()$value_col
+     settingsUI_list$settings$measure_col <- inputs()$measure_col
+     settingsUI_list$settings$normal_col_low <- inputs()$normal_col_low
+     settingsUI_list$settings$normal_col_high <- inputs()$normal_col_high
+     settingsUI_list$settings$studyday_col <- inputs()$studyday_col
+     settingsUI_list$settings$visit_col <- inputs()$visit_col
+     settingsUI_list$settings$visitn_col <- inputs()$visitn_col
+     settingsUI_list$settings$baseline_visitn <- inputs()$baseline_visitn
+     settingsUI_list$settings$measure_values$ALT <- inputs()$ALT
+     settingsUI_list$settings$measure_values$AST <- inputs()$AST
+     settingsUI_list$settings$measure_values$TB <- inputs()$TB
+     settingsUI_list$settings$measure_values$ALP <- inputs()$ALP
+     settingsUI_list$settings$x_options <- inputs()$x_options
+     settingsUI_list$settings$y_options <- inputs()$y_options
+     settingsUI_list$settings$visit_window <- inputs()$visit_window
+     settingsUI_list$settings$r_ratio_filter <- inputs()$r_ratio_filter
+     settingsUI_list$settings$r_ratio_cut <- inputs()$r_ratio_cut
+     settingsUI_list$settings$showTitle <- inputs()$showTitle
+     settingsUI_list$settings$warningText <- inputs()$warningText
+   })
  })
+ 
+ # observe({
+ #   req(inputs()$filters)
+ #   isolate({
+ #     settingsUI_list$settings$filters <- NULL
+ #     settingsUI_list$settings$filters <- data.frame(value_col=inputs()$filters, label=inputs()$filters)
+ #   })
+ # })
 
  # validate new settings 
   status2 <- eventReactive(settingsUI_list$settings,{
