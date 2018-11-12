@@ -12,14 +12,15 @@ HTMLWidgets.widget({
 
       renderValue: function(rSettings) {
         el.innerHTML = "<div class='edish'></div>";
-        
         let settings = rSettings.settings;
+
+        if(settings.debug_js){
+         console.log("R settings:")
+         console.log(rSettings);
+        }
+        
         settings.max_width = 600;
         rSettings.data = HTMLWidgets.dataframeToD3(rSettings.data);
-
-        // console.log(settings);
-         console.log(rSettings);
-
         safetyedish(".edish", settings).init(rSettings.data);
 
       },

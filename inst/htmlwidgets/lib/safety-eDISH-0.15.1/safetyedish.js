@@ -1,18 +1,15 @@
 (function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined'
-        ? (module.exports = factory(require('webcharts'), require('d3')))
+        ? (module.exports = factory(require('webcharts')))
         : typeof define === 'function' && define.amd
-            ? define(['webcharts', 'd3'], factory)
-            : (global.safetyedish = factory(global.webCharts, global.d3));
-})(this, function(webcharts, d3$1) {
+            ? define(['webcharts'], factory)
+            : (global.safetyedish = factory(global.webCharts));
+})(this, function(webcharts) {
     'use strict';
 
     if (typeof Object.assign != 'function') {
         Object.defineProperty(Object, 'assign', {
             value: function assign(target, varArgs) {
-                // .length of function is 2
-                'use strict';
-
                 if (target == null) {
                     // TypeError if undefined or null
                     throw new TypeError('Cannot convert undefined or null to object');
@@ -159,122 +156,6 @@
                       : typeof obj;
               };
 
-    var asyncGenerator = (function() {
-        function AwaitValue(value) {
-            this.value = value;
-        }
-
-        function AsyncGenerator(gen) {
-            var front, back;
-
-            function send(key, arg) {
-                return new Promise(function(resolve, reject) {
-                    var request = {
-                        key: key,
-                        arg: arg,
-                        resolve: resolve,
-                        reject: reject,
-                        next: null
-                    };
-
-                    if (back) {
-                        back = back.next = request;
-                    } else {
-                        front = back = request;
-                        resume(key, arg);
-                    }
-                });
-            }
-
-            function resume(key, arg) {
-                try {
-                    var result = gen[key](arg);
-                    var value = result.value;
-
-                    if (value instanceof AwaitValue) {
-                        Promise.resolve(value.value).then(
-                            function(arg) {
-                                resume('next', arg);
-                            },
-                            function(arg) {
-                                resume('throw', arg);
-                            }
-                        );
-                    } else {
-                        settle(result.done ? 'return' : 'normal', result.value);
-                    }
-                } catch (err) {
-                    settle('throw', err);
-                }
-            }
-
-            function settle(type, value) {
-                switch (type) {
-                    case 'return':
-                        front.resolve({
-                            value: value,
-                            done: true
-                        });
-                        break;
-
-                    case 'throw':
-                        front.reject(value);
-                        break;
-
-                    default:
-                        front.resolve({
-                            value: value,
-                            done: false
-                        });
-                        break;
-                }
-
-                front = front.next;
-
-                if (front) {
-                    resume(front.key, front.arg);
-                } else {
-                    back = null;
-                }
-            }
-
-            this._invoke = send;
-
-            if (typeof gen.return !== 'function') {
-                this.return = undefined;
-            }
-        }
-
-        if (typeof Symbol === 'function' && Symbol.asyncIterator) {
-            AsyncGenerator.prototype[Symbol.asyncIterator] = function() {
-                return this;
-            };
-        }
-
-        AsyncGenerator.prototype.next = function(arg) {
-            return this._invoke('next', arg);
-        };
-
-        AsyncGenerator.prototype.throw = function(arg) {
-            return this._invoke('throw', arg);
-        };
-
-        AsyncGenerator.prototype.return = function(arg) {
-            return this._invoke('return', arg);
-        };
-
-        return {
-            wrap: function(fn) {
-                return function() {
-                    return new AsyncGenerator(fn.apply(this, arguments));
-                };
-            },
-            await: function(value) {
-                return new AwaitValue(value);
-            }
-        };
-    })();
-
     var defineProperty = function(obj, key, value) {
         if (key in obj) {
             Object.defineProperty(obj, key, {
@@ -291,8 +172,8 @@
     };
 
     /*------------------------------------------------------------------------------------------------\
-  Clone a variable (http://stackoverflow.com/a/728694).
-\------------------------------------------------------------------------------------------------*/
+      Clone a variable (http://stackoverflow.com/a/728694).
+    \------------------------------------------------------------------------------------------------*/
 
     function clone(obj) {
         var copy;
@@ -332,22 +213,24 @@
     function settings() {
         return {
             //Default template settings
+            id_col: 'USUBJID',
+            studyday_col: 'DY',
             value_col: 'STRESN',
             measure_col: 'TEST',
-            visit_col: 'VISIT',
-            visitn_col: 'VISITNUM',
-            studyday_col: 'DY',
             normal_col_low: 'STNRLO',
             normal_col_high: 'STNRHI',
-            id_col: 'USUBJID',
+            visit_col: null,
+            visitn_col: null,
             group_cols: null,
             filters: null,
             details: null,
-            r_ratio_filter: true,
-            r_ratio_cut: 0,
             analysisFlag: {
                 value_col: null,
                 values: []
+            },
+            baseline: {
+                value_col: null, //synced with studyday_col in syncsettings()
+                values: [0]
             },
             measure_values: {
                 ALT: 'Aminotransferase, alanine (ALT)',
@@ -392,10 +275,11 @@
                 { label: 'Upper limit of normal adjusted (eDish)', value: 'relative_uln' },
                 { label: 'Baseline adjusted (mDish)', value: 'relative_baseline' }
             ],
-            baseline_visitn: '1',
             measureBounds: [0.01, 0.99],
             populationProfileURL: null,
             participantProfileURL: null,
+            r_ratio_filter: true,
+            r_ratio_cut: 0,
             visit_window: 30,
             showTitle: true,
             warningText:
@@ -580,6 +464,16 @@
             });
             settings.details = defaultDetails;
         }
+
+        // If settings.analysisFlag is null
+        if (!settings.analysisFlag)
+            settings.analysisFlag = {
+                value_col: null,
+                values: []
+
+                //if it is null, set settings.baseline.value_col to settings.studyday_col.
+            };
+        if (!settings.baseline.value_col) settings.baseline.value_col = settings.studyday_col;
 
         //parse x_ and y_options to array if needed
         if (typeof settings.x_options == 'string') settings.x_options = [settings.x_options];
@@ -1017,38 +911,28 @@
     }
 
     function dropRows() {
-        var _this = this;
-
+        var chart = this;
         var config = this.config;
         this.dropped_rows = [];
 
         /////////////////////////
         // Remove invalid rows
         /////////////////////////
-
-        this.imputed_data = this.initial_data
-            .filter(function(d) {
+        var numerics = ['value_col', 'studyday_col', 'normal_col_low', 'normal_col_high'];
+        chart.imputed_data = chart.initial_data.filter(function(f) {
+            return true;
+        });
+        numerics.forEach(function(setting) {
+            chart.imputed_data = chart.imputed_data.filter(function(d) {
                 //Remove non-numeric value_col
-                var numericValueCol = /^-?(\d*\.?\d+|\d+\.?\d*)(E-?\d+)?$/.test(
-                    d[_this.config.value_col]
-                );
-                if (!numericValueCol) {
-                    d.dropReason = 'Value Column ("' + config.value_col + '") is not numeric.';
-                    _this.dropped_rows.push(d);
+                var numericCol = /^-?(\d*\.?\d+|\d+\.?\d*)(E-?\d+)?$/.test(d[config[setting]]);
+                if (!numericCol) {
+                    d.dropReason = setting + ' Column ("' + config[setting] + '") is not numeric.';
+                    chart.dropped_rows.push(d);
                 }
-                return numericValueCol;
-            })
-            .filter(function(d) {
-                //Remove non-numeric visit_col
-                var numericVisitCol = /^-?(\d*\.?\d+|\d+\.?\d*)(E-?\d+)?$/.test(
-                    d[_this.config.visitn_col]
-                );
-                if (!numericVisitCol) {
-                    d.dropReason = 'Visit Column ("' + config.visitn_col + '") is not numeric.';
-                    _this.dropped_rows.push(d);
-                }
-                return numericVisitCol;
+                return numericCol;
             });
+        });
     }
 
     function deriveVariables() {
@@ -1059,20 +943,30 @@
             return config.measure_values[e];
         });
 
-        var sub = this.imputed_data
-            .filter(function(f) {
-                return included_measures.indexOf(f[config.measure_col]) > -1;
-            })
-            .filter(function(f) {
-                return true;
-            }); //add a filter on selected visits here
+        var sub = this.imputed_data.filter(function(f) {
+            return included_measures.indexOf(f[config.measure_col]) > -1;
+        });
 
         var missingBaseline = 0;
 
+        //coerce numeric values to number
+        this.imputed_data = this.imputed_data.map(function(d) {
+            var numerics = ['value_col', 'studyday_col', 'normal_col_low', 'normal_col_high'];
+            numerics.forEach(function(col) {
+                d[config[col]] = parseFloat(d[config[col]]);
+            });
+            return d;
+        });
+
         //create an object mapping baseline values for id/measure pairs
         var baseline_records = sub.filter(function(f) {
-            return +f[config.visitn_col] == +config.baseline_visitn;
+            var current =
+                typeof f[config.baseline.value_col] == 'string'
+                    ? f[config.baseline.value_col].trim()
+                    : parseFloat(f[config.baseline.value_col]);
+            return config.baseline.values.indexOf(current) > -1;
         });
+
         var baseline_values = d3
             .nest()
             .key(function(d) {
@@ -1087,11 +981,6 @@
             .map(baseline_records);
 
         this.imputed_data = this.imputed_data.map(function(d) {
-            //coerce numeric values to number
-            var numerics = ['value_col', 'visitn_col', 'normal_col_low', 'normal_col_high'];
-            numerics.forEach(function(col) {
-                d[config[col]] = +d[config[col]];
-            });
             //standardize key variables
             d.key_measure = false;
             if (included_measures.indexOf(d[config.measure_col]) > -1) {
@@ -1134,7 +1023,7 @@
         var config = this.config;
         this.imputed_data = this.imputed_data.map(function(d) {
             var hasAnalysisSetting =
-                (config.analysisFlag.value_col != null) & (config.analysisFlag.values.length > 0);
+                config.analysisFlag.value_col != null && config.analysisFlag.values.length > 0;
             d.analysisFlag = hasAnalysisSetting
                 ? config.analysisFlag.values.indexOf(d[config.analysisFlag.value_col]) > -1
                 : true;
@@ -1143,6 +1032,9 @@
     }
 
     function cleanData() {
+        var config = this.config;
+
+        //drop rows with invalid data
         this.imputedData = dropRows.call(this);
 
         this.imputed_data.forEach(function(d) {
@@ -1174,6 +1066,8 @@
     }
 
     function updateSummaryTable() {
+        var chart = this;
+        var config = chart.config;
         var quadrants = this.config.quadrants;
         var rows = quadrants.table.rows;
         var cells = quadrants.table.cells;
@@ -1286,6 +1180,8 @@
     function init() {
         var chart = this;
         var config = chart.config;
+        var quadrants = this.config.quadrants;
+
         var x_input = chart.controls.wrap
             .selectAll('div.control-group')
             .filter(function(f) {
@@ -1320,6 +1216,7 @@
 
     function layoutQuadrantLabels() {
         var chart = this;
+        var config = chart.config;
         var quadrants = this.config.quadrants;
 
         //////////////////////////////////////////////////////////
@@ -1354,6 +1251,12 @@
 
     function layoutCutLines() {
         var chart = this;
+        var config = chart.config;
+        var quadrants = this.config.quadrants;
+
+        //////////////////////////////////////////////////////////
+        //layout the cut lines
+        /////////////////////////////////////////////////////////
         chart.cut_lines = {};
         chart.cut_lines.wrap = this.svg.append('g').attr('class', 'cut-lines');
         var wrap = chart.cut_lines.wrap;
@@ -1441,11 +1344,8 @@
             sortable: false,
             pagination: false,
             exportable: false,
-            applyCSS: true,
-            visitn_col: this.visitn_col,
-            value_col: this.value_col
+            applyCSS: true
         };
-
         this.measureTable = webcharts.createTable(
             this.element + ' .participantDetails .measureTable',
             settings
@@ -1504,7 +1404,12 @@
             .append('span')
             .attr('class', 'displayControlAnnotation span-description')
             .style('color', 'blue')
-            .text('Note: Baseline defined as Visit ' + chart.config.baseline_visitn)
+            .text(
+                'Note: Baseline defined as ' +
+                    chart.config.baseline.value_col +
+                    ' = ' +
+                    chart.config.baseline.values.join(',')
+            )
             .style('display', config.display == 'relative_baseline' ? null : 'none');
 
         displayControl.on('change', function(d) {
@@ -1633,14 +1538,12 @@
             .style('border-radius', '0.6em')
             .style('cursor', 'pointer')
             .on('click', function(d) {
-                console.log(d);
                 d3.select(this.parentNode)
                     .html(function(d) {
                         return '<strong>' + jsUcfirst(d.type) + '</strong>: ' + d.message;
                     })
                     .each(function(d) {
                         if (d.callback) {
-                            console.log('callback');
                             d.callback.call(this.parentNode);
                         }
                     });
@@ -1752,7 +1655,7 @@
         });
 
         var fileName =
-            'eDishDroppedRows_' + d3$1.time.format('%Y-%m-%dT%H-%M-%S')(new Date()) + '.csv';
+            'eDishDroppedRows_' + d3.time.format('%Y-%m-%dT%H-%M-%S')(new Date()) + '.csv';
         var link = d3.select(this);
 
         if (navigator.msSaveBlob)
@@ -1999,8 +1902,6 @@
         var measureCols = [
             'measure_col',
             'value_col',
-            'visit_col',
-            'visitn_col',
             'studyday_col',
             'normal_col_low',
             'normal_col_high'
@@ -2387,6 +2288,7 @@
     }
 
     function clearParticipantDetails() {
+        var config = this.config;
         var points = this.svg.selectAll('g.point').select('circle');
 
         points.classed('disabled', false);
@@ -2650,6 +2552,7 @@
 
     function addPointMouseover() {
         var chart = this;
+        var config = this.config;
         var points = this.marks[0].circles;
         //add event listener to all participant level points
         points
@@ -2684,26 +2587,35 @@
         var matches = allMatches.filter(function(f) {
             return f[config.measure_col] == x_measure || f[config.measure_col] == y_measure;
         });
+
         //get coordinates by visit
         var visits = d3
             .set(
                 matches.map(function(m) {
-                    return m[config.visitn_col];
+                    return m[config.studyday_col];
                 })
             )
             .values();
         var visit_data = visits
             .map(function(m) {
                 var visitObj = {};
-                visitObj.visitn = +m;
-                visitObj.visit = matches.filter(function(f) {
-                    return f[config.visitn_col] == m;
-                })[0][config.visit_col];
+                visitObj.studyday = +m;
+                visitObj.visit = config.visit_col
+                    ? matches.filter(function(f) {
+                          return f[config.studyday_col] == m;
+                      })[0][config.visit_col]
+                    : null;
+                visitObj.visitn = config.visitn_col
+                    ? matches.filter(function(f) {
+                          return f[config.studyday_col] == m;
+                      })[0][config.visitn_col]
+                    : null;
                 visitObj[config.color_by] = matches[0][config.color_by];
+
                 //get x coordinate
                 var x_match = matches
                     .filter(function(f) {
-                        return f[config.visitn_col] == m;
+                        return f[config.studyday_col] == m;
                     })
                     .filter(function(f) {
                         return f[config.measure_col] == x_measure;
@@ -2720,7 +2632,7 @@
                 //get y coordinate
                 var y_match = matches
                     .filter(function(f) {
-                        return f[config.visitn_col] == m;
+                        return f[config.studyday_col] == m;
                     })
                     .filter(function(f) {
                         return f[config.measure_col] == y_measure;
@@ -2736,11 +2648,12 @@
                 return visitObj;
             })
             .sort(function(a, b) {
-                return a.visitn - b.visitn;
+                return a.studyday - b.studyday;
             })
             .filter(function(f) {
                 return (f.x > 0) & (f.y > 0);
             });
+
         //draw the path
         var myLine = d3.svg
             .line()
@@ -2765,8 +2678,8 @@
             .attr('stroke-width', '2px')
             .attr('fill', 'none');
 
+        //Little trick for animating line drawing
         var totalLength = path.node().getTotalLength();
-
         path.attr('stroke-dasharray', totalLength + ' ' + totalLength)
             .attr('stroke-dashoffset', totalLength)
             .transition()
@@ -2782,7 +2695,6 @@
             .append('g')
             .attr('class', 'visit-point');
 
-        var maxPoint = d;
         visitPoints
             .append('circle')
             .attr('class', 'participant-visits')
@@ -2790,45 +2702,34 @@
             .attr('stroke', function(d) {
                 return chart.colorScale(d[config.color_by]);
             })
-            .attr('stroke-width', function(d) {
-                return (d.x == maxPoint.x) & (d.y == maxPoint.y) ? 3 : 1;
-            })
+            .attr('stroke-width', 1)
             .attr('cx', function(d) {
                 return chart.x(d.x);
             })
             .attr('cy', function(d) {
                 return chart.y(d.y);
             })
-            .attr('fill', 'white')
-            .transition()
-            .delay(2000)
-            .duration(200)
-            .attr('r', 6);
-
-        //draw visit numbers
-        visitPoints
-            .append('text')
-            .text(function(d) {
-                return d.visitn;
-            })
-            .attr('class', 'participant-visits')
-            .attr('stroke', 'none')
             .attr('fill', function(d) {
                 return chart.colorScale(d[config.color_by]);
             })
-            .attr('x', function(d) {
-                return chart.x(d.x);
-            })
-            .attr('y', function(d) {
-                return chart.y(d.y);
-            })
-            .attr('text-anchor', 'middle')
-            .attr('alignment-baseline', 'middle')
-            .attr('font-size', 0)
+            .attr('fill-opacity', 0.5)
             .transition()
             .delay(2000)
             .duration(200)
-            .attr('font-size', 8);
+            .attr('r', 4);
+
+        //custom titles for points on mouseover
+        visitPoints.append('title').text(function(d) {
+            var xvar = config.x.column;
+            var yvar = config.y.column;
+            var studyday_label = 'Study day: ' + d.studyday + '\n',
+                visitn_label = d.visitn ? 'Visit Number: ' + d.visitn + '\n' : '',
+                visit_label = d.visit ? 'Visit: ' + d.visit + '\n' : '',
+                x_label = config.x.label + ': ' + d3.format('0.3f')(d.x) + '\n',
+                y_label = config.y.label + ': ' + d3.format('0.3f')(d.y);
+
+            return studyday_label + visit_label + visitn_label + x_label + y_label;
+        });
     }
 
     function makeNestedData(d) {
@@ -2884,9 +2785,11 @@
                     : 'black';
                 measureObj.spark_data = d.map(function(m) {
                     var obj = {
-                        id: +m[config.id_col],
-                        lab: +m[config.measure_col],
-                        visitn: +m[config.visitn_col],
+                        id: m[config.id_col],
+                        lab: m[config.measure_col],
+                        visit: config.visit_col ? m[config.visit_col] : null,
+                        visitn: config.visitn_col ? +m[config.visitn_col] : null,
+                        studyday: +m[config.studyday_col],
                         value: +m[config.value_col],
                         lln: +m[config.normal_col_low],
                         uln: +m[config.normal_col_high],
@@ -2897,6 +2800,7 @@
                     obj.outlier = obj.outlier_low || obj.outlier_high;
                     return obj;
                 });
+                console.log(measureObj);
                 return measureObj;
             })
             .entries(allMatches);
@@ -2945,17 +2849,18 @@
                         height = 25,
                         offset = 4,
                         overTime = row_d.spark_data.sort(function(a, b) {
-                            return +a.visitn - +b.visitn;
+                            return +a.studyday - +b.studyday;
                         }),
                         color = row_d.color;
+
                     var x = d3.scale
-                        .ordinal()
+                        .linear()
                         .domain(
-                            overTime.map(function(m) {
-                                return m.visitn;
+                            d3.extent(overTime, function(m) {
+                                return m.studyday;
                             })
                         )
-                        .rangePoints([offset, width - offset]);
+                        .range([offset, width - offset]);
 
                     //y-domain includes 99th population percentile + any participant outliers
                     var y_min = d3.min(d3.merge([row_d.values, row_d.population_extent])) * 0.99;
@@ -2976,11 +2881,11 @@
 
                     //draw the normal range polygon ULN and LLN
                     var upper = overTime.map(function(m) {
-                        return { visitn: m.visitn, value: m.uln };
+                        return { studyday: m.studyday, value: m.uln };
                     });
                     var lower = overTime
                         .map(function(m) {
-                            return { visitn: m.visitn, value: m.lln };
+                            return { studyday: m.studyday, value: m.lln };
                         })
                         .reverse();
                     var normal_data = d3.merge([upper, lower]).filter(function(m) {
@@ -2990,7 +2895,7 @@
                     var drawnormal = d3.svg
                         .line()
                         .x(function(d) {
-                            return x(d.visitn);
+                            return x(d.studyday);
                         })
                         .y(function(d) {
                             return y(d.value);
@@ -3028,7 +2933,7 @@
                         .line()
                         .interpolate('cardinal')
                         .x(function(d) {
-                            return x(d.visitn);
+                            return x(d.studyday);
                         })
                         .y(function(d) {
                             return y(d.value);
@@ -3054,7 +2959,7 @@
                         .append('circle')
                         .attr('class', 'circle outlier')
                         .attr('cx', function(d) {
-                            return x(d.visitn);
+                            return x(d.studyday);
                         })
                         .attr('cy', function(d) {
                             return y(d.value);
@@ -3074,15 +2979,14 @@
         max_width: 800,
         aspect: 4,
         x: {
-            column: 'visitn',
-            type: 'ordinal',
-            label: 'Visit'
+            column: 'studyday',
+            type: 'linear',
+            label: 'Study Day'
         },
         y: {
             column: 'value',
             type: 'linear',
             label: '',
-            //    domain: [0, null],
             format: '.1f'
         },
         marks: [
@@ -3093,12 +2997,11 @@
             {
                 type: 'circle',
                 radius: 4,
-                per: ['lab', 'visitn'],
-                values: { outlier: [true] },
-                attributes: {
-                    'fill-opacity': 1
-                },
-                tooltip: 'Visit: [visitn]\nValue: [value]\nULN: [uln]\nLLN: [lln]'
+                per: ['lab', 'studyday'] //,
+                //  values: { outlier: [true] },
+                //  attributes: {
+                //      'fill-opacity': 1
+                //  }
             }
         ],
         margin: { top: 20 },
@@ -3141,20 +3044,20 @@
     function drawNormalRange() {
         var lineChart = this;
         var upper = this.raw_data.map(function(m) {
-            return { visitn: m.visitn, value: m.uln };
+            return { studyday: m.studyday, value: m.uln };
         });
         var lower = this.raw_data
             .map(function(m) {
-                return { visitn: m.visitn, value: m.lln };
+                return { studyday: m.studyday, value: m.lln };
             })
             .reverse();
         var normal_data = d3.merge([upper, lower]).filter(function(f) {
-            return f.value;
+            return f.value || f.value == 0;
         });
         var drawnormal = d3.svg
             .line()
             .x(function(d) {
-                return lineChart.x(d.visitn) + lineChart.x.rangeBand() / 2;
+                return lineChart.x(d.studyday);
             })
             .y(function(d) {
                 return lineChart.y(d.value);
@@ -3171,7 +3074,31 @@
         normalpath.moveToBack();
     }
 
-    function init$2(d) {
+    function addPointTitles() {
+        var config = this.edish.config;
+        var points = this.marks[1].circles;
+        points.select('title').remove();
+        points.append('title').text(function(d) {
+            var raw = d.values.raw[0];
+            var xvar = config.x.column;
+            var yvar = config.y.column;
+            var studyday_label = 'Study day: ' + raw.studyday + '\n',
+                visitn_label = raw.visitn ? 'Visit Number: ' + raw.visitn + '\n' : '',
+                visit_label = raw.visit ? 'Visit: ' + raw.visit + '\n' : '',
+                lab_label = raw.lab + ': ' + d3.format('0.3f')(raw.value);
+            return studyday_label + visit_label + visitn_label + lab_label;
+        });
+    }
+
+    function updatePointFill() {
+        var points = this.marks[1].circles;
+        points.attr('fill-opacity', function(d) {
+            var outlier = d.values.raw[0].outlier;
+            return outlier ? 1 : 0;
+        });
+    }
+
+    function init$2(d, edish) {
         //layout the new cells on the DOM (slightly easier than using D3)
         var summaryRow_node = this.parentNode;
         var chartRow_node = document.createElement('tr');
@@ -3194,17 +3121,20 @@
         lineChart.on('draw', function() {
             setDomain$1.call(this);
         });
+        lineChart.edish = edish;
         lineChart.on('resize', function() {
             drawPopulationExtent.call(this);
             drawNormalRange.call(this);
+            addPointTitles.call(this);
+            updatePointFill.call(this);
         });
         lineChart.init(d.spark_data);
-
         lineChart.row = chartRow_node;
         return lineChart;
     }
 
     function addSparkClick() {
+        var edish = this.edish;
         if (this.data.raw.length > 0) {
             this.tbody
                 .selectAll('tr')
@@ -3214,7 +3144,7 @@
                         d3.select(this).classed('minimized', false);
                         d3.select(this.parentNode).style('border-bottom', 'none');
 
-                        this.lineChart = init$2.call(this, d);
+                        this.lineChart = init$2.call(this, d, edish);
                         d3.select(this)
                             .select('svg')
                             .style('display', 'none');
@@ -3297,6 +3227,7 @@
 
     function makeParticipantHeader(d) {
         var chart = this;
+        var wrap = this.participantDetails.header;
         var raw = d.values.raw[0];
 
         var title = this.participantDetails.header
@@ -3359,8 +3290,8 @@
         max_width: 600,
         x: {
             column: null,
-            type: 'ordinal',
-            label: 'Visit'
+            type: 'linear',
+            label: 'Study Day'
         },
         y: defineProperty(
             {
@@ -3473,17 +3404,49 @@
             .text(d3.format('0.1f')(cut));
     }
 
-    function onResize$1() {
+    function addPointTitles$1() {
         var spaghetti = this;
+        var config = this.edish.config;
+        var points = this.marks[1].circles;
+        points.select('title').remove();
+        points.append('title').text(function(d) {
+            var raw = d.values.raw[0];
+            var ylabel = spaghetti.config.displayLabel;
+            var yvar = spaghetti.config.y.column;
+            var studyday_label = 'Study day: ' + raw[config.studyday_col] + '\n',
+                visitn_label = config.visitn_col
+                    ? 'Visit Number: ' + raw[config.visitn_col] + '\n'
+                    : '',
+                visit_label = config.visit_col ? 'Visit: ' + raw[config.visit_col] + '\n' : '',
+                raw_label =
+                    'Raw ' +
+                    raw[config.measure_col] +
+                    ': ' +
+                    d3.format('0.3f')(raw[config.value_col]) +
+                    '\n',
+                adj_label =
+                    'Adjusted ' + raw[config.measure_col] + ': ' + d3.format('0.3f')(raw[yvar]);
+            return studyday_label + visit_label + visitn_label + raw_label + adj_label;
+        });
+    }
+
+    function onResize() {
+        var spaghetti = this;
+        var config = this.config;
+
+        addPointTitles$1.call(this);
+
+        //fill circles above the cut point
         var y_col = this.config.y.column;
         this.marks[1].circles
-            .attr('stroke-opacity', function(d) {
+            .attr('fill-opacity', function(d) {
                 return d.values.raw[0][y_col + '_flagged'] ? 1 : 0;
             })
             .attr('fill-opacity', function(d) {
                 return d.values.raw[0][y_col + '_flagged'] ? 1 : 0;
             });
 
+        //Show  cut lines on mouseover
         this.marks[1].circles
             .on('mouseover', function(d) {
                 drawCutLine.call(spaghetti, d);
@@ -3537,10 +3500,10 @@
         }
 
         //sync settings
-        defaultSettings$1.x.column = config.visitn_col;
+        defaultSettings$1.x.column = config.studyday_col;
         defaultSettings$1.color_by = config.measure_col;
         defaultSettings$1.marks[0].per = [config.id_col, config.measure_col];
-        defaultSettings$1.marks[1].per = [config.id_col, config.visitn_col, config.measure_col];
+        defaultSettings$1.marks[1].per = [config.id_col, config.studyday_col, config.measure_col];
         defaultSettings$1.firstDraw = true; //only initailize the measure table on first draw
 
         //flag variables above the cut-off
@@ -3589,7 +3552,7 @@
         chart.spaghetti.on('layout', onLayout$1);
         chart.spaghetti.on('preprocess', onPreprocess$1);
         chart.spaghetti.on('draw', onDraw$1);
-        chart.spaghetti.on('resize', onResize$1);
+        chart.spaghetti.on('resize', onResize);
         chart.spaghetti.init(matches);
 
         //add a footnote
@@ -3611,7 +3574,9 @@
         //add event listener to all participant level points
         points.on('click', function(d) {
             clearParticipantDetails.call(chart, d); //clear the previous participant
-            chart.config.quadrants.table.wrap.style('display', 'none'); //hide the quadrant summart
+            chart.config.quadrants.table.wrap.style('display', 'none'); //hide the quadrant summary
+
+            //format the eDish chart
             points
                 .attr('stroke', '#ccc') //set all points to gray
                 .attr('fill', 'white')
@@ -3623,17 +3588,19 @@
                 }) //highlight selected point
                 .attr('stroke-width', 3);
 
+            //Add elements to the eDish chart
             drawVisitPath.call(chart, d); //draw the path showing participant's pattern over time
             drawRugs.call(chart, d, 'x');
             drawRugs.call(chart, d, 'y');
 
+            //draw the "detail view" for the clicked participant
             chart.participantDetails.wrap.selectAll('*').style('display', null);
             makeParticipantHeader.call(chart, d);
-            init$3.call(chart, d);
+            init$3.call(chart, d); //NOTE: the measure table is initialized from within the spaghettiPlot
         });
     }
 
-    function addPointTitles() {
+    function addPointTitles$2() {
         var config = this.config;
         var points = this.marks[0].circles;
         points.select('title').remove();
@@ -3645,20 +3612,14 @@
                     config.x.label +
                     ': ' +
                     d3.format('0.2f')(raw[xvar]) +
-                    ' @ V' +
-                    raw[xvar + '_' + config.visitn_col] +
-                    ' (Day ' +
-                    raw[xvar + '_' + config.studyday_col] +
-                    ')',
+                    ' @  Day ' +
+                    raw[xvar + '_' + config.studyday_col],
                 yLabel =
                     config.y.label +
                     ': ' +
                     d3.format('0.2f')(raw[yvar]) +
-                    ' @ V' +
-                    raw[yvar + '_' + config.visitn_col] +
-                    ' (Day ' +
-                    raw[yvar + '_' + config.studyday_col] +
-                    ')',
+                    ' @ Day ' +
+                    raw[yvar + '_' + config.studyday_col],
                 dayDiff = raw['day_diff'] + ' days apart',
                 idLabel = 'Participant ID: ' + raw[config.id_col];
             return idLabel + '\n' + xLabel + '\n' + yLabel + '\n' + dayDiff;
@@ -3827,7 +3788,7 @@
             .attr('class', 'boxplot')
             .datum({ values: results, probs: probs });
 
-        //set bar width variable
+        //draw rectangle from q1 to q3
         var box_x = horizontal ? x(0.5 - boxPlotWidth / 2) : x(probs[1]);
         var box_width = horizontal
             ? x(0.5 + boxPlotWidth / 2) - x(0.5 - boxPlotWidth / 2)
@@ -4105,11 +4066,11 @@
             });
     }
 
-    function onResize() {
+    function onResize$1() {
         //add point interactivity, custom title and formatting
         addPointMouseover.call(this);
         addPointClick.call(this);
-        addPointTitles.call(this);
+        addPointTitles$2.call(this);
         addAxisLabelTitles.call(this);
         formatPoints.call(this);
         setPointSize.call(this);
@@ -4131,7 +4092,7 @@
         adjustTicks.call(this);
     }
 
-    function safetyedish$1(element, settings) {
+    function safetyedish(element, settings) {
         var initial_settings = clone(settings);
         var defaultSettings = configuration.settings();
         var controlInputs = configuration.controlInputs();
@@ -4153,10 +4114,10 @@
         chart.on('preprocess', onPreprocess);
         chart.on('datatransform', onDataTransform);
         chart.on('draw', onDraw);
-        chart.on('resize', onResize);
+        chart.on('resize', onResize$1);
 
         return chart;
     }
 
-    return safetyedish$1;
+    return safetyedish;
 });
