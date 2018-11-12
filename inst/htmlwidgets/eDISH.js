@@ -18,7 +18,7 @@ HTMLWidgets.widget({
         rSettings.data = HTMLWidgets.dataframeToD3(rSettings.data);
 
         // console.log(settings);
-        // console.log(rSettings);
+         console.log(rSettings);
 
         safetyedish(".edish", settings).init(rSettings.data);
 
