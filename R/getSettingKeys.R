@@ -17,6 +17,10 @@
 #' getSettingKeys(patterns=c("ALP"),settings=testSettings) #finds the matching nested setting
 #' getSettingKeys(patterns=c("measure_values"),settings=testSettings) #returns an empty list, since the only matching item is a list
 #' getSettingKeys(patterns=c("measure_values"),settings=testSettings, matchLists=TRUE) #finds the matching key associated with a list
+#' 
+#' @export
+#' @importFrom stringr str_detect 
+
 
 
 getSettingKeys<-function(patterns, settings, parents=NULL, matchLists=FALSE){

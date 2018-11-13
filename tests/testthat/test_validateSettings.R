@@ -1,5 +1,5 @@
 context("Tests for the validateSetting() function")
-library(ReDish)
+library(safetyGraphics)
 library(purrr)
 library(dplyr)
 
@@ -35,11 +35,11 @@ test_that("our examples have the correct number of failed checks",{
   expect_equal(failed$checkList%>%map_dbl(~!.x[["valid"]])%>%sum,1)
   expect_equal(failed2$checkList%>%map_dbl(~!.x[["valid"]])%>%sum,6) #2 columns and 4 fields
   
-  expect_true(passed$checkList%>%keep(~.x[["text_key"]]=="id_col")%>%map_lgl(~.x[["valid"]]))
-  expect_false(failed$checkList%>%keep(~.x[["text_key"]]=="id_col")%>%map_lgl(~.x[["valid"]]))
+  expect_true(all(passed$checkList%>%keep(~.x[["text_key"]]=="id_col")%>%map_lgl(~.x[["valid"]])))
+  expect_false(all(failed$checkList%>%keep(~.x[["text_key"]]=="id_col")%>%map_lgl(~.x[["valid"]])))
 })
 
-test_that("field checks are working as expected",{
+test_that("field checks fail when expected",{
   invalidFieldSettings <- validSettings
   invalidFieldSettings[["measure_values"]][["ALP"]]<-"not a field value :("
   fieldFailed<-validateSettings(data=adlbc,settings=invalidFieldSettings)
@@ -55,4 +55,16 @@ test_that("field checks are working as expected",{
   failedChecks2 = fieldFailed2[["checkList"]]%>%keep(~!.x[["valid"]])
   expect_false(fieldFailed[["valid"]])
   expect_length(failedChecks2, 3)
+})
+
+test_that("required setting checks fail when expected",{
+  invalidRequiredSettings <- validSettings
+  invalidRequiredSettings[["id_col"]]<-NULL
+  requiredFailed<-validateSettings(data=adlbc,settings=invalidRequiredSettings)
+  expect_false(requiredFailed[["valid"]])
+  
+  failedChecks <- requiredFailed[["checkList"]]%>%keep(~!.x[["valid"]])
+  expect_length(failedChecks, 1)
+  expect_equal(failedChecks[[1]][['check']],"value for specified key found in settings?")
+  expect_equal(failedChecks[[1]][['text_key']],"id_col")
 })

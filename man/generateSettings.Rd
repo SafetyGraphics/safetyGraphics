@@ -30,4 +30,5 @@ generateSettings(standard="a different standard") #returns shell settings list w
 /dontrun{
 generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far. 
 }
+
 }

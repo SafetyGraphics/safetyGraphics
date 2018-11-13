@@ -24,11 +24,17 @@
 #'  validateSettings(data=adlbc, settings=testSettings) # .$valid is TRUE
 #'  testSettings$id_col <- "NotAColumn"
 #'  validateSettings(data=adlbc, settings=testSettings) # .$valid is now FALSE
+#' @export
+#' @importFrom purrr map
+#' @import dplyr
 
 
 validateSettings <- function(data, settings, chart="eDish"){
   
   settingStatus<-list()
+  
+  # Check that all required parameters are not null
+  requiredChecks <- getRequiredSettings(chart = chart) %>% map(checkSettingProvided, settings = settings)
   
   #Check that non-null setting columns are found in the data
   columnChecks <- getSettingKeys(patterns="_col",settings=settings) %>% map(checkColumnSetting, settings=settings, data=data)
@@ -38,7 +44,7 @@ validateSettings <- function(data, settings, chart="eDish"){
   fieldChecks_flat <- unlist(fieldChecks, recursive=FALSE)
   
   #Combine different check types in to a master list
-  settingStatus$checkList<-c(columnChecks, fieldChecks_flat)
+  settingStatus$checkList<-c(requiredChecks, columnChecks, fieldChecks_flat)
   
   #valid=true if all checks pass, false otherwise 
   settingStatus$valid <- settingStatus$checkList%>%map_lgl(~.x[["valid"]])%>%all 

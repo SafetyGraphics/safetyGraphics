@@ -13,7 +13,7 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
   "Aminotransferase, aspartate (AST)", TB = "Total Bilirubin", ALP =
   "Alkaline phosphatase (ALP)"), x_options = c("ALT", "AST", "ALP"),
   y_options = "TB", visit_window = 30, r_ratio_filter = TRUE,
-  r_ratio_cut = 0, showTitle = TRUE,
+  r_ratio_cut = 0, showTitle = TRUE, debug_js = FALSE,
   warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.",
   settings = NULL)
 }
@@ -64,6 +64,8 @@ Editable by user after render. Default: \code{30}.}
 User can update this setting via the UI when \code{r_ratio_filter = TRUE}. Default: \code{0}.}
 
 \item{showTitle}{Specifies whether the title should be drawn above the controls. Default: \code{TRUE}.}
+
+\item{debug_js}{print settings in javascript before rendering chart. Default: \code{FALSE}.}
 
 \item{warningText}{Informational text to be displayed near the top of the controls (beneath the title, if any).
 No warning is displayed if \code{warningText = ""}. Default: \code{"Caution: This interactive graphic is 

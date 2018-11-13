@@ -13,7 +13,8 @@
 #' \dontrun{
 #'   detectStandard(adlbc,domain="AE") #throws error. AE domain not supported in this release. 
 #' }
-
+#' 
+#' @export
 
 detectStandard <- function(data, domain="labs"){
   stopifnot(

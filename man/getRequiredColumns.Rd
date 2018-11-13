@@ -20,4 +20,5 @@ Get a list of required columns for a chart in a given data standard
 \examples{
 getRequiredColumns(standard="ADAM")
 getRequiredColumns(standard="SDTM")
+
 }
