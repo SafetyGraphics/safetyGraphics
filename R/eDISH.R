@@ -33,6 +33,8 @@
 #'  No warning is displayed if \code{warningText = ""}. Default: \code{"Caution: This interactive graphic is 
 #'  not validated. Any clinical recommendations based on this tool should be confirmed using your organizations 
 #'  standard operating procedures."}.
+#' @param debug_js print settings in javascript before rendering chart. Default: \code{FALSE}.
+
 #' @param settings Optional list of settings arguments to be converted to JSON using \code{jsonlite::toJSON(settings, auto_unbox = TRUE, dataframe = "rows", null = "null")}.  If provided, all other function parameters are ignored. Default: \code{NULL}.
 #'  
 #' @examples 
@@ -105,6 +107,7 @@ eDISH <- function(data,
                   r_ratio_filter = TRUE,
                   r_ratio_cut = 0,
                   showTitle = TRUE,
+                  debug_js=FALSE,
                   warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.",
                   settings = NULL) {
 
@@ -134,7 +137,8 @@ eDISH <- function(data,
           r_ratio_filter = r_ratio_filter,
           r_ratio_cut = r_ratio_cut,
           showTitle = showTitle,
-          warningText = warningText
+          warningText = warningText,
+          debug_js=debug_js
         ),
         auto_unbox = TRUE,
         dataframe = "rows",
@@ -158,8 +162,8 @@ eDISH <- function(data,
     rSettings,
    # width = width,
    # height = height,
-    package = 'ReDish',
-    sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress = TRUE)
+    package = 'safetyGraphics',
+    sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE)
   )
 }
 
@@ -181,7 +185,7 @@ eDISH <- function(data,
 #'
 #' @export
 eDISHOutput <- function(outputId, width = '100%', height = '400px'){
-  htmlwidgets::shinyWidgetOutput(outputId, 'eDISH', width, height, package = 'ReDish')
+  htmlwidgets::shinyWidgetOutput(outputId, 'eDISH', width, height, package = 'safetyGraphics')
 }
 
 #' @rdname eDISH-shiny
