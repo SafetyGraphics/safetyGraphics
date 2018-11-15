@@ -19,9 +19,9 @@ navbarPage("eDISH Shiny app", id = "inTabset",
                              ),
                              fluidRow(
                                br(),
-                               tags$style(type='text/css', '#detectStandard_msg {font-size:23px;}'),
-                               uiOutput("detectStandard_msg"),
-                               actionButton("view_chart","View Chart")
+                               tags$style(type='text/css', '#detectStandard_msg {font-size:23px;}')
+                               # uiOutput("detectStandard_msg"),
+                               # actionButton("view_chart","View Chart")
                              )
                       )
                     )

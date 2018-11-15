@@ -1,7 +1,7 @@
 function(input, output, session){
   
   # initiate reactive values - list of uploaded data files
-  dd <- reactiveValues(data = NULL, current = NULL)
+  dd <- reactiveValues(data = NULL, current = NULL, standard = NULL)
   
   # modify reactive values when data is uploaded
   observeEvent(input$datafile,{
@@ -27,7 +27,10 @@ function(input, output, session){
     # set dd$current to FALSE for previous & TRUE for current uploads
     dd$current <- c(rep(FALSE, length(dd$current)), rep(TRUE, length(data_list)))
     
-    
+    # run detectStandard on new data and save to dd$standard
+    standard_list <- lapply(data_list, function(x){ detectStandard(x)$standard })
+    dd$standard <- c(dd$standard, standard_list) 
+      
     # generate UI elements - 1 for each uploaded dataset - for selecting which one will be used for eDISH plot
     # insertUI(
     #   selector = "#placeholderDataSelect",
@@ -42,11 +45,41 @@ function(input, output, session){
     # )
     
     
-    updateRadioButtons(session, "select_file", "Select file for eDISH chart",
-                              choices = names(dd$data))
+     # updateRadioButtons(session, "select_file", "Select file for eDISH chart",
+     #                           choices = names(dd$data))
     
   })
+  
 
+  ### make a reactive combining dd$data & standard 
+  data_choices <- reactive({
+
+    req(dd$data)
+    req(dd$standard)
+    
+    choices  <- list()
+    for (i in 1:length(dd$data)){
+      choices[[i]] <- names(dd$data)[i]
+    }
+    
+    names(choices) <- ifelse(dd$standard=="None",
+                             paste0("<p>", names(dd$data), " - <em style='font-size:12px;'>No Standard Detected</em></p>"),
+                             paste0("<p>", names(dd$data), " - <em style='color:green; font-size:12px;'>", dd$standard, "</em></p>"))
+    return(choices)
+  })
+
+  # update radio buttons to display dataset names and standards for selection
+  # NOTE - the selection is changing at times when new files are added.  need to fix
+  observeEvent(input$datafile, {
+    req(data_choices())
+    vals <- data_choices()
+    names(vals) <- NULL
+    names <- lapply(names(data_choices()), HTML)
+    
+   updateRadioButtons(session, "select_file",
+                    choiceNames = names,
+                    choiceValues = vals)
+   })
 
   # get selected dataset when selection changes
   data_selected <- eventReactive(input$select_file, {
@@ -68,22 +101,26 @@ function(input, output, session){
   })
 
 
-  # upon a dataset being selected, run detectStandard() function
+  # upon a dataset being selected, grab its standard
   standard <- reactive({
      req(data_selected())
-     detectStandard(data_selected())$standard
+    # detectStandard(data_selected())$standard
+    isolate({index <- which(names(dd$data)==input$select_file)[1]})
+    dd$standard[[index]]
   })
+  
+
 
 
   # output UI message based on detectStandard() result
-   output$detectStandard_msg <- renderUI({
-     req(standard())
-     if (standard()=="None"){
-       HTML("No standard detected. Please use settings tab to configure chart.")
-     } else {
-       HTML(paste("Matched",standard(),"data standard. eDISH chart available."))
-     }
-  })
+  #  output$detectStandard_msg <- renderUI({
+  #    req(standard())
+  #    if (standard()=="None"){
+  #      HTML("No standard detected. Please use settings tab to configure chart.")
+  #    } else {
+  #      HTML(paste("Matched",standard(),"data standard. eDISH chart available."))
+  #    }
+  # })
 
   # upon a dataset being selected, use generateSettings() to produce a settings obj
   settings_list <- reactiveValues(settings = NULL)
