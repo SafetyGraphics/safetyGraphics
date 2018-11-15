@@ -78,7 +78,8 @@ function(input, output, session){
     
    updateRadioButtons(session, "select_file",
                     choiceNames = names,
-                    choiceValues = vals)
+                    choiceValues = vals,
+                    selected = lapply(reactiveValuesToList(input), unclass)$select_file)
    })
 
   # get selected dataset when selection changes
@@ -148,7 +149,7 @@ function(input, output, session){
   #   this could cause the module to trigger twice unecessarily in some cases because the settings are generated
   #   AFTER the data is changed.  
   settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
-
+  
  inputs <- reactive({
    req(settings_list$settings)
    input <- callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings) 
