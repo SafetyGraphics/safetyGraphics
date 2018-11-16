@@ -69,17 +69,25 @@ function(input, output, session){
   })
 
   # update radio buttons to display dataset names and standards for selection
-  # NOTE - the selection is changing at times when new files are added.  need to fix
   observeEvent(input$datafile, {
     req(data_choices())
     vals <- data_choices()
     names(vals) <- NULL
     names <- lapply(names(data_choices()), HTML)
     
-   updateRadioButtons(session, "select_file",
-                    choiceNames = names,
-                    choiceValues = vals,
-                    selected = lapply(reactiveValuesToList(input), unclass)$select_file)
+    prev_sel <- lapply(reactiveValuesToList(input), unclass)$select_file
+    
+    if (prev_sel == "No files available") {
+      updateRadioButtons(session, "select_file",
+                         choiceNames = names,
+                         choiceValues = vals)
+    } else{
+      updateRadioButtons(session, "select_file",
+                         choiceNames = names,
+                         choiceValues = vals,
+                         selected = prev_sel)      
+    }
+
    })
 
   # get selected dataset when selection changes
