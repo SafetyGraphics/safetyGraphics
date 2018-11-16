@@ -121,9 +121,9 @@ function(input, output, session){
      print(settings_list$settings)
    })
   inputs <- reactive({
-    delay(5000, # this only kinda works
-          callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings))
+        callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings) 
   })
+
  
  # Fill settings object based on selections
   # require that secondary inputs have been filled in before proceeding
@@ -173,13 +173,21 @@ function(input, output, session){
    })
  })
  
- # observe({
- #   req(inputs()$filters)
- #   isolate({
- #     settingsUI_list$settings$filters <- NULL
- #     settingsUI_list$settings$filters <- data.frame(value_col=inputs()$filters, label=inputs()$filters)
- #   })
- # })
+ observe({
+   req(inputs()$filters)
+   isolate({
+     settingsUI_list$settings$filters <- NULL
+     settingsUI_list$settings$filters <- data.frame(value_col=inputs()$filters, label=inputs()$filters)
+   })
+ })
+
+ observe({
+   req(inputs()$group_cols)
+   isolate({
+     settingsUI_list$settings$group_cols <- NULL
+     settingsUI_list$settings$group_cols <- data.frame(value_col=inputs()$group_cols, label=inputs()$group_cols)
+   })
+ })
 
  # validate new settings 
   status2 <- eventReactive(settingsUI_list$settings,{

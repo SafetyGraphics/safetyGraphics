@@ -38,8 +38,8 @@ renderSettingsUI <- function(id){
           column(6, 
                  wellPanel(
                    h3("Measure Settings"),
-                #   selectInput(ns("filters"),"Filters", choices = NULL, multiple = TRUE),
-                #   selectInput(ns("group_cols"),"Group columns", choices = NULL, multiple = TRUE),
+                   selectInput(ns("filters"),"Filters", choices = NULL, selected = NULL,multiple = TRUE),
+                   selectInput(ns("group_cols"),"Group columns", choices = NULL, multiple = TRUE),
                    selectInput(ns("x_options"),"x_options", choices = c("ALT", "AST", "ALP"), selected = c("ALT", "AST", "ALP"), multiple = TRUE),
                    selectInput(ns("y_options"),"y_options", choices = c("ALT", "AST", "ALP"), selected = c("TB","ALP"), multiple = TRUE)
                  )
@@ -130,18 +130,17 @@ renderSettings <- function(input, output, session, data, settings){
       updateSelectInput(session, "anlyFlag", choices = colnames())
     } 
     
-    # if (! is.null(settings$filters$value_col)){
-    #   updateSelectInput(session, "filters", choices = unique(c(settings$filters$value_col,colnames())))
-    # } else {
-    #   updateSelectInput(session, "filters", choices = colnames())
-    # }
-    
-    # suppressing until we merge with updated JS which allows group_cols length 1
-    # if (! is.null(settings$group_cols)){
-    #   updateSelectInput(session, "group_cols", choices = unique(c(settings$group_cols,colnames())))
-    # } else {
-    #   updateSelectInput(session, "group_cols", choices = colnames())
-    # }
+  #  if (! is.null(settings$filters$value_col)){
+  #    updateSelectInput(session, "filters", choices = unique(c(settings$filters$value_col,colnames())))
+   # } else {
+      updateSelectInput(session, "filters", choices = colnames(), selected=NULL)
+  #  }
+
+  #  if (! is.null(settings$group_cols)){
+   #   updateSelectInput(session, "group_cols", choices = unique(c(settings$group_cols,colnames())))
+  #  } else {
+      updateSelectInput(session, "group_cols", choices = colnames())
+  #  }
   })
 
   
