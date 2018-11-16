@@ -1,7 +1,7 @@
 function(input, output, session){
   
   # initiate reactive values - list of uploaded data files
-  dd <- reactiveValues(data = NULL, current = NULL, standard = NULL)
+  dd <- reactiveValues(data = list("Example data" = adlbc), current = 1, standard = "AdAm")
   
   # modify reactive values when data is uploaded
   observeEvent(input$datafile,{
@@ -31,23 +31,6 @@ function(input, output, session){
     standard_list <- lapply(data_list, function(x){ detectStandard(x)$standard })
     dd$standard <- c(dd$standard, standard_list) 
       
-    # generate UI elements - 1 for each uploaded dataset - for selecting which one will be used for eDISH plot
-    # insertUI(
-    #   selector = "#placeholderDataSelect",
-    #   where = "beforeEnd",
-    #   ui = lapply(which(dd$current==TRUE), function(i){
-    #     if (i==1){   # if the VERY FIRST UPLOAD, default to "labs" data
-    #       selectInput(inputId = paste0("file_", i), label = names(dd$data)[i], choices=c("labs","other"), selected="labs")
-    #     } else {  # all other current uploads default to "other"
-    #       selectInput(inputId = paste0("file_", i), label = names(dd$data)[i], choices=c("labs","other"), selected="other")
-    #     } 
-    #   }) 
-    # )
-    
-    
-     # updateRadioButtons(session, "select_file", "Select file for eDISH chart",
-     #                           choices = names(dd$data))
-    
   })
   
 
@@ -67,7 +50,7 @@ function(input, output, session){
                              paste0("<p>", names(dd$data), " - <em style='color:green; font-size:12px;'>", dd$standard, "</em></p>"))
     return(choices)
   })
-
+  
   # update radio buttons to display dataset names and standards for selection
   observeEvent(input$datafile, {
     req(data_choices())
@@ -75,34 +58,30 @@ function(input, output, session){
     names(vals) <- NULL
     names <- lapply(names(data_choices()), HTML)
     
-    prev_sel <- lapply(reactiveValuesToList(input), unclass)$select_file
-    
-    if (prev_sel == "No files available") {
-      updateRadioButtons(session, "select_file",
-                         choiceNames = names,
-                         choiceValues = vals)
-    } else{
-      updateRadioButtons(session, "select_file",
+    prev_sel <- lapply(reactiveValuesToList(input), unclass)$select_file  # retain previous selection
+
+    updateRadioButtons(session, "select_file",
                          choiceNames = names,
                          choiceValues = vals,
                          selected = prev_sel)      
-    }
-
    })
 
   # get selected dataset when selection changes
   data_selected <- eventReactive(input$select_file, {
-    if (! input$select_file == "No files available"){
       isolate({index <- which(names(dd$data)==input$select_file)[1]})
       dd$data[[index]]
-    } else{
-      return()
-    }
     })
-
+  
  # upon a dataset being uploaded and selected, generate data preview
+  output$datapreview_header <- renderUI({
+    data_selected()
+    isolate(data_name <- input$select_file)
+    h3(paste("Data Preview for", data_name))
+  })
+  
   output$data_preview <- DT::renderDataTable({
       DT::datatable(data = data_selected(),
+                    caption = isolate(input$select_file),
                      rownames = FALSE,
                      style="bootstrap",
                      class="compact",
@@ -118,18 +97,6 @@ function(input, output, session){
     dd$standard[[index]]
   })
   
-
-
-
-  # output UI message based on detectStandard() result
-  #  output$detectStandard_msg <- renderUI({
-  #    req(standard())
-  #    if (standard()=="None"){
-  #      HTML("No standard detected. Please use settings tab to configure chart.")
-  #    } else {
-  #      HTML(paste("Matched",standard(),"data standard. eDISH chart available."))
-  #    }
-  # })
 
   # upon a dataset being selected, use generateSettings() to produce a settings obj
   settings_list <- reactiveValues(settings = NULL)
