@@ -1,7 +1,7 @@
 function(input, output, session){
   
   # initiate reactive values - list of uploaded data files
-  dd <- reactiveValues(data = list("Example data" = adlbc), current = 1, standard = "AdAm")
+  dd <- reactiveValues(data = list("Example data" = adlbc), current = 1, standard = "ADaM")
   
   # modify reactive values when data is uploaded
   observeEvent(input$datafile,{
@@ -63,7 +63,8 @@ function(input, output, session){
     updateRadioButtons(session, "select_file",
                          choiceNames = names,
                          choiceValues = vals,
-                         selected = prev_sel)      
+                         selected = prev_sel)  
+
    })
 
   # get selected dataset when selection changes
@@ -90,28 +91,19 @@ function(input, output, session){
 
 
   # upon a dataset being selected, grab its standard
-  standard <- reactive({
-     req(data_selected())
-    # detectStandard(data_selected())$standard
-    isolate({index <- which(names(dd$data)==input$select_file)[1]})
+  standard <- eventReactive(data_selected(), {
+    index <- which(names(dd$data)==input$select_file)[1]
     dd$standard[[index]]
   })
-  
 
   # upon a dataset being selected, use generateSettings() to produce a settings obj
   settings_list <- reactiveValues(settings = NULL)
-  observe({
-    req(data_selected())
-    standard()
+
+  observeEvent(c(data_selected(), standard()), {
     settings_list$settings <- generateSettings(standard = standard(), chart = "eDish")
-  }) 
-  
+  })
 
   # run validateSettings(data, standard, settings) and return a status
-  # this bombs if standard="none" because we are not yet updating settings obj based on
-  #   user input. Once we allow that, run validateSettings under either:
-  #     (1) standard is AdAM or SDTM & settings obj generated automatically
-  #     (2) user needs to update settings in UI manually (due to standard="none" currently, could be more conditions in future)
   status <- reactive({
     req(data_selected())
     req(settings_list$settings)
@@ -125,16 +117,23 @@ function(input, output, session){
   #   AFTER the data is changed.  
   settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
   
- inputs <- reactive({
-   req(settings_list$settings)
-   input <- callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings) 
- })
+   observe({
+     print(settings_list$settings)
+   })
+  inputs <- reactive({
+    delay(5000, # this only kinda works
+          callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings))
+  })
  
- # note this is getting triggered every time an input changes - even as the inputs fill in
- #   probably want to change that
- #  for example - (1) when UI created, (2) when main pieces of UI filled, (3) when dependent pieces of UI filled (e.g. ALT, etc)
+ # Fill settings object based on selections
+  # require that secondary inputs have been filled in before proceeding
+  # update is triggered by any of the input selections changing
  observe({
-   req(inputs())
+   req(inputs()$ALP)
+   req(inputs()$AST)
+   req(inputs()$TB)
+   req(inputs()$ALT)
+   req(inputs()$baseline_visitn)
    inputs()$id_col
    inputs()$value_col
    inputs()$measure_col
@@ -143,11 +142,6 @@ function(input, output, session){
    inputs()$studyday_col
    inputs()$visit_col
    inputs()$visitn_col
-   inputs()$baseline_visitn
-   inputs()$ALT
-   inputs()$AST
-   inputs()$TB
-   inputs()$ALP
    inputs()$x_options
    inputs()$y_options
    inputs()$visit_window

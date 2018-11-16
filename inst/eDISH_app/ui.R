@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyjs)
 
 navbarPage("eDISH Shiny app", id = "inTabset",
            tabPanel(title = "Data", value = "data",
@@ -9,28 +10,26 @@ navbarPage("eDISH Shiny app", id = "inTabset",
                                fileInput("datafile", "Upload a csv or sas7bdat file",accept = c(".sas7bdat", ".csv"), multiple = TRUE),
                               radioButtons("select_file","Select file for eDISH chart", 
                                            choiceNames = list(HTML("<p>Example data - <em style='color:green; font-size:12px;'>AdAm</em></p>")), 
-                                           choiceValues = "Example data") #, choices = "No files available")
+                                           choiceValues = "Example data") 
                              )
                       ),
                       column(6, 
                              fluidRow(
                                wellPanel( 
                                uiOutput("datapreview_header"),
-                             #  h3("Data preview"), 
                                div(DT::dataTableOutput("data_preview"), style = "font-size: 75%")
                              )
                              ),
                              fluidRow(
                                br(),
                                tags$style(type='text/css', '#detectStandard_msg {font-size:23px;}')
-                               # uiOutput("detectStandard_msg"),
-                               # actionButton("view_chart","View Chart")
                              )
                       )
                     )
            ),
            tabPanel(title = "Settings", id = "settings",
                     fluidPage(
+                      useShinyjs(),
                       renderSettingsUI("settingsUI")
                     )
            ),
