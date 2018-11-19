@@ -176,16 +176,24 @@ function(input, output, session){
  observe({
    req(inputs()$filters)
    isolate({
-     settingsUI_list$settings$filters <- NULL
-     settingsUI_list$settings$filters <- data.frame(value_col=inputs()$filters, label=inputs()$filters)
+     settingsUI_list$settings$filters <- list()
+     
+     for (i in 1:length(inputs()$filters)){
+       settingsUI_list$settings$filters[[i]] <- list(value_col = inputs()$filters[[i]],
+                                                     label = inputs()$filters[[i]])
+     }
    })
  })
 
  observe({
    req(inputs()$group_cols)
    isolate({
-     settingsUI_list$settings$group_cols <- NULL
-     settingsUI_list$settings$group_cols <- data.frame(value_col=inputs()$group_cols, label=inputs()$group_cols)
+     settingsUI_list$settings$group_cols <- list()
+     
+     for (i in 1:length(inputs()$group_cols)){
+       settingsUI_list$settings$group_cols[[i]] <- list(value_col = inputs()$group_cols[[i]],
+                                                        label = inputs()$group_cols[[i]])
+     }
    })
  })
 
