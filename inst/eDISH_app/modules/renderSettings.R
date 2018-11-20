@@ -81,10 +81,27 @@ renderSettings <- function(input, output, session, data, settings, status){
       map(., ~ keep(., names(.) %in% c("text_key","valid","message")) %>% 
             data.frame(., stringsAsFactors = FALSE)) %>% 
       bind_rows %>% 
-      mutate(top_key = sub("\\|.*", "", text_key))
+      mutate(top_key = sub("\\|.*", "", text_key)) %>% 
+      filter(valid==FALSE)
   })
   
-  observe({print(status_df())})
+  req_settings <- getRequiredSettings("eDish") %>% unlist
+  
+  ## the following will be useful (code to grab all inputs) if we do updates programmatically  
+  # but i'm guessing if we take that approach we will want to generate the UI programatically from the start
+  input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))})
+  
+  # observe({
+  #   for (name in input_names()){
+  #     if (! is.null(settings[[name]])){
+  #       updateSelectInput(session, name, choices=unique(c(settings[[name]], colnames())))
+  #     } else {
+  #       updateSelectInput(session, name, choices=colnames())
+  #     }
+  #   }
+  # })
+  
+
   
   observe({
     if (! is.null(settings$id_col)){
