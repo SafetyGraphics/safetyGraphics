@@ -108,7 +108,7 @@ function(input, output, session){
     req(data_selected())
     req(settings_list$settings)
     req(!standard()=="None")
-    validateSettings(data_selected(), settings_list$settings, chart="eDish")$valid
+    validateSettings(data_selected(), settings_list$settings, chart="eDish") #$valid
   })
 
   # based on selected data set & generated/selected settings obj, generate settings page.
@@ -116,12 +116,9 @@ function(input, output, session){
   #   this could cause the module to trigger twice unecessarily in some cases because the settings are generated
   #   AFTER the data is changed.  
   settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
-  
-   observe({
-     print(settings_list$settings)
-   })
+
   inputs <- reactive({
-        callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings) 
+        callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings, status=status) 
   })
 
  
@@ -129,10 +126,10 @@ function(input, output, session){
   # require that secondary inputs have been filled in before proceeding
   # update is triggered by any of the input selections changing
  observe({
-   req(inputs()$ALP)
-   req(inputs()$AST)
-   req(inputs()$TB)
-   req(inputs()$ALT)
+   req(inputs()$`measure_values|ALP`)
+   req(inputs()$`measure_values|AST`)
+   req(inputs()$`measure_values|TB`)
+   req(inputs()$`measure_values|ALT`)
    req(inputs()$baseline_visitn)
    inputs()$id_col
    inputs()$value_col
@@ -159,10 +156,10 @@ function(input, output, session){
      settingsUI_list$settings$visit_col <- inputs()$visit_col
      settingsUI_list$settings$visitn_col <- inputs()$visitn_col
      settingsUI_list$settings$baseline_visitn <- inputs()$baseline_visitn
-     settingsUI_list$settings$measure_values$ALT <- inputs()$ALT
-     settingsUI_list$settings$measure_values$AST <- inputs()$AST
-     settingsUI_list$settings$measure_values$TB <- inputs()$TB
-     settingsUI_list$settings$measure_values$ALP <- inputs()$ALP
+     settingsUI_list$settings$measure_values$ALT <- inputs()$`measure_values|ALT`
+     settingsUI_list$settings$measure_values$AST <- inputs()$`measure_values|AST`
+     settingsUI_list$settings$measure_values$TB <- inputs()$`measure_values|TB`
+     settingsUI_list$settings$measure_values$ALP <- inputs()$`measure_values|ALP`
      settingsUI_list$settings$x_options <- inputs()$x_options
      settingsUI_list$settings$y_options <- inputs()$y_options
      settingsUI_list$settings$visit_window <- inputs()$visit_window

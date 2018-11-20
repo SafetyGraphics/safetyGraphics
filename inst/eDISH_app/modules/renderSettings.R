@@ -14,10 +14,10 @@ renderSettingsUI <- function(id){
                      selectInput(ns("value_col"),"Lab result", choices = NULL),
                      selectInput(ns("measure_col"),"Lab measure", choices = NULL),
                      h4("Key measures"),
-                     selectInput(ns("ALT"),"ALT", choices = NULL),
-                     selectInput(ns("AST"),"AST", choices = NULL),
-                     selectInput(ns("TB"),"TB", choices = NULL),
-                     selectInput(ns("ALP"),"ALP", choices = NULL)
+                     selectInput(ns("measure_values|ALT"),"ALT", choices = NULL),
+                     selectInput(ns("measure_values|AST"),"AST", choices = NULL),
+                     selectInput(ns("measure_values|TB"),"TB", choices = NULL),
+                     selectInput(ns("measure_values|ALP"),"ALP", choices = NULL)
               ) ,
               column(6,
                      br(),
@@ -65,7 +65,7 @@ renderSettingsUI <- function(id){
 }
 
 
-renderSettings <- function(input, output, session, data, settings){
+renderSettings <- function(input, output, session, data, settings, status){
   
   ns <- session$ns
   
@@ -74,6 +74,17 @@ renderSettings <- function(input, output, session, data, settings){
   req(settings)
   
   colnames <- reactive({names(data())})
+  
+  status_df <- reactive({
+    req(status())
+    status()$checkList %>% 
+      map(., ~ keep(., names(.) %in% c("text_key","valid","message")) %>% 
+            data.frame(., stringsAsFactors = FALSE)) %>% 
+      bind_rows %>% 
+      mutate(top_key = sub("\\|.*", "", text_key))
+  })
+  
+  observe({print(status_df())})
   
   observe({
     if (! is.null(settings$id_col)){
@@ -155,7 +166,7 @@ renderSettings <- function(input, output, session, data, settings){
     } else {
       choices <- unique(data()[,input$measure_col])
     }
-    updateSelectInput(session, "ALT", choices = choices)
+    updateSelectInput(session, "measure_values|ALT", choices = choices)
   })
 
   observe({
@@ -169,7 +180,7 @@ renderSettings <- function(input, output, session, data, settings){
     } else {
       choices <- unique(data()[,input$measure_col])
     }
-    updateSelectInput(session, "AST", choices = choices)
+    updateSelectInput(session, "measure_values|AST", choices = choices)
   })
 
   observe({
@@ -183,7 +194,7 @@ renderSettings <- function(input, output, session, data, settings){
     } else {
       choices <- unique(data()[,input$measure_col])
     }
-    updateSelectInput(session, "TB", choices = choices)
+    updateSelectInput(session, "measure_values|TB", choices = choices)
   })
 
   observe({
@@ -197,7 +208,7 @@ renderSettings <- function(input, output, session, data, settings){
     } else {
       choices <- unique(data()[,input$measure_col])
     }
-    updateSelectInput(session, "ALP", choices = choices)
+    updateSelectInput(session, "measure_values|ALP", choices = choices)
   })
 
   observe({
