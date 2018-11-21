@@ -81,12 +81,16 @@ renderSettings <- function(input, output, session, data, settings, status){
       map(., ~ keep(., names(.) %in% c("text_key","valid","message")) %>% 
             data.frame(., stringsAsFactors = FALSE)) %>% 
       bind_rows %>% 
-      mutate(top_key = sub("\\|.*", "", text_key)) #  %>% 
+      mutate(top_key = sub("\\|.*", "", text_key)) # %>% 
     #  filter(valid==FALSE)
   })
   
-  req_settings <- getRequiredSettings("eDish") %>% unlist
-  print(req_settings)
+  #List of required settings
+  req_settings <- getRequiredSettings("eDish") %>% unlist  #Indicate required settings
+  
+  #List of inputs with custom observers
+  custom_observer_settings <- c("measure_col") #more to be added later
+  
   ## the following will be useful (code to grab all inputs) if we do updates programmatically  
   # but i'm guessing if we take that approach we will want to generate the UI programatically from the start
  # input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))})
@@ -196,6 +200,41 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   
   observe({
+    for (name in input_names()){
+      setting_key <- as.list(strsplit(name,"\\|"))
+      setting_value <- getSettingValue(key=setting_key,settings=settings)
+      setting_label <- setting_key #TODO: get the label!
+      
+      # 1. Update the options for data-mapping inputs
+      if(str_detect(name,"_col")){
+        sortedChoices<-NULL
+        if(!is.null(setting_value)){
+          sortedChoices<-unique(c(setting_value, colnames()))
+        }else{
+          sortedChoices<-colnames()
+        } 
+        updateSelectInput(session, name, choices=sortedChoices)         
+      }
+      
+      # 2. Flag the input if it is required
+      if(name %in% req_settings){
+        flagSetting(session=session, name=name, originalLabel=setting_label)
+      }
+      
+      # 3. Print a warning if the input failed a validation check
+      if(name %in% status_df()$text_key){
+        current_status<- status_df()[status_df()$text_key==name, "message"]
+        if(current_status ==""){current_status = "OK"}
+        updateSettingStatus(session=session, name=name, originalLabel=setting_label, status=current_status) # TODO: Create this function
+      }
+      
+      # 4. Check for custom observers and initialize if needed
+      if(name %in% custom_observer_settings){
+        #runCustomObserver(name=name) #TODO: clean this up!
+      }
+    }
+  })
+  
     req(input$measure_col)
     if (!is.null(settings$measure_col) & input$measure_col==settings$measure_col){
           choices_alt <- unique(c(settings$measure_values$ALT, as.character(data()[,settings$measure_col])))
