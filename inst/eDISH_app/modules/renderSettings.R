@@ -195,6 +195,7 @@ renderSettings <- function(input, output, session, data, settings, status){
      }
    })
 
+
   ### return all inputs from module to be used in global env.
   return(input)
 }
