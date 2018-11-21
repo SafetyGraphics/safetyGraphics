@@ -130,7 +130,7 @@ function(input, output, session){
    req(inputs()$`measure_values|AST`)
    req(inputs()$`measure_values|TB`)
    req(inputs()$`measure_values|ALT`)
-   req(inputs()$baseline_visitn)
+   # req(inputs()$baseline_visitn)
    inputs()$id_col
    inputs()$value_col
    inputs()$measure_col
@@ -194,7 +194,7 @@ function(input, output, session){
    })
  })
 
- # validate new settings 
+  # validate new settings 
   status2 <- eventReactive(settingsUI_list$settings,{
     req(data_selected())
     req(settingsUI_list$settings)

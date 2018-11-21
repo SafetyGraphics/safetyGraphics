@@ -8,16 +8,45 @@ renderSettingsUI <- function(id){
         tagList(
           wellPanel(
             fluidRow(
-              column(6,  
+              column(6,
                      h3("Data Mapping"),
-                     selectInput(ns("id_col"),"Unique subject identifier", choices = NULL),
-                     selectInput(ns("value_col"),"Lab result", choices = NULL),
-                     selectInput(ns("measure_col"),"Lab measure", choices = NULL),
+                     div(
+                         tags$label(id=ns("label_id_col"), "Unique subject identifier"),
+                         selectInput(ns("id_col"),NULL, choices = NULL)
+                     ),
+                     div(
+                       tags$label(id=ns("label_value_col"),"Lab Result"),
+                       selectInput(ns("value_col"),NULL, choices = NULL)                   
+                       ),
+                     div(
+                       tags$label(id=ns("label_measure_col"),"Lab measure"),
+                       selectInput(ns("measure_col"),NULL, choices = NULL)                   
+                     ),
                      h4("Key measures"),
-                     selectInput(ns("measure_values|ALT"),"ALT", choices = NULL),
-                     selectInput(ns("measure_values|AST"),"AST", choices = NULL),
-                     selectInput(ns("measure_values|TB"),"TB", choices = NULL),
-                     selectInput(ns("measure_values|ALP"),"ALP", choices = NULL)
+                     div(
+                       tags$label(id=ns("label_measure_values|ALT"),"ALT"),
+                       selectInput(ns("measure_values|ALT"),NULL, choices = NULL)                   
+                     ),
+                     div(
+                       tags$label(id=ns("label_measure_values|AST"),"AST"),
+                       selectInput(ns("measure_values|AST"),NULL, choices = NULL)                   
+                     ),
+                     div(
+                       tags$label(id=ns("label_measure_values|TB"),"TB"),
+                       selectInput(ns("measure_values|TB"),NULL, choices = NULL)                   
+                     ),
+                     div(
+                       tags$label(id=ns("label_measure_values|ALP"),"ALP"),
+                       selectInput(ns("measure_values|ALP"),NULL, choices = NULL)                   
+                     )
+                    # selectInput(ns("id_col"),"Unique subject identifier", choices = NULL),
+                    # selectInput(ns("value_col"),"Lab result", choices = NULL),
+                     # selectInput(ns("measure_col"),"Lab measure", choices = NULL),
+                     # h4("Key measures"),
+                     # selectInput(ns("measure_values|ALT"),"ALT", choices = NULL),
+                     # selectInput(ns("measure_values|AST"),"AST", choices = NULL),
+                     # selectInput(ns("measure_values|TB"),"TB", choices = NULL),
+                     # selectInput(ns("measure_values|ALP"),"ALP", choices = NULL)
               ) ,
               column(6,
                      br(),
@@ -27,7 +56,7 @@ renderSettingsUI <- function(id){
                      selectInput(ns("normal_col_high"),"Upper limit of normal", choices = NULL),
                      selectInput(ns("visit_col"),"Visit", choices = NULL),
                      selectInput(ns("visitn_col"),"Visit number", choices = NULL),
-                     selectInput(ns("baseline_visitn"),"Baseline visit number", choices = NULL),
+                  #   selectInput(ns("baseline_visitn"),"Baseline visit number", choices = NULL),
                      selectInput(ns("studyday_col"),"studyday_col", choices = NULL),
                      selectInput(ns("anlyFlag"),"anlyFlag", choices = NULL)
                      
@@ -65,26 +94,41 @@ renderSettingsUI <- function(id){
 }
 
 renderSettings <- function(input, output, session, data, settings, status){
+
+
   ####################
   #Helper functions 
   ###################
   #TODO: Save to separate file
   
-  flagSetting<-function(session, name, originalLabel){
-    updateSelectInput(session, name, label=paste0("!",originalLabel))         
+  flagSetting<-function(session, name){
+    shinyjs::html(id = paste0("label_", name), 
+                  html = "<strong>*</strong>", 
+                  add=TRUE)      
   }
   
-  updateSettingStatus<-function(session, name, originalLabel, status){
-    updateSelectInput(session, name, label=paste0(originalLabel,"-",status))         
+  updateSettingStatus<-function(session, name, status){
+    shinyjs::html(id = paste0("label_", name), 
+                  html = paste0("   <em style='color:red; font-size:12px;'>", status,"</em>"), 
+                  add=TRUE)     
   }
+  
+  # flagSetting<-function(session, name, originalLabel){
+  #   newLabel <- paste0(originalLabel,"sdsd")
+  #   updateSelectInput(session, name, label = newLabel)         
+  # }
+  # 
+  # updateSettingStatus<-function(session, name, originalLabel, status){
+  #   newLabel <- paste0(originalLabel," ",status)
+  #   updateSelectInput(session, name, label =htmltools::doRenderTags(newLabel)   )     
+  # }
   
   runCustomObserver<-function(name){
     # Custom observer for measure_col
     if(name=="measure_col"){
       observe({
         req(input$measure_col)
-        if (!is.null(settings$measure_col)){
-          if (input$measure_col==settings$measure_col){
+        if (!is.null(settings$measure_col) & input$measure_col==settings$measure_col){
             choices_ast <- unique(c(settings$measure_values$AST, as.character(data()[,settings$measure_col])))
             choices_alt <- unique(c(settings$measure_values$ALT, as.character(data()[,settings$measure_col])))
             choices_tb  <- unique(c(settings$measure_values$TB,  as.character(data()[,settings$measure_col])))
@@ -95,18 +139,14 @@ renderSettings <- function(input, output, session, data, settings, status){
             choices_tb  <- unique(data()[,input$measure_col])
             choices_alp <- unique(data()[,input$measure_col])
           }
-        } else {
-          choices_ast <- unique(data()[,input$measure_col])
-          choices_alt <- unique(data()[,input$measure_col])
-          choices_tb  <- unique(data()[,input$measure_col])
-          choices_alp <- unique(data()[,input$measure_col])
-        }
+
         updateSelectInput(session, "measure_values|ALT", choices = choices_ast)
         updateSelectInput(session, "measure_values|AST", choices = choices_alt)
         updateSelectInput(session, "measure_values|TB",  choices = choices_tb)
         updateSelectInput(session, "measure_values|ALP", choices = choices_alp)
       })  
     }
+  } #end runCustomObserver()
   
     #custom observer for visitn_col
     #ignore for v0.4 since baseline_visitn was deprecated in latest js release
@@ -124,7 +164,10 @@ renderSettings <- function(input, output, session, data, settings, status){
     #  }
     # updateSelectInput(session, "baseline_visitn", choices = choices)
     #})
-  } #end runCustomObserver()
+  
+  
+  
+  
   
   ###########################
   # Make updates to the UI
@@ -137,8 +180,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   colnames <- reactive({names(data())})
   
   #List of all inputs
-  #input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))}) #TODO: needs update
-  input_names <- reactive({c("id_col","measure_col")})
+  input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))}) #TODO: needs update
+ # input_names <- reactive({c("id_col","measure_col")})
   
   #Setting Status information (from failed checks only)
   status_df <- reactive({
@@ -147,24 +190,27 @@ renderSettings <- function(input, output, session, data, settings, status){
       map(., ~ keep(., names(.) %in% c("text_key","valid","message")) %>% 
             data.frame(., stringsAsFactors = FALSE)) %>% 
       bind_rows %>% 
-      mutate(top_key = sub("\\|.*", "", text_key)) # %>% 
+      mutate(top_key = sub("\\|.*", "", text_key))  %>% 
+      group_by(text_key) %>% 
+      slice(1)  # get first set of checks
     #  filter(valid==FALSE)
   })
+
   
   #List of required settings
   req_settings <- getRequiredSettings("eDish") %>% unlist  #Indicate required settings
-  
-  #List of inputs with custom observers
+
+    #List of inputs with custom observers
   custom_observer_settings <- c("measure_col") #more to be added later
   
   #Establish observers to update settings UI for all inputs
   #Triggered on update of input_names (e.g. new chart type added, ), 
   observe({
-     for (name in input_names()){
+     for (name in isolate(input_names())){
        setting_key <- as.list(strsplit(name,"\\|"))
-       setting_value <- getSettingValue(key=setting_key,settings=settings)
-       setting_label <- setting_key #TODO: get the label!
-       
+       setting_value <- getSettingValue(key=setting_key, settings=settings)
+       setting_label <- name ##TO DO: get the label!
+
        # 1. Update the options for data-mapping inputs
        if(str_detect(name,"_col")){
          sortedChoices<-NULL
@@ -178,19 +224,21 @@ renderSettings <- function(input, output, session, data, settings, status){
        
        # 2. Flag the input if it is required
        if(name %in% req_settings){
-         flagSetting(session=session, name=name, originalLabel=setting_label)
+         flagSetting(session=session, name=name) #, originalLabel=setting_label)
+        # setting_label <- paste0(setting_label,"*")
        }
        
        # 3. Print a warning if the input failed a validation check
        if(name %in% status_df()$text_key){
-         current_status<- status_df()[status_df()$text_key==name, "message"]
-         if(current_status ==""){current_status = "OK"}
-         updateSettingStatus(session=session, name=name, originalLabel=setting_label, status=current_status) # TODO: Create this function
+         current_status <- status_df()[status_df()$text_key==name, "message"]
+         current_status <- ifelse(current_status=="","OK",current_status)
+         updateSettingStatus(session=session, name=name, #originalLabel=setting_label, 
+                             status=current_status) # TODO: Create this function
        }
        
        # 4. Check for custom observers and initialize if needed
        if(name %in% custom_observer_settings){
-         #runCustomObserver(name=name) #TODO: clean this up!
+         runCustomObserver(name=name) #TODO: clean this up!
        }
      }
    })
