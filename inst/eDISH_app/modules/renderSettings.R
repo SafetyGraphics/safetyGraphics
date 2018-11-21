@@ -65,13 +65,22 @@ renderSettingsUI <- function(id){
 }
 
 renderSettings <- function(input, output, session, data, settings, status){
-  
-  #Helper functions defining custom interactivity 
-  #TODO: This initializes an observer inside of an observer - probably not kosher? 
+  ####################
+  #Helper functions 
+  ###################
   #TODO: Save to separate file
-  runCustomObsever<-function(name){
+  
+  flagSetting<-function(session, name, originalLabel){
+    updateSelectInput(session, name, label=paste0("!",originalLabel))         
+  }
+  
+  updateSettingStatus<-function(session, name, originalLabel, status){
+    updateSelectInput(session, name, label=paste0(originalLabel,"-",status))         
+  }
+  
+  runCustomObserver<-function(name){
     # Custom observer for measure_col
-    if(name="measure_col"){
+    if(name=="measure_col"){
       observe({
         req(input$measure_col)
         if (!is.null(settings$measure_col)){
@@ -117,6 +126,9 @@ renderSettings <- function(input, output, session, data, settings, status){
     #})
   } #end runCustomObserver()
   
+  ###########################
+  # Make updates to the UI
+  ###########################
   ns <- session$ns
   req(data())
   req(settings)
@@ -125,7 +137,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   colnames <- reactive({names(data())})
   
   #List of all inputs
-  input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))})
+  #input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))}) #TODO: needs update
+  input_names <- reactive({c("id_col","measure_col")})
   
   #Setting Status information (from failed checks only)
   status_df <- reactive({
@@ -134,8 +147,8 @@ renderSettings <- function(input, output, session, data, settings, status){
       map(., ~ keep(., names(.) %in% c("text_key","valid","message")) %>% 
             data.frame(., stringsAsFactors = FALSE)) %>% 
       bind_rows %>% 
-      mutate(top_key = sub("\\|.*", "", text_key)) %>% 
-      filter(valid==FALSE)
+      mutate(top_key = sub("\\|.*", "", text_key)) # %>% 
+    #  filter(valid==FALSE)
   })
   
   #List of required settings
@@ -145,31 +158,39 @@ renderSettings <- function(input, output, session, data, settings, status){
   custom_observer_settings <- c("measure_col") #more to be added later
   
   #Establish observers to update settings UI for all inputs
+  #Triggered on update of input_names (e.g. new chart type added, ), 
   observe({
      for (name in input_names()){
-       setting_key <- as.list(strsplit(name,"|"))
-       setting_value <- getSettingValue(key=key,settings=settings)
+       setting_key <- as.list(strsplit(name,"\\|"))
+       setting_value <- getSettingValue(key=setting_key,settings=settings)
+       setting_label <- setting_key #TODO: get the label!
        
        # 1. Update the options for data-mapping inputs
-       # TODO: Not sure if it makes more sense to have 1 big observer for each input, or to have several smaller ones in the if statements below. 
        if(str_detect(name,"_col")){
-         sortedChoices<-ifelse(!is.null(value), unique(c(value, colnames())), colnames())
+         sortedChoices<-NULL
+         if(!is.null(setting_value)){
+           sortedChoices<-unique(c(setting_value, colnames()))
+         }else{
+           sortedChoices<-colnames()
+         } 
          updateSelectInput(session, name, choices=sortedChoices)         
        }
        
        # 2. Flag the input if it is required
        if(name %in% req_settings){
-         #flagSetting(name=name) #TODO: Create this function
+         flagSetting(session=session, name=name, originalLabel=setting_label)
        }
        
        # 3. Print a warning if the input failed a validation check
-       if(name %in% status_df$text_key){
-         #printStatus(name=name, status=status) # TODO: Create this function
+       if(name %in% status_df()$text_key){
+         current_status<- status_df()[status_df()$text_key==name, "message"]
+         if(current_status ==""){current_status = "OK"}
+         updateSettingStatus(session=session, name=name, originalLabel=setting_label, status=current_status) # TODO: Create this function
        }
        
        # 4. Check for custom observers and initialize if needed
        if(name %in% custom_observer_settings){
-         runCustomObserver(name=name)
+         #runCustomObserver(name=name) #TODO: clean this up!
        }
      }
    })
