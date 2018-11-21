@@ -86,21 +86,44 @@ renderSettings <- function(input, output, session, data, settings, status){
   })
   
   req_settings <- getRequiredSettings("eDish") %>% unlist
-  
+  print(req_settings)
   ## the following will be useful (code to grab all inputs) if we do updates programmatically  
   # but i'm guessing if we take that approach we will want to generate the UI programatically from the start
-  input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))})
-  
+ # input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))})
+  # input_names <- reactive({"id_col"})
+  # 
   # observe({
   #   for (name in input_names()){
-  #     if (! is.null(settings[[name]])){
-  #       updateSelectInput(session, name, choices=unique(c(settings[[name]], colnames())))
-  #     } else {
-  #       updateSelectInput(session, name, choices=colnames())
+  #     setting_key <- as.list(strsplit(name,"|"))
+  #     setting_value <- getSettingValue(key=key,settings=settings)
+  #     
+  #     if(str_detect(name,"_col")){
+  #       
+  #       if(!is.null(setting_value)){
+  #         sortedChoices <- unique(c(setting_value, colnames()))
+  #       } else {
+  #         sortedChoices <- colnames()
+  #       }
+  # 
+  #       label <- name # want to store the actual label somewhere 
+  #       
+  #       if(name %in% req_settings){
+  #         label <- paste(label, "*")
+  #         updateSelectInput(session, name, label, choices=sortedChoices)         
+  #       }
+  #       
+  #       if (nrow(status_df())>0){
+  #         if(name %in% status_df()$text_key){
+  #           label <- paste(label, status_df()[status_df()$text_key==name, "message"])
+  #           updateSelectInput(session, name, label, choices=sortedChoices)         
+  #           
+  #         }
+  #       }
+  # 
+  #       # updateSelectInput(session, name, label, choices=sortedChoices)         
   #     }
   #   }
   # })
-  
 
   
   observe({
@@ -108,7 +131,7 @@ renderSettings <- function(input, output, session, data, settings, status){
       updateSelectInput(session, "id_col", choices = unique(c(settings$id_col,colnames())))
     } else {
       updateSelectInput(session, "id_col", choices = colnames())
-    } 
+    }
 
     if (! is.null(settings$value_col)){
       updateSelectInput(session, "value_col", choices = unique(c(settings$value_col,colnames())))
@@ -174,59 +197,25 @@ renderSettings <- function(input, output, session, data, settings, status){
   
   observe({
     req(input$measure_col)
-    if (!is.null(settings$measure_col)){
-      if (input$measure_col==settings$measure_col){
-          choices <- unique(c(settings$measure_values$ALT, as.character(data()[,settings$measure_col])))
+    if (!is.null(settings$measure_col) & input$measure_col==settings$measure_col){
+          choices_alt <- unique(c(settings$measure_values$ALT, as.character(data()[,settings$measure_col])))
+          choices_ast <- unique(c(settings$measure_values$AST, as.character(data()[,settings$measure_col])))
+          choices_tb <- unique(c(settings$measure_values$TB, as.character(data()[,settings$measure_col])))
+          choices_alp <- unique(c(settings$measure_values$ALP, as.character(data()[,settings$measure_col])))
       } else {
-        choices <- unique(data()[,input$measure_col])
+        choices_alt <- unique(data()[,input$measure_col])
+        choices_ast <- unique(data()[,input$measure_col])
+        choices_tb <- unique(data()[,input$measure_col])
+        choices_alp <- unique(data()[,input$measure_col])
       }
-    } else {
-      choices <- unique(data()[,input$measure_col])
-    }
-    updateSelectInput(session, "measure_values|ALT", choices = choices)
+
+    updateSelectInput(session, "measure_values|ALT", choices = choices_alt)
+    updateSelectInput(session, "measure_values|AST", choices = choices_ast)
+    updateSelectInput(session, "measure_values|TB", choices = choices_tb)
+    updateSelectInput(session, "measure_values|ALP", choices = choices_alp)
   })
 
-  observe({
-    req(input$measure_col)
-    if (!is.null(settings$measure_col)){
-      if (input$measure_col==settings$measure_col){
-        choices <- unique(c(settings$measure_values$AST, as.character(data()[,settings$measure_col])))
-      } else {
-        choices <- unique(data()[,input$measure_col])
-      }
-    } else {
-      choices <- unique(data()[,input$measure_col])
-    }
-    updateSelectInput(session, "measure_values|AST", choices = choices)
-  })
 
-  observe({
-    req(input$measure_col)
-    if (!is.null(settings$measure_col)){
-      if (input$measure_col==settings$measure_col){
-        choices <- unique(c(settings$measure_values$TB, as.character(data()[,settings$measure_col])))
-      } else {
-        choices <- unique(data()[,input$measure_col])
-      }
-    } else {
-      choices <- unique(data()[,input$measure_col])
-    }
-    updateSelectInput(session, "measure_values|TB", choices = choices)
-  })
-
-  observe({
-    req(input$measure_col)
-    if (!is.null(settings$measure_col)){
-      if (input$measure_col==settings$measure_col){
-        choices <- unique(c(settings$measure_values$ALP, as.character(data()[,settings$measure_col])))
-      } else {
-        choices <- unique(data()[,input$measure_col])
-      }
-    } else {
-      choices <- unique(data()[,input$measure_col])
-    }
-    updateSelectInput(session, "measure_values|ALP", choices = choices)
-  })
 
   observe({
     req(input$visitn_col)
