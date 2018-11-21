@@ -91,13 +91,41 @@ renderSettings <- function(input, output, session, data, settings, status){
   #List of inputs with custom observers
   custom_observer_settings <- c("measure_col") #more to be added later
   
-  
-  
-  
-  
   observe({
-
-
+    for (name in input_names()){
+      setting_key <- as.list(strsplit(name,"\\|"))
+      setting_value <- getSettingValue(key=setting_key,settings=settings)
+      setting_label <- setting_key #TODO: get the label!
+      
+      # 1. Update the options for data-mapping inputs
+      if(str_detect(name,"_col")){
+        sortedChoices<-NULL
+        if(!is.null(setting_value)){
+          sortedChoices<-unique(c(setting_value, colnames()))
+        }else{
+          sortedChoices<-colnames()
+        } 
+        updateSelectInput(session, name, choices=sortedChoices)         
+      }
+      
+      # 2. Flag the input if it is required
+      if(name %in% req_settings){
+        flagSetting(session=session, name=name, originalLabel=setting_label)
+      }
+      
+      # 3. Print a warning if the input failed a validation check
+      if(name %in% status_df()$text_key){
+        current_status<- status_df()[status_df()$text_key==name, "message"]
+        if(current_status ==""){current_status = "OK"}
+        updateSettingStatus(session=session, name=name, originalLabel=setting_label, status=current_status) # TODO: Create this function
+      }
+      
+      # 4. Check for custom observers and initialize if needed
+      if(name %in% custom_observer_settings){
+        #runCustomObserver(name=name) #TODO: clean this up!
+      }
+    }
+  })
   ### return all inputs from module to be used in global env.
   return(input)
 }
