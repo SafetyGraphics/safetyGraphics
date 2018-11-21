@@ -39,7 +39,7 @@ renderSettingsUI <- function(id){
                  wellPanel(
                    h3("Measure Settings"),
                    selectInput(ns("filters"),"Filters", choices = NULL, selected = NULL,multiple = TRUE),
-                   selectInput(ns("group_cols"),"Group columns", choices = NULL, multiple = TRUE),
+                   selectInput(ns("group_cols"),"Groups", choices = NULL, multiple = TRUE),
                    selectInput(ns("x_options"),"x_options", choices = c("ALT", "AST", "ALP"), selected = c("ALT", "AST", "ALP"), multiple = TRUE),
                    selectInput(ns("y_options"),"y_options", choices = c("ALT", "AST", "ALP"), selected = c("TB","ALP"), multiple = TRUE)
                  )
@@ -81,8 +81,8 @@ renderSettings <- function(input, output, session, data, settings, status){
       map(., ~ keep(., names(.) %in% c("text_key","valid","message")) %>% 
             data.frame(., stringsAsFactors = FALSE)) %>% 
       bind_rows %>% 
-      mutate(top_key = sub("\\|.*", "", text_key)) %>% 
-      filter(valid==FALSE)
+      mutate(top_key = sub("\\|.*", "", text_key)) #  %>% 
+    #  filter(valid==FALSE)
   })
   
   req_settings <- getRequiredSettings("eDish") %>% unlist
