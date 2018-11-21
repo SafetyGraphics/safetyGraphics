@@ -64,17 +64,83 @@ renderSettingsUI <- function(id){
   
 }
 
-
 renderSettings <- function(input, output, session, data, settings, status){
+  ####################
+  #Helper functions 
+  ###################
+  #TODO: Save to separate file
   
+  flagSetting<-function(session, name, originalLabel){
+    updateSelectInput(session, name, label=paste0("!",originalLabel))         
+  }
+  
+  updateSettingStatus<-function(session, name, originalLabel, status){
+    updateSelectInput(session, name, label=paste0(originalLabel,"-",status))         
+  }
+  
+  runCustomObserver<-function(name){
+    # Custom observer for measure_col
+    if(name=="measure_col"){
+      observe({
+        req(input$measure_col)
+        if (!is.null(settings$measure_col)){
+          if (input$measure_col==settings$measure_col){
+            choices_ast <- unique(c(settings$measure_values$AST, as.character(data()[,settings$measure_col])))
+            choices_alt <- unique(c(settings$measure_values$ALT, as.character(data()[,settings$measure_col])))
+            choices_tb  <- unique(c(settings$measure_values$TB,  as.character(data()[,settings$measure_col])))
+            choices_alp <- unique(c(settings$measure_values$ALP, as.character(data()[,settings$measure_col])))
+          } else {
+            choices_ast <- unique(data()[,input$measure_col])
+            choices_alt <- unique(data()[,input$measure_col])
+            choices_tb  <- unique(data()[,input$measure_col])
+            choices_alp <- unique(data()[,input$measure_col])
+          }
+        } else {
+          choices_ast <- unique(data()[,input$measure_col])
+          choices_alt <- unique(data()[,input$measure_col])
+          choices_tb  <- unique(data()[,input$measure_col])
+          choices_alp <- unique(data()[,input$measure_col])
+        }
+        updateSelectInput(session, "measure_values|ALT", choices = choices_ast)
+        updateSelectInput(session, "measure_values|AST", choices = choices_alt)
+        updateSelectInput(session, "measure_values|TB",  choices = choices_tb)
+        updateSelectInput(session, "measure_values|ALP", choices = choices_alp)
+      })  
+    }
+  
+    #custom observer for visitn_col
+    #ignore for v0.4 since baseline_visitn was deprecated in latest js release
+    
+    #observe({
+    #  req(input$visitn_col)
+    #  if (!is.null(settings$visitn_col)){
+    #    if (input$visitn_col==settings$visitn_col){
+    #      choices <- unique(c(settings$baseline_visitn, data()[,settings$visitn_col]))
+    #    } else {
+    #      choices <- unique(data()[,input$visitn_col])
+    #    }
+    #  } else {
+    #    choices <- unique(data()[,input$visitn_col])
+    #  }
+    # updateSelectInput(session, "baseline_visitn", choices = choices)
+    #})
+  } #end runCustomObserver()
+  
+  ###########################
+  # Make updates to the UI
+  ###########################
   ns <- session$ns
-  
-
   req(data())
   req(settings)
   
+  #Columns in the data
   colnames <- reactive({names(data())})
   
+  #List of all inputs
+  #input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))}) #TODO: needs update
+  input_names <- reactive({c("id_col","measure_col")})
+  
+  #Setting Status information (from failed checks only)
   status_df <- reactive({
     req(status())
     status()$checkList %>% 
@@ -94,41 +160,42 @@ renderSettings <- function(input, output, session, data, settings, status){
   #Establish observers to update settings UI for all inputs
   #Triggered on update of input_names (e.g. new chart type added, ), 
   observe({
-    for (name in input_names()){
-      setting_key <- as.list(strsplit(name,"\\|"))
-      setting_value <- getSettingValue(key=setting_key,settings=settings)
-      setting_label <- setting_key #TODO: get the label!
-      
-      # 1. Update the options for data-mapping inputs
-      if(str_detect(name,"_col")){
-        sortedChoices<-NULL
-        if(!is.null(setting_value)){
-          sortedChoices<-unique(c(setting_value, colnames()))
-        }else{
-          sortedChoices<-colnames()
-        } 
-        updateSelectInput(session, name, choices=sortedChoices)         
-      }
-      
-      # 2. Flag the input if it is required
-      if(name %in% req_settings){
-        flagSetting(session=session, name=name, originalLabel=setting_label)
-      }
-      
-      # 3. Print a warning if the input failed a validation check
-      if(name %in% status_df()$text_key){
-        current_status<- status_df()[status_df()$text_key==name, "message"]
-        if(current_status ==""){current_status = "OK"}
-        updateSettingStatus(session=session, name=name, originalLabel=setting_label, status=current_status) # TODO: Create this function
-      }
-      
-      # 4. Check for custom observers and initialize if needed
-      if(name %in% custom_observer_settings){
-        #runCustomObserver(name=name) #TODO: clean this up!
-      }
-    }
-  })
-  
+     for (name in input_names()){
+       setting_key <- as.list(strsplit(name,"\\|"))
+       setting_value <- getSettingValue(key=setting_key,settings=settings)
+       setting_label <- setting_key #TODO: get the label!
+       
+       # 1. Update the options for data-mapping inputs
+       if(str_detect(name,"_col")){
+         sortedChoices<-NULL
+         if(!is.null(setting_value)){
+           sortedChoices<-unique(c(setting_value, colnames()))
+         }else{
+           sortedChoices<-colnames()
+         } 
+         updateSelectInput(session, name, choices=sortedChoices)         
+       }
+       
+       # 2. Flag the input if it is required
+       if(name %in% req_settings){
+         flagSetting(session=session, name=name, originalLabel=setting_label)
+       }
+       
+       # 3. Print a warning if the input failed a validation check
+       if(name %in% status_df()$text_key){
+         current_status<- status_df()[status_df()$text_key==name, "message"]
+         if(current_status ==""){current_status = "OK"}
+         updateSettingStatus(session=session, name=name, originalLabel=setting_label, status=current_status) # TODO: Create this function
+       }
+       
+       # 4. Check for custom observers and initialize if needed
+       if(name %in% custom_observer_settings){
+         #runCustomObserver(name=name) #TODO: clean this up!
+       }
+     }
+   })
+
+
   ### return all inputs from module to be used in global env.
   return(input)
 }
