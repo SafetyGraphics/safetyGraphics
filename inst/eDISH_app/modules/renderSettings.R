@@ -90,7 +90,9 @@ renderSettings <- function(input, output, session, data, settings, status){
   
   #List of inputs with custom observers
   custom_observer_settings <- c("measure_col") #more to be added later
-  
+ 
+  #Establish observers to update settings UI for all inputs
+  #Triggered on update of input_names (e.g. new chart type added, ),  
   observe({
     for (name in input_names()){
       setting_key <- as.list(strsplit(name,"\\|"))
@@ -126,6 +128,7 @@ renderSettings <- function(input, output, session, data, settings, status){
       }
     }
   })
+  
   ### return all inputs from module to be used in global env.
   return(input)
 }
