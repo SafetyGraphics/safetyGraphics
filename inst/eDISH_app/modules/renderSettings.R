@@ -38,7 +38,7 @@ renderSettingsUI <- function(id){
           column(6, 
                  wellPanel(
                    h3("Measure Settings"),
-                   selectInput(ns("filters"),"Filters", choices = NULL, selected = NULL,multiple = TRUE),
+                   selectInput(ns("filters"),"Filters", choices = NULL, selected = NULL, multiple = TRUE),
                    selectInput(ns("group_cols"),"Groups", choices = NULL, multiple = TRUE),
                    selectInput(ns("x_options"),"x_options", choices = c("ALT", "AST", "ALP"), selected = c("ALT", "AST", "ALP"), multiple = TRUE),
                    selectInput(ns("y_options"),"y_options", choices = c("ALT", "AST", "ALP"), selected = c("TB","ALP"), multiple = TRUE)
@@ -91,184 +91,11 @@ renderSettings <- function(input, output, session, data, settings, status){
   #List of inputs with custom observers
   custom_observer_settings <- c("measure_col") #more to be added later
   
-  ## the following will be useful (code to grab all inputs) if we do updates programmatically  
-  # but i'm guessing if we take that approach we will want to generate the UI programatically from the start
- # input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))})
-  # input_names <- reactive({"id_col"})
-  # 
-  # observe({
-  #   for (name in input_names()){
-  #     setting_key <- as.list(strsplit(name,"|"))
-  #     setting_value <- getSettingValue(key=key,settings=settings)
-  #     
-  #     if(str_detect(name,"_col")){
-  #       
-  #       if(!is.null(setting_value)){
-  #         sortedChoices <- unique(c(setting_value, colnames()))
-  #       } else {
-  #         sortedChoices <- colnames()
-  #       }
-  # 
-  #       label <- name # want to store the actual label somewhere 
-  #       
-  #       if(name %in% req_settings){
-  #         label <- paste(label, "*")
-  #         updateSelectInput(session, name, label, choices=sortedChoices)         
-  #       }
-  #       
-  #       if (nrow(status_df())>0){
-  #         if(name %in% status_df()$text_key){
-  #           label <- paste(label, status_df()[status_df()$text_key==name, "message"])
-  #           updateSelectInput(session, name, label, choices=sortedChoices)         
-  #           
-  #         }
-  #       }
-  # 
-  #       # updateSelectInput(session, name, label, choices=sortedChoices)         
-  #     }
-  #   }
-  # })
-
+  
+  
+  
   
   observe({
-    if (! is.null(settings$id_col)){
-      updateSelectInput(session, "id_col", choices = unique(c(settings$id_col,colnames())))
-    } else {
-      updateSelectInput(session, "id_col", choices = colnames())
-    }
-
-    if (! is.null(settings$value_col)){
-      updateSelectInput(session, "value_col", choices = unique(c(settings$value_col,colnames())))
-    } else {
-      updateSelectInput(session, "value_col", choices = colnames())
-    } 
-
-    if (! is.null(settings$measure_col)){
-      updateSelectInput(session, "measure_col", choices = unique(c(settings$measure_col,colnames())))
-    } else {
-      updateSelectInput(session, "measure_col", choices = colnames())
-    } 
-
-    if (! is.null(settings$normal_col_low)){
-      updateSelectInput(session, "normal_col_low", choices = unique(c(settings$normal_col_low,colnames())))
-    } else {
-      updateSelectInput(session, "normal_col_low", choices = colnames())
-    } 
-
-    if (! is.null(settings$normal_col_high)){
-      updateSelectInput(session, "normal_col_high", choices = unique(c(settings$normal_col_high,colnames())))
-    } else {
-      updateSelectInput(session, "normal_col_high", choices = colnames())
-    } 
-
-    if (! is.null(settings$visit_col)){
-      updateSelectInput(session, "visit_col", choices = unique(c(settings$visit_col,colnames())))
-    } else {
-      updateSelectInput(session, "visit_col", choices = colnames())
-    } 
-
-    if (! is.null(settings$visitn_col)){
-      updateSelectInput(session, "visitn_col", choices = unique(c(settings$visitn_col,colnames())))
-    } else {
-      updateSelectInput(session, "visitn_col", choices = colnames())
-    } 
-
-    if (! is.null(settings$studyday_col)){
-      updateSelectInput(session, "studyday_col", choices = unique(c(settings$studyday_col,colnames())))
-    } else {
-      updateSelectInput(session, "studyday_col", choices = colnames())
-    } 
-    
-    if (! is.null(settings$anlyFlag)){
-      updateSelectInput(session, "anlyFlag", choices = unique(c(settings$anlyFlag,colnames())))
-    } else {
-      updateSelectInput(session, "anlyFlag", choices = colnames())
-    } 
-    
-  #  if (! is.null(settings$filters$value_col)){
-  #    updateSelectInput(session, "filters", choices = unique(c(settings$filters$value_col,colnames())))
-   # } else {
-      updateSelectInput(session, "filters", choices = colnames(), selected=NULL)
-  #  }
-
-  #  if (! is.null(settings$group_cols)){
-   #   updateSelectInput(session, "group_cols", choices = unique(c(settings$group_cols,colnames())))
-  #  } else {
-      updateSelectInput(session, "group_cols", choices = colnames())
-  #  }
-  })
-
-  
-  observe({
-    for (name in input_names()){
-      setting_key <- as.list(strsplit(name,"\\|"))
-      setting_value <- getSettingValue(key=setting_key,settings=settings)
-      setting_label <- setting_key #TODO: get the label!
-      
-      # 1. Update the options for data-mapping inputs
-      if(str_detect(name,"_col")){
-        sortedChoices<-NULL
-        if(!is.null(setting_value)){
-          sortedChoices<-unique(c(setting_value, colnames()))
-        }else{
-          sortedChoices<-colnames()
-        } 
-        updateSelectInput(session, name, choices=sortedChoices)         
-      }
-      
-      # 2. Flag the input if it is required
-      if(name %in% req_settings){
-        flagSetting(session=session, name=name, originalLabel=setting_label)
-      }
-      
-      # 3. Print a warning if the input failed a validation check
-      if(name %in% status_df()$text_key){
-        current_status<- status_df()[status_df()$text_key==name, "message"]
-        if(current_status ==""){current_status = "OK"}
-        updateSettingStatus(session=session, name=name, originalLabel=setting_label, status=current_status) # TODO: Create this function
-      }
-      
-      # 4. Check for custom observers and initialize if needed
-      if(name %in% custom_observer_settings){
-        #runCustomObserver(name=name) #TODO: clean this up!
-      }
-    }
-  })
-  
-    req(input$measure_col)
-    if (!is.null(settings$measure_col) & input$measure_col==settings$measure_col){
-          choices_alt <- unique(c(settings$measure_values$ALT, as.character(data()[,settings$measure_col])))
-          choices_ast <- unique(c(settings$measure_values$AST, as.character(data()[,settings$measure_col])))
-          choices_tb <- unique(c(settings$measure_values$TB, as.character(data()[,settings$measure_col])))
-          choices_alp <- unique(c(settings$measure_values$ALP, as.character(data()[,settings$measure_col])))
-      } else {
-        choices_alt <- unique(data()[,input$measure_col])
-        choices_ast <- unique(data()[,input$measure_col])
-        choices_tb <- unique(data()[,input$measure_col])
-        choices_alp <- unique(data()[,input$measure_col])
-      }
-
-    updateSelectInput(session, "measure_values|ALT", choices = choices_alt)
-    updateSelectInput(session, "measure_values|AST", choices = choices_ast)
-    updateSelectInput(session, "measure_values|TB", choices = choices_tb)
-    updateSelectInput(session, "measure_values|ALP", choices = choices_alp)
-  })
-
-
-
-  observe({
-    req(input$visitn_col)
-    if (!is.null(settings$visitn_col)){
-      if (input$visitn_col==settings$visitn_col){
-        choices <- unique(c(settings$baseline_visitn, data()[,settings$visitn_col]))
-      } else {
-        choices <- unique(data()[,input$visitn_col])
-      }
-    } else {
-      choices <- unique(data()[,input$visitn_col])
-    }
-    updateSelectInput(session, "baseline_visitn", choices = choices)
-  })
 
 
   ### return all inputs from module to be used in global env.
