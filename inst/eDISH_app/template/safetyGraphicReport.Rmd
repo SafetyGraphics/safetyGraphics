@@ -1,0 +1,62 @@
+
+---
+output: 
+  flexdashboard::flex_dashboard:
+    theme: lumen
+params:
+  data: NA
+  id_col: NA
+  value_col: NA
+  measure_col: NA
+  normal_col_low: NA
+  normal_col_high: NA
+  visit_col : NA
+  visitn_col: NA
+  studyday_col: NA
+  baseline_visitn: NA
+  filters: NA
+  group_cols: NA
+  analysisFlag: NA
+  measure_values: NA
+  x_options: NA
+  y_options: NA
+  visit_window: NA
+
+---
+---
+title: "Customized Interactive Safety Graphic"
+---
+
+```{r}
+library(safetyGraphics)
+```
+
+Column {.sidebar data-width=250}
+-------------------------------------
+
+Information here.
+ 
+Row 
+-------------------------------------
+```{r, fig.width=5, fig.height=6}
+eDISH(data = params$data,
+      id_col = params$id_col,
+      value_col = params$value_col,
+      measure_col = params$measure_col,
+      normal_col_low = params$normal_col_low,
+      normal_col_high = params$normal_col_high,
+      visit_col = params$visit_col,
+      visitn_col = params$visitn_col,
+      studyday_col = params$studyday_col,
+      baseline_visitn = params$baseline_visitn,
+      filters = params$filters,
+      group_cols = params$group_cols,
+      analysisFlag= params$analysisFlag,
+      measure_values = params$measure_values,
+      x_options = params$x_options,
+      y_options =  params$y_options, 
+      visit_window = params$visit_window)
+
+```
+
+ 

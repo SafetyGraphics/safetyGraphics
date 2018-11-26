@@ -34,7 +34,14 @@ navbarPage("eDISH Shiny app", id = "inTabset",
                     )
            ),
            tabPanel(title = "Charts", value = "charts",
+                    checkboxInput('report','Create Report'),
+                    conditionalPanel(
+                      condition="input.report==true",
+                      downloadButton("reportDL", "Generate report")
+                    ),
                     eDISHOutput("chart")
+
+                    
                     )
            )
 

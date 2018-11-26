@@ -219,6 +219,49 @@ function(input, output, session){
   })
 
   
+  # passing parameters for knitting on export button click
+  observeEvent(input$report==TRUE,
+               { 
+                 output$reportDL <- downloadHandler(
+                   filename = "safety_report.html",
+                   content = function(file) {
+                     # Copy the report file to a temporary directory before processing it, in case we don't
+                     # have write permissions to the current working dir (which can happen when deployed).
+                     tempReport <- file.path(tempdir(), "report.Rmd")
+                     file.copy("template/safetyGraphicReport.Rmd", tempReport, overwrite = TRUE)
+                     
+                     params <- list(data = data_selected(),
+                     id_col = inputs()$id_col,
+                     value_col = inputs()$value_col,
+                     measure_col = inputs()$measure_col,
+                     normal_col_low = inputs()$normal_col_low,
+                     normal_col_high = inputs()$normal_col_high,
+                     visit_col = inputs()$visit_col,
+                     visitn_col = inputs()$visitn_col,
+                     studyday_col = inputs()$studyday_col,
+                     baseline_visitn = inputs()$baseline_visitn,
+                     filters = inputs()$filters,
+                     group_cols = inputs()$group_cols,
+                     analysisFlag= inputs()$analysisFlag,
+                     measure_values =  list(ALT = inputs()$`measure_values|ALT`,
+                                            AST = inputs()$`measure_values|AST`,
+                                            TB = inputs()$`measure_values|TB`,
+                                            ALP = inputs()$`measure_values|ALP`),
+                     x_options = inputs()$x_options,
+                     y_options =  inputs()$y_options, 
+                     visit_window = inputs()$visit_window)
+                     
+                     
+                     rmarkdown::render(tempReport,
+                                       output_file = file,
+                                       params = params,  ## pass in params
+                                       envir = new.env(parent = globalenv())  ## eval in child of global env
+                     )
+                   }
+                 )
+               })
+  
+  
   session$onSessionEnded(stopApp)
   
 }
