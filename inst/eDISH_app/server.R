@@ -249,8 +249,13 @@ function(input, output, session){
                                             ALP = inputs()$`measure_values|ALP`),
                      x_options = inputs()$x_options,
                      y_options =  inputs()$y_options, 
-                     visit_window = inputs()$visit_window)
-                     
+                     visit_window = inputs()$visit_window,
+                     r_ratio_filter = inputs()$r_ratio_filter,
+                     r_ratio_cut = inputs()$r_ratio_cut,
+                     showTitle = inputs()$showTitle,
+                     debug_js = inputs()$debug_js,
+                     warningText = inputs()$warningText,
+                     settings = inputs()$settings) 
                      
                      rmarkdown::render(tempReport,
                                        output_file = file,
