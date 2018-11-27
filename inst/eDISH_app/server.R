@@ -230,32 +230,9 @@ function(input, output, session){
                      tempReport <- file.path(tempdir(), "report.Rmd")
                      file.copy("template/safetyGraphicReport.Rmd", tempReport, overwrite = TRUE)
                      
-                     params <- list(data = data_selected(),
-                     id_col = inputs()$id_col,
-                     value_col = inputs()$value_col,
-                     measure_col = inputs()$measure_col,
-                     normal_col_low = inputs()$normal_col_low,
-                     normal_col_high = inputs()$normal_col_high,
-                     visit_col = inputs()$visit_col,
-                     visitn_col = inputs()$visitn_col,
-                     studyday_col = inputs()$studyday_col,
-                     baseline_visitn = inputs()$baseline_visitn,
-                     filters = inputs()$filters,
-                     group_cols = inputs()$group_cols,
-                     analysisFlag= inputs()$analysisFlag,
-                     measure_values =  list(ALT = inputs()$`measure_values|ALT`,
-                                            AST = inputs()$`measure_values|AST`,
-                                            TB = inputs()$`measure_values|TB`,
-                                            ALP = inputs()$`measure_values|ALP`),
-                     x_options = inputs()$x_options,
-                     y_options =  inputs()$y_options, 
-                     visit_window = inputs()$visit_window,
-                     r_ratio_filter = inputs()$r_ratio_filter,
-                     r_ratio_cut = inputs()$r_ratio_cut,
-                     showTitle = inputs()$showTitle,
-                     debug_js = inputs()$debug_js,
-                     warningText = inputs()$warningText,
-                     settings = inputs()$settings) 
+                     params <- list(data = data_selected(), settings = settingsUI_list$settings) 
+                    
+                     # eDISH(data = data_selected(), settings = settingsUI_list$settings)
                      
                      rmarkdown::render(tempReport,
                                        output_file = file,

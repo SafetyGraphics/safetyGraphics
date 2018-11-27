@@ -1,78 +1,41 @@
 
 ---
-output: 
-  flexdashboard::flex_dashboard:
-    theme: lumen
+output:
+  html_document:
+    code_folding: hide
+
 params:
   data: NA
-  id_col: NA
-  value_col: NA
-  measure_col: NA
-  normal_col_low: NA
-  normal_col_high: NA
-  visit_col : NA
-  visitn_col: NA
-  studyday_col: NA
-  baseline_visitn: NA
-  filters: NA
-  group_cols: NA
-  analysisFlag: NA
-  measure_values: NA
-  x_options: NA
-  y_options: NA
-  visit_window: NA
-  r_ratio_filter: NA
-  r_ratio_cut: NA
-  showTitle: NA
-  debug_js: NA
-  warningText: NA
   settings: NA
   
-
----
----
-title: "Customized Interactive Safety Graphic"
 ---
 
-```{r}
+
+## Customized Interactive Safety Graphic {.tabset .tabset-fade} 
+
+```{r, echo = FALSE}
 library(safetyGraphics)
+library(knitr)
 ```
 
-Column {.sidebar data-width=250}
--------------------------------------
+### Chart
+
+```{r, fig.width=12, fig.height=15, echo = FALSE}
+
+
+eDISH(data = params$data,
+      settings = params$settings)
+
+```
+
+### Info
 
 The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics).
 
 safetyGraphics is an open source project built using standard web technology and will run in any modern web browser. The displays created are all dynamically linked to raw safety data which allows the tool to work with data from any safety system. The tool was originally created using Javascript/D3, but has been extended to an R tool as well using HTML Widgets.
  
- 
-Row 
--------------------------------------
-```{r, fig.width=12, fig.height=15}
+```{r,  results = 'hide'}
 eDISH(data = params$data,
-      id_col = params$id_col,
-      value_col = params$value_col,
-      measure_col = params$measure_col,
-      normal_col_low = params$normal_col_low,
-      normal_col_high = params$normal_col_high,
-      visit_col = params$visit_col,
-      visitn_col = params$visitn_col,
-      studyday_col = params$studyday_col,
-      baseline_visitn = params$baseline_visitn,
-      filters = params$filters,
-      group_cols = params$group_cols,
-      analysisFlag= params$analysisFlag,
-      measure_values = params$measure_values,
-      x_options = params$x_options,
-      y_options =  params$y_options, 
-      visit_window = params$visit_window,
-      r_ratio_filter = params$r_ratio_filter,
-      r_ratio_cut = params$r_ratio_cut,
-      showTitle = params$showTitle,
-      debug_js = params$debug_js,
-      warningText = params$warningText,
       settings = params$settings)
 
 ```
-
- 
