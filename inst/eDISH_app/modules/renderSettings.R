@@ -101,27 +101,18 @@ renderSettings <- function(input, output, session, data, settings, status){
   ###################
   #TODO: Save to separate file
   
-  flagSetting<-function(session, name){
+  flagSetting<-function(session, name, originalLabel){
     shinyjs::html(id = paste0("label_", name), 
-                  html = "<strong>*</strong>", 
-                  add=TRUE)      
+                  html = paste0(originalLabel, "<strong>*</strong>"), 
+                  add = FALSE)      
   }
   
-  updateSettingStatus<-function(session, name, status){
+  updateSettingStatus<-function(session, name, originalLabel, status){
     shinyjs::html(id = paste0("label_", name), 
-                  html = paste0("   <em style='color:red; font-size:12px;'>", status,"</em>"), 
-                  add=TRUE)     
+                    html = paste0(originalLabel, "   <em style='color:red; font-size:12px;'>", status,"</em>")) 
+    
   }
-  
-  # flagSetting<-function(session, name, originalLabel){
-  #   newLabel <- paste0(originalLabel,"sdsd")
-  #   updateSelectInput(session, name, label = newLabel)         
-  # }
-  # 
-  # updateSettingStatus<-function(session, name, originalLabel, status){
-  #   newLabel <- paste0(originalLabel," ",status)
-  #   updateSelectInput(session, name, label =htmltools::doRenderTags(newLabel)   )     
-  # }
+
   
   runCustomObserver<-function(name){
     # Custom observer for measure_col
@@ -181,31 +172,139 @@ renderSettings <- function(input, output, session, data, settings, status){
   
   #List of all inputs
   input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))}) #TODO: needs update
- # input_names <- reactive({c("id_col","measure_col")})
+
+  ### initialize reactive values for the UI inputs  
+  settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
+  
+  
+  # Fill settings object based on selections
+  # require that secondary inputs have been filled in before proceeding
+  # update is triggered by any of the input selections changing
+  observe({
+    req(input$`measure_values|ALP`)
+    req(input$`measure_values|AST`)
+    req(input$`measure_values|TB`)
+    req(input$`measure_values|ALT`)
+    input$id_col
+    input$value_col
+    input$measure_col
+    input$normal_col_low
+    input$normal_col_high
+    input$studyday_col
+    input$visit_col
+    input$visitn_col
+    input$x_options
+    input$y_options
+    input$visit_window
+    input$r_ratio_filter
+    input$r_ratio_cut
+    input$showTitle
+    input$warningText
+    isolate({
+      settingsUI_list$settings$id_col <- input$id_col
+      settingsUI_list$settings$value_col <- input$value_col
+      settingsUI_list$settings$measure_col <- input$measure_col
+      settingsUI_list$settings$normal_col_low <- input$normal_col_low
+      settingsUI_list$settings$normal_col_high <- input$normal_col_high
+      settingsUI_list$settings$studyday_col <- input$studyday_col
+      settingsUI_list$settings$visit_col <- input$visit_col
+      settingsUI_list$settings$visitn_col <- input$visitn_col
+      settingsUI_list$settings$baseline_visitn <- input$baseline_visitn
+      settingsUI_list$settings$measure_values$ALT <- input$`measure_values|ALT`
+      settingsUI_list$settings$measure_values$AST <- input$`measure_values|AST`
+      settingsUI_list$settings$measure_values$TB <- input$`measure_values|TB`
+      settingsUI_list$settings$measure_values$ALP <- input$`measure_values|ALP`
+      settingsUI_list$settings$x_options <- input$x_options
+      settingsUI_list$settings$y_options <- input$y_options
+      settingsUI_list$settings$visit_window <- input$visit_window
+      settingsUI_list$settings$r_ratio_filter <- input$r_ratio_filter
+      settingsUI_list$settings$r_ratio_cut <- input$r_ratio_cut
+      settingsUI_list$settings$showTitle <- input$showTitle
+      settingsUI_list$settings$warningText <- input$warningText
+    })
+  })
+
+
+  observe({
+    req(input$filters)
+    isolate({
+      settingsUI_list$settings$filters <- list()
+
+      for (i in 1:length(inputs()$filters)){
+        settingsUI_list$settings$filters[[i]] <- list(value_col = input$filters[[i]],
+                                                      label = input$filters[[i]])
+      }
+    })
+  })
+
+  observe({
+    req(input$group_cols)
+    isolate({
+      settingsUI_list$settings$group_cols <- list()
+
+      for (i in 1:length(inputs()$group_cols)){
+        settingsUI_list$settings$group_cols[[i]] <- list(value_col = input$group_cols[[i]],
+                                                         label = input$group_cols[[i]])
+      }
+    })
+  })
+
+  # validate new settings
+  #  the validation is run every time there is a change in settings.  for the case of dependent
+  #  inputs, such as measure values, the settings will update (1) when measure_col changes and 
+  #  (2) when the downstream inputs (e.g. ALT, TB, etc) change a second later. 
+  #
+  #  This will cause the req settings/status messages to be printed twice for each user change.
+  #  we may want to put a slight delay on the validation running.
+  #
+  #  Note also that when the settings are initially populated with the loop, this will update after every single
+  #   updateSelectInput.  Need to change!
+  #   temporary (?) fix...require the very last updated input to be available
+  status_new <- reactive({ #eventReactive(settingsUI_list$settings,{
+    req(data())
+     name <- rev(isolate(input_names()))[1]
+     req(settingsUI_list$settings[[name]])
+    validateSettings(data(), settingsUI_list$settings, chart="eDish")
+  })
+
   
   #Setting Status information (from failed checks only)
-  status_df <- reactive({
-    req(status())
-    status()$checkList %>% 
-      map(., ~ keep(., names(.) %in% c("text_key","valid","message")) %>% 
-            data.frame(., stringsAsFactors = FALSE)) %>% 
-      bind_rows %>% 
-      mutate(top_key = sub("\\|.*", "", text_key))  %>% 
-      group_by(text_key) %>% 
+   status_df <- reactive({
+    req(status_new())
+     status_new()$checkList %>%
+      map(., ~ keep(., names(.) %in% c("text_key","valid","message")) %>%
+            data.frame(., stringsAsFactors = FALSE)) %>%
+      bind_rows %>%
+      mutate(top_key = sub("\\|.*", "", text_key))  %>%
+      group_by(text_key) %>%
       slice(1)  # get first set of checks
     #  filter(valid==FALSE)
   })
-
+  
   
   #List of required settings
   req_settings <- getRequiredSettings("eDish") %>% unlist  #Indicate required settings
 
     #List of inputs with custom observers
   custom_observer_settings <- c("measure_col") #more to be added later
-  
+
+
+    
   #Establish observers to update settings UI for all inputs
-  #Triggered on update of input_names (e.g. new chart type added, ), 
+  #  Different observers:
+  #     (1a) update UI based on data selection & original settings object
+  #            - dependent on: colnames()
+  #            - populate all UI inputs
+  #            - flag required settings
+  #     (1b) Do 1a for the custom settings (e.g. measure_values options).  These contained nested observers
+  #            - dependent on: parent input$xxx
+  #     (2) append status messages to UI
+  #            - after UI is filled, we generate a NEW settings object & status
+  #            - dependent on: the new settings/status, which will update after every user selection
+  
   observe({
+    req(colnames())
+
      for (name in isolate(input_names())){
        setting_key <- as.list(strsplit(name,"\\|"))
        setting_value <- getSettingValue(key=setting_key, settings=settings)
@@ -218,32 +317,49 @@ renderSettings <- function(input, output, session, data, settings, status){
            sortedChoices<-unique(c(setting_value, colnames()))
          }else{
            sortedChoices<-colnames()
-         } 
-         updateSelectInput(session, name, choices=sortedChoices)         
+         }
+         updateSelectInput(session, name, choices=sortedChoices)
        }
        
-       # 2. Flag the input if it is required
-       if(name %in% req_settings){
-         flagSetting(session=session, name=name) #, originalLabel=setting_label)
-        # setting_label <- paste0(setting_label,"*")
-       }
-       
-       # 3. Print a warning if the input failed a validation check
-       if(name %in% status_df()$text_key){
-         current_status <- status_df()[status_df()$text_key==name, "message"]
-         current_status <- ifelse(current_status=="","OK",current_status)
-         updateSettingStatus(session=session, name=name, #originalLabel=setting_label, 
-                             status=current_status) # TODO: Create this function
-       }
-       
-       # 4. Check for custom observers and initialize if needed
+       # 2. Check for custom observers and initialize if needed
        if(name %in% custom_observer_settings){
          runCustomObserver(name=name) #TODO: clean this up!
        }
      }
+     })
+  
+  observe({
+    for (name in isolate(input_names())){
+
+      setting_label <- name
+
+      # 3. Flag the input if it is required
+      if(name %in% req_settings){
+        flagSetting(session=session, name=name, originalLabel=setting_label)
+        setting_label <- paste0(setting_label,"*")
+
+        }
+
+        # 4. Print a warning if the input failed a validation check
+        if(name %in% status_df()$text_key){
+          current_status <- status_df()[status_df()$text_key==name, "message"]
+          current_status <- ifelse(current_status=="","OK",current_status)
+          updateSettingStatus(session=session, name=name,
+                              originalLabel=setting_label,
+                              status=current_status) # TODO: Create this function
+        }
+
+    }
    })
 
-
-  ### return all inputs from module to be used in global env.
+  # seems fine! an indication that the contents of the module are not executing infinitely
+  #observe({print(settingsUI_list$settings)})
+ 
+  ### return updated settings and status to global env.
+  #  THis causes an infinite execution of the module and I get a NULL value from server side 
+   # return(status_new())
+  
+  ### return all inputs from module to be used in global env. 
+  # this works
   return(input)
 }
