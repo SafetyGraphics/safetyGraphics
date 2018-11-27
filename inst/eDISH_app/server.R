@@ -219,8 +219,8 @@ function(input, output, session){
   })
 
   
-  # passing parameters for knitting on export button click
-  observeEvent(input$report==TRUE,
+  # passing parameters for knitting on export button click. Call when chart generated
+  observeEvent(status2()==TRUE,
                { 
                  output$reportDL <- downloadHandler(
                    filename = "safety_report.html",
