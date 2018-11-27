@@ -37,8 +37,9 @@ safetyGraphics is an open source project built using standard web technology and
 
 #### Settings
 ```{r, comment=NA, echo=FALSE}
-code <- bquote(eDISH(data = params$data,
+graphic_code <- bquote(eDISH(data = params$data,
       settings = .(params$settings)))
-code
+
+graphic_code
 
 ```

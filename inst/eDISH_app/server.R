@@ -231,8 +231,6 @@ function(input, output, session){
                      file.copy("template/safetyGraphicReport.Rmd", tempReport, overwrite = TRUE)
                      
                      params <- list(data = data_selected(), settings = settingsUI_list$settings) 
-                    
-                     # eDISH(data = data_selected(), settings = settingsUI_list$settings)
                      
                      rmarkdown::render(tempReport,
                                        output_file = file,
