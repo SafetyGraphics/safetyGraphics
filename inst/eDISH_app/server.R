@@ -220,26 +220,24 @@ function(input, output, session){
 
   
   # passing parameters for knitting on export button click. Call when chart generated
-  observeEvent(status2()==TRUE,
-               { 
-                 output$reportDL <- downloadHandler(
-                   filename = "safety_report.html",
-                   content = function(file) {
-                     # Copy the report file to a temporary directory before processing it, in case we don't
-                     # have write permissions to the current working dir (which can happen when deployed).
-                     tempReport <- file.path(tempdir(), "report.Rmd")
-                     file.copy("template/safetyGraphicReport.Rmd", tempReport, overwrite = TRUE)
-                     
-                     params <- list(data = data_selected(), settings = settingsUI_list$settings) 
-                     
-                     rmarkdown::render(tempReport,
-                                       output_file = file,
-                                       params = params,  ## pass in params
-                                       envir = new.env(parent = globalenv())  ## eval in child of global env
-                     )
-                   }
-                 )
-               })
+    output$reportDL <- downloadHandler(
+           filename = "safety_report.html",
+           content = function(file) {
+           # Copy the report file to a temporary directory before processing it, in case we don't
+           # have write permissions to the current working dir (which can happen when deployed).
+           tempReport <- file.path(tempdir(), "report.Rmd")
+           file.copy("template/safetyGraphicReport.Rmd", tempReport, overwrite = TRUE)
+             
+           params <- list(data = data_selected(), settings = settingsUI_list$settings) 
+                   
+           rmarkdown::render(tempReport,
+                             output_file = file,
+                             params = params,  ## pass in params
+                             envir = new.env(parent = globalenv())  ## eval in child of global env
+                            )
+                  }
+            )
+    
   
   
   session$onSessionEnded(stopApp)
