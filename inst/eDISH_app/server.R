@@ -97,34 +97,47 @@ function(input, output, session){
   })
 
   # upon a dataset being selected, use generateSettings() to produce a settings obj
-  settings_list <- reactiveValues(settings = NULL)
-
-  observeEvent(c(data_selected(), standard()), {
-    settings_list$settings <- generateSettings(standard = standard(), chart = "eDish")
+  # settings_list <- reactiveValues(settings = NULL)
+  # 
+  # observeEvent(c(data_selected(), standard()), {
+  #   settings_list$settings <- generateSettings(standard = standard(), chart = "eDish")
+  # })
+  
+  settings <- eventReactive(c(data_selected(), standard()), {
+    generateSettings(standard=standard(), chart="eDish")
   })
 
   # run validateSettings(data, standard, settings) and return a status
   status <- reactive({
     req(data_selected())
-    req(settings_list$settings)
+    req(settings())
+   # req(settings_list$settings)
     req(!standard()=="None")
-    validateSettings(data_selected(), settings_list$settings, chart="eDish") #$valid
+    validateSettings(data_selected(), #settings_list$settings,
+                     settings(),
+                     chart="eDish") #$valid
   })
 
   # based on selected data set & generated/selected settings obj, generate settings page.
   # note that module is being triggered when selected dataset changes OR when settings list changes
   #   this could cause the module to trigger twice unecessarily in some cases because the settings are generated
   #   AFTER the data is changed.  
- # settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
+  #settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
 
-  settings_new <- reactive({
+ # settings_new <- reactive({
  # observe({
-        callModule(renderSettings, "settingsUI", data=data_selected, settings=settings_list$settings, status=status) 
-  })
+    # settings_new <-eventReactive(c(data_selected(),
+    #                                settings_list$settings,
+    #                                status()), {
+    settings_new <-   callModule(renderSettings, "settingsUI", 
+                                 data=data_selected, 
+                                 settings=settings, 
+                                 status=status )
+ # })
 
  observe({
-   req(settings_new()$id_col)
-   print(settings_new()$id_col)
+  # print(settings_new$settings())
+   print(settings_new$status()$valid)
  })
  # Fill settings object based on selections
   # require that secondary inputs have been filled in before proceeding
@@ -205,22 +218,18 @@ function(input, output, session){
  #    settingsUI_list$settings$id_col
  #    validateSettings(data_selected(), settingsUI_list$settings, chart="eDish")$valid
  #   })
- # 
- # 
- #  # if status2=="valid", generate chart
- #  observeEvent(status2()==TRUE, {
- # 
- #     ## future: wrap into module called generateChart()
- #    output$chart <- renderEDISH({
- #      req(data_selected())
- #      req(settingsUI_list$settings)
- #      eDISH(data = data_selected(), settings = settingsUI_list$settings)
- #    })
- #  })
- # 
- #  observeEvent(input$view_chart, {
- #    updateTabsetPanel(session, "inTabset", selected = "charts")
- #  })
+
+ 
+ #  # if returned status is valid, generate chart
+  observeEvent(settings_new$status()$valid==TRUE, {
+
+     ## future: wrap into module called generateChart()
+    output$chart <- renderEDISH({
+      req(data_selected())
+      req(settings_new$settings())
+      eDISH(data = data_selected(), settings = settings_new$settings())
+    })
+  })
 
   
   session$onSessionEnded(stopApp)

@@ -52,13 +52,37 @@ renderSettingsUI <- function(id){
                      br(),
                      br(),
                      br(),
-                     selectInput(ns("normal_col_low"),"Lower limit of normal", choices = NULL),
-                     selectInput(ns("normal_col_high"),"Upper limit of normal", choices = NULL),
-                     selectInput(ns("visit_col"),"Visit", choices = NULL),
-                     selectInput(ns("visitn_col"),"Visit number", choices = NULL),
-                  #   selectInput(ns("baseline_visitn"),"Baseline visit number", choices = NULL),
-                     selectInput(ns("studyday_col"),"studyday_col", choices = NULL),
-                     selectInput(ns("anlyFlag"),"anlyFlag", choices = NULL)
+                     div(
+                       tags$label(id=ns("label_normal_col_low"),"Lower limit of normal"),
+                       selectInput(ns("normal_col_low"),NULL, choices = NULL)                   
+                     ),
+                     div(
+                       tags$label(id=ns("label_normal_col_high"),"Upper limit of normal"),
+                       selectInput(ns("normal_col_high"),NULL, choices = NULL)                   
+                     ),
+                     div(
+                       tags$label(id=ns("label_visit_col"),"Visit"),
+                       selectInput(ns("visit_col"),NULL, choices = NULL)                   
+                     ),
+                     div(
+                       tags$label(id=ns("label_visitn_col"),"Visit number"),
+                       selectInput(ns("visitn_col"),NULL, choices = NULL)                   
+                     ),
+                     div(
+                       tags$label(id=ns("label_studyday_col"),"Study day"),
+                       selectInput(ns("studyday_col"),NULL, choices = NULL)                   
+                     ),
+                     div(
+                       tags$label(id=ns("label_anlyFlag"),"Use flagged analysis pop"),
+                       selectInput(ns("anlyFlag"),NULL, choices = NULL)                   
+                     )
+                  #    selectInput(ns("normal_col_low"),"Lower limit of normal", choices = NULL),
+                  #    selectInput(ns("normal_col_high"),"Upper limit of normal", choices = NULL),
+                  #    selectInput(ns("visit_col"),"Visit", choices = NULL),
+                  #    selectInput(ns("visitn_col"),"Visit number", choices = NULL),
+                  # #   selectInput(ns("baseline_visitn"),"Baseline visit number", choices = NULL),
+                  #    selectInput(ns("studyday_col"),"studyday_col", choices = NULL),
+                  #    selectInput(ns("anlyFlag"),"anlyFlag", choices = NULL)
                      
               ))
           )
@@ -115,6 +139,8 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   
   runCustomObserver<-function(name){
+    settings <- settings()
+    
     # Custom observer for measure_col
     if(name=="measure_col"){
       observe({
@@ -164,9 +190,11 @@ renderSettings <- function(input, output, session, data, settings, status){
   # Make updates to the UI
   ###########################
   ns <- session$ns
-  req(data())
-  req(settings)
-  
+  # req(data())
+  # req(settings())
+  # 
+  # settings <- settings()
+  # print(settings)
   #Columns in the data
   colnames <- reactive({names(data())})
   
@@ -174,101 +202,146 @@ renderSettings <- function(input, output, session, data, settings, status){
   input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))}) #TODO: needs update
 
   ### initialize reactive values for the UI inputs  
-  settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
-  
+ # settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
   
   # Fill settings object based on selections
   # require that secondary inputs have been filled in before proceeding
   # update is triggered by any of the input selections changing
-  observe({
+  
+  settingsUI_list <- reactive({
     req(input$`measure_values|ALP`)
     req(input$`measure_values|AST`)
     req(input$`measure_values|TB`)
     req(input$`measure_values|ALT`)
-    input$id_col
-    input$value_col
-    input$measure_col
-    input$normal_col_low
-    input$normal_col_high
-    input$studyday_col
-    input$visit_col
-    input$visitn_col
-    input$x_options
-    input$y_options
-    input$visit_window
-    input$r_ratio_filter
-    input$r_ratio_cut
-    input$showTitle
-    input$warningText
-    isolate({
-      settingsUI_list$settings$id_col <- input$id_col
-      settingsUI_list$settings$value_col <- input$value_col
-      settingsUI_list$settings$measure_col <- input$measure_col
-      settingsUI_list$settings$normal_col_low <- input$normal_col_low
-      settingsUI_list$settings$normal_col_high <- input$normal_col_high
-      settingsUI_list$settings$studyday_col <- input$studyday_col
-      settingsUI_list$settings$visit_col <- input$visit_col
-      settingsUI_list$settings$visitn_col <- input$visitn_col
-      settingsUI_list$settings$baseline_visitn <- input$baseline_visitn
-      settingsUI_list$settings$measure_values$ALT <- input$`measure_values|ALT`
-      settingsUI_list$settings$measure_values$AST <- input$`measure_values|AST`
-      settingsUI_list$settings$measure_values$TB <- input$`measure_values|TB`
-      settingsUI_list$settings$measure_values$ALP <- input$`measure_values|ALP`
-      settingsUI_list$settings$x_options <- input$x_options
-      settingsUI_list$settings$y_options <- input$y_options
-      settingsUI_list$settings$visit_window <- input$visit_window
-      settingsUI_list$settings$r_ratio_filter <- input$r_ratio_filter
-      settingsUI_list$settings$r_ratio_cut <- input$r_ratio_cut
-      settingsUI_list$settings$showTitle <- input$showTitle
-      settingsUI_list$settings$warningText <- input$warningText
-    })
-  })
-
-
-  observe({
-    req(input$filters)
-    isolate({
-      settingsUI_list$settings$filters <- list()
-
-      for (i in 1:length(inputs()$filters)){
-        settingsUI_list$settings$filters[[i]] <- list(value_col = input$filters[[i]],
-                                                      label = input$filters[[i]])
+    
+    settings <- list(id_col = input$id_col,
+                     value_col = input$value_col,
+                     measure_col = isolate(input$measure_col),  # avoid updating on measure_col - just update on downstream depends
+                     normal_col_low = input$normal_col_low,
+                     normal_col_high = input$normal_col_high,
+                     studyday_col = input$studyday_col,
+                     visit_col = input$visit_col,
+                     visitn_col = input$visitn_col,
+                     baseline_visitn = input$baseline_visitn,
+                     measure_values = list(ALT = input$`measure_values|ALT`,
+                                           AST = input$`measure_values|AST`,
+                                           TB = input$`measure_values|TB`,
+                                           ALP = input$`measure_values|ALP`),
+                     x_options = input$x_options,
+                     y_options = input$y_options,
+                     visit_window = input$visit_window,
+                     r_ratio_filter = input$r_ratio_filter,
+                     r_ratio_cut = input$r_ratio_cut,
+                     showTitle = input$showTitle,
+                     warningText = input$warningText)
+    
+    if (!is.null(input$filters)){
+          for (i in 1:length(input$filters)){
+            settings$filters[[i]] <- list(value_col = input$filters[[i]],
+                                          label = input$filters[[i]])
+          }
+    }
+    if (!is.null(input$group_cols)){
+      for (i in 1:length(input$group_cols)){
+        settings$group_cols[[i]] <- list(value_col = input$group_cols[[i]],
+                                      label = input$group_cols[[i]])
       }
-    })
+    }
+    
+    return(settings)
   })
+ 
+#   observe({
+#     req(input$`measure_values|ALP`)
+#     req(input$`measure_values|AST`)
+#     req(input$`measure_values|TB`)
+#     req(input$`measure_values|ALT`)
+#     input$id_col
+#     input$value_col
+#     input$measure_col
+#     input$normal_col_low
+#     input$normal_col_high
+#     input$studyday_col
+#     input$visit_col
+#     input$visitn_col
+#     input$x_options
+#     input$y_options
+#     input$visit_window
+#     input$r_ratio_filter
+#     input$r_ratio_cut
+#     input$showTitle
+#     input$warningText
+#     isolate({
+#       settingsUI_list$settings$id_col <- input$id_col
+#       settingsUI_list$settings$value_col <- input$value_col
+#       settingsUI_list$settings$measure_col <- input$measure_col
+#       settingsUI_list$settings$normal_col_low <- input$normal_col_low
+#       settingsUI_list$settings$normal_col_high <- input$normal_col_high
+#       settingsUI_list$settings$studyday_col <- input$studyday_col
+#       settingsUI_list$settings$visit_col <- input$visit_col
+#       settingsUI_list$settings$visitn_col <- input$visitn_col
+#       settingsUI_list$settings$baseline_visitn <- input$baseline_visitn
+#       settingsUI_list$settings$measure_values$ALT <- input$`measure_values|ALT`
+#       settingsUI_list$settings$measure_values$AST <- input$`measure_values|AST`
+#       settingsUI_list$settings$measure_values$TB <- input$`measure_values|TB`
+#       settingsUI_list$settings$measure_values$ALP <- input$`measure_values|ALP`
+#       settingsUI_list$settings$x_options <- input$x_options
+#       settingsUI_list$settings$y_options <- input$y_options
+#       settingsUI_list$settings$visit_window <- input$visit_window
+#       settingsUI_list$settings$r_ratio_filter <- input$r_ratio_filter
+#       settingsUI_list$settings$r_ratio_cut <- input$r_ratio_cut
+#       settingsUI_list$settings$showTitle <- input$showTitle
+#       settingsUI_list$settings$warningText <- input$warningText
+#     })
+#   })
+# # 
+#   settingsUI_list <- reactive({
+#     settings <- list()
+#     settings$id_col <- input$id_col
+#  return(settings)
+#   })
 
-  observe({
-    req(input$group_cols)
-    isolate({
-      settingsUI_list$settings$group_cols <- list()
-
-      for (i in 1:length(inputs()$group_cols)){
-        settingsUI_list$settings$group_cols[[i]] <- list(value_col = input$group_cols[[i]],
-                                                         label = input$group_cols[[i]])
-      }
-    })
-  })
+  # observe({
+  #   req(input$filters)
+  #   isolate({
+  #     settingsUI_list$settings$filters <- list()
+  # 
+  #     for (i in 1:length(inputs()$filters)){
+  #       settingsUI_list$settings$filters[[i]] <- list(value_col = input$filters[[i]],
+  #                                                     label = input$filters[[i]])
+  #     }
+  #   })
+  # })
+  # 
+  # observe({
+  #   req(input$group_cols)
+  #   isolate({
+  #     settingsUI_list$settings$group_cols <- list()
+  # 
+  #     for (i in 1:length(inputs()$group_cols)){
+  #       settingsUI_list$settings$group_cols[[i]] <- list(value_col = input$group_cols[[i]],
+  #                                                        label = input$group_cols[[i]])
+  #     }
+  #   })
+  # })
 
   # validate new settings
-  #  the validation is run every time there is a change in settings.  for the case of dependent
-  #  inputs, such as measure values, the settings will update (1) when measure_col changes and 
-  #  (2) when the downstream inputs (e.g. ALT, TB, etc) change a second later. 
+  #  the validation is run every time there is a change in settings.   
   #
-  #  This will cause the req settings/status messages to be printed twice for each user change.
-  #  we may want to put a slight delay on the validation running.
-  #
-  #  Note also that when the settings are initially populated with the loop, this will update after every single
-  #   updateSelectInput.  Need to change!
-  #   temporary (?) fix...require the very last updated input to be available
+  #  NOTE: to prevent status updating as loop runs and fills in settings(), 
+  #   require the very last updated input to be available
+
   status_new <- reactive({ #eventReactive(settingsUI_list$settings,{
     req(data())
      name <- rev(isolate(input_names()))[1]
-     req(settingsUI_list$settings[[name]])
-    validateSettings(data(), settingsUI_list$settings, chart="eDish")
+     if (!is.null(settings()[[name]])) {
+       validateSettings(data(), settings(), chart="eDish")
+     }
+   #  req(settingsUI_list$settings[[name]])
   })
 
-  
-  #Setting Status information (from failed checks only)
+ 
+  # #Setting Status information (from failed checks only)
    status_df <- reactive({
     req(status_new())
      status_new()$checkList %>%
@@ -277,8 +350,8 @@ renderSettings <- function(input, output, session, data, settings, status){
       bind_rows %>%
       mutate(top_key = sub("\\|.*", "", text_key))  %>%
       group_by(text_key) %>%
-      slice(1)  # get first set of checks
-    #  filter(valid==FALSE)
+      slice(1) %>%   # get first set of checks
+      filter(valid==FALSE)
   })
   
   
@@ -307,27 +380,28 @@ renderSettings <- function(input, output, session, data, settings, status){
 
      for (name in isolate(input_names())){
        setting_key <- as.list(strsplit(name,"\\|"))
-       setting_value <- getSettingValue(key=setting_key, settings=settings)
+       setting_value <- getSettingValue(key=setting_key, settings=settings())
+       
        setting_label <- name ##TO DO: get the label!
 
        # 1. Update the options for data-mapping inputs
-       if(str_detect(name,"_col")){
+       if(str_detect(name,"_col") | name %in% c("filters", "group_cols")){
          sortedChoices<-NULL
-         if(!is.null(setting_value)){
-           sortedChoices<-unique(c(setting_value, colnames()))
-         }else{
+         if(is.null(setting_value)){
            sortedChoices<-colnames()
+         }else{
+           sortedChoices<-unique(c(setting_value, colnames()))
          }
          updateSelectInput(session, name, choices=sortedChoices)
        }
-       
+
        # 2. Check for custom observers and initialize if needed
        if(name %in% custom_observer_settings){
          runCustomObserver(name=name) #TODO: clean this up!
        }
      }
      })
-  
+
   observe({
     for (name in isolate(input_names())){
 
@@ -336,7 +410,8 @@ renderSettings <- function(input, output, session, data, settings, status){
       # 3. Flag the input if it is required
       if(name %in% req_settings){
         flagSetting(session=session, name=name, originalLabel=setting_label)
-        setting_label <- paste0(setting_label,"*")
+        setting_label <- paste0(setting_label,"*")  #  <- this line is the reason why I'm including the flagging in
+                                                    #        this observer vs. the one prior
 
         }
 
@@ -352,14 +427,9 @@ renderSettings <- function(input, output, session, data, settings, status){
     }
    })
 
-  # seems fine! an indication that the contents of the module are not executing infinitely
-  #observe({print(settingsUI_list$settings)})
  
   ### return updated settings and status to global env.
-  #  THis causes an infinite execution of the module and I get a NULL value from server side 
-   # return(status_new())
-  
-  ### return all inputs from module to be used in global env. 
-  # this works
-  return(input)
+  return(list(settings = reactive(settingsUI_list()),
+              status = reactive(status_new())))
+
 }
