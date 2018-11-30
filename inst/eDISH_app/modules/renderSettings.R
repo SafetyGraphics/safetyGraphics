@@ -121,15 +121,18 @@ renderSettings <- function(input, output, session, data, settings, status){
     
   }
 
-  
   runCustomObserver<-function(name){
-    settings <- settings()
     
     # Custom observer for measure_col
     if(name=="measure_col"){
       observe({
+        settings <- settings()
+        
         req(input$measure_col)
-        if (!is.null(settings$measure_col) & input$measure_col==settings$measure_col){
+
+
+        if (input$measure_col %in% colnames()){
+          if (!is.null(settings$measure_col) && input$measure_col==settings$measure_col){
             choices_ast <- unique(c(settings$measure_values$AST, as.character(data()[,settings$measure_col])))
             choices_alt <- unique(c(settings$measure_values$ALT, as.character(data()[,settings$measure_col])))
             choices_tb  <- unique(c(settings$measure_values$TB,  as.character(data()[,settings$measure_col])))
@@ -141,10 +144,12 @@ renderSettings <- function(input, output, session, data, settings, status){
             choices_alp <- unique(data()[,input$measure_col])
           }
 
-        updateSelectInput(session, "measure_values|ALT", choices = choices_ast)
-        updateSelectInput(session, "measure_values|AST", choices = choices_alt)
-        updateSelectInput(session, "measure_values|TB",  choices = choices_tb)
-        updateSelectInput(session, "measure_values|ALP", choices = choices_alp)
+          updateSelectInput(session, "measure_values|ALT", choices = choices_ast)
+          updateSelectInput(session, "measure_values|AST", choices = choices_alt)
+          updateSelectInput(session, "measure_values|TB",  choices = choices_tb)
+          updateSelectInput(session, "measure_values|ALP", choices = choices_alp)
+        }
+
       })  
     }
   } #end runCustomObserver()
@@ -169,12 +174,12 @@ renderSettings <- function(input, output, session, data, settings, status){
   # Therefore, until the inputs are done updating based on new data, this object will be 
   # partially representing the old data, and partially representing the new data. 
   # not sure if this is the right place to do it...but can we clear out this object upon a data change and start over??
-  settingsUI_list <- reactive({
+  settings_new <- reactive({
     req(input$`measure_values|ALP`)
     req(input$`measure_values|AST`)
     req(input$`measure_values|TB`)
     req(input$`measure_values|ALT`)
-    
+
     settings <- list(id_col = input$id_col,
                      value_col = input$value_col,
                      measure_col = isolate(input$measure_col),  # avoid updating on measure_col - just update on downstream depends
@@ -195,7 +200,7 @@ renderSettings <- function(input, output, session, data, settings, status){
                      r_ratio_cut = input$r_ratio_cut,
                      showTitle = input$showTitle,
                      warningText = input$warningText)
-    
+
     if (!is.null(input$filters)){
           for (i in 1:length(input$filters)){
             settings$filters[[i]] <- list(value_col = input$filters[[i]],
@@ -208,9 +213,10 @@ renderSettings <- function(input, output, session, data, settings, status){
                                       label = input$group_cols[[i]])
       }
     }
-    
+
     return(settings)
   })
+ 
  
   # validate new settings
   #  the validation is run every time there is a change in settings.   
@@ -221,13 +227,13 @@ renderSettings <- function(input, output, session, data, settings, status){
   status_new <- reactive({ #eventReactive(settingsUI_list$settings,{
     req(data())
      name <- rev(isolate(input_names()))[1]
-     if (!is.null(settings()[[name]])) {
-       validateSettings(data(), settings(), chart="eDish")
+     if (!is.null(settings_new()[[name]])) {
+       validateSettings(data(), settings_new(), chart="eDish")
      }
    #  req(settingsUI_list$settings[[name]])
   })
 
- 
+
   # #Setting Status information (from failed checks only)
    status_df <- reactive({
     req(status_new())
@@ -237,8 +243,8 @@ renderSettings <- function(input, output, session, data, settings, status){
       bind_rows %>%
       mutate(top_key = sub("\\|.*", "", text_key))  %>%
       group_by(text_key) %>%
-      slice(1) %>%   # get first set of checks
-      filter(valid==FALSE)
+      slice(1) #%>%   # get first set of checks
+     # filter(valid==FALSE)
   })
   
   
@@ -262,7 +268,9 @@ renderSettings <- function(input, output, session, data, settings, status){
   #            - after UI is filled, we generate a NEW settings object & status
   #            - dependent on: the new settings/status, which will update after every user selection
   
-  observe({
+
+  
+  observeEvent(data(), {
     req(colnames())
 
      for (name in isolate(input_names())){
@@ -290,34 +298,34 @@ renderSettings <- function(input, output, session, data, settings, status){
      }
      })
 
-  # observe({
-  #   for (name in isolate(input_names())){
-  # 
-  #     setting_label <- name
-  # 
-  #     # 3. Flag the input if it is required
-  #     if(name %in% req_settings){
-  #       flagSetting(session=session, name=name, originalLabel=setting_label)
-  #       setting_label <- paste0(setting_label,"*")  #  <- this line is the reason why I'm including the flagging in
-  #                                                   #        this observer vs. the one prior
-  # 
-  #       }
-  # 
-  #       # 4. Print a warning if the input failed a validation check
-  #       if(name %in% status_df()$text_key){
-  #         current_status <- status_df()[status_df()$text_key==name, "message"]
-  #         current_status <- ifelse(current_status=="","OK",current_status)
-  #         updateSettingStatus(session=session, name=name,
-  #                             originalLabel=setting_label,
-  #                             status=current_status) # TODO: Create this function
-  #       }
-  # 
-  #   }
-  #  })
+  observe({
+    for (name in isolate(input_names())){
+
+      setting_label <- name
+
+      # 3. Flag the input if it is required
+      if(name %in% req_settings){
+        flagSetting(session=session, name=name, originalLabel=setting_label)
+        setting_label <- paste0(setting_label,"*")  #  <- this line is the reason why I'm including the flagging in
+                                                    #        this observer vs. the one prior
+
+        }
+
+        # 4. Print a warning if the input failed a validation check
+        if(name %in% status_df()$text_key){
+          current_status <- status_df()[status_df()$text_key==name, "message"]
+          current_status <- ifelse(current_status=="","OK",current_status)
+          updateSettingStatus(session=session, name=name,
+                              originalLabel=setting_label,
+                              status=current_status) # TODO: Create this function
+        }
+
+    }
+   })
 
  
   ### return updated settings and status to global env.
-  return(list(settings = reactive(settingsUI_list()),
+  return(list(settings = reactive(settings_new()),
               status = reactive(status_new())))
-
+ 
 }

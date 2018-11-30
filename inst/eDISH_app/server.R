@@ -118,11 +118,11 @@ function(input, output, session){
   #   AFTER the data is changed.  
   #  THis is a big problem if we switch datasets and the new settings list isn't available yet.  (e.g. if we switch from
   #  the example data (ADAM) to a non-ADAM dataset, the app will bomb)
-    settings_new <-   callModule(renderSettings, "settingsUI", 
-                                 data=isolate(data_selected), 
-                                 settings=settings, 
+    settings_new <-   callModule(renderSettings, "settingsUI",
+                                 data=isolate(data_selected),
+                                 settings=settings,
                                  status=status )
- 
+
    # if returned status is valid, generate chart
   observeEvent(settings_new$status()$valid==TRUE, {
 
