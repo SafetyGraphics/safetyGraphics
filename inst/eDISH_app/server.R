@@ -2,7 +2,7 @@ function(input, output, session){
   
   # initiate reactive values - list of uploaded data files
   dd <- reactiveValues(data = list("Example data" = adlbc), current = 1, standard = "ADaM")
-  
+ 
   # modify reactive values when data is uploaded
   observeEvent(input$datafile,{
     
@@ -97,12 +97,6 @@ function(input, output, session){
   })
 
   # upon a dataset being selected, use generateSettings() to produce a settings obj
-  # settings_list <- reactiveValues(settings = NULL)
-  # 
-  # observeEvent(c(data_selected(), standard()), {
-  #   settings_list$settings <- generateSettings(standard = standard(), chart = "eDish")
-  # })
-  
   settings <- eventReactive(c(data_selected(), standard()), {
     generateSettings(standard=standard(), chart="eDish")
   })
@@ -111,7 +105,6 @@ function(input, output, session){
   status <- reactive({
     req(data_selected())
     req(settings())
-   # req(settings_list$settings)
     req(!standard()=="None")
     validateSettings(data_selected(), #settings_list$settings,
                      settings(),
@@ -119,108 +112,18 @@ function(input, output, session){
   })
 
   # based on selected data set & generated/selected settings obj, generate settings page.
-  # note that module is being triggered when selected dataset changes OR when settings list changes
+  # 
+  #  NOTE:  module is being triggered when selected dataset changes OR when settings list changes
   #   this could cause the module to trigger twice unecessarily in some cases because the settings are generated
   #   AFTER the data is changed.  
-  #settingsUI_list <- reactiveValues()  ### initialize reactive values for the UI inputs
-
- # settings_new <- reactive({
- # observe({
-    # settings_new <-eventReactive(c(data_selected(),
-    #                                settings_list$settings,
-    #                                status()), {
+  #  THis is a big problem if we switch datasets and the new settings list isn't available yet.  (e.g. if we switch from
+  #  the example data (ADAM) to a non-ADAM dataset, the app will bomb)
     settings_new <-   callModule(renderSettings, "settingsUI", 
-                                 data=data_selected, 
+                                 data=isolate(data_selected), 
                                  settings=settings, 
                                  status=status )
- # })
-
- observe({
-  # print(settings_new$settings())
-   print(settings_new$status()$valid)
- })
- # Fill settings object based on selections
-  # require that secondary inputs have been filled in before proceeding
-  # update is triggered by any of the input selections changing
- # observe({
- #   req(inputs()$`measure_values|ALP`)
- #   req(inputs()$`measure_values|AST`)
- #   req(inputs()$`measure_values|TB`)
- #   req(inputs()$`measure_values|ALT`)
- #   # req(inputs()$baseline_visitn)
- #   inputs()$id_col
- #   inputs()$value_col
- #  # inputs()$measure_col
- #   inputs()$normal_col_low
- #   inputs()$normal_col_high
- #   inputs()$studyday_col
- #   inputs()$visit_col
- #   inputs()$visitn_col
- #   inputs()$x_options
- #   inputs()$y_options
- #   inputs()$visit_window
- #   inputs()$r_ratio_filter
- #   inputs()$r_ratio_cut
- #   inputs()$showTitle
- #   inputs()$warningText
- #   isolate({
- #     settingsUI_list$settings$id_col <- inputs()$id_col
- #     settingsUI_list$settings$value_col <- inputs()$value_col
- #     settingsUI_list$settings$measure_col <- inputs()$measure_col
- #     settingsUI_list$settings$normal_col_low <- inputs()$normal_col_low
- #     settingsUI_list$settings$normal_col_high <- inputs()$normal_col_high
- #     settingsUI_list$settings$studyday_col <- inputs()$studyday_col
- #     settingsUI_list$settings$visit_col <- inputs()$visit_col
- #     settingsUI_list$settings$visitn_col <- inputs()$visitn_col
- #     settingsUI_list$settings$baseline_visitn <- inputs()$baseline_visitn
- #     settingsUI_list$settings$measure_values$ALT <- inputs()$`measure_values|ALT`
- #     settingsUI_list$settings$measure_values$AST <- inputs()$`measure_values|AST`
- #     settingsUI_list$settings$measure_values$TB <- inputs()$`measure_values|TB`
- #     settingsUI_list$settings$measure_values$ALP <- inputs()$`measure_values|ALP`
- #     settingsUI_list$settings$x_options <- inputs()$x_options
- #     settingsUI_list$settings$y_options <- inputs()$y_options
- #     settingsUI_list$settings$visit_window <- inputs()$visit_window
- #     settingsUI_list$settings$r_ratio_filter <- inputs()$r_ratio_filter
- #     settingsUI_list$settings$r_ratio_cut <- inputs()$r_ratio_cut
- #     settingsUI_list$settings$showTitle <- inputs()$showTitle
- #     settingsUI_list$settings$warningText <- inputs()$warningText
- #   })
- # })
- # 
- # observe({
- #   req(inputs()$filters)
- #   isolate({
- #     settingsUI_list$settings$filters <- list()
- #     
- #     for (i in 1:length(inputs()$filters)){
- #       settingsUI_list$settings$filters[[i]] <- list(value_col = inputs()$filters[[i]],
- #                                                     label = inputs()$filters[[i]])
- #     }
- #   })
- # })
- # 
- # observe({
- #   req(inputs()$group_cols)
- #   isolate({
- #     settingsUI_list$settings$group_cols <- list()
- #     
- #     for (i in 1:length(inputs()$group_cols)){
- #       settingsUI_list$settings$group_cols[[i]] <- list(value_col = inputs()$group_cols[[i]],
- #                                                        label = inputs()$group_cols[[i]])
- #     }
- #   })
- # })
- # 
- #  # validate new settings 
- #  status2 <- eventReactive(settingsUI_list$settings,{
- #    req(data_selected())
- #    req(settingsUI_list$settings)
- #    settingsUI_list$settings$id_col
- #    validateSettings(data_selected(), settingsUI_list$settings, chart="eDish")$valid
- #   })
-
  
- #  # if returned status is valid, generate chart
+   # if returned status is valid, generate chart
   observeEvent(settings_new$status()$valid==TRUE, {
 
      ## future: wrap into module called generateChart()

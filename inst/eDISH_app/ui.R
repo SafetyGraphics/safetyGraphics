@@ -9,7 +9,7 @@ navbarPage("eDISH Shiny app", id = "inTabset",
                                h3("Data upload"), 
                                fileInput("datafile", "Upload a csv or sas7bdat file",accept = c(".sas7bdat", ".csv"), multiple = TRUE),
                               radioButtons("select_file","Select file for eDISH chart", 
-                                           choiceNames = list(HTML("<p>Example data - <em style='color:green; font-size:12px;'>AdAm</em></p>")), 
+                                           choiceNames = list(HTML("<p>Example data - <em style='color:green; font-size:12px;'>ADaM</em></p>")), 
                                            choiceValues = "Example data") 
                              )
                       ),
