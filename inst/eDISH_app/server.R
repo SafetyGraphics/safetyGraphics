@@ -212,33 +212,58 @@ function(input, output, session){
       req(settingsUI_list$settings)
       eDISH(data = data_selected(), settings = settingsUI_list$settings)
     })
+  
+    
   })
 
+  # if settings are not valid, then remove the download button
+  observeEvent(status2()==FALSE, {
+    removeUI(selector = "#download")
+  })
+  
+  # if settings are valid, then add the download button
+  observeEvent(status2()==TRUE, {
+    insertUI (
+      selector  = "div.container-fluid",
+      where = "beforeEnd",
+      ui =  div(id="download", # give the container div an id for easy removal
+                style="float: right;", 
+                span(class = "navbar-brand", #using one of the default nav bar classes to get css close 
+                     style="padding: 8px;",  #then little tweak to ensure vertical alignment
+                     downloadButton("reportDL", "Export Chart")))
+    )
+  })
+  
+  # Set up report generation on download button click
+  output$reportDL <- downloadHandler(
+    filename = "safety_report.html",
+    content = function(file) {
+      # Copy the report file to a temporary directory before processing it, in case we don't
+      # have write permissions to the current working dir (which can happen when deployed).
+      tempReport <- file.path(tempdir(), "report.Rmd")
+      file.copy("template/safetyGraphicReport.Rmd", tempReport, overwrite = TRUE)
+      
+      params <- list(data = data_selected(), settings = settingsUI_list$settings) 
+      
+      rmarkdown::render(tempReport,
+                        output_file = file,
+                        params = params,  ## pass in params
+                        envir = new.env(parent = globalenv())  ## eval in child of global env
+      )
+    }
+  )  
+  
   observeEvent(input$view_chart, {
     updateTabsetPanel(session, "inTabset", selected = "charts")
   })
 
   
   # passing parameters for knitting on export button click. Call when chart generated
-    output$reportDL <- downloadHandler(
-           filename = "safety_report.html",
-           content = function(file) {
-           # Copy the report file to a temporary directory before processing it, in case we don't
-           # have write permissions to the current working dir (which can happen when deployed).
-           tempReport <- file.path(tempdir(), "report.Rmd")
-           file.copy("template/safetyGraphicReport.Rmd", tempReport, overwrite = TRUE)
-             
-           params <- list(data = data_selected(), settings = settingsUI_list$settings) 
-                   
-           rmarkdown::render(tempReport,
-                             output_file = file,
-                             params = params,  ## pass in params
-                             envir = new.env(parent = globalenv())  ## eval in child of global env
-                            )
-                  }
-            )
-    
-  
+
+
+        
+                        
+      
   
   session$onSessionEnded(stopApp)
   

@@ -33,9 +33,8 @@ navbarPage("eDISH Shiny app", id = "inTabset",
                       renderSettingsUI("settingsUI")
                     )
            ),
-           tabPanel(title = "Charts", value = "charts",
-                      eDISHOutput("chart"),
-                      downloadButton("reportDL", "Export Chart", style = "position: relative; top: 440px;")  
-                    )
-           )
-
+           tabPanel(title = "Charts", 
+                    value = "charts",
+                    eDISHOutput("chart")
+          )
+)
