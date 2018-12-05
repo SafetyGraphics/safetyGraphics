@@ -33,8 +33,8 @@ navbarPage("eDISH Shiny app", id = "inTabset",
                       renderSettingsUI("settingsUI")
                     )
            ),
-           tabPanel(title = "Charts", value = "charts",
+           tabPanel(title = "Charts", 
+                    value = "charts",
                     eDISHOutput("chart")
-                    )
-           )
-
+          )
+)
