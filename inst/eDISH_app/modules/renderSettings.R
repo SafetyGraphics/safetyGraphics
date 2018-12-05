@@ -11,33 +11,34 @@ renderSettingsUI <- function(id){
               column(6,
                      h3("Data Mapping"),
                      div(
-                         tags$label(id=ns("label_id_col"), "Unique subject identifier"),
-                         selectInput(ns("id_col"),NULL, choices = NULL)
+                         div(tags$label(id=ns("label_id_col"), "Unique subject identifier")),
+                         selectizeInput(ns("id_col"),NULL, choices = NULL)
                      ),
+                     
                      div(
                        tags$label(id=ns("label_value_col"),"Lab Result"),
-                       selectInput(ns("value_col"),NULL, choices = NULL)                   
+                       selectizeInput(ns("value_col"),NULL, choices = NULL)                   
                        ),
                      div(
                        tags$label(id=ns("label_measure_col"),"Lab measure"),
-                       selectInput(ns("measure_col"),NULL, choices = NULL)                   
+                       selectizeInput(ns("measure_col"),NULL, choices = NULL)                   
                      ),
                      h4("Key measures"),
                      div(
                        tags$label(id=ns("label_measure_values|ALT"),"ALT"),
-                       selectInput(ns("measure_values|ALT"),NULL, choices = NULL)                   
+                       selectizeInput(ns("measure_values|ALT"),NULL, choices = NULL)                   
                      ),
                      div(
                        tags$label(id=ns("label_measure_values|AST"),"AST"),
-                       selectInput(ns("measure_values|AST"),NULL, choices = NULL)                   
+                       selectizeInput(ns("measure_values|AST"),NULL, choices = NULL)                   
                      ),
                      div(
                        tags$label(id=ns("label_measure_values|TB"),"TB"),
-                       selectInput(ns("measure_values|TB"),NULL, choices = NULL)                   
+                       selectizeInput(ns("measure_values|TB"),NULL, choices = NULL)                   
                      ),
                      div(
                        tags$label(id=ns("label_measure_values|ALP"),"ALP"),
-                       selectInput(ns("measure_values|ALP"),NULL, choices = NULL)                   
+                       selectizeInput(ns("measure_values|ALP"),NULL, choices = NULL)                   
                      )
               ) ,
               column(6,
@@ -46,28 +47,28 @@ renderSettingsUI <- function(id){
                      br(),
                      div(
                        tags$label(id=ns("label_normal_col_low"),"Lower limit of normal"),
-                       selectInput(ns("normal_col_low"),NULL, choices = NULL)                   
+                       selectizeInput(ns("normal_col_low"),NULL, choices = NULL)                   
                      ),
                      div(
                        tags$label(id=ns("label_normal_col_high"),"Upper limit of normal"),
-                       selectInput(ns("normal_col_high"),NULL, choices = NULL)                   
+                       selectizeInput(ns("normal_col_high"),NULL, choices = NULL)                   
                      ),
                      div(
                        tags$label(id=ns("label_visit_col"),"Visit"),
-                       selectInput(ns("visit_col"),NULL, choices = NULL)                   
+                       selectizeInput(ns("visit_col"),NULL, choices = NULL)                   
                      ),
                      div(
                        tags$label(id=ns("label_visitn_col"),"Visit number"),
-                       selectInput(ns("visitn_col"),NULL, choices = NULL)                   
+                       selectizeInput(ns("visitn_col"),NULL, choices = NULL)                   
                      ),
                      div(
                        tags$label(id=ns("label_studyday_col"),"Study day"),
-                       selectInput(ns("studyday_col"),NULL, choices = NULL)                   
-                     ),
-                     div(
-                       tags$label(id=ns("label_anlyFlag"),"Use flagged analysis pop"),
-                       selectInput(ns("anlyFlag"),NULL, choices = NULL)                   
-                     )
+                       selectizeInput(ns("studyday_col"),NULL, choices = NULL)                   
+                     ) #,
+                     # div(
+                     #   tags$label(id=ns("label_anlyFlag"),"Use flagged analysis pop"),
+                     #   selectizeInput(ns("anlyFlag"),NULL, choices = NULL)                   
+                     # )
               ))
           )
         ),
@@ -116,8 +117,13 @@ renderSettings <- function(input, output, session, data, settings, status){
   }
   
   updateSettingStatus<-function(session, name, originalLabel, status){
-    shinyjs::html(id = paste0("label_", name), 
-                    html = paste0(originalLabel, "   <em style='color:red; font-size:12px;'>", status,"</em>")) 
+    if (status=="OK"){
+      shinyjs::html(id = paste0("label_", name), 
+                    html = paste0(originalLabel, "   <em style='color:green; font-size:12px;'>", status,"</em>")) 
+    } else {
+      shinyjs::html(id = paste0("label_", name), 
+                    html = paste0(originalLabel, "   <em style='color:red; font-size:12px;'>", status,"</em>"))  
+    }
     
   }
 
@@ -137,18 +143,46 @@ renderSettings <- function(input, output, session, data, settings, status){
             choices_alt <- unique(c(settings$measure_values$ALT, as.character(data()[,settings$measure_col])))
             choices_tb  <- unique(c(settings$measure_values$TB,  as.character(data()[,settings$measure_col])))
             choices_alp <- unique(c(settings$measure_values$ALP, as.character(data()[,settings$measure_col])))
+            
+            updateSelectizeInput(session, "measure_values|ALT", choices = choices_ast)
+            updateSelectizeInput(session, "measure_values|AST", choices = choices_alt)
+            updateSelectizeInput(session, "measure_values|TB",  choices = choices_tb)
+            updateSelectizeInput(session, "measure_values|ALP", choices = choices_alp)
           } else {
             choices_ast <- unique(data()[,input$measure_col])
             choices_alt <- unique(data()[,input$measure_col])
             choices_tb  <- unique(data()[,input$measure_col])
             choices_alp <- unique(data()[,input$measure_col])
+            
+            updateSelectizeInput(session, "measure_values|ALT", choices = choices_ast,
+                                 options = list(
+                                   placeholder = '',
+                                   onInitialize = I('function() { this.setValue(""); }')))
+            updateSelectizeInput(session, "measure_values|AST", choices = choices_alt,
+                                 options = list(
+                                   placeholder = '',
+                                   onInitialize = I('function() { this.setValue(""); }')))
+            updateSelectizeInput(session, "measure_values|TB",  choices = choices_tb,
+                                 options = list(
+                                   placeholder = '',
+                                   onInitialize = I('function() { this.setValue(""); }')))
+            updateSelectizeInput(session, "measure_values|ALP", choices = choices_alp,
+                                 options = list(
+                                   placeholder = '',
+                                   onInitialize = I('function() { this.setValue(""); }')))
           }
-
-          updateSelectInput(session, "measure_values|ALT", choices = choices_ast)
-          updateSelectInput(session, "measure_values|AST", choices = choices_alt)
-          updateSelectInput(session, "measure_values|TB",  choices = choices_tb)
-          updateSelectInput(session, "measure_values|ALP", choices = choices_alp)
+        } else {
+          updateSelectizeInput(session, "measure_values|ALT", choices = "")
+          updateSelectizeInput(session, "measure_values|AST", choices = "")
+          updateSelectizeInput(session, "measure_values|TB", choices = "")
+          updateSelectizeInput(session, "measure_values|ALP", choices = "")
         }
+
+          # updateSelectizeInput(session, "measure_values|ALT", choices = choices_ast)
+          # updateSelectizeInput(session, "measure_values|AST", choices = choices_alt)
+          # updateSelectizeInput(session, "measure_values|TB",  choices = choices_tb)
+          # updateSelectizeInput(session, "measure_values|ALP", choices = choices_alp)
+
 
       })  
     }
@@ -175,20 +209,20 @@ renderSettings <- function(input, output, session, data, settings, status){
   # partially representing the old data, and partially representing the new data. 
   # not sure if this is the right place to do it...but can we clear out this object upon a data change and start over??
   settings_new <- reactive({
-    req(input$`measure_values|ALP`)
-    req(input$`measure_values|AST`)
-    req(input$`measure_values|TB`)
-    req(input$`measure_values|ALT`)
+    # req(input$`measure_values|ALP`)
+    # req(input$`measure_values|AST`)
+    # req(input$`measure_values|TB`)
+    # req(input$`measure_values|ALT`)
 
     settings <- list(id_col = input$id_col,
                      value_col = input$value_col,
-                     measure_col = isolate(input$measure_col),  # avoid updating on measure_col - just update on downstream depends
+                     measure_col = input$measure_col,
+                    # measure_col = isolate(input$measure_col),  # avoid updating on measure_col - just update on downstream depends
                      normal_col_low = input$normal_col_low,
                      normal_col_high = input$normal_col_high,
                      studyday_col = input$studyday_col,
                      visit_col = input$visit_col,
                      visitn_col = input$visitn_col,
-                     baseline_visitn = input$baseline_visitn,
                      measure_values = list(ALT = input$`measure_values|ALT`,
                                            AST = input$`measure_values|AST`,
                                            TB = input$`measure_values|TB`,
@@ -213,41 +247,66 @@ renderSettings <- function(input, output, session, data, settings, status){
                                       label = input$group_cols[[i]])
       }
     }
+    
+    # for (i in names(settings)){
+    #   if (!is.null(settings[[i]])){
+    #     if (settings[[i]][1]==""){
+    #       settings[[i]] <- NULL
+    #     }
+    #   }
+    # }
 
     return(settings)
   })
- 
- 
+  
+  
   # validate new settings
-  #  the validation is run every time there is a change in settings.   
+  #  the validation is run every time there is a change in data and/or settings.   
   #
   #  NOTE: to prevent status updating as loop runs and fills in settings(), 
-  #   require the very last updated input to be available
-
+  #   require the very last updated input to be available <- can't do this b/c we will have lots of
+  #   null settings to start when no standard detected...
   status_new <- reactive({ #eventReactive(settingsUI_list$settings,{
     req(data())
+    req(settings_new())
      name <- rev(isolate(input_names()))[1]
-     if (!is.null(settings_new()[[name]])) {
-       validateSettings(data(), settings_new(), chart="eDish")
-     }
-   #  req(settingsUI_list$settings[[name]])
+     settings_new <- settings_new()
+     
+
+   # if (!is.null(settings_new[[name]])) {
+      
+      for (i in names(settings_new)){
+        if (!is.null(settings_new[[i]])){
+          if (settings_new[[i]][1]==""){
+            settings_new[i] <- list(NULL)
+          }
+        }
+      }
+      
+       validateSettings2(data(), settings_new, chart="eDish")
+    # } 
   })
-
-
-  # #Setting Status information (from failed checks only)
+  
+  
+  #Setting Status information (from failed checks only)
    status_df <- reactive({
     req(status_new())
      status_new()$checkList %>%
       map(., ~ keep(., names(.) %in% c("text_key","valid","message")) %>%
             data.frame(., stringsAsFactors = FALSE)) %>%
       bind_rows %>%
-      mutate(top_key = sub("\\|.*", "", text_key))  %>%
+     # mutate(top_key = sub("\\|.*", "", text_key))  %>%
       group_by(text_key) %>%
-      slice(1) #%>%   # get first set of checks
+      mutate(num_fail = sum(valid==FALSE)) %>%
+      mutate(message = paste(message, collapse = " ") %>% trimws()) %>%
+       select(text_key, message, num_fail) %>%
+       unique %>%
+       mutate(message = ifelse(message=="", "OK", message))
+     # slice(1) #%>%   # get first set of checks
      # filter(valid==FALSE)
   })
   
-  
+ 
   #List of required settings
   req_settings <- getRequiredSettings("eDish") %>% unlist  #Indicate required settings
 
@@ -285,10 +344,18 @@ renderSettings <- function(input, output, session, data, settings, status){
          sortedChoices<-NULL
          if(is.null(setting_value)){
            sortedChoices<-colnames()
+           updateSelectizeInput(session, name, choices=sortedChoices,
+                                options = list(
+                                  placeholder = '',
+                                  onInitialize = I('function() { this.setValue(""); }')
+                                ))
+           
          }else{
            sortedChoices<-unique(c(setting_value, colnames()))
+           updateSelectizeInput(session, name, choices=sortedChoices)
+           
          } 
-         updateSelectInput(session, name, choices=sortedChoices)
+       #  updateSelectInput(session, name, choices=sortedChoices)
        }
 
        # 2. Check for custom observers and initialize if needed
@@ -312,12 +379,14 @@ renderSettings <- function(input, output, session, data, settings, status){
         }
 
         # 4. Print a warning if the input failed a validation check
+              # require that input has been selected
         if(name %in% status_df()$text_key){
+
           current_status <- status_df()[status_df()$text_key==name, "message"]
           current_status <- ifelse(current_status=="","OK",current_status)
           updateSettingStatus(session=session, name=name,
                               originalLabel=setting_label,
-                              status=current_status) # TODO: Create this function
+                              status=current_status)
         }
 
     }
