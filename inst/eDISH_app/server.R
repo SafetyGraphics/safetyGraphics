@@ -1,5 +1,12 @@
 function(input, output, session){
   
+  # output$test <- renderUI({
+  #   tags$div(title = "hover test")
+  # })
+  
+ #shinyBS::addTooltip(session, "select_file","test the hover!")
+
+
   # initiate reactive values - list of uploaded data files
   dd <- reactiveValues(data = list("Example data" = adlbc), current = 1, standard = "ADaM")
  
@@ -30,6 +37,7 @@ function(input, output, session){
     # run detectStandard on new data and save to dd$standard
     standard_list <- lapply(data_list, function(x){ detectStandard(x)$standard })
     dd$standard <- c(dd$standard, standard_list) 
+    
       
   })
   
@@ -122,6 +130,7 @@ function(input, output, session){
                                  data=isolate(data_selected),
                                  settings=settings,
                                  status=status )
+
 
    # if returned status is valid, generate chart
   observeEvent(settings_new$status()$valid==TRUE, {

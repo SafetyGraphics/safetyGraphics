@@ -1,16 +1,16 @@
 library(shiny)
 library(shinyjs)
 
-navbarPage("eDISH Shiny app", id = "inTabset",
+navbarPage("eDISH Shiny app", id = "inTabset", 
            tabPanel(title = "Data", value = "data",
                     fluidRow(
                       column(3,
                              wellPanel(
                                h3("Data upload"), 
                                fileInput("datafile", "Upload a csv or sas7bdat file",accept = c(".sas7bdat", ".csv"), multiple = TRUE),
-                              radioButtons("select_file","Select file for eDISH chart", 
+                               radioButtons("select_file","Select file for eDISH chart", 
                                            choiceNames = list(HTML("<p>Example data - <em style='color:green; font-size:12px;'>ADaM</em></p>")), 
-                                           choiceValues = "Example data") 
+                                           choiceValues = "Example data")
                              )
                       ),
                       column(6, 
