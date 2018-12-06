@@ -14,6 +14,8 @@
 #' getSettingValue(list("id_col"),testSettings) 
 #' getSettingsValue(list("measure_values","ALP"),testSettings)
 #' getSettingValue(list("NotASetting"),testSettings) #returns NULL
+#' 
+#' @export
 
 getSettingValue <- function(key,settings){
   stopifnot(typeof(settings)=="list")

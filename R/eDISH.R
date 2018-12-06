@@ -12,8 +12,8 @@
 #' @param visitn_col Visit number variable name. Default: \code{"VISITN"}. 
 #' @param studyday_col  Visit day variable name. Default: \code{"DY"}. 
 #' @param baseline_visitn Value of baseline visit number. Used to calculate mDish. Default: \code{1}. 
-#' @param filters An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.
-#' @param group_cols An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.
+#' @param filters An optional list of specifications for filters.  Each filter is a nested, named list (containing the filter value column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.
+#' @param group_cols An optional list of specifications for grouping columns.  Each group column is a nested, named list (containing the group variable column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.
 #' @param measure_values A list defining the data values from \code{measure_col} for the lab measures 
 #' used in eDish evaluations. Default: \code{list(ALT = 'Aminotransferase, alanine (ALT)', 
 #' AST = 'Aminotransferase, aspartate (AST)', TB = 'Total Bilirubin', ALP = 'Alkaline phosphatase (ALP)')}.
@@ -56,11 +56,18 @@
 #'                             ALP = "Alkaline Phosphatase (U/L)"))
 #' 
 #' ## Create eDISH figure using a premade settings list
-#' group_cols_vec <- c("TRTP","SEX", "AGEGR1")
-#' 
-#' filters_df <- data.frame(
-#'   value_col=c("TRTA", "SEX", "RACE", "AGEGR1"),
-#'   label = c("Treatment", "Sex", "RACE", "Age group")
+#' group_cols_list <- list(
+#'   list(value_col = "TRTP", label = "Treatment"),
+#'   list(value_col = "SEX", label = "Sex"), 
+#'   list(value_col = "AGEGR1", label = "Age group")
+#' )
+#'
+#'
+#' filters_list <- list(
+#'   list(value_col = "TRTA", label = "Treatment"),
+#'   list(value_col = "SEX", label = "Sex"), 
+#'   list(value_col = "RACE", label = "RACE"),
+#'   list(value_col = "AGEGR1", label = "Age group")
 #' )
 #' 
 #' settingsl <- list(id_col = "USUBJID",
@@ -71,8 +78,8 @@
 #'       studyday_col = "ADY", 
 #'       normal_col_low = "A1LO", 
 #'       normal_col_high = "A1HI", 
-#'       group_cols = group_cols_vec,
-#'       filters = filters_df,
+#'       group_cols = group_cols_list,
+#'       filters = filters_list,
 #'       measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
 #'                             AST = "Aspartate Aminotransferase (U/L)",
 #'                             TB = "Bilirubin (umol/L)",
@@ -141,7 +148,6 @@ eDISH <- function(data,
           debug_js=debug_js
         ),
         auto_unbox = TRUE,
-        dataframe = "rows",
         null = "null"
       )
     )    
@@ -150,7 +156,6 @@ eDISH <- function(data,
       data = data,
       settings = jsonlite::toJSON(settings,
                                   auto_unbox = TRUE,
-                                  dataframe = "rows",
                                   null = "null")
     )
   }

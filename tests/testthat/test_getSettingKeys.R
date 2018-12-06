@@ -1,4 +1,4 @@
-library(ReDish)
+library(safetyGraphics)
 library(stringr)
 
 context("Tests for the getSettingKeys() function")

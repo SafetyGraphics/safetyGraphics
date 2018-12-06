@@ -1,5 +1,5 @@
 context("Tests for the detectStandard() function")
-library(ReDish)
+library(safetyGraphics)
 
 test_that("a list with the expected properties and structure is returned",{
   a<- detectStandard(data.frame())

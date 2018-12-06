@@ -13,7 +13,8 @@
 #' #' @examples 
 #' testSettings<-generateSettings(standard="AdAM")
 #' checkFieldSettings(fieldKey=list("measure_values"),settings=testSettings, adlbc) #list of 4 checks. all pass ($valid ==TRUE)
-
+#' @importFrom stringr str_split
+#' 
 checkFieldSettings <- function(fieldKey, settings, data){
   stopifnot(typeof(fieldKey)=="list", typeof(settings)=="list")
   

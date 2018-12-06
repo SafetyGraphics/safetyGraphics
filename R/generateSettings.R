@@ -18,6 +18,8 @@
 #' /dontrun{
 #' generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far. 
 #' }
+#' 
+#' @export
 
 generateSettings <- function(standard="None", chart="eDish"){
   if(tolower(chart)!="edish"){

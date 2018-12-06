@@ -1,5 +1,5 @@
 context("Tests for the getSettingValue() function")
-library(ReDish)
+library(safetyGraphics)
 
 testSettings <- generateSettings(standard="SDTM")
 

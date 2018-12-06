@@ -1,5 +1,5 @@
 context("Tests for the generateSettings() function")
-library(ReDish)
+library(safetyGraphics)
 setting_names<-c("id_col", "value_col", "measure_col", "normal_col_low", "normal_col_high", "studyday_col", "visit_col", "visitn_col", "baseline_visitn", "filters", "group_cols", "measure_values", "x_options", "y_options", "visit_window", "r_ratio_filter", "r_ratio_cut", "showTitle", "warningText")
 
 test_that("a list with the expected properties and structure is returned for all standards",{

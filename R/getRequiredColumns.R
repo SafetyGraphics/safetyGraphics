@@ -9,6 +9,8 @@
 #' @examples 
 #' getRequiredColumns(standard="ADAM")
 #' getRequiredColumns(standard="SDTM")
+#' 
+#' @export
 
 getRequiredColumns<-function(standard,chart="eDish"){
   stopifnot(
