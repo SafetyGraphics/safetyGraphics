@@ -146,12 +146,12 @@ function(input, output, session){
   })
 
   # if settings are not valid, then remove the download button
-  observeEvent(status2()==FALSE, {
+  observeEvent(settings_new$status()$valid==FALSE, {
     removeUI(selector = "#download")
   })
   
   # if settings are valid, then add the download button
-  observeEvent(status2()==TRUE, {
+  observeEvent(settings_new$status()$valid==TRUE, {
     insertUI (
       selector  = "div.container-fluid",
       where = "beforeEnd",
@@ -186,14 +186,9 @@ function(input, output, session){
     updateTabsetPanel(session, "inTabset", selected = "charts")
   })
 
-
+  # Make valid settings available to shinytest for automated tests
+  exportTestValues(valid_settings = { settings_new$status()$valid })
   
-  # passing parameters for knitting on export button click. Call when chart generated
-
-
-        
-                        
-      
   
   session$onSessionEnded(stopApp)
   

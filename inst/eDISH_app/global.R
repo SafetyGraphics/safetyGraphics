@@ -20,7 +20,7 @@ source('../../R/checkSettingProvided.R')
 
 
 
-validateSettings2 <- function(data, settings, chart="eDish"){
+validateSettings2 <- function(data, settings, chart="eDISH"){
   
   settingStatus<-list()
   
