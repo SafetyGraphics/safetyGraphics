@@ -157,7 +157,7 @@ renderSettings <- function(input, output, session, data, settings, status){
         }
       }
 
-       validateSettings2(data(), settings_new, chart="eDish")
+       validateSettings(data(), settings_new, chart="eDish")
     # }
   })
 
