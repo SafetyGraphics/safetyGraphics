@@ -25,7 +25,7 @@ checkFieldSettings <- function(fieldKey, settings, data){
       nextKey<-length(current$key)+1
       current$key[[nextKey]]<-key
 
-      current$text_key <-  paste( unlist(current$key), collapse='|')
+      current$text_key <-  paste( unlist(current$key), collapse='--')
       current$check <- "'_values' field from setting found in data?"
       current$value <- getSettingValue(key=current$key,settings=settings)
       if(is.null(current$value)){
@@ -67,7 +67,7 @@ checkFieldSettings <- function(fieldKey, settings, data){
     current <- list()
     current$key<-fieldKey
     current$check <- "'_values' field from setting found in data?"
-    current$text_key <-  paste( unlist(current$key), collapse='|')
+    current$text_key <-  paste( unlist(current$key), collapse='--')
     current$value <- NULL
     current$valid <- FALSE
     current$message <- "No list of values found in settings."

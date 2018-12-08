@@ -13,7 +13,7 @@
 #'- `status` - a string summarizing of the validation results
 #'- `checkList` - list of lists giving details about checks performed on individual setting specifications. Each embedded item has the following properties:
 #'  - `key` - a list specifying the position of the property being checked. For example, `list("group_cols",1,"value_col")` corresponds to `settings[["group_cols"]][[1]][["value_col"]]`
-#'  - `text_key` - list from `key` parsed to character with a "|" separator.
+#'  - `text_key` - list from `key` parsed to character with a "--" separator.
 #'  - `value` - value of the setting
 #'  - `check` - description of the check performed.
 #'  - `valid` - a boolean indicating whether the check was passed
