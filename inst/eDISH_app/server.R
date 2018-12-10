@@ -146,23 +146,6 @@ function(input, output, session){
     
   })
 
-  #if settings are not valid, then remove the download button
-  # observeEvent(settings_new$status()$valid==FALSE, {
-  #   removeUI(selector = "#download")
-  # })
-  # 
-  # # if settings are valid, then add the download button
-  # observeEvent(settings_new$status()$valid==TRUE, {
-  #   insertUI (
-  #     selector  = "div.container-fluid",
-  #     where = "beforeEnd",
-  #     ui =  div(id="download", # give the container div an id for easy removal
-  #               style="float: right;",
-  #               span(class = "navbar-brand", #using one of the default nav bar classes to get css close
-  #                    style="padding: 8px;",  #then little tweak to ensure vertical alignment
-  #                    downloadButton("reportDL", "Export Chart")))
-  #   )
-  # })
 
   observeEvent(settings_new$status(), {
     removeUI(selector = "#download")
