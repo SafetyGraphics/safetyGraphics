@@ -391,8 +391,8 @@ renderSettings <- function(input, output, session, data, settings, status){
 
     }
    })
-
  
+  
   ### return updated settings and status to global env.
   return(list(settings = reactive(settings_new()),
               status = reactive(status_new())))
