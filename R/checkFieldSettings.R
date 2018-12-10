@@ -34,7 +34,7 @@ checkFieldSettings <- function(fieldKey, settings, data){
         current$message <- ""
         return(current)
       }else if(!columnSpecified){
-        current$valuid<-FALSE
+        current$valid<-FALSE
         current$message<-paste0("No column for ",columnKey," found in settings.")
       }else{
         current$valid <- current$value %in% validFields
