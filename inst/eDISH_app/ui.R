@@ -1,7 +1,9 @@
 library(shiny)
 library(shinyjs)
 
-navbarPage("eDISH Shiny app", id = "inTabset", 
+tagList(
+  useShinyjs(),
+  navbarPage("eDISH Shiny app", id = "inTabset", 
            tabPanel(title = "Data", value = "data",
                     fluidRow(
                       column(3,
@@ -29,12 +31,12 @@ navbarPage("eDISH Shiny app", id = "inTabset",
            ),
            tabPanel(title = "Settings", id = "settings",
                     fluidPage(
-                      useShinyjs(),
                       renderSettingsUI("settingsUI")
                     )
            ),
            tabPanel(title = "Charts", 
-                    value = "charts",
+                    id = "charts",
                     eDISHOutput("chart")
           )
+)
 )

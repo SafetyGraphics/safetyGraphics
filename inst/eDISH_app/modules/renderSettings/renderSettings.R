@@ -1,3 +1,4 @@
+
 source("modules/renderSettings/util/flagSetting.R")
 source("modules/renderSettings/util/updateSettingStatus.R")
 
@@ -10,6 +11,7 @@ renderSettings <- function(input, output, session, data, settings, status){
     if(name=="measure_col"){
       observe({
         settings <- settings()
+
         req(input$measure_col)
 
         if (input$measure_col %in% colnames()){
@@ -19,44 +21,46 @@ renderSettings <- function(input, output, session, data, settings, status){
             choices_tb  <- unique(c(settings$measure_values$TB,  as.character(data()[,settings$measure_col])))
             choices_alp <- unique(c(settings$measure_values$ALP, as.character(data()[,settings$measure_col])))
 
-            updateSelectizeInput(session, "measure_values|ALT", choices = choices_ast)
-            updateSelectizeInput(session, "measure_values|AST", choices = choices_alt)
-            updateSelectizeInput(session, "measure_values|TB",  choices = choices_tb)
-            updateSelectizeInput(session, "measure_values|ALP", choices = choices_alp)
+            updateSelectizeInput(session, "measure_values--ALT", choices = choices_ast)
+            updateSelectizeInput(session, "measure_values--AST", choices = choices_alt)
+            updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb)
+            updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp)
           } else {
             choices_ast <- unique(data()[,input$measure_col])
             choices_alt <- unique(data()[,input$measure_col])
             choices_tb  <- unique(data()[,input$measure_col])
             choices_alp <- unique(data()[,input$measure_col])
 
-            updateSelectizeInput(session, "measure_values|ALT", choices = choices_ast,
+            updateSelectizeInput(session, "measure_values--ALT", choices = choices_ast,
                                  options = list(
                                    placeholder = '',
                                    onInitialize = I('function() { this.setValue(""); }')))
-            updateSelectizeInput(session, "measure_values|AST", choices = choices_alt,
+            updateSelectizeInput(session, "measure_values--AST", choices = choices_alt,
                                  options = list(
                                    placeholder = '',
                                    onInitialize = I('function() { this.setValue(""); }')))
-            updateSelectizeInput(session, "measure_values|TB",  choices = choices_tb,
+            updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb,
                                  options = list(
                                    placeholder = '',
                                    onInitialize = I('function() { this.setValue(""); }')))
-            updateSelectizeInput(session, "measure_values|ALP", choices = choices_alp,
+            updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp,
                                  options = list(
                                    placeholder = '',
                                    onInitialize = I('function() { this.setValue(""); }')))
           }
         } else {
-          updateSelectizeInput(session, "measure_values|ALT", choices = "")
-          updateSelectizeInput(session, "measure_values|AST", choices = "")
-          updateSelectizeInput(session, "measure_values|TB", choices = "")
-          updateSelectizeInput(session, "measure_values|ALP", choices = "")
+          updateSelectizeInput(session, "measure_values--ALT", choices = "")
+          updateSelectizeInput(session, "measure_values--AST", choices = "")
+          updateSelectizeInput(session, "measure_values--TB", choices = "")
+          updateSelectizeInput(session, "measure_values--ALP", choices = "")
         }
+
 
           # updateSelectizeInput(session, "measure_values|ALT", choices = choices_ast)
           # updateSelectizeInput(session, "measure_values|AST", choices = choices_alt)
           # updateSelectizeInput(session, "measure_values|TB",  choices = choices_tb)
           # updateSelectizeInput(session, "measure_values|ALP", choices = choices_alp)
+
       })
     }
   } #end runCustomObserver()
@@ -83,10 +87,10 @@ renderSettings <- function(input, output, session, data, settings, status){
   # not sure if this is the right place to do it...but can we clear out this object upon a data change and start over??
 
   settings_new <- reactive({
-    # req(input$`measure_values|ALP`)
-    # req(input$`measure_values|AST`)
-    # req(input$`measure_values|TB`)
-    # req(input$`measure_values|ALT`)
+    # req(input$`measure_values--ALP`)
+    # req(input$`measure_values--AST`)
+    # req(input$`measure_values--TB`)
+    # req(input$`measure_values--ALT`)
 
     settings <- list(id_col = input$id_col,
                      value_col = input$value_col,
@@ -97,10 +101,10 @@ renderSettings <- function(input, output, session, data, settings, status){
                      studyday_col = input$studyday_col,
                      visit_col = input$visit_col,
                      visitn_col = input$visitn_col,
-                     measure_values = list(ALT = input$`measure_values|ALT`,
-                                           AST = input$`measure_values|AST`,
-                                           TB = input$`measure_values|TB`,
-                                           ALP = input$`measure_values|ALP`),
+                     measure_values = list(ALT = input$`measure_values--ALT`,
+                                           AST = input$`measure_values--AST`,
+                                           TB = input$`measure_values--TB`,
+                                           ALP = input$`measure_values--ALP`),
                      x_options = input$x_options,
                      y_options = input$y_options,
                      visit_window = input$visit_window,
@@ -157,7 +161,7 @@ renderSettings <- function(input, output, session, data, settings, status){
         }
       }
 
-       validateSettings2(data(), settings_new, chart="eDish")
+       validateSettings(data(), settings_new, chart="eDish")
     # }
   })
 
@@ -207,8 +211,8 @@ renderSettings <- function(input, output, session, data, settings, status){
     req(colnames())
 
      for (name in isolate(input_names())){
-
-       setting_key <- as.list(strsplit(name,"\\|"))
+       #print(name)
+       setting_key <- as.list(strsplit(name,"\\-\\-"))
        setting_value <- getSettingValue(key=setting_key, settings=settings())
 
        setting_label <- name ##TO DO: get the label!

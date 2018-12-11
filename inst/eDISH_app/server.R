@@ -128,6 +128,7 @@ function(input, output, session){
   #  the example data (ADAM) to a non-ADAM dataset, the app will bomb)
     settings_new <-   callModule(renderSettings, "settingsUI",
                                  data=isolate(data_selected),
+                               #  data=data_selected,
                                  settings=settings,
                                  status=status )
 
@@ -145,14 +146,14 @@ function(input, output, session){
 
   })
 
-  # if settings are not valid, then remove the download button
-  observeEvent(status()[["valid"]]==FALSE, {
-    removeUI(selector = "#download")
-  })
 
-  # if settings are valid, then add the download button
-  observeEvent(status()[["valid"]]==TRUE, {
-    insertUI (
+
+  observeEvent(settings_new$status(), {
+    removeUI(selector = "#download")
+    if (settings_new$status()$valid==FALSE) {
+      removeUI(selector = "#download")
+    } else{
+      insertUI (
       selector  = "div.container-fluid",
       where = "beforeEnd",
       ui =  div(id="download", # give the container div an id for easy removal
@@ -161,7 +162,9 @@ function(input, output, session){
                      style="padding: 8px;",  #then little tweak to ensure vertical alignment
                      downloadButton("reportDL", "Export Chart")))
     )
+    } 
   })
+
 
   # Set up report generation on download button click
   output$reportDL <- downloadHandler(
@@ -171,8 +174,9 @@ function(input, output, session){
       # have write permissions to the current working dir (which can happen when deployed).
       tempReport <- file.path(tempdir(), "report.Rmd")
       file.copy("template/safetyGraphicReport.Rmd", tempReport, overwrite = TRUE)
-
-      params <- list(data = data_selected(), settings = settingsUI_list$settings)
+      
+      params <- list(data = data_selected(), settings = settings_new$settings()) 
+      
 
       rmarkdown::render(tempReport,
                         output_file = file,
@@ -180,21 +184,11 @@ function(input, output, session){
                         envir = new.env(parent = globalenv())  ## eval in child of global env
       )
     }
-  )
-
-  observeEvent(input$view_chart, {
-    updateTabsetPanel(session, "inTabset", selected = "charts")
-  })
-
-
-
-  # passing parameters for knitting on export button click. Call when chart generated
-
-
-
-
-
-
+  )  
+  
+  # Make valid settings available to shinytest for automated tests
+  exportTestValues(valid_settings = { settings_new$status()$valid })
+  
   session$onSessionEnded(stopApp)
 
 }
