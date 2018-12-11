@@ -1,5 +1,10 @@
+
+source("modules/renderSettings/util/flagSetting.R")
+source("modules/renderSettings/util/updateSettingStatus.R")
+
 renderSettings <- function(input, output, session, data, settings, status){
 
+  #TODO: Save to separate file - probably needs to be a module.
   runCustomObserver<-function(name){
 
     # Custom observer for measure_col
@@ -8,7 +13,6 @@ renderSettings <- function(input, output, session, data, settings, status){
         settings <- settings()
 
         req(input$measure_col)
-
 
         if (input$measure_col %in% colnames()){
           if (!is.null(settings$measure_col) && input$measure_col==settings$measure_col){
@@ -56,7 +60,6 @@ renderSettings <- function(input, output, session, data, settings, status){
           # updateSelectizeInput(session, "measure_values|TB",  choices = choices_tb)
           # updateSelectizeInput(session, "measure_values|ALP", choices = choices_alp)
 
-
       })
     }
   } #end runCustomObserver()
@@ -81,6 +84,7 @@ renderSettings <- function(input, output, session, data, settings, status){
   # Therefore, until the inputs are done updating based on new data, this object will be
   # partially representing the old data, and partially representing the new data.
   # not sure if this is the right place to do it...but can we clear out this object upon a data change and start over??
+
   settings_new <- reactive({
     # req(input$`measure_values|ALP`)
     # req(input$`measure_values|AST`)

@@ -1,3 +1,4 @@
+
 renderSettingsUI <- function(id){
 
   ns <- NS(id)
@@ -11,14 +12,18 @@ renderSettingsUI <- function(id){
               column(6,
                      h3("Data Mapping"),
                      div(
+
                          div(tags$label(id=ns("label_id_col"), "Unique subject identifier")),
                          selectizeInput(ns("id_col"),NULL, choices = NULL)
+
                      ),
 
                      div(
                        tags$label(id=ns("label_value_col"),"Lab Result"),
                        selectizeInput(ns("value_col"),NULL, choices = NULL)
+
                        ),
+
                      div(
                        tags$label(id=ns("label_measure_col"),"Lab measure"),
                        selectizeInput(ns("measure_col"),NULL, choices = NULL)
@@ -98,6 +103,7 @@ renderSettingsUI <- function(id){
         )
       ))
   )
+
   )
 
 }
