@@ -147,13 +147,13 @@ function(input, output, session){
   })
 
 
+
   observeEvent(settings_new$status(), {
     removeUI(selector = "#download")
     if (settings_new$status()$valid==FALSE) {
       removeUI(selector = "#download")
     } else{
       insertUI (
-
       selector  = "div.container-fluid",
       where = "beforeEnd",
       ui =  div(id="download", # give the container div an id for easy removal
@@ -186,10 +186,9 @@ function(input, output, session){
     }
   )  
   
-
-    
+  # Make valid settings available to shinytest for automated tests
+  exportTestValues(valid_settings = { settings_new$status()$valid })
   
-
   session$onSessionEnded(stopApp)
 
 }
