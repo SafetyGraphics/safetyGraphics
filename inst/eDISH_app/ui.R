@@ -21,10 +21,6 @@ tagList(
                                uiOutput("datapreview_header"),
                                div(DT::dataTableOutput("data_preview"), style = "font-size: 75%")
                              )
-                             ),
-                             fluidRow(
-                               br(),
-                               tags$style(type='text/css', '#detectStandard_msg {font-size:23px;}')
                              )
                       )
                     )
@@ -36,7 +32,7 @@ tagList(
            ),
            tabPanel(title = "Charts", 
                     id = "charts",
-                    eDISHOutput("chart")
+                    renderEDishChartUI("chart--eDish")
           )
 )
 )

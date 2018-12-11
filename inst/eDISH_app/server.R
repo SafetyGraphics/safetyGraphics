@@ -132,19 +132,12 @@ function(input, output, session){
                                  settings=settings,
                                  status=status )
 
-
-   # if returned status is valid, generate chart
-  observeEvent(settings_new$status()$valid==TRUE, {
-
-     ## future: wrap into module called generateChart()
-    output$chart <- renderEDISH({
-      req(data_selected())
-      req(settings_new$settings())
-      eDISH(data = data_selected(), settings = settings_new$settings())
-    })
-
-
-  })
+    
+  # module to render eDish chart 
+  callModule(renderEDishChart, "chart--eDish", 
+             data = data_selected, 
+             settings = reactive(settings_new$settings()), 
+             valid = reactive(settings_new$status()$valid))
 
 
   observeEvent(settings_new$status(), {
