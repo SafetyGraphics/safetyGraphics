@@ -17,7 +17,7 @@ checkFieldSettings(fieldKey, settings, data)
 A list containing the results of the check following the format specified in \code{validateSettings()[["checkList"]]}
 
 
-#' @examples 
+#' @examples
 testSettings<-generateSettings(standard="AdAM")
 checkFieldSettings(fieldKey=list("measure_values"),settings=testSettings, adlbc) #list of 4 checks. all pass ($valid ==TRUE)
 }

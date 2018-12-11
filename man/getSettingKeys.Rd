@@ -16,19 +16,20 @@ getSettingKeys(patterns, settings, parents = NULL, matchLists = FALSE)
 \item{matchLists}{Boolean indicating whether keys containing lists should be returned as matches.}
 }
 \value{
-List of lists specifying the position of matching named elements in the format \code{list("filters",2,"value_col")}, which would correspond to \code{settings[["filters"]][[2]][["value_col]]}.
-
-#' @examples 
+List of lists specifying the position of matching named elements in the format \code{list("filters",2,"value_col")}, which would correspond to \code{settings[["filters"]][[2]][["value_col"]]}.
+}
+\description{
+Recursive function to find all keys matching a given text pattern in a settings list
+}
+\details{
+This function loops through all named elements (or "keys") in a \code{settings} list and returns items that match \code{patterns}. If \code{matchLists==FALSE} (the default), the function iteratively looks through the named elements in nested lists using the built-in \code{parents} parameter. The function returns a array of keys for all matches using a list of lists. Each key is defines the postition of a matching key using an unnamed list. For example, \code{list("filters",2,"value_col")} would correspond to \code{settings[["filters"]][[2]][["value_col"]]}.
+}
+\examples{
 testSettings<-generateSettings(standard="AdAM")
 
 getSettingKeys(patterns=c("_col"),settings=testSettings) # returns list of all matching values
 getSettingKeys(patterns=c("ALP"),settings=testSettings) #finds the matching nested setting
 getSettingKeys(patterns=c("measure_values"),settings=testSettings) #returns an empty list, since the only matching item is a list
 getSettingKeys(patterns=c("measure_values"),settings=testSettings, matchLists=TRUE) #finds the matching key associated with a list
-}
-\description{
-Recursive function to find all keys matching a given text pattern in a settings list
-}
-\details{
-This function loops through all named elements (or "keys") in a \code{settings} list and returns items that match \code{patterns}. If \code{matchLists==FALSE} (the default), the function iteratively looks through the named elements in nested lists using the built-in \code{parents} parameter. The function returns a array of keys for all matches using a list of lists. Each key is defines the postition of a matching key using an unnamed list. For example, \code{list("filters",2,"value_col")} would correspond to \code{settings[["filters"]][[2]][["value_col]]}.
+
 }

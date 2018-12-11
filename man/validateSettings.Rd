@@ -17,15 +17,15 @@ validateSettings(data, settings, chart = "eDish")
 A list describing the validation state for the data/settings combination. The returned list has the following properties:
 - `valid` - boolean indicating whether the settings/data combo creates a valid chart
 - `status` - a string summarizing of the validation results
-- `checkList` - list of lists giving details about checks performed on individual setting specifications. Each embedded item has the following properties: 
+- `checkList` - list of lists giving details about checks performed on individual setting specifications. Each embedded item has the following properties:
  - `key` - a list specifying the position of the property being checked. For example, `list("group_cols",1,"value_col")` corresponds to `settings[["group_cols"]][[1]][["value_col"]]`
- - `text_key` - list from `key` parsed to character with a "|" separator. 
+ - `text_key` - list from `key` parsed to character with a "--" separator.
  - `value` - value of the setting
  - `check` - description of the check performed.
  - `valid` - a boolean indicating whether the check was passed
  - `message` - a string describing failed checks (where `valid=FALSE`). returns an empty string when `valid==TRUE`
- 
- @examples 
+
+ @examples
  testSettings <- generateSettings(standard="adam")
  validateSettings(data=adlbc, settings=testSettings) # .$valid is TRUE
  testSettings$id_col <- "NotAColumn"
