@@ -1,3 +1,4 @@
+
 source("modules/renderSettings/util/flagSetting.R")
 source("modules/renderSettings/util/updateSettingStatus.R")
 
@@ -10,6 +11,7 @@ renderSettings <- function(input, output, session, data, settings, status){
     if(name=="measure_col"){
       observe({
         settings <- settings()
+
         req(input$measure_col)
 
         if (input$measure_col %in% colnames()){
@@ -57,6 +59,7 @@ renderSettings <- function(input, output, session, data, settings, status){
           # updateSelectizeInput(session, "measure_values|AST", choices = choices_alt)
           # updateSelectizeInput(session, "measure_values|TB",  choices = choices_tb)
           # updateSelectizeInput(session, "measure_values|ALP", choices = choices_alp)
+
       })
     }
   } #end runCustomObserver()
