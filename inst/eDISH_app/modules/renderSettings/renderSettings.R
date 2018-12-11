@@ -55,12 +55,6 @@ renderSettings <- function(input, output, session, data, settings, status){
           updateSelectizeInput(session, "measure_values--ALP", choices = "")
         }
 
-
-          # updateSelectizeInput(session, "measure_values|ALT", choices = choices_ast)
-          # updateSelectizeInput(session, "measure_values|AST", choices = choices_alt)
-          # updateSelectizeInput(session, "measure_values|TB",  choices = choices_tb)
-          # updateSelectizeInput(session, "measure_values|ALP", choices = choices_alp)
-
       })
     }
   } #end runCustomObserver()
@@ -95,7 +89,6 @@ renderSettings <- function(input, output, session, data, settings, status){
     settings <- list(id_col = input$id_col,
                      value_col = input$value_col,
                      measure_col = input$measure_col,
-                    # measure_col = isolate(input$measure_col),  # avoid updating on measure_col - just update on downstream depends
                      normal_col_low = input$normal_col_low,
                      normal_col_high = input$normal_col_high,
                      studyday_col = input$studyday_col,
