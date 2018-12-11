@@ -12,6 +12,7 @@
 #' checkSettingProvided(key=list("filters"),settings=testSettings) #fails since filters aren't specified by default
 #' checkSettingProvided(key=list("groups",1,"value_col"),settings=testSettings) #fails since groups aren't specified by default
 #' 
+#' @export
 
 checkSettingProvided <- function(key, settings){
   stopifnot(typeof(key)=="list",typeof(settings)=="list")

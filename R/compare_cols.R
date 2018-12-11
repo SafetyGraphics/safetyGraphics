@@ -10,6 +10,8 @@
 #' @examples 
 #' compare_cols(data_cols=c("a","b","c"),standard_cols=c("d","e","f")) #match == FALSE
 #' compare_cols(names(adlbc),getRequiredColumns(standard="ADaM")) # match == TRUE
+#' 
+#' @export
 
 compare_cols<-function(data_cols, standard_cols){
   compare_summary <- list()

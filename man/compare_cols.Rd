@@ -20,4 +20,5 @@ Function to compare contents of 2 vectors - used to summarize of which data colu
 \examples{
 compare_cols(data_cols=c("a","b","c"),standard_cols=c("d","e","f")) #match == FALSE
 compare_cols(names(adlbc),getRequiredColumns(standard="ADaM")) # match == TRUE
+
 }

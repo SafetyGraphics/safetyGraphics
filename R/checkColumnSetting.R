@@ -20,6 +20,7 @@
 #' checkColumnSetting(key=list("filters",1,"value_col"),settings=testSettings, adlbc) #pass
 #' checkColumnSetting(key=list("filters",2,"value_col"),settings=testSettings, adlbc) #NULL column pass
 #' checkColumnSetting(key=list("filters",3,"value_col"),settings=testSettings, adlbc) #invalid column fails
+#' @export
 
 checkColumnSetting <- function(key, settings, data){
   stopifnot(typeof(key)=="list",typeof(settings)=="list")

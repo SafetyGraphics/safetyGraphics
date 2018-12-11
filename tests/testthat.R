@@ -1,4 +1,4 @@
 library(testthat)
-library(ReDish)
+library(safetyGraphics)
 
-test_check("ReDish")
+test_check("safetyGraphics")
