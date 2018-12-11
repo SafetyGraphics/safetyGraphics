@@ -1,5 +1,5 @@
 # safetyGraphics: Clinical Trial Safety Graphics with R
-
+[![Travis-CI Build Status](https://travis-ci.org/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics.svg?branch=master)](https://travis-ci.org/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics)
 The **safetyGraphics** package provides a framework for evaluation of clinical trial safety in R. The initial release focuses on Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH). A prototype of the eDish interactive graphic available [here](https://asa-dia-interactivesafetygraphics.github.io/safety-eDISH/test/) and is shown below.
 
 ![edishgif](https://user-images.githubusercontent.com/3680095/45834450-02b3a000-bcbc-11e8-8172-324c2fe43521.gif)
