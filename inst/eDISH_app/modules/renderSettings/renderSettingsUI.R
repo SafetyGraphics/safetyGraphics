@@ -30,20 +30,20 @@ renderSettingsUI <- function(id){
                      ),
                      h4("Key measures"),
                      div(
-                       tags$label(id=ns("label_measure_values|ALT"),"ALT"),
-                       selectizeInput(ns("measure_values|ALT"),NULL, choices = NULL)
+                       tags$label(id=ns("label_measure_values--ALT"),"ALT"),
+                       selectizeInput(ns("measure_values--ALT"),NULL, choices = NULL)
                      ),
                      div(
-                       tags$label(id=ns("label_measure_values|AST"),"AST"),
-                       selectizeInput(ns("measure_values|AST"),NULL, choices = NULL)
+                       tags$label(id=ns("label_measure_values--AST"),"AST"),
+                       selectizeInput(ns("measure_values--AST"),NULL, choices = NULL)
                      ),
                      div(
-                       tags$label(id=ns("label_measure_values|TB"),"TB"),
-                       selectizeInput(ns("measure_values|TB"),NULL, choices = NULL)
+                       tags$label(id=ns("label_measure_values--TB"),"TB"),
+                       selectizeInput(ns("measure_values--TB"),NULL, choices = NULL)
                      ),
                      div(
-                       tags$label(id=ns("label_measure_values|ALP"),"ALP"),
-                       selectizeInput(ns("measure_values|ALP"),NULL, choices = NULL)
+                       tags$label(id=ns("label_measure_values--ALP"),"ALP"),
+                       selectizeInput(ns("measure_values--ALP"),NULL, choices = NULL)
                      )
               ) ,
               column(6,
@@ -105,5 +105,4 @@ renderSettingsUI <- function(id){
   )
 
   )
-
 }
