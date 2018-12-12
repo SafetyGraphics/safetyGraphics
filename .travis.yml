@@ -3,10 +3,11 @@
 dist: trusty  # Use Ubuntu 14.04 image (instead of 12.04)
 language: R
 sudo: false
-cache: packages
-       directories: 
-          # PhantomJS
-          - travis_phantomjs
+cache: 
+  packages : true
+  directories: 
+      # PhantomJS
+      - travis_phantomjs
 
 # Install PhantomJS 
 before_install:
@@ -19,4 +20,4 @@ before_install:
   - "if [ $(phantomjs --version) != $PHANTOMJS_VERSION ]; then wget https://github.com/Medium/phantomjs/releases/download/v$PHANTOMJS_VERSION/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 -O $PWD/travis_phantomjs/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2; fi"
   - "if [ $(phantomjs --version) != $PHANTOMJS_VERSION ]; then tar -xvf $PWD/travis_phantomjs/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 -C $PWD/travis_phantomjs; fi"
   - "if [ $(phantomjs --version) != $PHANTOMJS_VERSION ]; then hash -r; fi"
-- "phantomjs --version"
+  - "phantomjs --version"
