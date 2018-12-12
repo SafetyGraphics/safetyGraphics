@@ -209,6 +209,7 @@ renderSettings <- function(input, output, session, data, settings, status){
        setting_value <- getSettingValue(key=setting_key, settings=settings())
 
        setting_label <- name ##TO DO: get the label!
+       
 
        # 1. Update the options for data-mapping inputs
        if(str_detect(name,"_col") | name %in% c("filters", "group_cols")){
@@ -235,6 +236,7 @@ renderSettings <- function(input, output, session, data, settings, status){
        }
      }
      })
+
 
   observe({
     for (name in isolate(input_names())){

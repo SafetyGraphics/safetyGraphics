@@ -14,7 +14,7 @@ tagList(
            ),
            tabPanel(title = "Charts", 
                     id = "charts",
-                    renderEDishChartUI("chart--eDish")
+                    renderEDishChartUI("chartEDish")
           )
 )
 )
