@@ -1,6 +1,7 @@
 context("Core App Functionality")
 # This file is for testing the applications in the inst/ directory.
 
+library(safetyGraphics)
 library(shinytest)
 
 test_that("chart is drawn and settings are valid by default", {
