@@ -25,8 +25,8 @@ function(input, output, session){
              settings = reactive(settings_new$settings()),
              valid = reactive(settings_new$status()$valid))
 
-  
 
+  
   session$onSessionEnded(stopApp)
 
 }
