@@ -38,9 +38,9 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
 
 \item{baseline_visitn}{Value of baseline visit number. Used to calculate mDish. Default: \code{1}.}
 
-\item{filters}{An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.}
+\item{filters}{An optional list of specifications for filters.  Each filter is a nested, named list (containing the filter value column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.}
 
-\item{group_cols}{An optional data frame of filters ("value_col") and associated metadata ("label"). Default: \code{NULL}.}
+\item{group_cols}{An optional list of specifications for grouping columns.  Each group column is a nested, named list (containing the group variable column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.}
 
 \item{analysisFlag}{An optional list defining which column \code{value_col} and values \code{values} should be used to records for use in eDish and mDish analyses. Default: \code{NULL}.}
 
@@ -96,11 +96,18 @@ eDISH(data=adlbc,
                             ALP = "Alkaline Phosphatase (U/L)"))
 
 ## Create eDISH figure using a premade settings list
-group_cols_vec <- c("TRTP","SEX", "AGEGR1")
+group_cols_list <- list(
+  list(value_col = "TRTP", label = "Treatment"),
+  list(value_col = "SEX", label = "Sex"), 
+  list(value_col = "AGEGR1", label = "Age group")
+)
 
-filters_df <- data.frame(
-  value_col=c("TRTA", "SEX", "RACE", "AGEGR1"),
-  label = c("Treatment", "Sex", "RACE", "Age group")
+
+filters_list <- list(
+  list(value_col = "TRTA", label = "Treatment"),
+  list(value_col = "SEX", label = "Sex"), 
+  list(value_col = "RACE", label = "RACE"),
+  list(value_col = "AGEGR1", label = "Age group")
 )
 
 settingsl <- list(id_col = "USUBJID",
@@ -111,8 +118,8 @@ settingsl <- list(id_col = "USUBJID",
       studyday_col = "ADY", 
       normal_col_low = "A1LO", 
       normal_col_high = "A1HI", 
-      group_cols = group_cols_vec,
-      filters = filters_df,
+      group_cols = group_cols_list,
+      filters = filters_list,
       measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
                             AST = "Aspartate Aminotransferase (U/L)",
                             TB = "Bilirubin (umol/L)",
