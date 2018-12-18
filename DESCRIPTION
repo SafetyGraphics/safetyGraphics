@@ -19,7 +19,8 @@ Imports:
 	htmlwidgets,
 	purrr,
 	stringr,
- 	jsonlite
+ 	jsonlite, 
+ 	shiny
 Remotes:
     rstudio/shinytest
 
