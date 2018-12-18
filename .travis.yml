@@ -1,13 +1,22 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-dist: trusty  # Use Ubuntu 14.04 image (instead of 12.04)
 language: R
 sudo: false
-r: 3.4.4
+r: 3.5.1
+
+os:
+  - osx
+
+# Install packrat if needed and have it restore packages.
+install:
+  - R -e 'if (system.file(package="packrat") == "") install.packages("packrat")'
+  - R -e "packrat::packify(); packrat::restore()"
 
 cache: 
   packages : true
   directories: 
+      # Packrat packages
+      - packrat/lib
       # PhantomJS
       - travis_phantomjs
 
