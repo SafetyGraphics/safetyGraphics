@@ -9,8 +9,7 @@ test_that("chart is drawn and settings are valid by default", {
   skip_on_cran()
   
   appdir <- system.file(package = "safetyGraphics", "eDISH_app")
-  #expect_pass(testApp(appdir, "defaultPath.R"))
-  expect_pass(testApp(appdir, "defaultPath.R"))
+  expect_pass(testApp(appdir, "defaultPath.R",compareImages=F))
 })
 
 # test_that("chart is not drawn and settings are invalid when non standard data uploaded", {
