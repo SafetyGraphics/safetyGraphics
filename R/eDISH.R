@@ -11,7 +11,7 @@
 #' @param visit_col Visit variable name. Default: \code{"VISIT"}.
 #' @param visitn_col Visit number variable name. Default: \code{"VISITN"}. 
 #' @param studyday_col  Visit day variable name. Default: \code{"DY"}. 
-#' @param baseline_visitn Value of baseline visit number. Used to calculate mDish. Default: \code{1}. 
+#' @param baseline An optional list defining which column \code{"value_col"} and values (one or more) \code{values} represent the baseline visit(s) of the study.
 #' @param filters An optional list of specifications for filters.  Each filter is a nested, named list (containing the filter value column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.
 #' @param group_cols An optional list of specifications for grouping columns.  Each group column is a nested, named list (containing the group variable column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.
 #' @param measure_values A list defining the data values from \code{measure_col} for the lab measures 
@@ -100,7 +100,7 @@ eDISH <- function(data,
                   visit_col = "VISIT",
                   visitn_col = "VISITN",
                   studyday_col = "DY",
-                  baseline_visitn = 1,
+                  baseline = NULL,
                   filters = NULL,
                   group_cols = NULL,
                   analysisFlag= NULL,
@@ -118,6 +118,14 @@ eDISH <- function(data,
                   warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.",
                   settings = NULL) {
 
+  # If only one baseline value specified, convert value to list 
+  # this ensures that the value will stay in array format when auto_unbox=TRUE specified in toJSON()
+  # ... file an issue to fix on JS side
+  if (!is.null(baseline)){
+    if (length(baseline[["values"]])==1){
+      baseline[["values"]] <- list(baseline[["values"]])
+    }
+  }
 
   # forward options using rSettings
   if (is.null(settings)){
@@ -133,7 +141,7 @@ eDISH <- function(data,
           visit_col = visit_col,
           visitn_col = visitn_col,
           studyday_col = studyday_col,
-          baseline_visitn = baseline_visitn,
+          baseline = baseline,
           filters = filters,
           group_cols = group_cols,
           analysisFlag = analysisFlag,
