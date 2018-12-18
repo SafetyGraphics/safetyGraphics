@@ -20,7 +20,8 @@ Imports:
 	purrr,
 	stringr,
  	jsonlite, 
- 	shiny
+ 	shiny,
+ 	tidyverse
 Remotes:
     rstudio/shinytest
 
