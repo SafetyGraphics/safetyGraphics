@@ -57,8 +57,34 @@ renderSettings <- function(input, output, session, data, settings, status){
 
       })
     }
-  } #end runCustomObserver()
 
+  # Custom observer for baseline
+  # if(name=="baseline--value_col"){
+  #   observe({
+  #     settings <- settings()
+  #     
+  #     req(input$`baseline--value_col`)
+      
+      # if (input$`baseline--value_col` %in% colnames()){
+      #   if (!is.null(settings$baseline$value_col) && input$`baseline--value_col`==settings$baseline$value_col){
+      #     choices <- unique(c(settings$baseline$values, as.character(data()[,settings$baseline$value_col])))
+      #     
+      #     updateSelectizeInput(session, "baseline--values", choices = choices)
+      #   } else {
+      #     choices <- unique(data()[,input$`baseline--value_col`])
+      #     
+      #     updateSelectizeInput(session, "baseline--values", choices = choices,
+      #                          options = list(
+      #                            placeholder = '',
+      #                            onInitialize = I('function() { this.setValue(""); }')))
+      #   }
+      # } else {
+      #   updateSelectizeInput(session, "baseline--values", choices = "")
+      # }
+      
+  #   })
+  # }
+} #end runCustomObserver()
 
   ###########################
   # Make updates to the UI
@@ -106,6 +132,11 @@ renderSettings <- function(input, output, session, data, settings, status){
                      showTitle = input$showTitle,
                      warningText = input$warningText)
 
+    # if (!is.null(input$`baseline--value_col`)){
+    #   settings$baseline <- list(value_col = input$`baseline--value_col`,
+    #                             values = input$`baseline--values`)
+    # }
+    
     if (!is.null(input$filters)){
           for (i in 1:length(input$filters)){
             settings$filters[[i]] <- list(value_col = input$filters[[i]],
@@ -130,8 +161,7 @@ renderSettings <- function(input, output, session, data, settings, status){
     return(settings)
   })
 
-
-  # validate new settings
+    # validate new settings
   #  the validation is run every time there is a change in data and/or settings.
   #
   #  NOTE: to prevent status updating as loop runs and fills in settings(),
@@ -198,9 +228,9 @@ renderSettings <- function(input, output, session, data, settings, status){
   #            - after UI is filled, we generate a NEW settings object & status
   #            - dependent on: the new settings/status, which will update after every user selection
 
-
-
-  observeEvent(data(), {
+  
+ # observeEvent(data(), {
+  observe({ 
     req(colnames())
 
      for (name in isolate(input_names())){
@@ -212,7 +242,9 @@ renderSettings <- function(input, output, session, data, settings, status){
        
 
        # 1. Update the options for data-mapping inputs
-       if(str_detect(name,"_col") | name %in% c("filters", "group_cols")){
+      # if(str_detect(name,"_col") | name %in% c("filters", "group_cols")){
+       if (name %in% c("id_col","measure_col","value_col","studyday_col","normal_col_high",
+                       "normal_col_low", "visit_col","visitn_col")){
          sortedChoices<-NULL
          if(is.null(setting_value)){
            sortedChoices<-colnames()

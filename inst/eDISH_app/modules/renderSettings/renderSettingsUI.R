@@ -28,7 +28,7 @@ renderSettingsUI <- function(id){
                        tags$label(id=ns("label_measure_col"),"Lab measure"),
                        selectizeInput(ns("measure_col"),NULL, choices = NULL)
                      ),
-                     h4("Key measures"),
+                  #   h4("Key measures"),
                      div(
                        tags$label(id=ns("label_measure_values--ALT"),"ALT"),
                        selectizeInput(ns("measure_values--ALT"),NULL, choices = NULL)
@@ -45,17 +45,6 @@ renderSettingsUI <- function(id){
                        tags$label(id=ns("label_measure_values--ALP"),"ALP"),
                        selectizeInput(ns("measure_values--ALP"),NULL, choices = NULL)
                      ),
-                     br(),
-                     br(),
-                     br(),                     
-                     br(),
-                     br(),
-                     br()
-              ) ,
-              column(6,
-                     br(),
-                     br(),
-                     br(),
                      div(
                        tags$label(id=ns("label_normal_col_low"),"Lower limit of normal"),
                        selectizeInput(ns("normal_col_low"),NULL, choices = NULL)
@@ -63,7 +52,13 @@ renderSettingsUI <- function(id){
                      div(
                        tags$label(id=ns("label_normal_col_high"),"Upper limit of normal"),
                        selectizeInput(ns("normal_col_high"),NULL, choices = NULL)
-                     ),
+                     )
+              ) ,
+              column(6,
+                     br(),
+                     br(),
+                     br(),
+
                      div(
                        tags$label(id=ns("label_visit_col"),"Visit"),
                        selectizeInput(ns("visit_col"),NULL, choices = NULL)
@@ -76,17 +71,25 @@ renderSettingsUI <- function(id){
                        tags$label(id=ns("label_studyday_col"),"Study day"),
                        selectizeInput(ns("studyday_col"),NULL, choices = NULL)
                      ),
+                     # div(
+                     #   tags$label(id=ns("label_baseline--value_col"),"Baseline value column"),
+                     #   selectizeInput(ns("baseline--value_col"),NULL, choices = NULL)
+                     # ),
+                     # div(
+                     #   tags$label(id=ns("label_baseline--values"),"Baseline value(s)"),
+                     #   selectizeInput(ns("baseline--values"),NULL, choices = NULL)
+                     # ),
                      selectInput(ns("filters"),"Filters", choices = NULL, selected = NULL, multiple = TRUE),
                      selectInput(ns("group_cols"),"Groups", choices = NULL, multiple = TRUE),
+                     # div(
+                     #   tags$label(id=ns("label_analysisFlag"),"Analysis population"),
+                     #   selectizeInput(ns("analysisFlag"),NULL, choices = NULL)
+                     # ),
                      br(),
                      br(),
                      br(),
                      br(),
                      br()
-                     # div(
-                     #   tags$label(id=ns("label_anlyFlag"),"Use flagged analysis pop"),
-                     #   selectizeInput(ns("anlyFlag"),NULL, choices = NULL)
-                     # )
               ))
           )
         ),
@@ -94,8 +97,8 @@ renderSettingsUI <- function(id){
           column(6,
                  wellPanel(
                    h3("Measure Settings"),
-                   selectInput(ns("x_options"),"x_options", choices = c("ALT", "AST", "ALP"), selected = c("ALT", "AST", "ALP"), multiple = TRUE),
-                   selectInput(ns("y_options"),"y_options", choices = c("ALT", "AST", "ALP"), selected = c("TB","ALP"), multiple = TRUE)
+                   selectInput(ns("x_options"),"x_options", choices = c("ALT", "AST", "ALP","TB"), selected = c("ALT", "AST", "ALP"), multiple = TRUE),
+                   selectInput(ns("y_options"),"y_options", choices = c("ALT", "AST", "ALP","TB"), selected = c("TB"), multiple = TRUE)
                  ),
         #  ),
          # column(6,
