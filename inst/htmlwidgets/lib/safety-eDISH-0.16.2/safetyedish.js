@@ -282,6 +282,7 @@
             r_ratio_cut: 0,
             visit_window: 30,
             showTitle: true,
+            downloadLink: true,
             warningText:
                 "This graphic has been thoroughly tested, but is not validated. Any clinical recommendations based on this tool should be confirmed using your organization's standard operating procedures.",
             //all values set in onLayout/quadrants/*.js
@@ -392,6 +393,11 @@
             settings.color_by = 'NONE';
         }
 
+        //make sure filters is an Array
+        if (!(settings.filters instanceof Array)) {
+            settings.filters = [];
+        }
+
         //Define default details.
         var defaultDetails = [{ value_col: settings.id_col, label: 'Subject Identifier' }];
         if (settings.filters) {
@@ -466,13 +472,11 @@
         }
 
         // If settings.analysisFlag is null
-        if (!settings.analysisFlag)
-            settings.analysisFlag = {
-                value_col: null,
-                values: []
+        if (!settings.analysisFlag) settings.analysisFlag = { value_col: null, values: [] };
 
-                //if it is null, set settings.baseline.value_col to settings.studyday_col.
-            };
+        //if it is null, set settings.baseline.value_col to settings.studyday_col.
+        if (!settings.baseline) settings.baseline = { value_col: null, values: [] };
+        if (settings.baseline.values.length == 0) settings.baseline.values = [0];
         if (!settings.baseline.value_col) settings.baseline.value_col = settings.studyday_col;
 
         //parse x_ and y_options to array if needed
@@ -493,6 +497,12 @@
 
     function controlInputs() {
         return [
+            {
+                type: 'number',
+                label: 'Minimum R Ratio',
+                description: 'Display points with R ratios greater or equal to X',
+                option: 'r_ratio_cut'
+            },
             {
                 type: 'dropdown',
                 label: 'Group',
@@ -564,12 +574,6 @@
                 label: 'Highlight Points Based on Timing',
                 description: 'Fill points with max values less than X days apart',
                 option: 'visit_window'
-            },
-            {
-                type: 'number',
-                label: 'Minimum R Ratio',
-                description: 'Display points with R ratios greater or equal to X',
-                option: 'r_ratio_cut'
             }
         ];
     }
@@ -719,7 +723,7 @@
                 };
                 return filter;
             });
-            return controlInputs.concat(otherFilters);
+            return d3.merge([otherFilters, controlInputs]);
         } else return controlInputs;
     }
 
@@ -1627,7 +1631,7 @@
         }
     }
 
-    function downloadCSV(data, cols) {
+    function downloadCSV(data, cols, file) {
         var CSVarray = [];
 
         //add headers to CSV array
@@ -1653,9 +1657,8 @@
         var blob = new Blob([CSVarray.join('\n')], {
             type: 'text/csv;charset=utf-8;'
         });
-
-        var fileName =
-            'eDishDroppedRows_' + d3.time.format('%Y-%m-%dT%H-%M-%S')(new Date()) + '.csv';
+        var fileCore = file ? file : 'eDish';
+        var fileName = fileCore + '_' + d3.time.format('%Y-%m-%dT%H-%M-%S')(new Date()) + '.csv';
         var link = d3.select(this);
 
         if (navigator.msSaveBlob)
@@ -1695,7 +1698,7 @@
                                 return systemVars.indexOf(f) == -1;
                             })
                         ]);
-                        downloadCSV.call(this, d, cols);
+                        downloadCSV.call(this, d, cols, 'eDishDroppedRows');
                     });
             });
         }
@@ -1705,14 +1708,26 @@
         var config = this.config;
 
         //Add settings label
-        var first_control = this.controls.wrap.select('div.control-group');
-        this.controls.setting_header = first_control
+        var first_setting = this.controls.wrap
+            .selectAll('div.control-group')
+            .filter(function(f) {
+                return f.type != 'subsetter';
+            })
+            .filter(function(f) {
+                return f.option != 'r_ratio_cut';
+            })
+            .filter(function(f, i) {
+                return i == 0;
+            });
+
+        this.controls.setting_header = first_setting
             .insert('div', '*')
             .attr('class', 'subtitle')
             .style('border-top', '1px solid black')
             .style('border-bottom', '1px solid black')
             .style('margin-right', '1em')
             .style('margin-bottom', '1em');
+
         this.controls.setting_header
             .append('span')
             .text('Settings')
@@ -1761,7 +1776,7 @@
                         population +
                         '</span> of <span class="denominator">' +
                         population +
-                        '</span> partiticpants shown.'
+                        '</span> participants shown.'
                 )
                 .style('font-size', '0.8em');
 
@@ -1783,6 +1798,44 @@
             .style('padding-top', '0.1em');
     }
 
+    function addDownloadButton() {
+        var chart = this;
+        var config = this.config;
+        if (config.downloadLink) {
+            this.titleDiv
+                .select('span')
+                .append('a')
+                .attr('class', 'downloadRaw')
+                .html('&#x2193; Raw Data')
+                .attr('title', 'Download Raw Data')
+                .style('font-size', '.5em')
+                .style('margin-left', '1em')
+                .style('border', '1px solid black')
+                .style('border-radius', '2px')
+                .style('padding', '2px 4px')
+                .style('text-align', 'center')
+                .style('display', 'inline-block')
+                .style('cursor', 'pointer')
+                .style('font-weight', 'bold')
+                .datum(chart.initial_data)
+                .on('click', function(d) {
+                    var systemVars = [
+                        'dropReason',
+                        'NONE',
+                        'ALT',
+                        'TB',
+                        'impute_flag',
+                        'key_measure',
+                        'analysisFlag'
+                    ];
+                    var cols = Object.keys(d[0]).filter(function(f) {
+                        return systemVars.indexOf(f) == -1;
+                    });
+                    downloadCSV.call(this, d, cols, 'eDishRawData');
+                });
+        }
+    }
+
     function onLayout() {
         layoutPanels.call(this);
 
@@ -1790,7 +1843,9 @@
         init$1.call(this);
         initCustomWarning.call(this);
         initDroppedRowsWarning.call(this);
+
         initTitle.call(this);
+        addDownloadButton.call(this);
 
         addFootnote.call(this);
         addRRatioSpan.call(this);
@@ -2099,7 +2154,7 @@
                     .datum(chart.dropped_participants)
                     .on('click', function(d) {
                         var cols = ['id', 'drop_reason'];
-                        downloadCSV.call(this, d, cols);
+                        downloadCSV.call(this, d, cols, 'eDishDroppedParticipants');
                     });
             });
         }
@@ -2303,7 +2358,9 @@
     }
 
     function updateFilterLabel() {
-        this.controls.filter_numerator.text(this.filtered_data.length);
+        if (this.controls.filter_numerator) {
+            this.controls.filter_numerator.text(this.filtered_data.length);
+        }
     }
 
     function setCutpointMinimums() {
@@ -2800,7 +2857,6 @@
                     obj.outlier = obj.outlier_low || obj.outlier_high;
                     return obj;
                 });
-                console.log(measureObj);
                 return measureObj;
             })
             .entries(allMatches);
@@ -3212,6 +3268,60 @@
         footnotes.exit().remove();
     }
 
+    function addExtraMeasureToggle() {
+        var measureTable = this;
+        var chart = this.edish;
+        var config = chart.config;
+
+        measureTable.wrap.selectAll('div.wc-controls').remove();
+
+        //check to see if there are extra measures in the MeasureTable
+        var specifiedMeasures = Object.keys(config.measure_values).map(function(e) {
+            return config.measure_values[e];
+        });
+        var tableMeasures = measureTable.data.raw.map(function(f) {
+            return f.key;
+        });
+
+        //if extra measure exist...
+        if (tableMeasures.length > specifiedMeasures.length) {
+            var extraRows = measureTable.table
+                .select('tbody')
+                .selectAll('tr')
+                .filter(function(f) {
+                    return specifiedMeasures.indexOf(f.key) == -1;
+                });
+
+            //hide extra rows by default
+            extraRows.style('display', 'none');
+
+            //add a toggle
+            var toggleDiv = measureTable.wrap
+                .insert('div', '*')
+                .attr('class', 'wc-controls')
+                .append('div')
+                .attr('class', 'control-group');
+            var extraCount = tableMeasures.length - specifiedMeasures.length;
+            toggleDiv
+                .append('span')
+                .attr('class', 'wc-control-label')
+                .style('display', 'inline-block')
+                .style('padding-right', '.3em')
+                .text(
+                    'Show ' +
+                        extraCount +
+                        ' additional measure' +
+                        (extraCount == 1 ? '' : 's') +
+                        ':'
+                );
+            var toggle = toggleDiv.append('input').property('type', 'checkbox');
+            toggle.on('change', function() {
+                var showRows = this.checked;
+                extraRows.style('display', showRows ? null : 'none');
+            });
+        }
+    }
+
     function drawMeasureTable(d) {
         var nested = makeNestedData.call(this, d);
 
@@ -3220,6 +3330,7 @@
         this.measureTable.on('draw', function() {
             addSparkLines.call(this);
             addSparkClick.call(this);
+            addExtraMeasureToggle.call(this);
             addFootnote$1.call(this);
         });
         this.measureTable.draw(nested);
