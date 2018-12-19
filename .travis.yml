@@ -5,16 +5,16 @@ language: R
 sudo: false
 r: 3.5.1
 
-# Install packrat if needed and have it restore packages.
+# packrat magic - runs without cache but uses cache going forward
 install:
-  - R -e 'if (system.file(package="packrat") == "") install.packages("packrat")'
-  - R -e "packrat::packify(); packrat::restore()"
+  - R -e "0" --args --bootstrap-packrat
+  - R -e "packrat::restore(restart = FALSE)"
 
 cache: 
   packages : true
   directories: 
-      # Packrat packages
-      - packrat/lib
+      # Packrat 
+      - $TRAVIS_BUILD_DIR/packrat/lib
       # PhantomJS
       - travis_phantomjs
 
@@ -30,3 +30,6 @@ before_install:
   - "if [ $(phantomjs --version) != $PHANTOMJS_VERSION ]; then tar -xvf $PWD/travis_phantomjs/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 -C $PWD/travis_phantomjs; fi"
   - "if [ $(phantomjs --version) != $PHANTOMJS_VERSION ]; then hash -r; fi"
   - "phantomjs --version"
+  
+notifications:
+  email: false
