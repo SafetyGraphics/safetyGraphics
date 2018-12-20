@@ -71,20 +71,24 @@ renderSettingsUI <- function(id){
                        tags$label(id=ns("label_studyday_col"),"Study day"),
                        selectizeInput(ns("studyday_col"),NULL, choices = NULL)
                      ),
-                     # div(
-                     #   tags$label(id=ns("label_baseline--value_col"),"Baseline value column"),
-                     #   selectizeInput(ns("baseline--value_col"),NULL, choices = NULL)
-                     # ),
-                     # div(
-                     #   tags$label(id=ns("label_baseline--values"),"Baseline value(s)"),
-                     #   selectizeInput(ns("baseline--values"),NULL, choices = NULL)
-                     # ),
+                     div(
+                       tags$label(id=ns("label_baseline--value_col"),"Baseline value column"),
+                       selectizeInput(ns("baseline--value_col"),NULL, choices = NULL)
+                     ),
+                     div(
+                       tags$label(id=ns("label_baseline--values"),"Baseline value(s)"),
+                       selectizeInput(ns("baseline--values"),NULL, choices = NULL, multiple = TRUE)
+                     ),
                      selectInput(ns("filters"),"Filters", choices = NULL, selected = NULL, multiple = TRUE),
                      selectInput(ns("group_cols"),"Groups", choices = NULL, multiple = TRUE),
-                     # div(
-                     #   tags$label(id=ns("label_analysisFlag"),"Analysis population"),
-                     #   selectizeInput(ns("analysisFlag"),NULL, choices = NULL)
-                     # ),
+                     div(
+                       tags$label(id=ns("label_analysisFlag--value_col"),"Analysis population column"),
+                       selectizeInput(ns("analysisFlag--value_col"),NULL, choices = NULL)
+                     ),
+                     div(
+                       tags$label(id=ns("label_analysisFlag--values"),"Analysis population values"),
+                       selectizeInput(ns("analysisFlag--values"),NULL, choices = NULL, multiple = TRUE)
+                     ),
                      br(),
                      br(),
                      br(),

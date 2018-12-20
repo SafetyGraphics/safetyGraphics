@@ -14,8 +14,6 @@ renderEDishChart <- function(input, output, session, data, settings, valid){
     }
   }) 
   
-
-  observe({print(valid())})
   # insert export chart button if settings pass validation
   # remove button if validation fails
   observeEvent(valid(), {
