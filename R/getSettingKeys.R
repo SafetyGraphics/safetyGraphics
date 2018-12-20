@@ -58,7 +58,7 @@ getSettingKeys<-function(patterns, settings, parents=NULL, matchLists=FALSE){
         matches <- do.call(c, list(matches,nestedMatches)) 
       } else {
         #if the paramter isn't a list, check to see if the key matches the specified patterns.
-        if(any(str_detect(key,patterns))){
+        if(any(stringr::str_detect(key,patterns))){
           nextItem<-length(matches)+1
           matches[[nextItem]]<-keys
         }

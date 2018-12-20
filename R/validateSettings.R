@@ -25,8 +25,8 @@
 #'  testSettings$id_col <- "NotAColumn"
 #'  validateSettings(data=adlbc, settings=testSettings) # .$valid is now FALSE
 #' @export
-#' @importFrom purrr map
-#' @import dplyr
+#' @importFrom purrr map map_lgl map_dbl
+#' @importFrom magrittr "%>%"
 
 
 validateSettings <- function(data, settings, chart="eDish"){
@@ -34,23 +34,23 @@ validateSettings <- function(data, settings, chart="eDish"){
   settingStatus<-list()
 
   # Check that all required parameters are not null
-  requiredChecks <- getRequiredSettings(chart = chart) %>% map(checkSettingProvided, settings = settings)
+  requiredChecks <- getRequiredSettings(chart = chart) %>% purrr::map(checkSettingProvided, settings = settings)
 
   #Check that non-null setting columns are found in the data
-  columnChecks <- getSettingKeys(patterns="_col",settings=settings) %>% map(checkColumnSetting, settings=settings, data=data)
+  columnChecks <- getSettingKeys(patterns="_col",settings=settings) %>% purrr::map(checkColumnSetting, settings=settings, data=data)
 
   #Check that non-null field/column combinations are found in the data
-  fieldChecks <- getSettingKeys(patterns="_values",settings=settings, matchLists=TRUE) %>% map(checkFieldSettings, settings=settings, data=data )
+  fieldChecks <- getSettingKeys(patterns="_values",settings=settings, matchLists=TRUE) %>% purrr::map(checkFieldSettings, settings=settings, data=data )
   fieldChecks_flat <- unlist(fieldChecks, recursive=FALSE)
 
   #Combine different check types in to a master list
   settingStatus$checkList<-c(requiredChecks, columnChecks, fieldChecks_flat)
 
   #valid=true if all checks pass, false otherwise
-  settingStatus$valid <- settingStatus$checkList%>%map_lgl(~.x[["valid"]])%>%all
+  settingStatus$valid <- settingStatus$checkList%>%purrr::map_lgl(~.x[["valid"]])%>%all
 
   #create summary string
-  failCount <- settingStatus$checkList%>%map_dbl(~!.x[["valid"]])%>%sum
+  failCount <- settingStatus$checkList%>%purrr::map_dbl(~!.x[["valid"]])%>%sum
   checkCount <- length(settingStatus$checkList)
   settingStatus$status <- paste0(failCount," of ",checkCount," checks failed.")
   return (settingStatus)
