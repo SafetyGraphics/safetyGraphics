@@ -13,14 +13,14 @@
 #' @examples 
 #' testSettings<-generateSettings(standard="AdAM")
 #' 
-#' getSettingKeys(patterns=c("_col"),settings=testSettings) # returns list of all matching values
-#' getSettingKeys(patterns=c("ALP"),settings=testSettings) #finds the matching nested setting
-#' getSettingKeys(patterns=c("measure_values"),settings=testSettings) #returns an empty list, since the only matching item is a list
-#' getSettingKeys(patterns=c("measure_values"),settings=testSettings, matchLists=TRUE) #finds the matching key associated with a list
+#' safetyGraphics:::getSettingKeys(patterns=c("_col"),settings=testSettings) # returns list of all matching values
+#' safetyGraphics:::getSettingKeys(patterns=c("ALP"),settings=testSettings) #finds the matching nested setting
+#' safetyGraphics:::getSettingKeys(patterns=c("measure_values"),settings=testSettings) #returns an empty list, since the only matching item is a list
+#' safetyGraphics:::getSettingKeys(patterns=c("measure_values"),settings=testSettings, matchLists=TRUE) #finds the matching key associated with a list
 #' 
 #' @importFrom stringr str_detect 
 #' 
-#' @export
+
 
 
 getSettingKeys<-function(patterns, settings, parents=NULL, matchLists=FALSE){

@@ -18,7 +18,7 @@ A list summarizing the comparison between \code{data_cols} and \code{standard_co
 Function to compare contents of 2 vectors - used to summarize of which data columns are found in a given standard. Used in \code{detectStandard()} and \code{validateSettings()}
 }
 \examples{
-compare_cols(data_cols=c("a","b","c"),standard_cols=c("d","e","f")) #match == FALSE
-compare_cols(names(adlbc),getRequiredColumns(standard="ADaM")) # match == TRUE
+safetyGraphics:::compare_cols(data_cols=c("a","b","c"),standard_cols=c("d","e","f")) #match == FALSE
+safetyGraphics:::compare_cols(names(adlbc),safetyGraphics:::getRequiredColumns(standard="ADaM")) # match == TRUE
 
 }

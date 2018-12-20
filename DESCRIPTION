@@ -21,7 +21,7 @@ Imports:
 	stringr,
  	jsonlite, 
  	shiny,
- 	tidyverse
+	magrittr
 Remotes:
     rstudio/shinytest
 
