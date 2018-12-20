@@ -16,11 +16,10 @@
 #' testSettings$filters[[1]]<-list(value_col="RACE",label="Race")
 #' testSettings$filters[[2]]<-list(value_col=NULL,label="No Column")
 #' testSettings$filters[[3]]<-list(value_col="NotAColumn",label="Invalid Column")
-#' checkColumnSetting(key=list("id_col"),settings=testSettings, adlbc) #pass ($valid == TRUE)
-#' checkColumnSetting(key=list("filters",1,"value_col"),settings=testSettings, adlbc) #pass
-#' checkColumnSetting(key=list("filters",2,"value_col"),settings=testSettings, adlbc) #NULL column pass
-#' checkColumnSetting(key=list("filters",3,"value_col"),settings=testSettings, adlbc) #invalid column fails
-#' @export
+#' safetyGraphics:::checkColumnSetting(key=list("id_col"),settings=testSettings, adlbc) #pass ($valid == TRUE)
+#' safetyGraphics:::checkColumnSetting(key=list("filters",1,"value_col"),settings=testSettings, adlbc) #pass
+#' safetyGraphics:::checkColumnSetting(key=list("filters",2,"value_col"),settings=testSettings, adlbc) #NULL column pass
+#' safetyGraphics:::checkColumnSetting(key=list("filters",3,"value_col"),settings=testSettings, adlbc) #invalid column fails
 
 checkColumnSetting <- function(key, settings, data){
   stopifnot(typeof(key)=="list",typeof(settings)=="list")
