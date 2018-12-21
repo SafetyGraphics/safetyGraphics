@@ -15,10 +15,12 @@ function(input, output, session){
   #
   # reutrns updated settings and validation status
     settings_new <-   callModule(renderSettings, "settingsUI",
-                                 data = reactive(dataUpload_out$data_selected()),
+                                 data = isolate(reactive(dataUpload_out$data_selected())),
                                  settings = reactive(dataUpload_out$settings()),
                                  status = reactive(dataUpload_out$status()))
 
+
+    
   # module to render eDish chart
   callModule(renderEDishChart, "chartEDish",
              data = reactive(dataUpload_out$data_selected()),

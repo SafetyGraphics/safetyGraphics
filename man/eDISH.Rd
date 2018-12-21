@@ -7,7 +7,7 @@
 eDISH(data, id_col = "USUBJID", value_col = "STRESN",
   measure_col = "TEST", normal_col_low = "STNRLO",
   normal_col_high = "STNRHI", visit_col = "VISIT",
-  visitn_col = "VISITN", studyday_col = "DY", baseline_visitn = 1,
+  visitn_col = "VISITN", studyday_col = "DY", baseline = NULL,
   filters = NULL, group_cols = NULL, analysisFlag = NULL,
   measure_values = list(ALT = "Aminotransferase, alanine (ALT)", AST =
   "Aminotransferase, aspartate (AST)", TB = "Total Bilirubin", ALP =
@@ -36,7 +36,7 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
 
 \item{studyday_col}{Visit day variable name. Default: \code{"DY"}.}
 
-\item{baseline_visitn}{Value of baseline visit number. Used to calculate mDish. Default: \code{1}.}
+\item{baseline}{An optional list defining which column \code{"value_col"} and values (one or more) \code{values} represent the baseline visit(s) of the study.}
 
 \item{filters}{An optional list of specifications for filters.  Each filter is a nested, named list (containing the filter value column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.}
 

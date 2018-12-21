@@ -21,8 +21,8 @@ renderSettings <- function(input, output, session, data, settings, status){
             choices_tb  <- unique(c(settings$measure_values$TB,  as.character(data()[,settings$measure_col])))
             choices_alp <- unique(c(settings$measure_values$ALP, as.character(data()[,settings$measure_col])))
 
-            updateSelectizeInput(session, "measure_values--ALT", choices = choices_ast)
-            updateSelectizeInput(session, "measure_values--AST", choices = choices_alt)
+            updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt)
+            updateSelectizeInput(session, "measure_values--AST", choices = choices_ast)
             updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb)
             updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp)
           } else {
@@ -31,11 +31,11 @@ renderSettings <- function(input, output, session, data, settings, status){
             choices_tb  <- unique(data()[,input$measure_col])
             choices_alp <- unique(data()[,input$measure_col])
 
-            updateSelectizeInput(session, "measure_values--ALT", choices = choices_ast,
+            updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt,
                                  options = list(
                                    placeholder = '',
                                    onInitialize = I('function() { this.setValue(""); }')))
-            updateSelectizeInput(session, "measure_values--AST", choices = choices_alt,
+            updateSelectizeInput(session, "measure_values--AST", choices = choices_ast,
                                  options = list(
                                    placeholder = '',
                                    onInitialize = I('function() { this.setValue(""); }')))
@@ -57,8 +57,63 @@ renderSettings <- function(input, output, session, data, settings, status){
 
       })
     }
-  } #end runCustomObserver()
 
+  # Custom observer for baseline
+      if(name=="baseline--value_col"){
+        observe({
+          settings <- settings()
+      
+          req(input$`baseline--value_col`)
+      
+      if (input$`baseline--value_col` %in% colnames()){
+        if (!is.null(settings$baseline$value_col) && input$`baseline--value_col`==settings$baseline$value_col){
+          choices <- unique(c(settings$baseline$values, as.character(data()[,settings$baseline$value_col])))
+          choices <- sort(choices)
+          
+          updateSelectizeInput(session, "baseline--values", choices = choices)
+        } else {
+          choices <- unique(data()[,input$`baseline--value_col`])
+          choices <- sort(choices)
+          
+          updateSelectizeInput(session, "baseline--values", choices = choices,
+                               options = list(
+                                 placeholder = '',
+                                 onInitialize = I('function() { this.setValue(""); }')))
+        }
+      } else {
+        updateSelectizeInput(session, "baseline--values", choices = "")
+      }
+    })
+  }
+    
+    
+    # Custom observer for analysis population
+    if(name=="analysisFlag--value_col"){
+      observe({
+        settings <- settings()
+
+        req(input$`analysisFlag--value_col`)
+
+    if (input$`analysisFlag--value_col` %in% colnames()){
+      if (!is.null(settings$analysisFlag$value_col) && input$`analysisFlag--value_col`==settings$analysisFlag$value_col){
+        choices <- unique(c(settings$analysisFlag$values, as.character(data()[,settings$analysisFlag$value_col])))
+        
+        updateSelectizeInput(session, "analysisFlag--values", choices = choices)
+      } else {
+        choices <- unique(data()[,input$`analysisFlag--value_col`])
+
+        updateSelectizeInput(session, "analysisFlag--values", choices = choices,
+                             options = list(
+                               placeholder = '',
+                               onInitialize = I('function() { this.setValue(""); }')))
+      }
+    } else {
+      updateSelectizeInput(session, "analysisFlag--values", choices = "")
+    }
+
+      })
+    }
+} #end runCustomObserver()
 
   ###########################
   # Make updates to the UI
@@ -81,10 +136,6 @@ renderSettings <- function(input, output, session, data, settings, status){
   # not sure if this is the right place to do it...but can we clear out this object upon a data change and start over??
 
   settings_new <- reactive({
-    # req(input$`measure_values--ALP`)
-    # req(input$`measure_values--AST`)
-    # req(input$`measure_values--TB`)
-    # req(input$`measure_values--ALT`)
 
     settings <- list(id_col = input$id_col,
                      value_col = input$value_col,
@@ -106,6 +157,20 @@ renderSettings <- function(input, output, session, data, settings, status){
                      showTitle = input$showTitle,
                      warningText = input$warningText)
 
+    if (! is.null(input$`baseline--values`)){
+      if (! input$`baseline--values`[1]==""){
+        settings$baseline <- list(value_col = input$`baseline--value_col`,
+                                  values = input$`baseline--values`)
+      }
+    }
+
+    if (! is.null(input$`analysisFlag--values`)){
+      if (! input$`analysisFlag--values`==""){
+      settings$analysisFlag <- list(value_col = input$`analysisFlag--value_col`,
+                                values = input$`analysisFlag--values`)
+      }
+    }
+    
     if (!is.null(input$filters)){
           for (i in 1:length(input$filters)){
             settings$filters[[i]] <- list(value_col = input$filters[[i]],
@@ -129,9 +194,9 @@ renderSettings <- function(input, output, session, data, settings, status){
 
     return(settings)
   })
-
-
-  # validate new settings
+  
+ 
+    # validate new settings
   #  the validation is run every time there is a change in data and/or settings.
   #
   #  NOTE: to prevent status updating as loop runs and fills in settings(),
@@ -166,15 +231,12 @@ renderSettings <- function(input, output, session, data, settings, status){
       map(., ~ keep(., names(.) %in% c("text_key","valid","message")) %>%
             data.frame(., stringsAsFactors = FALSE)) %>%
       bind_rows %>%
-     # mutate(top_key = sub("\\|.*", "", text_key))  %>%
       group_by(text_key) %>%
       mutate(num_fail = sum(valid==FALSE)) %>%
       mutate(message = paste(message, collapse = " ") %>% trimws()) %>%
        select(text_key, message, num_fail) %>%
        unique %>%
-       mutate(message = ifelse(message=="", "OK", message))
-     # slice(1) #%>%   # get first set of checks
-     # filter(valid==FALSE)
+       mutate(message = ifelse(message=="", "OK", message)) 
   })
 
 
@@ -182,8 +244,7 @@ renderSettings <- function(input, output, session, data, settings, status){
   req_settings <- getRequiredSettings("eDish") %>% unlist  #Indicate required settings
 
     #List of inputs with custom observers
-  custom_observer_settings <- c("measure_col") #more to be added later
-
+   custom_observer_settings <- c("measure_col", "baseline--value_col","analysisFlag--value_col")
 
 
   #Establish observers to update settings UI for all inputs
@@ -198,9 +259,9 @@ renderSettings <- function(input, output, session, data, settings, status){
   #            - after UI is filled, we generate a NEW settings object & status
   #            - dependent on: the new settings/status, which will update after every user selection
 
-
-
-  observeEvent(data(), {
+  
+ # observeEvent(data(), {
+  observe({ 
     req(colnames())
 
      for (name in isolate(input_names())){
@@ -212,7 +273,10 @@ renderSettings <- function(input, output, session, data, settings, status){
        
 
        # 1. Update the options for data-mapping inputs
-       if(str_detect(name,"_col") | name %in% c("filters", "group_cols")){
+      # if(str_detect(name,"_col") | name %in% c("filters", "group_cols")){
+       if (name %in% c("id_col","measure_col","value_col","studyday_col","normal_col_high",
+                       "normal_col_low", "visit_col","visitn_col", "baseline--value_col",
+                       "analysisFlag--value_col")){
          sortedChoices<-NULL
          if(is.null(setting_value)){
            sortedChoices<-colnames()
@@ -227,7 +291,6 @@ renderSettings <- function(input, output, session, data, settings, status){
            updateSelectizeInput(session, name, choices=sortedChoices)
 
          }
-       #  updateSelectInput(session, name, choices=sortedChoices)
        }
 
        # 2. Check for custom observers and initialize if needed
