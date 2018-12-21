@@ -19,7 +19,9 @@ compare_cols<-function(data_cols, standard_cols){
   compare_summary[["missing_columns"]]<-setdiff(standard_cols,data_cols)
   
   #if there are no missing columns then call this a match
+  
   compare_summary[["match"]]<- length(compare_summary[["missing_columns"]])==0
+  compare_summary[["partial_match"]]<- length(compare_summary[["matched_columns"]])>0
   
   return(compare_summary)
 }

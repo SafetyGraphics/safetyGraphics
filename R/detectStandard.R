@@ -37,7 +37,14 @@ detectStandard <- function(data, domain="labs"){
     standard_list[["standard"]]<- "SDTM"
   }else if(standard_list[["details"]][["ADaM"]][["match"]]){
     standard_list[["standard"]]<- "ADaM"
-  }else{
+  }else if(standard_list[["details"]][["SDTM"]][["partial_match"]] |
+           standard_list[["details"]][["ADaM"]][["partial_match"]]){
+  standard_list[["standard"]] <- ifelse(
+    length(standard_list[["details"]][["ADaM"]][["matched_columns"]]) > length(standard_list[["details"]][["SDTM"]][["matched_columns"]]),
+      "ADaM" , "SDTM" #SDTM if they are equal
+    )
+  
+  }else {
     standard_list[["standard"]]<-"None"
   }
   
