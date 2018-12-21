@@ -10,11 +10,15 @@
 #' @return A list containing the results of the check following the format specified in \code{validateSettings()[["checkList"]]}
 #'
 #'
-#' #' @examples
+#' @examples
 #' testSettings<-generateSettings(standard="AdAM")
-#' checkFieldSettings(fieldKey=list("measure_values"),settings=testSettings, adlbc) #list of 4 checks. all pass ($valid ==TRUE)
+#' safetyGraphics:::checkFieldSettings(fieldKey=list("measure_values"),settings=testSettings, adlbc) #list of 4 checks. all pass ($valid ==TRUE)
+#' 
 #' @importFrom stringr str_split
+#' @importFrom magrittr "%>%"
+#' @importFrom purrr map 
 #'
+
 checkFieldSettings <- function(fieldKey, settings, data){
 
   # compare the fields in the settings to the fields in the data.
@@ -48,7 +52,7 @@ checkFieldSettings <- function(fieldKey, settings, data){
   stopifnot(typeof(fieldKey)=="list", typeof(settings)=="list")
 
    # get a list of all of the column's values from the data
-  key_base<-str_split(fieldKey, "_")[[1]][1]   # get the name of the column containing the fields(e.g. fields = "measure_values" -> column = "measure_col")
+  key_base<-stringr::str_split(fieldKey, "_")[[1]][1]   # get the name of the column containing the fields(e.g. fields = "measure_values" -> column = "measure_col")
   columnKey<-getSettingKeys(patterns=paste0(key_base,"_col") ,settings=settings)[[1]]
   columnName<-getSettingValue(key=columnKey, settings=settings) # get the name of the column from the value associated with columnKey
   columnSpecified <- is.character(columnName)
@@ -62,7 +66,7 @@ checkFieldSettings <- function(fieldKey, settings, data){
   fieldList<-getSettingValue(key=fieldKey, settings=settings)
 
   if(typeof(fieldList)=="list"){
-    fieldChecks <- fieldList %>% names %>% map(fieldCheck(key))
+    fieldChecks <- fieldList %>% names %>% purrr::map(fieldCheck(key))
   } else {
     current <- list()
     current$key<-fieldKey

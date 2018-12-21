@@ -15,15 +15,15 @@ checkFieldSettings(fieldKey, settings, data)
 }
 \value{
 A list containing the results of the check following the format specified in \code{validateSettings()[["checkList"]]}
-
-
-#' @examples
-testSettings<-generateSettings(standard="AdAM")
-checkFieldSettings(fieldKey=list("measure_values"),settings=testSettings, adlbc) #list of 4 checks. all pass ($valid ==TRUE)
 }
 \description{
 Checks that a single parameter from the settings list matches a field value in a specified data set
 }
 \details{
 This function compares settings with field values as part of the \code{validateSettings()} function. More specifically, the function checks whether the \code{fieldKey} in a \code{settings} object matches a column/field combination in \code{"data"}. The function makes 2 major assumptions about the structure of the settings object. First, it assumes that the first value in fieldKey is "settingName_values" and there is a corresponding "settingName_col" setting that defines the column to search for field-level data. Second, it expects that the value specified by key/settings is a list, and that each value in the list is a field of the variable above.
+}
+\examples{
+testSettings<-generateSettings(standard="AdAM")
+safetyGraphics:::checkFieldSettings(fieldKey=list("measure_values"),settings=testSettings, adlbc) #list of 4 checks. all pass ($valid ==TRUE)
+
 }

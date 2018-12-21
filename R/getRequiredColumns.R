@@ -7,10 +7,9 @@
 #' @return A character vector of required data columns
 #' 
 #' @examples 
-#' getRequiredColumns(standard="ADAM")
-#' getRequiredColumns(standard="SDTM")
+#' safetyGraphics:::getRequiredColumns(standard="ADAM")
+#' safetyGraphics:::getRequiredColumns(standard="SDTM")
 #' 
-#' @export
 
 getRequiredColumns<-function(standard,chart="eDish"){
   stopifnot(

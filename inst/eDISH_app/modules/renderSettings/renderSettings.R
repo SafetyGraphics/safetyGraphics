@@ -267,7 +267,7 @@ renderSettings <- function(input, output, session, data, settings, status){
      for (name in isolate(input_names())){
        #print(name)
        setting_key <- as.list(strsplit(name,"\\-\\-"))
-       setting_value <- getSettingValue(key=setting_key, settings=settings())
+       setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings=settings())
 
        setting_label <- name ##TO DO: get the label!
        

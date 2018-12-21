@@ -16,6 +16,6 @@ List of lists specifying the position of matching named elements in the format \
 Get a list of required settings for a given chart
 }
 \examples{
-getRequiredSettings(chart="eDish")
+safetyGraphics:::getRequiredSettings(chart="eDish")
 
 }
