@@ -8,6 +8,7 @@
 #' @examples 
 #' safetyGraphics:::getRequiredSettings(chart="eDish")
 #' 
+#' @export
 
 
 

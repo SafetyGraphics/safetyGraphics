@@ -1,6 +1,11 @@
 # temporarily load deps
-library(tidyverse)
 library(safetyGraphics)
+library(shiny)
+library(shinyjs)
+library(dplyr)
+library(purrr)
+library(stringr)
+library(DT)
 
 ## source modules
 source('modules/renderSettings/renderSettingsUI.R')
