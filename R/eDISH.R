@@ -118,7 +118,7 @@ eDISH <- function(data,
                   warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.",
                   settings = NULL) {
 
-  # If only one baseline value specified, convert value to list 
+  # If only one baseline value value specified, convert value to list 
   # this ensures that the value will stay in array format when auto_unbox=TRUE specified in toJSON()
   # ... file an issue to fix on JS side
   if (!is.null(baseline)){
@@ -126,6 +126,15 @@ eDISH <- function(data,
       baseline[["values"]] <- list(baseline[["values"]])
     }
   }
+
+  if (!is.null(settings$baseline$values)){
+     if (length(settings$baseline[["values"]])==1){
+       if (! is.list(settings$baseline[["values"]])){
+        settings$baseline[["values"]] <- as.list(settings$baseline[["values"]])
+       }
+     }
+  }
+  
 
   # forward options using rSettings
   if (is.null(settings)){
@@ -167,7 +176,6 @@ eDISH <- function(data,
                                   null = "null")
     )
   }
-
 
   # create widget
   htmlwidgets::createWidget(

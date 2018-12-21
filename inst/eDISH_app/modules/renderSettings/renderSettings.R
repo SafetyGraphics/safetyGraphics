@@ -68,11 +68,13 @@ renderSettings <- function(input, output, session, data, settings, status){
       if (input$`baseline--value_col` %in% colnames()){
         if (!is.null(settings$baseline$value_col) && input$`baseline--value_col`==settings$baseline$value_col){
           choices <- unique(c(settings$baseline$values, as.character(data()[,settings$baseline$value_col])))
-      
+          choices <- sort(choices)
+          
           updateSelectizeInput(session, "baseline--values", choices = choices)
         } else {
           choices <- unique(data()[,input$`baseline--value_col`])
-      
+          choices <- sort(choices)
+          
           updateSelectizeInput(session, "baseline--values", choices = choices,
                                options = list(
                                  placeholder = '',
@@ -156,9 +158,9 @@ renderSettings <- function(input, output, session, data, settings, status){
                      warningText = input$warningText)
 
     if (! is.null(input$`baseline--values`)){
-      if (! input$`baseline--values`==""){
+      if (! input$`baseline--values`[1]==""){
         settings$baseline <- list(value_col = input$`baseline--value_col`,
-                                  values = input$`baseline--values`) 
+                                  values = input$`baseline--values`)
       }
     }
 
