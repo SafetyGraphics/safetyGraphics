@@ -15,6 +15,7 @@ checkFieldSettings(fieldKey, settings, data)
 }
 \value{
 A list containing the results of the check following the format specified in \code{validateSettings()[["checkList"]]}
+
 }
 \description{
 Checks that a single parameter from the settings list matches a field value in a specified data set
