@@ -151,12 +151,6 @@ Version: 1.2.6
 Hash: 8ffb8b293a18e26e435465307cc47f75
 Requires: Rcpp
 
-Package: ggimage
-Source: CRAN
-Version: 0.2.0
-Hash: 7d798b2f62b63cbf94f65d62dead6769
-Requires: ggplot2, ggplotify, jsonlite, magick, rvcheck, scales, tibble
-
 Package: ggplot2
 Source: CRAN
 Version: 3.1.0
@@ -195,12 +189,6 @@ Package: gtable
 Source: CRAN
 Version: 0.2.0
 Hash: cd78381a9d3fea966ac39bd0daaf5554
-
-Package: hexSticker
-Source: CRAN
-Version: 0.4.4
-Hash: 76e762a7556b90d7ef55c7417566418e
-Requires: ggimage, ggplot2, hexbin, showtext, sysfonts
 
 Package: hexbin
 Source: CRAN
@@ -256,12 +244,6 @@ Package: lazyeval
 Source: CRAN
 Version: 0.2.1
 Hash: 88926ad9c43581fd0822a37c8ed09f05
-
-Package: magick
-Source: CRAN
-Version: 2.0
-Hash: 66b740385f59ab5c8803d10d970eb38c
-Requires: Rcpp, curl, magrittr
 
 Package: magrittr
 Source: CRAN
