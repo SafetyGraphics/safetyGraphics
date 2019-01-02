@@ -1,7 +1,7 @@
 library(hexSticker)
 
 #red on white
-imgurl <- "./inst/safetyGraphicsHex/noun_heart rate_210541_ec5d57.png"
+imgurl <- "./inst/safetyGraphicsHex/noun_heart_rate_210541_ec5d57.png"
 sticker(
   imgurl,
   filename="./inst/safetyGraphicsHex/safetyGraphicsHex.png",
