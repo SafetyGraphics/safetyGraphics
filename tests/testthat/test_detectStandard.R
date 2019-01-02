@@ -8,7 +8,7 @@ test_that("a list with the expected properties and structure is returned",{
   expect_named(a,c("details","standard"))
 
   expect_is(a[["standard"]],"character")
-  expect_match(a[["standard"]],"SDTM|ADaM|partial_SDTM|partial_ADaM|None")
+  expect_match(a[["standard"]],"SDTM|ADaM|None")
   expect_is(a[["details"]],"list")
   expect_named(a[["details"]],c("ADaM","SDTM"))
   

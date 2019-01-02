@@ -42,7 +42,7 @@ detectStandard <- function(data, domain="labs"){
   standard_list[["standard"]] <- ifelse(
     length(standard_list[["details"]][["ADaM"]][["matched_columns"]]) > 
       length(standard_list[["details"]][["SDTM"]][["matched_columns"]]),
-      "partial_ADaM" , "partial_SDTM" #SDTM if they are equal
+      "ADaM" , "SDTM" #SDTM if they are equal
     )
   
   } else {

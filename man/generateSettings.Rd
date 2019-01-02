@@ -4,12 +4,17 @@
 \alias{generateSettings}
 \title{Generate a settings object based on a data standard}
 \usage{
-generateSettings(standard = "None", chart = "eDish")
+generateSettings(standard = "None", chart = "eDish", partial = FALSE,
+  partial_cols = NULL)
 }
 \arguments{
 \item{standard}{The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"SDTM"}}
 
 \item{chart}{The chart for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.}
+
+\item{partial}{Boolean for whether or not the standard is a partial standard. Default: \code{"NULL"}.}
+
+\item{partial_cols}{A named list of the matched cols if partial is TRUE. Default: \code{"NULL"}.}
 }
 \value{
 A list containing the appropriate settings for the selected chart
@@ -24,6 +29,7 @@ The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc
 
 generateSettings(standard="SDTM") 
 generateSettings(standard="SdTm") #also ok
+generateSettings(standard="STDM", partial=TRUE, partial_cols = list("id_col"="USUBJID", "measure_col"="TEST", "value_col"="STRESN")) #partial
 generateSettings(standard="AdAM")
 generateSettings(standard="a different standard") #returns shell settings list with no data mapping
 

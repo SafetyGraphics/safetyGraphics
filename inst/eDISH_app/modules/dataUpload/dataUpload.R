@@ -105,6 +105,8 @@ dataUpload <- function(input, output, session){
     generateSettings(standard=standard(), chart="eDish")
   })
   
+  print(settings)
+  
   # run validateSettings(data, standard, settings) and return a status
   status <- reactive({
     req(data_selected())
@@ -114,6 +116,7 @@ dataUpload <- function(input, output, session){
                      chart="eDish")  
   })
   
+  print(status)
   
   ### return selected data, settings, and status to server
   return(list(data_selected = reactive(data_selected()),
