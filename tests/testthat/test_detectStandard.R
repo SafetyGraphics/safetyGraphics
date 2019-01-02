@@ -35,7 +35,7 @@ test_that("correct standards are identified",{
   expect_false(detectStandard(empty_test_data)[["details"]][["SDTM"]][["match"]])
   
   case_sensitive_test_data<-data.frame(usubjid="001",AVAL=10,PARAM="HDL",VISIT="Visit 1",VISITNUM=1,ADY=0,A1LO=0,A1HI=20)
-  expect_equal(detectStandard(case_sensitive_test_data)[["standard"]],"None")
+  expect_equal(detectStandard(case_sensitive_test_data)[["standard"]],"partial_ADaM")
   expect_false(detectStandard(case_sensitive_test_data)[["details"]][["ADaM"]][["match"]])
   expect_false(detectStandard(case_sensitive_test_data)[["details"]][["SDTM"]][["match"]])
   
@@ -46,6 +46,7 @@ test_that("correct standards are identified",{
   expect_true(detectStandard(sdtm_and_adam_test_data)[["details"]][["SDTM"]][["match"]])
   
   #Partial match Tests
+  
   majority_adam_test_data<-data.frame(USUBJID="001",VISIT="Visit 1", AVAL=10)
   expect_equal(detectStandard(majority_adam_test_data)[["standard"]],"partial_ADaM")
   expect_false(detectStandard(majority_adam_test_data)[["details"]][["ADaM"]][["match"]])

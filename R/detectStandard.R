@@ -35,16 +35,17 @@ detectStandard <- function(data, domain="labs"){
   # Determine the final standard
   if(standard_list[["details"]][["SDTM"]][["match"]]){
     standard_list[["standard"]]<- "SDTM"
-  }else if(standard_list[["details"]][["ADaM"]][["match"]]){
+  } else if(standard_list[["details"]][["ADaM"]][["match"]]){
     standard_list[["standard"]]<- "ADaM"
-  }else if(standard_list[["details"]][["SDTM"]][["partial_match"]] |
+  } else if(standard_list[["details"]][["SDTM"]][["partial_match"]] |
            standard_list[["details"]][["ADaM"]][["partial_match"]]){
   standard_list[["standard"]] <- ifelse(
-    length(standard_list[["details"]][["ADaM"]][["matched_columns"]]) > length(standard_list[["details"]][["SDTM"]][["matched_columns"]]),
-      "partial_ADaM" , "partial_ADaM" #SDTM if they are equal
+    length(standard_list[["details"]][["ADaM"]][["matched_columns"]]) > 
+      length(standard_list[["details"]][["SDTM"]][["matched_columns"]]),
+      "partial_ADaM" , "partial_SDTM" #SDTM if they are equal
     )
   
-  }else {
+  } else {
     standard_list[["standard"]]<-"None"
   }
   
