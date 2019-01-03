@@ -7,7 +7,7 @@
 #' @param standard The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"SDTM"}
 #' @param chart The chart for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.
 #' @param partial Boolean for whether or not the standard is a partial standard. Default: \code{"NULL"}.
-#' @param partial_cols A named list of the matched cols if partial is TRUE. Default: \code{"NULL"}.
+#' @param partial_cols Optional named list of the matched cols if partial is TRUE. Will not be used if partial is FALSE Default: \code{"NULL"}.
 #' @return A list containing the appropriate settings for the selected chart
 #' 
 #' @examples 
@@ -27,11 +27,6 @@
 generateSettings <- function(standard="None", chart="eDish", partial=FALSE, partial_cols=NULL){
   if(tolower(chart)!="edish"){
     stop(paste0("Can't generate settings for the specified chart ('",chart,"'). Only the 'eDish' chart is supported for now."))
-  }
-  
-  # Ensure that partial_cols can only be used with a partial standard)
-  if  (!is.null(partial_cols) & !partial ) {
-    stop("partial_cols is only used with a partial standard")
   }
   
   # Check that partial_cols is supplied if partial is true

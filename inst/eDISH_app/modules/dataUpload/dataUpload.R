@@ -31,10 +31,13 @@ dataUpload <- function(input, output, session){
     dd$current <- c(rep(FALSE, length(dd$current)), rep(TRUE, length(data_list)))
     
     # run detectStandard on new data and save to dd$standard
-    standard_list <- lapply(data_list, function(x){ detectStandard(x)$standard })
-    dd$standard <- c(dd$standard, standard_list)
+   
+    standard_list <- lapply(data_list, function(x){ detectStandard(x) })
     
+     #standard_list <- lapply(data_list, function(x){ detectStandard(x)$standard })
     
+    dd$standard <- c(dd, standard_list)
+
   })
   
   
@@ -49,9 +52,9 @@ dataUpload <- function(input, output, session){
       choices[[i]] <- names(dd$data)[i]
     }
     
-    names(choices) <- ifelse(dd$standard=="None",
+    names(choices) <- ifelse(dd$standard$standard=="None",
                              paste0("<p>", names(dd$data), " - <em style='font-size:12px;'>No Standard Detected</em></p>"),
-                             paste0("<p>", names(dd$data), " - <em style='color:green; font-size:12px;'>", dd$standard, "</em></p>"))
+                             paste0("<p>", names(dd$data), " - <em style='color:green; font-size:12px;'>", dd$standard$standard, "</em></p>"))
     return(choices)
   })
   
@@ -102,10 +105,16 @@ dataUpload <- function(input, output, session){
   
   # upon a dataset being selected, use generateSettings() to produce a settings obj
   settings <- eventReactive(c(data_selected(), standard()), {
-    generateSettings(standard=standard(), chart="eDish")
+    
+    #current_standard <- standard()[['standard']]
+    
+   # partial <- ifelse(standard()[[current_standard]][['match']] == "Partial", TRUE, FALSE) 
+    
+   # print(partial)
+    
+    generateSettings(standard=standard()[['standard']], chart="eDish") #partial=partial, partial_cols = standard[[current_standard]][['matched_columns']])
   })
-  
-  print(settings)
+
   
   # run validateSettings(data, standard, settings) and return a status
   status <- reactive({
