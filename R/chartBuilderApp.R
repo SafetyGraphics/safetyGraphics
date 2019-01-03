@@ -6,6 +6,7 @@
 #' @import DT
 #' @importFrom purrr map keep
 #' @importFrom magrittr "%>%"
+#' @import rmarkdown 
 #'
 #' @export
 #'
