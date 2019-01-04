@@ -6,7 +6,7 @@
 #' @return List of lists specifying the position of matching named elements in the format \code{list("filters",2,"value_col")}, which would correspond to \code{settings[["filters"]][[2]][["value_col"]]}.
 #' 
 #' @examples 
-#' getRequiredSettings(chart="eDish")
+#' safetyGraphics:::getRequiredSettings(chart="eDish")
 #' 
 #' @export
 

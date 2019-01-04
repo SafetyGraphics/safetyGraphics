@@ -27,7 +27,7 @@ generateSettings(standard="SdTm") #also ok
 generateSettings(standard="AdAM")
 generateSettings(standard="a different standard") #returns shell settings list with no data mapping
 
-/dontrun{
+\dontrun{
 generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far. 
 }
 
