@@ -1,13 +1,13 @@
 Package: safetyGraphics
-Title: Create an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH).
+Title: Create an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH)
 Version: 0.6.0
 Authors@R: c(
 	person("Becca", "Krouse", email = "rebecca_krouse@rhoworld.com", role = c("cre","aut")),
 	person("Jeremy", "Wildfire", role = "aut"),
 	person("Rho Inc.", role = "cph"))
-Description: Description: An R interface for 'JavaScript' charting libraries related to clinical trial safety
+Description: An R interface for 'JavaScript' charting libraries related to clinical trial safety.
 Depends: R (>= 3.5)
-License: MIT + File LICENSE
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
