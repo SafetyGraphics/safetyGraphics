@@ -8,14 +8,13 @@
 #' 
 #' 
 #' #' @examples 
-#' getSettingValue(list("a","b"),list(a=list(b="myValue"))) #returns "myValue"
+#' safetyGraphics:::getSettingValue(list("a","b"),list(a=list(b="myValue"))) #returns "myValue"
 #' 
 #' testSettings<-generateSettings(standard="AdAM")
-#' getSettingValue(list("id_col"),testSettings) 
-#' getSettingsValue(list("measure_values","ALP"),testSettings)
-#' getSettingValue(list("NotASetting"),testSettings) #returns NULL
+#' safetyGraphics:::getSettingValue(list("id_col"),testSettings) 
+#' safetyGraphics:::getSettingValue(list("measure_values","ALP"),testSettings)
+#' safetyGraphics:::getSettingValue(list("NotASetting"),testSettings) #returns NULL
 #' 
-#' @export
 
 getSettingValue <- function(key,settings){
   stopifnot(typeof(settings)=="list")

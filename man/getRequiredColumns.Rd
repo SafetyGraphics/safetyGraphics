@@ -18,7 +18,7 @@ A character vector of required data columns
 Get a list of required columns for a chart in a given data standard
 }
 \examples{
-getRequiredColumns(standard="ADAM")
-getRequiredColumns(standard="SDTM")
+safetyGraphics:::getRequiredColumns(standard="ADAM")
+safetyGraphics:::getRequiredColumns(standard="SDTM")
 
 }

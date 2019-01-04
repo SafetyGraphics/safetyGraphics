@@ -15,7 +15,7 @@
 #' generateSettings(standard="AdAM")
 #' generateSettings(standard="a different standard") #returns shell settings list with no data mapping
 #' 
-#' /dontrun{
+#' \dontrun{
 #' generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far. 
 #' }
 #' 
@@ -36,13 +36,17 @@ generateSettings <- function(standard="None", chart="eDish"){
     studyday_col=NULL,
     visit_col = NULL,
     visitn_col = NULL,
-    baseline_visitn = 1,
     filters = NULL,
     group_cols = NULL,
     measure_values = list(ALT = NULL,
                           AST = NULL,
                           TB = NULL,
                           ALP = NULL),
+    baseline = list(value_col=NULL,
+                    values=list()),
+    analysisFlag = list(value_col=NULL,
+                    values=list()),
+    
     x_options = c("ALT", "AST", "ALP"),
     y_options = c("TB", "ALP"),
     visit_window = 30,
