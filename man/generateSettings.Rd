@@ -14,7 +14,7 @@ generateSettings(standard = "None", chart = "eDish", partial = FALSE,
 
 \item{partial}{Boolean for whether or not the standard is a partial standard. Default: \code{"NULL"}.}
 
-\item{partial_cols}{A named list of the matched cols if partial is TRUE. Default: \code{"NULL"}.}
+\item{partial_cols}{Optional list of the matched cols if partial is TRUE. Will not be used if partial is FALSE Default: \code{"NULL"}.}
 }
 \value{
 A list containing the appropriate settings for the selected chart
@@ -29,7 +29,7 @@ The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc
 
 generateSettings(standard="SDTM") 
 generateSettings(standard="SdTm") #also ok
-generateSettings(standard="STDM", partial=TRUE, partial_cols = list("id_col"="USUBJID", "measure_col"="TEST", "value_col"="STRESN")) #partial
+generateSettings(standard="SDTM", partial=TRUE, partial_cols = list("USUBJID","TEST","STRESN")) #partial
 generateSettings(standard="AdAM")
 generateSettings(standard="a different standard") #returns shell settings list with no data mapping
 
