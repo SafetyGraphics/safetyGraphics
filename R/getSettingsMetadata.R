@@ -13,34 +13,41 @@
 #' safetyGraphics:::getSettingsMetadata(text_keys=c("id_col")) # returns a dataframe with a single row with metadata for the id_col setting
 #' safetyGraphics:::getSettingsMetadata(text_keys=c("id_col"), columns=c("label")) # returns the character value for the specified row. 
 
-getSettingsMetadata<-function(charts, text_keys, metadata_columns){
+getSettingsMetadata<-function(charts=NULL, text_keys=NULL, metadata_columns=NULL, metadata = settingsMetadata){
 
-  subsetMetadata <-settingsMetadata
-  all_columns <- names(settingsMetadata)
-  if(charts){ #Don't do anything if charts isn't specified
+  md <- metadata
+  all_columns <- names(md)
+  
+  #filter the metadata based on the charts option (if any)
+  if(!is.null(charts)){ #Don't do anything if charts isn't specified
     stopifnot(typeof(charts) == "character")
     
-    subsetMetadata$chartFlag<-FALSE; #all records false by default when charts is specified
-    for(chartName in charts){
-       
-      chartColumn <-paste0("chart_",chartName)
-      subsetMetadata$chartFlag%>%mutate(chartFlag = case_when(
-        !(chartName in all_columns) ~ chartFlag, 
-        !!as.name(chartColumn) == FALSE ~ chartFlag,
-        !!as.name(chartColumn) == TRUE ~ TRUE
-      )) 
+    # get list of all chart flags in the data
+    chart_columns <- str_subset(all_columns, "^chart_");
+    
+    # get a list of chart flags matching the request
+    matched_chart_columns <- intersect(chart_columns, paste0("chart_",charts))
+    #filter based 
+    if(length(matched_chart_columns)==0){
+      return(NULL)
+    }else{
+      # see if any of the matched chart flags are TRUE
+      md<-md%>%filter_at(vars(matched_chart_columns),any_vars(.==TRUE))
     }
   }
   
-  if(text_keys){
+  #filter the metadata based on the text_keys option (if any) 
+  if(!is.null(text_keys)){
     stopifnot(typeof(text_keys) == "character")
-    
+    query<-ifelse(length(text_keys)==1,text_keys,str_c(text_keys,collapse="|"))
+    md<-md%>%filter(str_detect(text_keys,query))
   }
   
-  if(metadata_columns){
+  #subset the metadata columnbs returned based on the metadata_columns option (if any)
+  if(!is.null(metadata_columns)){
     stopifnot(typeof(metadata_columns) =="character")
-    
+    md<-md%>%select(metadata_columns)
   }
-  return(subsetMetadata)
   
+  return(md)
 }
