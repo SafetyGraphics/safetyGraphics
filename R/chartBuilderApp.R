@@ -1,16 +1,16 @@
 #' Run the interactive safety chart builder
 #'
-#' @import shiny
+#' @importFrom shiny runApp
 #' @import shinyjs
 #' @import dplyr
-#' @import DT 
+#' @import DT
 #' @importFrom purrr map keep
 #' @importFrom magrittr "%>%"
-#' 
+#' @import rmarkdown 
+#'
 #' @export
-#' 
+#'
 chartBuilderApp <- function() {
   path <- system.file("eDISH_app", package = "safetyGraphics")
   shiny::runApp(path, launch.browser = TRUE)
-  
 }

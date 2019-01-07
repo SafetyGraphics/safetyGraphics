@@ -290,13 +290,21 @@ renderSettings <- function(input, output, session, data, settings, status){
            sortedChoices<-colnames()
            updateSelectizeInput(session, name, choices=sortedChoices,
                                 options = list(
-                                  placeholder = '',
-                                  onInitialize = I('function() { this.setValue(""); }')
+                                  onInitialize = I('function() { 
+                                                    //console.log("initializing input w/o value")
+                                                    //console.log(this)
+                                                    this.setValue(""); 
+                                                   }')
                                 ))
 
          }else{
            sortedChoices<-unique(c(setting_value, colnames()))
-           updateSelectizeInput(session, name, choices=sortedChoices)
+           updateSelectizeInput(session, name, choices=sortedChoices,
+                                options = list (onInitialize = I('function() { 
+                                                    //console.log("initializing input with value")
+                                                    //console.log(this)
+                                                   }')
+                                                ))
 
          }
        }

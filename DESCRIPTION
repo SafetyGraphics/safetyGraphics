@@ -6,7 +6,7 @@ Authors@R: c(
 	person("Jeremy", "Wildfire", role = "aut"),
 	person("Rho Inc.", role = "cph"))
 Description: Description: An R interface for 'JavaScript' charting libraries related to clinical trial safety
-Depends: R (>= 3.4.0)
+Depends: R (>= 3.5)
 License: MIT + File LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -23,7 +23,8 @@ Imports:
  	shiny,
 	magrittr,
 	DT,
-	shinyjs
+	shinyjs,
+	rmarkdown
 Remotes:
     rstudio/shinytest
 
