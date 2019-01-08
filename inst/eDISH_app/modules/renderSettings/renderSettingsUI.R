@@ -12,8 +12,11 @@ renderSettingsUI <- function(id){
               column(6,
                      h3("Data Mapping"),
                      div(
-
-                         div(tags$label(id=ns("label_id_col"), "Unique subject identifier")),
+                       # div with 2 spans
+                       # span 1: setting title (and req) and description on hover
+                       # span 2: validation short message and long message on hover
+                          div(id = ns("title_id_col"), 
+                              tags$label(id=ns("label_id_col"), "Unique subject identifier")),
                          selectizeInput(ns("id_col"),NULL, choices = NULL)
 
                      ),

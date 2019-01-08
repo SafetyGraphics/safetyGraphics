@@ -4,6 +4,7 @@ source("modules/renderSettings/util/updateSettingStatus.R")
 
 renderSettings <- function(input, output, session, data, settings, status){
 
+
   #TODO: Save to separate file - probably needs to be a module.
   runCustomObserver<-function(name){
 
@@ -119,6 +120,10 @@ renderSettings <- function(input, output, session, data, settings, status){
   # Make updates to the UI
   ###########################
   ns <- session$ns
+  
+
+  runjs(paste0('$("#',ns("title_id_col"), '").attr("title", "NEW<hr /> TITLE FOR <hr />ID COL")'))
+
 
   #Columns in the data
   colnames <- reactive({names(data())})
@@ -288,6 +293,7 @@ renderSettings <- function(input, output, session, data, settings, status){
                                                     this.setValue(""); 
                                                    }')
                                 ))
+          
 
          }else{
            sortedChoices<-unique(c(setting_value, colnames()))
