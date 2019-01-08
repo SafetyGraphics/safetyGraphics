@@ -7,14 +7,14 @@
 #' @param standard The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"SDTM"}
 #' @param chart The chart for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.
 #' @param partial Boolean for whether or not the standard is a partial standard. Default: \code{"NULL"}.
-#' @param partial_cols Optional list of the matched cols if partial is TRUE. Will not be used if partial is FALSE Default: \code{"NULL"}.
+#' @param partial_cols Optional character vector of the matched cols if partial is TRUE. It will not be used if partial is FALSE Default: \code{"NULL"}.
 #' @return A list containing the appropriate settings for the selected chart
 #' 
 #' @examples 
 #' 
 #' generateSettings(standard="SDTM") 
 #' generateSettings(standard="SdTm") #also ok
-#' generateSettings(standard="SDTM", partial=TRUE, partial_cols = list("USUBJID","TEST","STRESN")) #partial
+#' generateSettings(standard="SDTM", partial=TRUE, partial_cols = c("USUBJID","TEST","STRESN")) #partial
 #' generateSettings(standard="AdAM")
 #' generateSettings(standard="a different standard") #returns shell settings list with no data mapping
 #' 
@@ -115,10 +115,6 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
     settings <- potential_settings
     
   }
-  
-  # You could imagine handling situations where the values provied for the partial_cols 
-  # could be verified in addition to the names, but I think partial_cols will be primarily 
-  # used internally and this avoids duplicating the work of compare_cols.R
   
   return(settings)
 }
