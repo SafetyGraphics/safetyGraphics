@@ -23,9 +23,10 @@ getSettingsMetadata<-function(charts=NULL, text_keys=NULL, metadata_columns=NULL
     stopifnot(typeof(charts) == "character")
     
     # get list of all chart flags in the data
-    chart_columns <- str_subset(all_columns, "^chart_");
+    chart_columns <- tolower(str_subset(all_columns, "^chart_"));
     
     # get a list of chart flags matching the request
+    charts<-tolower(charts)
     matched_chart_columns <- intersect(chart_columns, paste0("chart_",charts))
     #filter based 
     if(length(matched_chart_columns)==0){
@@ -39,8 +40,10 @@ getSettingsMetadata<-function(charts=NULL, text_keys=NULL, metadata_columns=NULL
   #filter the metadata based on the text_keys option (if any) 
   if(!is.null(text_keys)){
     stopifnot(typeof(text_keys) == "character")
-    query<-ifelse(length(text_keys)==1,text_keys,str_c(text_keys,collapse="|"))
-    md<-md%>%filter(str_detect(text_keys,query))
+    text_keys<- paste0("^",text_keys,"&") #Exact matches only
+    query<-text_keys
+    #query<-ifelse(length(text_keys)==1,text_keys,str_c(text_keys,collapse="|"))
+    md<-md%>%filter(any(str_detect(text_key,query)))
   }
   
   #subset the metadata columnbs returned based on the metadata_columns option (if any)
@@ -49,5 +52,9 @@ getSettingsMetadata<-function(charts=NULL, text_keys=NULL, metadata_columns=NULL
     md<-md%>%select(metadata_columns)
   }
   
-  return(md)
+  if(dim(md)[1]==0){
+    return(NULL)
+  }else{
+    return(md)    
+  }
 }
