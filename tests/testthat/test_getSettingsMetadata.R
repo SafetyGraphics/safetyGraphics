@@ -77,8 +77,6 @@ test_that("charts parameter works as expected",{
 })
 
 test_that("text_keys parameter works as expected",{
-  
-  
   #return a dataframe for valid input
   expect_is(safetyGraphics:::getSettingsMetadata(text_keys=c("id_col")),"data.frame")
   
@@ -104,8 +102,28 @@ test_that("text_keys parameter works as expected",{
   #get the right number of records with various combinations
   expect_equal(dim(safetyGraphics:::getSettingsMetadata(text_keys=c("id_col"),metadata=mergedMetadata))[1],1)
   expect_equal(dim(safetyGraphics:::getSettingsMetadata(text_keys=c("value_col"),metadata=mergedMetadata))[1],2)
-  expect_equal(dim(safetyGraphics:::getSettingsMetadata(text_keys=c("id_col","measure_col","measure_values"),metadata=mergedMetadata))[1],3)
-  expect_equal(dim(safetyGraphics:::getSettingsMetadata(text_keys=c("id_col","measure_col","measure_values","value_col"),metadata=mergedMetadata))[1],5)
+  expect_equal(dim(safetyGraphics:::getSettingsMetadata(text_keys=c("id_col","measure_col"),metadata=mergedMetadata))[1],2)
+  expect_equal(dim(safetyGraphics:::getSettingsMetadata(text_keys=c("id_col","measure_col","value_col"),metadata=mergedMetadata))[1],4)
 })
 
-test_that("metadata_columns parameter works as expected",{})
+test_that("cols parameter works as expected",{
+  
+  #returns a data frame if multiple columns are requested
+  expect_is(safetyGraphics:::getSettingsMetadata(cols=c("label","text_key")),"data.frame")
+  
+  #returns a vector if a single column is specified
+  one_col <- safetyGraphics:::getSettingsMetadata(cols=c("label"))
+  expect_is(one_col,"character")
+  expect_equal(length(one_col),dim(rawMetadata)[1])
+  
+  #returns an atomic value if a single value is specified
+  one_val <- safetyGraphics:::getSettingsMetadata(cols=c("label"), text_keys="line_col", metadata= mergedMetadata)
+  expect_is(one_val,"character")
+  expect_equal(length(one_val),1)
+  expect_equal(one_val,"label1")
+  expect_true(safetyGraphics:::getSettingsMetadata(cols=c("column_mapping"), text_keys="line_col", metadata= mergedMetadata))
+  expect_false(safetyGraphics:::getSettingsMetadata(cols=c("field_mapping"), text_keys="line_col", metadata= mergedMetadata))
+  
+  #returns null if no valid columns are requested
+  expect_true(is.null(safetyGraphics:::getSettingsMetadata(cols=c("asda123"))))
+})

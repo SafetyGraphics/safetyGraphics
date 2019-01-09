@@ -4,7 +4,8 @@
 #' 
 #' @param charts optional vector of chart names used to filter the metadata. Exact matches only (case-insensitive). All rows returned by default.
 #' @param text_keys optional vector of keys used to filter the metadata. Partial matches for any of the strings are returned (case-insensitive). All rows returned by default.
-#' @param metadata_columns optional vector of columns to return from the metadata. All columns returned by default. 
+#' @param cols optional vector of columns to return from the metadata. All columns returned by default. 
+#' @param metadata metadata data frame to be queried
 #' 
 #' @return dataframe with the requested metadata or single metadata value
 #' 
@@ -13,7 +14,7 @@
 #' safetyGraphics:::getSettingsMetadata(text_keys=c("id_col")) # returns a dataframe with a single row with metadata for the id_col setting
 #' safetyGraphics:::getSettingsMetadata(text_keys=c("id_col"), columns=c("label")) # returns the character value for the specified row. 
 
-getSettingsMetadata<-function(charts=NULL, text_keys=NULL, metadata_columns=NULL, metadata = settingsMetadata){
+getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, metadata = settingsMetadata){
 
   md <- metadata
   all_columns <- names(md)
@@ -40,21 +41,28 @@ getSettingsMetadata<-function(charts=NULL, text_keys=NULL, metadata_columns=NULL
   #filter the metadata based on the text_keys option (if any) 
   if(!is.null(text_keys)){
     stopifnot(typeof(text_keys) == "character")
-    text_keys<- paste0("^",text_keys,"&") #Exact matches only
-    query<-text_keys
-    #query<-ifelse(length(text_keys)==1,text_keys,str_c(text_keys,collapse="|"))
-    md<-md%>%filter(any(str_detect(text_key,query)))
+    md<-md%>%filter(tolower(text_key) %in% tolower(text_keys))
   }
   
-  #subset the metadata columnbs returned based on the metadata_columns option (if any)
-  if(!is.null(metadata_columns)){
-    stopifnot(typeof(metadata_columns) =="character")
-    md<-md%>%select(metadata_columns)
+  #subset the metadata columns returned based on the metadata_columns option (if any)
+  if(!is.null(cols)){
+    stopifnot(typeof(cols) =="character")
+    valid_cols <- intersect(cols, names(md))
+    md<-md%>%select(valid_cols)
   }
   
-  if(dim(md)[1]==0){
+  #coerce factors to character
+  if(dim(md)[2]>0){
+    i <- sapply(md, is.factor)
+    md[i] <- lapply(md[i], as.character)
+  }
+  
+  #return the requested metadata
+  if(dim(md)[1]==0 | dim(md)[2]==0){ #return null if no rows or no columns are selected
     return(NULL)
-  }else{
+  }else if(dim(md)[2]==1){ #return a vector if there is only a single columns specified
+    return(md[[1]])
+  }else{ #otherwise return the whole data frame
     return(md)    
   }
 }
