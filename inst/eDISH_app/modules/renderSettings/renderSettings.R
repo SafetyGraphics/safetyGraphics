@@ -1,4 +1,4 @@
-
+source("modules/renderSettings/util/labelSetting.R")
 source("modules/renderSettings/util/flagSetting.R")
 source("modules/renderSettings/util/updateSettingStatus.R")
 
@@ -120,9 +120,6 @@ renderSettings <- function(input, output, session, data, settings, status){
   # Make updates to the UI
   ###########################
   ns <- session$ns
-  
-
-  runjs(paste0('$("#',ns("title_id_col"), '").attr("title", "NEW<hr /> TITLE FOR <hr />ID COL")'))
 
 
   #Columns in the data
@@ -281,7 +278,7 @@ renderSettings <- function(input, output, session, data, settings, status){
       # if(str_detect(name,"_col") | name %in% c("filters", "group_cols")){
        if (name %in% c("id_col","measure_col","value_col","studyday_col","normal_col_high",
                        "normal_col_low", "visit_col","visitn_col", "baseline--value_col",
-                       "analysisFlag--value_col")){
+                       "analysisFlag--value_col","filters","groups")){
          sortedChoices<-NULL
          if(is.null(setting_value)){
            sortedChoices<-colnames()
@@ -311,6 +308,15 @@ renderSettings <- function(input, output, session, data, settings, status){
        if(name %in% custom_observer_settings){
          runCustomObserver(name=name) #TODO: clean this up!
        }
+       
+       # 3. label setting
+       labelSetting(ns=ns, name=name, label=setting_label)   
+       
+       # 4. Flag the input if it is required
+       if(name %in% req_settings){
+         flagSetting(session=session, name=name, originalLabel=setting_label)
+
+       }
      }
      })
 
@@ -318,24 +324,24 @@ renderSettings <- function(input, output, session, data, settings, status){
   observe({
     for (name in isolate(input_names())){
 
-      setting_label <- name
+      # setting_label <- name
+      # 
+      # # 3. Flag the input if it is required
+      # if(name %in% req_settings){
+      #   flagSetting(session=session, name=name, originalLabel=setting_label)
+      #   setting_label <- paste0(setting_label,"*")  #  <- this line is the reason why I'm including the flagging in
+      #                                               #        this observer vs. the one prior
+      # 
+      #   }
 
-      # 3. Flag the input if it is required
-      if(name %in% req_settings){
-        flagSetting(session=session, name=name, originalLabel=setting_label)
-        setting_label <- paste0(setting_label,"*")  #  <- this line is the reason why I'm including the flagging in
-                                                    #        this observer vs. the one prior
-
-        }
-
-        # 4. Print a warning if the input failed a validation check
+        # 5. Print a warning if the input failed a validation check
               # require that input has been selected
         if(name %in% status_df()$text_key){
 
           current_status <- status_df()[status_df()$text_key==name, "message"]
           current_status <- ifelse(current_status=="","OK",current_status)
-          updateSettingStatus(session=session, name=name,
-                              originalLabel=setting_label,
+          updateSettingStatus(ns=ns, name=name,
+                             # originalLabel=setting_label,
                               status=current_status)
         }
 
