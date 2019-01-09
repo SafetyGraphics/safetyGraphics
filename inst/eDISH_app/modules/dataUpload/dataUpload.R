@@ -58,7 +58,7 @@ dataUpload <- function(input, output, session){
       temp_standard <- dd$standard[[i]]$standard
       
       if(temp_standard == "None") {
-        names(choices)[i] <- paste0("<p>", names(dd$data)[i], names(dd$data), " - <em style='font-size:12px;'>No Standard Detected</em></p>")
+        names(choices)[i] <- paste0("<p>", names(dd$data)[i], " - <em style='font-size:12px;'>No Standard Detected</em></p>")
       } else if (dd$standard[[i]]$details[[temp_standard]]$match == "Full") {
         names(choices)[i] <- paste0("<p>", names(dd$data)[i], " - <em style='color:green; font-size:12px;'>", dd$standard[[i]]$standard, "</em></p>")
         # If partial data spec match - give the fraction of variables matched
@@ -136,7 +136,6 @@ dataUpload <- function(input, output, session){
     }
   })
 
-  
   # run validateSettings(data, standard, settings) and return a status
   status <- reactive({
     req(data_selected())
@@ -146,8 +145,7 @@ dataUpload <- function(input, output, session){
                      chart="eDish")  
   })
   
-  print(status)
-  
+
   ### return selected data, settings, and status to server
   return(list(data_selected = reactive(data_selected()),
               settings = reactive(settings()),
