@@ -3,6 +3,7 @@
 #' Get a list of required settings for a given chart 
 #' 
 #' @param chart The chart for which required settings should be returned ("eDish" only for now) . Default: \code{"eDish"}.
+#' @param metadata The metadata file to be used
 #' @return List of lists specifying the position of matching named elements in the format \code{list("filters",2,"value_col")}, which would correspond to \code{settings[["filters"]][[2]][["value_col"]]}.
 #' 
 #' @examples 
@@ -12,12 +13,13 @@
 
 
 
-getRequiredSettings<-function(chart="eDish"){
+getRequiredSettings<-function(chart="eDish", metadata=settingsMetadata){
   stopifnot(
     typeof(chart)=="character",
     tolower(chart)=="edish"
   )
   
+  settings <- safetyGraphics::getSettingsMetadata(charts = chart, columns=c("text_key","required"))
   if(tolower(chart)=="edish"){
       return(list(
         list("id_col"),

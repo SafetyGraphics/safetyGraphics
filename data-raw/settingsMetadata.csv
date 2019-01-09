@@ -1,26 +1,26 @@
-﻿chart_edish,text_key,label,description,setting_type,column_mapping,column_type,column_required,field_mapping
-TRUE,id_col,ID column,Column containing a unique participant identifier,character,TRUE,character,TRUE,FALSE
-TRUE,value_col,Value column,Column containing numeric values for each measure,character,TRUE,numeric,TRUE,FALSE
-TRUE,measure_col,Measure column,Column containing measure names,character,TRUE,character,TRUE,FALSE
-TRUE,normal_col_low,Lower Limit of Normal column,Column containing the numeric lower limit of normal for each measure,character,TRUE,numeric,TRUE,FALSE
-TRUE,normal_col_high,Upper Limit of Normal column,Column containing the numeric upper limit of normal for each measure,character,TRUE,numeric,TRUE,FALSE
-TRUE,studyday_col,Study Day column,Column containing the study day,character,TRUE,numeric,TRUE,FALSE
-TRUE,visit_col,Visit column,Column containing the visit name,character,TRUE,character,FALSE,FALSE
-TRUE,visitn_col,Visit Number column,Column containing the visit number,character,TRUE,numeric,FALSE,FALSE
-TRUE,filters,Filters columns,List of columns to be used as filters,vector,TRUE,NA,FALSE,FALSE
-TRUE,group_cols,Group columns,List of columns to be used as grouping options,vector,TRUE,NA,FALSE,FALSE
-TRUE,measure_values--alt,Alanine Aminotransferase value,Value used for Alanine Aminotransferase in the specified measure column,character,FALSE,NA,NA,TRUE
-TRUE,measure_values--ast,Aspartate Aminotransferase value,Value used for Aspartate Aminotransferase in the specified measure column,character,FALSE,NA,NA,TRUE
-TRUE,measure_values--tb,Total Bilirubin value,Value used for Total Bilirubin in the specified measure column,character,FALSE,NA,NA,TRUE
-TRUE,meaure_values--alp,Alkaline Phosphatase value,Value used for Alkaline Phosphatase in the specified measure column,character,FALSE,NA,NA,TRUE
-TRUE,baseline--value_col,Baseline column,Column used to specify the baseline visit,character,TRUE,NA,FALSE,FALSE
-TRUE,baseline--values,Baseline values,Values used to specify the baseline visit in the specified baseline column,vector,FALSE,NA,NA,TRUE
-TRUE,analysisFlag--value_col,Analysis Flag column,Column used to specify which data rows should be included in the analysis,character,TRUE,NA,FALSE,FALSE
-TRUE,analysisFlag--values,Analysis Flag values,Values used to specify which data rows should be included in the analysis,vector,FALSE,NA,NA,TRUE
-TRUE,x_options,X axis options,Measures to be used as options for the x axis,vector,FALSE,NA,NA,FALSE
-TRUE,y_options,Y axis options,Measures to be used as options for the y axis,vector,FALSE,NA,NA,FALSE
-TRUE,visit_window,Default Visit Window in Days ,Visit window to be used to determine point fill on initial load,numeric,FALSE,NA,NA,FALSE
-TRUE,r_ratio_filter,Show R Ratio Filter?,Include the R ratio filter in the chart?,boolean,FALSE,NA,NA,FALSE
-TRUE,r_ratio_cut,Default R Ratio Cut,Cut point for the R ratio filter on initial load,numeric,FALSE,NA,NA,FALSE
-TRUE,showTitle,Show Chart Title? ,Show the chart title? ,boolean,FALSE,NA,NA,FALSE
-TRUE,warningText,Warning text,Message test to be shown on initial load,Character,FALSE,NA,NA,FALSE
+﻿chart_edish,text_key,label,description,setting_type,setting_required,column_mapping,column_type,column_required,field_mapping
+TRUE,id_col,ID column,Column containing a unique participant identifier,character,TRUE,TRUE,character,TRUE,FALSE
+TRUE,value_col,Value column,Column containing numeric values for each measure,character,TRUE,TRUE,numeric,TRUE,FALSE
+TRUE,measure_col,Measure column,Column containing measure names,character,TRUE,TRUE,character,TRUE,FALSE
+TRUE,normal_col_low,Lower Limit of Normal column,Column containing the numeric lower limit of normal for each measure,character,TRUE,TRUE,numeric,TRUE,FALSE
+TRUE,normal_col_high,Upper Limit of Normal column,Column containing the numeric upper limit of normal for each measure,character,TRUE,TRUE,numeric,TRUE,FALSE
+TRUE,studyday_col,Study Day column,Column containing the study day,character,TRUE,TRUE,numeric,TRUE,FALSE
+TRUE,visit_col,Visit column,Column containing the visit name,character,FALSE,TRUE,character,FALSE,FALSE
+TRUE,visitn_col,Visit Number column,Column containing the visit number,character,FALSE,TRUE,numeric,FALSE,FALSE
+TRUE,filters,Filters columns,List of columns to be used as filters,vector,FALSE,TRUE,NA,FALSE,FALSE
+TRUE,group_cols,Group columns,List of columns to be used as grouping options,vector,FALSE,TRUE,NA,FALSE,FALSE
+TRUE,measure_values--alt,Alanine Aminotransferase value,Value used for Alanine Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
+TRUE,measure_values--ast,Aspartate Aminotransferase value,Value used for Aspartate Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
+TRUE,measure_values--tb,Total Bilirubin value,Value used for Total Bilirubin in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
+TRUE,meaure_values--alp,Alkaline Phosphatase value,Value used for Alkaline Phosphatase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
+TRUE,baseline--value_col,Baseline column,Column used to specify the baseline visit,character,FALSE,TRUE,NA,FALSE,FALSE
+TRUE,baseline--values,Baseline values,Values used to specify the baseline visit in the specified baseline column,vector,FALSE,FALSE,NA,NA,TRUE
+TRUE,analysisFlag--value_col,Analysis Flag column,Column used to specify which data rows should be included in the analysis,character,FALSE,TRUE,NA,FALSE,FALSE
+TRUE,analysisFlag--values,Analysis Flag values,Values used to specify which data rows should be included in the analysis,vector,FALSE,FALSE,NA,NA,TRUE
+TRUE,x_options,X axis options,Measures to be used as options for the x axis,vector,FALSE,FALSE,NA,NA,FALSE
+TRUE,y_options,Y axis options,Measures to be used as options for the y axis,vector,FALSE,FALSE,NA,NA,FALSE
+TRUE,visit_window,Default Visit Window in Days ,Visit window to be used to determine point fill on initial load,numeric,FALSE,FALSE,NA,NA,FALSE
+TRUE,r_ratio_filter,Show R Ratio Filter?,Include the R ratio filter in the chart?,boolean,FALSE,FALSE,NA,NA,FALSE
+TRUE,r_ratio_cut,Default R Ratio Cut,Cut point for the R ratio filter on initial load,numeric,FALSE,FALSE,NA,NA,FALSE
+TRUE,showTitle,Show Chart Title? ,Show the chart title? ,boolean,FALSE,FALSE,NA,NA,FALSE
+TRUE,warningText,Warning text,Message test to be shown on initial load,Character,FALSE,FALSE,NA,NA,FALSE
