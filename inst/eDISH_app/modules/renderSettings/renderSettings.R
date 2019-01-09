@@ -12,6 +12,8 @@ renderSettings <- function(input, output, session, data, settings, status){
       observe({
         settings <- settings()
 
+        #print(settings)
+        
         req(input$measure_col)
 
         if (input$measure_col %in% colnames()){
@@ -137,6 +139,8 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   settings_new <- reactive({
 
+  #  print(input$id_col)
+    
     settings <- list(id_col = input$id_col,
                      value_col = input$value_col,
                      measure_col = input$measure_col,
@@ -211,6 +215,8 @@ renderSettings <- function(input, output, session, data, settings, status){
 
    # if (!is.null(settings_new[[name]])) {
 
+     #print(settings_new)
+     
       for (i in names(settings_new)){
         if (!is.null(settings_new[[i]])){
           if (settings_new[[i]][1]==""){
@@ -219,6 +225,8 @@ renderSettings <- function(input, output, session, data, settings, status){
         }
       }
 
+     
+     
        validateSettings(data(), settings_new, chart="eDish")
     # }
   })
@@ -326,8 +334,12 @@ renderSettings <- function(input, output, session, data, settings, status){
               # require that input has been selected
         if(name %in% status_df()$text_key){
 
+          
           current_status <- status_df()[status_df()$text_key==name, "message"]
           current_status <- ifelse(current_status=="","OK",current_status)
+          
+          #print(current_status)
+          
           updateSettingStatus(session=session, name=name,
                               originalLabel=setting_label,
                               status=current_status)
