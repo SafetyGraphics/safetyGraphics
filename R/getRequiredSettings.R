@@ -8,28 +8,31 @@
 #' 
 #' @examples 
 #' safetyGraphics:::getRequiredSettings(chart="eDish")
-#' 
+#'
+#' @importFrom stringr str_split
+#' @importFrom magrittr "%>%"
+#' @importFrom purrr map 
+#'       
 #' @export
 
 
-
 getRequiredSettings<-function(chart="eDish", metadata=settingsMetadata){
-  stopifnot(
-    typeof(chart)=="character",
-    tolower(chart)=="edish"
-  )
+  stopifnot(typeof(chart)=="character")
   
-  settings <- safetyGraphics::getSettingsMetadata(charts = chart, columns=c("text_key","required"))
-  if(tolower(chart)=="edish"){
-      return(list(
-        list("id_col"),
-        list("measure_col"),
-        list("value_col"),
-        list("studyday_col"),
-        list("normal_col_high"),
-        list("normal_col_low")
-      ))
+  #Get the metadata for the specified charts
+  all_settings <- safetyGraphics:::getSettingsMetadata(charts = chart, cols=c("text_key","setting_required"), metadata=metadata) 
+  if(is.null(all_settings)){
+    return(NULL)
+  }else{
+    #get the required setting keys for the chart and then convert it to a list of lists
+    required_settings <- all_settings %>% filter(setting_required) #get required settings 
+    settings_list <- as.list(required_settings[[1]]) %>% map(~as.list(str_split(.x,"--")[[1]]))  #parse to list of lists
+  }
+
+  if(length(settings_list)>0){
+    return(settings_list)  
   }else{
     return(NULL)
   }
+  
 }

@@ -13,6 +13,10 @@
 #' safetyGraphics:::getSettingsMetadata() # Returns a full copy of settingsMetadata.Rda
 #' safetyGraphics:::getSettingsMetadata(text_keys=c("id_col")) # returns a dataframe with a single row with metadata for the id_col setting
 #' safetyGraphics:::getSettingsMetadata(text_keys=c("id_col"), columns=c("label")) # returns the character value for the specified row. 
+#' 
+#' @importFrom stringr str_subset
+#' @importFrom magrittr "%>%"
+#' @import dplyr
 
 getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, metadata = settingsMetadata){
 
