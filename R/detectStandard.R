@@ -33,11 +33,19 @@ detectStandard <- function(data, domain="labs"){
   standard_list[["details"]][["SDTM"]]<-compare_cols(data_cols,getRequiredColumns(standard="SDTM"))
   
   # Determine the final standard
-  if(standard_list[["details"]][["SDTM"]][["match"]]){
+  if(standard_list[["details"]][["SDTM"]][["match"]] == "Full"){
     standard_list[["standard"]]<- "SDTM"
-  }else if(standard_list[["details"]][["ADaM"]][["match"]]){
+  } else if(standard_list[["details"]][["ADaM"]][["match"]] == "Full"){
     standard_list[["standard"]]<- "ADaM"
-  }else{
+  } else if(standard_list[["details"]][["SDTM"]][["match"]] == "Partial" |
+           standard_list[["details"]][["ADaM"]][["match"]] == "Partial"){
+  standard_list[["standard"]] <- ifelse(
+    length(standard_list[["details"]][["ADaM"]][["matched_columns"]]) > 
+      length(standard_list[["details"]][["SDTM"]][["matched_columns"]]),
+      "ADaM" , "SDTM" #SDTM if they are equal
+    )
+  
+  } else {
     standard_list[["standard"]]<-"None"
   }
   
