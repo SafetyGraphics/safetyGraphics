@@ -33,5 +33,17 @@ Users can also initialize standalone charts with a few lines of code. This works
 ```r
 devtools::install_github("ASA-DIA-InteractiveSafetyGraphics/safetyGraphics")
 library("safetyGraphics")
-eDISH(data=adlbc) #create htmlwidget using sample data
+eDISH(data=adlbc, 
+      id_col = "USUBJID",
+      value_col = "AVAL", 
+      measure_col = "PARAM", 
+      visit_col = "VISIT",
+      visitn_col = "VISITNUM", 
+      studyday_col = "ADY",
+      normal_col_low = "A1LO", 
+      normal_col_high = "A1HI", 
+      measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
+                            AST = "Aspartate Aminotransferase (U/L)",
+                            TB = "Bilirubin (umol/L)",
+                            ALP = "Alkaline Phosphatase (U/L)"))
 ```
