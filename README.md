@@ -28,7 +28,7 @@ chartBuilderApp() #open the shiny application
 
 ### Standalone charts
 
-Users can also initialize standalone charts with a few lines of code. This works best for data sets using [ADaM](https://www.cdisc.org/standards/foundational/adam) or [SDTM](https://www.cdisc.org/standards/foundational/sdtm) data standards:
+Users can also initialize customized standalone charts with a few lines of code.
 
 ```r
 devtools::install_github("ASA-DIA-InteractiveSafetyGraphics/safetyGraphics")
