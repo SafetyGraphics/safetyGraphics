@@ -1,8 +1,8 @@
 
 renderSettingsUI <- function(id){
-
+  
   ns <- NS(id)
-
+  
   tagList(
     fluidRow(
       splitLayout(
@@ -12,23 +12,23 @@ renderSettingsUI <- function(id){
               column(6,
                      h3("Data Mapping"),
                      div(
-                         span(id = ns("tt_lbl_id_col"), title = "",
-                             tags$label(id = ns("lbl_id_col"), "")),
-                         span(id = ns("tt_msg_id_col"), title = "",
-                              tags$label(id = ns("msg_id_col"), "")),
-                         selectizeInput(ns("id_col"),NULL, choices = NULL)
-
+                       span(id = ns("tt_lbl_id_col"), title = "",
+                            tags$label(id = ns("lbl_id_col"), "")),
+                       span(id = ns("tt_msg_id_col"), title = "",
+                            tags$label(id = ns("msg_id_col"), "")),
+                       selectizeInput(ns("id_col"),NULL, choices = NULL)
+                       
                      ),
-
+                     
                      div(
                        span(id = ns("tt_lbl_value_col"), title = "",
                             tags$label(id = ns("lbl_value_col"), "")),
                        span(id = ns("tt_msg_value_col"), title = "",
                             tags$label(id = ns("msg_value_col"), "")),
                        selectizeInput(ns("value_col"),NULL, choices = NULL)
-
-                       ),
-
+                       
+                     ),
+                     
                      div(
                        span(id = ns("tt_lbl_measure_col"), title = "",
                             tags$label(id = ns("lbl_measure_col"), "")),
@@ -149,23 +149,21 @@ renderSettingsUI <- function(id){
                    selectInput(ns("x_options"),"x_options", choices = c("ALT", "AST", "ALP","TB"), selected = c("ALT", "AST", "ALP"), multiple = TRUE),
                    selectInput(ns("y_options"),"y_options", choices = c("ALT", "AST", "ALP","TB"), selected = c("TB"), multiple = TRUE)
                  ),
-        #  ),
-         # column(6,
                  wellPanel(
-                     h3("Appearance Settings"),
-                         sliderInput(ns("visit_window"),"visit_window", value = 30, min=0, max=50),
-                         checkboxInput(ns("r_ratio_filter"),"r_ratio_filter", value = TRUE),
-                         conditionalPanel(
-                           condition="input.r_ratio_filter==true", ns=ns,
-                           sliderInput(ns("r_ratio_cut"),"r_ratio_cut", value = 0, min=0, max =1)
-                         ),
-                         checkboxInput(ns("showTitle"),"showTitle", value = TRUE),
-                         textAreaInput (ns("warningText"),"warningText", rows =4,
-                                        value = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.")
-                     )
-        )
-      ))
-  )
-
+                   h3("Appearance Settings"),
+                   sliderInput(ns("visit_window"),"visit_window", value = 30, min=0, max=50),
+                   checkboxInput(ns("r_ratio_filter"),"r_ratio_filter", value = TRUE),
+                   conditionalPanel(
+                     condition="input.r_ratio_filter==true", ns=ns,
+                     sliderInput(ns("r_ratio_cut"),"r_ratio_cut", value = 0, min=0, max =1)
+                   ),
+                   checkboxInput(ns("showTitle"),"showTitle", value = TRUE),
+                   textAreaInput (ns("warningText"),"warningText", rows =4,
+                                  value = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.")
+                 )
+          )
+        ))
+    )
+    
   )
 }
