@@ -243,15 +243,23 @@ renderSettings <- function(input, output, session, data, settings, status){
       bind_rows %>%
       group_by(text_key) %>%
       mutate(num_fail = sum(valid==FALSE)) %>%
-      mutate(message = paste(message, collapse = " ") %>% trimws()) %>%
-       select(text_key, message, num_fail) %>%
-       unique %>%
-       mutate(message = ifelse(message=="", "OK", message)) 
+      mutate(message_long = paste(message, collapse = " ") %>% trimws(),
+             message_short = case_when(
+               num_fail==0 ~ "OK",
+               num_fail==1 ~ "1 failed check.",
+               TRUE ~ paste(num_fail, "failed checks.")
+             )) %>%
+       select(text_key, message_long, message_short, num_fail) %>%
+       unique #%>%
+     #  mutate(message = ifelse(message=="", "OK", message)) 
   })
 
 
   #List of required settings
-  req_settings <- getRequiredSettings("eDish") %>% unlist  #Indicate required settings
+   req_settings <- safetyGraphics:::getSettingsMetadata() %>% 
+     filter(chart_edish==TRUE & setting_required==TRUE) %>% 
+     pull(text_key)
+ # req_settings <- getRequiredSettings("eDish") %>% unlist  #Indicate required settings
 
     #List of inputs with custom observers
    custom_observer_settings <- c("measure_col", "baseline--value_col","analysisFlag--value_col")
@@ -278,15 +286,17 @@ renderSettings <- function(input, output, session, data, settings, status){
        #print(name)
        setting_key <- as.list(strsplit(name,"\\-\\-"))
        setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings=settings())
-
-       setting_label <- name ##TO DO: get the label!
+       setting_label <- safetyGraphics:::getSettingsMetadata(charts="eDiSH", text_keys=name, cols="label") 
+    #   setting_label <- name ##TO DO: get the label!
        
+       column_mapping_ids <- safetyGraphics:::getSettingsMetadata(charts="eDiSH") %>% filter(column_mapping==TRUE) %>% pull(text_key) 
 
        # 1. Update the options for data-mapping inputs
       # if(str_detect(name,"_col") | name %in% c("filters", "group_cols")){
-       if (name %in% c("id_col","measure_col","value_col","studyday_col","normal_col_high",
-                       "normal_col_low", "visit_col","visitn_col", "baseline--value_col",
-                       "analysisFlag--value_col","filters","groups")){
+       # if (name %in% c("id_col","measure_col","value_col","studyday_col","normal_col_high",
+       #                 "normal_col_low", "visit_col","visitn_col", "baseline--value_col",
+       #                 "analysisFlag--value_col","filters","groups")){
+       if (name %in% column_mapping_ids){
          sortedChoices<-NULL
          if(is.null(setting_value)){
            sortedChoices<-colnames()
@@ -314,7 +324,7 @@ renderSettings <- function(input, output, session, data, settings, status){
 
        # 2. Check for custom observers and initialize if needed
        if(name %in% custom_observer_settings){
-         runCustomObserver(name=name) #TODO: clean this up!
+         runCustomObserver(name=name) 
        }
        
        # 3. label setting
@@ -332,26 +342,16 @@ renderSettings <- function(input, output, session, data, settings, status){
   observe({
     for (name in isolate(input_names())){
 
-      # setting_label <- name
-      # 
-      # # 3. Flag the input if it is required
-      # if(name %in% req_settings){
-      #   flagSetting(session=session, name=name, originalLabel=setting_label)
-      #   setting_label <- paste0(setting_label,"*")  #  <- this line is the reason why I'm including the flagging in
-      #                                               #        this observer vs. the one prior
-      # 
-      #   }
-
         # 5. Print a warning if the input failed a validation check
-              # require that input has been selected
         if(name %in% status_df()$text_key){
 
-          
-          current_status <- status_df()[status_df()$text_key==name, "message"]
-          current_status <- ifelse(current_status=="","OK",current_status)
-          updateSettingStatus(ns=ns, name=name,
-                             # originalLabel=setting_label,
-                              status=current_status)
+          status_short <- status_df()[status_df()$text_key==name, "message_short"]
+          status_long <- status_df()[status_df()$text_key==name, "message_long"]
+          # 
+          # current_status <- status_df()[status_df()$text_key==name, "message"]
+          # current_status <- ifelse(current_status=="","OK",current_status)
+          updateSettingStatus(ns=ns, name=name, status_short=status_short, status_long=status_long)
+                              #status=current_status)
         }
 
     }

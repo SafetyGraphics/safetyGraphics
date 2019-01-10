@@ -12,15 +12,10 @@ renderSettingsUI <- function(id){
               column(6,
                      h3("Data Mapping"),
                      div(
-                       # div with 2 spans
-                       # span 1: setting title (and req) and description on hover
-                       # span 2: validation short message and long message on hover
                          span(id = ns("tt_lbl_id_col"), title = "",
                              tags$label(id = ns("lbl_id_col"), "")),
                          span(id = ns("tt_msg_id_col"), title = "",
                               tags$label(id = ns("msg_id_col"), "")),
-                          # div(id = ns("title_id_col"), 
-                          #     tags$label(id=ns("label_id_col"), "Unique subject identifier")),
                          selectizeInput(ns("id_col"),NULL, choices = NULL)
 
                      ),
@@ -30,7 +25,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_value_col"), "")),
                        span(id = ns("tt_msg_value_col"), title = "",
                             tags$label(id = ns("msg_value_col"), "")),
-                      # tags$label(id=ns("label_value_col"),"Lab Result"),
                        selectizeInput(ns("value_col"),NULL, choices = NULL)
 
                        ),
@@ -40,7 +34,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_measure_col"), "")),
                        span(id = ns("tt_msg_measure_col"), title = "",
                             tags$label(id = ns("msg_measure_col"), "")),
-                    #  tags$label(id=ns("label_measure_col"),"Lab measure"),
                        selectizeInput(ns("measure_col"),NULL, choices = NULL)
                      ),
                      div(
@@ -48,7 +41,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_measure_values--ALT"), "")),
                        span(id = ns("tt_msg_measure_values--ALT"), title = "",
                             tags$label(id = ns("msg_measure_values--ALT"), "")),
-                    #   tags$label(id=ns("label_measure_values--ALT"),"ALT"),
                        selectizeInput(ns("measure_values--ALT"),NULL, choices = NULL)
                      ),
                      div(
@@ -56,7 +48,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_measure_values--AST"), "")),
                        span(id = ns("tt_msg_measure_values--AST"), title = "",
                             tags$label(id = ns("msg_measure_values--AST"), "")),
-                 #      tags$label(id=ns("label_measure_values--AST"),"AST"),
                        selectizeInput(ns("measure_values--AST"),NULL, choices = NULL)
                      ),
                      div(
@@ -64,7 +55,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_measure_values--TB"), "")),
                        span(id = ns("tt_msg_measure_values--TB"), title = "",
                             tags$label(id = ns("msg_measure_values--TB"), "")),
-                #       tags$label(id=ns("label_measure_values--TB"),"TB"),
                        selectizeInput(ns("measure_values--TB"),NULL, choices = NULL)
                      ),
                      div(
@@ -72,7 +62,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_measure_values--ALP"), "")),
                        span(id = ns("tt_msg_measure_values--ALP"), title = "",
                             tags$label(id = ns("msg_measure_values--ALP"), "")),
-                #       tags$label(id=ns("label_measure_values--ALP"),"ALP"),
                        selectizeInput(ns("measure_values--ALP"),NULL, choices = NULL)
                      ),
                      div(
@@ -80,7 +69,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_normal_col_low"), "")),
                        span(id = ns("tt_msg_normal_col_low"), title = "",
                             tags$label(id = ns("msg_normal_col_low"), "")),
-               #        tags$label(id=ns("label_normal_col_low"),"Lower limit of normal"),
                        selectizeInput(ns("normal_col_low"),NULL, choices = NULL)
                      ),
                      div(
@@ -88,7 +76,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_normal_col_high"), "")),
                        span(id = ns("tt_msg_normal_col_high"), title = "",
                             tags$label(id = ns("msg_normal_col_high"), "")),
-               #        tags$label(id=ns("label_normal_col_high"),"Upper limit of normal"),
                        selectizeInput(ns("normal_col_high"),NULL, choices = NULL)
                      )
               ) ,
@@ -96,13 +83,11 @@ renderSettingsUI <- function(id){
                      br(),
                      br(),
                      br(),
-
                      div(
                        span(id = ns("tt_lbl_visit_col"), title = "",
                             tags$label(id = ns("lbl_visit_col"), "")),
                        span(id = ns("tt_msg_visit_col"), title = "",
                             tags$label(id = ns("msg_visit_col"), "")),
-                #       tags$label(id=ns("label_visit_col"),"Visit"),
                        selectizeInput(ns("visit_col"),NULL, choices = NULL)
                      ),
                      div(
@@ -110,7 +95,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_visitn_col"), "")),
                        span(id = ns("tt_msg_visitn_col"), title = "",
                             tags$label(id = ns("msg_visitn_col"), "")),
-                 #      tags$label(id=ns("label_visitn_col"),"Visit number"),
                        selectizeInput(ns("visitn_col"),NULL, choices = NULL)
                      ),
                      div(
@@ -118,7 +102,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_studyday_col"), "")),
                        span(id = ns("tt_msg_studyday_col"), title = "",
                             tags$label(id = ns("msg_studyday_col"), "")),
-                 #      tags$label(id=ns("label_studyday_col"),"Study day"),
                        selectizeInput(ns("studyday_col"),NULL, choices = NULL)
                      ),
                      div(
@@ -126,7 +109,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_baseline--value_col"), "")),
                        span(id = ns("tt_msg_baseline--value_col"), title = "",
                             tags$label(id = ns("msg_baseline--value_col"), "")),
-                  #     tags$label(id=ns("label_baseline--value_col"),"Baseline value column"),
                        selectizeInput(ns("baseline--value_col"),NULL, choices = NULL)
                      ),
                      div(
@@ -134,7 +116,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_baseline--values"), "")),
                        span(id = ns("tt_msg_baseline--values"), title = "",
                             tags$label(id = ns("msg_baseline--values"), "")),
-                 #      tags$label(id=ns("label_baseline--values"),"Baseline value(s)"),
                        selectizeInput(ns("baseline--values"),NULL, choices = NULL, multiple = TRUE)
                      ),
                      selectInput(ns("filters"),"Filters", choices = NULL, selected = NULL, multiple = TRUE),
@@ -144,7 +125,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_analysisFlag--value_col"), "")),
                        span(id = ns("tt_msg_analysisFlag--value_col"), title = "",
                             tags$label(id = ns("msg_analysisFlag--value_col"), "")),
-                 #      tags$label(id=ns("label_analysisFlag--value_col"),"Analysis population column"),
                        selectizeInput(ns("analysisFlag--value_col"),NULL, choices = NULL)
                      ),
                      div(
@@ -152,7 +132,6 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("lbl_analysisFlag--values"), "")),
                        span(id = ns("tt_msg_analysisFlag--values"), title = "",
                             tags$label(id = ns("msg_analysisFlag--values"), "")),
-                 #      tags$label(id=ns("label_analysisFlag--values"),"Analysis population values"),
                        selectizeInput(ns("analysisFlag--values"),NULL, choices = NULL, multiple = TRUE)
                      ),
                      br(),
