@@ -4,7 +4,7 @@ library(dplyr)
 library(magrittr)
 
 #Preload the raw, custom metadata
-rawMetadata <- read.csv("../../data-raw/settingsMetadata.csv")
+rawMetadata <- safetyGraphics::settingsMetadata
 
 customMetadata<- data.frame(
   chart_linechart = c(TRUE, FALSE), 
