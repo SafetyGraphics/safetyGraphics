@@ -4,10 +4,12 @@
 \alias{getRequiredSettings}
 \title{Get a list of required settings}
 \usage{
-getRequiredSettings(chart = "eDish")
+getRequiredSettings(chart = "eDish", metadata = settingsMetadata)
 }
 \arguments{
 \item{chart}{The chart for which required settings should be returned ("eDish" only for now) . Default: \code{"eDish"}.}
+
+\item{metadata}{The metadata file to be used}
 }
 \value{
 List of lists specifying the position of matching named elements in the format \code{list("filters",2,"value_col")}, which would correspond to \code{settings[["filters"]][[2]][["value_col"]]}.
