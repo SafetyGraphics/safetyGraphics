@@ -12,7 +12,7 @@ TRUE,group_cols,Group columns,"An optional list of specifications for grouping c
 TRUE,measure_values--alt,Alanine Aminotransferase value,Value used for Alanine Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
 TRUE,measure_values--ast,Aspartate Aminotransferase value,Value used for Aspartate Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
 TRUE,measure_values--tb,Total Bilirubin value,Value used for Total Bilirubin in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
-TRUE,meaure_values--alp,Alkaline Phosphatase value,Value used for Alkaline Phosphatase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
+TRUE,measure_values--alp,Alkaline Phosphatase value,Value used for Alkaline Phosphatase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
 TRUE,baseline--value_col,Baseline column,An optional list defining which column represent the baseline visit(s) of the study.,character,FALSE,TRUE,NA,FALSE,FALSE
 TRUE,baseline--values,Baseline values,An optional list defining which values (one or more) represent the baseline visit(s) of the study.,vector,FALSE,FALSE,NA,NA,TRUE
 TRUE,analysisFlag--value_col,Analysis Flag column,An optional list defining which column should be used in eDish and mDish analyses.,character,FALSE,TRUE,NA,FALSE,FALSE
