@@ -11,12 +11,27 @@ This package is built being in conjunction with the [safety-eDISH](https://githu
 
 ## Usage
 
-Initializing the graphic will only require a few lines of code for data sets using [ADaM](https://www.cdisc.org/standards/foundational/adam) or [SDTM](https://www.cdisc.org/standards/foundational/sdtm) data standards:
+Users can interactively explore thier data with a shiny application or create standalone interactive charts. 
+
+### Shiny application
+
+The Shiny app provides a simple interface for:
+- Loading data
+- Customizing settings and data mappings
+- Viewing and exporting the interactive graphics
 
 ```r
-devtools::install_github("ASA-DIA-InteractiveSafetyGraphics/safetyGraphics", ref="v0.1.0")
-library("ReDish")
-eDISH(data=adlbc)
+devtools::install_github("ASA-DIA-InteractiveSafetyGraphics/safetyGraphics")
+library("safetyGraphics")
+chartBuilderApp() #open the shiny application
 ```
 
-Fully customizable settings and an easy-to-use Shiny app facilitating custom configuration and data mapping will be included in the first full release.
+### Standalone charts
+
+Users can also initialize standalone charts with a few lines of code. This works best for data sets using [ADaM](https://www.cdisc.org/standards/foundational/adam) or [SDTM](https://www.cdisc.org/standards/foundational/sdtm) data standards:
+
+```r
+devtools::install_github("ASA-DIA-InteractiveSafetyGraphics/safetyGraphics")
+library("safetyGraphics")
+eDISH(data=adlbc) #create htmlwidget using sample data
+```
