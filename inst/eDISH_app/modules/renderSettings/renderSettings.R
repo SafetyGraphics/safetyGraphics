@@ -126,7 +126,9 @@ renderSettings <- function(input, output, session, data, settings, status){
   colnames <- reactive({names(data())})
   
   #List of all inputs
-  input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))}) #TODO: needs update
+  #input_names <- reactive({safetyGraphics:::getSettingsMetadata(charts="eDiSH", cols="text_key")})
+  input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))}) 
+  #observe({print(input_names())})
   
   # Fill settings object based on selections
   # require that secondary inputs have been filled in before proceeding
@@ -268,6 +270,7 @@ renderSettings <- function(input, output, session, data, settings, status){
       setting_key <- as.list(strsplit(name,"\\-\\-"))
       setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings=settings())
       setting_label <- safetyGraphics:::getSettingsMetadata(charts="eDiSH", text_keys=name, cols="label") 
+      setting_description <- safetyGraphics:::getSettingsMetadata(charts="eDiSH", text_keys=name, cols="description") 
       
       
       column_mapping_ids <- safetyGraphics:::getSettingsMetadata(charts="eDiSH") %>% filter(column_mapping==TRUE) %>% pull(text_key) 
@@ -305,7 +308,7 @@ renderSettings <- function(input, output, session, data, settings, status){
       }
       
       # 3. label setting
-      labelSetting(ns=ns, name=name, label=setting_label)   
+      labelSetting(ns=ns, name=name, label=setting_label, description=setting_description) 
       
       # 4. Flag the input if it is required
       if(name %in% req_settings){

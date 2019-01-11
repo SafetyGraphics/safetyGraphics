@@ -118,8 +118,20 @@ renderSettingsUI <- function(id){
                             tags$label(id = ns("msg_baseline--values"), "")),
                        selectizeInput(ns("baseline--values"),NULL, choices = NULL, multiple = TRUE)
                      ),
-                     selectInput(ns("filters"),"Filters", choices = NULL, selected = NULL, multiple = TRUE),
-                     selectInput(ns("group_cols"),"Groups", choices = NULL, multiple = TRUE),
+                     div(
+                       span(id = ns("tt_lbl_filters"), title = "",
+                            tags$label(id = ns("lbl_filters"), "")),
+                       span(id = ns("tt_msg_filters"), title = "",
+                            tags$label(id = ns("msg_filters"), "")),
+                       selectInput(ns("filters"),NULL, choices = NULL, selected = NULL, multiple = TRUE)
+                     ),
+                     div(
+                       span(id = ns("tt_lbl_group_cols"), title = "",
+                            tags$label(id = ns("lbl_group_cols"), "")),
+                       span(id = ns("tt_msg_group_cols"), title = "",
+                            tags$label(id = ns("msg_group_cols"), "")),
+                       selectInput(ns("group_cols"),NULL, choices = NULL, selected = NULL, multiple = TRUE)
+                     ),
                      div(
                        span(id = ns("tt_lbl_analysisFlag--value_col"), title = "",
                             tags$label(id = ns("lbl_analysisFlag--value_col"), "")),
@@ -146,20 +158,49 @@ renderSettingsUI <- function(id){
           column(6,
                  wellPanel(
                    h3("Measure Settings"),
-                   selectInput(ns("x_options"),"x_options", choices = c("ALT", "AST", "ALP","TB"), selected = c("ALT", "AST", "ALP"), multiple = TRUE),
-                   selectInput(ns("y_options"),"y_options", choices = c("ALT", "AST", "ALP","TB"), selected = c("TB"), multiple = TRUE)
+                   div(
+                     div(id = ns("tt_lbl_x_options"), title = "",
+                         tags$label(id = ns("lbl_x_options"), "")),
+                     selectizeInput(ns("x_options"),NULL, choices = c("ALT", "AST", "ALP","TB"), selected = c("ALT", "AST", "ALP"), multiple=TRUE)
+                   ),
+                   div(
+                     div(id = ns("tt_lbl_y_options"), title = "",
+                         tags$label(id = ns("lbl_y_options"), "")),
+                     selectizeInput(ns("y_options"),NULL, choices = c("ALT", "AST", "ALP","TB"), selected = c("TB"), multiple = TRUE)
+                   )
+              
                  ),
                  wellPanel(
                    h3("Appearance Settings"),
-                   sliderInput(ns("visit_window"),"visit_window", value = 30, min=0, max=50),
-                   checkboxInput(ns("r_ratio_filter"),"r_ratio_filter", value = TRUE),
+                   div(
+                     div(id = ns("tt_lbl_visit_window"), title = "",
+                         tags$label(id = ns("lbl_visit_window"), "")),
+                     sliderInput(ns("visit_window"),NULL, value = 30, min=0, max=50)
+                   ),
+                   div(
+                     div(id = ns("tt_lbl_r_ratio_filter"), title = "",
+                         tags$label(id = ns("lbl_r_ratio_filter"), "")),
+                     checkboxInput(ns("r_ratio_filter"),NULL, value = TRUE)
+                   ),
                    conditionalPanel(
                      condition="input.r_ratio_filter==true", ns=ns,
-                     sliderInput(ns("r_ratio_cut"),"r_ratio_cut", value = 0, min=0, max =1)
+                     div(
+                       div(id = ns("tt_lbl_r_ratio_cut"), title = "",
+                           tags$label(id = ns("lbl_r_ratio_cut"), "")),
+                       sliderInput(ns("r_ratio_cut"),NULL, value = 0, min=0, max =1)
+                     )
                    ),
-                   checkboxInput(ns("showTitle"),"showTitle", value = TRUE),
-                   textAreaInput (ns("warningText"),"warningText", rows =4,
-                                  value = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.")
+                   div(
+                     div(id = ns("tt_lbl_showTitle"), title = "",
+                         tags$label(id = ns("lbl_showTitle"), "")),
+                     checkboxInput(ns("showTitle"),NULL, value = TRUE)
+                   ),
+                   div(
+                     div(id = ns("tt_lbl_warningText"), title = "",
+                         tags$label(id = ns("lbl_warningText"), "")),
+                     textAreaInput (ns("warningText"),NULL, rows =4,
+                                    value = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.")
+                   )
                  )
           )
         ))
