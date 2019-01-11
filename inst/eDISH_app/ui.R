@@ -3,17 +3,20 @@ library(shinyjs)
 
 tagList(
   useShinyjs(),
-  navbarPage("eDISH Shiny app", id = "inTabset", 
-           tabPanel(title = "Data", value = "data",
-                    dataUploadUI("datatab")
-           ),
-           tabPanel(title = "Settings", id = "settings",
+  tags$style(HTML("
+        .ok { color:#008000;}
+        .notok {color: #FF0000;}")),
+  navbarPage("eDISH Shiny app",  
+             tabPanel(title = htmlOutput("data_tab_title"), 
+                      dataUploadUI("datatab")
+             ),
+             tabPanel(title = htmlOutput("settings_tab_title"),
                     fluidPage(
                       renderSettingsUI("settingsUI")
                     )
            ),
-           tabPanel(title = "Charts", 
-                    id = "charts",
+           tabPanel(title = htmlOutput("chart_tab_title"),
+                    id = "charttab",
                     renderEDishChartUI("chartEDish")
           )
 )
