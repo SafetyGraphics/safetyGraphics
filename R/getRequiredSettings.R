@@ -18,19 +18,9 @@
 
 getRequiredSettings<-function(chart="eDish", metadata=settingsMetadata){
   stopifnot(typeof(chart)=="character")
-  
-  #Get the metadata for the specified charts
-  all_settings <- safetyGraphics:::getSettingsMetadata(charts = chart, cols=c("text_key","setting_required"), metadata=metadata) 
-  if(is.null(all_settings)){
-    return(NULL)
-  }else{
-    #get the required setting keys for the chart and then convert it to a list of lists
-    required_settings <- all_settings %>% filter(setting_required) #get required settings 
-    settings_list <- safetyGraphics:::textKeysToList(required_settings[[1]]) 
-  }
-
-  if(length(settings_list)>0){
-    return(settings_list)  
+  required_settings <- safetyGraphics:::getSettingsMetadata(charts = chart, cols="text_key", filter_expr=setting_required, metadata=metadata) %>% textKeysToList() 
+  if(!is.null(required_settings) & length(required_settings) > 0){
+    return(required_settings)
   }else{
     return(NULL)
   }

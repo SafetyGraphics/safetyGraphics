@@ -4,6 +4,7 @@
 #' 
 #' @param charts optional vector of chart names used to filter the metadata. Exact matches only (case-insensitive). All rows returned by default.
 #' @param text_keys optional vector of keys used to filter the metadata. Partial matches for any of the strings are returned (case-insensitive). All rows returned by default.
+#' @param filter_expr optional filter expression used to subset the data.
 #' @param cols optional vector of columns to return from the metadata. All columns returned by default. 
 #' @param metadata metadata data frame to be queried
 #' 
@@ -18,7 +19,7 @@
 #' @importFrom magrittr "%>%"
 #' @import dplyr
 
-getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, metadata = settingsMetadata){
+getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, filter_expr=NULL, metadata = settingsMetadata){
 
   md <- metadata
   all_columns <- names(md)
@@ -46,6 +47,13 @@ getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, metadata =
   if(!is.null(text_keys)){
     stopifnot(typeof(text_keys) == "character")
     md<-md%>%filter(tolower(text_key) %in% tolower(text_keys))
+  }
+  
+  #filter the metadata based on a the filter expression 
+  filter_expr <- enexpr(filter_expr)
+  if(!is.null(filter_expr)){
+    stopifnot(typeof(filter_expr) %in% c("language","symbol"))
+    md<-md %>% filter(!!filter_expr)
   }
   
   #subset the metadata columns returned based on the metadata_columns option (if any)
