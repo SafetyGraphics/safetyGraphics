@@ -1,3 +1,4 @@
+^inst/eDISH_app/tests$
 ^data-raw$
 ^.*\.Rproj$
 ^\.Rproj\.user$

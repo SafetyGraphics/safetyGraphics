@@ -12,7 +12,10 @@
 #'
 #' @examples
 #' testSettings<-generateSettings(standard="AdAM")
-#' safetyGraphics:::checkFieldSettings(fieldKey=list("measure_values"),settings=testSettings, adlbc) #list of 4 checks. all pass ($valid ==TRUE)
+#' 
+#' #list of 4 checks. all pass ($valid ==TRUE)
+#' safetyGraphics:::checkFieldSettings(fieldKey=list("measure_values"),
+#'                                     settings=testSettings, adlbc) 
 #' 
 #' @importFrom stringr str_split
 #' @importFrom magrittr "%>%"
