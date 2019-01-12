@@ -26,7 +26,7 @@
 #' 
 #' @export
 
-getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, filter_expr=NULL, metadata = settingsMetadata){
+getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, filter_expr=NULL, metadata = safetyGraphics::settingsMetadata){
 
   md <- metadata
   all_columns <- names(md)

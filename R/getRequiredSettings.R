@@ -16,9 +16,14 @@
 #' @export
 
 
-getRequiredSettings<-function(chart="eDish", metadata=settingsMetadata){
+getRequiredSettings<-function(chart="eDish", metadata=safetyGraphics::settingsMetadata){
   stopifnot(typeof(chart)=="character")
-  required_settings <- safetyGraphics::getSettingsMetadata(charts = chart, cols="text_key", filter_expr=setting_required, metadata=metadata) %>% textKeysToList() 
+  required_settings <- safetyGraphics::getSettingsMetadata(
+    charts = chart, 
+    cols="text_key", 
+    filter_expr=setting_required==TRUE, 
+    metadata=metadata
+  ) %>% textKeysToList() 
   if(!is.null(required_settings) & length(required_settings) > 0){
     return(required_settings)
   }else{
