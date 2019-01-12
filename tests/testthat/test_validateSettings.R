@@ -81,14 +81,26 @@ test_that("numeric column checks fail when no numeric values are found",{
   expect_equal(failedChecks[[1]][['text_key']],"value_col")
 })
 
-test_that("numeric column checks pass when one or more numeric values is found (even if others are strings)",{
+test_that("numeric column checks still fails when more than half of the values are not numeric ",{
   validNumericSettings <- validSettings
   validNumericSettings[["value_col"]]<-"someNumbers"
   adlbc_edit<-adlbc
   adlbc_edit$someNumbers <- c("10","11",rep("sometext", dim(adlbc_edit)[1]-2))
   numericPassed<-validateSettings(data=adlbc_edit,settings=validNumericSettings)
-  expect_true(numericPassed[["valid"]])
+  expect_false(numericPassed[["valid"]])
   partialNumericCheck <- numericPassed[["checkList"]]%>%keep(~.x$check=="specified column is numeric?" & .x$text_key=="value_col")
-  expect_equal(partialNumericCheck[[1]][["message"]],"10286 of 10288 values were non-numeric. These records may not appear in the graphic.")
+  expect_equal(partialNumericCheck[[1]][["message"]],"10286 of 10288 values were not numeric. Records with non-numeric values may not appear in the graphic.")
   
 })
+
+test_that("numeric column checks pass when more than half of the values are numeric ",{
+  validNumericSettings <- validSettings
+  validNumericSettings[["value_col"]]<-"someStrings"
+  adlbc_edit<-adlbc
+  adlbc_edit$someStrings <- c("b","a",rep("10", dim(adlbc_edit)[1]-2))
+  numericPassed<-validateSettings(data=adlbc_edit,settings=validNumericSettings)
+  expect_true(numericPassed[["valid"]])
+  partialNumericCheck <- numericPassed[["checkList"]]%>%keep(~.x$check=="specified column is numeric?" & .x$text_key=="value_col")
+  expect_equal(partialNumericCheck[[1]][["message"]],"2 of 10288 values were not numeric. Records with non-numeric values may not appear in the graphic.")
+})
+

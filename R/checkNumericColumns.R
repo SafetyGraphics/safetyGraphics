@@ -38,9 +38,10 @@ checkNumericColumns <- function(key, settings, data){
     numericValues<- suppressWarnings(as.numeric(characterValues))
     nonNumericCount <- sum(is.na(numericValues))
     totalCount <- length(values)
-    current$valid <- nonNumericCount < totalCount 
-    current$message <- paste0(nonNumericCount," of ", totalCount," values were non-numeric.")
-    if(nonNumericCount>0){current$message<-paste0(current$message, " These records may not appear in the graphic.")}
+    percentNonNumeric<-nonNumericCount/totalCount
+    current$valid <- percentNonNumeric < 0.5
+    current$message <- paste0(nonNumericCount," of ", totalCount," values were not numeric.")
+    if(nonNumericCount>0){current$message<-paste0(current$message, " Records with non-numeric values may not appear in the graphic.")}
     
     return(current)
   }
