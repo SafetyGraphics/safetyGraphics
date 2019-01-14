@@ -29,9 +29,11 @@ The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc
 
 generateSettings(standard="SDTM") 
 generateSettings(standard="SdTm") #also ok
-generateSettings(standard="SDTM", partial=TRUE, partial_cols = c("USUBJID","TEST","STRESN")) #partial
+generateSettings(standard="SDTM", partial=TRUE, partial_cols = c("USUBJID","TEST","STRESN"))
 generateSettings(standard="AdAM")
-generateSettings(standard="a different standard") #returns shell settings list with no data mapping
+
+generateSettings(standard="a different standard") 
+#returns shell settings list with no data mapping
 
 \dontrun{
 generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far. 

@@ -5,7 +5,7 @@
 \title{Get metadata about chart settings}
 \usage{
 getSettingsMetadata(charts = NULL, text_keys = NULL, cols = NULL,
-  metadata = settingsMetadata)
+  filter_expr = NULL, metadata = safetyGraphics::settingsMetadata)
 }
 \arguments{
 \item{charts}{optional vector of chart names used to filter the metadata. Exact matches only (case-insensitive). All rows returned by default.}
@@ -13,6 +13,8 @@ getSettingsMetadata(charts = NULL, text_keys = NULL, cols = NULL,
 \item{text_keys}{optional vector of keys used to filter the metadata. Partial matches for any of the strings are returned (case-insensitive). All rows returned by default.}
 
 \item{cols}{optional vector of columns to return from the metadata. All columns returned by default.}
+
+\item{filter_expr}{optional filter expression used to subset the data.}
 
 \item{metadata}{metadata data frame to be queried}
 }
@@ -23,8 +25,13 @@ dataframe with the requested metadata or single metadata value
 Retrieve specified metadata about chart settings from the data/settingsMetadata.Rda file.
 }
 \examples{
-safetyGraphics:::getSettingsMetadata() # Returns a full copy of settingsMetadata.Rda
-safetyGraphics:::getSettingsMetadata(text_keys=c("id_col")) # returns a dataframe with a single row with metadata for the id_col setting
-safetyGraphics:::getSettingsMetadata(text_keys=c("id_col"), cols=c("label")) # returns the character value for the specified row. 
+safetyGraphics:::getSettingsMetadata() 
+# Returns a full copy of settingsMetadata.Rda
+
+safetyGraphics:::getSettingsMetadata(text_keys=c("id_col")) 
+# returns a dataframe with a single row with metadata for the id_col setting
+
+safetyGraphics:::getSettingsMetadata(text_keys=c("id_col"), cols=c("label")) 
+# returns the character value for the specified row. 
 
 }

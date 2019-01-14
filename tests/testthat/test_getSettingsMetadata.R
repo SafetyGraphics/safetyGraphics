@@ -127,3 +127,13 @@ test_that("cols parameter works as expected",{
   #returns null if no valid columns are requested
   expect_true(is.null(safetyGraphics:::getSettingsMetadata(cols=c("asda123"))))
 })
+
+test_that("filter_expr parameters works as expected",{
+  expect_equal(
+    safetyGraphics:::getSettingsMetadata(filter_expr=text_key=="id_col"), 
+    safetyGraphics:::getSettingsMetadata(text_key="id_col")
+  )
+  expect_equal(safetyGraphics:::getSettingsMetadata(filter_expr=text_key=="id_col",cols="description"),"Unique subject identifier variable name.")
+  expect_length(safetyGraphics:::getSettingsMetadata(filter_expr=column_type=="numeric",cols="text_key",chart="edish"),5)
+  expect_length(safetyGraphics:::getSettingsMetadata(filter_expr=setting_required,cols="text_key",chart="edish"),6)
+  })
