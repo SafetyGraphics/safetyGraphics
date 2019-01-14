@@ -13,16 +13,16 @@ getSettingValue(key, settings)
 }
 \value{
 the value of the key/settings combo
-
-
-#' @examples 
+}
+\description{
+Returns the value for a named parameter (\code{key}) in a list \code{settings}
+}
+\examples{
 safetyGraphics:::getSettingValue(list("a","b"),list(a=list(b="myValue"))) #returns "myValue"
 
 testSettings<-generateSettings(standard="AdAM")
 safetyGraphics:::getSettingValue(list("id_col"),testSettings) 
 safetyGraphics:::getSettingValue(list("measure_values","ALP"),testSettings)
 safetyGraphics:::getSettingValue(list("NotASetting"),testSettings) #returns NULL
-}
-\description{
-Returns the value for a named parameter (\code{key}) in a list \code{settings}
+
 }

@@ -4,8 +4,9 @@ dataUpload <- function(input, output, session){
   
   
   # initiate reactive values - list of uploaded data files
-  dd <- reactiveValues(data = list("Example data" = adlbc), current = 1, standard = "ADaM")
-  
+  # standard to imitate output of detectStandard.R
+  dd <- reactiveValues(data = list("Example data" = adlbc), current = 1, standard = list(list("standard" = "ADaM", "details" = list("ADaM"=list("match"="Full")))))
+      
   # modify reactive values when data is uploaded
   observeEvent(input$datafile,{
     
@@ -31,9 +32,12 @@ dataUpload <- function(input, output, session){
     dd$current <- c(rep(FALSE, length(dd$current)), rep(TRUE, length(data_list)))
     
     # run detectStandard on new data and save to dd$standard
-    standard_list <- lapply(data_list, function(x){ detectStandard(x)$standard })
-    dd$standard <- c(dd$standard, standard_list)
+   
+    standard_list <- lapply(data_list, function(x){ detectStandard(x) })
     
+     #standard_list <- lapply(data_list, function(x){ detectStandard(x)$standard })
+    
+    dd$standard <- c(dd$standard, standard_list)
     
   })
   
@@ -48,10 +52,25 @@ dataUpload <- function(input, output, session){
     for (i in 1:length(dd$data)){
       choices[[i]] <- names(dd$data)[i]
     }
-    
-    names(choices) <- ifelse(dd$standard=="None",
-                             paste0("<p>", names(dd$data), " - <em style='font-size:12px;'>No Standard Detected</em></p>"),
-                             paste0("<p>", names(dd$data), " - <em style='color:green; font-size:12px;'>", dd$standard, "</em></p>"))
+
+    for (i in 1:length(dd$data)){
+      
+      temp_standard <- dd$standard[[i]]$standard
+      
+      if(temp_standard == "None") {
+        names(choices)[i] <- paste0("<p>", names(dd$data)[i], " - <em style='font-size:12px;'>No Standard Detected</em></p>")
+      } else if (dd$standard[[i]]$details[[temp_standard]]$match == "Full") {
+        names(choices)[i] <- paste0("<p>", names(dd$data)[i], " - <em style='color:green; font-size:12px;'>", dd$standard[[i]]$standard, "</em></p>")
+        # If partial data spec match - give the fraction of variables matched
+      } else {
+        fraction_cols  <- paste0(toString(length(dd$standard[[i]]$details[[temp_standard]]$matched_columns)), "/" ,
+                        toString(length(dd$standard[[i]]$details[[temp_standard]]$missing_columns) +
+                                   length(dd$standard[[i]]$details[[temp_standard]]$matched_columns)))
+        
+        names(choices)[i] <- paste0("<p>", names(dd$data)[i], " - <em style='color:green; font-size:12px;'>", "Partial ",
+                                    dd$standard[[i]]$standard, " (", fraction_cols, " columns)",  "</em></p>")
+      }
+    }
     return(choices)
   })
   
@@ -102,9 +121,21 @@ dataUpload <- function(input, output, session){
   
   # upon a dataset being selected, use generateSettings() to produce a settings obj
   settings <- eventReactive(c(data_selected(), standard()), {
-    generateSettings(standard=standard(), chart="eDish")
-  })
+    
+    current_standard <- standard()$standard
+    
+    partial <- ifelse(standard()$details[[current_standard]]$match == "Partial", TRUE, FALSE) 
+    
+    if (partial) {
+      partial_cols <- standard()$details[[current_standard]]$matched_columns
+      
+      generateSettings(standard=current_standard, chart="eDish", partial=partial, partial_cols = partial_cols)
   
+    } else {
+      generateSettings(standard=current_standard, chart="eDish")
+    }
+  })
+
   # run validateSettings(data, standard, settings) and return a status
   status <- reactive({
     req(data_selected())
@@ -114,7 +145,7 @@ dataUpload <- function(input, output, session){
                      chart="eDish")  
   })
   
-  
+
   ### return selected data, settings, and status to server
   return(list(data_selected = reactive(data_selected()),
               settings = reactive(settings()),

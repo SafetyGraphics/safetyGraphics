@@ -7,7 +7,7 @@
 #' @return the value of the key/settings combo
 #' 
 #' 
-#' #' @examples 
+#' @examples 
 #' safetyGraphics:::getSettingValue(list("a","b"),list(a=list(b="myValue"))) #returns "myValue"
 #' 
 #' testSettings<-generateSettings(standard="AdAM")

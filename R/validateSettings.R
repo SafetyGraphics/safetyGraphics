@@ -43,8 +43,12 @@ validateSettings <- function(data, settings, chart="eDish"){
   fieldChecks <- getSettingKeys(patterns="_values",settings=settings, matchLists=TRUE) %>% purrr::map(checkFieldSettings, settings=settings, data=data )
   fieldChecks_flat <- unlist(fieldChecks, recursive=FALSE)
 
+  #Check that settings for mapping numeric data are associated with numeric columns
+  numericKeys <- getSettingsMetadata(charts=chart, cols="text_key", filter_expr=column_type=="numeric")%>%textKeysToList()
+  numericChecks <- numericKeys %>% purrr::map(checkNumericColumns, settings=settings, data=data )
+  
   #Combine different check types in to a master list
-  settingStatus$checkList<-c(requiredChecks, columnChecks, fieldChecks_flat)
+  settingStatus$checkList<-c(requiredChecks, columnChecks, fieldChecks_flat, numericChecks)
 
   #valid=true if all checks pass, false otherwise
   settingStatus$valid <- settingStatus$checkList%>%purrr::map_lgl(~.x[["valid"]])%>%all

@@ -29,9 +29,10 @@
 #' @param r_ratio_cut Default cut point for R Ratio filter. Ignored when \code{r_ratio_filter = FALSE}. 
 #' User can update this setting via the UI when \code{r_ratio_filter = TRUE}. Default: \code{0}.
 #' @param showTitle Specifies whether the title should be drawn above the controls. Default: \code{TRUE}.
-#' @param warningText Informational text to be displayed near the top of the controls (beneath the title, if any).
-#'  No warning is displayed if \code{warningText = ""}. Default: \code{"Caution: This interactive graphic is 
-#'  not validated. Any clinical recommendations based on this tool should be confirmed using your organizations 
+#' @param warningText Informational text to be displayed near the top of the controls 
+#'  (beneath the  title, if any). No warning is displayed if \code{warningText = ""}. 
+#'  Default: \code{"Caution: This interactive graphic is not validated. Any clinical 
+#'  recommendations based on this tool should be confirmed using your organizations 
 #'  standard operating procedures."}.
 #' @param debug_js print settings in javascript before rendering chart. Default: \code{FALSE}.
 

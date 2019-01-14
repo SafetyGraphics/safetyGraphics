@@ -52,4 +52,25 @@ test_that("data mappings are null when setting=none, character otherwise",{
     expect_is(adam_settings2[[name]],"character")
   }
   
+  # Test Partial Spec Match
+  partial_adam_settings <- generateSettings(standard="SDTM", partial=TRUE, partial_cols = c("USUBJID","TEST"))
+  for(name in column_setting_names){
+    
+    if (name %in% c("id_col","measure_col")) {
+      expect_is(partial_adam_settings[[name]],"character")
+    } else {
+      expect_null(partial_adam_settings[[name]])
+    }
+  }
+  
+  #Testing that partial cols are only used when partial=TRUE
+  full_adam_partial_cols <- generateSettings(standard="ADaM", partial_cols = c("USUBJID","TEST"))
+  for(name in column_setting_names){
+    expect_is(full_adam_partial_cols[[name]],"character")
+  }
+  
+  #Testing failure when partial is true with no specified columns
+  expect_error(partial_settings_no_cols <- generateSettings(standard="ADaM", partial=TRUE))
+  
+  
 })
