@@ -6,7 +6,7 @@
 \title{Settings Metadata}
 \format{A data frame with 25 rows and 10 columns
 \describe{
-   \item{chart_edish}{Flag indicating if the setting apply to the eDish Chart}
+   \item{chart_edish}{Flag indicating if the settings apply to the eDish Chart}
    \item{text_key}{Text key indicating the setting name. '--' delimiter indicates a nested setting}
    \item{label}{Label}
    \item{description}{Description}
