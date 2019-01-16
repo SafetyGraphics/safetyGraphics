@@ -1,4 +1,4 @@
-#' Run the interactive safety chart builder
+#' Run the interactive safety graphics builder
 #'
 #' @importFrom shiny runApp
 #' @import shinyjs
@@ -10,7 +10,7 @@
 #'
 #' @export
 #'
-chartBuilderApp <- function() {
+safetyGraphicsApp <- function() {
   path <- system.file("eDISH_app", package = "safetyGraphics")
   shiny::runApp(path, launch.browser = TRUE)
 }

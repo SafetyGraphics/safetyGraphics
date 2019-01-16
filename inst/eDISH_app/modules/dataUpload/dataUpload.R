@@ -119,22 +119,28 @@ dataUpload <- function(input, output, session){
     dd$standard[[index]]
   })
   
+
   # upon a dataset being selected, use generateSettings() to produce a settings obj
   settings <- eventReactive(c(data_selected(), standard()), {
     
     current_standard <- standard()$standard
     
-    partial <- ifelse(standard()$details[[current_standard]]$match == "Partial", TRUE, FALSE) 
-    
-    if (partial) {
-      partial_cols <- standard()$details[[current_standard]]$matched_columns
+    if (! current_standard=="None"){
+      partial <- ifelse(standard()$details[[current_standard]]$match == "Partial", TRUE, FALSE) 
       
-      generateSettings(standard=current_standard, chart="eDish", partial=partial, partial_cols = partial_cols)
-  
+      if (partial) {
+        partial_cols <- standard()$details[[current_standard]]$matched_columns
+        
+        generateSettings(standard=current_standard, chart="eDish", partial=partial, partial_cols = partial_cols)
+        
+      } else {
+        generateSettings(standard=current_standard, chart="eDish")
+      } 
     } else {
       generateSettings(standard=current_standard, chart="eDish")
     }
   })
+  
 
   # run validateSettings(data, standard, settings) and return a status
   status <- reactive({
