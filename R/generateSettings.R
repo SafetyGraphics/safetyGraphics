@@ -24,6 +24,10 @@
 #' generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far. 
 #' }
 #' 
+#' @importFrom dplyr "filter"
+#' @importFrom stringr str_split
+#' @import rlang
+#' 
 #' @export
 
 generateSettings <- function(standard="None", chart="eDish", partial=FALSE, partial_cols=NULL){
@@ -36,87 +40,78 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
     stop("partial_cols must be supplied if the standard is partial")
   }
   
-  
-  #A shell setting object without any data mapping completed
-  settings<-list(
-    id_col = NULL,
-    value_col = NULL,
-    measure_col = NULL,
-    normal_col_low = NULL,
-    normal_col_high = NULL,
-    studyday_col=NULL,
-    visit_col = NULL,
-    visitn_col = NULL,
-    filters = NULL,
-    group_cols = NULL,
-    measure_values = list(ALT = NULL,
-                          AST = NULL,
-                          TB = NULL,
-                          ALP = NULL),
-    baseline = list(value_col=NULL,
-                    values=list()),
-    analysisFlag = list(value_col=NULL,
-                    values=list()),
-    
-    x_options = c("ALT", "AST", "ALP"),
-    y_options = c("TB", "ALP"),
-    visit_window = 30,
-    r_ratio_filter = TRUE,
-    r_ratio_cut = 0,
-    showTitle = TRUE,
-    warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures."
+  #Might be worth while to have an error message if they supply a standard and its not supported
+  metadata <- safetyGraphics::getSettingsMetadata(
+    charts = chart, 
+    cols=c("text_key","default","adam","sdtm")
   )
-    
-  potential_settings <- settings
+
+  # Split on -- for two level handling 
+  hierarchical_metadata <- str_split(metadata$text_key, "--") 
   
-  if(tolower(standard)=="adam"){
-    potential_settings[["id_col"]]<-"USUBJID"
-    potential_settings[["value_col"]]<-"AVAL"
-    potential_settings[["measure_col"]]<-"PARAM"
-    potential_settings[["normal_col_low"]]<-"A1LO"
-    potential_settings[["normal_col_high"]]<-"A1HI"
-    potential_settings[["studyday_col"]]<-"ADY"
-    potential_settings[["visit_col"]]<-"VISIT"
-    potential_settings[["visitn_col"]]<-"VISITNUM"
-    potential_settings[["measure_values"]][["ALT"]]<-"Alanine Aminotransferase (U/L)"
-    potential_settings[["measure_values"]][["AST"]]<-"Aspartate Aminotransferase (U/L)"
-    potential_settings[["measure_values"]][["TB"]]<-"Bilirubin (umol/L)"
-    potential_settings[["measure_values"]][["ALP"]]<-"Alkaline Phosphatase (U/L)"
+  standard_low <- tolower(standard)
+  
+  if (standard == "None") {
+    standard_low <- "default"
   }
   
-  if(tolower(standard)=="sdtm"){
-    potential_settings[["id_col"]]<-"USUBJID"
-    potential_settings[["value_col"]]<-"STRESN"
-    potential_settings[["measure_col"]]<-"TEST"
-    potential_settings[["normal_col_low"]]<-"STNRLO"
-    potential_settings[["normal_col_high"]]<-"STNRHI"
-    potential_settings[["studyday_col"]]<-"DY"
-    potential_settings[["visit_col"]]<-"VISIT"
-    potential_settings[["visitn_col"]]<-"VISITNUM"
-    potential_settings[["measure_values"]][["ALT"]]<-"Aminotransferase, alanine (ALT)"
-    potential_settings[["measure_values"]][["AST"]]<-"Aminotransferase, aspartate (AST)"
-    potential_settings[["measure_values"]][["TB"]]<-"Total Bilirubin"
-    potential_settings[["measure_values"]][["ALP"]]<-"Alkaline phosphatase (ALP)"
-  }
-  
-  
-  if(partial) {
+  # Build empty settings list
+  potential_settings <- list()
+  for ( i in 1:length(hierarchical_metadata) ) {
     
-    settings_names <- names(settings)
-    
-    potential_names <- names(potential_settings)
-    
-    for(i in 1:length(settings)) {
-      if (potential_settings[i] %in% partial_cols) {
-            settings[[which(settings_names == potential_names[i])]] <- potential_settings[[i]]
-          }
+    # Handle settings with one level
+    if (length(hierarchical_metadata[[i]]) == 1) {
+
+      #Handle Nulls
+       if (is.null(parse_expr(metadata[[standard_low]][i]))) {
+         potential_settings[metadata$text_key[i]] = list(parse_expr(metadata[[standard_low]][i]))
+         
+        # Handle C()  - not implemented for level two yet
+       } else if (typeof(parse_expr(metadata[[standard_low]][i])) == "language") {
+         potential_settings[[metadata$text_key[i]]] = as.character(parse_expr(metadata[[standard_low]][i]))[-1]  #Need the -1 to remove the unwelcome "c" that comes with this method
+         
+       } else {
+        potential_settings[metadata$text_key[[i]]] = parse_expr( metadata[[standard_low]][i])
+      }
+            
+      # Handle settings with two levels
+    } else if (length(hierarchical_metadata[[i]]) == 2){
+      
+      #Create list if it does not exist
+      if (!is.list(potential_settings[[hierarchical_metadata[[i]][1]]])) { potential_settings[[hierarchical_metadata[[i]][1]]] = list() } #Need to make list if it doesnt exist since its two-level
+      
+      #Handle Nulls
+       if (is.null(parse_expr(metadata[[standard_low]][i]))) {
+         potential_settings[[hierarchical_metadata[[i]][1]]][hierarchical_metadata[[i]][2]] = list(parse_expr(metadata[[standard_low]][i]))
+         
+       } else {
+        potential_settings[[hierarchical_metadata[[i]][1]]][[hierarchical_metadata[[i]][2]]] = parse_expr( metadata[[standard_low]][i])
+      }
+            
+    } else{
+      stop("Three level setting nests are not currently supported")
     }
     
-  } else {
+  }
+  
+  
+  # if(partial) {
+  #   
+  #   settings <- list()
+  #   
+  #   settings_names <- names(potential_settings)
+  #   
+  #   for(i in 1:length(potential_settings)) {
+  #     if (potential_settings[i] %in% partial_cols) {
+  #           settings[[which(settings_names == potential_names[i])]] <- potential_settings[[i]]
+  #         }
+  #   }
+  #   
+  # } else {
     
     settings <- potential_settings
     
-  }
+  #}
   
   return(settings)
 }
