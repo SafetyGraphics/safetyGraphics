@@ -151,6 +151,7 @@ dataUpload <- function(input, output, session){
                      chart="eDish")  
   })
   
+  exportTestValues(status = { status() })
 
   ### return selected data, settings, and status to server
   return(list(data_selected = reactive(data_selected()),

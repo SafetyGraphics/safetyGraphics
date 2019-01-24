@@ -8,16 +8,26 @@
 app <- ShinyDriver$new("../")
 app$snapshotInit("defaultPath")
 
-#Navigate to charts tab
-app$setInputs(inTabset = "charts")  
+# Navigate to Chart Tab
+app$findElement('#chart_tab_title')$click()
 
-# Give it time to draw the chart
+# Give it time to draw the chart 
 Sys.sleep(5) 
 
-# Generate snapshot
+# Snapshot of Chart
 app$snapshot(items = list(
-             export = "valid_settings", 
-             input = FALSE,
-             output = FALSE),  # This will capture if the settings are valid 
-             screenshot = TRUE)  # this will produce a visual output (.png) and ensure the chart renders with the download button
+  input = FALSE,
+  output = c("data_tab_title","settings_tab_title","chart_tab_title"), # Capture Status of Tabs
+  export = FALSE),  
+  screenshot = TRUE)  
+
+# Navigate to Settings Tab
+app$findElement('#settings_tab_title')$click()
+
+# Snapshot of Settings
+app$snapshot(items = list(
+   export = c("datatab-status","settingsUI-status_df"), # Capture Status settings and Checks
+   input = FALSE,
+   output = FALSE),  
+   screenshot = TRUE)
 
