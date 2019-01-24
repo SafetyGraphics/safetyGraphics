@@ -1,7 +1,7 @@
 #######################################################
 #
 # Tests upload of partial SDTM data. Chart and settings 
-# fail should initially but succeed after user updates 
+# should fail initially but succeed after user updates 
 # settings. 
 #
 #######################################################

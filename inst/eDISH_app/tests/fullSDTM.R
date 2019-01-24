@@ -1,7 +1,7 @@
 #######################################################
 #
 # Tests upload of full SDTM data. 
-#  Settings should be valid and the chart drawn 
+# Settings should be valid and the chart drawn.
 #
 #######################################################
 

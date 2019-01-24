@@ -1,7 +1,7 @@
 #######################################################
 #
 # Tests that settings are valid and chart is drawn 
-# using default data without user input 
+# using default data.
 #
 #######################################################
 
