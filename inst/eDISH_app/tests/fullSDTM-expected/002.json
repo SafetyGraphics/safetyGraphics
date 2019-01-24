@@ -1,0 +1,22 @@
+{
+  "output": {
+    "chart_tab_title": {
+      "html": "Chart <i class=\"fa fa-check ok\"><\/i>",
+      "deps": [
+
+      ]
+    },
+    "data_tab_title": {
+      "html": "Data <i class=\"fa fa-check ok\"><\/i>",
+      "deps": [
+
+      ]
+    },
+    "settings_tab_title": {
+      "html": "Settings <i class=\"fa fa-check ok\"><\/i>",
+      "deps": [
+
+      ]
+    }
+  }
+}
