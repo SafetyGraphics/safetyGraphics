@@ -18,9 +18,9 @@
           ],
           "text_key": "value_col",
           "check": "value for specified key found in settings?",
-          "value": "STRESN",
-          "valid": true,
-          "message": ""
+          "value": "--No Value Given--",
+          "valid": false,
+          "message": "value_col not specified in settings."
         },
         {
           "key": [
@@ -28,9 +28,9 @@
           ],
           "text_key": "measure_col",
           "check": "value for specified key found in settings?",
-          "value": "TEST",
-          "valid": true,
-          "message": ""
+          "value": "--No Value Given--",
+          "valid": false,
+          "message": "measure_col not specified in settings."
         },
         {
           "key": [
@@ -38,9 +38,9 @@
           ],
           "text_key": "normal_col_low",
           "check": "value for specified key found in settings?",
-          "value": "STNRLO",
-          "valid": true,
-          "message": ""
+          "value": "--No Value Given--",
+          "valid": false,
+          "message": "normal_col_low not specified in settings."
         },
         {
           "key": [
@@ -48,9 +48,9 @@
           ],
           "text_key": "normal_col_high",
           "check": "value for specified key found in settings?",
-          "value": "STNRHI",
-          "valid": true,
-          "message": ""
+          "value": "--No Value Given--",
+          "valid": false,
+          "message": "normal_col_high not specified in settings."
         },
         {
           "key": [
@@ -58,9 +58,9 @@
           ],
           "text_key": "studyday_col",
           "check": "value for specified key found in settings?",
-          "value": "DY",
-          "valid": true,
-          "message": ""
+          "value": "--No Value Given--",
+          "valid": false,
+          "message": "studyday_col not specified in settings."
         },
         {
           "key": [
@@ -78,7 +78,7 @@
           ],
           "text_key": "value_col",
           "check": "'_col' parameter from setting setting found in data?",
-          "value": "STRESN",
+          "value": "--No Value Given--",
           "valid": true,
           "message": ""
         },
@@ -88,7 +88,7 @@
           ],
           "text_key": "measure_col",
           "check": "'_col' parameter from setting setting found in data?",
-          "value": "TEST",
+          "value": "--No Value Given--",
           "valid": true,
           "message": ""
         },
@@ -98,7 +98,7 @@
           ],
           "text_key": "normal_col_low",
           "check": "'_col' parameter from setting setting found in data?",
-          "value": "STNRLO",
+          "value": "--No Value Given--",
           "valid": true,
           "message": ""
         },
@@ -108,7 +108,7 @@
           ],
           "text_key": "normal_col_high",
           "check": "'_col' parameter from setting setting found in data?",
-          "value": "STNRHI",
+          "value": "--No Value Given--",
           "valid": true,
           "message": ""
         },
@@ -118,7 +118,7 @@
           ],
           "text_key": "studyday_col",
           "check": "'_col' parameter from setting setting found in data?",
-          "value": "DY",
+          "value": "--No Value Given--",
           "valid": true,
           "message": ""
         },
@@ -128,7 +128,7 @@
           ],
           "text_key": "visit_col",
           "check": "'_col' parameter from setting setting found in data?",
-          "value": "VISIT",
+          "value": "--No Value Given--",
           "valid": true,
           "message": ""
         },
@@ -138,7 +138,7 @@
           ],
           "text_key": "visitn_col",
           "check": "'_col' parameter from setting setting found in data?",
-          "value": "--No Value Given--",
+          "value": "VISITNUM",
           "valid": true,
           "message": ""
         },
@@ -224,9 +224,9 @@
           ],
           "text_key": "value_col",
           "check": "specified column is numeric?",
-          "value": "STRESN",
+          "value": "--No Value Given--",
           "valid": true,
-          "message": "2592 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic."
+          "message": ""
         },
         {
           "key": [
@@ -234,9 +234,9 @@
           ],
           "text_key": "normal_col_low",
           "check": "specified column is numeric?",
-          "value": "STNRLO",
+          "value": "--No Value Given--",
           "valid": true,
-          "message": "15 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic."
+          "message": ""
         },
         {
           "key": [
@@ -244,9 +244,9 @@
           ],
           "text_key": "normal_col_high",
           "check": "specified column is numeric?",
-          "value": "STNRHI",
+          "value": "--No Value Given--",
           "valid": true,
-          "message": "15 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic."
+          "message": ""
         },
         {
           "key": [
@@ -254,9 +254,9 @@
           ],
           "text_key": "studyday_col",
           "check": "specified column is numeric?",
-          "value": "DY",
+          "value": "--No Value Given--",
           "valid": true,
-          "message": "15 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic."
+          "message": ""
         },
         {
           "key": [
@@ -264,13 +264,13 @@
           ],
           "text_key": "visitn_col",
           "check": "specified column is numeric?",
-          "value": "--No Value Given--",
+          "value": "VISITNUM",
           "valid": true,
-          "message": ""
+          "message": "15 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic."
         }
       ],
       "valid": false,
-      "status": "1 of 26 checks failed."
+      "status": "6 of 26 checks failed."
     },
     "settingsUI-status_df": {
       "text_key": [
@@ -282,52 +282,40 @@
         "studyday_col",
         "visit_col",
         "visitn_col",
-        "measure_values--ALT",
-        "measure_values--AST",
-        "measure_values--TB",
-        "measure_values--ALP"
+        "measure_values"
       ],
       "message_long": [
         "id_col not specified in settings.",
-        "2592 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic.",
+        "value_col not specified in settings.",
+        "measure_col not specified in settings.",
+        "normal_col_low not specified in settings.",
+        "normal_col_high not specified in settings.",
+        "studyday_col not specified in settings.",
         "",
         "15 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic.",
-        "15 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic.",
-        "15 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic.",
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""
+        "No list of values found in settings."
       ],
       "message_short": [
         "1 failed check.",
+        "1 failed check.",
+        "1 failed check.",
+        "1 failed check.",
+        "1 failed check.",
+        "1 failed check.",
         "OK",
         "OK",
-        "OK",
-        "OK",
-        "OK",
-        "OK",
-        "OK",
-        "OK",
-        "OK",
-        "OK",
-        "OK"
+        "1 failed check."
       ],
       "num_fail": [
         1,
+        1,
+        1,
+        1,
+        1,
+        1,
         0,
         0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
+        1
       ]
     }
   }

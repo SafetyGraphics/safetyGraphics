@@ -1,8 +1,7 @@
 #######################################################
 #
-# Tests that settings are not valid and chart is not 
-# drawn when using data with no standard without 
-# adjusting settings 
+# Tests upload of full SDTM data. 
+#  Settings should be valid and the chart drawn 
 #
 #######################################################
 

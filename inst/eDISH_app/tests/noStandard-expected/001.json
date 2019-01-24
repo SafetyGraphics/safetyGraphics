@@ -2,10 +2,10 @@
   "input": {
     "datatab-datafile": {
       "name": [
-        "partialSDTM.csv"
+        "noStandard.csv"
       ],
       "size": [
-        3194899
+        3141083
       ],
       "type": [
         "text/csv"
@@ -14,7 +14,7 @@
         "0.csv"
       ]
     },
-    "datatab-select_file": "partialSDTM.csv"
+    "datatab-select_file": "noStandard.csv"
   },
   "output": {
     "datatab-data_preview": {
@@ -24,8 +24,8 @@
         "extensions": [
           "Scroller"
         ],
-        "caption": "<caption>partialSDTM.csv<\/caption>",
-        "container": "<table class=\"table table-condensed\">\n  <thead>\n    <tr>\n      <th>ID<\/th>\n      <th>SITEID<\/th>\n      <th>SITE<\/th>\n      <th>AGE<\/th>\n      <th>SEX<\/th>\n      <th>RACE<\/th>\n      <th>ARM<\/th>\n      <th>RFSTDTC<\/th>\n      <th>SAFFL<\/th>\n      <th>VISIT<\/th>\n      <th>VISITN<\/th>\n      <th>DT<\/th>\n      <th>DY<\/th>\n      <th>CAT<\/th>\n      <th>TEST<\/th>\n      <th>STRESU<\/th>\n      <th>STRESN<\/th>\n      <th>STNRLO<\/th>\n      <th>STNRHI<\/th>\n      <th>VISITN.1<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "caption": "<caption>noStandard.csv<\/caption>",
+        "container": "<table class=\"table table-condensed\">\n  <thead>\n    <tr>\n      <th>ID<\/th>\n      <th>SITEID<\/th>\n      <th>SITE<\/th>\n      <th>AGE<\/th>\n      <th>SEX<\/th>\n      <th>RACE<\/th>\n      <th>ARM<\/th>\n      <th>RFSTDTC<\/th>\n      <th>SAFFL<\/th>\n      <th>VISIT_<\/th>\n      <th>VISITNUM<\/th>\n      <th>DT<\/th>\n      <th>DAY<\/th>\n      <th>CAT<\/th>\n      <th>TESTS<\/th>\n      <th>STRESU<\/th>\n      <th>STRESS<\/th>\n      <th>STNRLOW<\/th>\n      <th>STNRHIGH<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -39,8 +39,7 @@
                 12,
                 16,
                 17,
-                18,
-                19
+                18
               ]
             }
           ],

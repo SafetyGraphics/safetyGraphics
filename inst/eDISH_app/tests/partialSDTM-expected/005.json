@@ -288,7 +288,7 @@
         "measure_values--ALP"
       ],
       "message_long": [
-        "id_col not specified in settings.",
+        "",
         "2592 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic.",
         "",
         "15 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic.",
@@ -302,7 +302,7 @@
         ""
       ],
       "message_short": [
-        "1 failed check.",
+        "OK",
         "OK",
         "OK",
         "OK",
@@ -316,7 +316,7 @@
         "OK"
       ],
       "num_fail": [
-        1,
+        0,
         0,
         0,
         0,
