@@ -12,6 +12,7 @@
 #' @importFrom stringr str_split
 #' @importFrom magrittr "%>%"
 #' @importFrom purrr map
+#' @importFrom rlang .data
 #'
 #' @export
 
@@ -21,7 +22,7 @@ getRequiredSettings<-function(chart="eDish", metadata=safetyGraphics::settingsMe
   required_settings <- safetyGraphics::getSettingsMetadata(
     charts = chart, 
     cols="text_key", 
-    filter_expr=setting_required==TRUE, 
+    filter_expr=.data$setting_required==TRUE, 
     metadata=metadata
   ) %>% textKeysToList() 
   if(!is.null(required_settings) & length(required_settings) > 0){
