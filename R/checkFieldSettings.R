@@ -25,6 +25,8 @@
 checkFieldSettings <- function(fieldKey, settings, data){
 
   # compare the fields in the settings to the fields in the data.
+  key <- NULL
+  
   fieldCheck <- function(key){
     function(key){
       current <- list()
