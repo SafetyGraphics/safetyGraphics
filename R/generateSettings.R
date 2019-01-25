@@ -26,7 +26,6 @@
 #' 
 #' @importFrom dplyr "filter"
 #' @importFrom stringr str_split
-#' @import rlang
 #' 
 #' @export
 
@@ -40,78 +39,80 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
     stop("partial_cols must be supplied if the standard is partial")
   }
   
-  #Might be worth while to have an error message if they supply a standard and its not supported
   metadata <- safetyGraphics::getSettingsMetadata(
     charts = chart, 
-    cols=c("text_key","default","adam","sdtm")
+    cols=c("text_key","adam","sdtm"),
+    filter_expr = adam != '' & sdtm != '' 
   )
 
-  # Split on -- for two level handling 
+  # Split on -- for multi-level handling 
   hierarchical_metadata <- str_split(metadata$text_key, "--") 
+  
+  settings<-list(
+    id_col = NULL,
+    value_col = NULL,
+    measure_col = NULL,
+    normal_col_low = NULL,
+    normal_col_high = NULL,
+    studyday_col=NULL,
+    visit_col = NULL,
+    visitn_col = NULL,
+    filters = NULL,
+    group_cols = NULL,
+    measure_values = list(alt = NULL,
+                          ast = NULL,
+                          tb = NULL,
+                          alp = NULL),
+    baseline = list(value_col=NULL,
+                    values=list()),
+    analysisFlag = list(value_col=NULL,
+                        values=list()),
+    
+    x_options = c("LT", "AST", "ALP"),
+    y_options = c("TB", "ALP"),
+    visit_window = 30,
+    r_ratio_filter = TRUE,
+    r_ratio_cut = 0,
+    showTitle = TRUE,
+    warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures."
+  )
+  
+  potential_settings <- settings
   
   standard_low <- tolower(standard)
   
-  if (standard == "None") {
-    standard_low <- "default"
-  }
-  
-  # Build empty settings list
-  potential_settings <- list()
-  for ( i in 1:length(hierarchical_metadata) ) {
+  if (standard_low == "adam" | standard_low == "sdtm") {
     
-    # Handle settings with one level
-    if (length(hierarchical_metadata[[i]]) == 1) {
-
-      #Handle Nulls
-       if (is.null(parse_expr(metadata[[standard_low]][i]))) {
-         potential_settings[metadata$text_key[i]] = list(parse_expr(metadata[[standard_low]][i]))
-         
-        # Handle C()  - not implemented for level two yet
-       } else if (typeof(parse_expr(metadata[[standard_low]][i])) == "language") {
-         potential_settings[[metadata$text_key[i]]] = as.character(parse_expr(metadata[[standard_low]][i]))[-1]  #Need the -1 to remove the unwelcome "c" that comes with this method
-         
-       } else {
-        potential_settings[metadata$text_key[[i]]] = parse_expr( metadata[[standard_low]][i])
-      }
-            
-      # Handle settings with two levels
-    } else if (length(hierarchical_metadata[[i]]) == 2){
-      
-      #Create list if it does not exist
-      if (!is.list(potential_settings[[hierarchical_metadata[[i]][1]]])) { potential_settings[[hierarchical_metadata[[i]][1]]] = list() } #Need to make list if it doesnt exist since its two-level
-      
-      #Handle Nulls
-       if (is.null(parse_expr(metadata[[standard_low]][i]))) {
-         potential_settings[[hierarchical_metadata[[i]][1]]][hierarchical_metadata[[i]][2]] = list(parse_expr(metadata[[standard_low]][i]))
-         
-       } else {
-        potential_settings[[hierarchical_metadata[[i]][1]]][[hierarchical_metadata[[i]][2]]] = parse_expr( metadata[[standard_low]][i])
-      }
-            
+  for (row in hierarchical_metadata)  {
+    if (length(row) == 1) {
+      potential_settings[row] <- filter(metadata,text_key == !!row)[[standard_low]]
+    } else if (length(row) == 2) {
+      potential_settings[row[[1]]][[1]][row[[2]]] <- filter(metadata, grepl(!!row[[2]],text_key))[[standard_low]]
     } else{
       stop("Three level setting nests are not currently supported")
     }
     
   }
   
+  }
   
-  # if(partial) {
-  #   
-  #   settings <- list()
-  #   
-  #   settings_names <- names(potential_settings)
-  #   
-  #   for(i in 1:length(potential_settings)) {
-  #     if (potential_settings[i] %in% partial_cols) {
-  #           settings[[which(settings_names == potential_names[i])]] <- potential_settings[[i]]
-  #         }
-  #   }
-  #   
-  # } else {
+  if(partial) {
+    
+    settings_names <- names(settings)
+    
+    potential_names <- names(potential_settings)
+    
+    for(i in 1:length(settings)) {
+      if (potential_settings[i] %in% partial_cols) {
+        settings[[which(settings_names == potential_names[i])]] <- potential_settings[[i]]
+      }
+    }
+    
+  } else {
     
     settings <- potential_settings
     
-  #}
+  }
   
   return(settings)
 }

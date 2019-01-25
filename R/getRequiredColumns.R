@@ -10,7 +10,6 @@
 #' safetyGraphics:::getRequiredColumns(standard="ADAM")
 #' safetyGraphics:::getRequiredColumns(standard="SDTM")
 #' 
-#' @importFrom dplyr "filter"
 
 getRequiredColumns<-function(standard,chart="eDish"){
   stopifnot(
@@ -21,16 +20,16 @@ getRequiredColumns<-function(standard,chart="eDish"){
   
   metadata <- safetyGraphics::getSettingsMetadata(
     charts = chart, 
-    cols=c("setting_required","adam","sdtm")
+    cols=c("setting_required","adam","sdtm"),
+    filter_expr=setting_required==TRUE
   )
   
   if(tolower(chart)=="edish"){
     
-    required <- filter(metadata, setting_required==TRUE)
     if(tolower(standard)=="adam"){
-      return(gsub('[\"]', '',required$adam)) #changed csv!
+      return(metadata$adam) 
     }else if(tolower(standard)=="sdtm"){
-      return(gsub('[\"]', '',required$sdtm)) 
+      return(metadata$sdtm) 
     }else{
       return(NULL)
     }
