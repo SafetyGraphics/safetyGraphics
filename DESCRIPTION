@@ -24,8 +24,7 @@ Imports:
 	magrittr,
 	DT,
 	shinyjs,
-	rmarkdown,
-	rlang
+	rmarkdown
 Remotes:
     rstudio/shinytest
 

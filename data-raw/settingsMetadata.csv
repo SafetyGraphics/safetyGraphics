@@ -5,8 +5,8 @@ TRUE,measure_col,Measure column,Lab measure variable name,character,TRUE,TRUE,ch
 TRUE,normal_col_low,Lower Limit of Normal column,Lower limit of normal variable name,character,TRUE,TRUE,numeric,TRUE,FALSE,A1LO,STNRLO
 TRUE,normal_col_high,Upper Limit of Normal column,Upper limit of normal variable name,character,TRUE,TRUE,numeric,TRUE,FALSE,A1HI,STNRHI
 TRUE,studyday_col,Study Day column,Visit day variable name,character,TRUE,TRUE,numeric,TRUE,FALSE,ADY,DY
-TRUE,visit_col,Visit column,Visit variable name,character,TRUE,TRUE,character,FALSE,FALSE,VISIT,VISIT
-TRUE,visitn_col,Visit Number column,Visit number variable name,character,TRUE,TRUE,numeric,FALSE,FALSE,VISITNUM,VISITNUM
+TRUE,visit_col,Visit column,Visit variable name,character,FALSE,TRUE,character,FALSE,FALSE,VISIT,VISIT
+TRUE,visitn_col,Visit Number column,Visit number variable name,character,FALSE,TRUE,numeric,FALSE,FALSE,VISITNUM,VISITNUM
 TRUE,filters,Filters columns,"An optional list of specifications for filters. Each filter is a nested, named list (containing the filter value column: 'value_col' and associated label: 'label') within the larger list.",vector,FALSE,TRUE,NA,FALSE,FALSE,,
 TRUE,group_cols,Group columns,"An optional list of specifications for grouping columns. Each group column is a nested, named list (containing the group variable column: 'value_col' and associated label: 'label') within the larger list. ",vector,FALSE,TRUE,NA,FALSE,FALSE,,
 TRUE,measure_values--alt,Alanine Aminotransferase value,Value used for Alanine Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Alanine Aminotransferase (U/L),"Aminotransferase, alanine (ALT)"
