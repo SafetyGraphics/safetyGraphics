@@ -10,6 +10,7 @@
 #' safetyGraphics:::getRequiredColumns(standard="ADAM")
 #' safetyGraphics:::getRequiredColumns(standard="SDTM")
 #' 
+#' @importFrom rlang .data
 
 getRequiredColumns<-function(standard,chart="eDish"){
   stopifnot(
@@ -21,7 +22,7 @@ getRequiredColumns<-function(standard,chart="eDish"){
   metadata <- safetyGraphics::getSettingsMetadata(
     charts = chart, 
     cols=c("setting_required","adam","sdtm"),
-    filter_expr=setting_required==TRUE
+    filter_expr=.data$setting_required==TRUE
   )
   
   if(tolower(chart)=="edish"){

@@ -26,6 +26,7 @@
 #' 
 #' @importFrom dplyr "filter"
 #' @importFrom stringr str_split
+#' @importFrom rlang .data
 #' 
 #' @export
 
@@ -42,7 +43,7 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
   metadata <- safetyGraphics::getSettingsMetadata(
     charts = chart, 
     cols=c("text_key","adam","sdtm"),
-    filter_expr = adam != '' & sdtm != '' 
+    filter_expr = .data$adam != '' & .data$sdtm != '' 
   )
 
   # Split on -- for multi-level handling 
@@ -85,9 +86,9 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
     
   for (row in hierarchical_metadata)  {
     if (length(row) == 1) {
-      potential_settings[row] <- filter(metadata,text_key == !!row)[[standard_low]]
+      potential_settings[row] <- filter(metadata,.data$text_key == !!row)[[standard_low]]
     } else if (length(row) == 2) {
-      potential_settings[row[[1]]][[1]][row[[2]]] <- filter(metadata, grepl(!!row[[2]],text_key))[[standard_low]]
+      potential_settings[row[[1]]][[1]][row[[2]]] <- filter(metadata, grepl(!!row[[2]],.data$text_key))[[standard_low]]
     } else{
       stop("Three level setting nests are not currently supported")
     }
