@@ -1,0 +1,216 @@
+---
+title: "safetyGraphics Shiny App - User Guide"
+author: "Jeremy Wildfire"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Overview
+
+The `safetyGraphics` Shiny app provides an easy-to-use point-and-click interface to create shareable safety graphics for any study. You can run the app in your local R session using the code below, or visit a hosted version [here](https://becca-krouse.shinyapps.io/safetyGraphicsApp/).
+
+```
+#Code to initialize shiny application
+devtools::install_github("ASA-DIA-InteractiveSafetyGraphics/safetyGraphics") 
+library("safetyGraphics") 
+safetyGraphicsApp()
+```
+
+# Typical Workflow
+
+After opening the app, you will typically follow the workflow below. In short, you will load data (once), tweak settings and view charts (maybe more than once), and then export a snapshot of the charts for other users. 
+
+<img src="https://user-images.githubusercontent.com/3680095/51403731-f4b14700-1b16-11e9-9d5a-fb31df48bb87.png" width="80%" >
+
+This workflow lines up with the items in the toolbar for the App.
+
+<img src="https://user-images.githubusercontent.com/3680095/51495225-794ad200-1d70-11e9-9b1b-9c602dac27a1.png"  width="80%">
+
+More information about each step in the process is shown below.
+
+## Load Data
+
+When you open the app, you are taken to the Data Tab with "Data Upload" and "Data Preview" panels. The preview for the pre-loaded "Example data" dataset is shown by default.
+
+<img src="https://user-images.githubusercontent.com/3680095/51489521-6b3f8600-1d5d-11e9-907a-1fce165edad9.png"  width="80%">
+
+To load your own data, simply click the browse button and select a `.csv` or `.sas7bdat` data set. Once the file is loaded, select it in the list at the bottom of the "Data Upload Panel". Once selected, the "Data Preview" panel will update automatically (along with the Settings and Chart tabs). 
+
+The charts in the safetyGraphics app are specifically designed for clinical trial safety monitoring, and require laboratory datasets that contain one row per participant per time point per measure. Data mappings for two common [CDISC](https://www.cdisc.org/) data standards - [SDTM](https://www.cdisc.org/standards/foundational/sdtm) and [ADaM](https://www.cdisc.org/standards/foundational/adam) - are pre-loaded in the application. As described below, the app can automatically generate charts for data sets using these standards; other data sets require some user configuration.  
+
+## Update Settings
+
+After loading your data, navigate to the Settings tab to customize the behavior of the charts. This tab includes panels for different types of chart settings.  For example, the "Data Mapping" panel (shown below for the "Example Data" ADaM data set) can be used to specify the column that contains the unique subject ID, and on the more general "Appearance Settings" panel, there is an option to specify a warning message to be displayed when the chart loads. You can hover the mouse over any setting label to get more details. 
+
+<img src="https://user-images.githubusercontent.com/3680095/51495648-f1fe5e00-1d71-11e9-97e6-939ef6d08a9b.png"  width="80%">
+
+When possible, items on the settings tab are pre-populated based on the data standard of the selected data set. See the Case Studies below for more details regarding working with non-standard data and adding customizations to the charts. 
+
+## View Chart
+
+Once the settings configuration is complete and a green check is shown in the navigation bar, navigate to the chart tab to view the chart. The chart tab updates automatically when settings are changed or new data is loaded. 
+More details about chart functionality will be documented in separate vignettes.  
+
+<img src="https://user-images.githubusercontent.com/3680095/51504626-c8a3f900-1d96-11e9-91d5-3641378844f1.png"  width="80%">
+
+## Export Results
+
+Finally, click the "Export Chart" button in the upper right corner to create a standalone copy of the chart using the current configuration. The export functionality combines the data, code, and settings for the chart in to a single file. In addition to the chart itself, the export includes a summary of the tool, and code to recreate the customized chart in R. 
+
+<img src="https://user-images.githubusercontent.com/3680095/51543124-b61ad580-1e11-11e9-8fe2-fe1a67a83583.png"  width="80%">
+
+# Case Study #1 - Mapping Non-Standard data
+
+## Overview
+
+When a new data file is loaded, the app will detect whether the dataset is formatted according to ADaM or SDTM data standards.  If the uploaded dataset matches one of these standards, the settings tab will be pre-populated accordingly, and little or no custom user customization will be needed to generate a basic chart. However, no data standard is strictly required; the app also works with data in other formats. The only firm data requirements for the eDish chart are:
+
+- The data must have one record per participant per timepoint per lab test. That is, the data should be long, not wide.
+- The data must have columns for: 
+  - Unique Subject Identifier (ID Column)
+  - Name of Measure or Test (Measure Column)
+  - Numeric finding or result (Value Column)
+  - Numeric upper limit of normal for the test
+  - Numeric lower limit of normal for the test
+  - Numeric study day
+- The following values must be present in the column corresponding to Measure or Test:
+  - Aminotransferase, alanine (ALT)
+  - Aminotransferase, aspartate (AST)
+  - Alkaline phosphatase (ALP)
+  - Total Bilirubin
+
+The app also supports data sets that partially match the pre-loaded data standards. The step-by-step instructions below outline how to create a chart for one such data set. 
+ 
+## Step-by-step
+
+### 1. Open the App
+
+Paste the following code into RStudio: 
+
+```
+#Code to initialize shiny application
+devtools::install_github("ASA-DIA-InteractiveSafetyGraphics/safetyGraphics") 
+library("safetyGraphics") 
+safetyGraphicsApp()
+```
+
+### 2. Load Data
+
+Use the "Browse.." button on the data upload section of the data tab to load a non-standard data set. We'll use the `.csv` saved [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/raw/master/inst/eDISH_app/tests/partialSDTM.csv), but the process is similar for other data sets. Notice that once the data is loaded, the app will detect whether the data matches one of those pre-loaded standards, and a note is added to indicate whether a match is found. Our sample data is a partial match for the SDTM standard. Once you select the newly loaded data set, the app should look like the screen capture below. Note the red x's in the toolbar indicating that user customization is needed.
+
+<img src="https://user-images.githubusercontent.com/3680095/51546853-e7979f00-1e19-11e9-8152-c24f3da36846.png"  width="80%">
+
+### 3. Select Columns
+
+Next, click the "Settings" tab (with the red x) in the nav bar at the top of the page. The page should look something like this: 
+
+<img src="https://user-images.githubusercontent.com/3680095/51547012-3e04dd80-1e1a-11e9-97c5-0b552e04690c.png"  width="80%">
+
+Behind the scenes, a validation process is run to check if the selected settings match up with the selected data set to create a valid chart. Green (for valid) and red (for invalid) status messages are shown after each label in the settings tab - you can hover the mouse over the status to get more details. 
+
+As you can see, we've got several invalid settings with red status messages. To make a long story short, we now need to go through and update each invalid setting and turn its status message in to a green "ok". Once all of the individual settings are valid, the red Xs in the toolbar will turn to green checks, and the chart will be created. Let's hover over the first red error message to see the detailed description of the failed check: 
+
+<img src="https://user-images.githubusercontent.com/3680095/51568477-b1284700-1e4e-11e9-881d-89b6f443c4fa.png" width="30%">
+
+As you might've guessed from the empty select box, the check failed because no value is specified for the setting. Choosing the measure column is simple. Click the select box to see pre-populated options corresponding to the columns in the data.
+
+<img src="https://user-images.githubusercontent.com/3680095/51504095-d441f080-1d93-11e9-9daf-293a027bd831.png" width="30%">
+
+Now select LBTEST for Measure Column and LBDY for the Study Day Column option. Your setting page should look something like this:
+
+<img src="https://user-images.githubusercontent.com/3680095/51569187-8b9c3d00-1e50-11e9-830d-cb605ab758b5.png" width="80%">
+
+Now we need to fill in the 4 inputs beneath Measure Column. You may have noticed that there were no options available for these inputs when the page loaded. This is because these options are field level data that depend on the Measure Column option. Once you selected a Measure Column, the options for these inputs were populated using the unique values found in that data column. To fill them in, just type the first few letters of lab in the text box. For example, type "Alan" for the Alanine Aminotransferase value input and select the correct option. 
+
+<img src="https://user-images.githubusercontent.com/3680095/51569266-bbe3db80-1e50-11e9-8b5f-ff6a06ad73b7.png" width="30%">
+
+Repeat the process for the other 3 "value" inputs and viola, the red x changes to a green check, and our chart is ready. 
+
+<img src="https://user-images.githubusercontent.com/3680095/51569331-e897f300-1e50-11e9-9014-0fd3b0dee92d.png" width="80%">
+
+### 4. View Chart
+
+Now that we've got the data mapping complete, just click the Chart tab in the header to see the navigation bar at the top of the page. 
+
+<img src="https://user-images.githubusercontent.com/3680095/51569449-3f9dc800-1e51-11e9-8594-6262358ac79f.png" width="80%">
+
+The chart has lots of useful interactive features built in, but we'll cover those in a separate vignette. 
+
+### 5. Export Chart
+
+To export the chart, click the "Export Chart" button in the upper right hand corner of the page. Your chart, saved as an `.html` file, will be downloaded to your machine. 
+
+Open the downloaded file in a new tab in your browser and you'll see two tabs. The "Chart" tab, will be identical to the chart shown above, with all of your customizations intact. The "Info" tab, shown below, has a brief description of the safetyGraphics package and source code that you can use to recreate the chart in R.
+
+<img src="https://user-images.githubusercontent.com/3680095/51569925-98219500-1e52-11e9-9992-0955ebef9bf4.png" width="80%">
+
+The html file contains all of the data and code for the chart and is easy to share. Just send the file to the person you're sharing with, and tell them to open it in their web browser (just double-click the file) - they don't even need R. 
+
+## Summary 
+
+This case study shows how to create a shareable chart created using custom settings in just a few clicks. Continue reading to find out how to add customizations to your chart. 
+
+# Case Study #2 - Adding Customizations
+
+## Overview
+
+Only the most basic settings used by the `safetyGraphics` displays are populated by default, but users can also add a wide variety of additional customization. We'll walk through a few common customizations for the eDish chart in this case study including:
+
+- Adding grouping variables
+- Adding filter variables
+- Defining which rows should be included in the analyses using the Analysis Flag options
+- Defining the baseline measurement using the Baseline options
+
+## Step-by-Step
+
+### 1. Open the App
+
+Just paste this code in to RStudio: 
+
+```
+#Code to initialize shiny application
+devtools::install_github("ASA-DIA-InteractiveSafetyGraphics/safetyGraphics") 
+library("safetyGraphics") 
+safetyGraphicsApp()
+```
+
+We'll use the pre-loaded example data for this case study, so there is no need to load your own data file. 
+
+### 2. Add Filters and Groups
+
+The `SafetyGraphics` eDish chart offers native support for data-driven groups and filtering. Any data column can be used to add filter and grouping controls to the chart. One common use case is to add grouping by treatment arm and filtering by site, race and sex. All of this can be done with just a few clicks. As you might have guessed, you just update the "Filter columns" and "Group columns" inputs as shown:
+
+<img src="https://user-images.githubusercontent.com/3680095/51570389-c489e100-1e53-11e9-8286-822083d96588.png" width="30%">
+
+Click the charts tab to see the following chart (with orange boxes added around the newly created filters and groups for emphasis): 
+
+<img src="https://user-images.githubusercontent.com/3680095/51570671-83de9780-1e54-11e9-8c32-74e2bec1e8b5.png" width="80%">
+
+A word of warning - both grouping and filtering works best using categorical variables with a relatively small number of groups (less than 10 or so). With that said, there is no official limit on the number of unique values to include in a group or filter, so if you followed the example above but chose "AGE" (with over a dozen unique integer values) instead of "AGEGR1" (with 3 categorical levels), you might not love the functionality in the chart. Fortunately, it's easy to go back and update the chart to use the categorized variable instead - just go back to the settings tab and update the corresponding setting. 
+
+### 3. Flag Rows of Special Interest
+
+You can also use the settings page to identify important values in the data. For the eDish chart, you can flag baseline values (using the "Baseline column" and "Baseline values" inputs) and values included in the analysis population (using "Analysis Flag column" and "Analysis Flag values" inputs). In both cases, you need to choose the "column" first, and then choose 1 or more corresponding "values".  Here are some suggested settings using our sample data: 
+
+<img src="https://user-images.githubusercontent.com/3680095/51571343-ca34f600-1e56-11e9-986c-b6531df7a0bd.png" width="30%">
+
+In the eDish chart, adding a baseline flag enables the users to view a baseline-adjusted version of the chart. Click the chart tab, and then change the "Display Type" control to "Baseline Adjusted (mDish)". 
+
+<img src="https://user-images.githubusercontent.com/3680095/51571827-251b1d00-1e58-11e9-8364-0434c17fd2c1.png" width="80%">
+
+We're following ADaM conventions and using "flag" columns ending in "FL" and "Y" values for the configuration here, but any column/value combination is allowed. For example, you could use study day 0 to define baseline by setting baseline column to "ADY" and baseline value to "0". 
+
+### Summary
+
+This case study shows how to add some basic customizations to your eDish chart with a few clicks in the shiny application. Note that not all customizations are available in the shiny app. You can access more granular settings using the `htmlwidget` that creates the chart (e.g. see `?eDISH`) or even by looking at the documentation for the underlying [safety-eDish github repo](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safety-eDISH) javascript library.  
