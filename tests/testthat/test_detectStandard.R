@@ -36,7 +36,7 @@ test_that("correct standards are identified",{
   
   case_sensitive_test_data<-data.frame(usubjid="001",AVAL=10,PARAM="HDL",VISIT="Visit 1",VISITNUM=1,ADY=0,A1LO=0,A1HI=20)
   expect_equal(detectStandard(case_sensitive_test_data)[["standard"]],"ADaM")
-  expect_equal(detectStandard(case_sensitive_test_data)[["details"]][["ADaM"]][["match"]], "Partial")
+  expect_equal(detectStandard(case_sensitive_test_data)[["details"]][["ADaM"]][["match"]], "Full")
   expect_equal(detectStandard(case_sensitive_test_data)[["details"]][["SDTM"]][["match"]], "Partial")
   
   #NOTE: SDTM takes precedence over ADAM

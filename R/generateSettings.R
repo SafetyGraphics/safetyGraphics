@@ -24,6 +24,9 @@
 #' generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far. 
 #' }
 #' 
+#' @importFrom dplyr "filter"
+#' @importFrom stringr str_split
+#' 
 #' @export
 
 generateSettings <- function(standard="None", chart="eDish", partial=FALSE, partial_cols=NULL){
@@ -36,8 +39,15 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
     stop("partial_cols must be supplied if the standard is partial")
   }
   
+  metadata <- safetyGraphics::getSettingsMetadata(
+    charts = chart, 
+    cols=c("text_key","adam","sdtm"),
+    filter_expr = adam != '' & sdtm != '' 
+  )
+
+  # Split on -- for multi-level handling 
+  hierarchical_metadata <- str_split(metadata$text_key, "--") 
   
-  #A shell setting object without any data mapping completed
   settings<-list(
     id_col = NULL,
     value_col = NULL,
@@ -49,16 +59,16 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
     visitn_col = NULL,
     filters = NULL,
     group_cols = NULL,
-    measure_values = list(ALT = NULL,
-                          AST = NULL,
-                          TB = NULL,
-                          ALP = NULL),
+    measure_values = list(alt = NULL,
+                          ast = NULL,
+                          tb = NULL,
+                          alp = NULL),
     baseline = list(value_col=NULL,
                     values=list()),
     analysisFlag = list(value_col=NULL,
-                    values=list()),
+                        values=list()),
     
-    x_options = c("ALT", "AST", "ALP"),
+    x_options = c("LT", "AST", "ALP"),
     y_options = c("TB", "ALP"),
     visit_window = 30,
     r_ratio_filter = TRUE,
@@ -66,39 +76,25 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
     showTitle = TRUE,
     warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures."
   )
-    
+  
   potential_settings <- settings
   
-  if(tolower(standard)=="adam"){
-    potential_settings[["id_col"]]<-"USUBJID"
-    potential_settings[["value_col"]]<-"AVAL"
-    potential_settings[["measure_col"]]<-"PARAM"
-    potential_settings[["normal_col_low"]]<-"A1LO"
-    potential_settings[["normal_col_high"]]<-"A1HI"
-    potential_settings[["studyday_col"]]<-"ADY"
-    potential_settings[["visit_col"]]<-"VISIT"
-    potential_settings[["visitn_col"]]<-"VISITNUM"
-    potential_settings[["measure_values"]][["ALT"]]<-"Alanine Aminotransferase (U/L)"
-    potential_settings[["measure_values"]][["AST"]]<-"Aspartate Aminotransferase (U/L)"
-    potential_settings[["measure_values"]][["TB"]]<-"Bilirubin (umol/L)"
-    potential_settings[["measure_values"]][["ALP"]]<-"Alkaline Phosphatase (U/L)"
+  standard_low <- tolower(standard)
+  
+  if (standard_low == "adam" | standard_low == "sdtm") {
+    
+  for (row in hierarchical_metadata)  {
+    if (length(row) == 1) {
+      potential_settings[row] <- filter(metadata,text_key == !!row)[[standard_low]]
+    } else if (length(row) == 2) {
+      potential_settings[row[[1]]][[1]][row[[2]]] <- filter(metadata, grepl(!!row[[2]],text_key))[[standard_low]]
+    } else{
+      stop("Three level setting nests are not currently supported")
+    }
+    
   }
   
-  if(tolower(standard)=="sdtm"){
-    potential_settings[["id_col"]]<-"USUBJID"
-    potential_settings[["value_col"]]<-"STRESN"
-    potential_settings[["measure_col"]]<-"TEST"
-    potential_settings[["normal_col_low"]]<-"STNRLO"
-    potential_settings[["normal_col_high"]]<-"STNRHI"
-    potential_settings[["studyday_col"]]<-"DY"
-    potential_settings[["visit_col"]]<-"VISIT"
-    potential_settings[["visitn_col"]]<-"VISITNUM"
-    potential_settings[["measure_values"]][["ALT"]]<-"Aminotransferase, alanine (ALT)"
-    potential_settings[["measure_values"]][["AST"]]<-"Aminotransferase, aspartate (AST)"
-    potential_settings[["measure_values"]][["TB"]]<-"Total Bilirubin"
-    potential_settings[["measure_values"]][["ALP"]]<-"Alkaline phosphatase (ALP)"
   }
-  
   
   if(partial) {
     
@@ -108,8 +104,8 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
     
     for(i in 1:length(settings)) {
       if (potential_settings[i] %in% partial_cols) {
-            settings[[which(settings_names == potential_names[i])]] <- potential_settings[[i]]
-          }
+        settings[[which(settings_names == potential_names[i])]] <- potential_settings[[i]]
+      }
     }
     
   } else {

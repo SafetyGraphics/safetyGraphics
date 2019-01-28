@@ -1,26 +1,26 @@
-chart_edish,text_key,label,description,setting_type,setting_required,column_mapping,column_type,column_required,field_mapping
-TRUE,id_col,ID column,Unique subject identifier variable name.,character,TRUE,TRUE,character,TRUE,FALSE
-TRUE,value_col,Value column,Lab result variable name.,character,TRUE,TRUE,numeric,TRUE,FALSE
-TRUE,measure_col,Measure column,Lab measure variable name,character,TRUE,TRUE,character,TRUE,FALSE
-TRUE,normal_col_low,Lower Limit of Normal column,Lower limit of normal variable name,character,TRUE,TRUE,numeric,TRUE,FALSE
-TRUE,normal_col_high,Upper Limit of Normal column,Upper limit of normal variable name,character,TRUE,TRUE,numeric,TRUE,FALSE
-TRUE,studyday_col,Study Day column,Visit day variable name,character,TRUE,TRUE,numeric,TRUE,FALSE
-TRUE,visit_col,Visit column,Visit variable name,character,FALSE,TRUE,character,FALSE,FALSE
-TRUE,visitn_col,Visit Number column,Visit number variable name,character,FALSE,TRUE,numeric,FALSE,FALSE
-TRUE,filters,Filters columns,"An optional list of specifications for filters. Each filter is a nested, named list (containing the filter value column: 'value_col' and associated label: 'label') within the larger list.",vector,FALSE,TRUE,NA,FALSE,FALSE
-TRUE,group_cols,Group columns,"An optional list of specifications for grouping columns. Each group column is a nested, named list (containing the group variable column: 'value_col' and associated label: 'label') within the larger list. ",vector,FALSE,TRUE,NA,FALSE,FALSE
-TRUE,measure_values--alt,Alanine Aminotransferase value,Value used for Alanine Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
-TRUE,measure_values--ast,Aspartate Aminotransferase value,Value used for Aspartate Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
-TRUE,measure_values--tb,Total Bilirubin value,Value used for Total Bilirubin in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
-TRUE,measure_values--alp,Alkaline Phosphatase value,Value used for Alkaline Phosphatase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE
-TRUE,baseline--value_col,Baseline column,An optional list defining which column represent the baseline visit(s) of the study.,character,FALSE,TRUE,NA,FALSE,FALSE
-TRUE,baseline--values,Baseline values,An optional list defining which values (one or more) represent the baseline visit(s) of the study.,vector,FALSE,FALSE,NA,NA,TRUE
-TRUE,analysisFlag--value_col,Analysis Flag column,An optional list defining which column should be used in eDish and mDish analyses.,character,FALSE,TRUE,NA,FALSE,FALSE
-TRUE,analysisFlag--values,Analysis Flag values,An optional list defining which values should be used in eDish and mDish analyses.,vector,FALSE,FALSE,NA,NA,TRUE
-TRUE,x_options,X axis options,"Specifies variable options for the x-axis using the key values from measure_values (e.g. 'ALT'). When multiple options are specified, a control allowing the user to interactively change the x variable is shown. ",vector,FALSE,FALSE,NA,NA,FALSE
-TRUE,y_options,Y axis options,"Specifies variable options for the y-axis using the key values from measure_values (e.g. 'TB'). When multiple options are specified, a control allowing the user to interactively change the y variable is shown. ",vector,FALSE,FALSE,NA,NA,FALSE
-TRUE,visit_window,Default Visit Window in Days ,Default visit window used to highlight eDish points where x and y measures occurred within the specified number of days. Editable by user after render. ,numeric,FALSE,FALSE,NA,NA,FALSE
-TRUE,r_ratio_filter,Show R Ratio Filter?,Specifies whether the R Ratio filter should be shown. R ratio is defined as: (ALT value/ULN for ALT) / (ALP value/ULN for ALP).,logical,FALSE,FALSE,NA,NA,FALSE
-TRUE,r_ratio_cut,Default R Ratio Cut,Default cut point for R Ratio filter. Ignored when r_ratio_filter = FALSE. User can update this setting via the UI when r_ratio_filter = TRUE. ,numeric,FALSE,FALSE,NA,NA,FALSE
-TRUE,showTitle,Show Chart Title? ,Specifies whether the title should be drawn above the controls.,logical,FALSE,FALSE,NA,NA,FALSE
-TRUE,warningText,Warning text,"Informational text to be displayed near the top of the controls (beneath the title, if any). No warning is displayed if warningText = ''. ",Character,FALSE,FALSE,NA,NA,FALSE
+chart_edish,text_key,label,description,setting_type,setting_required,column_mapping,column_type,column_required,field_mapping,adam,sdtm
+TRUE,id_col,ID column,Unique subject identifier variable name.,character,TRUE,TRUE,character,TRUE,FALSE,USUBJID,USUBJID
+TRUE,value_col,Value column,Lab result variable name.,character,TRUE,TRUE,numeric,TRUE,FALSE,AVAL,STRESN
+TRUE,measure_col,Measure column,Lab measure variable name,character,TRUE,TRUE,character,TRUE,FALSE,PARAM,TEST
+TRUE,normal_col_low,Lower Limit of Normal column,Lower limit of normal variable name,character,TRUE,TRUE,numeric,TRUE,FALSE,A1LO,STNRLO
+TRUE,normal_col_high,Upper Limit of Normal column,Upper limit of normal variable name,character,TRUE,TRUE,numeric,TRUE,FALSE,A1HI,STNRHI
+TRUE,studyday_col,Study Day column,Visit day variable name,character,TRUE,TRUE,numeric,TRUE,FALSE,ADY,DY
+TRUE,visit_col,Visit column,Visit variable name,character,FALSE,TRUE,character,FALSE,FALSE,VISIT,VISIT
+TRUE,visitn_col,Visit Number column,Visit number variable name,character,FALSE,TRUE,numeric,FALSE,FALSE,VISITNUM,VISITNUM
+TRUE,filters,Filters columns,"An optional list of specifications for filters. Each filter is a nested, named list (containing the filter value column: 'value_col' and associated label: 'label') within the larger list.",vector,FALSE,TRUE,NA,FALSE,FALSE,,
+TRUE,group_cols,Group columns,"An optional list of specifications for grouping columns. Each group column is a nested, named list (containing the group variable column: 'value_col' and associated label: 'label') within the larger list. ",vector,FALSE,TRUE,NA,FALSE,FALSE,,
+TRUE,measure_values--alt,Alanine Aminotransferase value,Value used for Alanine Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Alanine Aminotransferase (U/L),"Aminotransferase, alanine (ALT)"
+TRUE,measure_values--ast,Aspartate Aminotransferase value,Value used for Aspartate Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Aspartate Aminotransferase (U/L),"Aminotransferase, aspartate (AST)"
+TRUE,measure_values--tb,Total Bilirubin value,Value used for Total Bilirubin in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Bilirubin (umol/L),Total Bilirubin
+TRUE,measure_values--alp,Alkaline Phosphatase value,Value used for Alkaline Phosphatase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Alkaline Phosphatase (U/L),Alkaline phosphatase (ALP)
+TRUE,baseline--value_col,Baseline column,An optional list defining which column represent the baseline visit(s) of the study.,character,FALSE,TRUE,NA,FALSE,FALSE,,
+TRUE,baseline--values,Baseline values,An optional list defining which values (one or more) represent the baseline visit(s) of the study.,vector,FALSE,FALSE,NA,NA,TRUE,,
+TRUE,analysisFlag--value_col,Analysis Flag column,An optional list defining which column should be used in eDish and mDish analyses.,character,FALSE,TRUE,NA,FALSE,FALSE,,
+TRUE,analysisFlag--values,Analysis Flag values,An optional list defining which values should be used in eDish and mDish analyses.,vector,FALSE,FALSE,NA,NA,TRUE,,
+TRUE,x_options,X axis options,"Specifies variable options for the x-axis using the key values from measure_values (e.g. 'ALT'). When multiple options are specified, a control allowing the user to interactively change the x variable is shown. ",vector,FALSE,FALSE,NA,NA,FALSE,,
+TRUE,y_options,Y axis options,"Specifies variable options for the y-axis using the key values from measure_values (e.g. 'TB'). When multiple options are specified, a control allowing the user to interactively change the y variable is shown. ",vector,FALSE,FALSE,NA,NA,FALSE,,
+TRUE,visit_window,Default Visit Window in Days ,Default visit window used to highlight eDish points where x and y measures occurred within the specified number of days. Editable by user after render. ,numeric,FALSE,FALSE,NA,NA,FALSE,,
+TRUE,r_ratio_filter,Show R Ratio Filter?,Specifies whether the R Ratio filter should be shown. R ratio is defined as: (ALT value/ULN for ALT) / (ALP value/ULN for ALP).,logical,FALSE,FALSE,NA,NA,FALSE,,
+TRUE,r_ratio_cut,Default R Ratio Cut,Default cut point for R Ratio filter. Ignored when r_ratio_filter = FALSE. User can update this setting via the UI when r_ratio_filter = TRUE. ,numeric,FALSE,FALSE,NA,NA,FALSE,,
+TRUE,showTitle,Show Chart Title? ,Specifies whether the title should be drawn above the controls.,logical,FALSE,FALSE,NA,NA,FALSE,,
+TRUE,warningText,Warning text,"Informational text to be displayed near the top of the controls (beneath the title, if any). No warning is displayed if warningText = ''. ",Character,FALSE,FALSE,NA,NA,FALSE,,
