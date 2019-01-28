@@ -23,6 +23,7 @@
 #' @importFrom stringr str_subset
 #' @importFrom magrittr "%>%"
 #' @import dplyr
+#' @importFrom rlang .data
 #' 
 #' @export
 
@@ -46,14 +47,14 @@ getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, filter_exp
       return(NULL)
     }else{
       # see if any of the matched chart flags are TRUE
-      md<-md%>%filter_at(vars(matched_chart_columns),any_vars(.==TRUE))
+      md<-md%>%filter_at(vars(matched_chart_columns),any_vars(.data$.==TRUE))
     }
   }
   
   #filter the metadata based on the text_keys option (if any) 
   if(!is.null(text_keys)){
     stopifnot(typeof(text_keys) == "character")
-    md<-md%>%filter(tolower(text_key) %in% tolower(text_keys))
+    md<-md%>%filter(tolower(.data$text_key) %in% tolower(text_keys))
   }
   
   #filter the metadata based on a the filter expression 

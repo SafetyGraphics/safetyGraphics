@@ -30,10 +30,10 @@
 #' User can update this setting via the UI when \code{r_ratio_filter = TRUE}. Default: \code{0}.
 #' @param showTitle Specifies whether the title should be drawn above the controls. Default: \code{TRUE}.
 #' @param warningText Informational text to be displayed near the top of the controls 
-#'  (beneath the  title, if any). No warning is displayed if \code{warningText = ""}. 
-#'  Default: \code{"Caution: This interactive graphic is not validated. Any clinical 
-#'  recommendations based on this tool should be confirmed using your organizations 
-#'  standard operating procedures."}.
+#' (beneath the  title, if any). No warning is displayed if \code{warningText = ""}. If \code{warningText = NULL},
+#' default warning text will be displayed ("Caution: This interactive graphic is not validated. Any clinical 
+#' recommendations based on this tool should be confirmed using your organizations 
+#' standard operating procedures.").
 #' @param debug_js print settings in javascript before rendering chart. Default: \code{FALSE}.
 
 #' @param settings Optional list of settings arguments to be converted to JSON using \code{jsonlite::toJSON(settings, auto_unbox = TRUE, dataframe = "rows", null = "null")}.  If provided, all other function parameters are ignored. Default: \code{NULL}.
@@ -116,7 +116,7 @@ eDISH <- function(data,
                   r_ratio_cut = 0,
                   showTitle = TRUE,
                   debug_js=FALSE,
-                  warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.",
+                  warningText = NULL, 
                   settings = NULL) {
 
   # If only one baseline value value specified, convert value to list 
@@ -136,6 +136,15 @@ eDISH <- function(data,
      }
   }
   
+  # if warningText is NULL, use default warningText
+  if(is.null(warningText)){
+    warningText <- "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures."
+  }
+  if (!is.null(settings)){
+    if(is.null(settings$warningText)){
+      settings$warningText <- "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures."
+    }
+  }
 
   # forward options using rSettings
   if (is.null(settings)){
