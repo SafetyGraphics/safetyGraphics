@@ -4,7 +4,7 @@ author: "Jeremy Wildfire"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{safetyGraphics Shiny App - User Guide}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -78,17 +78,17 @@ When a new data file is loaded, the app will detect whether the dataset is forma
 
 - The data must have one record per participant per timepoint per lab test. That is, the data should be long, not wide.
 - The data must have columns for: 
-  - Unique Subject Identifier (ID Column)
-  - Name of Measure or Test (Measure Column)
-  - Numeric finding or result (Value Column)
-  - Numeric upper limit of normal for the test
-  - Numeric lower limit of normal for the test
-  - Numeric study day
+    - Unique Subject Identifier (ID Column)
+    - Name of Measure or Test (Measure Column)
+    - Numeric finding or result (Value Column)
+    - Numeric upper limit of normal for the test
+    - Numeric lower limit of normal for the test
+    - Numeric study day
 - The following values must be present in the column corresponding to Measure or Test:
-  - Aminotransferase, alanine (ALT)
-  - Aminotransferase, aspartate (AST)
-  - Alkaline phosphatase (ALP)
-  - Total Bilirubin
+    - Aminotransferase, alanine (ALT)
+    - Aminotransferase, aspartate (AST)
+    - Alkaline phosphatase (ALP)
+    - Total Bilirubin
 
 The app also supports data sets that partially match the pre-loaded data standards. The step-by-step instructions below outline how to create a chart for one such data set. 
  
