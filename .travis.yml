@@ -4,4 +4,4 @@ dist: trusty   # Use Ubuntu 14.04 image (instead of 12.04)
 language: R
 sudo: false
 r: 3.5
-cache:packages
+cache: packages
