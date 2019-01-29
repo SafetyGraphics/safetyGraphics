@@ -43,7 +43,7 @@ More information about each step in the process is shown below.
 
 When you open the app, you are taken to the Data Tab with "Data Upload" and "Data Preview" panels. The preview for the pre-loaded "Example data" dataset is shown by default.
 
-<img src="https://user-images.githubusercontent.com/3680095/51489521-6b3f8600-1d5d-11e9-907a-1fce165edad9.png"  width="80%">
+<img src="https://user-images.githubusercontent.com/3680095/51935405-ae7fa180-23ba-11e9-9c5b-a0e5f5202a93.png"  width="80%">
 
 To load your own data, simply click the browse button and select a `.csv` or `.sas7bdat` data set. Once the file is loaded, select it in the list at the bottom of the "Data Upload Panel". Once selected, the "Data Preview" panel will update automatically (along with the Settings and Chart tabs). 
 
@@ -109,13 +109,13 @@ safetyGraphicsApp()
 
 Use the "Browse.." button on the data upload section of the data tab to load a non-standard data set. We'll use the `.csv` saved [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/raw/master/inst/eDISH_app/tests/partialSDTM.csv), but the process is similar for other data sets. Notice that once the data is loaded, the app will detect whether the data matches one of those pre-loaded standards, and a note is added to indicate whether a match is found. Our sample data is a partial match for the SDTM standard. Once you select the newly loaded data set, the app should look like the screen capture below. Note the red x's in the toolbar indicating that user customization is needed.
 
-<img src="https://user-images.githubusercontent.com/3680095/51546853-e7979f00-1e19-11e9-8152-c24f3da36846.png"  width="80%">
+<img src="https://user-images.githubusercontent.com/3680095/51935406-ae7fa180-23ba-11e9-9708-bdaf46cde892.png"  width="80%">
 
 ### 3. Select Columns
 
 Next, click the "Settings" tab (with the red x) in the nav bar at the top of the page. The page should look something like this: 
 
-<img src="https://user-images.githubusercontent.com/3680095/51547012-3e04dd80-1e1a-11e9-97c5-0b552e04690c.png"  width="80%">
+<img src="https://user-images.githubusercontent.com/3680095/51935407-ae7fa180-23ba-11e9-8d04-7a077329d8f5.png"  width="80%">
 
 Behind the scenes, a validation process is run to check if the selected settings match up with the selected data set to create a valid chart. Green (for valid) and red (for invalid) status messages are shown after each label in the settings tab - you can hover the mouse over the status to get more details. 
 
@@ -129,7 +129,7 @@ As you might've guessed from the empty select box, the check failed because no v
 
 Now select LBTEST for Measure Column and LBDY for the Study Day Column option. Your setting page should look something like this:
 
-<img src="https://user-images.githubusercontent.com/3680095/51569187-8b9c3d00-1e50-11e9-830d-cb605ab758b5.png" width="80%">
+<img src="https://user-images.githubusercontent.com/3680095/51935408-af183800-23ba-11e9-8aef-284efa1ee83a.png" width="80%">
 
 Now we need to fill in the 4 inputs beneath Measure Column. You may have noticed that there were no options available for these inputs when the page loaded. This is because these options are field level data that depend on the Measure Column option. Once you selected a Measure Column, the options for these inputs were populated using the unique values found in that data column. To fill them in, just type the first few letters of lab in the text box. For example, type "Alan" for the Alanine Aminotransferase value input and select the correct option. 
 
@@ -137,7 +137,7 @@ Now we need to fill in the 4 inputs beneath Measure Column. You may have noticed
 
 Repeat the process for the other 3 "value" inputs and viola, the red x changes to a green check, and our chart is ready. 
 
-<img src="https://user-images.githubusercontent.com/3680095/51569331-e897f300-1e50-11e9-9014-0fd3b0dee92d.png" width="80%">
+<img src="https://user-images.githubusercontent.com/3680095/51935409-af183800-23ba-11e9-8d56-7a0e49ce553a.png" width="80%">
 
 ### 4. View Chart
 
@@ -195,7 +195,7 @@ The `SafetyGraphics` eDish chart offers native support for data-driven groups an
 
 Click the charts tab to see the following chart (with orange boxes added around the newly created filters and groups for emphasis): 
 
-<img src="https://user-images.githubusercontent.com/3680095/51570671-83de9780-1e54-11e9-8c32-74e2bec1e8b5.png" width="80%">
+<img src="https://user-images.githubusercontent.com/3680095/51935411-afb0ce80-23ba-11e9-85e5-accf13d37101.png" width="80%">
 
 A word of warning - both grouping and filtering works best using categorical variables with a relatively small number of groups (less than 10 or so). With that said, there is no official limit on the number of unique values to include in a group or filter, so if you followed the example above but chose "AGE" (with over a dozen unique integer values) instead of "AGEGR1" (with 3 categorical levels), you might not love the functionality in the chart. Fortunately, it's easy to go back and update the chart to use the categorized variable instead - just go back to the settings tab and update the corresponding setting. 
 
