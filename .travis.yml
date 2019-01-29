@@ -11,7 +11,7 @@ r_packages:
 r_check_args: "--no-vignettes"
 
 # packrat magic - runs without cache but uses cache going forward
-install:
+before_install:
   - R -e "0" --args --bootstrap-packrat
   - R -e "packrat::restore(restart = FALSE)"
 
