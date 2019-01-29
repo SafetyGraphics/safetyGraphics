@@ -5,20 +5,3 @@ language: R
 sudo: false
 r: 3.5
 
-r_binary_install:
-  - knitr
-  - rmarkdown
-  
-# packrat magic - runs without cache but uses cache going forward
-install:
-  - R -e "0" --args --bootstrap-packrat
-  - R -e "packrat::restore(restart = FALSE)"
-
-cache: 
-  packages : true
-  directories: 
-      # Packrat 
-      - $TRAVIS_BUILD_DIR/packrat/lib
-  
-notifications:
-  email: false
