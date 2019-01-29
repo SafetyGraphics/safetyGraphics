@@ -7,7 +7,9 @@ r: 3.5
 
 r_packages:
   - rmarkdown
-  
+
+r_check_args: "--no-vignettes"
+
 # packrat magic - runs without cache but uses cache going forward
 install:
   - R -e "0" --args --bootstrap-packrat
