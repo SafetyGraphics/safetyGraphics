@@ -6,15 +6,15 @@ test_that("a list with the expected properties and structure is returned for all
   
   expect_is(generateSettings(standard="None"),"list")
   expect_named(generateSettings(standard="None"),setting_names)
-  expect_named(generateSettings(standard="None")[["measure_values"]], c("alt","ast","tb","alp"))
+  expect_named(generateSettings(standard="None")[["measure_values"]], c("ALT","AST","TB","ALP"))
   
   expect_is(generateSettings(standard="ADaM"),"list")
   expect_named(generateSettings(standard="ADaM"),setting_names)
-  expect_named(generateSettings(standard="ADaM")[["measure_values"]], c("alt","ast","tb","alp"))
+  expect_named(generateSettings(standard="ADaM")[["measure_values"]], c("ALT","AST","TB","ALP"))
                
   expect_is(generateSettings(standard="SDTM"),"list")
   expect_named(generateSettings(standard="SDTM"),setting_names)
-  expect_named(generateSettings(standard="SDTM")[["measure_values"]], c("alt","ast","tb","alp"))
+  expect_named(generateSettings(standard="SDTM")[["measure_values"]], c("ALT","AST","Tb","ALP"))
 })
 
 test_that("a warning is thrown if chart isn't eDish",{

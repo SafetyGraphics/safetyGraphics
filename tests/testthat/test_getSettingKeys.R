@@ -54,7 +54,7 @@ test_that("function plays nicely with getSettingValue",{
   myValue<-getSettingValue(key=myKey,settings=testSettings)
   expect_equal(myValue,"USUBJID")
   
-  myNestedKey <- getSettingKeys(patterns="alt",settings=testSettings)[[1]]
+  myNestedKey <- getSettingKeys(patterns="ALT",settings=testSettings)[[1]]
   myNestedValue<-getSettingValue(key=myNestedKey,settings=testSettings)
   expect_equal(myNestedValue,"Aminotransferase, alanine (ALT)")
 })

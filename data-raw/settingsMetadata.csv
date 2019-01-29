@@ -9,10 +9,10 @@ TRUE,visit_col,Visit column,Visit variable name,character,FALSE,TRUE,character,F
 TRUE,visitn_col,Visit Number column,Visit number variable name,character,FALSE,TRUE,numeric,FALSE,FALSE,VISITNUM,VISITNUM
 TRUE,filters,Filters columns,"An optional list of specifications for filters. Each filter is a nested, named list (containing the filter value column: 'value_col' and associated label: 'label') within the larger list.",vector,FALSE,TRUE,NA,FALSE,FALSE,,
 TRUE,group_cols,Group columns,"An optional list of specifications for grouping columns. Each group column is a nested, named list (containing the group variable column: 'value_col' and associated label: 'label') within the larger list. ",vector,FALSE,TRUE,NA,FALSE,FALSE,,
-TRUE,measure_values--alt,Alanine Aminotransferase value,Value used for Alanine Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Alanine Aminotransferase (U/L),"Aminotransferase, alanine (ALT)"
-TRUE,measure_values--ast,Aspartate Aminotransferase value,Value used for Aspartate Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Aspartate Aminotransferase (U/L),"Aminotransferase, aspartate (AST)"
-TRUE,measure_values--tb,Total Bilirubin value,Value used for Total Bilirubin in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Bilirubin (umol/L),Total Bilirubin
-TRUE,measure_values--alp,Alkaline Phosphatase value,Value used for Alkaline Phosphatase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Alkaline Phosphatase (U/L),Alkaline phosphatase (ALP)
+TRUE,measure_values--ALT,Alanine Aminotransferase value,Value used for Alanine Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Alanine Aminotransferase (U/L),"Aminotransferase, alanine (ALT)"
+TRUE,measure_values--AST,Aspartate Aminotransferase value,Value used for Aspartate Aminotransferase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Aspartate Aminotransferase (U/L),"Aminotransferase, aspartate (AST)"
+TRUE,measure_values--TB,Total Bilirubin value,Value used for Total Bilirubin in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Bilirubin (umol/L),Total Bilirubin
+TRUE,measure_values--ALP,Alkaline Phosphatase value,Value used for Alkaline Phosphatase in the specified measure column,character,FALSE,FALSE,NA,NA,TRUE,Alkaline Phosphatase (U/L),Alkaline phosphatase (ALP)
 TRUE,baseline--value_col,Baseline column,An optional list defining which column represent the baseline visit(s) of the study.,character,FALSE,TRUE,NA,FALSE,FALSE,,
 TRUE,baseline--values,Baseline values,An optional list defining which values (one or more) represent the baseline visit(s) of the study.,vector,FALSE,FALSE,NA,NA,TRUE,,
 TRUE,analysisFlag--value_col,Analysis Flag column,An optional list defining which column should be used in eDish and mDish analyses.,character,FALSE,TRUE,NA,FALSE,FALSE,,
