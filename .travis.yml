@@ -5,6 +5,9 @@ language: R
 sudo: false
 r: 3.5
 
+r_packages:
+  - rmarkdown
+  
 # packrat magic - runs without cache but uses cache going forward
 install:
   - R -e "0" --args --bootstrap-packrat
