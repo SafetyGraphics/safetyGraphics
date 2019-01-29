@@ -4,17 +4,4 @@ dist: trusty   # Use Ubuntu 14.04 image (instead of 12.04)
 language: R
 sudo: false
 r: 3.5
-
-# packrat magic - runs without cache but uses cache going forward
-install:
-  - R -e "0" --args --bootstrap-packrat
-  - R -e "packrat::restore(restart = FALSE)"
-
-cache: 
-  packages : true
-  directories: 
-      # Packrat 
-      - $TRAVIS_BUILD_DIR/packrat/lib
-  
-notifications:
-  email: false
+cache:packages
