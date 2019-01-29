@@ -38,3 +38,7 @@ rsconnect/
 
 .DS_Store
 packrat/lib*/
+
+#Local shinyTest folders
+inst/eDISH_app/tests/*-current/
+
