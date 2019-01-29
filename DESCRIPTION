@@ -7,7 +7,7 @@ Authors@R: c(
 	person("Preston","Burns", role="aut"),
 	person("Xiao","Ni", role = "aut"),
 	person("James","Buchanan", role="aut"),
-	person("Susan","Duke", role="aut")
+	person("Susan","Duke", role="aut"),
 	person("Rho Inc.", role = "cph"))
 Maintainer: Jeremy Wildfire <jeremy_wildfire@rhoworld.com>
 Description: A framework for evaluation of clinical trial safety. Users can interactively explore their data using the 'Shiny' application or create standalone 'htmlwidget' charts. Interactive charts are built using 'd3.js' and 'webcharts.js' 'JavaScrpt' libraries.
