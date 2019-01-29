@@ -14,7 +14,7 @@ test_that("a list with the expected properties and structure is returned for all
                
   expect_is(generateSettings(standard="SDTM"),"list")
   expect_named(generateSettings(standard="SDTM"),setting_names)
-  expect_named(generateSettings(standard="SDTM")[["measure_values"]], c("ALT","AST","Tb","ALP"))
+  expect_named(generateSettings(standard="SDTM")[["measure_values"]], c("ALT","AST","TB","ALP"))
 })
 
 test_that("a warning is thrown if chart isn't eDish",{
