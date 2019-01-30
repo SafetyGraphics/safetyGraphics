@@ -128,7 +128,7 @@
           ],
           "text_key": "visit_col",
           "check": "'_col' parameter from setting setting found in data?",
-          "value": "VISIT",
+          "value": "--No Value Given--",
           "valid": true,
           "message": ""
         },

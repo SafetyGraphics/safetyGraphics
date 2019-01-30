@@ -24,6 +24,9 @@ app$snapshot(items = list(
 # Navigate to Settings Tab
 app$findElement('#settings_tab_title')$click()
 
+# Give it time to set settings 
+Sys.sleep(3) 
+
 # Snapshot of Settings
 app$snapshot(items = list(
    export = c("datatab-status","settingsUI-status_df"), # Capture Status settings and Checks

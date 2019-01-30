@@ -138,7 +138,7 @@
           ],
           "text_key": "visitn_col",
           "check": "'_col' parameter from setting setting found in data?",
-          "value": "VISITNUM",
+          "value": "--No Value Given--",
           "valid": true,
           "message": ""
         },
@@ -264,9 +264,9 @@
           ],
           "text_key": "visitn_col",
           "check": "specified column is numeric?",
-          "value": "VISITNUM",
+          "value": "--No Value Given--",
           "valid": true,
-          "message": "15 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic."
+          "message": ""
         }
       ],
       "valid": false,
@@ -292,7 +292,7 @@
         "normal_col_high not specified in settings.",
         "studyday_col not specified in settings.",
         "",
-        "15 of 24669 values were not numeric. Records with non-numeric values may not appear in the graphic.",
+        "",
         "No list of values found in settings."
       ],
       "message_short": [
