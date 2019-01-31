@@ -1,19 +1,25 @@
 Package: safetyGraphics
-Title: Create an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH)
-Version: 0.6.1
+Title: Create interactive graphics related to clinical trial safety
+Version: 0.7.0
 Authors@R: c(
-	person("Becca", "Krouse", email = "rebecca_krouse@rhoworld.com", role = c("cre","aut")),
-	person("Jeremy", "Wildfire", role = "aut"),
+	person("Jeremy", "Wildfire", email = "jeremy_wildfire@rhoworld.com", role = c("cre","aut")),
+	person("Becca", "Krouse", role="aut"),
+	person("Preston","Burns", role="aut"),
+	person("Xiao","Ni", role = "aut"),
+	person("James","Buchanan", role="aut"),
+	person("Susan","Duke", role="aut"),
 	person("Rho Inc.", role = "cph"))
-Description: An R interface for 'JavaScript' charting libraries related to clinical trial safety.
+Maintainer: Jeremy Wildfire <jeremy_wildfire@rhoworld.com>
+Description: A framework for evaluation of clinical trial safety. Users can interactively explore their data using the 'Shiny' application or create standalone 'htmlwidget' charts. Interactive charts are built using 'd3.js' and 'webcharts.js' 'JavaScrpt' libraries.
 Depends: R (>= 3.5)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
 Suggests: 
-	testthat,
-	shinytest
+    testthat,
+    shinytest,
+    knitr
 Imports: 
 	dplyr, 
 	htmlwidgets,
@@ -24,8 +30,9 @@ Imports:
 	magrittr,
 	DT,
 	shinyjs,
-	rmarkdown
+	rmarkdown,
+	rlang
 Remotes:
     rstudio/shinytest
-
+VignetteBuilder: knitr
 

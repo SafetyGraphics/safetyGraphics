@@ -239,6 +239,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   })
   
   
+  exportTestValues(status_df = { status_df() })
+  
   #List of required settings
   req_settings <- safetyGraphics:::getSettingsMetadata() %>% 
     filter(chart_edish==TRUE & setting_required==TRUE) %>% 

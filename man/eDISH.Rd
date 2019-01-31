@@ -14,8 +14,7 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
   "Alkaline phosphatase (ALP)"), x_options = c("ALT", "AST", "ALP"),
   y_options = "TB", visit_window = 30, r_ratio_filter = TRUE,
   r_ratio_cut = 0, showTitle = TRUE, debug_js = FALSE,
-  warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.",
-  settings = NULL)
+  warningText = NULL, settings = NULL)
 }
 \arguments{
 \item{data}{A data frame containing the labs data. Data must be structured as one record per study participant per time point per lab measure.}
@@ -68,10 +67,10 @@ User can update this setting via the UI when \code{r_ratio_filter = TRUE}. Defau
 \item{debug_js}{print settings in javascript before rendering chart. Default: \code{FALSE}.}
 
 \item{warningText}{Informational text to be displayed near the top of the controls 
-(beneath the  title, if any). No warning is displayed if \code{warningText = ""}. 
-Default: \code{"Caution: This interactive graphic is not validated. Any clinical 
+(beneath the  title, if any). No warning is displayed if \code{warningText = ""}. If \code{warningText = NULL},
+default warning text will be displayed ("Caution: This interactive graphic is not validated. Any clinical 
 recommendations based on this tool should be confirmed using your organizations 
-standard operating procedures."}.}
+standard operating procedures.").}
 
 \item{settings}{Optional list of settings arguments to be converted to JSON using \code{jsonlite::toJSON(settings, auto_unbox = TRUE, dataframe = "rows", null = "null")}.  If provided, all other function parameters are ignored. Default: \code{NULL}.}
 }

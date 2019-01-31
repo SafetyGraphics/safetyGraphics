@@ -26,7 +26,7 @@ detectStandard <- function(data, domain="labs"){
   # Create placeholder list, with Standard = None.
   standard_list <- list()
   standard_list[["details"]] = list()
-  data_cols<-colnames(data)
+  data_cols<-toupper(colnames(data))
   
   # Check to see if data columns match the standards
   standard_list[["details"]][["ADaM"]]<-compare_cols(data_cols,getRequiredColumns(standard="ADaM"))

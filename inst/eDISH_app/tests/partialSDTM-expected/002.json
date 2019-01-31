@@ -1,7 +1,7 @@
 {
   "output": {
     "chart_tab_title": {
-      "html": "Chart <i class=\"fa fa-check ok\"><\/i>",
+      "html": "Chart <i class=\"fa fa-times notok\"><\/i>",
       "deps": [
 
       ]
@@ -13,7 +13,7 @@
       ]
     },
     "settings_tab_title": {
-      "html": "Settings <i class=\"fa fa-check ok\"><\/i>",
+      "html": "Settings <i class=\"fa fa-times notok\"><\/i>",
       "deps": [
 
       ]
