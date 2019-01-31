@@ -1,5 +1,5 @@
 Package: safetyGraphics
-Title: Create interactive graphics related to clinical trial safety
+Title: Create Interactive Graphics Related to Clinical Trial Safety
 Version: 0.7.3
 Authors@R: c(
 	person("Jeremy", "Wildfire", email = "jeremy_wildfire@rhoworld.com", role = c("cre","aut")),
