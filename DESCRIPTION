@@ -1,6 +1,6 @@
 Package: safetyGraphics
 Title: Create interactive graphics related to clinical trial safety
-Version: 0.7.1
+Version: 0.7.2
 Authors@R: c(
 	person("Jeremy", "Wildfire", email = "jeremy_wildfire@rhoworld.com", role = c("cre","aut")),
 	person("Becca", "Krouse", role="aut"),
@@ -10,7 +10,7 @@ Authors@R: c(
 	person("Susan","Duke", role="aut"),
 	person("Rho Inc.", role = "cph"))
 Maintainer: Jeremy Wildfire <jeremy_wildfire@rhoworld.com>
-Description: A framework for evaluation of clinical trial safety. Users can interactively explore their data using the 'Shiny' application or create standalone 'htmlwidget' charts. Interactive charts are built using 'd3.js' and 'webcharts.js' 'JavaScrpt' libraries.
+Description: A framework for evaluation of clinical trial safety. Users can interactively explore their data using the 'Shiny' application or create standalone 'htmlwidget' charts. Interactive charts are built using 'd3.js' and 'webcharts.js' 'JavaScript' libraries.
 Depends: R (>= 3.5)
 License: MIT + file LICENSE
 Encoding: UTF-8
