@@ -6,3 +6,4 @@
 ^packrat/
 ^inst/safetyGraphicsHex$
 ^\.Rprofile$
+^cran-comments.md$
