@@ -48,7 +48,7 @@
 #'    \item{ABLFL}{Baseline Record Flag}
 #'    \item{AENTMTFL}{Analysis End Date Flag}
 #'    \item{LBSEQ}{Lab Sequence Number }
-#'    \item{LBNRIND}{Refernce Range Indicator}
+#'    \item{LBNRIND}{Reference Range Indicator}
 #'    \item{LBSTRESN}{Numeric Result/Finding in Std Units}
 #' }    
 #' @source \url{https://github.com/RhoInc/data-library}

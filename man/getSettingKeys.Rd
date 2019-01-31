@@ -11,7 +11,7 @@ getSettingKeys(patterns, settings, parents = NULL, matchLists = FALSE)
 
 \item{settings}{List of settings used to generate a chart like \code{eDISH()}.}
 
-\item{parents}{List containing the position of the parent list using recusive matches.}
+\item{parents}{List containing the position of the parent list using recursive matches.}
 
 \item{matchLists}{Boolean indicating whether keys containing lists should be returned as matches.}
 }
@@ -22,7 +22,7 @@ List of lists specifying the position of matching named elements in the format \
 Recursive function to find all keys matching a given text pattern in a settings list
 }
 \details{
-This function loops through all named elements (or "keys") in a \code{settings} list and returns items that match \code{patterns}. If \code{matchLists==FALSE} (the default), the function iteratively looks through the named elements in nested lists using the built-in \code{parents} parameter. The function returns a array of keys for all matches using a list of lists. Each key is defines the postition of a matching key using an unnamed list. For example, \code{list("filters",2,"value_col")} would correspond to \code{settings[["filters"]][[2]][["value_col"]]}.
+This function loops through all named elements (or "keys") in a \code{settings} list and returns items that match \code{patterns}. If \code{matchLists==FALSE} (the default), the function iteratively looks through the named elements in nested lists using the built-in \code{parents} parameter. The function returns a array of keys for all matches using a list of lists. Each key is defines the position of a matching key using an unnamed list. For example, \code{list("filters",2,"value_col")} would correspond to \code{settings[["filters"]][[2]][["value_col"]]}.
 }
 \examples{
 testSettings<-generateSettings(standard="AdAM")

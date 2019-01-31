@@ -2,7 +2,7 @@
 #'
 #' This function returns a list describing the validation status of a data set for a specified data standard
 #'
-#' This function returns a list describing the validation status of a settings/data combo for a given chart type. This list can be used to populate status fields and control workflow in the Shiny app. It could also be used to manually QC a buggy chart. The tool checks that all setting properties containing "_col" match columns in the data set via \code{checkColumnSettings},  and all properties contianing "_values" match fields in the data set via \code{checkFieldSettings}.
+#' This function returns a list describing the validation status of a settings/data combo for a given chart type. This list can be used to populate status fields and control workflow in the Shiny app. It could also be used to manually QC a buggy chart. The tool checks that all setting properties containing "_col" match columns in the data set via \code{checkColumnSettings},  and all properties containing "_values" match fields in the data set via \code{checkFieldSettings}.
 #'
 #' @param data A data frame to check against the settings object
 #' @param settings The settings list to compare with the data frame.

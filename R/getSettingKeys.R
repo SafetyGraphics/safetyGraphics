@@ -2,11 +2,11 @@
 #'
 #' Recursive function to find all keys matching a given text pattern in a settings list
 #'
-#' This function loops through all named elements (or "keys") in a \code{settings} list and returns items that match \code{patterns}. If \code{matchLists==FALSE} (the default), the function iteratively looks through the named elements in nested lists using the built-in \code{parents} parameter. The function returns a array of keys for all matches using a list of lists. Each key is defines the postition of a matching key using an unnamed list. For example, \code{list("filters",2,"value_col")} would correspond to \code{settings[["filters"]][[2]][["value_col"]]}.
+#' This function loops through all named elements (or "keys") in a \code{settings} list and returns items that match \code{patterns}. If \code{matchLists==FALSE} (the default), the function iteratively looks through the named elements in nested lists using the built-in \code{parents} parameter. The function returns a array of keys for all matches using a list of lists. Each key is defines the position of a matching key using an unnamed list. For example, \code{list("filters",2,"value_col")} would correspond to \code{settings[["filters"]][[2]][["value_col"]]}.
 #' 
 #' @param patterns List  of text patterns to match with named elements in \code{settings}.
 #' @param settings List of settings used to generate a chart like \code{eDISH()}.
-#' @param parents List containing the position of the parent list using recusive matches.
+#' @param parents List containing the position of the parent list using recursive matches.
 #' @param matchLists Boolean indicating whether keys containing lists should be returned as matches.
 #' @return List of lists specifying the position of matching named elements in the format \code{list("filters",2,"value_col")}, which would correspond to \code{settings[["filters"]][[2]][["value_col"]]}.
 #' 

@@ -12,7 +12,7 @@ detectStandard(data, domain = "labs")
 \item{domain}{The data domain for the data set provided.  Default: \code{"labs"}.}
 }
 \value{
-A list containing the matching \code{"standard"} ("ADaM", "SDTM" or "None") and a list of  \code{"details"} descripting of comparison with each standard considered. #'
+A list containing the matching \code{"standard"} ("ADaM", "SDTM" or "None") and a list of  \code{"details"} describing each standard considered. #'
 }
 \description{
 This function attempts to detect the data CDISC clinical standard used in a given R data frame.
