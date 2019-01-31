@@ -2,8 +2,8 @@
 #'
 #' Convert settings keys from text vectors (using the "--" delimiter) to a list of lists
 #'
-#' @param textKeys a list (or vector) of character keys using the "--" delimiter to indicate heirarchy
-#' @return A list of unnamed lists, with position in the nested list indicating heirarchy
+#' @param textKeys a list (or vector) of character keys using the "--" delimiter to indicate hierarchy
+#' @return A list of unnamed lists, with position in the nested list indicating hierarchy
 #'
 #' @examples
 #' safetyGraphics:::textKeysToList("id_col") 

@@ -7,10 +7,10 @@
 textKeysToList(textKeys)
 }
 \arguments{
-\item{textKeys}{a list (or vector) of character keys using the "--" delimiter to indicate heirarchy}
+\item{textKeys}{a list (or vector) of character keys using the "--" delimiter to indicate hierarchy}
 }
 \value{
-A list of unnamed lists, with position in the nested list indicating heirarchy
+A list of unnamed lists, with position in the nested list indicating hierarchy
 }
 \description{
 Convert settings keys from text vectors (using the "--" delimiter) to a list of lists

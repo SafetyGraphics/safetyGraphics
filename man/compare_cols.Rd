@@ -12,7 +12,7 @@ compare_cols(data_cols, standard_cols)
 \item{standard_cols}{A character vector with column names in the data standard}
 }
 \value{
-A list summarizing the comparison between \code{data_cols} and \code{standard_cols}. List has character vectors for "matched_columns", "extra_columns" and "missing_colimns" parameters, and a boolean "match" parameter indicating that there are no missing columns.
+A list summarizing the comparison between \code{data_cols} and \code{standard_cols}. List has character vectors for "matched_columns", "extra_columns" and "missing_columns" parameters, and a boolean "match" parameter indicating that there are no missing columns.
 }
 \description{
 Function to compare contents of 2 vectors - used to summarize of which data columns are found in a given standard. Used in \code{detectStandard()} and \code{validateSettings()}

@@ -4,7 +4,7 @@
 #' 
 #' @param data_cols A character vector with column names in the data frame
 #' @param standard_cols A character vector with column names in the data standard
-#' @return A list summarizing the comparison between \code{data_cols} and \code{standard_cols}. List has character vectors for "matched_columns", "extra_columns" and "missing_colimns" parameters, and a boolean "match" parameter indicating that there are no missing columns. 
+#' @return A list summarizing the comparison between \code{data_cols} and \code{standard_cols}. List has character vectors for "matched_columns", "extra_columns" and "missing_columns" parameters, and a boolean "match" parameter indicating that there are no missing columns. 
 #' 
 #' 
 #' @examples 
