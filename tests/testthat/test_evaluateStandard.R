@@ -19,15 +19,29 @@ test_that("a list with the expected properties and structure is returned",{
   expect_is(a[["invalid_count"]],"integer")
 })
 
-test_that("expected checks are marked invalid",{
-  expect_true(FALSE)
+test_that("expected number of checks (in)valid",{
+  expect_equal(evaluateStandard(data=adlbc, standard="sdtm")[["valid_count"]],1)
+  expect_equal(evaluateStandard(data=adlbc, standard="sdtm")[["invalid_count"]],9)
+  
+  adlbc_edit <- adlbc
+  adlbc_edit$TEST <- adlbc_edit$PARAM
+  a<-evaluateStandard(data=adlbc_edit, standard="sdtm")
+  expect_equal(a[["valid_count"]],2)
+  expect_equal(a[["invalid_count"]],8)
+  expect_true(a[["checks"]]%>%filter(text_key=="measure_col")%>%select(valid)%>%unlist)
 })
 
 
 test_that("field level data is ignored when useFields=false",{
-  expect_true(FALSE)
+  noFields<-evaluateStandard(data=adlbc, standard="adam", includeFields=FALSE)
+  expect_equal(noFields[["match"]],"Full")
+  expect_equal(noFields[["valid_count"]],6)
 })
 
 test_that("invalid options throw errors",{
-  expect_true(FALSE)
+  expect_error(evaluateStandard(data=list(a=1,b=2), standard="sdtm"))
+  expect_error(evaluateStandard(data="notadataframe", standard="sdtm"))
+  expect_error(evaluateStandard(data=adlbc, standard=123))
+  expect_error(evaluateStandard(data=adlbc, standard="notarealstandard"))
+  expect_error(evaluateStandard(data=adlbc, standard="adam", includeFields="yesPlease"))
 })

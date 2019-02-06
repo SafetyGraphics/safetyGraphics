@@ -49,6 +49,11 @@ evaluateStandard <- function(data, standard, includeFields=TRUE, domain="labs"){
   )) %>%
   select(text_key, standard_val, type, valid)
 
+  # filter out the field level checks if includeChecks is false
+  if(!includeFields){
+    standardChecks <- standardChecks %>% filter(type != "field")
+  }
+  
  # compare_summary[["checks"]] <- split(standardChecks, seq(nrow(standardChecks)))%>%map(~as.list(.)) #coerce to list of lists?
   compare_summary[["checks"]] <- standardChecks #or just keep the tibble ... 
 
