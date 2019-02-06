@@ -30,3 +30,4 @@ safetyGraphics:::checkFieldSettings(fieldKey=list("measure_values"),
                                     settings=testSettings, adlbc) 
 
 }
+\keyword{internal}

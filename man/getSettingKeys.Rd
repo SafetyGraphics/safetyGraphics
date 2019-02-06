@@ -45,3 +45,4 @@ safetyGraphics:::getSettingKeys(patterns=c("measure_values"),
                                 matchLists=TRUE) 
 
 }
+\keyword{internal}

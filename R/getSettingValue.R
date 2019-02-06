@@ -15,6 +15,7 @@
 #' safetyGraphics:::getSettingValue(list("measure_values","ALP"),testSettings)
 #' safetyGraphics:::getSettingValue(list("NotASetting"),testSettings) #returns NULL
 #' 
+#' @keywords internal
 
 getSettingValue <- function(key,settings){
   stopifnot(typeof(settings)=="list")

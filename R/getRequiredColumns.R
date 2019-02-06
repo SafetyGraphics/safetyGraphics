@@ -11,6 +11,7 @@
 #' safetyGraphics:::getRequiredColumns(standard="SDTM")
 #' 
 #' @importFrom rlang .data
+#' @keywords internal
 
 getRequiredColumns<-function(standard,chart="eDish"){
   stopifnot(
