@@ -38,14 +38,12 @@ safetyGraphics is an open source project built using standard web technology and
 #### Code to Reproduce Chart
 
 Retrieve Data
-```{r, comment=NA, echo=FALSE, tidy=TRUE}
+```{r, comment=NA, echo=FALSE}
 
 writeLines("path <- 'path_to_data'")
 writeLines("my_data <- read.csv(file.path(path, 'data.csv'))")
 
 ```
-
-`r print("path <- 'path_to_data'", quote = FALSE)`
 
 Generate Chart
 ```{r, comment=NA, echo=FALSE}
