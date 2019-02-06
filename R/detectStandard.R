@@ -27,8 +27,8 @@ detectStandard <- function(data, includeFields=TRUE, domain="labs"){
   # Create placeholder list, with Standard = None.
   standard_list <- list()
   standard_list[["details"]] = list()
-  standard_list[["details"]][["ADaM"]]<-compare_to_standard(data,standard="ADaM", includeFields=includeFields, domain=domain)
-  standard_list[["details"]][["SDTM"]]<-compare_to_standard(data,standard="SDTM", includeFields=includeFields, domain=domain)
+  standard_list[["details"]][["ADaM"]]<-evaluateStandard(data,standard="ADaM", includeFields=includeFields, domain=domain)
+  standard_list[["details"]][["SDTM"]]<-evaluateStandard(data,standard="SDTM", includeFields=includeFields, domain=domain)
 
   # Determine the final standard
   if(standard_list[["details"]][["SDTM"]][["match"]] == "Full"){

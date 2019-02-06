@@ -14,10 +14,10 @@
 
 hasField<- function(fieldValue, columnName, data){
   stopifnot(
-    length(fieldValue)>1,
-    typeof(column)=="character",
-    length(columnName)>1,
-    typeof(data)=="data.frame"
+    length(fieldValue)==1,
+    typeof(columnName)=="character",
+    length(columnName)==1,
+    is.data.frame(data)
   )
 
   columnFound <- hasColumn(columnName=columnName, data=data)
@@ -28,5 +28,5 @@ hasField<- function(fieldValue, columnName, data){
   }
 
   validFields <- unique(data[[columnName]])
-  return fieldValue %in% validFields
+  return(fieldValue %in% validFields)
 }
