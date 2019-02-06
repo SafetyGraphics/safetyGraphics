@@ -35,9 +35,22 @@ safetyGraphics is an open source project built using standard web technology and
   
 <br>
 
-#### Code
+#### Code to Reproduce Chart
+
+Retrieve Data
+```{r, comment=NA, echo=FALSE, tidy=TRUE}
+
+writeLines("path <- 'path_to_data'")
+writeLines("my_data <- read.csv(file.path(path, 'data.csv'))")
+
+```
+
+`r print("path <- 'path_to_data'", quote = FALSE)`
+
+Generate Chart
 ```{r, comment=NA, echo=FALSE}
-graphic_code <- bquote(eDISH(data = params$data,
+
+graphic_code <- bquote(eDISH(data = my_data,
       settings = .(params$settings)))
 
 graphic_code
