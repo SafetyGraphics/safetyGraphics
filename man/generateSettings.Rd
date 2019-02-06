@@ -30,7 +30,7 @@ The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc
 generateSettings(standard="SDTM") 
 generateSettings(standard="SdTm") #also ok
 generateSettings(standard="SDTM", partial=TRUE, partial_cols = c("USUBJID","TEST","STRESN"))
-generateSettings(standard="AdAM")
+generateSettings(standard="ADaM")
 
 generateSettings(standard="a different standard") 
 #returns shell settings list with no data mapping

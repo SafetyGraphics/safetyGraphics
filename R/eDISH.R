@@ -15,12 +15,14 @@
 #' @param filters An optional list of specifications for filters.  Each filter is a nested, named list (containing the filter value column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.
 #' @param group_cols An optional list of specifications for grouping columns.  Each group column is a nested, named list (containing the group variable column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.
 #' @param measure_values A list defining the data values from \code{measure_col} for the lab measures 
-#' used in eDish evaluations. Default: \code{list(ALT = 'Aminotransferase, alanine (ALT)', 
-#' AST = 'Aminotransferase, aspartate (AST)', TB = 'Total Bilirubin', ALP = 'Alkaline phosphatase (ALP)')}.
+#' used in eDish evaluations. Default: \preformatted{list(ALT = 'Aminotransferase, alanine (ALT)', 
+#'      AST = 'Aminotransferase, aspartate (AST)',
+#'      TB = 'Total Bilirubin',
+#'      ALP = 'Alkaline phosphatase (ALP)')}
 #' @param x_options Specifies variable options for the x-axis using the key values from \code{measure_values} (e.g. "ALT"). 
 #' When multiple options are specified, a control allowing the user to interactively change the x variable is shown. Default: \code{c("ALT", "AST", "ALP")}.
 #' @param y_options Specifies variable options for the y-axis using the key values from \code{measure_values} (e.g. "TB"). 
-#' When multiple options are specified, a control allowing the user to interactively change the y variable is shown. Default: \code{c("TB", "ALP")}.
+#' When multiple options are specified, a control allowing the user to interactively change the y variable is shown. Default: \code{"TB"}.
 #' @param analysisFlag An optional list defining which column \code{value_col} and values \code{values} should be used to records for use in eDish and mDish analyses. Default: \code{NULL}.
 #' @param visit_window Default visit window used to highlight eDish points where x and y measures occurred within the specified number of days. 
 #' Editable by user after render. Default: \code{30}.
@@ -36,7 +38,10 @@
 #' standard operating procedures.").
 #' @param debug_js print settings in javascript before rendering chart. Default: \code{FALSE}.
 
-#' @param settings Optional list of settings arguments to be converted to JSON using \code{jsonlite::toJSON(settings, auto_unbox = TRUE, dataframe = "rows", null = "null")}.  If provided, all other function parameters are ignored. Default: \code{NULL}.
+#' @param settings Optional list of settings arguments to be converted to JSON using: \preformatted{
+#' jsonlite::toJSON(settings, auto_unbox = TRUE, 
+#'                  dataframe = "rows", null = "null")}
+#' If provided, all other function parameters are ignored. Default: \code{NULL}.
 #'  
 #' @examples 
 #' \dontrun{
