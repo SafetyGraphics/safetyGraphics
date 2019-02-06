@@ -37,17 +37,12 @@ safetyGraphics is an open source project built using standard web technology and
 
 #### Code to Reproduce Chart
 
-Retrieve Data
+Use the script below to (1) load your data and (2) render the chart. Make sure to update the first line to point at your data. 
+
 ```{r, comment=NA, echo=FALSE}
 
-writeLines("path <- 'path_to_data'")
+writeLines("path <- 'path_to_data'") ### <-- Update this!
 writeLines("my_data <- read.csv(file.path(path, 'data.csv'))")
-
-```
-
-Generate Chart
-```{r, comment=NA, echo=FALSE}
-
 graphic_code <- bquote(eDISH(data = my_data,
       settings = .(params$settings)))
 
