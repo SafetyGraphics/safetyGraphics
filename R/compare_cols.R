@@ -15,7 +15,7 @@
 #' # match == TRUE
 #' safetyGraphics:::compare_cols(names(adlbc),
 #'                               safetyGraphics:::getRequiredColumns(standard="ADaM")) 
-#' 
+#' @keywords internal
 
 compare_cols<-function(data_cols, standard_cols){
   compare_summary <- list()

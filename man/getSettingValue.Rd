@@ -26,3 +26,4 @@ safetyGraphics:::getSettingValue(list("measure_values","ALP"),testSettings)
 safetyGraphics:::getSettingValue(list("NotASetting"),testSettings) #returns NULL
 
 }
+\keyword{internal}

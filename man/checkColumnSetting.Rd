@@ -45,3 +45,4 @@ safetyGraphics:::checkColumnSetting(key=list("filters",2,"value_col"),
 safetyGraphics:::checkColumnSetting(key=list("filters",3,"value_col"),
                                     settings=testSettings, adlbc) 
 }
+\keyword{internal}

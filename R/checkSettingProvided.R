@@ -20,7 +20,7 @@
 #' #fails since groups aren't specified by default
 #' safetyGraphics:::checkSettingProvided(key=list("groups",1,"value_col"),
 #'                                       settings=testSettings) 
-#'
+#' @keywords internal
 
 checkSettingProvided <- function(key, settings){
   stopifnot(typeof(key)=="list",typeof(settings)=="list")

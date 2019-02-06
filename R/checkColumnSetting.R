@@ -32,6 +32,7 @@
 #' #invalid column fails
 #' safetyGraphics:::checkColumnSetting(key=list("filters",3,"value_col"),
 #'                                     settings=testSettings, adlbc) 
+#' @keywords internal
 
 checkColumnSetting <- function(key, settings, data){
   stopifnot(typeof(key)=="list",typeof(settings)=="list")

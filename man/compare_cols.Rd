@@ -25,5 +25,5 @@ safetyGraphics:::compare_cols(data_cols=c("a","b","c"),
 # match == TRUE
 safetyGraphics:::compare_cols(names(adlbc),
                               safetyGraphics:::getRequiredColumns(standard="ADaM")) 
-
 }
+\keyword{internal}
