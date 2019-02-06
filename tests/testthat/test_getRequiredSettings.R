@@ -2,13 +2,17 @@ context("Tests for the getRequiredSettings() function")
 library(safetyGraphics)
 library(testthat)
 
-defaultRequiredCols <- list(
+defaultRequiredSettings <- list(
   list("id_col"),
   list("value_col"),
   list("measure_col"),
   list("normal_col_low"),
   list("normal_col_high"),
-  list("studyday_col")
+  list("studyday_col"),
+  list("measure_values","ALT"),
+  list("measure_values","AST"),
+  list("measure_values","TB"),
+  list("measure_values","ALP")
 )
 
 
@@ -30,7 +34,7 @@ customMetadata<- data.frame(
 test_that("default function call works as expected",{
   a<- safetyGraphics::getRequiredSettings()
   expect_is(a,"list")
-  expect_equal(a,defaultRequiredCols)
+  expect_equal(a,defaultRequiredSettings)
 })
 
 test_that("options work as expected",{

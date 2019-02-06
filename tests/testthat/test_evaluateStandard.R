@@ -19,7 +19,15 @@ test_that("a list with the expected properties and structure is returned",{
   expect_is(a[["invalid_count"]],"integer")
 })
 
+test_that("expected checks are marked invalid",{
+  expect_true(FALSE)
+})
 
-test_that("field level data is ignored when useFields=false",{})
 
-test_that("invalid options throw errors",{})
+test_that("field level data is ignored when useFields=false",{
+  expect_true(FALSE)
+})
+
+test_that("invalid options throw errors",{
+  expect_true(FALSE)
+})
