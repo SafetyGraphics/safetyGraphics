@@ -10,7 +10,7 @@
 #' hasField(fieldValue="Bilirubin (umol/L)",columnName="PARAM",data=adlbc) #TRUE
 #' hasField(fieldValue="Not_a_real_value",columnName="",data=adlbc) #FALSE
 #'
-#' @export
+#' @keywords internal
 
 hasField<- function(fieldValue, columnName, data){
   stopifnot(
