@@ -9,6 +9,8 @@ detectStandard(data, includeFields = TRUE, domain = "labs")
 \arguments{
 \item{data}{A data frame in which to detect the data standard}
 
+\item{includeFields}{specifies whether to check the data set for field level data in addition to columns.  Default: \code{TRUE}.}
+
 \item{domain}{The data domain for the data set provided.  Default: \code{"labs"}.}
 }
 \value{
@@ -21,6 +23,7 @@ This function attempts to detect the data CDISC clinical standard used in a give
 This function compares the columns in the provided \code{"data"} with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, only "labs" is the only domain supported.
 }
 \examples{
+
 detectStandard(adlbc)[["standard"]] #AdAM
 detectStandard(iris)[["standard"]] #none
 

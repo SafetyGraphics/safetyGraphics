@@ -15,5 +15,11 @@ hasColumn(columnName, data)
 logical scalar. TRUE if the column is found. FALSE otherwise
 }
 \description{
-This checks whether a specified column is found in a specified data set
+Checks whether a specified column is found in a specified data set
 }
+\examples{
+safetyGraphics:::hasColumn(columnName="PARAM",data=adlbc) #TRUE
+safetyGraphics:::hasColumn(columnName="Not_a_column",data=adlbc) #FALSE
+
+}
+\keyword{internal}

@@ -6,9 +6,10 @@
 #' @param columnName The column to check.
 #' @param data the data.frame to search.
 #' @return logical scalar. TRUE if field_value is found. FALSE otherwise
+#'
 #' @examples
-#' hasField(fieldValue="Bilirubin (umol/L)",columnName="PARAM",data=adlbc) #TRUE
-#' hasField(fieldValue="Not_a_real_value",columnName="",data=adlbc) #FALSE
+#' safetyGraphics:::hasField(fieldValue="Bilirubin (umol/L)",columnName="PARAM",data=adlbc) #TRUE
+#' safetyGraphics:::hasField(fieldValue="Not_a_real_value",columnName="",data=adlbc) #FALSE
 #'
 #' @keywords internal
 

@@ -21,4 +21,9 @@ a list describing to what degree the data set matches the data standard. The "ma
 \description{
 Determines whether the required data elements in a data standard are found in a given data frame
 }
+\examples{
+safetyGraphics:::evaluateStandard(data=adlbc, standard="adam") # Match is TRUE
+safetyGraphics:::evaluateStandard(data=adlbc, standard="sdtm") # Match is FALSE
+
+}
 \keyword{internal}
