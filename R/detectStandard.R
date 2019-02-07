@@ -2,16 +2,14 @@
 #'
 #' This function attempts to detect the data CDISC clinical standard used in a given R data frame.
 #'
-#' This function compares the columns in the provided \code{"data"} with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, only "labs" is the only domain supported.
+#' This function compares the columns in the provided \code{"data"} with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, "labs" is the only domain supported.
 #'
 #' @param data A data frame in which to detect the data standard
 #' @param includeFields specifies whether to check the data set for field level data in addition to columns.  Default: \code{TRUE}.
 #' @param domain The data domain for the data set provided.  Default: \code{"labs"}.
-#' 
-#' @return A list containing the matching \code{"standard"} ("ADaM", "SDTM" or "None") and a list of  \code{"details"} describing each standard considered. #'
-#'
-#' @examples
-#' 
+#' @return A list containing the matching \code{"standard"} ("ADaM", "SDTM" or "None") and a list of  \code{"details"} describing each standard considered.
+#' @examples 
+
 #' detectStandard(adlbc)[["standard"]] #AdAM
 #' detectStandard(iris)[["standard"]] #none
 #'
