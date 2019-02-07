@@ -35,13 +35,13 @@ eDISH(data, id_col = "USUBJID", value_col = "STRESN",
 
 \item{studyday_col}{Visit day variable name. Default: \code{"DY"}.}
 
-\item{baseline}{An optional list defining which column \code{"value_col"} and values (one or more) \code{values} represent the baseline visit(s) of the study.}
+\item{baseline}{An optional list defining which column (\code{value_col}) and \code{values} (one or more) represent the baseline visit(s) of the study.}
 
 \item{filters}{An optional list of specifications for filters.  Each filter is a nested, named list (containing the filter value column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.}
 
 \item{group_cols}{An optional list of specifications for grouping columns.  Each group column is a nested, named list (containing the group variable column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.}
 
-\item{analysisFlag}{An optional list defining which column \code{value_col} and values \code{values} should be used to records for use in eDish and mDish analyses. Default: \code{NULL}.}
+\item{analysisFlag}{An optional list defining which column (\code{value_col}) and \code{values} should be used in eDish and mDish analyses. Default: \code{NULL}.}
 
 \item{measure_values}{A list defining the data values from \code{measure_col} for the lab measures 
 used in eDish evaluations. Default: \preformatted{list(ALT = 'Aminotransferase, alanine (ALT)', 

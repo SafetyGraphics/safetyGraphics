@@ -6,8 +6,8 @@
 #'
 #' @param standard The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"SDTM"}
 #' @param chart The chart for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.
-#' @param partial Boolean for whether or not the standard is a partial standard. Default: \code{"NULL"}.
-#' @param partial_cols Optional character vector of the matched cols if partial is TRUE. It will not be used if partial is FALSE Default: \code{"NULL"}.
+#' @param partial Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.
+#' @param partial_cols Optional character vector of the matched cols if partial is TRUE. It will not be used if partial is FALSE Default: \code{NULL}.
 #' @return A list containing the appropriate settings for the selected chart
 #' 
 #' @examples 

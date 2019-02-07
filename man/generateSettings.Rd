@@ -12,9 +12,9 @@ generateSettings(standard = "None", chart = "eDish", partial = FALSE,
 
 \item{chart}{The chart for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.}
 
-\item{partial}{Boolean for whether or not the standard is a partial standard. Default: \code{"NULL"}.}
+\item{partial}{Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.}
 
-\item{partial_cols}{Optional character vector of the matched cols if partial is TRUE. It will not be used if partial is FALSE Default: \code{"NULL"}.}
+\item{partial_cols}{Optional character vector of the matched cols if partial is TRUE. It will not be used if partial is FALSE Default: \code{NULL}.}
 }
 \value{
 A list containing the appropriate settings for the selected chart
