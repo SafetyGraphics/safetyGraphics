@@ -4,17 +4,19 @@
 \alias{generateSettings}
 \title{Generate a settings object based on a data standard}
 \usage{
-generateSettings(standard = "None", chart = "eDish", partial = FALSE,
-  partial_cols = NULL)
+generateSettings(standard = "None", chart = "eDish",
+  requiredOnly = TRUE, partial = FALSE, partial_keys = NULL)
 }
 \arguments{
 \item{standard}{The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"SDTM"}}
 
 \item{chart}{The chart for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.}
 
+\item{requiredOnly}{Only include required settings? Default: \code{TRUE}.}
+
 \item{partial}{Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.}
 
-\item{partial_cols}{Optional character vector of the matched cols if partial is TRUE. It will not be used if partial is FALSE Default: \code{NULL}.}
+\item{partial_keys}{Optional character vector of the matched settings if partial is TRUE. Settings should be identified using the text_key format described in ?settingsMetadata. Setting is ignored when partial is FALSE. Default: \code{NULL}.}
 }
 \value{
 A list containing the appropriate settings for the selected chart
@@ -29,7 +31,7 @@ The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc
 
 generateSettings(standard="SDTM") 
 generateSettings(standard="SdTm") #also ok
-generateSettings(standard="SDTM", partial=TRUE, partial_cols = c("USUBJID","TEST","STRESN"))
+generateSettings(standard="SDTM", partial=TRUE, partial_keys = c("id_col","measure_col","value_col"))
 generateSettings(standard="ADaM")
 
 generateSettings(standard="a different standard") 

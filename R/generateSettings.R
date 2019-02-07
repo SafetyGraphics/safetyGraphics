@@ -6,15 +6,16 @@
 #'
 #' @param standard The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"SDTM"}
 #' @param chart The chart for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.
+#' @param requiredOnly Only include required settings? Default: \code{TRUE}.
 #' @param partial Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.
-#' @param partial_cols Optional character vector of the matched cols if partial is TRUE. It will not be used if partial is FALSE Default: \code{NULL}.
+#' @param partial_keys Optional character vector of the matched settings if partial is TRUE. Settings should be identified using the text_key format described in ?settingsMetadata. Setting is ignored when partial is FALSE. Default: \code{NULL}.
 #' @return A list containing the appropriate settings for the selected chart
 #' 
 #' @examples 
 #' 
 #' generateSettings(standard="SDTM") 
 #' generateSettings(standard="SdTm") #also ok
-#' generateSettings(standard="SDTM", partial=TRUE, partial_cols = c("USUBJID","TEST","STRESN"))
+#' generateSettings(standard="SDTM", partial=TRUE, partial_keys = c("id_col","measure_col","value_col"))
 #' generateSettings(standard="ADaM")
 #' 
 #' generateSettings(standard="a different standard") 
@@ -30,26 +31,31 @@
 #' 
 #' @export
 
-generateSettings <- function(standard="None", chart="eDish", partial=FALSE, partial_cols=NULL){
+generateSettings <- function(standard="None", chart="eDish", requiredOnly=TRUE, partial=FALSE, partial_keys=NULL){
   if(tolower(chart)!="edish"){
     stop(paste0("Can't generate settings for the specified chart ('",chart,"'). Only the 'eDish' chart is supported for now."))
   }
   
-  # Check that partial_cols is supplied if partial is true
-  if  (is.null(partial_cols) & partial ) {
-    stop("partial_cols must be supplied if the standard is partial")
+  # Check that partial_keys is supplied if partial is true
+  if  (is.null(partial_keys) & partial ) {
+    stop("partial_keys must be supplied if the standard is partial")
   }
   
-  metadata <- safetyGraphics::getSettingsMetadata(
+  standard<-lowcase(standard)
+  dataMappings <- safetyGraphics::getSettingsMetadata(
     charts = chart, 
-    cols=c("text_key","adam","sdtm"),
-    filter_expr = .data$adam != '' & .data$sdtm != '' 
-  )
+    cols=c("text_key",standard)
+  ) %>% 
+  filter(ifelse(requiredOnly, setting_required, TRUE))%>%
+  rename("column_name" = standard)%>%
+  filter(.data$column_name != '')%>%
+  mutate(selectedFlag = ifelse(partial, .data$text_key %in% .data$partial_keys, TRUE)) %>%
+  mutate(key=str_split(.data$text_key, "--"))
 
   # Split on -- for multi-level handling 
-  hierarchical_metadata <- str_split(metadata$text_key, "--") 
-  
-  settings<-list(
+  #hierarchical_metadata <- str_split(metadata$text_key, "--") 
+  shells<-list()
+  shells[["edish"]]<-list(
     id_col = NULL,
     value_col = NULL,
     measure_col = NULL,
@@ -78,42 +84,11 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
     warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures."
   )
   
-  potential_settings <- settings
+  # loop through dataMappings and apply them to the correct shell as appropriate
   
-  standard_low <- tolower(standard)
-  
-  if (standard_low == "adam" | standard_low == "sdtm") {
-    
-  for (row in hierarchical_metadata)  {
-    if (length(row) == 1) {
-      potential_settings[row] <- filter(metadata,.data$text_key == !!row)[[standard_low]]
-    } else if (length(row) == 2) {
-      potential_settings[row[[1]]][[1]][row[[2]]] <- filter(metadata, grepl(!!row[[2]],.data$text_key))[[standard_low]]
-    } else{
-      stop("Three level setting nests are not currently supported")
-    }
-    
+  for(row in dataMappings%>%filter(selectedFlag)){
+    setSettingValue(settings = shells[[chart]], key = row$key, value = row$columnName)
   }
   
-  }
-  
-  if(partial) {
-    
-    settings_names <- names(settings)
-    
-    potential_names <- names(potential_settings)
-    
-    for(i in 1:length(settings)) {
-      if (potential_settings[i] %in% partial_cols) {
-        settings[[which(settings_names == potential_names[i])]] <- potential_settings[[i]]
-      }
-    }
-    
-  } else {
-    
-    settings <- potential_settings
-    
-  }
-  
-  return(settings)
+  return(shell[[chart]])
 }

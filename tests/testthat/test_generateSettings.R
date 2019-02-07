@@ -74,3 +74,8 @@ test_that("data mappings are null when setting=none, character otherwise",{
   
   
 })
+
+test_that("check the required_only option",{
+  expect_true(FALSE)
+})
+  
