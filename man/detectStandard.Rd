@@ -4,7 +4,7 @@
 \alias{detectStandard}
 \title{Detect the data standard used for a data set}
 \usage{
-detectStandard(data, domain = "labs")
+detectStandard(data, includeFields = TRUE, domain = "labs")
 }
 \arguments{
 \item{data}{A data frame in which to detect the data standard}
@@ -25,7 +25,7 @@ detectStandard(adlbc)[["standard"]] #AdAM
 detectStandard(iris)[["standard"]] #none
 
 \dontrun{
-  detectStandard(adlbc,domain="AE") #throws error. AE domain not supported in this release. 
+  detectStandard(adlbc,domain="AE") #throws error. AE domain not supported in this release.
 }
 
 }

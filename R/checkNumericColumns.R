@@ -18,6 +18,7 @@
 #' #fails since groups aren't specified by default
 #' safetyGraphics:::checkSettingProvided(key=list("groups",1,"value_col"),settings=testSettings) 
 #'
+#' @keywords internal
 
 checkNumericColumns <- function(key, settings, data){
   stopifnot(typeof(key)=="list",typeof(settings)=="list")

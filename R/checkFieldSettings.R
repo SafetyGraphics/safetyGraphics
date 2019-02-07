@@ -20,7 +20,8 @@
 #' @importFrom stringr str_split
 #' @importFrom magrittr "%>%"
 #' @importFrom purrr map 
-#'
+#' @keywords internal
+
 
 checkFieldSettings <- function(fieldKey, settings, data){
 

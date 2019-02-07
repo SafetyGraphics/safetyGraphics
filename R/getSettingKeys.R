@@ -31,7 +31,7 @@
 #'                                 matchLists=TRUE) 
 #' 
 #' @importFrom stringr str_detect 
-#' 
+#' @keywords internal
 
 
 
