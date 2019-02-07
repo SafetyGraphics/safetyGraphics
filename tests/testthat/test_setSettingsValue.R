@@ -30,11 +30,20 @@ test_that("can set nested values",{
 })
 
 test_that("can set nested values that didn't previously exist",{
-  expect_equal(setSettingsValue(list("a","z"), 456, testSettings1)[["a"]][["x"]], 456)
-  expect_equal(setSettingsValue(list("d","test"), 456, testSettings1)[["a"]][["x"]], 456)
+  expect_equal(setSettingsValue(list("a","z"), 456, testSettings1)[["a"]][["z"]], 456)
 })
 
-test_that("can't set nested values when a parent isn't a list",{
-  expect_false(TRUE)
+test_that("but can't set nested values when a parent is missing or isn't a list",{
+  expect_error(setSettingsValue(list("d","test"), 456, testSettings1)[["d"]][["test"]]) # d doesn't exist, so this doesn't work. user could set d to list() and then set test to 456 ... 
+  expect_error(setSettingsValue(list("b","z"), 456, testSettings1)) # can't replace a scalar (b="hi mom") with a list (b=list(z=456))
 })
+
+test_that("can set nested values in an unnamed list",{
+  expect_true(FALSE)
+})
+
+test_that("can set nested values in an unnamed list that didn't previously exist",{
+  expect_true(FALSE)
+})
+
   

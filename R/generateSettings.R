@@ -41,19 +41,20 @@ generateSettings <- function(standard="None", chart="eDish", requiredOnly=TRUE, 
     stop("partial_keys must be supplied if the standard is partial")
   }
   
-  standard<-lowcase(standard)
+  standard<-tolower(standard)
+  chart<-tolower(chart)
+  
   dataMappings <- safetyGraphics::getSettingsMetadata(
     charts = chart, 
-    cols=c("text_key",standard)
+    cols=c("text_key",standard,"setting_required")
   ) %>% 
-  filter(ifelse(requiredOnly, setting_required, TRUE))%>%
+  filter(ifelse(requiredOnly, .data$setting_required, TRUE))%>%
   rename("column_name" = standard)%>%
   filter(.data$column_name != '')%>%
   mutate(selectedFlag = ifelse(partial, .data$text_key %in% .data$partial_keys, TRUE)) %>%
-  mutate(key=str_split(.data$text_key, "--"))
+  filter(selectedFlag)
 
-  # Split on -- for multi-level handling 
-  #hierarchical_metadata <- str_split(metadata$text_key, "--") 
+    #hierarchical_metadata <- str_split(metadata$text_key, "--") 
   shells<-list()
   shells[["edish"]]<-list(
     id_col = NULL,
@@ -75,7 +76,7 @@ generateSettings <- function(standard="None", chart="eDish", requiredOnly=TRUE, 
     analysisFlag = list(value_col=NULL,
                         values=list()),
     
-    x_options = c("LT", "AST", "ALP"),
+    x_options = c("ALT", "AST", "ALP"),
     y_options = c("TB", "ALP"),
     visit_window = 30,
     r_ratio_filter = TRUE,
@@ -86,9 +87,9 @@ generateSettings <- function(standard="None", chart="eDish", requiredOnly=TRUE, 
   
   # loop through dataMappings and apply them to the correct shell as appropriate
   
-  for(row in dataMappings%>%filter(selectedFlag)){
-    setSettingValue(settings = shells[[chart]], key = row$key, value = row$columnName)
+  for(row in 1:nrow(dataMappings)){
+    shells[[chart]]<-setSettingsValue(settings = shells[[chart]], key = textKeysToList(dataMappings[row,"text_key"])[[1]], value = dataMappings[row, "column_name"])
   }
   
-  return(shell[[chart]])
+  return(shells[[chart]])
 }

@@ -71,8 +71,6 @@ test_that("data mappings are null when setting=none, character otherwise",{
   
   #Testing failure when partial is true with no specified columns
   expect_error(partial_settings_no_cols <- generateSettings(standard="ADaM", partial=TRUE))
-  
-  
 })
 
 test_that("check the required_only option",{

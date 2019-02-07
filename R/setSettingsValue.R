@@ -20,6 +20,10 @@
 
 
 setSettingsValue <- function(key, value, settings){
+  stopifnot(
+    typeof(settings)=="list"
+  )
+  
   firstKey <- key[[1]]
   if(length(key)==1){
     settings[[firstKey]]<-value
