@@ -16,6 +16,7 @@
    \item{column_type}{Expected type for the data column values. Should be "character","logical" or "numeric"}
    \item{column_required}{Flag indicating whether the associated data column should be considered required}
    \item{field_mapping}{Flag indicating whether the setting corresponds to a field-level mapping in the data}
+   \item{field_column_key}{Key for the column that provides options for the field-level mapping in the data}
    \item{adam}{Settings values for the ADaM standard}
    \item{sdtm}{Settings values for the SDTM standard}
 }}
