@@ -131,9 +131,10 @@ dataUpload <- function(input, output, session){
       partial <- ifelse(standard()$details[[current_standard]]$match == "Partial", TRUE, FALSE) 
       
       if (partial) {
-        partial_cols <- standard()$details[[current_standard]]$matched_columns
+        partial_keys <- standard()$details[[current_standard]]$checks %>% filter(valid==TRUE) 
+       # .%>%select(text_keys)%>%unlist()
         
-        generateSettings(standard=current_standard, chart="eDish", partial=partial, partial_cols = partial_cols)
+        generateSettings(standard=current_standard, chart="eDish", partial=partial, partial_keys = partial_keys)
         
       } else {
         generateSettings(standard=current_standard, chart="eDish")
