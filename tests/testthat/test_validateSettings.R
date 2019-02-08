@@ -50,7 +50,7 @@ test_that("field checks fail when expected",{
   expect_equal(failedChecks[[1]][['check']],"'_values' field from setting found in data?")
   expect_equal(failedChecks[[1]][['text_key']],"measure_values--ALP")
 
-  invalidFieldSettings$visit_values <- list(test="not a visit",test2="still not a visit")
+  invalidFieldSettings$id_values <- list(test="not an id",test2="still not an id")
   fieldFailed2<-validateSettings(data=adlbc,settings=invalidFieldSettings)
   failedChecks2 = fieldFailed2[["checkList"]]%>%keep(~!.x[["valid"]])
   expect_false(fieldFailed[["valid"]])
