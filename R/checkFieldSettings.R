@@ -22,66 +22,27 @@
 #' @importFrom purrr map 
 #' @keywords internal
 
-
 checkFieldSettings <- function(fieldKey, settings, data){
-
-  # compare the fields in the settings to the fields in the data.
-  key <- NULL
-  
-  fieldCheck <- function(key){
-    function(key){
-      current <- list()
-      current$key<-fieldKey
-      nextKey<-length(current$key)+1
-      current$key[[nextKey]]<-key
-
-      current$text_key <-  paste( unlist(current$key), collapse='--')
-      current$check <- "'_values' field from setting found in data?"
-      current$value <- getSettingValue(key=current$key,settings=settings)
-      if(is.null(current$value)){
-        current$value <- "--No Value Given--"
-        current$valid <- TRUE
-        current$message <- ""
-        return(current)
-      }else if(!columnSpecified){
-        current$valid<-FALSE
-        current$message<-paste0("No column for ",columnKey," found in settings.")
-      }else{
-        current$valid <- current$value %in% validFields
-        current$message <- ifelse(current$valid,"",paste0(current$value," field not found in the ",columnName," column"))
-        return(current)
-      }
-    }
-  }
-
-
   stopifnot(typeof(fieldKey)=="list", typeof(settings)=="list")
+  
+  # Check to see that the field data specified in the seetings is found in the data
+  fieldCheck <- list()
+  fieldCheck$key<-fieldKey
+  fieldCheck$text_key<- paste( unlist(fieldKey), collapse='--')
+  fieldCheck$check <- "field value from setting found in data"
+  fieldCheck$value <-  getSettingValue(key=fieldCheck$key,settings=settings)
+  
+  #get the name of the column containing the field 
+  columnTextKey<-getSettingsMetadata(cols="field_column_key",text_keys=fieldCheck$text_key)
+  columnKey<-textKeysToList(columnTextKey)[[1]]
+  columnName<-getSettingValue(key=columnKey,settings=settings)
 
-   # get a list of all of the column's values from the data
-  key_base<-stringr::str_split(fieldKey, "_")[[1]][1]   # get the name of the column containing the fields(e.g. fields = "measure_values" -> column = "measure_col")
-  columnKey<-getSettingKeys(patterns=paste0(key_base,"_col") ,settings=settings)[[1]]
-  columnName<-getSettingValue(key=columnKey, settings=settings) # get the name of the column from the value associated with columnKey
-  columnSpecified <- is.character(columnName)
-  if(columnSpecified){
-    validFields <- unique(data[[columnName]])
-  } else{
-    validFields <- c()
+  if(length(fieldCheck$value)>0){
+    fieldCheck$valid <-  hasField(fieldValue=fieldCheck$value, columnName=columnName,data=data)     
+  }else{
+    fieldCheck$valid <- TRUE #null values are ok
   }
-
-  # get a list of fields from the settings object
-  fieldList<-getSettingValue(key=fieldKey, settings=settings)
-
-  if(typeof(fieldList)=="list"){
-    fieldChecks <- fieldList %>% names %>% purrr::map(fieldCheck(key))
-  } else {
-    current <- list()
-    current$key<-fieldKey
-    current$check <- "'_values' field from setting found in data?"
-    current$text_key <-  paste( unlist(current$key), collapse='--')
-    current$value <- NULL
-    current$valid <- FALSE
-    current$message <- "No list of values found in settings."
-    fieldChecks <- list(current)
-  }
-  return(fieldChecks)
+  fieldCheck$message <- ifelse(!fieldCheck$valid,  paste0("Value of ",fieldCheck$value, " for '",fieldCheck$text_key,"' not found in ",columnName),"")
+  
+  return(fieldCheck)
 }

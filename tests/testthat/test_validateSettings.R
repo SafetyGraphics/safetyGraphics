@@ -47,10 +47,11 @@ test_that("field checks fail when expected",{
 
   failedChecks = fieldFailed[["checkList"]]%>%keep(~!.x[["valid"]])
   expect_length(failedChecks, 1)
-  expect_equal(failedChecks[[1]][['check']],"'_values' field from setting found in data?")
+  expect_equal(failedChecks[[1]][['check']],"field value from setting found in data")
   expect_equal(failedChecks[[1]][['text_key']],"measure_values--ALP")
 
-  invalidFieldSettings$id_values <- list(test="not an id",test2="still not an id")
+  #a vector of values are each checked independently. 
+  invalidFieldSettings$baseline[["values"]] <- c("not a filter",test2="still not a filter")
   fieldFailed2<-validateSettings(data=adlbc,settings=invalidFieldSettings)
   failedChecks2 = fieldFailed2[["checkList"]]%>%keep(~!.x[["valid"]])
   expect_false(fieldFailed[["valid"]])
