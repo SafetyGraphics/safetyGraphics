@@ -4,15 +4,13 @@
 \alias{generateSettings}
 \title{Generate a settings object based on a data standard}
 \usage{
-generateSettings(standard = "None", chart = "eDish",
-  requiredOnly = TRUE, partial = FALSE, partial_keys = NULL)
+generateSettings(standard = "None", chart = "eDish", partial = FALSE,
+  partial_keys = NULL)
 }
 \arguments{
 \item{standard}{The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"SDTM"}}
 
 \item{chart}{The chart for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.}
-
-\item{requiredOnly}{Only include required settings? Default: \code{TRUE}.}
 
 \item{partial}{Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.}
 

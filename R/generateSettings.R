@@ -6,7 +6,6 @@
 #'
 #' @param standard The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"SDTM"}
 #' @param chart The chart for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.
-#' @param requiredOnly Only include required settings? Default: \code{TRUE}.
 #' @param partial Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.
 #' @param partial_keys Optional character vector of the matched settings if partial is TRUE. Settings should be identified using the text_key format described in ?settingsMetadata. Setting is ignored when partial is FALSE. Default: \code{NULL}.
 #' @return A list containing the appropriate settings for the selected chart
@@ -31,7 +30,7 @@
 #' 
 #' @export
 
-generateSettings <- function(standard="None", chart="eDish", requiredOnly=TRUE, partial=FALSE, partial_keys=NULL){
+generateSettings <- function(standard="None", chart="eDish", partial=FALSE, partial_keys=NULL){
   if(tolower(chart)!="edish"){
     stop(paste0("Can't generate settings for the specified chart ('",chart,"'). Only the 'eDish' chart is supported for now."))
   }
@@ -51,7 +50,7 @@ generateSettings <- function(standard="None", chart="eDish", requiredOnly=TRUE, 
       charts = chart, 
       cols=c("text_key",standard,"setting_required")
     ) %>% 
-    filter(ifelse(requiredOnly, .data$setting_required, TRUE))%>%
+    filter(.data$setting_required)%>%
     rename("column_name" = standard)%>%
     filter(.data$column_name != '')
     

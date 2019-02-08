@@ -1,8 +1,7 @@
 context("Tests for the setSettingValue() function")
 library(safetyGraphics)
 
-testSettings1<-list(a=list(x="sue",y="sam"), b="hi mom", c=123)
-testSDTM <- generateSettings(standard="SDTM")
+testSettings1<-list(a=list(x="sue",y="sam"), b="hi mom", c=123, unnamed=list("Apples","Oranges"))
 
 test_that("function throws an error if the settings object isn't a list",{
   expect_error(setSettingsValue(key="testKey",value="abc", settings=c("NotAList")))
@@ -39,11 +38,31 @@ test_that("but can't set nested values when a parent is missing or isn't a list"
 })
 
 test_that("can set nested values in an unnamed list",{
-  expect_true(FALSE)
+  expect_equal(setSettingsValue(list("unnamed",1), 456, testSettings1)[["unnamed"]][[1]], 456) # [[1]] is overwritten
+  expect_equal(setSettingsValue(list("unnamed",1), 456, testSettings1)[["unnamed"]][[2]], "Oranges") #original value in [[2]] is unchanged
 })
 
 test_that("can set nested values in an unnamed list that didn't previously exist",{
-  expect_true(FALSE)
+  expect_true(setSettingsValue(list("unnamed",3), TRUE, testSettings1)[["unnamed"]][[3]]) #[[3]] added
+  
+  expect_true(setSettingsValue(list("unnamed",5), TRUE, testSettings1)[["unnamed"]][[5]]) #this works, [[4]] and [[5]] are Null
+  expect_null(setSettingsValue(list("unnamed",5), TRUE, testSettings1)[["unnamed"]][[4]]) #this works, [[4]] and [[5]] are Null
+  expect_null(setSettingsValue(list("unnamed",5), TRUE, testSettings1)[["unnamed"]][[4]]) #this works, [[4]] and [[5]] are Null
 })
 
+
+test_that("sanity checks using a real setting object",{
+  testSDTM <- generateSettings(standard="SDTM")
+  testSDTM <-setSettingsValue(list("id_col"), "customID", testSDTM)
+  testSDTM <-setSettingsValue(list("measure_values","ALP"), "Alpine", testSDTM)
+  testSDTM <-setSettingsValue(list("filters"), list(), testSDTM)
+  testSDTM <-setSettingsValue(list("filters",1), "RACE", testSDTM)
+  testSDTM <-setSettingsValue(list("customSetting"), "customized!", testSDTM)
+  
+  
+  expect_equal(testSDTM[["id_col"]],"customID")
+  expect_equal(testSDTM[["measure_values"]][["ALP"]],"Alpine")
+  expect_equal(testSDTM[["filters"]][[1]],"RACE")
+  expect_equal(testSDTM[["customSetting"]],"customized!")
+})
   
