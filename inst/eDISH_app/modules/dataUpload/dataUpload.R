@@ -63,12 +63,14 @@ dataUpload <- function(input, output, session){
         names(choices)[i] <- paste0("<p>", names(dd$data)[i], " - <em style='color:green; font-size:12px;'>", dd$standard[[i]]$standard, "</em></p>")
         # If partial data spec match - give the fraction of variables matched
       } else {
-        fraction_cols  <- paste0(toString(length(dd$standard[[i]]$details[[temp_standard]]$matched_columns)), "/" ,
-                        toString(length(dd$standard[[i]]$details[[temp_standard]]$missing_columns) +
-                                   length(dd$standard[[i]]$details[[temp_standard]]$matched_columns)))
         
+        valid_count <- dd$standard[[i]]$details[[temp_standard]]$valid_count
+        total_count <- dd$standard[[i]]$details[[temp_standard]]$invalid_count + valid_count
+        
+        fraction_cols  <- paste0(valid_count, "/" ,total_count)
+
         names(choices)[i] <- paste0("<p>", names(dd$data)[i], " - <em style='color:green; font-size:12px;'>", "Partial ",
-                                    dd$standard[[i]]$standard, " (", fraction_cols, " columns)",  "</em></p>")
+                                    dd$standard[[i]]$standard, " (", fraction_cols, " data settings)",  "</em></p>")
       }
     }
     return(choices)
