@@ -7,14 +7,16 @@
 #' @param settings The settings list used to generate a chart like \code{eDISH()}
 #' @return the updated settings object
 #' 
-#' 
 #' @examples 
-#' safetyGraphics:::setSettingValue(key=list("a","b"), value="notMyValue", settings=list(a=list(b="myValue"))) #returns list(a=list(b="notMyValue")))
+#' testSet<-list(a=list(b="myValue"))
+#' safetyGraphics:::setSettingsValue(key=list("a","b"), value="notMyValue", settings=testSet) 
+#' #returns list(a=list(b="notMyValue")))
 #' 
-#' testSettings<-generateSettings(standard="AdAM")
-#' safetyGraphics:::setSettingValue(list("id_col"),"customID",testSettings) 
-#' safetyGraphics:::setSettingValue(list("measure_values","ALP"),"Alanine Aminotransferase",testSettings)
-#' safetyGraphics:::setSettingValue(list("myCustomSetting"),"customized",testSettings) #adds myCustomSetting to testSettings
+#' adamSettings<-generateSettings(standard="AdAM")
+#' safetyGraphics:::setSettingsValue(list("id_col"),"customID",adamSettings) 
+#' safetyGraphics:::setSettingsValue(list("measure_values","ALP"),"Alanine Aminotrans",adamSettings)
+#' safetyGraphics:::setSettingsValue(list("myCustomSetting"),"customized",adamSettings) 
+#' #adds myCustomSetting to adamSettings
 #' 
 #' @keywords internal
 

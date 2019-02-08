@@ -65,4 +65,6 @@ test_that("sanity checks using a real setting object",{
   expect_equal(testSDTM[["filters"]][[1]],"RACE")
   expect_equal(testSDTM[["customSetting"]],"customized!")
 })
+
+
   

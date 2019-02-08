@@ -33,6 +33,12 @@ test_that("data mappings are null when setting=none, character otherwise",{
     expect_null(getSettingValue(settings=none_settings,key=key))
   }
   
+  other_settings <- generateSettings(standard="a different standard") 
+  for(text_key in data_setting_keys){
+    key<-textKeysToList(text_key)[[1]]
+    expect_null(getSettingValue(settings=other_settings,key=key))
+  }
+  
   sdtm_settings <- generateSettings(standard="SDTM")
   for(text_key in data_setting_keys){
     key<-textKeysToList(text_key)[[1]]

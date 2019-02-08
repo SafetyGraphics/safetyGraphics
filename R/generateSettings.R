@@ -14,8 +14,9 @@
 #' 
 #' generateSettings(standard="SDTM") 
 #' generateSettings(standard="SdTm") #also ok
-#' generateSettings(standard="SDTM", partial=TRUE, partial_keys = c("id_col","measure_col","value_col"))
 #' generateSettings(standard="ADaM")
+#' pkeys<- c("id_col","measure_col","value_col")
+#' generateSettings(standard="adam", partial=TRUE, partial_keys=pkeys)
 #' 
 #' generateSettings(standard="a different standard") 
 #' #returns shell settings list with no data mapping
@@ -45,7 +46,8 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
   chart<-tolower(chart)
   
   # Build a table of data mappings for the selected standard and partial settings
-  if(standard != "none"){
+  standardList<-c("adam","sdtm") #TODO: automatically generate this from metadata
+  if(standard %in% standardList){
     dataMappings <- safetyGraphics::getSettingsMetadata(
       charts = chart, 
       cols=c("text_key",standard,"setting_required")
@@ -59,7 +61,8 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
     }
   }
   
-  # build shell settings for each chart (move these to /data eventually?)
+  # build shell settings for each chart 
+  # TODO: move these to `/data` eventually
   shells<-list()
   shells[["edish"]]<-list(
     id_col = NULL,
@@ -91,7 +94,7 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
   )
   
   # loop through dataMappings and apply them to the shell
-  if(standard != "none"){
+  if(standard %in% standardList){
     for(row in 1:nrow(dataMappings)){
       shells[[chart]]<-setSettingsValue(settings = shells[[chart]], key = textKeysToList(dataMappings[row,"text_key"])[[1]], value = dataMappings[row, "column_name"])
     }    
