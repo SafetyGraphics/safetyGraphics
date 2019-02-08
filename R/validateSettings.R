@@ -47,7 +47,12 @@ validateSettings <- function(data, settings, chart="eDish"){
   columnChecks <- dataKeys %>% purrr::map(checkColumnSetting, settings=settings, data=data)
 
   #Check that non-null field/column combinations are found in the data
-  fieldKeys <- getSettingsMetadata(chart=chart, filter_expr = .data$field_mapping, cols = "text_key")%>%textKeysToList()
+  fieldKeys <- getSettingsMetadata(chart=chart, filter_expr = .data$field_mapping)%>%
+    filter(.data$setting_type!="vector")%>% #TODO: check the vectorized fields as well. Not sure a big deal now, since none are required ... 
+    select(.data$text_key)%>%
+    unlist()%>%
+    textKeysToList()
+  
   fieldChecks <- fieldKeys %>% purrr::map(checkFieldSettings, settings=settings, data=data )
 
   #Check that settings for mapping numeric data are associated with numeric columns

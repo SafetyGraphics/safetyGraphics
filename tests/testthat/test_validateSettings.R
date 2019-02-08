@@ -50,12 +50,13 @@ test_that("field checks fail when expected",{
   expect_equal(failedChecks[[1]][['check']],"field value from setting found in data")
   expect_equal(failedChecks[[1]][['text_key']],"measure_values--ALP")
 
-  #a vector of values are each checked independently. 
-  invalidFieldSettings$baseline[["values"]] <- c("not a filter",test2="still not a filter")
-  fieldFailed2<-validateSettings(data=adlbc,settings=invalidFieldSettings)
-  failedChecks2 = fieldFailed2[["checkList"]]%>%keep(~!.x[["valid"]])
-  expect_false(fieldFailed[["valid"]])
-  expect_length(failedChecks2, 3)
+  # TODO: support vectorized fields/columns #170
+  # a vector of values are each checked independently. 
+  # invalidFieldSettings$baseline[["values"]] <- c("not a filter",test2="still not a filter")
+  # fieldFailed2<-validateSettings(data=adlbc,settings=invalidFieldSettings)
+  # failedChecks2 = fieldFailed2[["checkList"]]%>%keep(~!.x[["valid"]])
+  # expect_false(fieldFailed[["valid"]])
+  # expect_length(failedChecks2, 3)
 })
 
 test_that("required setting checks fail when expected",{
