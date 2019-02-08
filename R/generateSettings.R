@@ -41,20 +41,26 @@ generateSettings <- function(standard="None", chart="eDish", requiredOnly=TRUE, 
     stop("partial_keys must be supplied if the standard is partial")
   }
   
+  # Coerce options to lowercase
   standard<-tolower(standard)
   chart<-tolower(chart)
   
-  dataMappings <- safetyGraphics::getSettingsMetadata(
-    charts = chart, 
-    cols=c("text_key",standard,"setting_required")
-  ) %>% 
-  filter(ifelse(requiredOnly, .data$setting_required, TRUE))%>%
-  rename("column_name" = standard)%>%
-  filter(.data$column_name != '')%>%
-  mutate(selectedFlag = ifelse(partial, .data$text_key %in% .data$partial_keys, TRUE)) %>%
-  filter(selectedFlag)
-
-    #hierarchical_metadata <- str_split(metadata$text_key, "--") 
+  # Build a table of data mappings for the selected standard and partial settings
+  if(standard != "none"){
+    dataMappings <- safetyGraphics::getSettingsMetadata(
+      charts = chart, 
+      cols=c("text_key",standard,"setting_required")
+    ) %>% 
+    filter(ifelse(requiredOnly, .data$setting_required, TRUE))%>%
+    rename("column_name" = standard)%>%
+    filter(.data$column_name != '')
+    
+    if(partial){
+      dataMappings<-dataMappings%>%filter(.data$text_key %in% partial_keys) 
+    }
+  }
+  
+  # build shell settings for each chart (move these to /data eventually?)
   shells<-list()
   shells[["edish"]]<-list(
     id_col = NULL,
@@ -85,11 +91,12 @@ generateSettings <- function(standard="None", chart="eDish", requiredOnly=TRUE, 
     warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures."
   )
   
-  # loop through dataMappings and apply them to the correct shell as appropriate
-  
-  for(row in 1:nrow(dataMappings)){
-    shells[[chart]]<-setSettingsValue(settings = shells[[chart]], key = textKeysToList(dataMappings[row,"text_key"])[[1]], value = dataMappings[row, "column_name"])
+  # loop through dataMappings and apply them to the shell
+  if(standard != "none"){
+    for(row in 1:nrow(dataMappings)){
+      shells[[chart]]<-setSettingsValue(settings = shells[[chart]], key = textKeysToList(dataMappings[row,"text_key"])[[1]], value = dataMappings[row, "column_name"])
+    }    
   }
-  
+
   return(shells[[chart]])
 }
