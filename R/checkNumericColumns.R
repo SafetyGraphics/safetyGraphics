@@ -31,7 +31,10 @@ checkNumericColumns <- function(key, settings, data){
     current$value <- "--No Value Given--"
     current$valid <- TRUE
     current$message <- ""
-    return(current)
+  }else if(!hasColumn(current$value,data)){
+    current$value <- "--Column not found--"
+    current$valid <- TRUE
+    current$message <- ""
   }else{
     #check to see if the specified column contains numeric values
     values<- data[[current$value]]
@@ -43,7 +46,6 @@ checkNumericColumns <- function(key, settings, data){
     current$valid <- percentNonNumeric < 0.5
     current$message <- paste0(nonNumericCount," of ", totalCount," values were not numeric.")
     if(nonNumericCount>0){current$message<-paste0(current$message, " Records with non-numeric values may not appear in the graphic.")}
-    
-    return(current)
   }
+  return(current)
 }

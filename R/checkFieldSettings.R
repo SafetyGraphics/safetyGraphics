@@ -12,10 +12,8 @@
 #'
 #' @examples
 #' testSettings<-generateSettings(standard="AdAM")
-#' 
-#' #list of 4 checks. all pass ($valid ==TRUE)
-#' safetyGraphics:::checkFieldSettings(fieldKey=list("measure_values"),
-#'                                     settings=testSettings, adlbc) 
+#' fields<-list("measure_values","TB")
+#' safetyGraphics:::checkFieldSettings(fieldKey=fields,settings=testSettings, data=adlbc) 
 #' 
 #' @importFrom stringr str_split
 #' @importFrom magrittr "%>%"
@@ -40,6 +38,7 @@ checkFieldSettings <- function(fieldKey, settings, data){
   if(length(fieldCheck$value)>0){
     fieldCheck$valid <-  hasField(fieldValue=fieldCheck$value, columnName=columnName,data=data)     
   }else{
+    fieldCheck$value <-  "--No Value Given--"
     fieldCheck$valid <- TRUE #null values are ok
   }
   fieldCheck$message <- ifelse(!fieldCheck$valid,  paste0("Value of ",fieldCheck$value, " for '",fieldCheck$text_key,"' not found in ",columnName),"")
