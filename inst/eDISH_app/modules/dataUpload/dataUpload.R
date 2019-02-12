@@ -1,7 +1,10 @@
 dataUpload <- function(input, output, session){
   
-  ns <- session$ns
+  maxFileSize <- 20
+  #increase maximum file upload limit
+  options(shiny.maxRequestSize=(maxFileSize*1024^2))
   
+  ns <- session$ns
   
   # initiate reactive values - list of uploaded data files
   # standard to imitate output of detectStandard.R
