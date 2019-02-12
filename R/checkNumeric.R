@@ -9,23 +9,21 @@
 #'
 #' @examples
 #' testSettings<-generateSettings(standard="AdAM")
+#' #pass ($valid == FALSE)
+#' safetyGraphics:::checkNumeric(key=list("id_col"),settings=testSettings) 
+#' 
 #' #pass ($valid == TRUE)
-#' safetyGraphics:::checkSettingProvided(key=list("id_col"),settings=testSettings) 
+#' safetyGraphics:::checkNumeric(key=list("value_col"),settings=testSettings) 
 #' 
-#' #fails since filters aren't specified by default
-#' safetyGraphics:::checkSettingProvided(key=list("filters"),settings=testSettings) 
-#' 
-#' #fails since groups aren't specified by default
-#' safetyGraphics:::checkSettingProvided(key=list("groups",1,"value_col"),settings=testSettings) 
-#'
 #' @keywords internal
 
-checkNumericColumns <- function(key, settings, data){
+checkNumeric <- function(key, settings, data){
   stopifnot(typeof(key)=="list",typeof(settings)=="list")
 
   current <- list(key=key)
   current$text_key <-  paste( unlist(current$key), collapse='--')
-  current$check <- "specified column is numeric?"
+  current$type <- "numeric"
+  current$description <- "specified column is numeric?"
   current$value <- getSettingValue(key=key,settings=settings)
   if(is.null(current$value)){
     current$value <- "--No Value Given--"

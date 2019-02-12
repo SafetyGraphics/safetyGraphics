@@ -18,28 +18,29 @@
 #' testSettings$filters[[3]]<-list(value_col="NotAColumn",label="Invalid Column")
 #' 
 #' #pass ($valid == TRUE)
-#' safetyGraphics:::checkColumnSetting(key=list("id_col"),
+#' safetyGraphics:::checkColumn(key=list("id_col"),
 #'                                     settings=testSettings, adlbc) 
 #'                                     
 #' #pass
-#' safetyGraphics:::checkColumnSetting(key=list("filters",1,"value_col"),
+#' safetyGraphics:::checkColumn(key=list("filters",1,"value_col"),
 #'                                     settings=testSettings, adlbc) 
 #'                                     
 #' #NULL column pass
-#' safetyGraphics:::checkColumnSetting(key=list("filters",2,"value_col"),
+#' safetyGraphics:::checkColumn(key=list("filters",2,"value_col"),
 #'                                     settings=testSettings, adlbc) 
 #'                                     
 #' #invalid column fails
-#' safetyGraphics:::checkColumnSetting(key=list("filters",3,"value_col"),
+#' safetyGraphics:::checkColumn(key=list("filters",3,"value_col"),
 #'                                     settings=testSettings, adlbc) 
 #' @keywords internal
 
-checkColumnSetting <- function(key, settings, data){
+checkColumn <- function(key, settings, data){
   stopifnot(typeof(key)=="list",typeof(settings)=="list")
   
   current <- list(key=key)
   current$text_key <-  paste( unlist(current$key), collapse='--')
-  current$check <- "column parameter from setting setting found in data?"
+  current$type <- "column"
+  current$description <- "column parameter from setting setting found in data?"
   current$value <- getSettingValue(key=key,settings=settings)
   if(is.null(current$value)){
     current$value <- "--No Value Given--"
