@@ -33,6 +33,7 @@ Imports:
 	DT,
 	shinyjs,
 	rmarkdown,
-	rlang
+	rlang,
+	tibble
 VignetteBuilder: knitr
 
