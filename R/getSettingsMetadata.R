@@ -47,7 +47,7 @@ getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, filter_exp
       return(NULL)
     }else{
       # see if any of the matched chart flags are TRUE
-      md<-md%>%filter_at(vars(matched_chart_columns),any_vars(.data$.==TRUE))
+      md<-md%>%filter_at(vars(matched_chart_columns),any_vars(.))
     }
   }
   

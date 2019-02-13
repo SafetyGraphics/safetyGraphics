@@ -22,7 +22,8 @@ A list describing the validation state for the data/settings combination. The re
 \item{"key"}{ - list specifying the position of the property being checked. For example, `list("group_cols",1,"value_col")` corresponds to `settings[["group_cols"]][[1]][["value_col"]]`}
 \item{"text_key"}{ - list from `key` parsed to character with a "--" separator.}
 \item{"value"}{ - value of the setting}
-\item{"check"}{ - description of the check performed.}
+\item{"type"}{ - type of the check performed.}
+\item{"description"}{ - description of the check performed.}
 \item{"valid"}{ - boolean indicating whether the check was passed}
 \item{"message"}{ - string describing failed checks (where `valid=FALSE`). returns an empty string when `valid==TRUE`}
  }

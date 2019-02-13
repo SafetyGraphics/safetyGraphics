@@ -13,21 +13,18 @@
 #' @examples
 #' testSettings<-generateSettings(standard="AdAM")
 #' fields<-list("measure_values","TB")
-#' safetyGraphics:::checkField(fieldKey=fields,settings=testSettings, data=adlbc) 
+#' safetyGraphics:::checkFieldSettings(fieldKey=fields,settings=testSettings, data=adlbc) 
 #' 
-#' @importFrom stringr str_split
-#' @importFrom magrittr "%>%"
-#' @importFrom purrr map 
 #' @keywords internal
 
-checkField<- function(fieldKey, settings, data){
+checkFieldSettings <- function(fieldKey, settings, data){
   stopifnot(typeof(fieldKey)=="list", typeof(settings)=="list")
   
   # Check to see that the field data specified in the seetings is found in the data
   fieldCheck <- list()
   fieldCheck$key<-fieldKey
   fieldCheck$text_key<- paste( unlist(fieldKey), collapse='--')
-  fieldCheck$type <- "field"
+  fieldCheck$type <- "field value from setting found in data"
   fieldCheck$description <- "field value from setting found in data"
   fieldCheck$value <-  getSettingValue(key=fieldCheck$key,settings=settings)
   
