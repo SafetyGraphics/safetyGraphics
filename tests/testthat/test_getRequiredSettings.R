@@ -17,8 +17,8 @@ defaultRequiredSettings <- list(
 
 
 customMetadata<- data.frame(
-  chart_linechart = c(TRUE, FALSE), 
-  chart_barchart = c(FALSE,TRUE), 
+  chart_linechart = c(TRUE, FALSE),
+  chart_barchart = c(FALSE,TRUE),
   text_key = c("line_col","value_col--label"),
   label=c("label1","label2"),
   description=c("desc1","desc2"),
@@ -26,7 +26,6 @@ customMetadata<- data.frame(
   setting_required=TRUE,
   column_mapping=TRUE,
   column_type="character",
-  column_required=TRUE,
   field_mapping=FALSE
 )
 
