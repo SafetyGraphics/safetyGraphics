@@ -34,5 +34,6 @@ Imports:
     shinyjs,
     rmarkdown,
     rlang,
+    tibble,
     utils
 VignetteBuilder: knitr
