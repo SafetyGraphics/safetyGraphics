@@ -1,17 +1,18 @@
-#' Helper function to trim unneccessary rows and columns from data prior to rendering chart
+#' Removes unnecessary rows and columns
 #'
-#' llnkonjklConvert settings keys from text vectors (using the "--" delimiter) to a list of lists
+#' Removes unnecessary rows and columns from data based on current settings
 #'
-#' @param data a dataframe containing lab data
-#' @param settings a list of settings 
-#' @return A dataframe with irrelevant columns and rows removed
+#' @param data a data frame to trim
+#' @param settings the settings list used to determine which rows and columns to drop
+#' @return A dataframe with unnecessary columns and rows removed
 #'
 #' @examples
-#' safetyGraphics:::textKeysToList("id_col") 
-#' #list(list("id_col"))
+#' testSettings <- generateSettings(standard="adam")
+#' trimData(data=adlbc, settings=testSettings) 
 #' 
-#' #list(list("id_col"),list("measure_col","label"))
-#' safetyGraphics:::textKeysToList(c("id_col","measure_col--label")) 
+#' @importFrom dplyr filter_at
+#' @importFrom purrr map 
+#' @importFrom magrittr "%>%"
 #' 
 #' @keywords internal
 
@@ -19,21 +20,29 @@
 trimData <- function(data, settings){
   
   #remove columns not in settings
-  
-  data <- adlbc
-   settings<-generateSettings(standard="AdAM")
-  
-   cols <- colnames(data)
-   settings_names  <- c("id_col","value_col","measure_col","normal_col_low","normal_col_high"
-                                         ,"studyday_col","visit_col","visitn_col","filters","group_cols")
+
+  col_names <- colnames(data)
+  settings_keys  <- list("id_col","value_col","measure_col","normal_col_low","normal_col_high",
+                        "studyday_col","visit_col","visitn_col","filters","group_cols",
+                       list("baseline","value_col"),list("analysisFlag","value_col"))
    
-   a <- map(settings_names, function(x) {return(safetyGraphics:::getSettingValue(x, settings))})
-   int<- intersect(cols,a)
-  
-   select(data, unlist(int))
+  settings_values <- map(settings_keys, function(x) {return(safetyGraphics:::getSettingValue(x, settings))})
    
-   
-  #remove rows if analysisflag or baseline specified
+  common_cols <- intersect(col_names,settings_values)
   
-  return(trimmed_data)
+  data_subset <- select(data, unlist(common_cols))
+   
+  #remove rows if baseline or analysisFlag is specified
+  
+  if (!is.null(settings[['baseline']][['value_col']])) {
+    data_subset <- data_subset %>%
+    filter_at(settings[['baseline']][['value_col']], all_vars(. %in% settings[['baseline']][['values']]))
+  }
+   
+  if (!is.null(settings[['analysisFlag']][['value_col']])) {
+    data_subset <- data_subset %>%
+    filter_at(settings[['analysisFlag']][['value_col']], all_vars(. %in% settings[['analysisFlag']][['values']]))
+  }
+  
+  return(data_subset)
 }
