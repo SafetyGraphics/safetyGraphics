@@ -32,22 +32,10 @@ renderSettings <- function(input, output, session, data, settings, status){
             choices_tb  <- unique(data()[,input$measure_col])
             choices_alp <- unique(data()[,input$measure_col])
             
-            updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt,
-                                 options = list(
-                                   placeholder = '',
-                                   onInitialize = I('function() { this.setValue(""); }')))
-            updateSelectizeInput(session, "measure_values--AST", choices = choices_ast,
-                                 options = list(
-                                   placeholder = '',
-                                   onInitialize = I('function() { this.setValue(""); }')))
-            updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb,
-                                 options = list(
-                                   placeholder = '',
-                                   onInitialize = I('function() { this.setValue(""); }')))
-            updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp,
-                                 options = list(
-                                   placeholder = '',
-                                   onInitialize = I('function() { this.setValue(""); }')))
+            updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt)
+            updateSelectizeInput(session, "measure_values--AST", choices = choices_ast) 
+            updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb)
+            updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp)
           }
         } else {
           updateSelectizeInput(session, "measure_values--ALT", choices = "")
@@ -222,10 +210,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   #Setting Status information (from failed checks only)
   status_df <- reactive({
     req(status_new())
-    status_new()$checkList %>%
-      map(., ~ keep(., names(.) %in% c("text_key","valid","message")) %>%
-            data.frame(., stringsAsFactors = FALSE)) %>%
-      bind_rows %>%
+
+    status_new()$checks %>% 
       group_by(text_key) %>%
       mutate(num_fail = sum(valid==FALSE)) %>%
       mutate(message_long = paste(message, collapse = " ") %>% trimws(),
@@ -336,6 +322,7 @@ renderSettings <- function(input, output, session, data, settings, status){
     }
   })
   
+  observe({print(settings_new()$measure_values)})
   
   ### return updated settings and status to global env.
   return(list(settings = reactive(settings_new()),
