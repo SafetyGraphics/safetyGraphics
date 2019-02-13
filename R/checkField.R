@@ -15,9 +15,6 @@
 #' fields<-list("measure_values","TB")
 #' safetyGraphics:::checkFieldSettings(fieldKey=fields,settings=testSettings, data=adlbc) 
 #' 
-#' @importFrom stringr str_split
-#' @importFrom magrittr "%>%"
-#' @importFrom purrr map 
 #' @keywords internal
 
 checkFieldSettings <- function(fieldKey, settings, data){

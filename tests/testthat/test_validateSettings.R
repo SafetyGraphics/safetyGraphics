@@ -2,6 +2,7 @@ context("Tests for the validateSetting() function")
 library(safetyGraphics)
 library(purrr)
 library(dplyr)
+library(tibble)
 
 validSettings<-generateSettings(standard="adam")
 passed<-validateSettings(data=adlbc,settings=validSettings)
@@ -16,14 +17,12 @@ test_that("our basic example is valid (until we break it)",{
 })
 
 test_that("function returns a list with the expected structure",{
-  expect_named(passed,c("checkList","valid","status"))
-  expect_named(failed,c("checkList","valid","status"))
-  expect_type(passed$checkList,"list")
+  expect_named(passed,c("checks","valid","status"))
+  expect_named(failed,c("checks","valid","status"))
+  expect_true(is_tibble(passed$checks))
   expect_type(passed$valid,"logical")
   expect_type(passed$status,"character")
-  for(item in passed[["checkList"]]){
-    expect_named(item,c("key","text_key","check","value","valid","message"))
-  }
+  expect_equal(colnames(passed$checks),c("key","text_key","type","description","value","valid","message"))
 })
 
 test_that("our examples have the correct number of failed checks",{
@@ -31,12 +30,12 @@ test_that("our examples have the correct number of failed checks",{
   invalidSettings2$measure_col<-"not_a_measure_id"
   failed2<-validateSettings(data=adlbc,settings=invalidSettings2)
 
-  expect_equal(passed$checkList%>%map_dbl(~!.x[["valid"]])%>%sum,0)
-  expect_equal(failed$checkList%>%map_dbl(~!.x[["valid"]])%>%sum,1)
-  expect_equal(failed2$checkList%>%map_dbl(~!.x[["valid"]])%>%sum,6) #2 columns and 4 fields
+  expect_equal(passed$checks%>%filter(!valid)%>%nrow,0)
+  expect_equal(failed$checks%>%filter(!valid)%>%nrow,1)
+  expect_equal(failed2$checks%>%filter(!valid)%>%nrow,6) #2 columns and 4 fields
 
-  expect_true(all(passed$checkList%>%keep(~.x[["text_key"]]=="id_col")%>%map_lgl(~.x[["valid"]])))
-  expect_false(all(failed$checkList%>%keep(~.x[["text_key"]]=="id_col")%>%map_lgl(~.x[["valid"]])))
+  expect_true(passed$checks%>%filter(text_key=="id_col")%>%select(valid)%>%unlist%>%all)
+  expect_false(failed$checks%>%filter(text_key=="id_col")%>%select(valid)%>%unlist%>%all)
 })
 
 test_that("field checks fail when expected",{
@@ -45,10 +44,10 @@ test_that("field checks fail when expected",{
   fieldFailed<-validateSettings(data=adlbc,settings=invalidFieldSettings)
   expect_false(fieldFailed[["valid"]])
 
-  failedChecks = fieldFailed[["checkList"]]%>%keep(~!.x[["valid"]])
-  expect_length(failedChecks, 1)
-  expect_equal(failedChecks[[1]][['check']],"field value from setting found in data")
-  expect_equal(failedChecks[[1]][['text_key']],"measure_values--ALP")
+  failedChecks <- fieldFailed$checks%>%filter(!valid)
+  expect_equal(nrow(failedChecks), 1)
+  expect_equal(failedChecks[1,"description"]%>%as.character,"field value from setting found in data")
+  expect_equal(failedChecks[1,'text_key']%>%as.character,"measure_values--ALP")
 
   # TODO: support vectorized fields/columns #170
   # a vector of values are each checked independently. 
@@ -65,10 +64,10 @@ test_that("required setting checks fail when expected",{
   requiredFailed<-validateSettings(data=adlbc,settings=invalidRequiredSettings)
   expect_false(requiredFailed[["valid"]])
 
-  failedChecks <- requiredFailed[["checkList"]]%>%keep(~!.x[["valid"]])
-  expect_length(failedChecks, 1)
-  expect_equal(failedChecks[[1]][['check']],"value for specified key found in settings?")
-  expect_equal(failedChecks[[1]][['text_key']],"id_col")
+  failedChecks <- requiredFailed$checks%>%filter(!valid)
+  expect_equal(nrow(failedChecks), 1)
+  expect_equal(failedChecks[1,'description']%>%as.character,"value for specified key found in settings?")
+  expect_equal(failedChecks[1,'text_key']%>%as.character,"id_col")
 })
 
 test_that("numeric column checks fail when no numeric values are found",{
@@ -77,10 +76,10 @@ test_that("numeric column checks fail when no numeric values are found",{
   numericFailed<-validateSettings(data=adlbc,settings=invalidNumericSettings)
   expect_false(numericFailed[["valid"]])
   
-  failedChecks <- numericFailed[["checkList"]]%>%keep(~!.x[["valid"]])
-  expect_length(failedChecks, 1)
-  expect_equal(failedChecks[[1]][['check']],"specified column is numeric?")
-  expect_equal(failedChecks[[1]][['text_key']],"value_col")
+  failedChecks <- numericFailed$checks%>%filter(!valid)
+  expect_equal(nrow(failedChecks), 1)
+  expect_equal(failedChecks[1,'description']%>%as.character,"specified column is numeric?")
+  expect_equal(failedChecks[1,'text_key']%>%as.character,"value_col")
 })
 
 test_that("numeric column checks still fails when more than half of the values are not numeric ",{
@@ -88,10 +87,10 @@ test_that("numeric column checks still fails when more than half of the values a
   validNumericSettings[["value_col"]]<-"someNumbers"
   adlbc_edit<-adlbc
   adlbc_edit$someNumbers <- c("10","11",rep("sometext", dim(adlbc_edit)[1]-2))
-  numericPassed<-validateSettings(data=adlbc_edit,settings=validNumericSettings)
-  expect_false(numericPassed[["valid"]])
-  partialNumericCheck <- numericPassed[["checkList"]]%>%keep(~.x$check=="specified column is numeric?" & .x$text_key=="value_col")
-  expect_equal(partialNumericCheck[[1]][["message"]],"10286 of 10288 values were not numeric. Records with non-numeric values may not appear in the graphic.")
+  numericFailedAgain<-validateSettings(data=adlbc_edit,settings=validNumericSettings)
+  expect_false(numericFailedAgain[["valid"]])
+  partialNumericCheck <- numericFailedAgain$checks %>% filter(description=="specified column is numeric?" & text_key=="value_col")
+  expect_equal(partialNumericCheck[1,"message"]%>%as.character,"10286 of 10288 values were not numeric. Records with non-numeric values may not appear in the graphic.")
   
 })
 
@@ -102,7 +101,7 @@ test_that("numeric column checks pass when more than half of the values are nume
   adlbc_edit$someStrings <- c("b","a",rep("10", dim(adlbc_edit)[1]-2))
   numericPassed<-validateSettings(data=adlbc_edit,settings=validNumericSettings)
   expect_true(numericPassed[["valid"]])
-  partialNumericCheck <- numericPassed[["checkList"]]%>%keep(~.x$check=="specified column is numeric?" & .x$text_key=="value_col")
-  expect_equal(partialNumericCheck[[1]][["message"]],"2 of 10288 values were not numeric. Records with non-numeric values may not appear in the graphic.")
+  partialNumericCheck <- numericPassed$checks%>%filter(description=="specified column is numeric?" & text_key=="value_col")
+  expect_equal(partialNumericCheck[1,"message"]%>%as.character,"2 of 10288 values were not numeric. Records with non-numeric values may not appear in the graphic.")
 })
 

@@ -31,7 +31,9 @@
 #' # .$valid is now FALSE
 #'
 #' @export
-#' @importFrom purrr map map_lgl map_dbl
+#' @import dplyr
+#' @importFrom tibble tibble
+#' @importFrom purrr map map_lgl map_dbl map_chr
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang .data
 
@@ -73,10 +75,10 @@ validateSettings <- function(data, settings, chart="eDish"){
   }
   
   #valid=true if all checks pass, false otherwise
-  settingStatus$valid <- settingStatus$checks%>%select(valid)%>%unlist%>%all
+  settingStatus$valid <- settingStatus$checks%>%select(.data$valid)%>%unlist%>%all
 
   #create summary string
-  failCount <- nrow(settingStatus$checks%>%filter(!valid))
+  failCount <- nrow(settingStatus$checks%>%filter(!.data$valid))
   checkCount <- nrow(settingStatus$checks)
   settingStatus$status <- paste0(failCount," of ",checkCount," checks failed.")
   return (settingStatus)
