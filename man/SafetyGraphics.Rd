@@ -9,7 +9,8 @@
 Create Interactive Graphics Related to Clinical Trial Safety
 }
 \details{
-Learn moreon
+Learn more on
 \href{https://CRAN.R-project.org/package=safetyGraphics}{CRAN}
 or \href{https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics}{GitHub}
 }
+\keyword{internal}
