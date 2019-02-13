@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' testSettings <- generateSettings(standard="adam")
-#' trimData(data=adlbc, settings=testSettings) 
+#' safetyGraphics:::trimData(data=adlbc, settings=testSettings) 
 #' 
 #' @importFrom dplyr filter_at
 #' @importFrom purrr map 
@@ -22,7 +22,8 @@ trimData <- function(data, settings){
   #remove columns not in settings
 
   col_names <- colnames(data)
-  settings_keys  <- safetyGraphics::getSettingsMetadata(cols="text_key", filter_expr=column_mapping==TRUE)
+  settings_keys  <- safetyGraphics::getSettingsMetadata(cols="text_key", filter_expr=column_mapping==TRUE) %>%
+    str_split("--")
   
   settings_values <- map(settings_keys, function(x) {return(safetyGraphics:::getSettingValue(x, settings))})
    

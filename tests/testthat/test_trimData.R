@@ -4,24 +4,30 @@ library(safetyGraphics)
 settings <-generateSettings(standard="AdAM")
 
 baseline_settings <- settings
-settings[['baseline']][['value_col']] <- 'TRTA'
-settings[['baseline']][['values']] <- list("Placebo","Xanomeline High Dose")
+baseline_settings[['baseline']][['value_col']] <- 'ADY'
+baseline_settings[['baseline']][['values']] <-  list("-7","15")
 
 analysisFlag_settings <- settings
-settings[['analysisFlag']][['value_col']] <- 'ADY'
-settings[['analysisFlag']][['values']] <- list("-7","15")
+analysisFlag_settings[['analysisFlag']][['value_col']] <- 'TRTA'
+analysisFlag_settings[['analysisFlag']][['values']] <- list("Placebo","Xanomeline High Dose")
+
+both_settings <- baseline_settings
+both_settings[['analysisFlag']][['value_col']] <- 'TRTA'
+both_settings[['analysisFlag']][['values']] <- list("Placebo","Xanomeline High Dose")
 
 test_that("columns are removed",{
   # simple test case works
   expect_length(trimData(adlbc, settings), 6)
-  expect_length(trimData(adlbc, baseline_settings), 7)
+  expect_length(trimData(adlbc, baseline_settings), 6)
   expect_length(trimData(adlbc, analysisFlag_settings), 7)
+  expect_length(trimData(adlbc, both_settings), 7)
 })
 
 test_that("rows are removed",{
   # simple test case works
-  expect_equal(nrows(trimData(adlbc, settings)), 10288) # none removed
-  expect_equal(nrows(trimData(adlbc, baseline_settings)), 7148)
-  expect_equal(nrows(trimData(adlbc, analysisFlag_settings)), 7148)
+  expect_equal(nrow(trimData(adlbc, settings)), 10288) # none removed
+  expect_equal(nrow(trimData(adlbc, baseline_settings)), 714)
+  expect_equal(nrow(trimData(adlbc, analysisFlag_settings)), 7148)
+  expect_equal(nrow(trimData(adlbc, both_settings)), 484)
 })
 
