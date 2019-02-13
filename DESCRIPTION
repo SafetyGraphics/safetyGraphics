@@ -23,16 +23,16 @@ Suggests:
     shinytest,
     knitr
 Imports: 
-	dplyr, 
-	htmlwidgets,
-	purrr,
-	stringr,
- 	jsonlite, 
- 	shiny,
-	magrittr,
-	DT,
-	shinyjs,
-	rmarkdown,
-	rlang
+    dplyr,
+    htmlwidgets,
+    purrr,
+    stringr,
+    jsonlite,
+    shiny,
+    magrittr,
+    DT,
+    shinyjs,
+    rmarkdown,
+    rlang,
+    utils
 VignetteBuilder: knitr
-
