@@ -1,4 +1,3 @@
-# temporarily load deps
 library(safetyGraphics)
 library(shiny)
 library(shinyjs)

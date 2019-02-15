@@ -1,6 +1,3 @@
-library(shiny)
-library(shinyjs)
-
 tagList(
   useShinyjs(),
   tags$style(HTML("
