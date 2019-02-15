@@ -15,6 +15,7 @@ params:
 ### Chart
 
 ```{r, fig.width=12, fig.height=15, echo = FALSE}
+library(safetyGraphics)
 
 eDISH(data = params$data,
       settings = params$settings)
