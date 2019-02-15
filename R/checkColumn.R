@@ -18,28 +18,29 @@
 #' testSettings$filters[[3]]<-list(value_col="NotAColumn",label="Invalid Column")
 #' 
 #' #pass ($valid == TRUE)
-#' safetyGraphics:::checkColumnSetting(key=list("id_col"),
+#' safetyGraphics:::checkColumn(key=list("id_col"),
 #'                                     settings=testSettings, adlbc) 
 #'                                     
 #' #pass
-#' safetyGraphics:::checkColumnSetting(key=list("filters",1,"value_col"),
+#' safetyGraphics:::checkColumn(key=list("filters",1,"value_col"),
 #'                                     settings=testSettings, adlbc) 
 #'                                     
 #' #NULL column pass
-#' safetyGraphics:::checkColumnSetting(key=list("filters",2,"value_col"),
+#' safetyGraphics:::checkColumn(key=list("filters",2,"value_col"),
 #'                                     settings=testSettings, adlbc) 
 #'                                     
 #' #invalid column fails
-#' safetyGraphics:::checkColumnSetting(key=list("filters",3,"value_col"),
+#' safetyGraphics:::checkColumn(key=list("filters",3,"value_col"),
 #'                                     settings=testSettings, adlbc) 
+#' @keywords internal
 
-checkColumnSetting <- function(key, settings, data){
+checkColumn <- function(key, settings, data){
   stopifnot(typeof(key)=="list",typeof(settings)=="list")
-
-  validCols <- names(data)
+  
   current <- list(key=key)
   current$text_key <-  paste( unlist(current$key), collapse='--')
-  current$check <- "'_col' parameter from setting setting found in data?"
+  current$type <- "column"
+  current$description <- "column parameter from setting setting found in data?"
   current$value <- getSettingValue(key=key,settings=settings)
   if(is.null(current$value)){
     current$value <- "--No Value Given--"
@@ -47,7 +48,7 @@ checkColumnSetting <- function(key, settings, data){
     current$message <- ""
     return(current)
   }else{
-    current$valid <- current$value %in% validCols
+    current$valid <- hasColumn(current$value, data)
     current$message <- ifelse(current$valid,"",paste0(current$value," column not found in data."))
     return(current)
   }

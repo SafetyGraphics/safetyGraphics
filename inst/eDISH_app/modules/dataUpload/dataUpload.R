@@ -2,7 +2,6 @@ dataUpload <- function(input, output, session){
   
   ns <- session$ns
   
-  
   # initiate reactive values - list of uploaded data files
   # standard to imitate output of detectStandard.R
   dd <- reactiveValues(data = list("Example data" = adlbc), current = 1, standard = list(list("standard" = "ADaM", "details" = list("ADaM"=list("match"="Full")))))
@@ -63,12 +62,14 @@ dataUpload <- function(input, output, session){
         names(choices)[i] <- paste0("<p>", names(dd$data)[i], " - <em style='color:green; font-size:12px;'>", dd$standard[[i]]$standard, "</em></p>")
         # If partial data spec match - give the fraction of variables matched
       } else {
-        fraction_cols  <- paste0(toString(length(dd$standard[[i]]$details[[temp_standard]]$matched_columns)), "/" ,
-                        toString(length(dd$standard[[i]]$details[[temp_standard]]$missing_columns) +
-                                   length(dd$standard[[i]]$details[[temp_standard]]$matched_columns)))
         
+        valid_count <- dd$standard[[i]]$details[[temp_standard]]$valid_count
+        total_count <- dd$standard[[i]]$details[[temp_standard]]$invalid_count + valid_count
+        
+        fraction_cols  <- paste0(valid_count, "/" ,total_count)
+
         names(choices)[i] <- paste0("<p>", names(dd$data)[i], " - <em style='color:green; font-size:12px;'>", "Partial ",
-                                    dd$standard[[i]]$standard, " (", fraction_cols, " columns)",  "</em></p>")
+                                    dd$standard[[i]]$standard, " (", fraction_cols, " data settings)",  "</em></p>")
       }
     }
     return(choices)
@@ -129,9 +130,12 @@ dataUpload <- function(input, output, session){
       partial <- ifelse(standard()$details[[current_standard]]$match == "Partial", TRUE, FALSE) 
       
       if (partial) {
-        partial_cols <- standard()$details[[current_standard]]$matched_columns
+        partial_keys <- standard()$details[[current_standard]]$checks %>% 
+          filter(valid==TRUE) %>%
+          select(text_key) %>% 
+          pull()
         
-        generateSettings(standard=current_standard, chart="eDish", partial=partial, partial_cols = partial_cols)
+        generateSettings(standard=current_standard, chart="eDish", partial=partial, partial_keys = partial_keys)
         
       } else {
         generateSettings(standard=current_standard, chart="eDish")

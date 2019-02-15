@@ -22,3 +22,4 @@ safetyGraphics:::getRequiredColumns(standard="ADAM")
 safetyGraphics:::getRequiredColumns(standard="SDTM")
 
 }
+\keyword{internal}

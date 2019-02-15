@@ -1,276 +1,313 @@
 {
   "export": {
     "datatab-status": {
-      "checkList": [
-        {
-          "key": [
+      "checks": {
+        "key": [
+          [
             "id_col"
           ],
-          "text_key": "id_col",
-          "check": "value for specified key found in settings?",
-          "value": "USUBJID",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
+          [
             "value_col"
           ],
-          "text_key": "value_col",
-          "check": "value for specified key found in settings?",
-          "value": "AVAL",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
+          [
             "measure_col"
           ],
-          "text_key": "measure_col",
-          "check": "value for specified key found in settings?",
-          "value": "PARAM",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
+          [
             "normal_col_low"
           ],
-          "text_key": "normal_col_low",
-          "check": "value for specified key found in settings?",
-          "value": "A1LO",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
+          [
             "normal_col_high"
           ],
-          "text_key": "normal_col_high",
-          "check": "value for specified key found in settings?",
-          "value": "A1HI",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
+          [
             "studyday_col"
           ],
-          "text_key": "studyday_col",
-          "check": "value for specified key found in settings?",
-          "value": "ADY",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
-            "id_col"
-          ],
-          "text_key": "id_col",
-          "check": "'_col' parameter from setting setting found in data?",
-          "value": "USUBJID",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
-            "value_col"
-          ],
-          "text_key": "value_col",
-          "check": "'_col' parameter from setting setting found in data?",
-          "value": "AVAL",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
-            "measure_col"
-          ],
-          "text_key": "measure_col",
-          "check": "'_col' parameter from setting setting found in data?",
-          "value": "PARAM",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
-            "normal_col_low"
-          ],
-          "text_key": "normal_col_low",
-          "check": "'_col' parameter from setting setting found in data?",
-          "value": "A1LO",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
-            "normal_col_high"
-          ],
-          "text_key": "normal_col_high",
-          "check": "'_col' parameter from setting setting found in data?",
-          "value": "A1HI",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
-            "studyday_col"
-          ],
-          "text_key": "studyday_col",
-          "check": "'_col' parameter from setting setting found in data?",
-          "value": "ADY",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
-            "visit_col"
-          ],
-          "text_key": "visit_col",
-          "check": "'_col' parameter from setting setting found in data?",
-          "value": "VISIT",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
-            "visitn_col"
-          ],
-          "text_key": "visitn_col",
-          "check": "'_col' parameter from setting setting found in data?",
-          "value": "VISITNUM",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
-            "group_cols"
-          ],
-          "text_key": "group_cols",
-          "check": "'_col' parameter from setting setting found in data?",
-          "value": "--No Value Given--",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
-            "baseline",
-            "value_col"
-          ],
-          "text_key": "baseline--value_col",
-          "check": "'_col' parameter from setting setting found in data?",
-          "value": "--No Value Given--",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
-            "analysisFlag",
-            "value_col"
-          ],
-          "text_key": "analysisFlag--value_col",
-          "check": "'_col' parameter from setting setting found in data?",
-          "value": "--No Value Given--",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
+          [
             "measure_values",
             "ALT"
           ],
-          "text_key": "measure_values--ALT",
-          "check": "'_values' field from setting found in data?",
-          "value": "Alanine Aminotransferase (U/L)",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
+          [
             "measure_values",
             "AST"
           ],
-          "text_key": "measure_values--AST",
-          "check": "'_values' field from setting found in data?",
-          "value": "Aspartate Aminotransferase (U/L)",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
+          [
             "measure_values",
             "TB"
           ],
-          "text_key": "measure_values--TB",
-          "check": "'_values' field from setting found in data?",
-          "value": "Bilirubin (umol/L)",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
+          [
             "measure_values",
             "ALP"
           ],
-          "text_key": "measure_values--ALP",
-          "check": "'_values' field from setting found in data?",
-          "value": "Alkaline Phosphatase (U/L)",
-          "valid": true,
-          "message": ""
-        },
-        {
-          "key": [
+          [
+            "id_col"
+          ],
+          [
             "value_col"
           ],
-          "text_key": "value_col",
-          "check": "specified column is numeric?",
-          "value": "AVAL",
-          "valid": true,
-          "message": "9 of 10288 values were not numeric. Records with non-numeric values may not appear in the graphic."
-        },
-        {
-          "key": [
+          [
+            "measure_col"
+          ],
+          [
             "normal_col_low"
           ],
-          "text_key": "normal_col_low",
-          "check": "specified column is numeric?",
-          "value": "A1LO",
-          "valid": true,
-          "message": "0 of 10288 values were not numeric."
-        },
-        {
-          "key": [
+          [
             "normal_col_high"
           ],
-          "text_key": "normal_col_high",
-          "check": "specified column is numeric?",
-          "value": "A1HI",
-          "valid": true,
-          "message": "0 of 10288 values were not numeric."
-        },
-        {
-          "key": [
+          [
             "studyday_col"
           ],
-          "text_key": "studyday_col",
-          "check": "specified column is numeric?",
-          "value": "ADY",
-          "valid": true,
-          "message": "0 of 10288 values were not numeric."
-        },
-        {
-          "key": [
+          [
+            "visit_col"
+          ],
+          [
             "visitn_col"
           ],
-          "text_key": "visitn_col",
-          "check": "specified column is numeric?",
-          "value": "VISITNUM",
-          "valid": true,
-          "message": "0 of 10288 values were not numeric."
-        }
-      ],
+          [
+            "filters"
+          ],
+          [
+            "group_cols"
+          ],
+          [
+            "baseline",
+            "value_col"
+          ],
+          [
+            "analysisFlag",
+            "value_col"
+          ],
+          [
+            "measure_values",
+            "ALT"
+          ],
+          [
+            "measure_values",
+            "AST"
+          ],
+          [
+            "measure_values",
+            "TB"
+          ],
+          [
+            "measure_values",
+            "ALP"
+          ],
+          [
+            "value_col"
+          ],
+          [
+            "normal_col_low"
+          ],
+          [
+            "normal_col_high"
+          ],
+          [
+            "studyday_col"
+          ],
+          [
+            "visitn_col"
+          ]
+        ],
+        "text_key": [
+          "id_col",
+          "value_col",
+          "measure_col",
+          "normal_col_low",
+          "normal_col_high",
+          "studyday_col",
+          "measure_values--ALT",
+          "measure_values--AST",
+          "measure_values--TB",
+          "measure_values--ALP",
+          "id_col",
+          "value_col",
+          "measure_col",
+          "normal_col_low",
+          "normal_col_high",
+          "studyday_col",
+          "visit_col",
+          "visitn_col",
+          "filters",
+          "group_cols",
+          "baseline--value_col",
+          "analysisFlag--value_col",
+          "measure_values--ALT",
+          "measure_values--AST",
+          "measure_values--TB",
+          "measure_values--ALP",
+          "value_col",
+          "normal_col_low",
+          "normal_col_high",
+          "studyday_col",
+          "visitn_col"
+        ],
+        "type": [
+          "required",
+          "required",
+          "required",
+          "required",
+          "required",
+          "required",
+          "required",
+          "required",
+          "required",
+          "required",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "field",
+          "field",
+          "field",
+          "field",
+          "numeric",
+          "numeric",
+          "numeric",
+          "numeric",
+          "numeric"
+        ],
+        "description": [
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "field value from setting found in data",
+          "field value from setting found in data",
+          "field value from setting found in data",
+          "field value from setting found in data",
+          "specified column is numeric?",
+          "specified column is numeric?",
+          "specified column is numeric?",
+          "specified column is numeric?",
+          "specified column is numeric?"
+        ],
+        "value": [
+          "USUBJID",
+          "AVAL",
+          "PARAM",
+          "A1LO",
+          "A1HI",
+          "ADY",
+          "Alanine Aminotransferase (U/L)",
+          "Aspartate Aminotransferase (U/L)",
+          "Bilirubin (umol/L)",
+          "Alkaline Phosphatase (U/L)",
+          "USUBJID",
+          "AVAL",
+          "PARAM",
+          "A1LO",
+          "A1HI",
+          "ADY",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "Alanine Aminotransferase (U/L)",
+          "Aspartate Aminotransferase (U/L)",
+          "Bilirubin (umol/L)",
+          "Alkaline Phosphatase (U/L)",
+          "AVAL",
+          "A1LO",
+          "A1HI",
+          "ADY",
+          "--No Value Given--"
+        ],
+        "valid": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "message": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "9 of 10288 values were not numeric. Records with non-numeric values may not appear in the graphic.",
+          "0 of 10288 values were not numeric.",
+          "0 of 10288 values were not numeric.",
+          "0 of 10288 values were not numeric.",
+          ""
+        ]
+      },
       "valid": true,
-      "status": "0 of 26 checks failed."
+      "status": "0 of 31 checks failed."
     },
     "settingsUI-status_df": {
       "text_key": [
@@ -280,12 +317,16 @@
         "normal_col_low",
         "normal_col_high",
         "studyday_col",
-        "visit_col",
-        "visitn_col",
         "measure_values--ALT",
         "measure_values--AST",
         "measure_values--TB",
-        "measure_values--ALP"
+        "measure_values--ALP",
+        "visit_col",
+        "visitn_col",
+        "filters",
+        "group_cols",
+        "baseline--value_col",
+        "analysisFlag--value_col"
       ],
       "message_long": [
         "",
@@ -295,7 +336,11 @@
         "0 of 10288 values were not numeric.",
         "0 of 10288 values were not numeric.",
         "",
-        "0 of 10288 values were not numeric.",
+        "",
+        "",
+        "",
+        "",
+        "",
         "",
         "",
         "",
@@ -313,9 +358,17 @@
         "OK",
         "OK",
         "OK",
+        "OK",
+        "OK",
+        "OK",
+        "OK",
         "OK"
       ],
       "num_fail": [
+        0,
+        0,
+        0,
+        0,
         0,
         0,
         0,

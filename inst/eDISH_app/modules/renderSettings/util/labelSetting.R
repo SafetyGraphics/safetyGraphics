@@ -1,4 +1,7 @@
 labelSetting<-function(ns, name, label, description){
+
+  
+  label <- paste("<i class='fa fa-info-circle' style='color:gray'></i>", label)
   
   label_id <- paste0("lbl_", name)
   shinyjs::html(id =  label_id,

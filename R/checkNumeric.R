@@ -9,28 +9,30 @@
 #'
 #' @examples
 #' testSettings<-generateSettings(standard="AdAM")
+#' #pass ($valid == FALSE)
+#' safetyGraphics:::checkNumeric(key=list("id_col"),settings=testSettings, data=adlbc) 
+#' 
 #' #pass ($valid == TRUE)
-#' safetyGraphics:::checkSettingProvided(key=list("id_col"),settings=testSettings) 
+#' safetyGraphics:::checkNumeric(key=list("value_col"),settings=testSettings, data=adlbc) 
 #' 
-#' #fails since filters aren't specified by default
-#' safetyGraphics:::checkSettingProvided(key=list("filters"),settings=testSettings) 
-#' 
-#' #fails since groups aren't specified by default
-#' safetyGraphics:::checkSettingProvided(key=list("groups",1,"value_col"),settings=testSettings) 
-#'
+#' @keywords internal
 
-checkNumericColumns <- function(key, settings, data){
+checkNumeric <- function(key, settings, data){
   stopifnot(typeof(key)=="list",typeof(settings)=="list")
 
   current <- list(key=key)
   current$text_key <-  paste( unlist(current$key), collapse='--')
-  current$check <- "specified column is numeric?"
+  current$type <- "numeric"
+  current$description <- "specified column is numeric?"
   current$value <- getSettingValue(key=key,settings=settings)
   if(is.null(current$value)){
     current$value <- "--No Value Given--"
     current$valid <- TRUE
     current$message <- ""
-    return(current)
+  }else if(!hasColumn(current$value,data)){
+    current$value <- "--Column not found--"
+    current$valid <- TRUE
+    current$message <- ""
   }else{
     #check to see if the specified column contains numeric values
     values<- data[[current$value]]
@@ -42,7 +44,6 @@ checkNumericColumns <- function(key, settings, data){
     current$valid <- percentNonNumeric < 0.5
     current$message <- paste0(nonNumericCount," of ", totalCount," values were not numeric.")
     if(nonNumericCount>0){current$message<-paste0(current$message, " Records with non-numeric values may not appear in the graphic.")}
-    
-    return(current)
   }
+  return(current)
 }

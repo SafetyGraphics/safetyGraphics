@@ -10,24 +10,25 @@
 #' testSettings<-generateSettings(standard="AdAM")
 #' 
 #' #pass ($valid == TRUE)
-#' safetyGraphics:::checkSettingProvided(key=list("id_col"),
+#' safetyGraphics:::checkRequired(key=list("id_col"),
 #'                                       settings=testSettings) 
 #' 
 #' #fails since filters aren't specified by default
-#' safetyGraphics:::checkSettingProvided(key=list("filters"),
+#' safetyGraphics:::checkRequired(key=list("filters"),
 #'                                       settings=testSettings) 
 #' 
 #' #fails since groups aren't specified by default
-#' safetyGraphics:::checkSettingProvided(key=list("groups",1,"value_col"),
+#' safetyGraphics:::checkRequired(key=list("groups",1,"value_col"),
 #'                                       settings=testSettings) 
-#'
+#' @keywords internal
 
-checkSettingProvided <- function(key, settings){
+checkRequired <- function(key, settings){
   stopifnot(typeof(key)=="list",typeof(settings)=="list")
 
   current <- list(key=key)
   current$text_key <-  paste( unlist(current$key), collapse='--')
-  current$check <- "value for specified key found in settings?"
+  current$type<-"required"
+  current$description <- "value for specified key found in settings?"
   current$value <- getSettingValue(key=key,settings=settings)
   if(is.null(current$value)){
     current$value <- "--No Value Given--"
