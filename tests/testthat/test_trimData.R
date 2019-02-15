@@ -28,6 +28,6 @@ test_that("rows are removed",{
   expect_equal(nrow(trimData(adlbc, settings)), 10288) # none removed
   expect_equal(nrow(trimData(adlbc, baseline_settings)), 714)
   expect_equal(nrow(trimData(adlbc, analysisFlag_settings)), 7148)
-  expect_equal(nrow(trimData(adlbc, both_settings)), 484)
+  expect_equal(nrow(trimData(adlbc, both_settings)), 7378)
 })
 
