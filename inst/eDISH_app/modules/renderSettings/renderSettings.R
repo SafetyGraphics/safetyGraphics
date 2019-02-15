@@ -22,10 +22,26 @@ renderSettings <- function(input, output, session, data, settings, status){
             choices_tb  <- unique(c(settings$measure_values$TB,  as.character(data()[,settings$measure_col])))
             choices_alp <- unique(c(settings$measure_values$ALP, as.character(data()[,settings$measure_col])))
             
-            updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt)
-            updateSelectizeInput(session, "measure_values--AST", choices = choices_ast)
-            updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb)
-            updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp)
+            updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt,
+                                 options = list (onInitialize = I('function() { 
+                                                    //console.log("initializing input with value")
+                                                    //console.log(this)
+                                                   }')))
+            updateSelectizeInput(session, "measure_values--AST", choices = choices_ast,
+                                 options = list (onInitialize = I('function() { 
+                                                                  //console.log("initializing input with value")
+                                                                  //console.log(this)
+          }')))
+            updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb,
+                                 options = list (onInitialize = I('function() { 
+                                                                  //console.log("initializing input with value")
+                                                                  //console.log(this)
+          }')))
+            updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp,
+                                 options = list (onInitialize = I('function() { 
+                                                                  //console.log("initializing input with value")
+                                                                  //console.log(this)
+                                                  }')))
           } else {
             choices_ast <- unique(data()[,input$measure_col])
             choices_alt <- unique(data()[,input$measure_col])
@@ -34,20 +50,32 @@ renderSettings <- function(input, output, session, data, settings, status){
             
             updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt,
                                  options = list(
-                                   placeholder = '',
-                                   onInitialize = I('function() { this.setValue(""); }')))
+                                   onInitialize = I('function() { 
+                                                    //console.log("initializing input w/o value")
+                                                    //console.log(this)
+                                                    this.setValue(""); 
+                                                     }')))
             updateSelectizeInput(session, "measure_values--AST", choices = choices_ast,
                                  options = list(
-                                   placeholder = '',
-                                   onInitialize = I('function() { this.setValue(""); }')))
+                                   onInitialize = I('function() { 
+                                                    //console.log("initializing input w/o value")
+                                                    //console.log(this)
+                                                    this.setValue(""); 
+                                                  }')))
             updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb,
                                  options = list(
-                                   placeholder = '',
-                                   onInitialize = I('function() { this.setValue(""); }')))
+                                   onInitialize = I('function() { 
+                                                    //console.log("initializing input w/o value")
+                                                    //console.log(this)
+                                                    this.setValue(""); 
+                                                   }')))
             updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp,
                                  options = list(
-                                   placeholder = '',
-                                   onInitialize = I('function() { this.setValue(""); }')))
+                                   onInitialize = I('function() { 
+                                                    //console.log("initializing input w/o value")
+                                                    //console.log(this)
+                                                    this.setValue(""); 
+                                                     }')))
           }
         } else {
           updateSelectizeInput(session, "measure_values--ALT", choices = "")
@@ -71,15 +99,22 @@ renderSettings <- function(input, output, session, data, settings, status){
             choices <- unique(c(settings$baseline$values, as.character(data()[,settings$baseline$value_col])))
             choices <- sort(choices)
             
-            updateSelectizeInput(session, "baseline--values", choices = choices)
+            updateSelectizeInput(session, "baseline--values", choices = choices,
+                                 options = list (onInitialize = I('function() { 
+                                                                  //console.log("initializing input with value")
+                                                                  //console.log(this)
+          }')))
           } else {
             choices <- unique(data()[,input$`baseline--value_col`])
             choices <- sort(choices)
             
             updateSelectizeInput(session, "baseline--values", choices = choices,
                                  options = list(
-                                   placeholder = '',
-                                   onInitialize = I('function() { this.setValue(""); }')))
+                                   onInitialize = I('function() { 
+                                                    //console.log("initializing input w/o value")
+                                                    //console.log(this)
+                                                    this.setValue(""); 
+          }')))
           }
         } else {
           updateSelectizeInput(session, "baseline--values", choices = "")
@@ -99,14 +134,21 @@ renderSettings <- function(input, output, session, data, settings, status){
           if (!is.null(settings$analysisFlag$value_col) && input$`analysisFlag--value_col`==settings$analysisFlag$value_col){
             choices <- unique(c(settings$analysisFlag$values, as.character(data()[,settings$analysisFlag$value_col])))
             
-            updateSelectizeInput(session, "analysisFlag--values", choices = choices)
+            updateSelectizeInput(session, "analysisFlag--values", choices = choices,,
+                                 options = list (onInitialize = I('function() { 
+                                                                  //console.log("initializing input with value")
+                                                                  //console.log(this)
+          }')))
           } else {
             choices <- unique(data()[,input$`analysisFlag--value_col`])
             
             updateSelectizeInput(session, "analysisFlag--values", choices = choices,
                                  options = list(
-                                   placeholder = '',
-                                   onInitialize = I('function() { this.setValue(""); }')))
+                                   onInitialize = I('function() { 
+                                                    //console.log("initializing input w/o value")
+                                                    //console.log(this)
+                                                    this.setValue(""); 
+          }')))
           }
         } else {
           updateSelectizeInput(session, "analysisFlag--values", choices = "")
@@ -222,10 +264,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   #Setting Status information (from failed checks only)
   status_df <- reactive({
     req(status_new())
-    status_new()$checkList %>%
-      map(., ~ keep(., names(.) %in% c("text_key","valid","message")) %>%
-            data.frame(., stringsAsFactors = FALSE)) %>%
-      bind_rows %>%
+    
+    status_new()$checks %>% 
       group_by(text_key) %>%
       mutate(num_fail = sum(valid==FALSE)) %>%
       mutate(message_long = paste(message, collapse = " ") %>% trimws(),
@@ -335,7 +375,6 @@ renderSettings <- function(input, output, session, data, settings, status){
       
     }
   })
-  
   
   ### return updated settings and status to global env.
   return(list(settings = reactive(settings_new()),

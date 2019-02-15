@@ -5,13 +5,15 @@ updateSettingStatus<-function(ns, name, status_short, status_long){
   
   if (status_short=="OK"){
     shinyjs::html(id = msg_id,
-                  html = paste0("   <em style='color:green; font-size:12px;'>", status_short,"</em>"))
+                  html = paste("   <em style='color:green; font-size:12px;'>", status_short,"</em>",
+                                "<i class='fa fa-ellipsis-h' style='color:green'></i>"))
     
     shinyjs::runjs(paste0('$("#',ns(tooltip_id), '").attr("title", "Selection is valid")'))
     
   } else {
     shinyjs::html(id = msg_id,
-                  html = paste0("   <em style='color:red; font-size:12px;'>", status_short,"</em>"))
+                  html = paste("   <em style='color:red; font-size:12px;'>", status_short,"</em>",
+                                "<i class='fa fa-ellipsis-h' style='color:red'></i>"))
     
     shinyjs::runjs(paste0('$("#',ns(tooltip_id), '").attr("title", "', status_long, '")'))
   }
