@@ -1,12 +1,45 @@
-source("modules/renderSettings/util/labelSetting.R")
-source("modules/renderSettings/util/flagSetting.R")
+source("modules/renderSettings/util/createSettingsUI.R")
+# source("modules/renderSettings/util/labelSetting.R")
+# source("modules/renderSettings/util/flagSetting.R")
 source("modules/renderSettings/util/updateSettingStatus.R")
 
 renderSettings <- function(input, output, session, data, settings, status){
+
+  ns <- session$ns
   
+  #List of all inputs
+  input_names <- reactive({safetyGraphics:::getSettingsMetadata(charts="eDiSH", cols="text_key")})
+
   
-  # code for field level inputs
-  # toggleState(id = field_key, condition = ! input[field_column_key]=="")
+  ######################################################################
+  # create settings UI
+  #   - chart selection -> gather all necessary UI elements
+  #   - create elements based on metadata file
+  #   - populate using data/settings
+  ######################################################################
+  
+  output$data_mapping_ui <- renderUI({
+    tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "data", charts="edish", ns=ns))
+  })
+  outputOptions(output, "data_mapping_ui", suspendWhenHidden = FALSE) 
+  
+  output$measure_settings_ui <- renderUI({
+    tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "measure", charts="edish", ns=ns))
+  })
+  outputOptions(output, "measure_settings_ui", suspendWhenHidden = FALSE)
+  
+  output$appearance_settings_ui <- renderUI({
+    tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "appearance", charts="edish", ns=ns))
+  })
+  outputOptions(output, "appearance_settings_ui", suspendWhenHidden = FALSE)
+  
+
+  ######################################################################
+  # Update field level settings if a column level setting is changed
+  #
+  #  TO-do: make a function!
+  ######################################################################
+  
   observe({
     toggleState(id = "measure_values--ALT", condition = !input$measure_col=="")
     toggleState(id = "measure_values--AST", condition = !input$measure_col=="")
@@ -14,181 +47,70 @@ renderSettings <- function(input, output, session, data, settings, status){
     toggleState(id = "measure_values--ALP", condition = !input$measure_col=="")
   })
   observe({
-    toggleState(id = "baseline--values", condition = !input$`baseline--value_col`=="") 
+    req(input$measure_col)
+    if (! input$measure_col == isolate(settings()$measure_col)){
+              choices_ast <- unique(data()[,input$measure_col])
+              choices_alt <- unique(data()[,input$measure_col])
+              choices_tb  <- unique(data()[,input$measure_col])
+              choices_alp <- unique(data()[,input$measure_col])
+
+              updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt,
+                                   options = list(placeholder = "Please select a value",
+                                     onInitialize = I('function() {
+                                                      this.setValue("");
+                                                       }')))
+              updateSelectizeInput(session, "measure_values--AST", choices = choices_ast,
+                                   options = list(placeholder = "Please select a value",
+                                     onInitialize = I('function() {
+                                                      this.setValue("");
+                                                    }')))
+              updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb,
+                                   options = list(placeholder = "Please select a value",
+                                     onInitialize = I('function() {
+                                                      this.setValue("");
+                                                     }')))
+              updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp,
+                                   options = list(placeholder = "Please select a value",
+                                     onInitialize = I('function() {
+                                                      this.setValue("");
+                                                       }')))
+    }
+  })
+  
+  
+  observe({
+    toggleState(id = "baseline--values", condition = !input$`baseline--value_col`=="")
   })
   observe({
-    toggleState(id = "analysisFlag--values", condition = !input$`analysisFlag--value_col`=="") 
+    req(input$`baseline--value_col`)
+    if (! input$`baseline--value_col` == isolate(settings()$`baseline--value_col`)){
+      choices <- data()[,input$`baseline--value_col`] %>% unique %>% sort
+      
+      updateSelectizeInput(session, "baseline--values", choices = choices,
+                           options = list(placeholder = "Please select a value",
+                                          onInitialize = I('function() {
+                                                      this.setValue("");                                                       }')))
+    }
   })
   
-  #TODO: Save to separate file - probably needs to be a module.
-  runCustomObserver<-function(name){
-    
-    # Custom observer for measure_col
-    if(name=="measure_col"){
-      observe({
-        settings <- settings()
-        
-        req(input$measure_col)
-        
-        if (input$measure_col %in% colnames()){
-          if (!is.null(settings$measure_col) && input$measure_col==settings$measure_col){
-            choices_ast <- unique(c(settings$measure_values$AST, as.character(data()[,settings$measure_col])))
-            choices_alt <- unique(c(settings$measure_values$ALT, as.character(data()[,settings$measure_col])))
-            choices_tb  <- unique(c(settings$measure_values$TB,  as.character(data()[,settings$measure_col])))
-            choices_alp <- unique(c(settings$measure_values$ALP, as.character(data()[,settings$measure_col])))
-            
-            updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt,
-                                 options = list (onInitialize = I('function() { 
-                                                   }')))
-            updateSelectizeInput(session, "measure_values--AST", choices = choices_ast,
-                                 options = list (onInitialize = I('function() { 
-          }')))
-            updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb,
-                                 options = list (onInitialize = I('function() { 
-          }')))
-            updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp,
-                                 options = list (onInitialize = I('function() { 
-                                                  }')))
-          } else {
-            choices_ast <- unique(data()[,input$measure_col])
-            choices_alt <- unique(data()[,input$measure_col])
-            choices_tb  <- unique(data()[,input$measure_col])
-            choices_alp <- unique(data()[,input$measure_col])
-            
-            updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt,
-                                 options = list(placeholder = "Please select a value",
-                                   onInitialize = I('function() {  
-                                                    this.setValue(""); 
-                                                     }')))
-            updateSelectizeInput(session, "measure_values--AST", choices = choices_ast,
-                                 options = list(placeholder = "Please select a value",
-                                   onInitialize = I('function() {  
-                                                    this.setValue(""); 
-                                                  }')))
-            updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb,
-                                 options = list(placeholder = "Please select a value",
-                                   onInitialize = I('function() {  
-                                                    this.setValue(""); 
-                                                   }')))
-            updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp,
-                                 options = list(placeholder = "Please select a value",
-                                   onInitialize = I('function() {  
-                                                    this.setValue(""); 
-                                                     }')))
-          }
-        } else {
-          updateSelectizeInput(session, "measure_values--ALT", choices = "",
-                               options = list(placeholder = "Please select a measure column",
-                                              onInitialize = I('function() {  
-                                                               this.setValue(""); 
-        }')))
-          updateSelectizeInput(session, "measure_values--AST", choices = "",
-                               options = list(placeholder = "Please select a measure column",
-                                              onInitialize = I('function() {  
-                                                               this.setValue(""); 
-        }')))
-          updateSelectizeInput(session, "measure_values--TB", choices = "",
-                               options = list(placeholder = "Please select a measure column",
-                                              onInitialize = I('function() {  
-                                                               this.setValue(""); 
-        }')))
-          updateSelectizeInput(session, "measure_values--ALP", choices = "",
-                               options = list(placeholder = "Please select a measure column",
-                                              onInitialize = I('function() {  
-                                                               this.setValue(""); 
-        }')))
-        }
-        
-      })
-    }
-    
-    # Custom observer for baseline
-    if(name=="baseline--value_col"){
-      observe({
-        settings <- settings()
-        
-        req(input$`baseline--value_col`)
-        
-        if (input$`baseline--value_col` %in% colnames()){
-          if (!is.null(settings$baseline$value_col) && input$`baseline--value_col`==settings$baseline$value_col){
-            choices <- unique(c(settings$baseline$values, as.character(data()[,settings$baseline$value_col])))
-            choices <- sort(choices)
-            
-            updateSelectizeInput(session, "baseline--values", choices = choices,
-                                 options = list (onInitialize = I('function() { 
-          }')))
-          } else {
-            choices <- unique(data()[,input$`baseline--value_col`])
-            choices <- sort(choices)
-            
-            updateSelectizeInput(session, "baseline--values", choices = choices,
-                                 options = list(
-                                   placeholder = "Please select a value",
-                                   onInitialize = I('function() { 
-                                                    this.setValue(""); 
-          }')))
-          }
-        } else {
-          updateSelectizeInput(session, "baseline--values", choices = "",
-                               options = list(placeholder = "Please select a baseline column",
-                                              onInitialize = I('function() {  
-                                                               this.setValue(""); 
-        }')))
-        }
-      })
-    }
-    
-    
-    # Custom observer for analysis population
-    if(name=="analysisFlag--value_col"){
-      observe({
-        settings <- settings()
-        
-        req(input$`analysisFlag--value_col`)
-        
-        if (input$`analysisFlag--value_col` %in% colnames()){
-          if (!is.null(settings$analysisFlag$value_col) && input$`analysisFlag--value_col`==settings$analysisFlag$value_col){
-            choices <- unique(c(settings$analysisFlag$values, as.character(data()[,settings$analysisFlag$value_col])))
-            
-            updateSelectizeInput(session, "analysisFlag--values", choices = choices,
-                                 options = list (onInitialize = I('function() { 
-          }')))
-          } else {
-            choices <- unique(data()[,input$`analysisFlag--value_col`])
-            
-            updateSelectizeInput(session, "analysisFlag--values", choices = choices,
-                                 options = list(
-                                   placeholder = "Please select a value",
-                                   onInitialize = I('function() { 
-                                                    this.setValue(""); 
-          }')))
-          }
-        } else {
-          updateSelectizeInput(session, "analysisFlag--values", choices = "",
-                               options = list(placeholder = "Please select an analysis flag column",
-                                              onInitialize = I('function() {  
-                                                               this.setValue(""); 
-        }')))
-        }
-        
-      })
-    }
-  } #end runCustomObserver()
-  
-  ###########################
-  # Make updates to the UI
-  ###########################
-  ns <- session$ns
+  observe({
+    toggleState(id = "analysisFlag--values", condition = !input$`analysisFlag--value_col`=="")
+  })
+  observe({
+    req(input$`analysisFlag--value_col`)
+    if (! input$`analysisFlag--value_col` == isolate(settings()$`analysisFlag--value_col`)){
+      choices <- data()[,input$`analysisFlag--value_col`] %>% unique %>% sort
+      
+      updateSelectizeInput(session, "analysisFlag--values", choices = choices,
+                           options = list(placeholder = "Please select a value",
+                                          onInitialize = I('function() {
+                                                           this.setValue("");                                                       }')))
+  }
+    })
+
   
   
-  #Columns in the data
-  colnames <- reactive({names(data())})
-  
-  #List of all inputs
-  #input_names <- reactive({safetyGraphics:::getSettingsMetadata(charts="eDiSH", cols="text_key")})
-  input_names <- reactive({names(lapply(reactiveValuesToList(input), unclass))}) 
-  #observe({print(input_names())})
-  
+  ######################################################################
   # Fill settings object based on selections
   # require that secondary inputs have been filled in before proceeding
   # update is triggered by any of the input selections changing
@@ -197,10 +119,10 @@ renderSettings <- function(input, output, session, data, settings, status){
   # Therefore, until the inputs are done updating based on new data, this object will be
   # partially representing the old data, and partially representing the new data.
   # not sure if this is the right place to do it...but can we clear out this object upon a data change and start over??
+  ######################################################################
   
   settings_new <- reactive({
     
-    #  print(input$id_col)
     
     settings <- list(id_col = input$id_col,
                      value_col = input$value_col,
@@ -253,12 +175,15 @@ renderSettings <- function(input, output, session, data, settings, status){
   })
   
   
+  ######################################################################
   # validate new settings
   #  the validation is run every time there is a change in data and/or settings.
   #
   #  NOTE: to prevent status updating as loop runs and fills in settings(),
   #   require the very last updated input to be available <- can't do this b/c we will have lots of
   #   null settings to start when no standard detected...
+  ######################################################################
+
   status_new <- reactive({  
     req(data())
     req(settings_new())
@@ -278,7 +203,9 @@ renderSettings <- function(input, output, session, data, settings, status){
   })
   
   
-  #Setting Status information (from failed checks only)
+  ######################################################################
+  # Setting validation status information
+  ######################################################################
   status_df <- reactive({
     req(status_new())
     
@@ -295,103 +222,26 @@ renderSettings <- function(input, output, session, data, settings, status){
       unique 
   })
   
-  
+  # for shiny tests
   exportTestValues(status_df = { status_df() })
   
-  #List of required settings
-  req_settings <- safetyGraphics:::getSettingsMetadata() %>% 
-    filter(chart_edish==TRUE & setting_required==TRUE) %>% 
-    pull(text_key)
-  
-  #List of inputs with custom observers
-  custom_observer_settings <- c("measure_col", "baseline--value_col","analysisFlag--value_col")
-  
-  
-  #Establish observers to update settings UI for all inputs
-  #  Different observers:
-  #     (1a) update UI based on data selection & original settings object
-  #            - dependent on: colnames()
-  #            - populate all UI inputs
-  #            - flag required settings
-  #     (1b) Do 1a for the custom settings (e.g. measure_values options).  These contained nested observers
-  #            - dependent on: parent input$xxx
-  #     (2) append status messages to UI
-  #            - after UI is filled, we generate a NEW settings object & status
-  #            - dependent on: the new settings/status, which will update after every user selection
-  
-  
-  observe({ 
-    req(colnames())
-    
-    for (name in isolate(input_names())){
+  ######################################################################
+  # print validation messages
+  ######################################################################
+ observe({
+   for (name in isolate(input_names())){
 
-      setting_key <- as.list(strsplit(name,"\\-\\-"))
-      setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings=settings())
-      setting_label <- safetyGraphics:::getSettingsMetadata(charts="eDiSH", text_keys=name, cols="label") 
-      setting_description <- safetyGraphics:::getSettingsMetadata(charts="eDiSH", text_keys=name, cols="description") 
-      
-      
-      column_mapping_ids <- safetyGraphics:::getSettingsMetadata(charts="eDiSH") %>% filter(column_mapping==TRUE) %>% pull(text_key) 
-      
-      
-      if (name %in% column_mapping_ids){
-        sortedChoices<-NULL
-        if(is.null(setting_value)){
-          sortedChoices<-colnames()
-          updateSelectizeInput(session, name, choices=sortedChoices,
-                               options = list(
-                                 onInitialize = I('function() { 
-                                                    //console.log("initializing input w/o value")
-                                                    //console.log(this)
-                                                    this.setValue(""); 
-                                                   }')
-                               ))
-          
-          
-        }else{
-          sortedChoices<-unique(c(setting_value, colnames()))
-          updateSelectizeInput(session, name, choices=sortedChoices,
-                               options = list (onInitialize = I('function() { 
-                                                    //console.log("initializing input with value")
-                                                    //console.log(this)
-                                                   }')
-                               ))
-          
-        }
-      }
-      
-      # 2. Check for custom observers and initialize if needed
-      if(name %in% custom_observer_settings){
-        runCustomObserver(name=name) 
-      }
-      
-      # 3. label setting
-      labelSetting(ns=ns, name=name, label=setting_label, description=setting_description) 
-      
-      # 4. Flag the input if it is required
-      if(name %in% req_settings){
-        flagSetting(session=session, name=name, originalLabel=setting_label)
-        
-      }
-    }
-  })
-  
-  
-  observe({
-    for (name in isolate(input_names())){
-      
-      # 5. Print a warning if the input failed a validation check
-      if(name %in% status_df()$text_key){
-        
-        status_short <- status_df()[status_df()$text_key==name, "message_short"]
-        status_long <- status_df()[status_df()$text_key==name, "message_long"]
-        
-        updateSettingStatus(ns=ns, name=name, status_short=status_short, status_long=status_long)
-      }
-      
-    }
-  })
-  
+     if(name %in% status_df()$text_key){
+
+       status_short <- status_df()[status_df()$text_key==name, "message_short"]
+       status_long <- status_df()[status_df()$text_key==name, "message_long"]
+
+       updateSettingStatus(ns=ns, name=name, status_short=status_short, status_long=status_long)
+     }
+
+   }
+ })
+ 
   ### return updated settings and status to global env.
   return(list(settings = reactive(settings_new()),
               status = reactive(status_new())))
