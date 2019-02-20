@@ -39,16 +39,32 @@
 
 
 validateSettings <- function(data, settings, chart="eDish"){
-
+  
   settingStatus<-list()
-
+  
   # Check that all required parameters are not null
   requiredChecks <- getRequiredSettings(chart = chart) %>% purrr::map(checkRequired, settings = settings)
-
+  
   #Check that non-null setting columns are found in the data
   dataKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$column_mapping, cols = "text_key")%>%textKeysToList()
+  
+  # Add filters and group_cols to dataKeys manually as temporary fix - they are no longer True for column_mapping in settingsMetadata
+  if (length(settings$filters) > 0) {
+    for (i in 1:length(settings$filters)){
+      dataKeys[[1+length(dataKeys)]] <- list("filters",i,"value_col")
+    }
+    
+  }
+  
+  if (length(settings$filters) > 0) {
+    for (i in 1:length(settings$filters)){
+      dataKeys[[1+length(dataKeys)]] <- list("filters",i,"value_col")
+    }
+    
+  }
+  
   columnChecks <- dataKeys %>% purrr::map(checkColumn, settings=settings, data=data)
-
+  
   #Check that non-null field/column combinations are found in the data
   fieldKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$field_mapping)%>%
     filter(.data$setting_type!="vector")%>% #TODO: check the vectorized fields as well. Not sure a big deal now, since none are required ... 
@@ -56,7 +72,7 @@ validateSettings <- function(data, settings, chart="eDish"){
     unlist()%>%
     textKeysToList()
   fieldChecks <- fieldKeys %>% purrr::map(checkField, settings=settings, data=data )
-
+  
   #Check that settings for mapping numeric data are associated with numeric columns
   numericKeys <- getSettingsMetadata(charts=chart, filter_expr=.data$column_type=="numeric", cols="text_key")%>%textKeysToList()
   numericChecks <- numericKeys %>% purrr::map(checkNumeric, settings=settings, data=data )
@@ -76,7 +92,7 @@ validateSettings <- function(data, settings, chart="eDish"){
   
   #valid=true if all checks pass, false otherwise
   settingStatus$valid <- settingStatus$checks%>%select(.data$valid)%>%unlist%>%all
-
+  
   #create summary string
   failCount <- nrow(settingStatus$checks%>%filter(!.data$valid))
   checkCount <- nrow(settingStatus$checks)

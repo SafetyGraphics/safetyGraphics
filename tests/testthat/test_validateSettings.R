@@ -105,3 +105,17 @@ test_that("numeric column checks pass when more than half of the values are nume
   expect_equal(partialNumericCheck[1,"message"]%>%as.character,"2 of 10288 values were not numeric. Records with non-numeric values may not appear in the graphic.")
 })
 
+
+test_that("validateSettings works with filters and group_cols ",{
+  groupFilterSettings <- validSettings
+  groupFilterSettings$filters <- list()
+  groupFilterSettings$filters[[1]] <- list(value_col = "RACE",
+                                label = "RACE")
+  groupFilterSettings$group_cols <- list()
+  groupFilterSettings$group_cols[[1]] <- list(value_col = "SEX",
+                                     label = "SEX")
+  Passed<-validateSettings(data=adlbc,settings=groupFilterSettings)
+  expect_true(Passed[["valid"]])
+})
+
+
