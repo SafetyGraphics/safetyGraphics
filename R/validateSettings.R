@@ -56,9 +56,9 @@ validateSettings <- function(data, settings, chart="eDish"){
     
   }
   
-  if (length(settings$filters) > 0) {
-    for (i in 1:length(settings$filters)){
-      dataKeys[[1+length(dataKeys)]] <- list("filters",i,"value_col")
+  if (length(settings$group_cols) > 0) {
+    for (i in 1:length(settings$group_cols)){
+      dataKeys[[1+length(dataKeys)]] <- list("group_cols",i,"value_col")
     }
     
   }
