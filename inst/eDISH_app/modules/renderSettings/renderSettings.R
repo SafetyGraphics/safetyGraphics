@@ -213,7 +213,7 @@ renderSettings <- function(input, output, session, data, settings, status){
     }
     
     if (! is.null(input$`analysisFlag--values`)){
-      if (! input$`analysisFlag--values`==""){
+      if (! input$`analysisFlag--values`[1]==""){
         settings$analysisFlag <- list(value_col = input$`analysisFlag--value_col`,
                                       values = input$`analysisFlag--values`)
       }
