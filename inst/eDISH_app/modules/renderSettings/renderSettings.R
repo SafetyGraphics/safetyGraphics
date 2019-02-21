@@ -38,7 +38,10 @@ renderSettings <- function(input, output, session, data, settings, status){
   
 
   ######################################################################
-  # Update field level settings if a column level setting is changed
+  # Update field level inputs
+  #
+  # NOTE: i think the following 4 observers need to be in modules so we can
+  #       pass the field_key or column_key as a function param
   ######################################################################
   
   # Toggle field-level inputs:
@@ -60,8 +63,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   })
   
 
-  ### NOTE: i think the following 3 observers need to be in modules so we can
-  ###       pass the column_key as a function param
+  # update field-level inputs if a column level setting changes
+  
   observeEvent(input$measure_col, {
     if (is.null(isolate(settings()$measure_col)) || ! input$measure_col == isolate(settings()$measure_col)){
       if (input$measure_col %in% colnames(data())){
