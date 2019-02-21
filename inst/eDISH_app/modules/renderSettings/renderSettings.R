@@ -43,74 +43,85 @@ renderSettings <- function(input, output, session, data, settings, status){
   #  TO-do: make a function!
   ######################################################################
   
-  #field_keys <- getSettingsMetadata(chartcol="text_key")
-  
+  # Toggle field-level inputs:
+  #    ON  - if column-level input is selected)
+  #    OFF - if column-level input is not yet selected
   observe({
-    toggleState(id = "measure_values--ALT", condition = !input$measure_col=="")
-    toggleState(id = "measure_values--AST", condition = !input$measure_col=="")
-    toggleState(id = "measure_values--TB", condition = !input$measure_col=="")
-    toggleState(id = "measure_values--ALP", condition = !input$measure_col=="")
-  })
-  observe({
-    req(input$measure_col)
-    if (! input$measure_col == isolate(settings()$measure_col)){
-              choices_ast <- unique(data()[,input$measure_col])
-              choices_alt <- unique(data()[,input$measure_col])
-              choices_tb  <- unique(data()[,input$measure_col])
-              choices_alp <- unique(data()[,input$measure_col])
+    req(input$select_charts)
+    field_keys <- getSettingsMetadata(charts=input$select_charts, 
+                                      cols=c("text_key", "field_column_key"), 
+                                      filter_expr = field_mapping==TRUE)
 
-              updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt,
-                                   options = list(placeholder = "Please select a value",
-                                     onInitialize = I('function() {
-                                                      this.setValue("");
-                                                       }')))
-              updateSelectizeInput(session, "measure_values--AST", choices = choices_ast,
-                                   options = list(placeholder = "Please select a value",
-                                     onInitialize = I('function() {
-                                                      this.setValue("");
-                                                    }')))
-              updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb,
-                                   options = list(placeholder = "Please select a value",
-                                     onInitialize = I('function() {
-                                                      this.setValue("");
-                                                     }')))
-              updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp,
-                                   options = list(placeholder = "Please select a value",
-                                     onInitialize = I('function() {
-                                                      this.setValue("");
-                                                       }')))
+    for (key in field_keys$text_key){
+      
+      column_key  <- filter(field_keys, text_key==key) %>% pull(field_column_key)
+      
+      toggleState(id = key, condition = !input[[column_key]]=="")
     }
   })
-  
-  
-  observe({
-    toggleState(id = "baseline--values", condition = !input$`baseline--value_col`=="")
+
+  observeEvent(input$measure_col, {
+    if (is.null(isolate(settings()$measure_col)) || ! input$measure_col == isolate(settings()$measure_col)){
+      if (input$measure_col %in% colnames(data())){
+        choices_ast <- unique(data()[,input$measure_col])
+        choices_alt <- unique(data()[,input$measure_col])
+        choices_tb  <- unique(data()[,input$measure_col])
+        choices_alp <- unique(data()[,input$measure_col])
+        
+        updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt,
+                             options = list(placeholder = "Please select a value",
+                                            onInitialize = I('function() {
+                                                             this.setValue("");
+      }')))
+              updateSelectizeInput(session, "measure_values--AST", choices = choices_ast,
+                                   options = list(placeholder = "Please select a value",
+                                                  onInitialize = I('function() {
+                                                                   this.setValue("");
+    }')))
+              updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb,
+                                   options = list(placeholder = "Please select a value",
+                                                  onInitialize = I('function() {
+                                                                   this.setValue("");
+    }')))
+              updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp,
+                                   options = list(placeholder = "Please select a value",
+                                                  onInitialize = I('function() {
+                                                                   this.setValue("");
+      }'))) 
+      }
+    }
   })
-  observe({
-    req(input$`baseline--value_col`)
-    if (! input$`baseline--value_col` == isolate(settings()$`baseline--value_col`)){
+
+  observeEvent(input$`baseline--value_col`, {
+    
+    #req(input$`baseline--value_col`)
+    if (is.null(isolate(settings()$`baseline--value_col`)) || ! input$`baseline--value_col` == isolate(settings()$`baseline--value_col`)){
+      if (input$`baseline--value_col` %in% colnames(data())){
+        
       choices <- data()[,input$`baseline--value_col`] %>% unique %>% sort
-      
+
       updateSelectizeInput(session, "baseline--values", choices = choices,
                            options = list(placeholder = "Please select a value",
                                           onInitialize = I('function() {
                                                       this.setValue("");                                                       }')))
+      }
     }
   })
-  
-  observe({
-    toggleState(id = "analysisFlag--values", condition = !input$`analysisFlag--value_col`=="")
-  })
-  observe({
-    req(input$`analysisFlag--value_col`)
-    if (! input$`analysisFlag--value_col` == isolate(settings()$`analysisFlag--value_col`)){
+
+  observeEvent(input$`analysisFlag--value_col`, {
+  #  req(input$`analysisFlag--value_col`)
+    
+    if (is.null(isolate(settings()$`analysisFlag--value_col`)) || ! input$`analysisFlag--value_col` == isolate(settings()$`analysisFlag--value_col`)){
+      if (input$`baseline--value_col` %in% colnames(data())){
+        
       choices <- data()[,input$`analysisFlag--value_col`] %>% unique %>% sort
-      
+
       updateSelectizeInput(session, "analysisFlag--values", choices = choices,
                            options = list(placeholder = "Please select a value",
                                           onInitialize = I('function() {
                                                            this.setValue("");                                                       }')))
-  }
+    }
+      }
     })
 
   
