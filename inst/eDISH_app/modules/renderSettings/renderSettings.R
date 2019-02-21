@@ -17,19 +17,22 @@ renderSettings <- function(input, output, session, data, settings, status){
   #   - create elements based on metadata file
   #   - populate using data/settings
   ######################################################################
-  
+
   output$data_mapping_ui <- renderUI({
-    tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "data", charts="edish", ns=ns))
+    req(input$select_charts)
+    tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "data", charts=input$charts, ns=ns))
   })
   outputOptions(output, "data_mapping_ui", suspendWhenHidden = FALSE) 
   
   output$measure_settings_ui <- renderUI({
-    tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "measure", charts="edish", ns=ns))
+    req(input$select_charts)
+    tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "measure", charts=input$charts, ns=ns))
   })
   outputOptions(output, "measure_settings_ui", suspendWhenHidden = FALSE)
   
   output$appearance_settings_ui <- renderUI({
-    tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "appearance", charts="edish", ns=ns))
+    req(input$select_charts)
+    tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "appearance", charts=input$charts, ns=ns))
   })
   outputOptions(output, "appearance_settings_ui", suspendWhenHidden = FALSE)
   
@@ -39,6 +42,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   #
   #  TO-do: make a function!
   ######################################################################
+  
+  #field_keys <- getSettingsMetadata(chartcol="text_key")
   
   observe({
     toggleState(id = "measure_values--ALT", condition = !input$measure_col=="")
