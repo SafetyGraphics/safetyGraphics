@@ -8,7 +8,7 @@ renderSettings <- function(input, output, session, data, settings, status){
   ns <- session$ns
   
   #List of all inputs
-  input_names <- reactive({safetyGraphics:::getSettingsMetadata(charts="eDiSH", cols="text_key")})
+  input_names <- reactive({safetyGraphics:::getSettingsMetadata(charts=input$selected_charts, cols="text_key")})
 
   
   ######################################################################
@@ -39,95 +39,54 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   ######################################################################
   # Update field level inputs
-  #
-  # NOTE: i think the following 4 observers need to be in modules so we can
-  #       pass the field_key or column_key as a function param
   ######################################################################
-  
-  # Toggle field-level inputs:
-  #    ON  - if column-level input is selected)
-  #    OFF - if column-level input is not yet selected
-  observe({
-    req(input$select_charts)
-    field_keys <- getSettingsMetadata(charts=input$select_charts, 
-                                      cols=c("text_key", "field_column_key"), 
-                                      filter_expr = field_mapping==TRUE)
 
-    for (key in field_keys$text_key){
-      
-      column_key  <- filter(field_keys, text_key==key) %>% pull(field_column_key)
-      
-      toggleState(id = key, condition = !input[[column_key]]=="")
-      
-    }
-  })
-  
 
   # update field-level inputs if a column level setting changes
-  
-  observeEvent(input$measure_col, {
-    if (is.null(isolate(settings()$measure_col)) || ! input$measure_col == isolate(settings()$measure_col)){
-      if (input$measure_col %in% colnames(data())){
-        choices_ast <- unique(data()[,input$measure_col])
-        choices_alt <- unique(data()[,input$measure_col])
-        choices_tb  <- unique(data()[,input$measure_col])
-        choices_alp <- unique(data()[,input$measure_col])
+        # dependent on change in data, chart selection, or column-level input
+  observe({
+    
+    column_keys <- getSettingsMetadata(charts=input$select_charts,
+                        filter_expr = field_mapping==TRUE) %>% 
+      pull(field_column_key) %>% 
+      unique %>% 
+      as.list()
+    
+    lapply(column_keys, function(col){
+      
+      col_quo <- enquo(col)
+      observeEvent(input[[col]],{
+     
+        field_keys <- getSettingsMetadata(charts=input$select_charts, col = "text_key", 
+                                          filter_expr = field_column_key==!!col) 
         
-        updateSelectizeInput(session, "measure_values--ALT", choices = choices_alt,
-                             options = list(placeholder = "Please select a value",
-                                            onInitialize = I('function() {
-                                                             this.setValue("");
-      }')))
-              updateSelectizeInput(session, "measure_values--AST", choices = choices_ast,
-                                   options = list(placeholder = "Please select a value",
-                                                  onInitialize = I('function() {
-                                                                   this.setValue("");
-    }')))
-              updateSelectizeInput(session, "measure_values--TB",  choices = choices_tb,
-                                   options = list(placeholder = "Please select a value",
-                                                  onInitialize = I('function() {
-                                                                   this.setValue("");
-    }')))
-              updateSelectizeInput(session, "measure_values--ALP", choices = choices_alp,
-                                   options = list(placeholder = "Please select a value",
-                                                  onInitialize = I('function() {
-                                                                   this.setValue("");
-      }'))) 
+        
+        # Toggle field-level inputs:
+        #    ON  - if column-level input is selected)
+        #    OFF - if column-level input is not yet selected
+        for (fk in field_keys){
+          toggleState(id = fk, condition = !input[[col]]=="")
+        }
+
+          if (is.null(isolate(settings()[[col]])) || ! input[[col]] == isolate(settings()[[col]])){
+            if (input[[col]] %in% colnames(data())){
+              
+              choices <- unique(data()[,input[[col]]]) 
+              
+              for (key in field_keys){
+                  updateSelectizeInput(session, inputId = key, choices = choices,
+                                       options = list(placeholder = "Please select a value",
+                                                      onInitialize = I('function() {
+                                                                       this.setValue("");
+                }')))
+               }
+            } 
+          }
       }
-    }
+    )
   })
-
-  observeEvent(input$`baseline--value_col`, {
-
-    if (is.null(isolate(settings()$`baseline--value_col`)) || ! input$`baseline--value_col` == isolate(settings()$`baseline--value_col`)){
-      if (input$`baseline--value_col` %in% colnames(data())){
-        
-      choices <- data()[,input$`baseline--value_col`] %>% unique %>% sort
-
-      updateSelectizeInput(session, "baseline--values", choices = choices,
-                           options = list(placeholder = "Please select a value",
-                                          onInitialize = I('function() {
-                                                      this.setValue("");                                                       }')))
-      }
-    }
   })
-
-  observeEvent(input$`analysisFlag--value_col`, {
-
-    if (is.null(isolate(settings()$`analysisFlag--value_col`)) || ! input$`analysisFlag--value_col` == isolate(settings()$`analysisFlag--value_col`)){
-      if (input$`baseline--value_col` %in% colnames(data())){
-        
-      choices <- data()[,input$`analysisFlag--value_col`] %>% unique %>% sort
-
-      updateSelectizeInput(session, "analysisFlag--values", choices = choices,
-                           options = list(placeholder = "Please select a value",
-                                          onInitialize = I('function() {
-                                                           this.setValue("");                                                       }')))
-    }
-      }
-    })
-
-  
+ 
   
   ######################################################################
   # Fill settings object based on selections
