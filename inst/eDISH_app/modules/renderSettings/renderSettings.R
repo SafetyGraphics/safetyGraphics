@@ -39,8 +39,6 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   ######################################################################
   # Update field level settings if a column level setting is changed
-  #
-  #  TO-do: make a function!
   ######################################################################
   
   # Toggle field-level inputs:
@@ -57,9 +55,13 @@ renderSettings <- function(input, output, session, data, settings, status){
       column_key  <- filter(field_keys, text_key==key) %>% pull(field_column_key)
       
       toggleState(id = key, condition = !input[[column_key]]=="")
+      
     }
   })
+  
 
+  ### NOTE: i think the following 3 observers need to be in modules so we can
+  ###       pass the column_key as a function param
   observeEvent(input$measure_col, {
     if (is.null(isolate(settings()$measure_col)) || ! input$measure_col == isolate(settings()$measure_col)){
       if (input$measure_col %in% colnames(data())){
@@ -93,8 +95,7 @@ renderSettings <- function(input, output, session, data, settings, status){
   })
 
   observeEvent(input$`baseline--value_col`, {
-    
-    #req(input$`baseline--value_col`)
+
     if (is.null(isolate(settings()$`baseline--value_col`)) || ! input$`baseline--value_col` == isolate(settings()$`baseline--value_col`)){
       if (input$`baseline--value_col` %in% colnames(data())){
         
@@ -109,8 +110,7 @@ renderSettings <- function(input, output, session, data, settings, status){
   })
 
   observeEvent(input$`analysisFlag--value_col`, {
-  #  req(input$`analysisFlag--value_col`)
-    
+
     if (is.null(isolate(settings()$`analysisFlag--value_col`)) || ! input$`analysisFlag--value_col` == isolate(settings()$`analysisFlag--value_col`)){
       if (input$`baseline--value_col` %in% colnames(data())){
         
@@ -243,6 +243,10 @@ renderSettings <- function(input, output, session, data, settings, status){
   
   ######################################################################
   # print validation messages
+  #
+  #  Right now we are re-printing ALL status messages upon validation update.
+  #   if we make a module, we have the option of printing ONLY the 
+  #  message for input that changed.
   ######################################################################
  observe({
    for (name in isolate(input_names())){
