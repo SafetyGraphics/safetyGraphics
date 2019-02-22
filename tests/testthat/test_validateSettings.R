@@ -55,7 +55,7 @@ test_that("field checks fail when expected",{
    invalidFieldSettings$baseline[["value_col"]]<- "PARAM"
    invalidFieldSettings$baseline[["values"]] <- list("not a filter","still not a filter")
    
-   expect_false(safetyGraphics::checkField(list("baseline","values",1),  settings=invalidFieldSettings, data=adlbc )$valid)
+   expect_false(safetyGraphics:::checkField(list("baseline","values",1),  settings=invalidFieldSettings, data=adlbc )$valid)
    
    fieldFailed2<-validateSettings(data=adlbc,settings=invalidFieldSettings)
    expect_false(fieldFailed2[["valid"]])

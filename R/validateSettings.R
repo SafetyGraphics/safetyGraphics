@@ -47,10 +47,10 @@ validateSettings <- function(data, settings, chart="eDish"){
   
   #Check that non-null setting columns are found in the data
   allKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$column_mapping, cols = c("text_key","setting_type"))
-  dataKeys <- allKeys %>% filter(setting_type !="vector") %>% pull(text_key) %>% textKeysToList()
+  dataKeys <- allKeys %>% filter(.data$setting_type !="vector") %>% pull(.data$text_key) %>% textKeysToList()
   
   # Add items in vectors to list individually
-  dataVectorKeys <- allKeys %>% filter(setting_type =="vector") %>% pull(text_key) %>% textKeysToList()
+  dataVectorKeys <- allKeys %>% filter(.data$setting_type =="vector") %>% pull(.data$text_key) %>% textKeysToList()
   for(key in dataVectorKeys){
     current<-getSettingValue(key, settings=settings)
     if (length(current) > 0 ) {

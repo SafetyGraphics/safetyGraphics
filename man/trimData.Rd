@@ -19,7 +19,7 @@ Removes unnecessary rows and columns from data based on current settings
 }
 \examples{
 testSettings <- generateSettings(standard="adam")
-safetyGraphics:::trimData(data=adlbc, settings=testSettings) 
+safetyGraphics:::trimData(data=adlbc, settings=testSettings)
 
 }
 \keyword{internal}

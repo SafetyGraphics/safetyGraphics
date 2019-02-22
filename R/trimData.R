@@ -12,7 +12,7 @@
 #'
 #' @importFrom dplyr filter
 #' @importFrom purrr map
-#' @importFrom rlang parse_expr
+#' @importFrom rlang parse_expr .data
 #'
 #' @keywords internal
 
@@ -22,7 +22,7 @@ trimData <- function(data, settings){
   ## Remove columns not in settings ##
 
   col_names <- colnames(data)
-  settings_keys  <- safetyGraphics::getSettingsMetadata(cols="text_key", filter_expr=column_mapping==TRUE) %>%
+  settings_keys  <- safetyGraphics::getSettingsMetadata(cols="text_key", filter_expr=.data$column_mapping==TRUE) %>%
     str_split("--")
 
   settings_values <- map(settings_keys, function(x) {return(getSettingValue(x, settings))})
