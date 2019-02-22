@@ -48,14 +48,18 @@ test_that("field checks fail when expected",{
   expect_equal(nrow(failedChecks), 1)
   expect_equal(failedChecks[1,"description"]%>%as.character,"field value from setting found in data")
   expect_equal(failedChecks[1,'text_key']%>%as.character,"measure_values--ALP")
+  
 
-  # TODO: support vectorized fields/columns #170
-  # a vector of values are each checked independently. 
-  # invalidFieldSettings$baseline[["values"]] <- c("not a filter",test2="still not a filter")
-  # fieldFailed2<-validateSettings(data=adlbc,settings=invalidFieldSettings)
-  # failedChecks2 = fieldFailed2[["checkList"]]%>%keep(~!.x[["valid"]])
-  # expect_false(fieldFailed[["valid"]])
-  # expect_length(failedChecks2, 3)
+   # a vector of values are each checked independently.
+   invalidFieldSettings <- validSettings
+   invalidFieldSettings$baseline[["value_col"]]<- "PARAM"
+   invalidFieldSettings$baseline[["values"]] <- list("not a filter","still not a filter")
+   
+   expect_false(safetyGraphics::checkField(list("baseline","values",1),  settings=invalidFieldSettings, data=adlbc )$valid)
+   
+   fieldFailed2<-validateSettings(data=adlbc,settings=invalidFieldSettings)
+   expect_false(fieldFailed2[["valid"]])
+   expect_equal(fieldFailed2$checks%>%filter(!valid)%>%nrow,2) #2 fields fail
 })
 
 test_that("required setting checks fail when expected",{

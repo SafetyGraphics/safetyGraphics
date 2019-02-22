@@ -13,11 +13,11 @@
 #' @examples
 #' testSettings<-generateSettings(standard="AdAM")
 #' fields<-list("measure_values","TB")
-#' safetyGraphics:::checkFieldSettings(fieldKey=fields,settings=testSettings, data=adlbc) 
+#' safetyGraphics:::checkField(fieldKey=fields,settings=testSettings, data=adlbc) 
 #' 
 #' @keywords internal
 
-checkFieldSettings <- function(fieldKey, settings, data){
+checkField <- function(fieldKey, settings, data){
   stopifnot(typeof(fieldKey)=="list", typeof(settings)=="list")
   
   # Check to see that the field data specified in the seetings is found in the data
@@ -29,12 +29,22 @@ checkFieldSettings <- function(fieldKey, settings, data){
   fieldCheck$value <-  getSettingValue(key=fieldCheck$key,settings=settings)
   
   #get the name of the column containing the field 
-  columnTextKey<-getSettingsMetadata(cols="field_column_key",text_keys=fieldCheck$text_key)
+  lastKey <- fieldCheck$key[[length(fieldCheck$key)]]
+  
+  #use the parent metadata entry if the item is a vector
+  if(is.numeric(lastKey)){
+    sub_key <- fieldKey[-length(fieldKey)]
+    sub_text_key <- paste(unlist(sub_key), collapse='--')
+    columnTextKey <-getSettingsMetadata(cols="field_column_key",text_keys=sub_text_key)
+  }else{
+    columnTextKey <-getSettingsMetadata(cols="field_column_key",text_keys=fieldCheck$text_key)
+  }
+
   columnKey<-textKeysToList(columnTextKey)[[1]]
   columnName<-getSettingValue(key=columnKey,settings=settings)
 
   if(length(fieldCheck$value)>0){
-    fieldCheck$valid <-  hasField(fieldValue=fieldCheck$value, columnName=columnName,data=data)     
+    fieldCheck$valid <- hasField(fieldValue=fieldCheck$value, columnName=columnName,data=data)     
   }else{
     fieldCheck$value <-  "--No Value Given--"
     fieldCheck$valid <- TRUE #null values are ok

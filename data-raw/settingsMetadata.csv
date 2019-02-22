@@ -7,8 +7,8 @@ TRUE,normal_col_high,Upper Limit of Normal column,Upper limit of normal variable
 TRUE,studyday_col,Study Day column,Visit day variable name,character,TRUE,TRUE,numeric,FALSE,,ADY,DY
 TRUE,visit_col,Visit column,Visit variable name,character,FALSE,TRUE,character,FALSE,,VISIT,VISIT
 TRUE,visitn_col,Visit Number column,Visit number variable name,character,FALSE,TRUE,numeric,FALSE,,VISITNUM,VISITNUM
-TRUE,filters,Filters columns,"An optional list of specifications for filters. Each filter is a nested, named list (containing the filter value column: 'value_col' and associated label: 'label') within the larger list.",vector,FALSE,FALSE,NA,FALSE,,,
-TRUE,group_cols,Group columns,"An optional list of specifications for grouping columns. Each group column is a nested, named list (containing the group variable column: 'value_col' and associated label: 'label') within the larger list. ",vector,FALSE,FALSE,NA,FALSE,,,
+TRUE,filters,Filters columns,"An optional list of specifications for filters. Each filter is a nested, named list (containing the filter value column: 'value_col' and associated label: 'label') within the larger list.",vector,FALSE,TRUE,NA,FALSE,,,
+TRUE,group_cols,Group columns,"An optional list of specifications for grouping columns. Each group column is a nested, named list (containing the group variable column: 'value_col' and associated label: 'label') within the larger list. ",vector,FALSE,TRUE,NA,FALSE,,,
 TRUE,measure_values--ALT,Alanine Aminotransferase value,Value used for Alanine Aminotransferase in the specified measure column,character,TRUE,FALSE,NA,TRUE,measure_col,Alanine Aminotransferase (U/L),"Aminotransferase, alanine (ALT)"
 TRUE,measure_values--AST,Aspartate Aminotransferase value,Value used for Aspartate Aminotransferase in the specified measure column,character,TRUE,FALSE,NA,TRUE,measure_col,Aspartate Aminotransferase (U/L),"Aminotransferase, aspartate (AST)"
 TRUE,measure_values--TB,Total Bilirubin value,Value used for Total Bilirubin in the specified measure column,character,TRUE,FALSE,NA,TRUE,measure_col,Bilirubin (umol/L),Total Bilirubin
