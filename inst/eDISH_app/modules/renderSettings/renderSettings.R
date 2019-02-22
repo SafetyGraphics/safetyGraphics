@@ -38,12 +38,12 @@ renderSettings <- function(input, output, session, data, settings, status){
   
 
   ######################################################################
-  # Update field level inputs
+  # Update field level inputs  
+  #
+  # update field-level inputs if a column level setting changes
+  # dependent on change in data, chart selection, or column-level input
   ######################################################################
 
-
-  # update field-level inputs if a column level setting changes
-        # dependent on change in data, chart selection, or column-level input
   observe({
     
     column_keys <- getSettingsMetadata(charts=input$select_charts,
