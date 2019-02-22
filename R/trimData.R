@@ -4,6 +4,7 @@
 #'
 #' @param data a data frame to trim
 #' @param settings the settings list used to determine which rows and columns to drop
+#' @param chart the chart being created
 #' @return A dataframe with unnecessary columns and rows removed
 #'
 #' @examples
@@ -17,15 +18,32 @@
 #' @keywords internal
 
 
-trimData <- function(data, settings){
+trimData <- function(data, settings, chart="edish"){
 
   ## Remove columns not in settings ##
-
   col_names <- colnames(data)
-  settings_keys  <- safetyGraphics::getSettingsMetadata(cols="text_key", filter_expr=.data$column_mapping==TRUE) %>%
-    str_split("--")
-
-  settings_values <- map(settings_keys, function(x) {return(getSettingValue(x, settings))})
+  
+  allKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$column_mapping, cols = c("text_key","setting_type"))
+  dataKeys <- allKeys %>% filter(.data$setting_type !="vector") %>% pull(.data$text_key) %>% textKeysToList()
+  
+  # Add items in vectors to list individually
+  dataVectorKeys <- allKeys %>% filter(.data$setting_type =="vector") %>% pull(.data$text_key) %>% textKeysToList()
+  for(key in dataVectorKeys){
+    current<-getSettingValue(key, settings=settings)
+    if (length(current) > 0 ) {
+      for (i in 1:length(current)){
+        newKey <- key
+        newKey[[1+length(newKey)]]<-i
+        sub <- current[[i]]
+        if(typeof(sub)=="list"){
+          newKey[[1+length(newKey)]]<-"value_col"
+        }  
+        dataKeys[[1+length(dataKeys)]]<-newKey 
+      }
+    }
+  }
+  
+  settings_values <- map(dataKeys, function(x) {return(getSettingValue(x, settings))})
 
   common_cols <- intersect(col_names,settings_values)
 
