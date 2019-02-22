@@ -26,8 +26,7 @@ evaluateStandard <- function(data, standard, includeFields=TRUE, domain="labs"){
     is.data.frame(data),
     is.character(standard),
     is.logical(includeFields),
-    is.character(domain),
-    tolower(standard) %in% c("adam","sdtm")
+    is.character(domain)
   )
   
   standard<-tolower(standard)
