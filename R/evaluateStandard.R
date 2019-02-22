@@ -7,7 +7,7 @@
 #' @param includeFields should field level data be evaluated? 
 #' @param domain data domain. "labs" only for now. 
 #' 
-#' @return a list describing to what degree the data set matches the data standard. The "match" property describes compliance with the standard as "Full", "Partial" or "None". The "checks" property is a list of the data elements expected for the standard and whether they are "valid" in the given data set. "valid_checks" and "invalid_checks" provide counts of the specified checks. 
+#' @return a list describing to what degree the data set matches the data standard. The "match" property describes compliance with the standard as "full", "partial" or "none". The "checks" property is a list of the data elements expected for the standard and whether they are "valid" in the given data set. "total_checks", "valid_checks" and "invalid_checks" provide counts of the specified checks. "match_percent" is calculated as valid_checks/total_checks.
 #'  
 #' @examples
 #' safetyGraphics:::evaluateStandard(data=adlbc, standard="adam") # Match is TRUE
