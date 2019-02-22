@@ -39,24 +39,53 @@
 
 
 validateSettings <- function(data, settings, chart="eDish"){
-
+  
   settingStatus<-list()
-
+  
   # Check that all required parameters are not null
   requiredChecks <- getRequiredSettings(chart = chart) %>% purrr::map(checkRequired, settings = settings)
-
+  
   #Check that non-null setting columns are found in the data
-  dataKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$column_mapping, cols = "text_key")%>%textKeysToList()
+  allKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$column_mapping, cols = c("text_key","setting_type"))
+  dataKeys <- allKeys %>% filter(.data$setting_type !="vector") %>% pull(.data$text_key) %>% textKeysToList()
+  
+  # Add items in vectors to list individually
+  dataVectorKeys <- allKeys %>% filter(.data$setting_type =="vector") %>% pull(.data$text_key) %>% textKeysToList()
+  for(key in dataVectorKeys){
+    current<-getSettingValue(key, settings=settings)
+    if (length(current) > 0 ) {
+      for (i in 1:length(current)){
+        newKey <- key
+        newKey[[1+length(newKey)]]<-i
+        sub <- current[[i]]
+        if(typeof(sub)=="list"){
+          newKey[[1+length(newKey)]]<-"value_col"
+        }  
+        dataKeys[[1+length(dataKeys)]]<-newKey 
+      }
+    }
+  }
+  
   columnChecks <- dataKeys %>% purrr::map(checkColumn, settings=settings, data=data)
 
   #Check that non-null field/column combinations are found in the data
-  fieldKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$field_mapping)%>%
-    filter(.data$setting_type!="vector")%>% #TODO: check the vectorized fields as well. Not sure a big deal now, since none are required ... 
-    select(.data$text_key)%>%
-    unlist()%>%
-    textKeysToList()
+  allKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$field_mapping, cols = c("text_key","setting_type"))
+  fieldKeys <- allKeys %>% filter(.data$setting_type!="vector")%>% pull(.data$text_key)%>%textKeysToList()
+  
+  #Add items in vectors to list individually
+  fieldVectorKeys <- allKeys %>% filter(.data$setting_type=="vector")%>% pull(.data$text_key)%>%textKeysToList()
+  for(key in fieldVectorKeys){
+    current<-getSettingValue(key, settings=settings)
+    if (length(current) > 0 ) {
+      for (i in 1:length(current)){
+        newKey <- key
+        newKey[[1+length(newKey)]]<-i
+        fieldKeys[[1+length(fieldKeys)]]<-newKey
+      }
+    }
+  }
   fieldChecks <- fieldKeys %>% purrr::map(checkField, settings=settings, data=data )
-
+  
   #Check that settings for mapping numeric data are associated with numeric columns
   numericKeys <- getSettingsMetadata(charts=chart, filter_expr=.data$column_type=="numeric", cols="text_key")%>%textKeysToList()
   numericChecks <- numericKeys %>% purrr::map(checkNumeric, settings=settings, data=data )
@@ -76,7 +105,7 @@ validateSettings <- function(data, settings, chart="eDish"){
   
   #valid=true if all checks pass, false otherwise
   settingStatus$valid <- settingStatus$checks%>%select(.data$valid)%>%unlist%>%all
-
+  
   #create summary string
   failCount <- nrow(settingStatus$checks%>%filter(!.data$valid))
   checkCount <- nrow(settingStatus$checks)

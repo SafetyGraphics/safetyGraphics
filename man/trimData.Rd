@@ -4,12 +4,14 @@
 \alias{trimData}
 \title{Removes unnecessary rows and columns}
 \usage{
-trimData(data, settings)
+trimData(data, settings, chart = "edish")
 }
 \arguments{
 \item{data}{a data frame to trim}
 
 \item{settings}{the settings list used to determine which rows and columns to drop}
+
+\item{chart}{the chart being created}
 }
 \value{
 A dataframe with unnecessary columns and rows removed
@@ -19,7 +21,7 @@ Removes unnecessary rows and columns from data based on current settings
 }
 \examples{
 testSettings <- generateSettings(standard="adam")
-safetyGraphics:::trimData(data=adlbc, settings=testSettings) 
+trimmed<-safetyGraphics:::trimData(data=adlbc, settings=testSettings)
 
 }
 \keyword{internal}

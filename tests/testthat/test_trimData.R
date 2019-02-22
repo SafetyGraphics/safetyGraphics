@@ -11,6 +11,9 @@ analysisFlag_settings <- settings
 analysisFlag_settings[['analysisFlag']][['value_col']] <- 'TRTA'
 analysisFlag_settings[['analysisFlag']][['values']] <- list("Placebo","Xanomeline High Dose")
 
+filter_settings <- settings
+filter_settings[['filters']]<-list("SEX", "AGEGR1")
+
 both_settings <- baseline_settings
 both_settings[['analysisFlag']][['value_col']] <- 'TRTA'
 both_settings[['analysisFlag']][['values']] <- list("Placebo","Xanomeline High Dose")
@@ -21,6 +24,8 @@ test_that("columns are removed",{
   expect_length(trimData(adlbc, baseline_settings), 6)
   expect_length(trimData(adlbc, analysisFlag_settings), 7)
   expect_length(trimData(adlbc, both_settings), 7)
+  expect_length(trimData(adlbc, filter_settings), 8)
+ 
 })
 
 test_that("rows are removed",{
