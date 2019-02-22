@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' testSettings <- generateSettings(standard="adam")
-#' safetyGraphics:::trimData(data=adlbc, settings=testSettings)
+#' trimmed<-safetyGraphics:::trimData(data=adlbc, settings=testSettings)
 #'
 #' @importFrom dplyr filter
 #' @importFrom purrr map
