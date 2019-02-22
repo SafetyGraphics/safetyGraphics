@@ -10,10 +10,6 @@ createLabel <- function(key){
   }
 }
 
-createDescription <- function(key){
-  getSettingsMetadata(text_keys=key, cols="description")
-}
-
 createControl <- function(key, metadata, data, settings, ns){
   sm_key <- filter(metadata, text_key==key)
   
@@ -23,7 +19,7 @@ createControl <- function(key, metadata, data, settings, ns){
   setting_key <- as.list(strsplit(key,"\\-\\-"))
   setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings=settings)
   setting_label <- createLabel(key)
-  setting_description <- createDescription(key)
+  setting_description <- getSettingsMetadata(text_keys=key, cols="description")
   
   field_column <- NULL
   field_column_label <- NULL

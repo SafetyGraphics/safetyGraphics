@@ -10,7 +10,7 @@ renderSettingsUI <- function(id){
                wellPanel(
                  div(
                    span(h2(tags$strong("Select Chart(s):"))),
-                   checkboxGroupInput(ns("select_charts"),"", 
+                   checkboxGroupInput(ns("charts"),"", 
                                       choices = c("e-DISH" = "edish"), 
                                       selected="edish")) 
                )

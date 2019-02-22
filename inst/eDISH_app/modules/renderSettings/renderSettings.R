@@ -19,19 +19,19 @@ renderSettings <- function(input, output, session, data, settings, status){
   ######################################################################
 
   output$data_mapping_ui <- renderUI({
-    req(input$select_charts)
+    req(input$charts)
     tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "data", charts=input$charts, ns=ns))
   })
   outputOptions(output, "data_mapping_ui", suspendWhenHidden = FALSE) 
   
   output$measure_settings_ui <- renderUI({
-    req(input$select_charts)
+    req(input$charts)
     tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "measure", charts=input$charts, ns=ns))
   })
   outputOptions(output, "measure_settings_ui", suspendWhenHidden = FALSE)
   
   output$appearance_settings_ui <- renderUI({
-    req(input$select_charts)
+    req(input$charts)
     tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "appearance", charts=input$charts, ns=ns))
   })
   outputOptions(output, "appearance_settings_ui", suspendWhenHidden = FALSE)
@@ -46,7 +46,7 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   observe({
     
-    column_keys <- getSettingsMetadata(charts=input$select_charts,
+    column_keys <- getSettingsMetadata(charts=input$charts,
                         filter_expr = field_mapping==TRUE) %>% 
       pull(field_column_key) %>% 
       unique %>% 
@@ -57,7 +57,7 @@ renderSettings <- function(input, output, session, data, settings, status){
       col_quo <- enquo(col)
       observeEvent(input[[col]],{
      
-        field_keys <- getSettingsMetadata(charts=input$select_charts, col = "text_key", 
+        field_keys <- getSettingsMetadata(charts=input$charts, col = "text_key", 
                                           filter_expr = field_column_key==!!col) 
         
         
@@ -205,10 +205,6 @@ renderSettings <- function(input, output, session, data, settings, status){
   
   ######################################################################
   # print validation messages
-  #
-  #  Right now we are re-printing ALL status messages upon validation update.
-  #   if we make a module, we have the option of printing ONLY the 
-  #  message for input that changed.
   ######################################################################
  observe({
    for (name in isolate(input_names())){
@@ -225,7 +221,8 @@ renderSettings <- function(input, output, session, data, settings, status){
  })
  
   ### return updated settings and status to global env.
-  return(list(settings = reactive(settings_new()),
+  return(list(charts = reactive(input$charts),
+              settings = reactive(settings_new()),
               status = reactive(status_new())))
   
 }
