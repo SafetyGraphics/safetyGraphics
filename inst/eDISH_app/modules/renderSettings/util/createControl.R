@@ -1,14 +1,17 @@
 createControl <- function(key, metadata, data, settings, ns){
+  
   sm_key <- filter(metadata, text_key==key)
   
   tt_msg <- paste0("tt_msg_", key)
   msg <- paste0("msg_", key)   
   
+  ### get metadata for the input
   setting_key <- as.list(strsplit(key,"\\-\\-"))
   setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings=settings)
   setting_label <- createSettingLabel(key)
   setting_description <- getSettingsMetadata(text_keys=key, cols="description")
   
+  ### if a field-level input, get metadata about the parent column-level input
   field_column <- NULL
   field_column_label <- NULL
   if (!is.null(sm_key$field_column_key)){
@@ -17,7 +20,7 @@ createControl <- function(key, metadata, data, settings, ns){
   }
   
   
-  # get the choices for the option
+  ### get the choices for the selectors
   value <- NULL
   choices <- NULL
   placeholder <- NULL
@@ -46,6 +49,9 @@ createControl <- function(key, metadata, data, settings, ns){
     # nowhere to grab "choices" from.  Here we are just saying that choices=selected=setting_value 
   }  
   
+  
+  
+  ### create code for the UI
   if (sm_key$column_mapping==TRUE | sm_key$field_mapping==TRUE){
     
     multiple <- (sm_key$setting_type=="vector")
