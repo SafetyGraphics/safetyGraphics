@@ -1,18 +1,18 @@
-text_key,adam,sdtm
+text_key,sdtm,adam
 id_col,USUBJID,USUBJID
-value_col,AVAL,STRESN
-measure_col,PARAM,TEST
-normal_col_low,A1LO,STNRLO
-normal_col_high,A1HI,STNRHI
-studyday_col,ADY,DY
+value_col,STRESN,AVAL
+measure_col,TEST,PARAM
+normal_col_low,STNRLO,A1LO
+normal_col_high,STNRHI,A1HI
+studyday_col,DY,ADY
 visit_col,VISIT,VISIT
 visitn_col,VISITNUM,VISITNUM
 filters,,
 group_cols,,
-measure_values--ALT,Alanine Aminotransferase (U/L),"Aminotransferase, alanine (ALT)"
-measure_values--AST,Aspartate Aminotransferase (U/L),"Aminotransferase, aspartate (AST)"
-measure_values--TB,Bilirubin (umol/L),Total Bilirubin
-measure_values--ALP,Alkaline Phosphatase (U/L),Alkaline phosphatase (ALP)
+measure_values--ALT,"Aminotransferase, alanine (ALT)",Alanine Aminotransferase (U/L)
+measure_values--AST,"Aminotransferase, aspartate (AST)",Aspartate Aminotransferase (U/L)
+measure_values--TB,Total Bilirubin,Bilirubin (umol/L)
+measure_values--ALP,Alkaline phosphatase (ALP),Alkaline Phosphatase (U/L)
 baseline--value_col,,
 baseline--values,,
 analysisFlag--value_col,,

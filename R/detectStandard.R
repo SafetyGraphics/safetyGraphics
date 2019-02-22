@@ -26,31 +26,45 @@ detectStandard <- function(data, includeFields=TRUE, domain="labs"){
   )
 
 
-  # Create placeholder list, with Standard = None.
+  # Create placeholder list, with Standard = none.
   available_standards <- standardsMetadata %>% select(-text_key) %>% names
   standard_list <- list()
   standard_list[["details"]] = list()
+  standard_list[["standard"]] = "none"
+  standard_list[["standard_percent"]] = 0
+  
   for(standard in available_standards){
+    # evaluate the current standard and save the result
     standard_list[["details"]][[standard]]<-evaluateStandard(data,standard=standard, includeFields=includeFields, domain=domain)  
+    
+    # if the current standard is a better match, use it as the overall standard
+    # if there is a tie, don't change the standard - this means the column order in standardMetadata breaks ties!
+    current_percent <- standard_list[["details"]][[standard]][["match_percent"]]
+    overall_percent <- standard_list[["standard_percent"]]
+    if(current_percent > overall_percent){
+      standard_list[["standard"]] <- standard  
+      standard_list[["standard_percent"]] <- current_percent
+    }
   }
 
   # Determine the final standard
+  
   # TODO: write a general algorithm to do this ...
-  if(standard_list[["details"]][["sdtm"]][["match"]] == "Full"){
-    standard_list[["standard"]]<- "sdtm"
-  } else if(standard_list[["details"]][["adam"]][["match"]] == "Full"){
-    standard_list[["standard"]]<- "adam"
-  } else if(standard_list[["details"]][["sdtm"]][["match"]] == "Partial" |
-           standard_list[["details"]][["adam"]][["match"]] == "Partial"){
-  standard_list[["standard"]] <- ifelse(
-    length(standard_list[["details"]][["adam"]][["valid_count"]]) >
-      length(standard_list[["details"]][["sdtm"]][["valid_count"]]),
-      "adam" , "sdtm" #SDTM if they are equal
-    )
-
-  } else {
-    standard_list[["standard"]]<-"None"
-  }
+  # if(standard_list[["details"]][["sdtm"]][["match"]] == "Full"){
+  #   standard_list[["standard"]]<- "sdtm"
+  # } else if(standard_list[["details"]][["adam"]][["match"]] == "Full"){
+  #   standard_list[["standard"]]<- "adam"
+  # } else if(standard_list[["details"]][["sdtm"]][["match"]] == "Partial" |
+  #          standard_list[["details"]][["adam"]][["match"]] == "Partial"){
+  # standard_list[["standard"]] <- ifelse(
+  #   length(standard_list[["details"]][["adam"]][["valid_count"]]) >
+  #     length(standard_list[["details"]][["sdtm"]][["valid_count"]]),
+  #     "adam" , "sdtm" #SDTM if they are equal
+  #   )
+  # 
+  # } else {
+  #   standard_list[["standard"]]<-"None"
+  # }
 
   return(standard_list)
 }
