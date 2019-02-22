@@ -30,10 +30,10 @@
 
 getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, filter_expr=NULL, add_standards=TRUE, metadata = safetyGraphics::settingsMetadata){
 
-  md <- metadata %>% mutate(text_key=as.character(text_key))
+  md <- metadata %>% mutate(text_key=as.character(.data$text_key))
   
   if(add_standards){
-    ms<-standardsMetadata %>% mutate(text_key=as.character(text_key))
+    ms<-safetyGraphics::standardsMetadata %>% mutate(text_key=as.character(.data$text_key))
     md<-md%>%left_join(ms, by="text_key")
   }
   

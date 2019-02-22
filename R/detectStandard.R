@@ -27,7 +27,7 @@ detectStandard <- function(data, includeFields=TRUE, domain="labs"){
 
 
   # Create placeholder list, with Standard = none.
-  available_standards <- standardsMetadata %>% select(-text_key) %>% names
+  available_standards <- safetyGraphics::standardsMetadata %>% select(-.data$text_key) %>% names
   standard_list <- list()
   standard_list[["details"]] = list()
   standard_list[["standard"]] = "none"
