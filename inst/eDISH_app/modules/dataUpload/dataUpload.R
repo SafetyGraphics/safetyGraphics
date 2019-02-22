@@ -2,7 +2,6 @@ dataUpload <- function(input, output, session){
   
   ns <- session$ns
   
-  
   # initiate reactive values - list of uploaded data files
   # standard to imitate output of detectStandard.R
   dd <- reactiveValues(data = list("Example data" = adlbc), current = 1, standard = list(list("standard" = "ADaM", "details" = list("ADaM"=list("match"="Full")))))

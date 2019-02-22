@@ -8,7 +8,8 @@ renderEDishChart <- function(input, output, session, data, settings, valid){
     req(settings())
     
     if (valid()==TRUE){
-      eDISH(data = data(), settings = settings())
+      trimmed_data <- safetyGraphics:::trimData(data = data(), settings = settings())
+      eDISH(data = trimmed_data, settings = settings())
     } else{
       return()
     }

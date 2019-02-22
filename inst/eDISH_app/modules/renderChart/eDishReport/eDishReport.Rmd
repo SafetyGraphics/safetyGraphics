@@ -33,9 +33,11 @@ safetyGraphics is an open source project built using standard web technology and
 
 #### Code to Reproduce Chart
 
-Use the script below to (1) load your data and (2) render the chart. Make sure to update the first line to point at your data. 
+Use the script below to (1) load the safetyGraphics package, (2) load your data and (3) render the chart. Make sure to update the second line to point at your data. 
 
 ```{r, comment=NA, echo=FALSE}
+lib_code <- quote(library(safetyGraphics))
+lib_code
 
 writeLines("path <- 'path_to_data'") ### <-- Update this!
 writeLines("my_data <- read.csv(file.path(path, 'data.csv'))")
