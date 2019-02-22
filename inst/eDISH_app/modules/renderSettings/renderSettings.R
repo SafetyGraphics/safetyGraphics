@@ -1,6 +1,6 @@
+source("modules/renderSettings/util/createSettingLabel.R")
+source("modules/renderSettings/util/createControl.R")
 source("modules/renderSettings/util/createSettingsUI.R")
-# source("modules/renderSettings/util/labelSetting.R")
-# source("modules/renderSettings/util/flagSetting.R")
 source("modules/renderSettings/util/updateSettingStatus.R")
 
 renderSettings <- function(input, output, session, data, settings, status){
