@@ -1,5 +1,6 @@
 library(safetyGraphics)
 library(shiny)
+library(shinyWidgets)
 library(shinyjs)
 library(dplyr)
 library(purrr)

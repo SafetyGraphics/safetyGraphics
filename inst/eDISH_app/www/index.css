@@ -1,0 +1,18 @@
+
+.section h2 div {
+  display:inline-block;
+}
+
+
+/* Validation Coloring */
+.ok { 
+  color:#008000;
+}
+.notok {
+  color: #FF0000;
+}
+
+/* hide the chartSelect div until we're ready to implement multiple charts */
+.chartSelect{
+  display:none;
+}

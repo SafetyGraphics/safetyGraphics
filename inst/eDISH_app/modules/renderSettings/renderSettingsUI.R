@@ -5,79 +5,67 @@ renderSettingsUI <- function(id){
   
   tagList(
     verticalLayout(
-      fluidRow(
-        column(4,
-               wellPanel(
-                 div(
-                   span(h2(tags$strong("Select Chart(s):"))),
-                   checkboxGroupInput(ns("charts"),"", 
-                                      choices = c("e-DISH" = "edish"), 
-                                      selected="edish")) 
-               )
+      wellPanel(
+        class="chartSelect section",
+        h2("Select Chart(s):"),
+        checkboxGroupInput(
+          ns("charts"),
+          "", 
+          choices = c("e-DISH" = "edish"), 
+          selected="edish"
         )
       ),
-      fluidRow(
-        column(4,
-               tags$hr()
-               )
+      wellPanel(
+        class="dataMapping section",
+        h3(
+          materialSwitch(
+            ns("show_data_mapping"),
+            label = "Data Mapping",
+            right=TRUE,
+            value = TRUE,
+            status = "primary"
+          )
         ),
-      fluidRow(
-        column(4,
-               h2(tags$strong("Customize Settings:"))
-               ) 
+        conditionalPanel(
+          condition="input.show_data_mapping", 
+          ns=ns, 
+          uiOutput(ns("data_mapping_ui"))
+        )
+      ),
+      wellPanel(
+        class="measureSettings section",
+        h3(
+          materialSwitch(
+            ns("show_measure_settings"),
+            label = "Measure Settings",
+            right=TRUE,
+            value = TRUE,
+            status = "primary"
+          )
         ),
-      fluidRow(
-        column(4,
-               div(
-                 div(style="display: inline-block;", h3(tags$i("Data Mapping"))),
-                 div(style="display: inline-block;", checkboxInput(ns("show_data_mapping"), "show", TRUE))
-               )
+        conditionalPanel(
+          condition="input.show_measure_settings", 
+          ns=ns, 
+          uiOutput(ns("measure_settings_ui"))
         )
       ),
-      conditionalPanel(condition="input.show_data_mapping", ns=ns, 
-                       fluidRow(
-                         column(4,    
-                                wellPanel( 
-                                  uiOutput(ns("data_mapping_ui"))
-                                ))
-                         
-                       ) 
-      ),
-      
-      fluidRow(
-        column(4,  
-               div(
-                 div(style="display: inline-block;", h3(tags$i("Measure Settings"))),
-                 div(style="display: inline-block;", checkboxInput(ns("show_measure_settings"), "show", TRUE))
-               ) 
+      wellPanel(
+        class="appearanceSettings section",
+        h3(
+          materialSwitch(
+            ns("show_appearance_settings"),
+            label = "Appearance Settings",
+            right=TRUE,
+            value = TRUE,
+            status = "primary"
+          )
+        ),
+        conditionalPanel(
+          condition="input.show_appearance_settings", 
+          ns=ns, 
+          uiOutput(ns("appearance_settings_ui"))
         )
-      ),
-      conditionalPanel(condition="input.show_measure_settings", ns=ns, 
-                       fluidRow(
-                         column(4,    
-                                wellPanel( 
-                                  uiOutput(ns("measure_settings_ui"))
- 
-                                )
-                         )
-                       )
-      ),
-      fluidRow(
-        column(6,  
-               div(
-                 div(style="display: inline-block;", h3(tags$i("Appearance Settings"))),
-                 div(style="display: inline-block;", checkboxInput(ns("show_appearance_settings"), "show", TRUE))
-               )  
-        )
-      ),
-      conditionalPanel(condition="input.show_appearance_settings", ns=ns, 
-                       fluidRow(
-                         column(4, 
-                                wellPanel(
-                                  uiOutput(ns("appearance_settings_ui"))
-                                )
-                         )
-                       )
       )
-    ))
+    )
+  )
 }
