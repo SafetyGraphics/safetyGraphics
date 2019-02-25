@@ -10,6 +10,7 @@
    \item{text_key}{Text key indicating the setting name. \code{'--'} delimiter indicates a nested setting}
    \item{label}{Label}
    \item{description}{Description}
+   \item{setting_cat}{Setting category (data, measure, appearance)}
    \item{setting_type}{Expected type for setting value. Should be "character", "vector", "numeric" or "logical"}
    \item{setting_required}{Flag indicating if the setting is required}
    \item{column_mapping}{Flag indicating if the setting corresponds to a column in the associated data}
