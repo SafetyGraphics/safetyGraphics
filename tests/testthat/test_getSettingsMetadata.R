@@ -24,19 +24,19 @@ mergedMetadata = suppressWarnings(bind_rows(
 ))
 
 test_that("Default function copies the whole metadata dataframe",{
-  default<-safetyGraphics:::getSettingsMetadata()
+  default<-safetyGraphics:::getSettingsMetadata(add_standards=FALSE)
   expect_is(default,"data.frame")
   expect_equal(dim(default), dim(rawMetadata))
 })
 
 test_that("Pulling from a custom metadata file works as expected",{
-  custom<-safetyGraphics:::getSettingsMetadata(metadata=customMetadata)
+  custom<-safetyGraphics:::getSettingsMetadata(metadata=customMetadata, add_standards=FALSE)
   expect_is(custom,"data.frame")
   expect_equal(dim(custom), dim(customMetadata))
 
-  merged<-safetyGraphics:::getSettingsMetadata(metadata=customMetadata)
+  merged<-safetyGraphics:::getSettingsMetadata(metadata=mergedMetadata, add_standards=FALSE)
   expect_is(custom,"data.frame")
-  expect_equal(dim(custom), dim(customMetadata))
+  expect_equal(dim(merged), dim(mergedMetadata))
 })
 
 test_that("charts parameter works as expected",{
@@ -135,4 +135,13 @@ test_that("filter_expr parameters works as expected",{
   expect_equal(safetyGraphics:::getSettingsMetadata(filter_expr=text_key=="id_col",cols="description"),"Unique subject identifier variable name.")
   expect_length(safetyGraphics:::getSettingsMetadata(filter_expr=column_type=="numeric",cols="text_key",chart="edish"),5)
   expect_length(safetyGraphics:::getSettingsMetadata(filter_expr=setting_required,cols="text_key",chart="edish"),10)
-  })
+})
+
+test_that("add_standards parameters works as expected",{
+  noStandards<-safetyGraphics:::getSettingsMetadata(metadata=customMetadata, add_standards=FALSE)
+  yesStandards<-safetyGraphics:::getSettingsMetadata(metadata=customMetadata) #included by default
+  expect_true(dim(noStandards)[2]< dim(yesStandards)[2])
+  standardNames <- names(standardsMetadata)
+  expect_equal(intersect(standardNames, names(yesStandards)),standardNames)
+  expect_equal(intersect(standardNames, names(noStandards)),"text_key")
+})

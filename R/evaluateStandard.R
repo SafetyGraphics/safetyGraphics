@@ -7,7 +7,7 @@
 #' @param includeFields should field level data be evaluated? 
 #' @param domain data domain. "labs" only for now. 
 #' 
-#' @return a list describing to what degree the data set matches the data standard. The "match" property describes compliance with the standard as "Full", "Partial" or "None". The "checks" property is a list of the data elements expected for the standard and whether they are "valid" in the given data set. "valid_checks" and "invalid_checks" provide counts of the specified checks. 
+#' @return a list describing to what degree the data set matches the data standard. The "match" property describes compliance with the standard as "full", "partial" or "none". The "checks" property is a list of the data elements expected for the standard and whether they are "valid" in the given data set. "total_checks", "valid_checks" and "invalid_checks" provide counts of the specified checks. "match_percent" is calculated as valid_checks/total_checks.
 #'  
 #' @examples
 #' safetyGraphics:::evaluateStandard(data=adlbc, standard="adam") # Match is TRUE
@@ -26,8 +26,7 @@ evaluateStandard <- function(data, standard, includeFields=TRUE, domain="labs"){
     is.data.frame(data),
     is.character(standard),
     is.logical(includeFields),
-    is.character(domain),
-    tolower(standard) %in% c("adam","sdtm")
+    is.character(domain)
   )
   
   standard<-tolower(standard)
@@ -43,7 +42,8 @@ evaluateStandard <- function(data, standard, includeFields=TRUE, domain="labs"){
   mutate(type = ifelse(.data$column_mapping, "column", "field")) %>% 
   rowwise %>%
   mutate(field_column_name = ifelse(.data$field_mapping, getSettingsMetadata(cols=standard, text_keys=.data$field_column_key),"")) %>%
-  mutate(valid = ifelse(.data$column_mapping,
+  mutate(
+    valid = ifelse(.data$column_mapping,
     hasColumn(data=data, columnName=.data$standard_val),
     hasField(data=data, columnName=.data$field_column_name, fieldValue=.data$standard_val)
   )) %>%
@@ -54,20 +54,20 @@ evaluateStandard <- function(data, standard, includeFields=TRUE, domain="labs"){
     standardChecks <- standardChecks %>% filter(.data$type != "field")
   }
   
- # compare_summary[["checks"]] <- split(standardChecks, seq(nrow(standardChecks)))%>%map(~as.list(.)) #coerce to list of lists?
-  compare_summary[["checks"]] <- standardChecks #or just keep the tibble ... 
+  compare_summary[["checks"]] <- standardChecks 
 
   # count valid/invalid data elements
+  compare_summary[["total_count"]] <- standardChecks %>% nrow()
   compare_summary[["valid_count"]] <- standardChecks %>% filter(.data$valid) %>% nrow()
   compare_summary[["invalid_count"]] <- standardChecks %>% filter(!.data$valid) %>% nrow()
-
-
+  compare_summary[["match_percent"]] <- compare_summary[["valid_count"]] / compare_summary[["total_count"]]
+  
   if (compare_summary[["invalid_count"]]==0) {
-     compare_summary[["match"]] <- "Full"
+     compare_summary[["match"]] <- "full"
   } else if(compare_summary[["valid_count"]]>0) {
-    compare_summary[["match"]] <- "Partial"
+    compare_summary[["match"]] <- "partial"
   } else {
-    compare_summary[["match"]] <- "None"
+    compare_summary[["match"]] <- "none"
   }
 
   return(compare_summary)
