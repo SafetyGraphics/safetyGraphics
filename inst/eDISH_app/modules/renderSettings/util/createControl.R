@@ -45,8 +45,7 @@ createControl <- function(key, metadata, data, settings, ns){
     placeholder <- list (onInitialize = I('function() { }'))
     }
   } else if (sm_key$setting_type=="vector"){
-    choices <- setting_value   ### this is meant to cover the scenario for x_options/y_options. But we have 
-    # nowhere to grab "choices" from.  Here we are just saying that choices=selected=setting_value 
+    choices <- setting_value   ### this is meant to cover the scenario for x_options/y_options 
   }  
   
   
