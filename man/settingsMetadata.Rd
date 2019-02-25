@@ -17,6 +17,7 @@
    \item{column_type}{Expected type for the data column values. Should be "character","logical" or "numeric"}
    \item{field_mapping}{Flag indicating whether the setting corresponds to a field-level mapping in the data}
    \item{field_column_key}{Key for the column that provides options for the field-level mapping in the data}
+   \item{setting_cat}{Category specifying where the setting should be located in shiny}
 }}
 \source{
 Created for this package
