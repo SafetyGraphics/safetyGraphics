@@ -90,13 +90,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   
   ######################################################################
   # Fill settings object based on selections
-  # require that secondary inputs have been filled in before proceeding
+  #  
   # update is triggered by any of the input selections changing
-  #
-  # NOTE: when data selection changes, the inputs are updating 1 by 1
-  # Therefore, until the inputs are done updating based on new data, this object will be
-  # partially representing the old data, and partially representing the new data.
-  # not sure if this is the right place to do it...but can we clear out this object upon a data change and start over??
   ######################################################################
   
   settings_new <- reactive({
@@ -157,9 +152,6 @@ renderSettings <- function(input, output, session, data, settings, status){
   # validate new settings
   #  the validation is run every time there is a change in data and/or settings.
   #
-  #  NOTE: to prevent status updating as loop runs and fills in settings(),
-  #   require the very last updated input to be available <- can't do this b/c we will have lots of
-  #   null settings to start when no standard detected...
   ######################################################################
 
   status_new <- reactive({  
