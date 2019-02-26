@@ -1,84 +1,46 @@
-#' Render Settings module - UI code
-#' 
-#' This module creates the Settings tab for the Shiny app. The UI is dynamically populated from the server side. 
-#' 
-#' The UI contains:
-#' - Chart selector 
-#' - Settings customizations for the selected charts:
-#'      - Data mapping
-#'      - Measure settings
-#'      - Appearance settings
-#'
-#' @param id The module-specific ID that will get pre-pended to all element IDs
-#'
-#' @return The UI for the Settings tab
-#'
+
 renderSettingsUI <- function(id){
-  
+  makeSection <- function(class, label){
+    section <- 
+      column(6,
+        wellPanel(
+         class=paste0(class," section"),
+         h3(
+            label,
+            materialSwitch(
+              ns(paste0("show_",class)),
+             label = "",
+              right=TRUE,
+              value = TRUE,
+              status = "primary"
+            )
+          ),
+          conditionalPanel(
+            condition=paste0("input.show_",class), 
+            ns=ns, 
+            uiOutput(ns(paste0(class,"_ui")))
+          )
+        )
+      )
+    return(section)
+  }
   ns <- NS(id)
-  
-  tagList(
-    verticalLayout(
-      wellPanel(
+  fluidPage(
+    fluidRow(
+      column(12,
         class="chartSelect section",
-        h2("Select Chart(s):"),
         checkboxGroupInput(
           ns("charts"),
-          "", 
+          "Select Chart(s):", 
           choices = c("e-DISH" = "edish"), 
           selected="edish"
         )
-      ),
-      wellPanel(
-        class="dataMapping section",
-        h3("Data Mapping"),
-        materialSwitch(
-            ns("show_data_mapping"),
-            label = "",
-            right=TRUE,
-            value = TRUE,
-            status = "primary"
-        ),
-        conditionalPanel(
-          condition="input.show_data_mapping", 
-          ns=ns, 
-          uiOutput(ns("data_mapping_ui"))
-        )
-      ),
-      wellPanel(
-        class="measureSettings section",
-        h3(
-          materialSwitch(
-            ns("show_measure_settings"),
-            label = "Measure Settings",
-            right=TRUE,
-            value = TRUE,
-            status = "primary"
-          )
-        ),
-        conditionalPanel(
-          condition="input.show_measure_settings", 
-          ns=ns, 
-          uiOutput(ns("measure_settings_ui"))
-        )
-      ),
-      wellPanel(
-        class="appearanceSettings section",
-        h3(
-          materialSwitch(
-            ns("show_appearance_settings"),
-            label = "Appearance Settings",
-            right=TRUE,
-            value = TRUE,
-            status = "primary"
-          )
-        ),
-        conditionalPanel(
-          condition="input.show_appearance_settings", 
-          ns=ns, 
-          uiOutput(ns("appearance_settings_ui"))
-        )
       )
+    ),
+    fluidRow(
+      makeSection("data_mapping", "Data Mappings"),
+      makeSection("measure_settings", "Measure Settings"),
+      makeSection("appearance_settings", "Appearance Settings")
     )
   )
 }

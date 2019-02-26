@@ -4,6 +4,9 @@
 }
 /* ------------------------------------------------------------------------------- */
 
+.section{
+  min-width:400px;
+}
 .control-wrap .select-wrap .form-group{
   display:inline-block;  
 }
@@ -15,8 +18,8 @@
   cursor:help;
 }
 
-.control-wrap .select-wrap div .selectize-control{
-  min-width:300px;
+.control-wrap .select-wrap .form-group{
+  width:60%;
 }
 
 /* Validation Coloring */
@@ -37,9 +40,19 @@
   border-color:red;
 }
 
-.material-switch{
+/* Settings - header tweaks */
+.section h3 {
+  margin:0;
+} 
+
+.section h3 .form-group {
+  display:inline;
+}
+
+.section h3 .form-group .material-switch{
   float:right;
 }
+
 
 .ok { 
   color:#008000;
