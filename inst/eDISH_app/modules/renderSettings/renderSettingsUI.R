@@ -17,14 +17,13 @@ renderSettingsUI <- function(id){
       ),
       wellPanel(
         class="dataMapping section",
-        h3(
-          materialSwitch(
+        h3("Data Mapping"),
+        materialSwitch(
             ns("show_data_mapping"),
-            label = "Data Mapping",
+            label = "",
             right=TRUE,
             value = TRUE,
             status = "primary"
-          )
         ),
         conditionalPanel(
           condition="input.show_data_mapping", 

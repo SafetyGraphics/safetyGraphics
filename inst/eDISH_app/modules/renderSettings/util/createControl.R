@@ -19,69 +19,52 @@ createControl <- function(key, metadata, data, settings, ns){
     field_column_label <- getSettingsMetadata(text_key = sm_key$field_column_key, cols = "label")
   }
   
-  
   ### get the choices for the selectors
   value <- NULL
   choices <- NULL
   placeholder <- NULL
-  if(sm_key$column_mapping==TRUE){
-    if(is.null(setting_value)){
+  
+  if(sm_key$column_mapping==TRUE & is.null(setting_value)){ #column mapping - no value specified
       choices <- colnames(data)
-      placeholder <- list(
-        onInitialize = I('function() {
-                         this.setValue("");}'))
-  } else{
-    choices <- unique(c(setting_value, colnames(data)))
-    placeholder <- list (onInitialize = I('function() { }'))
-    }
-  } else if (sm_key$field_mapping==TRUE){
-    if(is.null(field_column)){   ## if there is NOT a column specified in settings
+      placeholder <- list(onInitialize = I('function() {this.setValue("");}'))
+  } else if(sm_key$column_mapping==TRUE & !is.null(setting_value)) { #column mapping - value specified
+      choices <- unique(c(setting_value, colnames(data)))
+      placeholder <- list (onInitialize = I('function() { }'))
+  } else if (sm_key$field_mapping==TRUE & is.null(field_column)){ ## if there is NOT a column specified in settings
       placeholder <- list(
         placeholder = paste0("Please select a ", field_column_label),
         onInitialize = I('function() {
-                         this.setValue("");}'))
-  } else{                      ## if there is a column specified in settings                       
+                         this.setValue("");}')
+      )
+  } else if (sm_key$field_mapping==TRUE & !is.null(field_column)){ ## if there is NOT a column specified in settings
     choices <- unique(c(setting_value, as.character(data[,field_column]))) %>% unlist
     placeholder <- list (onInitialize = I('function() { }'))
-    }
   } else if (sm_key$setting_type=="vector"){
     choices <- setting_value   ### this is meant to cover the scenario for x_options/y_options 
   }  
   
-  
-  
   ### create code for the UI
+  multiple <- (sm_key$setting_type=="vector")
+ 
   if (sm_key$column_mapping==TRUE | sm_key$field_mapping==TRUE){
-    
-    multiple <- (sm_key$setting_type=="vector")
-    
-    div(
-      span(title = setting_description, tags$label(HTML(setting_label))),
-      span(id = ns(tt_msg), title = "", tags$label(id = ns(msg), "")),
-      selectizeInput(inputId = ns(key), label = NULL, choices = choices, options = placeholder, multiple = multiple)
-    )  
+    input <- selectizeInput(inputId = ns(key), label = NULL, choices = choices, options = placeholder, multiple = multiple)
   } else if (sm_key$setting_type=="vector"){
-    
-    div(
-      span(title = setting_description, tags$label(HTML(setting_label))),
-      span(id = ns(tt_msg), title = "", tags$label(id = ns(msg), "")),
-      selectizeInput(inputId = ns(key), label = NULL, choices = choices, selected = choices, multiple = TRUE)
-    ) 
-    
+    input <- selectizeInput(inputId = ns(key), label = NULL, choices = choices, selected = choices, multiple = TRUE)
   } else if (sm_key$setting_type=="numeric"){
-    div(
-      div(title = setting_description, tags$label(HTML(setting_label))),
-      sliderInput(inputId = ns(key), label = NULL, value=setting_value, min=0, max=50)
-    )
+    input <- sliderInput(inputId = ns(key), label = NULL, value=setting_value, min=0, max=50)  
   } else if (sm_key$setting_type=="logical"){
-    div(
-      div(title = setting_description, tags$label(HTML(setting_label))),
-      checkboxInput(inputId = ns(key), label = NULL, value=setting_value)
-    )
+    input <- checkboxInput(inputId = ns(key), label = NULL, value=setting_value)
   } else if (sm_key$setting_type=="character"){
-    div(
-      div(title = setting_description, tags$label(HTML(setting_label))),
-      textAreaInput(inputId = ns(key), label = NULL, value = setting_value)
-    )
+    input <-textAreaInput(inputId = ns(key), label = NULL, value = setting_value)  
   }
+  
+  div(
+    class="control-wrap",
+    span(title = setting_description, tags$label(HTML(setting_label))),
+    div(
+      class="select-wrap",
+      input,
+      div(id = ns(tt_msg), title = "", tags$label(id = ns(msg), ""), class="status")
+    )
+  )  
 }

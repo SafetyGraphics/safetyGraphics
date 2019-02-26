@@ -1,18 +1,50 @@
+/* --- hide the chartSelect div until we're ready to implement multiple charts --- */
+.chartSelect{
+  display:none;
+}
+/* ------------------------------------------------------------------------------- */
 
-.section h2 div {
-  display:inline-block;
+.control-wrap .select-wrap .form-group{
+  display:inline-block;  
 }
 
+.control-wrap .select-wrap .status{
+  display:inline-block;
+  margin-top:.5em;
+  vertical-align:top;
+  cursor:help;
+}
+
+.control-wrap .select-wrap div .selectize-control{
+  min-width:300px;
+}
 
 /* Validation Coloring */
+
+.control-wrap .select-wrap.valid .status{
+  color:green;
+}
+
+.control-wrap select-wrap.valid div .selectize-control .selectize-input{
+  border-color:green;
+}
+
+.control-wrap .select-wrap.invalid .status{
+  color:red;
+}
+
+.control-wrap .select-wrap.invalid div .selectize-control .selectize-input{
+  border-color:red;
+}
+
+.material-switch{
+  float:right;
+}
+
 .ok { 
   color:#008000;
 }
+
 .notok {
   color: #FF0000;
-}
-
-/* hide the chartSelect div until we're ready to implement multiple charts */
-.chartSelect{
-  display:none;
 }
