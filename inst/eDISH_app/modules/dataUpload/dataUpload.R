@@ -1,3 +1,32 @@
+#' Data upload module - server code
+#'
+#' This module creates the Data tab for the Shiny app. 
+#' 
+#' Workflow:
+#' (1) A reactiveValues() list is created with example dataset as first entry. 
+#'     The following information is included in list:
+#'        - dataset and name
+#'        - current (whether the dataset came from most recent upload)
+#'        - data standard / quality of match
+#' (2) Upon user data upload:
+#'        - reactiveValues list is updated with information about new data.
+#'        - radio buttons are updated with new data choices
+#' (3) When a new dataset is selected, the data preview output is invalidated
+#' (4) When a new dataset is selected OR the standard changes (since these don't update at the same time), the
+#'     the settings object ("settings()") is invalidated.
+#' (5) When a new dataset is selected OR the settings object is updated, the settings validation ("status()") is 
+#'     invalidated.
+#' 
+#' @param input Input objects from module namespace
+#' @param output Output objects from module namespace
+#' @param session An environment that can be used to access information and functionality relating to the session
+#'
+#' @return A list of reactive values, including: 
+#' \itemize{
+#' \item{"data_selected"}{A data frame selected by the user}
+#' \item{"settings"}{Result from generateSettings() for data_selected}
+#' \item{"status"}{Result from validateSettings() for data_selected and settings}
+#'  
 dataUpload <- function(input, output, session){
 
   ns <- session$ns

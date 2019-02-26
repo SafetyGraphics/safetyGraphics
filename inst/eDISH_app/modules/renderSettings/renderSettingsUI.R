@@ -1,4 +1,18 @@
-
+#' Render Settings module - UI code
+#' 
+#' This module creates the Settings tab for the Shiny app. The UI is dynamically populated from the server side. 
+#' 
+#' The UI contains:
+#' - Chart selector 
+#' - Settings customizations for the selected charts:
+#'      - Data mapping
+#'      - Measure settings
+#'      - Appearance settings
+#'
+#' @param id The module-specific ID that will get pre-pended to all element IDs
+#'
+#' @return The UI for the Settings tab
+#'
 renderSettingsUI <- function(id){
   
   ns <- NS(id)

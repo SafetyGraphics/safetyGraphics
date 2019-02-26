@@ -1,7 +1,18 @@
-updateSettingStatus<-function(ns, name, status_short, status_long){
+#' Update setting validation status
+#' 
+#' Workflow:
+#' (1) Update abbreviated status for a given setting using green (valid) or red (invalid) text
+#' (2) Update long status message for a given setting to be displayed upon mouseover
+#' 
+#' @param ns The namespace of the current module
+#' @param key A character key representing the setting of interest 
+#' @param status_short Abbreviated validation message  
+#' @param status_long Detailed validation message  
+
+updateSettingStatus<-function(ns, key, status_short, status_long){
   
-  msg_id <- paste0("msg_", name)
-  tooltip_id <- paste0("tt_msg_", name)
+  msg_id <- paste0("msg_", key)
+  tooltip_id <- paste0("tt_msg_", key)
   
   if (status_short=="OK"){
     shinyjs::html(id = msg_id,

@@ -1,3 +1,5 @@
+# UI Code for safetyGraphics App
+
 tagList(
   useShinyjs(),
   tags$head(

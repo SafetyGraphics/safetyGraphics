@@ -1,3 +1,21 @@
+#' Create setting control 
+#'
+#' Workflow:
+#' (1) Get setting label and description from metadata
+#' (2) Get setting value from settings object
+#' (3) Get choices and placeholder text for the selectors based on metadata, data, and settings
+#' (4) Create HTML code for the selector based on the following metadata:
+#'     - whether the option is a column or field-level input
+#'     - data type of the setting (e.g. character/numeric/logical, vector of length 1 vs >1) 
+#'     - label, description, choices, selected value, placeholder text
+#' 
+#' @param key A character key representing the setting of interest  
+#' @param metadata Metadata data frame to be queried for information about the setting
+#' @param data A data frame to be used to populate control options
+#' @param settings A settings list to be used to populate control options
+#' @param ns  The namespace of the current module
+#'
+#' @return HTML code for the div containing the setting of interest
 createControl <- function(key, metadata, data, settings, ns){
   
   sm_key <- filter(metadata, text_key==key)
