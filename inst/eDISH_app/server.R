@@ -1,3 +1,10 @@
+# Server code for safetyGraphics App
+#   - calls dataUpload module (data tab)
+#   - calls renderSettings module (settings tab)
+#   - calls renderEDishChart (chart tab)
+#   - uses render UI to append a red X or green check on tab title, 
+#      indicating whether user has satisfied requirements of that tab
+
 function(input, output, session){
 
 
