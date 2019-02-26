@@ -1,3 +1,16 @@
+#' Data upload module - UI code
+#' 
+#' This module creates the Data tab for the Shiny app. 
+#' 
+#' The UI contains:
+#' - a file upload control
+#' - radio buttons for selecting from the available datasets
+#' - raw data preview. 
+#'
+#' @param id The module-specific ID that will get pre-pended to all element IDs
+#'
+#' @return The UI for the Data tab
+#'
 dataUploadUI <- function(id){
 
   ns <- NS(id)
