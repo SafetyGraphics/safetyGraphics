@@ -1,4 +1,5 @@
 # Functions to include
+source("modules/renderSettings/util/createSettingsSection.R")
 source("modules/renderSettings/util/createSettingLabel.R")
 source("modules/renderSettings/util/createControl.R")
 source("modules/renderSettings/util/createSettingsUI.R")

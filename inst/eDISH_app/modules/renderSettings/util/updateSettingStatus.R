@@ -11,22 +11,21 @@
 
 updateSettingStatus<-function(ns, key, status_short, status_long){
   
+  ctl_id<-paste0("#ctl_", key," .select-wrap")  
+  print(ctl_id)
+  #TODO: get msg_ and tooltip_ selectors using relative position to control id
   msg_id <- paste0("msg_", key)
   tooltip_id <- paste0("tt_msg_", key)
-  
-  if (status_short=="OK"){
-    shinyjs::html(id = msg_id,
-                  html = paste("   <em style='color:green; font-size:12px;'>", status_short,"</em>",
-                                "<i class='fa fa-ellipsis-h' style='color:green'></i>"))
-    
-    shinyjs::runjs(paste0('$("#',ns(tooltip_id), '").attr("title", "Selection is valid")'))
-    
-  } else {
-    shinyjs::html(id = msg_id,
-                  html = paste("   <em style='color:red; font-size:12px;'>", status_short,"</em>",
-                                "<i class='fa fa-ellipsis-h' style='color:red'></i>"))
-    
-    shinyjs::runjs(paste0('$("#',ns(tooltip_id), '").attr("title", "', status_long, '")'))
+  if(status_short=="OK"){
+    print("adding valid classes")
+    shinyjs::addClass(id=msg_id, class="valid")
+    shinyjs::removeClass(id=msg_id, class="invalid")
+  }else{
+    print("adding invalid classes")
+    shinyjs::removeClass(id=msg_id, class="valid")
+    shinyjs::addClass(id=msg_id, class="invalid") 
   }
-
+    
+  shinyjs::html(id = msg_id, html = paste(status_short))
+  shinyjs::runjs(paste0('$("#',ns(tooltip_id), '").attr("title", "',status_long,'")'))
 }

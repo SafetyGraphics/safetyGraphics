@@ -7,8 +7,24 @@
 .section{
   min-width:400px;
 }
+
+.control-wrap{
+  margin-top:1em;
+}
+
+.control-wrap span label{
+  font-weight:normal;
+  color:#444;
+  cursor:help;
+}
+
 .control-wrap .select-wrap .form-group{
-  display:inline-block;  
+  display:inline-block; 
+  margin-bottom:0;
+}
+
+.control-wrap .select-wrap .form-group .form-control{
+  margin-bottom:0;
 }
 
 .control-wrap .select-wrap .status{
@@ -19,24 +35,25 @@
 }
 
 .control-wrap .select-wrap .form-group{
-  width:60%;
+  min-width:70%; /* TODO: don't love this ... update eventually */ 
+  
 }
 
 /* Validation Coloring */
 
-.control-wrap .select-wrap.valid .status{
+.control-wrap.valid .select-wrap .status{
   color:green;
 }
 
-.control-wrap select-wrap.valid div .selectize-control .selectize-input{
+.control-wrap.valid .select-wrap div .selectize-control .selectize-input{
   border-color:green;
 }
 
-.control-wrap .select-wrap.invalid .status{
+.control-wrap.invalid .select-wrap .status{
   color:red;
 }
 
-.control-wrap .select-wrap.invalid div .selectize-control .selectize-input{
+.control-wrap.invalid .select-wrap div .selectize-control .selectize-input{
   border-color:red;
 }
 

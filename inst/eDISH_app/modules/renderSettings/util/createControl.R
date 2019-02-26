@@ -19,7 +19,7 @@
 createControl <- function(key, metadata, data, settings, ns){
   
   sm_key <- filter(metadata, text_key==key)
-  
+  ctl_id <- paste0("ctl_", key)
   tt_msg <- paste0("tt_msg_", key)
   msg <- paste0("msg_", key)   
   
@@ -28,6 +28,7 @@ createControl <- function(key, metadata, data, settings, ns){
   setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings=settings)
   setting_label <- createSettingLabel(key)
   setting_description <- getSettingsMetadata(text_keys=key, cols="description")
+  setting_required <- ifelse(getSettingsMetadata(text_keys=key, cols="setting_required"),"\nSetting Required","\nSetting Optional")
   
   ### if a field-level input, get metadata about the parent column-level input
   field_column <- NULL
@@ -78,7 +79,8 @@ createControl <- function(key, metadata, data, settings, ns){
   
   div(
     class="control-wrap",
-    span(title = setting_description, tags$label(HTML(setting_label))),
+    id=ctl_id,
+    span(title = paste0(setting_description," ",setting_required), tags$label(HTML(setting_label))),
     div(
       class="select-wrap",
       input,

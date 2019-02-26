@@ -1,31 +1,7 @@
 
 renderSettingsUI <- function(id){
-  makeSection <- function(class, label){
-    section <- 
-      column(6,
-        wellPanel(
-         class=paste0(class," section"),
-         h3(
-            label,
-            materialSwitch(
-              ns(paste0("show_",class)),
-             label = "",
-              right=TRUE,
-              value = TRUE,
-              status = "primary"
-            )
-          ),
-          conditionalPanel(
-            condition=paste0("input.show_",class), 
-            ns=ns, 
-            uiOutput(ns(paste0(class,"_ui")))
-          )
-        )
-      )
-    return(section)
-  }
   ns <- NS(id)
-  fluidPage(
+  tagList(
     fluidRow(
       column(12,
         class="chartSelect section",
@@ -37,10 +13,11 @@ renderSettingsUI <- function(id){
         )
       )
     ),
+    #TODO - make this a loop based on metadata
     fluidRow(
-      makeSection("data_mapping", "Data Mappings"),
-      makeSection("measure_settings", "Measure Settings"),
-      makeSection("appearance_settings", "Appearance Settings")
+      createSettingsSection("data_mapping", "Data Mappings",6,ns),
+      createSettingsSection("measure_settings", "Measure Settings",6,ns),
+      createSettingsSection("appearance_settings", "Appearance Settings",6,ns)
     )
   )
 }
