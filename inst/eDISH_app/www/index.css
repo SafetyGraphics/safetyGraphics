@@ -19,6 +19,7 @@
 }
 
 .control-wrap .select-wrap .form-group{
+  width:90%; /* TODO: don't love this ... update eventually */ 
   display:inline-block; 
   margin-bottom:0;
 }
@@ -30,14 +31,14 @@
 .control-wrap .select-wrap .status{
   display:inline-block;
   margin-top:.5em;
+  padding-left:0.5em;
   vertical-align:top;
+}
+
+.control-wrap .select-wrap .status.details label i {
   cursor:help;
 }
 
-.control-wrap .select-wrap .form-group{
-  min-width:70%; /* TODO: don't love this ... update eventually */ 
-  
-}
 
 /* Validation Coloring */
 

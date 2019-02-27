@@ -224,13 +224,14 @@ renderSettings <- function(input, output, session, data, settings, status){
     status_new()$checks %>% 
       group_by(text_key) %>%
       mutate(num_fail = sum(valid==FALSE)) %>%
+      mutate(icon = ifelse(num_fail==0, "<i class='glyphicon glyphicon-ok'></i>","<i class='glyphicon glyphicon-remove'></i>"))%>%
       mutate(message_long = paste(message, collapse = " ") %>% trimws(),
              message_short = case_when(
                num_fail==0 ~ "OK",
                num_fail==1 ~ "1 failed check.",
                TRUE ~ paste(num_fail, "failed checks.")
              )) %>%
-      select(text_key, message_long, message_short, num_fail) %>%
+      select(text_key, icon, message_long, message_short, num_fail) %>%
       unique 
   })
   
@@ -247,8 +248,8 @@ renderSettings <- function(input, output, session, data, settings, status){
 
        status_short <- status_df()[status_df()$text_key==key, "message_short"]
        status_long <- status_df()[status_df()$text_key==key, "message_long"]
-
-       updateSettingStatus(ns=ns, key=key, status_short=status_short, status_long=status_long)
+       icon <- status_df()[status_df()$text_key==key, "icon"]
+       updateSettingStatus(ns=ns, key=key, status_short=status_short, status_long=status_long, icon=icon)
      }
 
    }
