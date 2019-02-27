@@ -9,6 +9,7 @@
 #' @importFrom purrr map keep
 #' @importFrom magrittr "%>%"
 #' @import rmarkdown 
+#' @importFrom haven read_sas
 #'
 #' @export
 #'

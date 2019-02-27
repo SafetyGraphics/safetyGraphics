@@ -35,5 +35,6 @@ Imports:
     rmarkdown,
     rlang,
     tibble,
-    utils
+    utils,
+    haven
 VignetteBuilder: knitr
