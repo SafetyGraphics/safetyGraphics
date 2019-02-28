@@ -4,7 +4,7 @@
 \alias{safetyGraphicsApp}
 \title{Run the interactive safety graphics builder}
 \usage{
-safetyGraphicsApp(maxFileSize = 20)
+safetyGraphicsApp(maxFileSize = NULL)
 }
 \arguments{
 \item{maxFileSize}{maximum file size in MB allowed for file upload.}
