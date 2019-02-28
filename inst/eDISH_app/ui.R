@@ -2,9 +2,9 @@
 
 tagList(
   useShinyjs(),
-  tags$style(HTML("
-        .ok { color:#008000;}
-        .notok {color: #FF0000;}")),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "index.css")
+  ),
   navbarPage("eDISH Shiny app",  
              tabPanel(title = htmlOutput("data_tab_title"), 
                       dataUploadUI("datatab")
