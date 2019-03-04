@@ -1,5 +1,5 @@
 /* --- hide the chartSelect div until we're ready to implement multiple charts --- */
-.chartSelect{
+/*.chartSelect{
   display:none;
 }
 /* ------------------------------------------------------------------------------- */
