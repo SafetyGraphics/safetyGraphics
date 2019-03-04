@@ -36,5 +36,6 @@ Imports:
     rlang,
     tibble,
     utils,
-    haven
+    haven,
+    shinyWidgets
 VignetteBuilder: knitr

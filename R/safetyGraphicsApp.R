@@ -10,6 +10,7 @@
 #' @importFrom magrittr "%>%"
 #' @import rmarkdown 
 #' @importFrom haven read_sas
+#' @importFrom shinyWidgets materialSwitch
 #'
 #' @export
 #'
