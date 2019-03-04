@@ -6,11 +6,13 @@
 #'
 #' @return The UI for the Chart tab
 #'
-renderEDishChartUI <- function(id){
+render_edish_chartUI <- function(id){
   
   ns <- NS(id)
   
-  tagList(
-     eDISHOutput(ns("chart")) 
-  )
+  # #tagList( 
+  #    tabPanel("edish",
+              eDISHOutput(ns("chart")) #)
+  #)
+  
 }

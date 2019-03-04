@@ -15,8 +15,8 @@ library(haven)
 source('modules/renderSettings/renderSettingsUI.R')
 source('modules/renderSettings/renderSettings.R')
 
-source('modules/renderChart/renderEDishChartUI.R')
-source('modules/renderChart/renderEDishChart.R')
+source('modules/renderChart/render_edish_chartUI.R')
+source('modules/renderChart/render_edish_chart.R')
 
 source('modules/dataUpload/dataUploadUI.R')
 source('modules/dataUpload/dataUpload.R')

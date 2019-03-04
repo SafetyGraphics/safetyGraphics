@@ -14,7 +14,7 @@
 #' @param data A data frame 
 #' @param valid A logical indicating whether data/settings combination is valid for chart
  
-renderEDishChart <- function(input, output, session, data, settings, valid){
+render_edish_chart <- function(input, output, session, data, settings, valid){
   
   ns <- session$ns
   
@@ -22,14 +22,23 @@ renderEDishChart <- function(input, output, session, data, settings, valid){
   output$chart <- renderEDISH({
     req(data())
     req(settings())
-    
+
     if (valid()==TRUE){
       trimmed_data <- safetyGraphics:::trimData(data = data(), settings = settings())
       eDISH(data = trimmed_data, settings = settings())
     } else{
       return()
     }
-  }) 
+  })
+  
+  
+  # output$chart_title = renderUI({
+  #   if (valid()==TRUE){
+  #     HTML(paste("eDISH", icon("check", class="ok")))
+  #   } else {
+  #     HTML(paste("eDISH", icon("times", class="notok")))
+  #   }
+  # })
   
   # insert export chart button if settings pass validation
   # remove button if validation fails
