@@ -28,7 +28,6 @@ function(input, output, session){
   #
   # reutrns updated settings and validation status
     settings_new <-   callModule(renderSettings, "settingsUI",
-                                # data = isolate(reactive(dataUpload_out$data_selected())),  # this doesnt make sense
                                  data = reactive(dataUpload_out$data_selected()),
                                  settings = reactive(dataUpload_out$settings()),
                                  status = reactive(dataUpload_out$status()))
@@ -44,22 +43,61 @@ function(input, output, session){
     })
 
     # update charts navbar
-    output$chart_tab_title = renderUI({
-      if (settings_new$status()$valid==TRUE){
-        HTML(paste("Chart", icon("check", class="ok")))
+    # output$chart_tab_title = renderUI({
+    #   if (settings_new$status()$valid==TRUE){
+    #     HTML(paste("Chart", icon("check", class="ok")))
+    #   } else {
+    #     HTML(paste("Chart", icon("times", class="notok")))
+    #   }
+    # })
+
+   # ## this currently wipes away everything anytime there's a change in chart selections
+   observe({
+
+     charts <- settings_new$charts()
+
+      # remove whole navMenu and all existing chart tabs
+      removeTab(inputId="tabs", target="Charts")
+
+      # for each chart, append a new tab to the menu and place the module UI output
+      lapply(charts, function(chart){
+        tabfun <- match.fun(paste0("render_", chart, "_chartUI"))
+        tabid <- paste0(chart, "_tab_title")
+        tabcode <-  tabPanel(title = htmlOutput(tabid), tabfun(paste0("chart", chart)))
+
+        appendTab(inputId = "tabs",
+                  navbarMenu("Charts", tabcode))
+      })
+     })
+
+  allcharts <- c("edish") # grab from metadata - all available charts
+  
+  for (chart in allcharts){
+    
+    name <- paste0(chart,"_tab_title")
+    
+    output[[name]] = renderUI({
+      status <- settings_new$status()$valid
+      if(status==TRUE){
+        label <- HTML(paste(chart, icon("check", class="ok")))
       } else {
-        HTML(paste("Chart", icon("times", class="notok")))
+        label <- HTML(paste(chart, icon("times", class="notok")))
       }
     })
+    
+    modfun <- match.fun(paste0("render_", chart, "_chart"))    
+    callModule(modfun, paste0("chart", chart),
+               data = reactive(dataUpload_out$data_selected()),
+               settings = reactive(settings_new$settings()),
+               valid = reactive(settings_new$status()$valid)) 
+  }
 
 
-  # module to render eDish chart
-  callModule(renderEDishChart, "chartEDish",
-             data = reactive(dataUpload_out$data_selected()),
-             settings = reactive(settings_new$settings()),
-             valid = reactive(settings_new$status()$valid))
-
-
+  # # module to render eDish chart
+  # callModule(renderEDishChart, "chartEDish",
+  #            data = reactive(dataUpload_out$data_selected()),
+  #            settings = reactive(settings_new$settings()),
+  #            valid = reactive(settings_new$status()$valid)) 
   
   session$onSessionEnded(stopApp)
 
