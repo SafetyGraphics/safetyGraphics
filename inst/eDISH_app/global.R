@@ -1,10 +1,15 @@
+#  global.R code for safetyGraphics app
+#  - load all required libraries
+#  - source module functions
 library(safetyGraphics)
 library(shiny)
+library(shinyWidgets)
 library(shinyjs)
 library(dplyr)
 library(purrr)
 library(stringr)
 library(DT)
+library(haven)
 
 ## source modules
 source('modules/renderSettings/renderSettingsUI.R')

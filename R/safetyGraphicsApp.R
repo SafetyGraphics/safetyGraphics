@@ -9,12 +9,16 @@
 #' @importFrom purrr map keep
 #' @importFrom magrittr "%>%"
 #' @import rmarkdown 
+#' @importFrom haven read_sas
+#' @importFrom shinyWidgets materialSwitch
 #'
 #' @export
 #'
-safetyGraphicsApp <- function(maxFileSize = 20) {
+safetyGraphicsApp <- function(maxFileSize = NULL) {
   #increase maximum file upload limit
-  options(shiny.maxRequestSize=(maxFileSize*1024^2))
+  if(!is.null(maxFileSize)){
+    options(shiny.maxRequestSize=(maxFileSize*1024^2))  
+  }
   
   path <- system.file("eDISH_app", package = "safetyGraphics")
   shiny::runApp(path, launch.browser = TRUE)

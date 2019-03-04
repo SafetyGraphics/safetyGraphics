@@ -5,6 +5,7 @@
 #' @param charts optional vector of chart names used to filter the metadata. Exact matches only (case-insensitive). All rows returned by default.
 #' @param text_keys optional vector of keys used to filter the metadata. Partial matches for any of the strings are returned (case-insensitive). All rows returned by default.
 #' @param filter_expr optional filter expression used to subset the data.
+#' @param add_standards should data standard info stored in standardsMetadata be included
 #' @param cols optional vector of columns to return from the metadata. All columns returned by default. 
 #' @param metadata metadata data frame to be queried
 #' 
@@ -27,9 +28,15 @@
 #' 
 #' @export
 
-getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, filter_expr=NULL, metadata = safetyGraphics::settingsMetadata){
+getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, filter_expr=NULL, add_standards=TRUE, metadata = safetyGraphics::settingsMetadata){
 
-  md <- metadata
+  md <- metadata %>% mutate(text_key=as.character(.data$text_key))
+  
+  if(add_standards){
+    ms<-safetyGraphics::standardsMetadata %>% mutate(text_key=as.character(.data$text_key))
+    md<-md%>%left_join(ms, by="text_key")
+  }
+  
   all_columns <- names(md)
   
   #filter the metadata based on the charts option (if any)

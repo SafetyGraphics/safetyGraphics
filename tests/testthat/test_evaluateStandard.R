@@ -2,16 +2,16 @@ context("Tests for the evaluateStandard() function")
 library(safetyGraphics)
 
 test_that("basic test cases evaluate as expected",{
-  expect_equal(evaluateStandard(data=adlbc, standard="adam")[["match"]],"Full")
-  expect_equal(evaluateStandard(data=adlbc, standard="sdtm")[["match"]],"Partial")
-  expect_equal(evaluateStandard(data=data.frame(), standard="sdtm")[["match"]],"None")
+  expect_equal(evaluateStandard(data=adlbc, standard="adam")[["match"]],"full")
+  expect_equal(evaluateStandard(data=adlbc, standard="sdtm")[["match"]],"partial")
+  expect_equal(evaluateStandard(data=data.frame(), standard="sdtm")[["match"]],"none")
 })
 
 test_that("a list with the expected properties and structure is returned",{
   a<- evaluateStandard(data=data.frame(),standard="adam")
 
   expect_is(a,"list")
-  expect_named(a,c('standard', 'checks', 'valid_count', 'invalid_count', 'match'))
+  expect_named(a,c('standard', 'checks', 'total_count','valid_count', 'invalid_count','match_percent', 'match'))
   expect_is(a[["standard"]],"character")
   expect_is(a[["match"]],"character")
   expect_is(a[["checks"]],"tbl")
@@ -28,13 +28,16 @@ test_that("expected number of checks (in)valid",{
   a<-evaluateStandard(data=adlbc_edit, standard="sdtm")
   expect_equal(a[["valid_count"]],2)
   expect_equal(a[["invalid_count"]],8)
+  expect_equal(a[["total_count"]],10)
+  expect_equal(a[["match_percent"]],.2)
   expect_true(a[["checks"]]%>%filter(text_key=="measure_col")%>%select(valid)%>%unlist)
 })
 
 
 test_that("field level data is ignored when useFields=false",{
   noFields<-evaluateStandard(data=adlbc, standard="adam", includeFields=FALSE)
-  expect_equal(noFields[["match"]],"Full")
+  expect_equal(noFields[["match"]],"full")
+  expect_equal(noFields[["match_percent"]],1)
   expect_equal(noFields[["valid_count"]],6)
 })
 

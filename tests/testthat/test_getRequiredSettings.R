@@ -6,13 +6,13 @@ defaultRequiredSettings <- list(
   list("id_col"),
   list("value_col"),
   list("measure_col"),
-  list("normal_col_low"),
-  list("normal_col_high"),
-  list("studyday_col"),
   list("measure_values","ALT"),
   list("measure_values","AST"),
   list("measure_values","TB"),
-  list("measure_values","ALP")
+  list("measure_values","ALP"),
+  list("normal_col_low"),
+  list("normal_col_high"),
+  list("studyday_col")
 )
 
 

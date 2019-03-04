@@ -1,0 +1,81 @@
+/* --- hide the chartSelect div until we're ready to implement multiple charts --- */
+.chartSelect{
+  display:none;
+}
+/* ------------------------------------------------------------------------------- */
+
+.section{
+  min-width:400px;
+}
+
+.control-wrap{
+  margin-top:1em;
+}
+
+.control-wrap span label{
+  font-weight:normal;
+  color:#444;
+  cursor:help;
+}
+
+.control-wrap .select-wrap .form-group{
+  width:90%; /* TODO: don't love this ... update eventually */ 
+  display:inline-block; 
+  margin-bottom:0;
+}
+
+.control-wrap .select-wrap .form-group .form-control{
+  margin-bottom:0;
+}
+
+.control-wrap .select-wrap .status{
+  display:inline-block;
+  margin-top:.5em;
+  padding-left:0.5em;
+  vertical-align:top;
+}
+
+.control-wrap .select-wrap .status.details label i {
+  cursor:help;
+}
+
+
+/* Validation Coloring */
+
+.control-wrap.valid .select-wrap .status{
+  color:green;
+}
+
+.control-wrap.valid .select-wrap div .selectize-control .selectize-input{
+  border-color:green;
+}
+
+.control-wrap.invalid .select-wrap .status{
+  color:red;
+}
+
+.control-wrap.invalid .select-wrap div .selectize-control .selectize-input{
+  border-color:red;
+}
+
+/* Settings - header tweaks */
+.section h3 {
+  margin:0;
+} 
+
+.section h3 .form-group {
+  display:inline;
+}
+
+.section h3 .form-group .material-switch{
+  float:right;
+}
+
+
+.ok { 
+  color:#008000;
+}
+
+.notok {
+  color: #FF0000;
+}

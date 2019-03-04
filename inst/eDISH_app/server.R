@@ -1,3 +1,10 @@
+# Server code for safetyGraphics App
+#   - calls dataUpload module (data tab)
+#   - calls renderSettings module (settings tab)
+#   - calls renderEDishChart (chart tab)
+#   - uses render UI to append a red X or green check on tab title, 
+#      indicating whether user has satisfied requirements of that tab
+
 function(input, output, session){
 
 
@@ -9,7 +16,8 @@ function(input, output, session){
   # add status to data panel nav bar
   #   always OK for now, since example data is loaded by default
   output$data_tab_title = renderUI({
-    HTML(paste("Data", icon("check", class="ok")))
+   # HTML(paste("Data", icon("check", class="ok")))
+    span(tagList("Data", icon("check", class="ok")))
   })
   
   # based on selected data set & generated/selected settings obj, generate settings page.
@@ -20,7 +28,8 @@ function(input, output, session){
   #
   # reutrns updated settings and validation status
     settings_new <-   callModule(renderSettings, "settingsUI",
-                                 data = isolate(reactive(dataUpload_out$data_selected())),
+                                # data = isolate(reactive(dataUpload_out$data_selected())),  # this doesnt make sense
+                                 data = reactive(dataUpload_out$data_selected()),
                                  settings = reactive(dataUpload_out$settings()),
                                  status = reactive(dataUpload_out$status()))
 
@@ -33,7 +42,7 @@ function(input, output, session){
         HTML(paste("Settings", icon("times", class="notok")))
       }
     })
-    
+
     # update charts navbar
     output$chart_tab_title = renderUI({
       if (settings_new$status()$valid==TRUE){
@@ -42,8 +51,8 @@ function(input, output, session){
         HTML(paste("Chart", icon("times", class="notok")))
       }
     })
-    
-    
+
+
   # module to render eDish chart
   callModule(renderEDishChart, "chartEDish",
              data = reactive(dataUpload_out$data_selected()),
