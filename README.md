@@ -1,5 +1,5 @@
 
-[![Travis-CI Build Status](https://travis-ci.org/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics.svg?branch=master)](https://travis-ci.org/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/safetyGraphics)](https://cran.r-project.org/package=safetyGraphics)
+[![Travis-CI Build Status](https://travis-ci.org/SafetyGraphics/safetyGraphics.svg?branch=master)](https://travis-ci.org/SafetyGraphics/safetyGraphics) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/safetyGraphics)](https://cran.r-project.org/package=safetyGraphics)
 
 # safetyGraphics: Clinical Trial Safety Graphics with R  <img src="inst/safetyGraphicsHex/safetyGraphicsHex.png" width = "175" height = "200" align="right" />
 
