@@ -1,0 +1,29 @@
+defaults <- list(
+    id_col = NULL,
+    value_col = NULL,
+    measure_col = NULL,
+    "measure_values--ALT" = NULL,
+    "measure_values--AST" = NULL,
+    "measure_values--TB" = NULL,
+    "measure_values--ALP" = NULL,
+    normal_col_low = NULL,
+    normal_col_high = NULL,
+    studyday_col= NULL,
+    visit_col = NULL,
+    visitn_col = NULL,
+    filters = NULL,
+    group_cols = NULL,
+    "baseline--value_col" = NULL,
+    "baseline--values" = list(),
+    "analysisFlag--value_col"=NULL,
+    "analysisFlag--values" = list(),
+    x_options = c("ALT", "AST", "ALP"),
+    y_options = c("TB", "ALP"),
+    visit_window = 30,
+    r_ratio_filter = TRUE,
+    r_ratio_cut = 0,
+    showTitle = TRUE,
+    warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures."
+  )
+
+saveRDS(defaults, file="data-raw/defaults.rda")
