@@ -5,7 +5,7 @@
 #' The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, eDish is the only chart supported.
 #'
 #' @param standard The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"SDTM"}
-#' @param chart The chart for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.
+#' @param charts The chart or chart(s) for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.
 #' @param partial Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.
 #' @param partial_keys Optional character vector of the matched settings if partial is TRUE. Settings should be identified using the text_key format described in ?settingsMetadata. Setting is ignored when partial is FALSE. Default: \code{NULL}.
 #' @return A list containing the appropriate settings for the selected chart
@@ -31,7 +31,7 @@
 #' 
 #' @export
 
-generateSettings <- function(standard="None", chart="eDish", partial=FALSE, partial_keys=NULL){
+generateSettings <- function(standard="None", charts="eDish", partial=FALSE, partial_keys=NULL){
   if(tolower(chart)!="edish"){
     stop(paste0("Can't generate settings for the specified chart ('",chart,"'). Only the 'eDish' chart is supported for now."))
   }
@@ -61,37 +61,9 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
     }
   }
   
-  # build shell settings for each chart 
-  # TODO: move these to `/data` eventually
-  shells<-list()
-  shells[["edish"]]<-list(
-    id_col = NULL,
-    value_col = NULL,
-    measure_col = NULL,
-    normal_col_low = NULL,
-    normal_col_high = NULL,
-    studyday_col=NULL,
-    visit_col = NULL,
-    visitn_col = NULL,
-    filters = NULL,
-    group_cols = NULL,
-    measure_values = list(ALT = NULL,
-                          AST = NULL,
-                          TB = NULL,
-                          ALP = NULL),
-    baseline = list(value_col=NULL,
-                    values=list()),
-    analysisFlag = list(value_col=NULL,
-                        values=list()),
-    
-    x_options = c("ALT", "AST", "ALP"),
-    y_options = c("TB", "ALP"),
-    visit_window = 30,
-    r_ratio_filter = TRUE,
-    r_ratio_cut = 0,
-    showTitle = TRUE,
-    warningText = "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures."
-  )
+  #generate the shell setting object for the chart
+  shell<-generateShell(chart=chart)
+  populateDefaults(shell)
   
   # loop through dataMappings and apply them to the shell
   if(standard %in% standardList){
@@ -100,5 +72,11 @@ generateSettings <- function(standard="None", chart="eDish", partial=FALSE, part
     }    
   }
 
+  #replace defaults with custom values (if any)
+  shell[[chart]]<-applyCustomSettings(shell, customSettings)
+  for(setting in customSettigns){
+    setSettingValue(shell,setting$key, setting$value)
+  }
+  
   return(shells[[chart]])
 }
