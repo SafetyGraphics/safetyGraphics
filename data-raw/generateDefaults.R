@@ -26,4 +26,4 @@ defaults <- tribble(~text_key, ~default,
              "warningText", "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures."
              )
 
-usethis::use_data(defaults, overwrite = TRUE)
+saveRDS(defaults, file="data-raw/defaults.rda")
