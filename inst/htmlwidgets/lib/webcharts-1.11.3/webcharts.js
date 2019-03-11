@@ -4,9 +4,9 @@
         : typeof define === 'function' && define.amd
           ? define(['d3'], factory)
           : (global.webCharts = factory(global.d3));
-})(this, function(d3) {
+})(typeof self !== 'undefined' ? self : this, function(d3) {
     'use strict';
-    var version = '1.11.1';
+    var version = '1.11.3';
 
     function init(data) {
         var _this = this;
@@ -433,7 +433,7 @@
                                 return f instanceof Date;
                             });
                     })
-                    .entries(this.raw_data)
+                    .entries(this.filtered_data)
                     .sort(function(a, b) {
                         return d3.min(b.values) - d3.min(a.values);
                     })
@@ -1592,7 +1592,7 @@
     }
 
     function makeLegend() {
-        var scale$$1 = arguments.length > 0 && arguments[0] !== undefined
+        var scale = arguments.length > 0 && arguments[0] !== undefined
             ? arguments[0]
             : this.colorScale;
         var label = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
@@ -1638,7 +1638,7 @@
 
         var legend_data =
             custom_data ||
-            scale$$1
+            scale
                 .domain()
                 .slice(0)
                 .filter(function(f) {
@@ -1670,7 +1670,7 @@
             .attr('class', 'legend-item')
             .style({ 'list-style-type': 'none', 'margin-right': '1em' });
         new_parts.append('span').attr('class', 'legend-mark-text').style('color', function(d) {
-            return scale$$1(d.label);
+            return scale(d.label);
         });
         new_parts
             .append('svg')
@@ -1695,16 +1695,16 @@
 
         leg_parts.selectAll('.legend-color-block').select('.legend-mark').remove();
         leg_parts.selectAll('.legend-color-block').each(function(e) {
-            var svg$$1 = d3.select(this);
+            var svg = d3.select(this);
             if (e.mark === 'circle') {
-                svg$$1.append('circle').attr({
+                svg.append('circle').attr({
                     cx: '.5em',
                     cy: '.5em',
                     r: '.45em',
                     class: 'legend-mark'
                 });
             } else if (e.mark === 'line') {
-                svg$$1.append('line').attr({
+                svg.append('line').attr({
                     x1: 0,
                     y1: '.5em',
                     x2: '1em',
@@ -1714,7 +1714,7 @@
                     class: 'legend-mark'
                 });
             } else if (e.mark === 'square') {
-                svg$$1.append('rect').attr({
+                svg.append('rect').attr({
                     height: '1em',
                     width: '1em',
                     class: 'legend-mark',
@@ -1726,10 +1726,10 @@
             .selectAll('.legend-color-block')
             .select('.legend-mark')
             .attr('fill', function(d) {
-                return d.color || scale$$1(d.label);
+                return d.color || scale(d.label);
             })
             .attr('stroke', function(d) {
-                return d.color || scale$$1(d.label);
+                return d.color || scale(d.label);
             })
             .each(function(e) {
                 d3.select(this).attr(e.attributes);
@@ -1743,7 +1743,7 @@
                 return d.label;
             });
 
-        if (scale$$1.domain().length > 0) {
+        if (scale.domain().length > 0) {
             var legendDisplay = (this.config.legend.location === 'bottom' ||
                 this.config.legend.location === 'top') &&
                 !this.parent
@@ -3335,8 +3335,8 @@
     }
 
     /*------------------------------------------------------------------------------------------------\
-  Check equality of two arrays (https://stackoverflow.com/questions/7837456/how-to-compare-arrays-in-javascript)
-\------------------------------------------------------------------------------------------------*/
+      Check equality of two arrays (https://stackoverflow.com/questions/7837456/how-to-compare-arrays-in-javascript)
+    \------------------------------------------------------------------------------------------------*/
 
     // Warn if overriding existing method
     if (Array.prototype.equals)
@@ -3782,6 +3782,7 @@
     }
 
     function layout$4() {
+        //Add sort container.
         this.sortable.wrap = this.wrap
             .select('.table-top')
             .append('div')
@@ -3970,8 +3971,8 @@
         if (next >= this.config.nPages) next = this.config.nPages - 1; // nothing after the last page
 
         /**-------------------------------------------------------------------------------------------\
-      Left side
-    \-------------------------------------------------------------------------------------------**/
+          Left side
+        \-------------------------------------------------------------------------------------------**/
 
         this.pagination.wrap
             .insert('span', ':first-child')
@@ -3998,8 +3999,8 @@
             .text('<<');
 
         /**-------------------------------------------------------------------------------------------\
-      Right side
-    \-------------------------------------------------------------------------------------------**/
+          Right side
+        \-------------------------------------------------------------------------------------------**/
 
         this.pagination.wrap
             .append('span')
@@ -4353,8 +4354,8 @@
         this.events.onDatatransform.call(this);
 
         /**-------------------------------------------------------------------------------------------\
-       Code below associated with the former paradigm of a d3.nest() data array.
-    \-------------------------------------------------------------------------------------------**/
+           Code below associated with the former paradigm of a d3.nest() data array.
+        \-------------------------------------------------------------------------------------------**/
 
         if (config.row_per) {
             var rev_order = config.row_per.slice(0).reverse();
