@@ -63,7 +63,7 @@ generateSettings <- function(standard="None", charts="eDish", partial=FALSE, par
   
   #generate the shell setting object for the chart
   shell<-generateShell(chart=chart)
-  populateDefaults(shell)
+  #populateDefaults(shell) what is this for...
   
   # loop through dataMappings and apply them to the shell
   if(standard %in% standardList){
