@@ -13,9 +13,9 @@
 #'  
 #' @keywords internal
 
-generateShell <- function(charts="eDish"){ 
+populateDefaults <- function(charts="eDish", settings ){ 
   
-  
+
   chart="eDish" # expand too multiple charts
   
   defaultMappings <- safetyGraphics::getSettingsMetadata(
@@ -26,9 +26,8 @@ generateShell <- function(charts="eDish"){
   hierarchical_metadata <- str_split(defaultMappings$text_key, "--") 
   
   
-  
-  
   shell <- list()
+  #replace this !!!!!!!!!!!
   for (i in 1:length(hierarchical_metadata) ) {
     
     # Handle settings with one level

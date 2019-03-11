@@ -36,6 +36,9 @@ generateSettings <- function(standard="None", charts="eDish", partial=FALSE, par
     stop(paste0("Can't generate settings for the specified chart ('",chart,"'). Only the 'eDish' chart is supported for now."))
   }
   
+  chart="eDish"
+  standard="sdtm"
+  
   # Check that partial_keys is supplied if partial is true
   if  (is.null(partial_keys) & partial ) {
     stop("partial_keys must be supplied if the standard is partial")
@@ -61,22 +64,28 @@ generateSettings <- function(standard="None", charts="eDish", partial=FALSE, par
     }
   }
   
+  shells<-list()
   #generate the shell setting object for the chart
-  shell<-generateShell(chart=chart)
-  #populateDefaults(shell) what is this for...
+  shells[[chart]]<-safetyGraphics:::generateShell(chart=chart) # will want to handle multiple charts eventually...
+  
+  
+  #populateDefaults() 
+  # Currently the default assignment is happening in generateShell, but I think you would ideally make the shell (only key names) in
+  #generateShell and then merge defaults and standards together (overwritting defaults where there are standards) and then do the loop below
   
   # loop through dataMappings and apply them to the shell
+  
   if(standard %in% standardList){
     for(row in 1:nrow(dataMappings)){
       shells[[chart]]<-setSettingsValue(settings = shells[[chart]], key = textKeysToList(dataMappings[row,"text_key"])[[1]], value = dataMappings[row, "column_name"])
     }    
   }
 
-  #replace defaults with custom values (if any)
-  shell[[chart]]<-applyCustomSettings(shell, customSettings)
-  for(setting in customSettigns){
-    setSettingValue(shell,setting$key, setting$value)
-  }
+  # #replace defaults with custom values (if any)
+  # shell[[chart]]<-applyCustomSettings(shell, customSettings)
+  # for(setting in customSettigns){
+  #   setSettingValue(shell,setting$key, setting$value)
+  # }
   
   return(shells[[chart]])
 }
