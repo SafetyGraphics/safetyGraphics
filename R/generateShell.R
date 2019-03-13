@@ -14,13 +14,11 @@
 #' @keywords internal
 
 generateShell <- function(charts=NULL){ 
-  print(charts)
   keys <- safetyGraphics::getSettingsMetadata(
     charts = charts, 
     cols=c("text_key")
   ) %>% safetyGraphics:::textKeysToList()
 
-  print(keys)
   shell <- list()
 
   for (i in 1:length(keys) ) {
