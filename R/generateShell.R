@@ -1,31 +1,31 @@
 #' Generate a default settings shell based on settings metadata
 #'
-#' This function returns a default settings objectbased on the chart(s) specified. 
+#' This function returns a default settings object based on the chart(s) specified. 
 #'
 #' The function is designed to work with valid safetyGraphics charts.
 #'
-#' @param charts The chart or chart(s) for which shells should be generated ("eDish" only for now) . Default: \code{"eDish"}.
-#' @return A list containing the appropriate settings for the selected chart
+#' @param charts The chart or chart(s) to include in the shell settings object
+#' @return A list containing a setting shell (all values = NA) for the selected chart(s)
 #' 
 #' @examples 
 #' 
-#' generateShell(chart = "eDish") 
+#' generateShell(charts = "eDish") 
 #'  
 #' @keywords internal
 
 generateShell <- function(charts=NULL){ 
-  
-  defaultMappings <- safetyGraphics::getSettingsMetadata(
+  print(charts)
+  keys <- safetyGraphics::getSettingsMetadata(
     charts = charts, 
-    cols=c("text_key","default","col_mapping")
-  )  
+    cols=c("text_key")
+  ) %>% safetyGraphics:::textKeysToList()
 
-  hierarchical_metadata <- str_split(defaultMappings$text_key, "--") 
-  
+  print(keys)
   shell <- list()
-  for (i in 1:length(hierarchical_metadata) ) {
+
+  for (i in 1:length(keys) ) {
     shell<-safetyGraphics:::setSettingsValue(
-      key=hierarchical_metadata[[i]], 
+      key=keys[[i]], 
       value=NA, #NA is prefered here since NULL deletes the element in the list
       settings=shell, 
       forceCreate=TRUE

@@ -40,11 +40,18 @@ generateSettings <- function(standard="None", charts=NULL, partial=FALSE, partia
   
   # Coerce options to lowercase
   standard<-tolower(standard)
-  charts<-tolower(charts)
+  if(!is.null(charts)){
+    charts<-tolower(charts)  
+  }
   
-  #create shell
+  #############################################################################
+  # create shell
+  #############################################################################
   shell<-safetyGraphics:::generateShell(charts=charts) 
   
+  #############################################################################
+  # populate defaults settings using a data standard (data and field mappings) 
+  #############################################################################
   # Build a table of data mappings for the selected standard and partial settings
   standardList<-c("adam","sdtm") #TODO: automatically generate this from metadata
   if(standard %in% standardList){
@@ -61,23 +68,29 @@ generateSettings <- function(standard="None", charts=NULL, partial=FALSE, partia
     }
   }
   
-  #populateDefaults() 
-  # Currently the default assignment is happening in generateShell, but I think you would ideally make the shell (only key names) in
-  #generateShell and then merge defaults and standards together (overwritting defaults where there are standards) and then do the loop below
-  
   # loop through dataMappings and apply them to the shell
-  
   if(standard %in% standardList){
     for(row in 1:nrow(dataMappings)){
-      shells[[chart]]<-setSettingsValue(settings = shells[[chart]], key = textKeysToList(dataMappings[row,"text_key"])[[1]], value = dataMappings[row, "column_name"])
+      shell<-setSettingsValue(settings = shell, key = textKeysToList(dataMappings[row,"text_key"])[[1]], value = dataMappings[row, "column_name"])
     }    
   }
-
-  # #replace defaults with custom values (if any)
-  # shell[[chart]]<-applyCustomSettings(shell, customSettings)
-  # for(setting in customSettigns){
-  #   setSettingValue(shell,setting$key, setting$value)
-  # }
+  
+  #############################################################################
+  # populate defaults settings not using a data standard (non-mappings) 
+  #############################################################################
+  defaults <- safetyGraphics::getSettingsMetadata(
+    charts = charts, 
+    filter = !.data$column_mapping & !.data$field_mapping,
+    cols=c("text_key","default")
+  )
+  
+  if(partial){
+    defaults<-defaults%>%filter(.data$text_key %in% partial_keys) 
+  }
+  
+  for(row in 1:nrow(defaults)){
+    shell<-setSettingsValue(settings = shell, key = textKeysToList(defaults[row,"text_key"])[[1]], value = defaults[row, "default"])
+  }    
   
   return(shell)
 }
