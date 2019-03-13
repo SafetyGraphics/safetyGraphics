@@ -13,42 +13,24 @@
 #'  
 #' @keywords internal
 
-generateShell <- function(charts="eDish"){ 
-  
-  
-  chart="eDish" # expand too multiple charts
+generateShell <- function(charts=NULL){ 
   
   defaultMappings <- safetyGraphics::getSettingsMetadata(
     charts = charts, 
-    cols=c("text_key","default")
+    cols=c("text_key","default","col_mapping")
   )  
 
   hierarchical_metadata <- str_split(defaultMappings$text_key, "--") 
   
-  
-  
-  
   shell <- list()
   for (i in 1:length(hierarchical_metadata) ) {
-    
-    # Handle settings with one level
-    if (length(hierarchical_metadata[[i]]) == 1) {
-      
-      shell[defaultMappings$text_key[i]] =  defaultMappings$default[i]
-        
-      # Handle settings with two levels
-    } else if (length(hierarchical_metadata[[i]]) == 2){
-      
-      #Create list if it does not exist
-      if (!is.list(shell[[hierarchical_metadata[[i]][1]]])) { shell[[hierarchical_metadata[[i]][1]]] = list() } #Need to make list if it doesnt exist since its two-level
-      
-      shell[[hierarchical_metadata[[i]][1]]][hierarchical_metadata[[i]][2]] =  defaultMappings$default[i]
-      
-    } else{
-      stop("Three level setting nests are not currently supported")
-    }
-    
+    shell<-safetyGraphics:::setSettingsValue(
+      key=hierarchical_metadata[[i]], 
+      value=NA, #NA is prefered here since NULL deletes the element in the list
+      settings=shell, 
+      forceCreate=TRUE
+    )
   }
-  
+
   return(shell)
 }

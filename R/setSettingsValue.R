@@ -21,17 +21,22 @@
 #' @keywords internal
 
 
-setSettingsValue <- function(key, value, settings){
-  stopifnot(
-    typeof(settings)=="list"
-  )
+setSettingsValue <- function(key, value, settings, forceCreate=FALSE){
+
+  if(typeof(settings)!="list"){
+    if(forceCreate){
+      settings=list()  
+    }else{
+      stop("Settings is not a valid list object. Set forceCreate to TRUE and re-run if you want to create a new list and continue.")  
+    } 
+  }
   
   firstKey <- key[[1]]
   if(length(key)==1){
     settings[[firstKey]]<-value
     return(settings)
   }else{
-    settings[[firstKey]]<-setSettingsValue(settings = settings[[firstKey]],key = key[2:length(key)], value)
+    settings[[firstKey]]<-setSettingsValue(settings = settings[[firstKey]],key = key[2:length(key)], value=value, forceCreate=forceCreate)
     return(settings)
   }
 }

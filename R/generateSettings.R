@@ -31,13 +31,7 @@
 #' 
 #' @export
 
-generateSettings <- function(standard="None", charts="eDish", partial=FALSE, partial_keys=NULL){
-  if(tolower(chart)!="edish"){
-    stop(paste0("Can't generate settings for the specified chart ('",chart,"'). Only the 'eDish' chart is supported for now."))
-  }
-  
-  chart="eDish"
-  standard="sdtm"
+generateSettings <- function(standard="None", charts=NULL, partial=FALSE, partial_keys=NULL){
   
   # Check that partial_keys is supplied if partial is true
   if  (is.null(partial_keys) & partial ) {
@@ -46,13 +40,16 @@ generateSettings <- function(standard="None", charts="eDish", partial=FALSE, par
   
   # Coerce options to lowercase
   standard<-tolower(standard)
-  chart<-tolower(chart)
+  charts<-tolower(charts)
+  
+  #create shell
+  shell<-safetyGraphics:::generateShell(charts=charts) 
   
   # Build a table of data mappings for the selected standard and partial settings
   standardList<-c("adam","sdtm") #TODO: automatically generate this from metadata
   if(standard %in% standardList){
     dataMappings <- safetyGraphics::getSettingsMetadata(
-      charts = chart, 
+      charts = charts, 
       cols=c("text_key",standard,"setting_required")
     ) %>% 
     filter(.data$setting_required)%>%
@@ -63,11 +60,6 @@ generateSettings <- function(standard="None", charts="eDish", partial=FALSE, par
       dataMappings<-dataMappings%>%filter(.data$text_key %in% partial_keys) 
     }
   }
-  
-  shells<-list()
-  #generate the shell setting object for the chart
-  shells[[chart]]<-safetyGraphics:::generateShell(chart=chart) # will want to handle multiple charts eventually...
-  
   
   #populateDefaults() 
   # Currently the default assignment is happening in generateShell, but I think you would ideally make the shell (only key names) in
@@ -87,5 +79,5 @@ generateSettings <- function(standard="None", charts="eDish", partial=FALSE, par
   #   setSettingValue(shell,setting$key, setting$value)
   # }
   
-  return(shells[[chart]])
+  return(shell)
 }
