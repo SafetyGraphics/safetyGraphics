@@ -5,6 +5,7 @@
 #' @param key a list (like those provided by \code{getSettingKeys()}) defining the position of parameter in the settings object. 
 #' @param value the value to set
 #' @param settings The settings list used to generate a chart like \code{eDISH()}
+#' @param forceCreate Specifies whether the function should create a new list() when none exisits. This most commonly occurs when deeply nested objects.  
 #' @return the updated settings object
 #' 
 #' @examples 

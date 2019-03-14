@@ -4,23 +4,23 @@
 \alias{generateShell}
 \title{Generate a default settings shell based on settings metadata}
 \usage{
-generateShell(charts = "eDish")
+generateShell(charts = NULL)
 }
 \arguments{
-\item{charts}{The chart or chart(s) for which shells should be generated ("eDish" only for now) . Default: \code{"eDish"}.}
+\item{charts}{The chart or chart(s) to include in the shell settings object}
 }
 \value{
-A list containing the appropriate settings for the selected chart
+A list containing a setting shell (all values = NA) for the selected chart(s)
 }
 \description{
-This function returns a default settings objectbased on the chart(s) specified.
+This function returns a default settings object based on the chart(s) specified.
 }
 \details{
 The function is designed to work with valid safetyGraphics charts.
 }
 \examples{
 
-generateShell(chart = "eDish") 
+generateShell(charts = "eDish") 
  
 }
 \keyword{internal}

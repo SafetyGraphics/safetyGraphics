@@ -4,17 +4,22 @@
 \alias{generateSettings}
 \title{Generate a settings object based on a data standard}
 \usage{
-generateSettings(standard = "None", charts = "eDish",
-  partial = FALSE, partial_keys = NULL)
+generateSettings(standard = "None", charts = NULL,
+  useDefaults = TRUE, partial = FALSE, partial_keys = NULL,
+  custom_settings = NULL)
 }
 \arguments{
-\item{standard}{The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"SDTM"}}
+\item{standard}{The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"None"}.}
 
-\item{charts}{The chart or chart(s) for which standards should be generated ("eDish" only for now) . Default: \code{"eDish"}.}
+\item{charts}{The chart or chart(s) for which settings should be generated. Default: \code{NULL} (uses all available charts).}
+
+\item{useDefaults}{Specifies whether default values from settingsMetadata should be included in the settings object. Default: \code{TRUE}.}
 
 \item{partial}{Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.}
 
 \item{partial_keys}{Optional character vector of the matched settings if partial is TRUE. Settings should be identified using the text_key format described in ?settingsMetadata. Setting is ignored when partial is FALSE. Default: \code{NULL}.}
+
+\item{custom_settings}{a tibble with text_key and customValue columns specifiying customizations to be applied to the settings object. Default: \code{NULL}.}
 }
 \value{
 A list containing the appropriate settings for the selected chart

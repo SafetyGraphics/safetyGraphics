@@ -4,7 +4,7 @@
 \alias{setSettingsValue}
 \title{Set the value for a given named parameter}
 \usage{
-setSettingsValue(key, value, settings)
+setSettingsValue(key, value, settings, forceCreate = FALSE)
 }
 \arguments{
 \item{key}{a list (like those provided by \code{getSettingKeys()}) defining the position of parameter in the settings object.}
@@ -12,6 +12,8 @@ setSettingsValue(key, value, settings)
 \item{value}{the value to set}
 
 \item{settings}{The settings list used to generate a chart like \code{eDISH()}}
+
+\item{forceCreate}{Specifies whether the function should create a new list() when none exisits. This most commonly occurs when deeply nested objects.}
 }
 \value{
 the updated settings object

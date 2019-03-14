@@ -5,19 +5,17 @@ setting_names<-c("id_col","value_col","measure_col","normal_col_low","normal_col
 test_that("a list with the expected properties and structure is returned for all standards",{
   
   expect_is(generateSettings(standard="None"),"list")
-  expect_named(generateSettings(standard="None"),setting_names)
-  expect_named(generateSettings(standard="None")[["measure_values"]], c("ALT","AST","TB","ALP"))
+  expect_equal(sort(names(generateSettings(standard="None"))),sort(setting_names))
+  expect_equal(sort(names(generateSettings(standard="None")[["measure_values"]])), sort(c("ALT","AST","TB","ALP")))
   
   expect_is(generateSettings(standard="ADaM"),"list")
-  expect_named(generateSettings(standard="ADaM"),setting_names)
-  expect_named(generateSettings(standard="ADaM")[["measure_values"]], c("ALT","AST","TB","ALP"))
-               
+  expect_equal(sort(names(generateSettings(standard="ADaM"))),sort(setting_names))
+  expect_equal(sort(names(generateSettings(standard="ADaM")[["measure_values"]])), sort(c("ALT","AST","TB","ALP")))               
   expect_is(generateSettings(standard="SDTM"),"list")
-  expect_named(generateSettings(standard="SDTM"),setting_names)
-  expect_named(generateSettings(standard="SDTM")[["measure_values"]], c("ALT","AST","TB","ALP"))
-})
+  expect_equal(sort(names(generateSettings(standard="SDTM"))),sort(setting_names))
+  expect_equal(sort(names(generateSettings(standard="SDTM")[["measure_values"]])), sort(c("ALT","AST","TB","ALP")))})
 
-test_that("a warning is thrown if chart isn't eDish",{
+test_that("a warning is thrown if chart isn't found in the chart list",{
   expect_error(generateSettings(chart="aeexplorer"))
   expect_error(generateSettings(chart=""))
   expect_silent(generateSettings(chart="eDish"))

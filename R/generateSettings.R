@@ -46,8 +46,6 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     charts<-tolower(charts)  
   }
   
-  charts=NULL
-  standard="adam"
   #############################################################################
   # get keys & default values for settings using a data standard (data and field mappings) 
   ############################################################################
@@ -82,7 +80,7 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     )%>%
     rename("otherDefault"="default")
   }else{
-    otherDefaults = tibble("text_key","otherDefault", .rows=0)
+    otherDefaults <- tibble("text_key","otherDefault", .rows=0)
   }
   
   #############################################################################
@@ -90,8 +88,17 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   #############################################################################
   #print(dataDefaults)
   #print(otherDefaults)
-  key_values <- full_join(dataDefaults, otherDefaults, by="text_key")%>%
-    mutate(default=ifelse(is.na(dataDefault),otherDefault,dataDefault))
+  if(nrows(dataDefaults) == 0 & nrows(otherDefaults==0)){
+    key_values <- tibble("text_key","dataDefault","otherDefault", .rows=0)
+  }else if(nrows(dataDefaults)==0){
+    key_values<-otherDefaults %>% mutate(dataDefault=NA)
+  }else if(nrows(otherDefaults)==0){
+    key_values<-dataDefaults %>% mutate(otherDefault=NA)
+  }else{
+    key_values <- full_join(dataDefaults, otherDefaults, by="text_key")
+  }
+  
+  key_values <- key_values %>% mutate(default=ifelse(is.na(dataDefault),otherDefault,dataDefault))
   
   #############################################################################
   # Apply custom settings (if any)
