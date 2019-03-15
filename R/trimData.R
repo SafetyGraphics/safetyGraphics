@@ -50,22 +50,25 @@ trimData <- function(data, settings, chart="edish"){
   data_subset <- select(data, unlist(common_cols))
 
   ## Remove rows if baseline or analysisFlag is specified ##
-
-  if(!is.null(settings[['baseline']][['value_col']]) | !is.null(settings[['analysisFlag']][['value_col']])) {
+  baselineSetting<-settings[['baseline']][['value_col']]
+  baselineMissing <- is.null(baselineSetting) || is.na(baselineSetting)
+  analysisSetting<-settings[['analysisFlag']][['value_col']]
+  analysisMissing <- is.null(analysisSetting) || is.na(analysisSetting)
+  
+  if(!baselineMissing | !analysisMissing) {
 
     # Create Baseline String
-    baseline_string <- ifelse(!is.null(settings[['baseline']][['value_col']]),
+    baseline_string <- ifelse(!baselineMissing,
      paste(settings[['baseline']][['value_col']], "%in% settings[['baseline']][['values']]"),
      "")
 
     # Create AnalysisFlag String
-    analysis_string <- ifelse(!is.null(settings[['analysisFlag']][['value_col']]),
+    analysis_string <- ifelse(!analysisMissing,
       paste(settings[['analysisFlag']][['value_col']], "%in% settings[['analysisFlag']][['values']]"),
     "")
 
     # Include OR operator if both are specified
-    operator <- ifelse(!is.null(settings[['baseline']][['value_col']]) & !is.null(settings[['analysisFlag']][['value_col']]),
-                        "|","")
+    operator <- ifelse(!baselineMissing & !analysisMissing, "|", "")
 
     # Create filter string and make it an expression
     filter_string <- paste(baseline_string, operator, analysis_string)
