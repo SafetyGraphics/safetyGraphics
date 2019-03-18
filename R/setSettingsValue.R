@@ -34,7 +34,11 @@ setSettingsValue <- function(key, value, settings, forceCreate=FALSE){
   
   firstKey <- key[[1]]
   if(length(key)==1){
-    settings[[firstKey]]<-value
+    if(is.null(value)){
+      settings[firstKey]<-list(NULL)
+    }else{
+      settings[[firstKey]]<-value
+    }
     return(settings)
   }else{
     settings[[firstKey]]<-setSettingsValue(settings = settings[[firstKey]],key = key[2:length(key)], value=value, forceCreate=forceCreate)

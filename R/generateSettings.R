@@ -1,80 +1,80 @@
 #' Generate a settings object based on a data standard
 #'
-#' This function returns a settings object for the eDish chart based on the specified data standard. 
+#' This function returns a settings object for the eDish chart based on the specified data standard.
 #'
 #' The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, eDish is the only chart supported.
 #'
 #' @param standard The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"None"}.
 #' @param charts The chart or chart(s) for which settings should be generated. Default: \code{NULL} (uses all available charts).
-#' @param useDefaults Specifies whether default values from settingsMetadata should be included in the settings object. Default: \code{TRUE}. 
+#' @param useDefaults Specifies whether default values from settingsMetadata should be included in the settings object. Default: \code{TRUE}.
 #' @param partial Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.
 #' @param partial_keys Optional character vector of the matched settings if partial is TRUE. Settings should be identified using the text_key format described in ?settingsMetadata. Setting is ignored when partial is FALSE. Default: \code{NULL}.
-#' @param custom_settings a tibble with text_key and customValue columns specifiying customizations to be applied to the settings object. Default: \code{NULL}. 
+#' @param custom_settings a tibble with text_key and customValue columns specifiying customizations to be applied to the settings object. Default: \code{NULL}.
 #' @return A list containing the appropriate settings for the selected chart
-#' 
-#' @examples 
-#' 
-#' generateSettings(standard="SDTM") 
+#'
+#' @examples
+#'
+#' generateSettings(standard="SDTM")
 #' generateSettings(standard="SdTm") #also ok
 #' generateSettings(standard="ADaM")
 #' pkeys<- c("id_col","measure_col","value_col")
 #' generateSettings(standard="adam", partial=TRUE, partial_keys=pkeys)
-#' 
-#' generateSettings(standard="a different standard") 
+#'
+#' generateSettings(standard="a different standard")
 #' #returns shell settings list with no data mapping
-#' 
+#'
 #' \dontrun{
-#' generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far. 
+#' generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far.
 #' }
-#' 
+#'
 #' @importFrom dplyr "filter" full_join
 #' @importFrom stringr str_split
 #' @importFrom rlang .data
-#' 
+#'
 #' @export
 
 generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, partial=FALSE, partial_keys=NULL, custom_settings=NULL){
-  
+
   # Check that partial_keys is supplied if partial is true
   if  (is.null(partial_keys) & partial ) {
     stop("partial_keys must be supplied if the standard is partial")
   }
-  
+
   # Coerce options to lowercase
   standard<-tolower(standard)
   if(!is.null(charts)){
-    charts<-tolower(charts)  
+    charts<-tolower(charts)
   }
-  
+
   #############################################################################
-  # get keys & default values for settings using a data standard (data and field mappings) 
+  # get keys & default values for settings using a data standard (data and field mappings)
   ############################################################################
   # Build a table of data mappings for the selected standard and partial settings
   standardList<-safetyGraphics::standardsMetadata%>%select(-.data$text_key)%>%names
-  
+
   if(standard %in% standardList){
     dataDefaults <- safetyGraphics::getSettingsMetadata(
-      charts = charts, 
+      charts = charts,
       cols=c("text_key",standard,"setting_required")
-    ) %>% 
+    ) %>%
     filter(.data$setting_required)%>%
-    select(-.data$setting_required)%>%  
+    select(-.data$setting_required)%>%
     rename("dataDefault" = standard)%>%
     filter(.data$dataDefault != '')
   }else{
     dataDefaults<-tibble(text_key=character(),dataDefault=character(), .rows=0)
   }
-  
+
   if(partial){
-    dataDefaults <-dataDefaults%>%filter(.data$text_key %in% partial_keys) 
+    dataDefaults <-dataDefaults%>%filter(.data$text_key %in% partial_keys)
   }
-  
+
   #############################################################################
-  # get keys & default values for settings not using a data standard  
+  # get keys & default values for settings not using a data standard
   #############################################################################
   if(useDefaults){
     otherDefaults <- safetyGraphics::getSettingsMetadata(
-      charts = charts, 
+      charts = charts,
       filter = !.data$column_mapping & !.data$field_mapping,
       cols=c("text_key","default")
     )%>%
@@ -82,13 +82,13 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   }else{
     otherDefaults <- tibble(text_key=character(),otherDefault=character(), .rows=0)
   }
-  
+
   #############################################################################
   # merge all keys & default values
   #############################################################################
   key_values <- full_join(dataDefaults, otherDefaults, by="text_key")
   key_values <- key_values %>% mutate(default=ifelse(is.na(.data$dataDefault),.data$otherDefault,.data$dataDefault))
-  
+
   #############################################################################
   # Apply custom settings (if any)
   #############################################################################
@@ -97,24 +97,24 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   } else {
     key_values$customValue<-NA
   }
-  
+
   key_values<-key_values %>% mutate(value=ifelse(is.na(.data$customValue), .data$default, .data$customValue))
-  
+
   #############################################################################
   # create shell settings object
   #############################################################################
-  shell<-generateShell(charts=charts) 
-  
+  shell<-generateShell(charts=charts)
+
   #########################################################################################
   # populate the shell settings by looping through key_values and apply them to the shell
   #########################################################################################
   for(row in 1:nrow(key_values)){
     shell<-setSettingsValue(
-      settings = shell, 
-      key = textKeysToList(key_values[row,"text_key"])[[1]], 
+      settings = shell,
+      key = textKeysToList(key_values[row,"text_key"])[[1]],
       value = key_values[row, "value"][[1]]
     )
-  }    
-  
+  }
+
   return(shell)
 }

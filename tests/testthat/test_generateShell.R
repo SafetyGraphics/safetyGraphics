@@ -5,8 +5,8 @@ default <- generateShell()
 
 test_that("a list with the expected properties and structure is returned by default",{
   expect_type(default, "list")
-  expect_equal(default[["id_col"]],NA)
-  expect_equal(default[["measure_values"]][["ALT"]],NA)
+  expect_equal(default[["id_col"]],NULL)
+  expect_equal(default[["measure_values"]][["ALT"]],NULL)
   expect_null(default[["not_a_setting"]])
 })
 
