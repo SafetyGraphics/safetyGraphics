@@ -50,7 +50,7 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   # get keys & default values for settings using a data standard (data and field mappings) 
   ############################################################################
   # Build a table of data mappings for the selected standard and partial settings
-  standardList<-standardsMetadata%>%select(-text_key)%>%names
+  standardList<-safetyGraphics::standardsMetadata%>%select(-.data$text_key)%>%names
   
   if(standard %in% standardList){
     dataDefaults <- safetyGraphics::getSettingsMetadata(
@@ -58,7 +58,7 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
       cols=c("text_key",standard,"setting_required")
     ) %>% 
     filter(.data$setting_required)%>%
-    select(-setting_required)%>%  
+    select(-.data$setting_required)%>%  
     rename("dataDefault" = standard)%>%
     filter(.data$dataDefault != '')
   }else{
@@ -86,10 +86,8 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   #############################################################################
   # merge all keys & default values
   #############################################################################
-  #print(dataDefaults)
-  #print(otherDefaults)
   key_values <- full_join(dataDefaults, otherDefaults, by="text_key")
-  key_values <- key_values %>% mutate(default=ifelse(is.na(dataDefault),otherDefault,dataDefault))
+  key_values <- key_values %>% mutate(default=ifelse(is.na(.data$dataDefault),.data$otherDefault,.data$dataDefault))
   
   #############################################################################
   # Apply custom settings (if any)
@@ -105,15 +103,15 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   #############################################################################
   # create shell settings object
   #############################################################################
-  shell<-safetyGraphics:::generateShell(charts=charts) 
+  shell<-generateShell(charts=charts) 
   
   #########################################################################################
   # populate the shell settings by looping through key_values and apply them to the shell
   #########################################################################################
   for(row in 1:nrow(key_values)){
-    shell<-safetyGraphics:::setSettingsValue(
+    shell<-setSettingsValue(
       settings = shell, 
-      key = safetyGraphics:::textKeysToList(key_values[row,"text_key"])[[1]], 
+      key = textKeysToList(key_values[row,"text_key"])[[1]], 
       value = key_values[row, "value"][[1]]
     )
   }    
