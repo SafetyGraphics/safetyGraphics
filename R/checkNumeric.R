@@ -25,7 +25,7 @@ checkNumeric <- function(key, settings, data){
   current$type <- "numeric"
   current$description <- "specified column is numeric?"
   current$value <- getSettingValue(key=key,settings=settings)
-  if(is.null(current$value)){
+  if(is.na(current$value)||is.null(current$value)){
     current$value <- "--No Value Given--"
     current$valid <- TRUE
     current$message <- ""

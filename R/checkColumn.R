@@ -42,7 +42,7 @@ checkColumn <- function(key, settings, data){
   current$type <- "column"
   current$description <- "column parameter from setting setting found in data?"
   current$value <- getSettingValue(key=key,settings=settings)
-  if(is.null(current$value)){
+  if(is.na(current$value)||is.null(current$value)){
     current$value <- "--No Value Given--"
     current$valid <- TRUE
     current$message <- ""

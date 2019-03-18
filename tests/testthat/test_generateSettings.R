@@ -5,19 +5,17 @@ setting_names<-c("id_col","value_col","measure_col","normal_col_low","normal_col
 test_that("a list with the expected properties and structure is returned for all standards",{
   
   expect_is(generateSettings(standard="None"),"list")
-  expect_named(generateSettings(standard="None"),setting_names)
-  expect_named(generateSettings(standard="None")[["measure_values"]], c("ALT","AST","TB","ALP"))
+  expect_equal(sort(names(generateSettings(standard="None"))),sort(setting_names))
+  expect_equal(sort(names(generateSettings(standard="None")[["measure_values"]])), sort(c("ALT","AST","TB","ALP")))
   
   expect_is(generateSettings(standard="ADaM"),"list")
-  expect_named(generateSettings(standard="ADaM"),setting_names)
-  expect_named(generateSettings(standard="ADaM")[["measure_values"]], c("ALT","AST","TB","ALP"))
-               
+  expect_equal(sort(names(generateSettings(standard="ADaM"))),sort(setting_names))
+  expect_equal(sort(names(generateSettings(standard="ADaM")[["measure_values"]])), sort(c("ALT","AST","TB","ALP")))               
   expect_is(generateSettings(standard="SDTM"),"list")
-  expect_named(generateSettings(standard="SDTM"),setting_names)
-  expect_named(generateSettings(standard="SDTM")[["measure_values"]], c("ALT","AST","TB","ALP"))
-})
+  expect_equal(sort(names(generateSettings(standard="SDTM"))),sort(setting_names))
+  expect_equal(sort(names(generateSettings(standard="SDTM")[["measure_values"]])), sort(c("ALT","AST","TB","ALP")))})
 
-test_that("a warning is thrown if chart isn't eDish",{
+test_that("a warning is thrown if chart isn't found in the chart list",{
   expect_error(generateSettings(chart="aeexplorer"))
   expect_error(generateSettings(chart=""))
   expect_silent(generateSettings(chart="eDish"))
@@ -30,13 +28,13 @@ test_that("data mappings are null when setting=none, character otherwise",{
   none_settings <- generateSettings(standard="None")
   for(text_key in data_setting_keys){
     key<-textKeysToList(text_key)[[1]]
-    expect_null(getSettingValue(settings=none_settings,key=key))
+    expect_equal(getSettingValue(settings=none_settings,key=key),NA)
   }
   
   other_settings <- generateSettings(standard="a different standard") 
   for(text_key in data_setting_keys){
     key<-textKeysToList(text_key)[[1]]
-    expect_null(getSettingValue(settings=other_settings,key=key))
+    expect_equal(getSettingValue(settings=other_settings,key=key),NA)
   }
   
   sdtm_settings <- generateSettings(standard="SDTM")
@@ -73,7 +71,7 @@ test_that("data mappings are null when setting=none, character otherwise",{
     if (text_key %in% c("id_col","measure_col","measure_values--ALT")) {
       expect_is(getSettingValue(settings=partial_adam_settings,key=key),"character")
     } else {
-      expect_null(getSettingValue(settings=partial_adam_settings,key=key))
+      expect_equal(getSettingValue(settings=partial_adam_settings,key=key),NA)
     }
   }
   
@@ -86,4 +84,28 @@ test_that("data mappings are null when setting=none, character otherwise",{
   
   #Testing failure when partial is true with no specified columns
   expect_error(partial_settings_no_cols <- generateSettings(standard="ADaM", partial=TRUE))
+  
+  #Test useDefaults
+  noDefaults <- generateSettings(standard="adam",useDefaults=FALSE)
+  option_keys<-c("x_options", "y_options", "visit_window", "r_ratio_filter", "r_ratio_cut", "showTitle", "warningText")
+  
+  #non data mappings are NA
+  for(text_key in option_keys){
+    key<-textKeysToList(text_key)[[1]]
+    expect_equal(getSettingValue(settings=noDefaults,key=key),NA)
+  }
+  
+  #data mappings are filled as expected 
+  for(text_key in data_setting_keys){
+    key<-textKeysToList(text_key)[[1]]
+    expect_is(getSettingValue(settings=noDefaults,key=key),"character")
+  }
+  
+  #Test customSettings
+  customizations<- tibble(text_key=c("id_col","warningText","measure_values--ALT"),customValue=c("customID","This is a custom warning","custom ALT"))
+  customSettings<-generateSettings(standard="adam",custom_settings=customizations)
+  expect_equal(getSettingValue(settings=customSettings,key=list("id_col")),"customID")
+  expect_equal(getSettingValue(settings=customSettings,key=list("warningText")),"This is a custom warning")
+  expect_equal(getSettingValue(settings=customSettings,key=list("measure_values","ALT")),"custom ALT")
+  expect_equal(getSettingValue(settings=customSettings,key=list("measure_col")),"PARAM")
 })
