@@ -22,10 +22,10 @@ trimData <- function(data, settings, chart="edish"){
 
   ## Remove columns not in settings ##
   col_names <- colnames(data)
-  
+
   allKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$column_mapping, cols = c("text_key","setting_type"))
   dataKeys <- allKeys %>% filter(.data$setting_type !="vector") %>% pull(.data$text_key) %>% textKeysToList()
-  
+
   # Add items in vectors to list individually
   dataVectorKeys <- allKeys %>% filter(.data$setting_type =="vector") %>% pull(.data$text_key) %>% textKeysToList()
   for(key in dataVectorKeys){
@@ -37,12 +37,12 @@ trimData <- function(data, settings, chart="edish"){
         sub <- current[[i]]
         if(typeof(sub)=="list"){
           newKey[[1+length(newKey)]]<-"value_col"
-        }  
-        dataKeys[[1+length(dataKeys)]]<-newKey 
+        }
+        dataKeys[[1+length(dataKeys)]]<-newKey
       }
     }
   }
-  
+
   settings_values <- map(dataKeys, function(x) {return(getSettingValue(x, settings))})
 
   common_cols <- intersect(col_names,settings_values)
@@ -51,10 +51,10 @@ trimData <- function(data, settings, chart="edish"){
 
   ## Remove rows if baseline or analysisFlag is specified ##
   baselineSetting<-settings[['baseline']][['value_col']]
-  baselineMissing <- is.null(baselineSetting) || is.na(baselineSetting)
+  baselineMissing <- is.null(baselineSetting)
   analysisSetting<-settings[['analysisFlag']][['value_col']]
-  analysisMissing <- is.null(analysisSetting) || is.na(analysisSetting)
-  
+  analysisMissing <- is.null(analysisSetting)
+
   if(!baselineMissing | !analysisMissing) {
 
     # Create Baseline String

@@ -24,7 +24,7 @@ generateShell <- function(charts=NULL){
   for (i in 1:length(keys) ) {
     shell<-setSettingsValue(
       key=keys[[i]],
-      value=NA, #NA is prefered here since NULL deletes the element in the list
+      value=NULL, 
       settings=shell,
       forceCreate=TRUE
     )

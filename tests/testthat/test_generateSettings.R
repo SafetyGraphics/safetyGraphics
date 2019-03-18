@@ -28,13 +28,13 @@ test_that("data mappings are null when setting=none, character otherwise",{
   none_settings <- generateSettings(standard="None")
   for(text_key in data_setting_keys){
     key<-textKeysToList(text_key)[[1]]
-    expect_equal(getSettingValue(settings=none_settings,key=key),NA)
+    expect_equal(getSettingValue(settings=none_settings,key=key),NULL)
   }
   
   other_settings <- generateSettings(standard="a different standard") 
   for(text_key in data_setting_keys){
     key<-textKeysToList(text_key)[[1]]
-    expect_equal(getSettingValue(settings=other_settings,key=key),NA)
+    expect_equal(getSettingValue(settings=other_settings,key=key),NULL)
   }
   
   sdtm_settings <- generateSettings(standard="SDTM")
@@ -71,7 +71,7 @@ test_that("data mappings are null when setting=none, character otherwise",{
     if (text_key %in% c("id_col","measure_col","measure_values--ALT")) {
       expect_is(getSettingValue(settings=partial_adam_settings,key=key),"character")
     } else {
-      expect_equal(getSettingValue(settings=partial_adam_settings,key=key),NA)
+      expect_equal(getSettingValue(settings=partial_adam_settings,key=key),NULL)
     }
   }
   
@@ -92,7 +92,7 @@ test_that("data mappings are null when setting=none, character otherwise",{
   #non data mappings are NA
   for(text_key in option_keys){
     key<-textKeysToList(text_key)[[1]]
-    expect_equal(getSettingValue(settings=noDefaults,key=key),NA)
+    expect_equal(getSettingValue(settings=noDefaults,key=key),NULL)
   }
   
   #data mappings are filled as expected 

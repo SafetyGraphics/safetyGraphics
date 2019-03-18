@@ -16,33 +16,33 @@
 #' testSettings$filters[[1]]<-list(value_col="RACE",label="Race")
 #' testSettings$filters[[2]]<-list(value_col=NULL,label="No Column")
 #' testSettings$filters[[3]]<-list(value_col="NotAColumn",label="Invalid Column")
-#' 
+#'
 #' #pass ($valid == TRUE)
 #' safetyGraphics:::checkColumn(key=list("id_col"),
-#'                                     settings=testSettings, adlbc) 
-#'                                     
+#'                                     settings=testSettings, adlbc)
+#'
 #' #pass
 #' safetyGraphics:::checkColumn(key=list("filters",1,"value_col"),
-#'                                     settings=testSettings, adlbc) 
-#'                                     
+#'                                     settings=testSettings, adlbc)
+#'
 #' #NULL column pass
 #' safetyGraphics:::checkColumn(key=list("filters",2,"value_col"),
-#'                                     settings=testSettings, adlbc) 
-#'                                     
+#'                                     settings=testSettings, adlbc)
+#'
 #' #invalid column fails
 #' safetyGraphics:::checkColumn(key=list("filters",3,"value_col"),
-#'                                     settings=testSettings, adlbc) 
+#'                                     settings=testSettings, adlbc)
 #' @keywords internal
 
 checkColumn <- function(key, settings, data){
   stopifnot(typeof(key)=="list",typeof(settings)=="list")
-  
+
   current <- list(key=key)
   current$text_key <-  paste( unlist(current$key), collapse='--')
   current$type <- "column"
   current$description <- "column parameter from setting setting found in data?"
   current$value <- getSettingValue(key=key,settings=settings)
-  if(is.na(current$value)||is.null(current$value)){
+  if(is.null(current$value)){
     current$value <- "--No Value Given--"
     current$valid <- TRUE
     current$message <- ""

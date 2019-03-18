@@ -10,11 +10,11 @@
 #' @examples
 #' testSettings<-generateSettings(standard="AdAM")
 #' #pass ($valid == FALSE)
-#' safetyGraphics:::checkNumeric(key=list("id_col"),settings=testSettings, data=adlbc) 
-#' 
+#' safetyGraphics:::checkNumeric(key=list("id_col"),settings=testSettings, data=adlbc)
+#'
 #' #pass ($valid == TRUE)
-#' safetyGraphics:::checkNumeric(key=list("value_col"),settings=testSettings, data=adlbc) 
-#' 
+#' safetyGraphics:::checkNumeric(key=list("value_col"),settings=testSettings, data=adlbc)
+#'
 #' @keywords internal
 
 checkNumeric <- function(key, settings, data){
@@ -25,7 +25,7 @@ checkNumeric <- function(key, settings, data){
   current$type <- "numeric"
   current$description <- "specified column is numeric?"
   current$value <- getSettingValue(key=key,settings=settings)
-  if(is.na(current$value)||is.null(current$value)){
+  if(is.null(current$value)){
     current$value <- "--No Value Given--"
     current$valid <- TRUE
     current$message <- ""
