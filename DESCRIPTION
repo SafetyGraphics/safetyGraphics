@@ -1,6 +1,6 @@
 Package: safetyGraphics
 Title: Create Interactive Graphics Related to Clinical Trial Safety
-Version: 0.9.0
+Version: 0.9.1
 Authors@R: c(
 	person("Jeremy", "Wildfire", email = "jeremy_wildfire@rhoworld.com", role = c("cre","aut")),
 	person("Becca", "Krouse", role="aut"),
@@ -18,11 +18,11 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Suggests: 
+Suggests:
     testthat,
     shinytest,
     knitr
-Imports: 
+Imports:
     dplyr,
     htmlwidgets,
     purrr,
