@@ -22,10 +22,10 @@ trimData <- function(data, settings, chart="edish"){
 
   ## Remove columns not in settings ##
   col_names <- colnames(data)
-  
+
   allKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$column_mapping, cols = c("text_key","setting_type"))
   dataKeys <- allKeys %>% filter(.data$setting_type !="vector") %>% pull(.data$text_key) %>% textKeysToList()
-  
+
   # Add items in vectors to list individually
   dataVectorKeys <- allKeys %>% filter(.data$setting_type =="vector") %>% pull(.data$text_key) %>% textKeysToList()
   for(key in dataVectorKeys){
@@ -37,12 +37,12 @@ trimData <- function(data, settings, chart="edish"){
         sub <- current[[i]]
         if(typeof(sub)=="list"){
           newKey[[1+length(newKey)]]<-"value_col"
-        }  
-        dataKeys[[1+length(dataKeys)]]<-newKey 
+        }
+        dataKeys[[1+length(dataKeys)]]<-newKey
       }
     }
   }
-  
+
   settings_values <- map(dataKeys, function(x) {return(getSettingValue(x, settings))})
 
   common_cols <- intersect(col_names,settings_values)
@@ -50,22 +50,25 @@ trimData <- function(data, settings, chart="edish"){
   data_subset <- select(data, unlist(common_cols))
 
   ## Remove rows if baseline or analysisFlag is specified ##
+  baselineSetting<-settings[['baseline']][['value_col']]
+  baselineMissing <- is.null(baselineSetting)
+  analysisSetting<-settings[['analysisFlag']][['value_col']]
+  analysisMissing <- is.null(analysisSetting)
 
-  if(!is.null(settings[['baseline']][['value_col']]) | !is.null(settings[['analysisFlag']][['value_col']])) {
+  if(!baselineMissing | !analysisMissing) {
 
     # Create Baseline String
-    baseline_string <- ifelse(!is.null(settings[['baseline']][['value_col']]),
+    baseline_string <- ifelse(!baselineMissing,
      paste(settings[['baseline']][['value_col']], "%in% settings[['baseline']][['values']]"),
      "")
 
     # Create AnalysisFlag String
-    analysis_string <- ifelse(!is.null(settings[['analysisFlag']][['value_col']]),
+    analysis_string <- ifelse(!analysisMissing,
       paste(settings[['analysisFlag']][['value_col']], "%in% settings[['analysisFlag']][['values']]"),
     "")
 
     # Include OR operator if both are specified
-    operator <- ifelse(!is.null(settings[['baseline']][['value_col']]) & !is.null(settings[['analysisFlag']][['value_col']]),
-                        "|","")
+    operator <- ifelse(!baselineMissing & !analysisMissing, "|", "")
 
     # Create filter string and make it an expression
     filter_string <- paste(baseline_string, operator, analysis_string)
