@@ -23,12 +23,13 @@ render_edish_chart <- function(input, output, session, data, settings, valid){
     req(data())
     req(settings())
 
-    if (valid()==TRUE){
+    print(valid())
+   # if (valid()==TRUE){
       trimmed_data <- safetyGraphics:::trimData(data = data(), settings = settings())
       eDISH(data = trimmed_data, settings = settings())
-    } else{
-      return()
-    }
+    # } else{
+    #   return()
+    # }
   })
   
   
@@ -54,7 +55,7 @@ render_edish_chart <- function(input, output, session, data, settings, valid){
                     style="padding: 8px;",  #then little tweak to ensure vertical alignment
                       downloadButton(ns("reportDL"), "Export Chart")) )
       )
-    } 
+    }
     else {
       removeUI(selector = paste0("#", ns("download")))
     }
