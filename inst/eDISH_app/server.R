@@ -86,8 +86,6 @@ function(input, output, session){
 
 
    # call all chart modules
-  allcharts <- c("edish", "safetyhistogram") # grab from metadata - all available charts
-
   for (chart in allcharts){
 
     modfun <- match.fun(paste0("render_", chart, "_chart"))

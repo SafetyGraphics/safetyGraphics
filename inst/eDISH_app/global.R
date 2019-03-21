@@ -11,6 +11,9 @@ library(stringr)
 library(DT)
 library(haven)
 
+# create vector of all possible charts
+allcharts <- c("edish","safetyhistogram")
+
 ## source modules
 source('modules/renderSettings/renderSettingsUI.R')
 source('modules/renderSettings/renderSettings.R')
