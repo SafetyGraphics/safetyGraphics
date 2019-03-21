@@ -24,3 +24,6 @@ r_ratio_filter,,
 r_ratio_cut,,
 showTitle,,
 warningText,,
+unit_col,STRESU,PARAMCD
+details,,
+missingValues,,
