@@ -74,8 +74,9 @@ function(input, output, session){
           }
 
         tabfun <- match.fun(paste0("render_", chart, "_chartUI"))  # module UI for given tab
-        # tabid <- paste0(chart, "_tab_title")
-        tabcode <- tabPanel(title = tab_title, #htmlOutput(tabid),
+       #tabid <- paste0(chart, "_tab_title")
+        tabcode <- tabPanel(title = tab_title, 
+                           # title = htmlOutput(tabid),
                              tabfun(paste0("chart", chart)))
 
         appendTab(inputId = "tabs",
@@ -87,7 +88,17 @@ function(input, output, session){
 
    # call all chart modules
   for (chart in allcharts){
-
+    
+    # tabid <- paste0(chart, "_tab_title")
+    # output[[tabid]] = renderUI({
+    #   status <- settings_new$status()[[chart]]$valid
+    #   if(status==TRUE){
+    #    HTML(paste(chart, icon("check", class="ok")))
+    #   } else {
+    #    HTML(paste(chart, icon("times", class="notok")))
+    #   }
+    # })
+    
     modfun <- match.fun(paste0("render_", chart, "_chart"))
     callModule(module = modfun, 
                id = paste0("chart", chart),
