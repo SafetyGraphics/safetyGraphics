@@ -81,6 +81,10 @@ function(input, output, session){
   for (chart in allcharts){
     
     modfun <- match.fun(paste0("render_", chart, "_chart"))
+    
+    # I'm thinking this code set up (loop + callModule() using reactives) isn't ideal and 
+    # the value for "valid" doesn't always get passed directly.
+    # this should be fixed by us moving to renderChart module
     callModule(module = modfun, 
                id = paste0("chart", chart),
                data = reactive(dataUpload_out$data_selected()),
