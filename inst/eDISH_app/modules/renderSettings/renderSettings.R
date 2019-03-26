@@ -162,6 +162,7 @@ renderSettings <- function(input, output, session, data, settings, status){
                      showTitle = input$showTitle,
                      warningText = input$warningText,
                      unit_col = input$unit_col,
+                     start_value = input$start_value,
                      details = as.list(input$details),
                      filters = as.list(input$filters),
                      group_cols = input$group_cols #as.list(input$group_cols) 
