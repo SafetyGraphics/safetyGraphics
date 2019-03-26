@@ -19,7 +19,7 @@
 #' @examples 
 #' \dontrun{
 #' 
-#' ## Create eDISH figure customized to user data
+#' ## Create Histogram figure customized to user data
 #'safetyHistogram(data=adlbc, 
 #'                id_col = "USUBJID",
 #'                value_col = "AVAL", 
@@ -28,7 +28,7 @@
 #'                normal_col_high = "A1HI", 
 #'                unit_col = "PARAMCD")
 #' 
-#' ## Create eDISH figure using a premade settings list
+#' ## Create Histogram figure using a premade settings list
 #' details_list <- list(
 #'   list(value_col = "TRTP", label = "Treatment"),
 #'   list(value_col = "SEX", label = "Sex"), 
