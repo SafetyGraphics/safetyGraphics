@@ -91,9 +91,9 @@ validateSettings <- function(data, settings, chart="eDish"){
   
   #Check that settings for mapping numeric data are associated with numeric columns
   numericChecks <- NULL
-  numericKeys <- getSettingsMetadata(charts=chart, filter_expr=.data$column_type=="numeric", cols="text_key")%>%textKeysToList()
+  numericKeys <- getSettingsMetadata(charts=chart, filter_expr=.data$column_type=="numeric", cols="text_key")
   if (!is.null(numericKeys)){
-    numericChecks <- numericKeys %>% purrr::map(checkNumeric, settings=settings, data=data )
+    numericChecks <- numericKeys %>%textKeysToList() %>% purrr::map(checkNumeric, settings=settings, data=data )
   }
 
   #Combine different check types in to a master list
