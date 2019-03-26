@@ -26,9 +26,9 @@ render_edish_chart <- function(input, output, session, data, settings, valid){
    # if (valid()==TRUE){
       trimmed_data <- safetyGraphics:::trimData(data = data(), settings = settings())
       eDISH(data = trimmed_data, settings = settings())
-    # } else{
-    #   return()
-    # }
+   # } else{
+  #    return()
+  #  }
   })
   
   
