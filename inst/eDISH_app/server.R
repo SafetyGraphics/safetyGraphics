@@ -1,7 +1,7 @@
 # Server code for safetyGraphics App
 #   - calls dataUpload module (data tab)
 #   - calls renderSettings module (settings tab)
-#   - calls renderEDishChart (chart tab)
+#   - calls chart modules (chart tab)
 #   - uses render UI to append a red X or green check on tab title, 
 #      indicating whether user has satisfied requirements of that tab
 
@@ -36,7 +36,6 @@ function(input, output, session){
   # update settings navbar
     output$settings_tab_title = renderUI({
       num_valid <- settings_new$status() %>% flatten() %>%  keep(., names(.)=="valid") %>% unlist() %>% sum()
-    #  if (settings_new$status()$valid==TRUE){
       if(num_valid >0) {
         HTML(paste("Settings", icon("check", class="ok")))
       } else {
@@ -44,14 +43,6 @@ function(input, output, session){
       }
     })
 
-    # update charts navbar
-    # output$chart_tab_title = renderUI({
-    #   if (settings_new$status()$valid==TRUE){
-    #     HTML(paste("Chart", icon("check", class="ok")))
-    #   } else {
-    #     HTML(paste("Chart", icon("times", class="notok")))
-    #   }
-    # })
 
    # ## this currently wipes away everything anytime there's a change in chart selections OR
     #  change in validation status
@@ -88,16 +79,6 @@ function(input, output, session){
 
    # call all chart modules
   for (chart in allcharts){
-    
-    # tabid <- paste0(chart, "_tab_title")
-    # output[[tabid]] = renderUI({
-    #   status <- settings_new$status()[[chart]]$valid
-    #   if(status==TRUE){
-    #    HTML(paste(chart, icon("check", class="ok")))
-    #   } else {
-    #    HTML(paste(chart, icon("times", class="notok")))
-    #   }
-    # })
     
     modfun <- match.fun(paste0("render_", chart, "_chart"))
     callModule(module = modfun, 

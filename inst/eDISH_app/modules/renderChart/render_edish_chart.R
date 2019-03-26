@@ -23,7 +23,6 @@ render_edish_chart <- function(input, output, session, data, settings, valid){
     req(data())
     req(settings())
 
-    print(valid())
    # if (valid()==TRUE){
       trimmed_data <- safetyGraphics:::trimData(data = data(), settings = settings())
       eDISH(data = trimmed_data, settings = settings())
@@ -32,14 +31,6 @@ render_edish_chart <- function(input, output, session, data, settings, valid){
     # }
   })
   
-  
-  # output$chart_title = renderUI({
-  #   if (valid()==TRUE){
-  #     HTML(paste("eDISH", icon("check", class="ok")))
-  #   } else {
-  #     HTML(paste("eDISH", icon("times", class="notok")))
-  #   }
-  # })
   
   # insert export chart button if settings pass validation
   # remove button if validation fails

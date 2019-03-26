@@ -10,9 +10,5 @@ render_edish_chartUI <- function(id){
   
   ns <- NS(id)
   
-  # #tagList( 
-  #    tabPanel("edish",
-              eDISHOutput(ns("chart")) #)
-  #)
-  
+  eDISHOutput(ns("chart")) 
 }

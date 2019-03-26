@@ -15,9 +15,5 @@ tagList(
                     )
            ), 
            navbarMenu("Charts")
-          #  tabPanel(title = htmlOutput("chart_tab_title"),
-          #           id = "charttab",
-          #           renderEDishChartUI("chartEDish")
-          # )
 )
 )

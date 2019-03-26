@@ -52,7 +52,6 @@ renderSettings <- function(input, output, session, data, settings, status){
   #List of all inputs
   input_names <- reactive({safetyGraphics:::getSettingsMetadata(charts=input$selected_charts, cols="text_key")})
 
-  
   ######################################################################
   # create settings UI
   #   - chart selection -> gather all necessary UI elements
@@ -181,19 +180,6 @@ renderSettings <- function(input, output, session, data, settings, status){
                                       values = input$`analysisFlag--values`)
       }
     }
-    # 
-    # if (!is.null(input$filters)){
-    #   for (i in 1:length(input$filters)){
-    #     settings$filters[[i]] <- list(value_col = input$filters[[i]],
-    #                                   label = input$filters[[i]])
-    #   }
-    # }
-    # if (!is.null(input$group_cols)){
-    #   for (i in 1:length(input$group_cols)){
-    #     settings$group_cols[[i]] <- list(value_col = input$group_cols[[i]],
-    #                                      label = input$group_cols[[i]])
-    #   }
-    # }
     
     return(settings)
   })
