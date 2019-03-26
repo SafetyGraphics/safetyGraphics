@@ -25,5 +25,6 @@ r_ratio_cut,,
 showTitle,,
 warningText,,
 unit_col,STRESU,PARAMCD
+start_value,,
 details,,
 missingValues,,

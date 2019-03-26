@@ -7,7 +7,7 @@ usethis::use_data(adlbc, overwrite = TRUE)
 partialSettingsMetadata <- read.csv("data-raw/settingsMetadata.csv", stringsAsFactors = FALSE)
 
 #merge defaults on to settingsMetadata
-defaults <- readRDS("data-raw/defaults.Rds") #why is this not working... grrrr 
+defaults <- readRDS("data-raw/defaults.Rds")  
 
 
 settingsMetadata <- dplyr::full_join(partialSettingsMetadata, defaults, by="text_key")
