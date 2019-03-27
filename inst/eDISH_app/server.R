@@ -89,7 +89,7 @@ function(input, output, session){
                id = paste0("chart", chart),
                data = reactive(dataUpload_out$data_selected()),
                settings = reactive(settings_new$settings()),
-               valid = reactive(settings_new$status()[[chart]]$valid)) ## why is this always sending SH
+               valid = reactive(settings_new$status()[[chart]]$valid)) ## bad
   }
 
   
