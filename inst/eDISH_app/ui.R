@@ -9,7 +9,7 @@ tagList(
              tabPanel(title = htmlOutput("data_tab_title"), 
                       dataUploadUI("datatab")
              ),
-             tabPanel(title = htmlOutput("settings_tab_title"),
+             tabPanel(title = "Settings",
                     fluidPage(
                       renderSettingsUI("settingsUI")
                     )

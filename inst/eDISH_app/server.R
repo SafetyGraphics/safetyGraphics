@@ -33,16 +33,6 @@ function(input, output, session){
                                  status = reactive(dataUpload_out$status()))
 
 
-  # update settings navbar
-    output$settings_tab_title = renderUI({
-      num_valid <- settings_new$status() %>% flatten() %>%  keep(., names(.)=="valid") %>% unlist() %>% sum()
-      if(num_valid >0) {
-        HTML(paste("Settings", icon("check", class="ok")))
-      } else {
-        HTML(paste("Settings", icon("times", class="notok")))
-      }
-    })
-
 
    # ## this currently wipes away everything anytime there's a change in chart selections OR
     #  change in validation status
