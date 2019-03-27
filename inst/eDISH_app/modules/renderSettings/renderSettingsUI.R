@@ -8,8 +8,9 @@ renderSettingsUI <- function(id){
         checkboxGroupInput(
           ns("charts"),
           "Select Chart(s):", 
-          choices = c("e-DISH" = "edish"), 
-          selected="edish"
+          choices = c("e-DISH" = "edish",
+                      "Safety Histogram" = "safetyhistogram"), 
+          selected=c("edish", "safetyhistogram")
         )
       )
     ),

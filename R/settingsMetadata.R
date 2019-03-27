@@ -5,6 +5,7 @@
 #' @format A data frame with 25 rows and 10 columns
 #' \describe{
 #'    \item{chart_edish}{Flag indicating if the settings apply to the eDish Chart}
+#'    \item{chart_safetyhistogram}{Flag indicating if the settings apply to the Safety Histogram Chart}
 #'    \item{text_key}{Text key indicating the setting name. \code{'--'} delimiter indicates a nested setting}
 #'    \item{label}{Label}
 #'    \item{description}{Description}

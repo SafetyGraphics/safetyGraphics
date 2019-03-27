@@ -1,7 +1,7 @@
 # Server code for safetyGraphics App
 #   - calls dataUpload module (data tab)
 #   - calls renderSettings module (settings tab)
-#   - calls renderEDishChart (chart tab)
+#   - calls chart modules (chart tab)
 #   - uses render UI to append a red X or green check on tab title, 
 #      indicating whether user has satisfied requirements of that tab
 
@@ -28,37 +28,59 @@ function(input, output, session){
   #
   # reutrns updated settings and validation status
     settings_new <-   callModule(renderSettings, "settingsUI",
-                                # data = isolate(reactive(dataUpload_out$data_selected())),  # this doesnt make sense
                                  data = reactive(dataUpload_out$data_selected()),
                                  settings = reactive(dataUpload_out$settings()),
                                  status = reactive(dataUpload_out$status()))
 
 
-  # update settings navbar
-    output$settings_tab_title = renderUI({
-      if (settings_new$status()$valid==TRUE){
-        HTML(paste("Settings", icon("check", class="ok")))
-      } else {
-        HTML(paste("Settings", icon("times", class="notok")))
-      }
-    })
 
-    # update charts navbar
-    output$chart_tab_title = renderUI({
-      if (settings_new$status()$valid==TRUE){
-        HTML(paste("Chart", icon("check", class="ok")))
-      } else {
-        HTML(paste("Chart", icon("times", class="notok")))
-      }
-    })
+   # ## this currently wipes away everything anytime there's a change in chart selections OR
+    #  change in validation status
+   observe({
+
+     charts <- settings_new$charts()
+
+      # remove whole navMenu and all existing chart tabs
+      removeTab(inputId="tabs", target="Charts")
+     appendTab(inputId = "tabs", navbarMenu("Charts"))
+
+      # for each chart, append a new tab to the menu and place the module UI output
+      lapply(charts, function(chart){
+
+        status <- settings_new$status()[[chart]]$valid
+          if(status==TRUE){
+             tab_title <- HTML(paste(chart, icon("check", class="ok")))
+          } else {
+             tab_title <- HTML(paste(chart, icon("times", class="notok")))
+          }
+
+        tabfun <- match.fun(paste0("render_", chart, "_chartUI"))  # module UI for given tab
+       #tabid <- paste0(chart, "_tab_title")
+        tabcode <- tabPanel(title = tab_title, 
+                           # title = htmlOutput(tabid),
+                             tabfun(paste0("chart", chart)))
+
+        appendTab(inputId = "tabs",
+                  tabcode,
+                  menuName = "Charts")
+      })
+     })
 
 
-  # module to render eDish chart
-  callModule(renderEDishChart, "chartEDish",
-             data = reactive(dataUpload_out$data_selected()),
-             settings = reactive(settings_new$settings()),
-             valid = reactive(settings_new$status()$valid))
-
+   # call all chart modules
+  for (chart in allcharts){
+    
+    modfun <- match.fun(paste0("render_", chart, "_chart"))
+    
+    # I'm thinking this code set up (loop + callModule() using reactives) isn't ideal and 
+    # the value for "valid" doesn't always get passed directly.
+    # Moving to renderChart module will hopefully help here
+    callModule(module = modfun, 
+               id = paste0("chart", chart),
+               data = reactive(dataUpload_out$data_selected()),
+               settings = reactive(settings_new$settings()),
+               valid = reactive(settings_new$status()[[chart]]$valid)) ## bad
+  }
 
   
   session$onSessionEnded(stopApp)

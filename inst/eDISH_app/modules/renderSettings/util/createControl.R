@@ -56,7 +56,7 @@ createControl <- function(key, metadata, data, settings, ns){
                          this.setValue("");}')
       )
   } else if (sm_key$field_mapping==TRUE & !is.null(field_column)){ ## if there is NOT a column specified in settings
-    choices <- unique(c(setting_value, as.character(data[,field_column]))) %>% unlist
+    choices <- unique(c(setting_value, sort(as.character(data[,field_column])))) %>% unlist
     placeholder <- list (onInitialize = I('function() { }'))
   } else if (sm_key$setting_type=="vector"){
     choices <- setting_value   ### this is meant to cover the scenario for x_options/y_options 

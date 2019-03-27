@@ -52,7 +52,6 @@ renderSettings <- function(input, output, session, data, settings, status){
   #List of all inputs
   input_names <- reactive({safetyGraphics:::getSettingsMetadata(charts=input$selected_charts, cols="text_key")})
 
-  
   ######################################################################
   # create settings UI
   #   - chart selection -> gather all necessary UI elements
@@ -88,8 +87,11 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   observe({
     
-    column_keys <- getSettingsMetadata(charts=input$charts,
-                        filter_expr = field_mapping==TRUE) %>% 
+    field_rows <- getSettingsMetadata(charts=input$charts,
+                                      filter_expr = field_mapping==TRUE) 
+    
+    if(!is.null(field_rows)){
+    column_keys <- field_rows %>% 
       pull(field_column_key) %>% 
       unique %>% 
       as.list()
@@ -127,6 +129,7 @@ renderSettings <- function(input, output, session, data, settings, status){
       }
     )
   })
+    }
   })
  
   
@@ -157,7 +160,13 @@ renderSettings <- function(input, output, session, data, settings, status){
                      r_ratio_filter = input$r_ratio_filter,
                      r_ratio_cut = input$r_ratio_cut,
                      showTitle = input$showTitle,
-                     warningText = input$warningText)
+                     warningText = input$warningText,
+                     unit_col = input$unit_col,
+                     start_value = input$start_value,
+                     details = as.list(input$details),
+                     filters = as.list(input$filters),
+                     group_cols = input$group_cols #as.list(input$group_cols) 
+                     )
     
     if (! is.null(input$`baseline--values`)){
       if (! input$`baseline--values`[1]==""){
@@ -170,19 +179,6 @@ renderSettings <- function(input, output, session, data, settings, status){
       if (! input$`analysisFlag--values`[1]==""){
         settings$analysisFlag <- list(value_col = input$`analysisFlag--value_col`,
                                       values = input$`analysisFlag--values`)
-      }
-    }
-    
-    if (!is.null(input$filters)){
-      for (i in 1:length(input$filters)){
-        settings$filters[[i]] <- list(value_col = input$filters[[i]],
-                                      label = input$filters[[i]])
-      }
-    }
-    if (!is.null(input$group_cols)){
-      for (i in 1:length(input$group_cols)){
-        settings$group_cols[[i]] <- list(value_col = input$group_cols[[i]],
-                                         label = input$group_cols[[i]])
       }
     }
     
@@ -210,8 +206,14 @@ renderSettings <- function(input, output, session, data, settings, status){
       }
     }
     
-    validateSettings(data(), settings_new, chart="eDish")
+    out <- list()
     
+    charts <- isolate(input$charts)
+    for (chart in charts){
+      out[[chart]] <- validateSettings(data(), settings_new, chart=chart)
+    }
+    
+    return(out)
   })
   
   
@@ -221,7 +223,11 @@ renderSettings <- function(input, output, session, data, settings, status){
   status_df <- reactive({
     req(status_new())
     
-    status_new()$checks %>% 
+    #status_new()$checks %>% 
+    flatten(status_new()) %>%
+      keep(., names(.)=="checks") %>% 
+      bind_rows() %>% 
+      unique  %>% 
       group_by(text_key) %>%
       mutate(num_fail = sum(valid==FALSE)) %>%
       mutate(icon = ifelse(num_fail==0, "<i class='glyphicon glyphicon-ok'></i>","<i class='glyphicon glyphicon-remove'></i>"))%>%

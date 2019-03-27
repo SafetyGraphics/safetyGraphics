@@ -23,7 +23,11 @@ defaults <- tribble(~text_key, ~default,
              "r_ratio_filter", TRUE,
              "r_ratio_cut", 0,
              "showTitle", TRUE,
-             "warningText", "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures."
+             "warningText", "Caution: This interactive graphic is not validated. Any clinical recommendations based on this tool should be confirmed using your organizations standard operating procedures.",
+             "unit_col", NULL,
+             "start_value", NULL,
+             "details", NULL,
+             "missingValues", c("","NA","N/A")
              )
 
-saveRDS(defaults, file="data-raw/defaults.rda")
+saveRDS(defaults, file="data-raw/defaults.Rds")

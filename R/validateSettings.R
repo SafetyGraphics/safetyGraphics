@@ -69,7 +69,9 @@ validateSettings <- function(data, settings, chart="eDish"){
   columnChecks <- dataKeys %>% purrr::map(checkColumn, settings=settings, data=data)
 
   #Check that non-null field/column combinations are found in the data
+  fieldChecks <- NULL
   allKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$field_mapping, cols = c("text_key","setting_type"))
+  if (!is.null(allKeys)){
   fieldKeys <- allKeys %>% filter(.data$setting_type!="vector")%>% pull(.data$text_key)%>%textKeysToList()
   
   #Add items in vectors to list individually
@@ -85,11 +87,15 @@ validateSettings <- function(data, settings, chart="eDish"){
     }
   }
   fieldChecks <- fieldKeys %>% purrr::map(checkField, settings=settings, data=data )
+  }
   
   #Check that settings for mapping numeric data are associated with numeric columns
-  numericKeys <- getSettingsMetadata(charts=chart, filter_expr=.data$column_type=="numeric", cols="text_key")%>%textKeysToList()
-  numericChecks <- numericKeys %>% purrr::map(checkNumeric, settings=settings, data=data )
-  
+  numericChecks <- NULL
+  numericKeys <- getSettingsMetadata(charts=chart, filter_expr=.data$column_type=="numeric", cols="text_key")
+  if (!is.null(numericKeys)){
+    numericChecks <- numericKeys %>%textKeysToList() %>% purrr::map(checkNumeric, settings=settings, data=data )
+  }
+
   #Combine different check types in to a master list
   settingStatus$checks <-c(requiredChecks, columnChecks, fieldChecks, numericChecks) %>% {
     tibble(

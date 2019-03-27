@@ -164,13 +164,13 @@ dataUpload <- function(input, output, session){
           select(text_key) %>%
           pull()
 
-        generateSettings(standard=current_standard, chart="eDish", partial=partial, partial_keys = partial_keys)
+        generateSettings(standard=current_standard, partial=partial, partial_keys = partial_keys)
 
       } else {
-        generateSettings(standard=current_standard, chart="eDish")
+        generateSettings(standard=current_standard)
       }
     } else {
-      generateSettings(standard=current_standard, chart="eDish")
+      generateSettings(standard=current_standard)
     }
   })
 
@@ -180,8 +180,7 @@ dataUpload <- function(input, output, session){
     req(data_selected())
     req(settings())
     validateSettings(data_selected(),
-                     settings(),
-                     chart="eDish")
+                     settings())
   })
 
   exportTestValues(status = { status() })
