@@ -32,17 +32,17 @@ The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc
 }
 \examples{
 
-generateSettings(standard="SDTM") 
+generateSettings(standard="SDTM")
 generateSettings(standard="SdTm") #also ok
 generateSettings(standard="ADaM")
 pkeys<- c("id_col","measure_col","value_col")
 generateSettings(standard="adam", partial=TRUE, partial_keys=pkeys)
 
-generateSettings(standard="a different standard") 
+generateSettings(standard="a different standard")
 #returns shell settings list with no data mapping
 
 \dontrun{
-generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far. 
+generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far.
 }
 
 }

@@ -23,6 +23,7 @@ mergedMetadata = suppressWarnings(bind_rows(
   customMetadata%>%mutate(chart_edish= FALSE)
 ))
 
+
 test_that("Default function copies the whole metadata dataframe",{
   default<-safetyGraphics:::getSettingsMetadata(add_standards=FALSE)
   expect_is(default,"data.frame")

@@ -14,7 +14,7 @@ test_that("different data types for `key` parameter work as expected",{
   expect_equal(getSettingValue(key="id_col",settings=testSettings),"USUBJID")
   expect_equal(getSettingValue(key=c("measure_values","ALT"),settings=testSettings),"Aminotransferase, alanine (ALT)")
   expect_equal(getSettingValue(key=list("measure_values","ALT"),settings=testSettings),"Aminotransferase, alanine (ALT)")
-  expect_equal(getSettingValue(key=list("measure_values",2),settings=testSettings),"Aminotransferase, alanine (ALT)")
+  expect_equal(getSettingValue(key=list("measure_values",1),settings=testSettings),"Aminotransferase, alanine (ALT)")
 })
 
 test_that("returns null if the setting isn't found",{
