@@ -52,6 +52,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   #List of all inputs
   input_names <- reactive({safetyGraphics:::getSettingsMetadata(charts=input$selected_charts, cols="text_key")})
 
+
+  
   ######################################################################
   # create settings UI
   #   - chart selection -> gather all necessary UI elements
@@ -140,34 +142,16 @@ renderSettings <- function(input, output, session, data, settings, status){
   ######################################################################
   
   settings_new <- reactive({
+   
+    keys<-input_names() %>% as.character()
+    values<- keys %>% map(~ifelse(is.null(input[[.x]]) , "", input[[.x]])) #Only capturing the first value in vectors ... 
+    inputDF <- tibble(text_key=keys, customValue=values) %>% mutate(customValue= unlist(customValue))
     
+    #print(inputDF)
+    settings <- generateSettings(custom_settings=inputDF) #need to add charts paramater
+    #print(settings)
     
-    settings <- list(id_col = input$id_col,
-                     value_col = input$value_col,
-                     measure_col = input$measure_col,
-                     normal_col_low = input$normal_col_low,
-                     normal_col_high = input$normal_col_high,
-                     studyday_col = input$studyday_col,
-                     visit_col = input$visit_col,
-                     visitn_col = input$visitn_col,
-                     measure_values = list(ALT = input$`measure_values--ALT`,
-                                           AST = input$`measure_values--AST`,
-                                           TB = input$`measure_values--TB`,
-                                           ALP = input$`measure_values--ALP`),
-                     x_options = input$x_options,
-                     y_options = input$y_options,
-                     visit_window = input$visit_window,
-                     r_ratio_filter = input$r_ratio_filter,
-                     r_ratio_cut = input$r_ratio_cut,
-                     showTitle = input$showTitle,
-                     warningText = input$warningText,
-                     unit_col = input$unit_col,
-                     start_value = input$start_value,
-                     details = as.list(input$details),
-                     filters = as.list(input$filters),
-                     group_cols = input$group_cols #as.list(input$group_cols) 
-                     )
-    
+    # Need to reevaluate custom mappings below. 
     if (! is.null(input$`baseline--values`)){
       if (! input$`baseline--values`[1]==""){
         settings$baseline <- list(value_col = input$`baseline--value_col`,
