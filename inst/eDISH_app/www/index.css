@@ -19,8 +19,8 @@
 }
 
 .control-wrap .select-wrap .form-group{
-  width:90%; /* TODO: don't love this ... update eventually */ 
-  display:inline-block; 
+  width:90%; /* TODO: don't love this ... update eventually */
+  display:inline-block;
   margin-bottom:0;
 }
 
@@ -61,7 +61,7 @@
 /* Settings - header tweaks */
 .section h3 {
   margin:0;
-} 
+}
 
 .section h3 .form-group {
   display:inline;
@@ -72,10 +72,14 @@
 }
 
 
-.ok { 
+.ok {
   color:#008000;
 }
 
 .notok {
   color: #FF0000;
+}
+
+.maybe{
+  color:orange;
 }
