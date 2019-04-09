@@ -33,53 +33,82 @@ function(input, output, session){
                                  status = reactive(dataUpload_out$status()))
 
 
+ 
+    # set up all tabs from the start (allcharts defined in global.R)
+    # generated from server.R so we can do this dynamically in future..
+    for (chart in all_charts){
+      
+      tabfun <- match.fun(paste0("render_", chart, "_chartUI"))  # module UI for given tab
+      tabid <- paste0(chart, "_tab_title")
+      
+      appendTab(inputId = "nav_id",
+                  tab = tabPanel(title = chart,
+                                 tabfun(paste0("chart", chart))),
+                  menuName = "Charts")
+    }
 
+    # hide/show chart tabs in response to user selections
+    observe({
+
+      selected_charts <- settings_new$charts()
+      unselected_charts <- all_charts[!all_charts %in% selected_charts]
+
+      for(chart in unselected_charts){
+        hideTab(inputId = "nav_id", target = chart)  
+      }
+      for(chart in selected_charts){
+        showTab(inputId = "nav_id", target = chart)
+      }
+    })
+    
+    
    # ## this currently wipes away everything anytime there's a change in chart selections OR
     #  change in validation status
-   observe({
-
-     charts <- settings_new$charts()
-
-      # remove whole navMenu and all existing chart tabs
-      removeTab(inputId="tabs", target="Charts")
-     appendTab(inputId = "tabs", navbarMenu("Charts"))
-
-      # for each chart, append a new tab to the menu and place the module UI output
-      lapply(charts, function(chart){
-
-        status <- settings_new$status()[[chart]]$valid
-          if(status==TRUE){
-             tab_title <- HTML(paste(chart, icon("check", class="ok")))
-          } else {
-             tab_title <- HTML(paste(chart, icon("times", class="notok")))
-          }
-
-        tabfun <- match.fun(paste0("render_", chart, "_chartUI"))  # module UI for given tab
-       #tabid <- paste0(chart, "_tab_title")
-        tabcode <- tabPanel(title = tab_title, 
-                           # title = htmlOutput(tabid),
-                             tabfun(paste0("chart", chart)))
-
-        appendTab(inputId = "tabs",
-                  tabcode,
-                  menuName = "Charts")
-      })
-     })
-
-
+  #  observe({
+  # 
+  #    charts <- settings_new$charts()
+  # 
+  #     # remove whole navMenu and all existing chart tabs
+  #     removeTab(inputId="tabs", target="Charts")
+  #    appendTab(inputId = "tabs", navbarMenu("Charts"))
+  # 
+  #     # for each chart, append a new tab to the menu and place the module UI output
+  #     lapply(charts, function(chart){
+  # 
+  #       status <- settings_new$status()[[chart]]$valid
+  #         if(status==TRUE){
+  #            tab_title <- HTML(paste(chart, icon("check", class="ok")))
+  #         } else {
+  #            tab_title <- HTML(paste(chart, icon("times", class="notok")))
+  #         }
+  # 
+  #       tabfun <- match.fun(paste0("render_", chart, "_chartUI"))  # module UI for given tab
+  #      #tabid <- paste0(chart, "_tab_title")
+  #       tabcode <- tabPanel(title = tab_title, 
+  #                          # title = htmlOutput(tabid),
+  #                            tabfun(paste0("chart", chart)))
+  # 
+  #       appendTab(inputId = "tabs",
+  #                 tabcode,
+  #                 menuName = "Charts")
+  #     })
+  #    })
+  # 
+  # 
+    
    # call all chart modules
-  for (chart in allcharts){
-    
-    modfun <- match.fun(paste0("render_", chart, "_chart"))
-    
+    #
     # I'm thinking this code set up (loop + callModule() using reactives) isn't ideal and 
     # the value for "valid" doesn't always get passed directly.
-    # Moving to renderChart module will hopefully help here
-    callModule(module = modfun, 
+    # Moving to renderChart module will hopefully help here  for (chart in all_charts){
+
+    modfun <- match.fun(paste0("render_", chart, "_chart"))
+
+    callModule(module = modfun,
                id = paste0("chart", chart),
                data = reactive(dataUpload_out$data_selected()),
                settings = reactive(settings_new$settings()),
-               valid = reactive(settings_new$status()[[chart]]$valid)) ## bad
+               valid = reactive(settings_new$status()[[chart]]$valid)) 
   }
 
   

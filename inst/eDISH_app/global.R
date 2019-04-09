@@ -12,7 +12,7 @@ library(DT)
 library(haven)
 
 # create vector of all possible charts
-allcharts <- c("edish","safetyhistogram")
+all_charts <- c("edish","safetyhistogram")
 
 ## source modules
 source('modules/renderSettings/renderSettingsUI.R')
