@@ -98,7 +98,8 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     key_values$customValue<-NA
   }
 
-  key_values<-key_values %>% mutate(value=ifelse(is.na(.data$customValue), .data$default, .data$customValue))
+  key_values<- key_values %>% mutate(value=ifelse(is.na(.data$customValue),.data$default,.data$customValue))
+
 
   #############################################################################
   # create shell settings object
@@ -108,11 +109,15 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   #########################################################################################
   # populate the shell settings by looping through key_values and apply them to the shell
   #########################################################################################
+  print(key_values)
+#  print(key_values[1,"default"])
   for(row in 1:nrow(key_values)){
+    value<-key_values[row, "value"][[1]]
+    #finalValue<-ifelse(length(value)>1,value,value[[1]])
     shell<-setSettingsValue(
       settings = shell,
       key = textKeysToList(key_values[row,"text_key"])[[1]],
-      value = key_values[row, "value"][[1]]
+      value = value
     )
   }
 

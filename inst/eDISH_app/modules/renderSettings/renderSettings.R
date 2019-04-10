@@ -173,13 +173,29 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   settings_new <- reactive({
 
-    keys<-input_names() %>% as.character()
-    values<- keys %>% map(~ifelse(is.null(input[[.x]]) , "", input[[.x]])) #Only capturing the first value in vectors ...
-    inputDF <- tibble(text_key=keys, customValue=values) %>% mutate(customValue= unlist(customValue))
+    getValues <- function(x){
+      if (is.null(input[[x]])){
+        return(NULL)
+      } else{
+        return(input[[x]])
+      }
+    }
+    req(input_names())
+    keys <- input_names()
+  #  print(keys)
+    values<- keys %>% map(~getValues(.x))
+    print(values)
+    inputDF <- tibble(text_key=keys, customValue=values) %>%
+      filter(!is.null(customValue[[1]]))
+    print(inputDF)
+  #  print(inputDF)
+  if(nrow(inputDF)>0){
+    settings <- generateSettings(custom_settings=inputDF, charts=input$charts)
+  }else{
+    settings<- generateSettings(charts=input$charts)
+  }
 
-    #print(inputDF)
-    settings <- generateSettings(custom_settings=inputDF) #need to add charts paramater
-    #print(settings)
+  #  print(settings)
 
     # Need to reevaluate custom mappings below.
     if (! is.null(input$`baseline--values`)){

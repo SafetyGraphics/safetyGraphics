@@ -26,7 +26,7 @@ function(input, output, session){
   # returns updated settings and validation status
   ##############################################################
   
-  settings_new <-   callModule(
+settings_new <-   callModule(
     renderSettings, 
     "settingsUI",
     data = reactive(dataUpload_out$data_selected()),
