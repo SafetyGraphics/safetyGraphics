@@ -63,22 +63,47 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   output$data_mapping_ui <- renderUI({
     req(input$charts)
-    tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "data", charts=input$charts, ns=ns))
+    tagList(
+      createSettingsUI(
+        data=data(),
+        settings = settings(),
+        setting_cat_val = "data",
+        charts=input$charts,
+        ns=ns
+      )
+    )
   })
-  outputOptions(output, "data_mapping_ui", suspendWhenHidden = FALSE)
+
 
   output$measure_settings_ui <- renderUI({
     req(input$charts)
-    tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "measure", charts=input$charts, ns=ns))
+    tagList(
+      createSettingsUI(
+        data=data(),
+        settings = settings(),
+        setting_cat_val = "measure",
+        charts=input$charts,
+        ns=ns
+      )
+    )
   })
-  outputOptions(output, "measure_settings_ui", suspendWhenHidden = FALSE)
 
   output$appearance_settings_ui <- renderUI({
     req(input$charts)
-    tagList(createSettingsUI(data=data(), settings = settings(), setting_cat_val = "appearance", charts=input$charts, ns=ns))
+    tagList(
+      createSettingsUI(
+        data=data(),
+        settings = settings(),
+        setting_cat_val = "appearance",
+        charts=input$charts,
+        ns=ns
+      )
+    )
   })
-  outputOptions(output, "appearance_settings_ui", suspendWhenHidden = FALSE)
 
+  outputOptions(output, "data_mapping_ui", suspendWhenHidden = FALSE)
+  outputOptions(output, "measure_settings_ui", suspendWhenHidden = FALSE)
+  outputOptions(output, "appearance_settings_ui", suspendWhenHidden = FALSE)
 
   ######################################################################
   # Update field level inputs
@@ -88,7 +113,6 @@ renderSettings <- function(input, output, session, data, settings, status){
   ######################################################################
 
   observe({
-
     field_rows <- getSettingsMetadata(
       charts=input$charts,
       filter_expr = field_mapping==TRUE
@@ -141,7 +165,6 @@ renderSettings <- function(input, output, session, data, settings, status){
     } #if(!is.null)
   }) #observe
 
-
   ######################################################################
   # Fill settings object based on selections
   #
@@ -161,15 +184,19 @@ renderSettings <- function(input, output, session, data, settings, status){
     # Need to reevaluate custom mappings below.
     if (! is.null(input$`baseline--values`)){
       if (! input$`baseline--values`[1]==""){
-        settings$baseline <- list(value_col = input$`baseline--value_col`,
-                                  values = input$`baseline--values`)
+        settings$baseline <- list(
+          value_col = input$`baseline--value_col`,
+          values = input$`baseline--values`
+        )
       }
     }
 
     if (! is.null(input$`analysisFlag--values`)){
       if (! input$`analysisFlag--values`[1]==""){
-        settings$analysisFlag <- list(value_col = input$`analysisFlag--value_col`,
-                                      values = input$`analysisFlag--values`)
+        settings$analysisFlag <- list(
+          value_col = input$`analysisFlag--value_col`,
+          values = input$`analysisFlag--values`
+        )
       }
     }
 
@@ -214,7 +241,6 @@ renderSettings <- function(input, output, session, data, settings, status){
   status_df <- reactive({
     req(status_new())
 
-    #status_new()$checks %>%
     flatten(status_new()) %>%
       keep(., names(.)=="checks") %>%
       bind_rows() %>%
@@ -222,12 +248,14 @@ renderSettings <- function(input, output, session, data, settings, status){
       group_by(text_key) %>%
       mutate(num_fail = sum(valid==FALSE)) %>%
       mutate(icon = ifelse(num_fail==0, "<i class='glyphicon glyphicon-ok'></i>","<i class='glyphicon glyphicon-remove'></i>"))%>%
-      mutate(message_long = paste(message, collapse = " ") %>% trimws(),
-             message_short = case_when(
-               num_fail==0 ~ "OK",
-               num_fail==1 ~ "1 failed check.",
-               TRUE ~ paste(num_fail, "failed checks.")
-             )) %>%
+      mutate(
+        message_long = paste(message, collapse = " ") %>% trimws(),
+        message_short = case_when(
+          num_fail==0 ~ "OK",
+          num_fail==1 ~ "1 failed check.",
+          TRUE ~ paste(num_fail, "failed checks.")
+        )
+      ) %>%
       select(text_key, icon, message_long, message_short, num_fail) %>%
       unique
   })
@@ -240,21 +268,27 @@ renderSettings <- function(input, output, session, data, settings, status){
   ######################################################################
  observe({
    for (key in isolate(input_names())){
-
      if(key %in% status_df()$text_key){
-
        status_short <- status_df()[status_df()$text_key==key, "message_short"]
        status_long <- status_df()[status_df()$text_key==key, "message_long"]
        icon <- status_df()[status_df()$text_key==key, "icon"]
-       updateSettingStatus(ns=ns, key=key, status_short=status_short, status_long=status_long, icon=icon)
+       updateSettingStatus(
+         ns=ns,
+         key=key,
+         status_short=status_short,
+         status_long=status_long,
+         icon=icon
+       )
      }
-
    }
  })
 
   ### return updated settings and status to global env.
-  return(list(charts = reactive(input$charts),
-              settings = reactive(settings_new()),
-              status = reactive(status_new())))
-
+  return(
+    list(
+      charts = reactive(input$charts),
+      settings = reactive(settings_new()),
+      status = reactive(status_new())
+    )
+  )
 }
