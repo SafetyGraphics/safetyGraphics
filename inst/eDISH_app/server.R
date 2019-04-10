@@ -109,7 +109,7 @@ function(input, output, session){
                data = reactive(dataUpload_out$data_selected()),
                settings = reactive(settings_new$settings()),
                valid = reactive(settings_new$status()[[chart]]$valid)) 
-  }
+  
 
   
   session$onSessionEnded(stopApp)
