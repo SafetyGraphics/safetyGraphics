@@ -68,7 +68,6 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   if(partial){
     dataDefaults <-dataDefaults%>%filter(.data$text_key %in% partial_keys)
   }
-
   #############################################################################
   # get keys & default values for settings not using a data standard
   #############################################################################
@@ -100,7 +99,6 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
 
   key_values<- key_values %>% mutate(value=ifelse(is.na(.data$customValue),.data$default,.data$customValue))
 
-
   #############################################################################
   # create shell settings object
   #############################################################################
@@ -109,17 +107,20 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   #########################################################################################
   # populate the shell settings by looping through key_values and apply them to the shell
   #########################################################################################
-  print(key_values)
-#  print(key_values[1,"default"])
+  #print(key_values)
   for(row in 1:nrow(key_values)){
-    value<-key_values[row, "value"][[1]]
-    #finalValue<-ifelse(length(value)>1,value,value[[1]])
+    text_key<-key_values[row,]%>%pull("text_key")
+    key<- textKeysToList(text_key)[[1]]
+    type <- safetyGraphics::getSettingsMetadata(text_keys=text_key,cols="setting_type")
+    value <- key_values[row,"value"][[1]]
+    finalValue <- ifelse(type=="vector",as.list(value[[1]]),value[[1]])
+    #print(paste(text_key," (",type,"):",toString(value),typeof(value),length(value),"->",finalValue,typeof(finalValue),length(finalValue)))
     shell<-setSettingsValue(
       settings = shell,
-      key = textKeysToList(key_values[row,"text_key"])[[1]],
-      value = value
+      key = key,
+      value = finalValue
     )
   }
-
+  #print(shell)
   return(shell)
 }
