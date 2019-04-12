@@ -50,9 +50,7 @@ renderSettings <- function(input, output, session, data, settings, status){
   ns <- session$ns
 
   #List of all inputs
-  input_names <- reactive({safetyGraphics:::getSettingsMetadata(charts=input$selected_charts, cols="text_key")})
-
-
+  input_names <- reactive({safetyGraphics:::getSettingsMetadata(charts=input$charts, cols="text_key")})
 
   ######################################################################
   # create settings UI
@@ -180,14 +178,12 @@ renderSettings <- function(input, output, session, data, settings, status){
         return(input[[x]])
       }
     }
-    req(input_names())
-    keys <- input_names()
 
+    keys <- input_names()
     values<- keys %>% map(~getValues(.x))
 
     inputDF <- tibble(text_key=keys, customValue=values) %>%
       filter(!is.null(customValue[[1]]))
-
     if(nrow(inputDF)>0){
       settings <- generateSettings(custom_settings=inputDF, charts=input$charts)
     }else{
