@@ -188,32 +188,11 @@ renderSettings <- function(input, output, session, data, settings, status){
     inputDF <- tibble(text_key=keys, customValue=values) %>%
       filter(!is.null(customValue[[1]]))
 
-    print(inputDF)
-
-  if(nrow(inputDF)>0){
-    settings <- generateSettings(custom_settings=inputDF, charts=input$charts)
-  }else{
-    settings<- generateSettings(charts=input$charts)
-  }
-
-  #  print(settings)
-
-    # Need to reevaluate custom mappings below.
-#    if (! is.null(input$`baseline--values`)){
-#      if (! input$`baseline--values`[1]==""){
-#        settings$baseline <- list(
-#          value_col = input$`baseline--value_col`,
-#       )
-#    }
-#
-#    if (! is.null(input$`analysisFlag--values`)){
-#      if (! input$`analysisFlag--values`[1]==""){
-#        settings$analysisFlag <- list(
-#          value_col = input$`analysisFlag--value_col`,
-#          values = input$`analysisFlag--values`
-#        )
-#      }
-#    }
+    if(nrow(inputDF)>0){
+      settings <- generateSettings(custom_settings=inputDF, charts=input$charts)
+    }else{
+      settings<- generateSettings(charts=input$charts)
+    }
 
     return(settings)
   })
@@ -230,14 +209,6 @@ renderSettings <- function(input, output, session, data, settings, status){
     req(settings_new())
     name <- rev(isolate(input_names()))[1]
     settings_new <- settings_new()
-
-    for (i in names(settings_new)){
-      if (!is.null(settings_new[[i]])){
-        if (settings_new[[i]][1]==""){
-          settings_new[i] <- list(NULL)
-        }
-      }
-    }
 
     out <- list()
 
