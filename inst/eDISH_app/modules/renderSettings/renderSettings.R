@@ -215,6 +215,15 @@ renderSettings <- function(input, output, session, data, settings, status){
 #      }
 #    }
 
+    
+    for (i in names(settings)){
+      if (!is.null(settings[[i]])){
+        if (settings[[i]][1]==""){
+          settings[i] <- list(NULL)
+        }
+      }
+    }
+    
     return(settings)
   })
 
@@ -231,13 +240,13 @@ renderSettings <- function(input, output, session, data, settings, status){
     name <- rev(isolate(input_names()))[1]
     settings_new <- settings_new()
 
-    for (i in names(settings_new)){
-      if (!is.null(settings_new[[i]])){
-        if (settings_new[[i]][1]==""){
-          settings_new[i] <- list(NULL)
-        }
-      }
-    }
+    # for (i in names(settings_new)){
+    #   if (!is.null(settings_new[[i]])){
+    #     if (settings_new[[i]][1]==""){
+    #       settings_new[i] <- list(NULL)
+    #     }
+    #   }
+    # }
 
     out <- list()
 
