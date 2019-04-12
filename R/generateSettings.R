@@ -60,7 +60,8 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     filter(.data$setting_required)%>%
     select(-.data$setting_required)%>%
     rename("dataDefault" = standard)%>%
-    filter(.data$dataDefault != '')
+    filter(.data$dataDefault != '') %>%
+    as_tibble
   }else{
     dataDefaults<-tibble(text_key=character(),dataDefault=character(), .rows=0)
   }
@@ -68,7 +69,6 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   if(partial){
     dataDefaults <-dataDefaults%>%filter(.data$text_key %in% partial_keys)
   }
-
   #############################################################################
   # get keys & default values for settings not using a data standard
   #############################################################################
@@ -98,7 +98,7 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     key_values$customValue<-NA
   }
 
-  key_values<-key_values %>% mutate(value=ifelse(is.na(.data$customValue), .data$default, .data$customValue))
+  key_values<- key_values %>% mutate(value=ifelse(is.na(.data$customValue),.data$default,.data$customValue))
 
   #############################################################################
   # create shell settings object
@@ -108,13 +108,31 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   #########################################################################################
   # populate the shell settings by looping through key_values and apply them to the shell
   #########################################################################################
+  #print(key_values)
   for(row in 1:nrow(key_values)){
+    text_key<-key_values[row,]%>%pull("text_key")
+    key<- textKeysToList(text_key)[[1]]
+    type <- safetyGraphics::getSettingsMetadata(text_keys=text_key,cols="setting_type")
+    value <- key_values[row,"value"][[1]]
+    finalValue <- value[[1]]
+
+    #print(paste(text_key," (",type,"):",toString(value),typeof(value),length(value),"->",finalValue,typeof(finalValue),length(finalValue)))
     shell<-setSettingsValue(
       settings = shell,
-      key = textKeysToList(key_values[row,"text_key"])[[1]],
-      value = key_values[row, "value"][[1]]
+      key = key,
+      value = finalValue
     )
   }
 
+  #Coerce empty string to NULL
+  for (i in names(shell)){
+    if (!is.null(shell[[i]])){
+      if (shell[[i]][1]==""){
+        shell[i] <- list(NULL)
+      }
+    }
+  }
+
+  #print(shell)
   return(shell)
 }
