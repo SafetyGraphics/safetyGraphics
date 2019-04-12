@@ -179,6 +179,7 @@ renderSettings <- function(input, output, session, data, settings, status){
       }
     }
 
+    req(input_names())
     keys <- input_names()
     values<- keys %>% map(~getValues(.x))
 
