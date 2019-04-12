@@ -60,7 +60,8 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     filter(.data$setting_required)%>%
     select(-.data$setting_required)%>%
     rename("dataDefault" = standard)%>%
-    filter(.data$dataDefault != '')
+    filter(.data$dataDefault != '') %>% 
+    as_tibble
   }else{
     dataDefaults<-tibble(text_key=character(),dataDefault=character(), .rows=0)
   }
@@ -113,7 +114,8 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     key<- textKeysToList(text_key)[[1]]
     type <- safetyGraphics::getSettingsMetadata(text_keys=text_key,cols="setting_type")
     value <- key_values[row,"value"][[1]]
-    finalValue <- ifelse(type=="vector",as.list(value[[1]]),value[[1]])
+   # finalValue <- ifelse(type=="vector",as.list(value[[1]]),value[[1]])
+    finalValue <- value[[1]]
     #print(paste(text_key," (",type,"):",toString(value),typeof(value),length(value),"->",finalValue,typeof(finalValue),length(finalValue)))
     shell<-setSettingsValue(
       settings = shell,
