@@ -105,20 +105,21 @@ renderSettings <- function(input, output, session, data, settings, status){
   ######### Hide Settings that are not relevant to selected charts ########
   observeEvent(input$charts,{
     
-    #Make sure all settings are showing before you start subsetting! (alternatively could show those missing)
+    # Make sure all relevant settings are showing
     for (setting in input_names()) {
       shinyjs::show(id=paste0("ctl_",setting))
     }
-    # 1. get all possible metadata (input_names always reflects the current chart selections and is already filtered)
-    # so I'm grabbing all of these options so I cnan determine which should be hidden
-    metadata <- getSettingsMetadata(
+    
+    # Get all possible metadata (input_names always reflects the current chart selections and is already filtered)
+    # so I'm grabbing all of these options so I can determine which should be hidden
+    all_settings <- getSettingsMetadata(
       cols=c("text_key")
     )
     
-    # 2. identify which settings in input_names() are not relevant
-    settings_to_drop <- setdiff(metadata,input_names())
+    # Identify which settings in input_names() are not relevant
+    settings_to_drop <- setdiff(all_settings,input_names())
   
-    # 3. use shinyJS::hide() to hide these inputs (loop thru)
+    # Use shinyJS::hide() to hide these inputs
     for (setting in settings_to_drop) {
       shinyjs::hide(id=paste0("ctl_",setting))
     }
@@ -134,7 +135,7 @@ renderSettings <- function(input, output, session, data, settings, status){
   #
   # update field-level inputs if a column level setting changes
   # dependent on change in data, chart selection, or column-level input
-  ######################3################################################
+  ######################################################################
 
   observe({
     field_rows <- getSettingsMetadata(
