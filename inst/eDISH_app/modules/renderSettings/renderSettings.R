@@ -50,8 +50,15 @@ renderSettings <- function(input, output, session, data, settings, status){
   ns <- session$ns
 
   #List of all inputs
-  input_names <- reactive({safetyGraphics:::getSettingsMetadata(charts=input$charts, cols="text_key")})
-
+  # Null if no charts are selected
+  input_names <- reactive({
+    if(!is.null(input$charts)){
+      safetyGraphics:::getSettingsMetadata(charts=input$charts, cols="text_key")
+    } else{
+      NULL
+    }
+    })
+  
   ######################################################################
   # create settings UI
   #   - chart selection -> gather all necessary UI elements
@@ -60,13 +67,14 @@ renderSettings <- function(input, output, session, data, settings, status){
   ######################################################################
 
   output$data_mapping_ui <- renderUI({
-    req(input$charts)
+    charts <- isolate(input$charts)
+    req(charts)
     tagList(
       createSettingsUI(
         data=data(),
         settings = settings(),
         setting_cat_val = "data",
-        charts=input$charts,
+        charts=charts,
         ns=ns
       )
     )
@@ -74,31 +82,61 @@ renderSettings <- function(input, output, session, data, settings, status){
 
 
   output$measure_settings_ui <- renderUI({
-    req(input$charts)
+    charts <- isolate(input$charts)
+    req(charts)
     tagList(
       createSettingsUI(
         data=data(),
         settings = settings(),
         setting_cat_val = "measure",
-        charts=input$charts,
+        charts=charts,
         ns=ns
       )
     )
   })
 
   output$appearance_settings_ui <- renderUI({
-    req(input$charts)
+    charts <- isolate(input$charts)
+    req(charts)
     tagList(
       createSettingsUI(
         data=data(),
         settings = settings(),
         setting_cat_val = "appearance",
-        charts=input$charts,
+        charts=charts,
         ns=ns
       )
     )
   })
 
+  ######### Hide Settings that are not relevant to selected charts ########
+  observeEvent(input$charts,{
+
+    input_names <- isolate(input_names())
+
+    # Make sure all relevant settings are showing
+    if (!is.null(input_names)){
+      for (setting in input_names) {
+        shinyjs::show(id=paste0("ctl_",setting))
+      }      
+    }
+
+    # Get all possible metadata (input_names always reflects the current chart selections and is already filtered)
+    # so I'm grabbing all of these options so I can determine which should be hidden
+    all_settings <- getSettingsMetadata(
+      cols=c("text_key")
+    )
+
+    # Identify which settings in input_names() are not relevant
+    settings_to_drop <- setdiff(all_settings,input_names)
+
+    # Use shinyJS::hide() to hide these inputs
+    for (setting in settings_to_drop) {
+      shinyjs::hide(id=paste0("ctl_",setting))
+    }
+
+  }, ignoreNULL=FALSE)  ## input$charts = NULL if none are selected
+  
   outputOptions(output, "data_mapping_ui", suspendWhenHidden = FALSE)
   outputOptions(output, "measure_settings_ui", suspendWhenHidden = FALSE)
   outputOptions(output, "appearance_settings_ui", suspendWhenHidden = FALSE)
