@@ -38,6 +38,7 @@ source("modules/renderSettings/util/updateSettingStatus.R")
 #' @param data A data frame
 #' @param settings Settings object that corresponds to data's standard - result of generateSettings().
 #' @param status A list describing the validation state for data/settings - result of validateSettings().
+#' @param labels A list of column names and their labels
 #'
 #' @return A list of reactive values, including:
 #' \itemize{
@@ -75,6 +76,7 @@ renderSettings <- function(input, output, session, data, settings, status, label
         settings = settings(),
         setting_cat_val = "data",
         charts=charts,
+        labels=labels(),
         ns=ns
       )
     )
@@ -90,6 +92,7 @@ renderSettings <- function(input, output, session, data, settings, status, label
         settings = settings(),
         setting_cat_val = "measure",
         charts=charts,
+        labels=labels(),
         ns=ns
       )
     )
@@ -104,6 +107,7 @@ renderSettings <- function(input, output, session, data, settings, status, label
         settings = settings(),
         setting_cat_val = "appearance",
         charts=charts,
+        labels=labels(),
         ns=ns
       )
     )

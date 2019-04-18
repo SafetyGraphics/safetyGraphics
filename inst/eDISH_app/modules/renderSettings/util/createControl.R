@@ -13,10 +13,11 @@
 #' @param metadata Metadata data frame to be queried for information about the setting
 #' @param data A data frame to be used to populate control options
 #' @param settings A settings list to be used to populate control options
+#' @param labels A list of column names and their labels
 #' @param ns  The namespace of the current module
 #'
 #' @return HTML code for the div containing the setting of interest
-createControl <- function(key, metadata, data, settings, ns){
+createControl <- function(key, metadata, data, settings, labels, ns){
   
   sm_key <- filter(metadata, text_key==key)
   ctl_id <- paste0("ctl_", key)
@@ -61,6 +62,12 @@ createControl <- function(key, metadata, data, settings, ns){
   } else if (sm_key$setting_type=="vector"){
     choices <- setting_value   ### this is meant to cover the scenario for x_options/y_options 
   }  
+  
+  if(!is.null(labels)) {
+    print(choices) 
+    print(labels)
+  }
+  
   
   ### create code for the UI
   multiple <- (sm_key$setting_type=="vector")

@@ -45,11 +45,13 @@ dataUpload <- function(input, output, session){
     for (i in 1:nrow(input$datafile)){
       if (length(grep(".csv", input$datafile$name[i], ignore.case = TRUE)) > 0){
         data_list[[i]] <- data.frame(read.csv(input$datafile$datapath[i], na.strings=NA))
+        label_list[[i]] <- list(NULL)
       }else if(length(grep(".sas7bdat", input$datafile$name[i], ignore.case = TRUE)) > 0){
         data_list[[i]] <- data.frame(haven::read_sas(input$datafile$datapath[i]))
-        label_list[[i]] <- map_chr(data_list[[i]], ~attributes(.)$label)
+        label_list[[i]] <- map_chr(data_list[[i]], ~attributes(.)$label) # SAS
       }else{
         data_list[[i]] <- NULL
+        label_list[[i]] <- NULL
       }
     }
     # names
@@ -66,9 +68,9 @@ dataUpload <- function(input, output, session){
     standard_list <- lapply(data_list, function(x){ detectStandard(x) })
 
     dd$standard <- c(dd$standard, standard_list)
-    
+          
     dd$label <- label_list
-
+    
   })
 
 
@@ -157,7 +159,9 @@ dataUpload <- function(input, output, session){
   # upon a dataset being selected, grab its labels
   labels <- eventReactive(data_selected(), {
     index <- which(names(dd$data)==input$select_file)[1]
-    dd$label[[index]]
+#    print(index)
+#    print(dd$label)
+    dd$label[[index]] # bombing here i -> idk whats up with my list
   })
 
 

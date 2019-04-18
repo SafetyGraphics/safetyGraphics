@@ -4,16 +4,17 @@
 #' @param settings A settings list to be used to populate control options
 #' @param setting_cat_val Settings category. One of "data","measure","appearance"
 #' @param charts A character vector containing names of charts of interest
+#' @param labels A list of column names and their labels
 #' @param ns The namespace of the current module
 #'
 #' @return A list containing the UI code for all selectors in the specified settings category.
-createSettingsUI <- function(data, settings, setting_cat_val, charts, ns){
+createSettingsUI <- function(data, settings, setting_cat_val, charts, labels, ns){
   
   sm <- getSettingsMetadata(charts=charts) %>% 
     filter(setting_cat==setting_cat_val)
 
   lapply(sm$text_key, function(key){
-    createControl(key, metadata = sm, data, settings, ns) 
+    createControl(key, metadata = sm, data, settings, labels, ns) 
   })
 }
 
