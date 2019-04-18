@@ -39,6 +39,7 @@ dataUpload <- function(input, output, session){
   observeEvent(input$datafile,{
 
     data_list <- list()
+    label_list <- list()
 
     ## data list
     for (i in 1:nrow(input$datafile)){
@@ -46,6 +47,7 @@ dataUpload <- function(input, output, session){
         data_list[[i]] <- data.frame(read.csv(input$datafile$datapath[i], na.strings=NA))
       }else if(length(grep(".sas7bdat", input$datafile$name[i], ignore.case = TRUE)) > 0){
         data_list[[i]] <- data.frame(haven::read_sas(input$datafile$datapath[i]))
+        label_list[[i]] <- map_chr(data_list[[i]], ~attributes(.)$label)
       }else{
         data_list[[i]] <- NULL
       }
@@ -63,9 +65,9 @@ dataUpload <- function(input, output, session){
 
     standard_list <- lapply(data_list, function(x){ detectStandard(x) })
 
-     #standard_list <- lapply(data_list, function(x){ detectStandard(x)$standard })
-
     dd$standard <- c(dd$standard, standard_list)
+    
+    dd$label <- label_list
 
   })
 
@@ -126,6 +128,9 @@ dataUpload <- function(input, output, session){
     dd$data[[index]]
   })
 
+
+  
+  
   # upon a dataset being uploaded and selected, generate data preview
   output$datapreview_header <- renderUI({
     data_selected()
@@ -147,6 +152,12 @@ dataUpload <- function(input, output, session){
   standard <- eventReactive(data_selected(), {
     index <- which(names(dd$data)==input$select_file)[1]
     dd$standard[[index]]
+  })
+  
+  # upon a dataset being selected, grab its labels
+  labels <- eventReactive(data_selected(), {
+    index <- which(names(dd$data)==input$select_file)[1]
+    dd$label[[index]]
   })
 
 
@@ -188,6 +199,7 @@ dataUpload <- function(input, output, session){
   ### return selected data, settings, and status to server
   return(list(data_selected = reactive(data_selected()),
               settings = reactive(settings()),
-              status = reactive(status())))
+              status = reactive(status()),
+              labels = reactive(labels())))
 
 }

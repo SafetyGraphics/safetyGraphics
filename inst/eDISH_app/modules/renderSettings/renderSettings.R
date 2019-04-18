@@ -45,7 +45,7 @@ source("modules/renderSettings/util/updateSettingStatus.R")
 #' \item{"settings"}{Upadted settings object based on UI/user selections}
 #' \item{"status"}{Result from validateSettings() for originally selected data + updated settings object}
 #'
-renderSettings <- function(input, output, session, data, settings, status){
+renderSettings <- function(input, output, session, data, settings, status, labels){
 
   ns <- session$ns
 
