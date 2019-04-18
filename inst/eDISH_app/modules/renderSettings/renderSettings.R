@@ -58,7 +58,7 @@ renderSettings <- function(input, output, session, data, settings, status){
       NULL
     }
     })
-  
+
   ######################################################################
   # create settings UI
   #   - chart selection -> gather all necessary UI elements
@@ -118,7 +118,7 @@ renderSettings <- function(input, output, session, data, settings, status){
     if (!is.null(input_names)){
       for (setting in input_names) {
         shinyjs::show(id=paste0("ctl_",setting))
-      }      
+      }
     }
 
     # Get all possible metadata (input_names always reflects the current chart selections and is already filtered)
@@ -136,7 +136,7 @@ renderSettings <- function(input, output, session, data, settings, status){
     }
 
   }, ignoreNULL=FALSE)  ## input$charts = NULL if none are selected
-  
+
   outputOptions(output, "data_mapping_ui", suspendWhenHidden = FALSE)
   outputOptions(output, "measure_settings_ui", suspendWhenHidden = FALSE)
   outputOptions(output, "appearance_settings_ui", suspendWhenHidden = FALSE)
@@ -268,7 +268,7 @@ renderSettings <- function(input, output, session, data, settings, status){
       unique  %>%
       group_by(text_key) %>%
       mutate(num_fail = sum(valid==FALSE)) %>%
-      mutate(icon = ifelse(num_fail==0, "<i class='glyphicon glyphicon-ok'></i>","<i class='glyphicon glyphicon-remove'></i>"))%>%
+      mutate(icon = ifelse(num_fail==0, "<i class='fa fa-check'></i>","<i class='fa fa-times'></i>"))%>%
       mutate(
         message_long = paste(message, collapse = " ") %>% trimws(),
         message_short = case_when(

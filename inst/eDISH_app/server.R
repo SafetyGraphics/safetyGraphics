@@ -2,11 +2,11 @@
 #   - calls dataUpload module (data tab)
 #   - calls renderSettings module (settings tab)
 #   - calls chart modules (chart tab)
-#   - uses render UI to append a red X or green check on tab title, 
+#   - uses render UI to append a red X or green check on tab title,
 #      indicating whether user has satisfied requirements of that tab
 
 function(input, output, session){
-  
+
   ##############################################################
   # initialize dataUpload module
   #
@@ -25,9 +25,9 @@ function(input, output, session){
   #
   # returns updated settings and validation status
   ##############################################################
-  
+
 settings_new <-   callModule(
-    renderSettings, 
+    renderSettings,
     "settingsUI",
     data = reactive(dataUpload_out$data_selected()),
     settings = reactive(dataUpload_out$settings()),
@@ -35,17 +35,30 @@ settings_new <-   callModule(
   )
 
 
+# toggle css class of chart tabs
+observeEvent(settings_new$status(),{
+  
+  for (chart in settings_new$charts()){
+    valid <- settings_new$status()[[chart]]$valid
+    
+    ## code to toggle css for chart-specific tab here
+    # we will need to deal with the fact that the tabs don't have IDs :)
+    # toggleClass(class=?, id=chart_tab_id, "valid", chart_status=="valid")
+    # toggleClass(class=?, id=chart_tab_id, "invalid", chart_status=="invalid")
+  }
+})
+
   ##############################################################
   # Initialize Charts Modules
   ##############################################################
-  
+
   # set up all chart tabs from the start (allcharts defined in global.R)
   # generated from server.R so we can do this dynamically in future..
   for (chart in all_charts){
-      
+
     tabfun <- match.fun(paste0("render_", chart, "_chartUI"))  # module UI for given tab
     tabid <- paste0(chart, "_tab_title")
-      
+
     appendTab(
       inputId = "nav_id",
       tab = tabPanel(
@@ -62,21 +75,21 @@ settings_new <-   callModule(
     unselected_charts <- all_charts[!all_charts %in% selected_charts]
 
     for(chart in unselected_charts){
-      hideTab(inputId = "nav_id", target = chart)  
+      hideTab(inputId = "nav_id", target = chart)
     }
     for(chart in selected_charts){
       showTab(inputId = "nav_id", target = chart)
     }
   })
-    
+
   # call all chart modules
   #
-  # I'm thinking this code set up (loop + callModule() using reactives) isn't ideal and 
+  # I'm thinking this code set up (loop + callModule() using reactives) isn't ideal and
   # the value for "valid" doesn't always get passed directly.
   # Moving to renderChart module will hopefully help here  for (chart in all_charts){
-  
+
   for (chart in all_charts){
-    
+
     modfun <- match.fun(paste0("render_", chart, "_chart"))
     callModule(
       module = modfun,
@@ -85,9 +98,8 @@ settings_new <-   callModule(
       settings = reactive(settings_new$settings()),
       valid = reactive(settings_new$status()[[chart]]$valid)
     )
-    
   }
- 
-  
+
+
   session$onSessionEnded(stopApp)
 }
