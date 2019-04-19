@@ -221,8 +221,10 @@ renderSettings <- function(input, output, session, data, settings, status){
     keys <- input_names()
     values<- keys %>% map(~getValues(.x))
 
-    inputDF <- tibble(text_key=keys, customValue=values) %>%
+    inputDF <- tibble(text_key=keys, customValue=values)%>%
+      rowwise %>% 
       filter(!is.null(customValue[[1]]))
+    
     if(nrow(inputDF)>0){
       settings <- generateSettings(custom_settings=inputDF, charts=input$charts)
     }else{
