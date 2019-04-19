@@ -58,6 +58,24 @@
   padding-left:0.3em;
 }
 
+/* chart validation formatting */
+.valid {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f00c";
+  color: green;
+  padding-left:0.3em;
+}
+
+.invalid {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f00c";
+  color: red;
+  padding-left:0.3em;
+}
+
+
 /* Setting Validation Coloring */
 
 .control-wrap.valid .select-wrap .status{
