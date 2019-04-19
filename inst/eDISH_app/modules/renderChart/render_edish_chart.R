@@ -23,12 +23,9 @@ render_edish_chart <- function(input, output, session, data, settings, valid){
     req(data())
     req(settings())
 
-   # if (valid()==TRUE){
       trimmed_data <- safetyGraphics:::trimData(data = data(), settings = settings())
       eDISH(data = trimmed_data, settings = settings())
-   # } else{
-  #    return()
-  #  }
+
   })
 
 
@@ -44,7 +41,7 @@ render_edish_chart <- function(input, output, session, data, settings, valid){
                  style="float: right;",
                  span(class = "navbar-brand", #using one of the default nav bar classes to get css close
                     style="padding: 8px;",  #then little tweak to ensure vertical alignment
-                      downloadButton(ns("reportDL"), "Export Chart")) )
+                      downloadButton(ns("reportDL"), "Export eDISH Chart")) )
       )
     }
     else {
