@@ -6,7 +6,7 @@
           : (global.webCharts = factory(global.d3));
 })(typeof self !== 'undefined' ? self : this, function(d3) {
     'use strict';
-    var version = '1.11.3';
+    var version = '1.11.5';
 
     function init(data) {
         var _this = this;
@@ -518,7 +518,7 @@
         if (this.filters.length) {
             this.filters.forEach(function(filter) {
                 _this.filtered_data = _this.filtered_data.filter(function(d) {
-                    return filter.val === 'All'
+                    return filter.all === true && filter.index === 0
                         ? d
                         : filter.val instanceof Array
                           ? filter.val.indexOf(d[filter.col]) > -1
@@ -1092,7 +1092,7 @@
         if (this.filters.length) {
             this.filters.forEach(function(e) {
                 filtered = filtered.filter(function(d) {
-                    return e.val === 'All'
+                    return e.all === true && e.index === 0
                         ? d
                         : e.val instanceof Array
                           ? e.val.indexOf(d[e.col]) > -1
@@ -1831,6 +1831,7 @@
     function drawBars(marks) {
         var _this = this;
 
+        var chart = this;
         var rawData = this.raw_data;
         var config = this.config;
 
@@ -1896,7 +1897,7 @@
                 .attr('class', function(d) {
                     return 'wc-data-mark bar ' + d.key;
                 })
-                .style('clip-path', 'url(#' + this.id + ')')
+                .style('clip-path', 'url(#' + chart.id + ')')
                 .attr('y', this.y(0))
                 .attr('height', 0)
                 .append('title');
@@ -2029,7 +2030,7 @@
                 .attr('class', function(d) {
                     return 'wc-data-mark bar ' + d.key;
                 })
-                .style('clip-path', 'url(#' + this.id + ')')
+                .style('clip-path', 'url(#' + chart.id + ')')
                 .attr('x', this.x(0))
                 .attr('width', 0)
                 .append('title');
@@ -2157,7 +2158,7 @@
                 .attr('class', function(d) {
                     return 'wc-data-mark bar ' + d.key;
                 })
-                .style('clip-path', 'url(#' + this.id + ')')
+                .style('clip-path', 'url(#' + chart.id + ')')
                 .attr('y', this.y(0))
                 .attr('height', 0)
                 .append('title');
@@ -2267,7 +2268,7 @@
                 .attr('class', function(d) {
                     return 'wc-data-mark bar ' + d.key;
                 })
-                .style('clip-path', 'url(#' + this.id + ')')
+                .style('clip-path', 'url(#' + chart.id + ')')
                 .attr('x', this.x(0))
                 .attr('width', 0)
                 .append('title');
@@ -2362,6 +2363,7 @@
     function drawLines(marks) {
         var _this = this;
 
+        var chart = this;
         var config = this.config;
         var line = d3.svg
             .line()
@@ -2409,6 +2411,7 @@
         var linePaths = line_grps
             .select('path')
             .attr('class', 'wc-data-mark')
+            .style('clip-path', 'url(#' + chart.id + ')')
             .datum(function(d) {
                 return d.values;
             })
@@ -2458,6 +2461,7 @@
     function drawPoints(marks) {
         var _this = this;
 
+        var chart = this;
         var config = this.config;
 
         var point_supergroups = this.svg.selectAll('.point-supergroup').data(marks, function(d, i) {
@@ -2496,6 +2500,7 @@
         //static attributes
         points
             .select('circle')
+            .style('clip-path', 'url(#' + chart.id + ')')
             .attr(
                 'fill-opacity',
                 config.fill_opacity || config.fill_opacity === 0 ? config.fill_opacity : 0.6
@@ -2568,6 +2573,7 @@
     function drawText(marks) {
         var _this = this;
 
+        var chart = this;
         var config = this.config;
 
         var textSupergroups = this.svg.selectAll('.text-supergroup').data(marks, function(d, i) {
@@ -2610,7 +2616,7 @@
         texts.each(attachMarks);
 
         // parse text like tooltips
-        texts.select('text').text(function(d) {
+        texts.select('text').style('clip-path', 'url(#' + chart.id + ')').text(function(d) {
             var tt = d.mark.text || '';
             var xformat = config.x.summary === 'percent'
                 ? d3.format('0%')
@@ -3061,13 +3067,16 @@
     }
 
     function makeSubsetterControl(control, control_wrap) {
-        var targets = this.targets;
+        var targets = this.targets; // associated charts and tables.
+
+        //dropdown selection
         var changer = control_wrap
             .append('select')
-            .attr('class', 'changer')
+            .classed('changer', true)
             .attr('multiple', control.multiple ? true : null)
             .datum(control);
 
+        //dropdown option data
         var option_data = control.values
             ? control.values
             : d3
@@ -3080,17 +3089,24 @@
                               return f;
                           })
                   )
-                  .values();
-        option_data.sort(naturalSorter);
+                  .values()
+                  .sort(naturalSorter); // only sort when values are derived
 
+        //initial dropdown option
         control.start = control.start ? control.start : control.loose ? option_data[0] : null;
 
+        //conditionally add All option
         if (!control.multiple && !control.start) {
             option_data.unshift('All');
+            control.all = true;
+        } else {
+            control.all = false;
         }
 
+        //what does loose mean?
         control.loose = !control.loose && control.start ? true : control.loose;
 
+        //dropdown options selection
         var options = changer
             .selectAll('option')
             .data(option_data)
@@ -3103,6 +3119,7 @@
                 return d === control.start;
             });
 
+        //define filter object for each associated target
         targets.forEach(function(e) {
             var match = e.filters
                 .slice()
@@ -3113,16 +3130,20 @@
             if (match > -1) {
                 e.filters[match] = {
                     col: control.value_col,
-                    val: control.start ? control.start : 'All',
+                    val: control.start ? control.start : !control.multiple ? 'All' : option_data,
+                    index: 0,
                     choices: option_data,
-                    loose: control.loose
+                    loose: control.loose,
+                    all: control.all
                 };
             } else {
                 e.filters.push({
                     col: control.value_col,
-                    val: control.start ? control.start : 'All',
+                    val: control.start ? control.start : !control.multiple ? 'All' : option_data,
+                    index: 0,
                     choices: option_data,
-                    loose: control.loose
+                    loose: control.loose,
+                    all: control.all
                 });
             }
         });
@@ -3139,6 +3160,7 @@
             }
         }
 
+        //add event listener to control
         changer.on('change', function(d) {
             if (control.multiple) {
                 var values = options
@@ -3152,8 +3174,10 @@
                 var new_filter = {
                     col: control.value_col,
                     val: values,
+                    index: null, //  could specify an array of indices but seems like a waste of resources give it doesn't inform anything without an overall 'All'
                     choices: option_data,
-                    loose: control.loose
+                    loose: control.loose,
+                    all: control.all
                 };
                 targets.forEach(function(e) {
                     setSubsetter(e, new_filter);
@@ -3165,11 +3189,14 @@
                 });
             } else {
                 var value = d3.select(this).select('option:checked').property('text');
+                var index = d3.select(this).select('option:checked').property('index');
                 var _new_filter = {
                     col: control.value_col,
                     val: value,
+                    index: index,
                     choices: option_data,
-                    loose: control.loose
+                    loose: control.loose,
+                    all: control.all
                 };
                 targets.forEach(function(e) {
                     setSubsetter(e, _new_filter);
@@ -3273,7 +3300,8 @@
             this.filters &&
             this.filters.some(function(filter) {
                 return (
-                    (typeof filter.val === 'string' && filter.val !== 'All') ||
+                    (typeof filter.val === 'string' &&
+                        !(filter.all === true && filter.index === 0)) ||
                     (Array.isArray(filter.val) && filter.val.length < filter.choices.length)
                 );
             })
@@ -3282,7 +3310,8 @@
             this.filters
                 .filter(function(filter) {
                     return (
-                        (typeof filter.val === 'string' && filter.val !== 'All') ||
+                        (typeof filter.val === 'string' &&
+                            !(filter.all === true && filter.index === 0)) ||
                         (Array.isArray(filter.val) && filter.val.length < filter.choices.length)
                     );
                 })

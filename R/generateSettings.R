@@ -115,7 +115,11 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     type <- safetyGraphics::getSettingsMetadata(text_keys=text_key,cols="setting_type")
     value <- key_values[row,"value"][[1]]
     finalValue <- value[[1]]
-
+    if(type=="vector"){
+      print(text_key)
+      print(typeof(finalValue))
+      print(length(finalValue))
+    }
     #print(paste(text_key," (",type,"):",toString(value),typeof(value),length(value),"->",finalValue,typeof(finalValue),length(finalValue)))
     shell<-setSettingsValue(
       settings = shell,

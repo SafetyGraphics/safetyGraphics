@@ -4,12 +4,11 @@ dependencies:
     src: htmlwidgets/lib/d3-3.5.17
     script: d3.v3.min.js
   - name: webcharts
-    version: 1.11.3
-    src: htmlwidgets/lib/webcharts-1.11.3
+    version: 1.11.5
+    src: htmlwidgets/lib/webcharts-1.11.5
     script: webcharts.js
     stylesheet: webcharts.css
   - name: safety-histogram
     version: 2.2.2
     src: htmlwidgets/lib/safety-histogram-2.2.2
     script: safetyHistogram.js
-    
