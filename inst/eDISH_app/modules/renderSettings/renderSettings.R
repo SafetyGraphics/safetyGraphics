@@ -49,15 +49,37 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   ns <- session$ns
 
+  output$charts_wrap_ui <- renderUI({
+    checkboxGroupButtons(
+      ns("charts"),
+      label = NULL,
+      choices = c(
+        "e-DISH" = "edish",
+        "Safety Histogram" = "safetyhistogram"
+      ),
+      selected=c("edish", "safetyhistogram"),
+      checkIcon = list(
+        yes = icon("ok", lib = "glyphicon"),
+        no = icon("remove",lib = "glyphicon")
+      ),
+      status="primary"
+    )
+  })
+
   #List of all inputs
   # Null if no charts are selected
   input_names <- reactive({
+    print(input$charts)
     if(!is.null(input$charts)){
       safetyGraphics:::getSettingsMetadata(charts=input$charts, cols="text_key")
     } else{
       NULL
     }
+<<<<<<< HEAD
+  })
+=======
     })
+>>>>>>> dev-v0.10.0
 
   ######################################################################
   # create settings UI
@@ -68,7 +90,6 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   output$data_mapping_ui <- renderUI({
     charts <- isolate(input$charts)
-    req(charts)
     tagList(
       createSettingsUI(
         data=data(),
@@ -83,7 +104,6 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   output$measure_settings_ui <- renderUI({
     charts <- isolate(input$charts)
-    req(charts)
     tagList(
       createSettingsUI(
         data=data(),
@@ -97,7 +117,6 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   output$appearance_settings_ui <- renderUI({
     charts <- isolate(input$charts)
-    req(charts)
     tagList(
       createSettingsUI(
         data=data(),
