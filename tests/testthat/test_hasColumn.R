@@ -13,7 +13,10 @@ test_that("columns are found when expected",{
   # returns false when fieldValue isn't there or there is a type mismatch
   expect_false(hasColumn(columnName="PARAMETER",data=adlbc))
   expect_false(hasColumn(columnName="SUBJID2",data=adlbc))
-
+  
+  # returns false for null columnName
+  expect_false(hasColumn(columnName=NULL,data=adlbc))
+  
   # fails with invalid parameters
   expect_error(hasColumn(columnName=123,data=adlbc))
   expect_error(hasColumn(columnName=c("PARAM","SUBJID"),data=adlbc))
