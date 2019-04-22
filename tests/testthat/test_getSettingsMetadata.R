@@ -20,7 +20,7 @@ customMetadata<- data.frame(
 
 mergedMetadata = suppressWarnings(bind_rows(
   rawMetadata%>%mutate(chart_linechart= FALSE)%>%mutate(chart_barchart= FALSE),
-  customMetadata%>%mutate(chart_edish= FALSE)
+  customMetadata%>%mutate(chart_edish= FALSE, chart_safetyhistogram=FALSE)
 ))
 
 
@@ -72,7 +72,7 @@ test_that("charts parameter works as expected",{
   linesandbars <- safetyGraphics:::getSettingsMetadata(charts=c("linechart","barchart"),metadata=mergedMetadata)
   expect_equal(dim(linesandbars)[1],2)
 
-  allcharts <- safetyGraphics:::getSettingsMetadata(charts=c("linechart","barchart","edish"),metadata=mergedMetadata)
+  allcharts <- safetyGraphics:::getSettingsMetadata(charts=c("linechart","barchart","edish","safetyhistogram"),metadata=mergedMetadata)
   expect_equal(dim(allcharts)[1],dim(mergedMetadata)[1])
 })
 
