@@ -49,6 +49,7 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   ns <- session$ns
 
+  
   output$charts_wrap_ui <- renderUI({
     checkboxGroupButtons(
       ns("charts"),
@@ -69,7 +70,6 @@ renderSettings <- function(input, output, session, data, settings, status){
   #List of all inputs
   # Null if no charts are selected
   input_names <- reactive({
-    print(input$charts)
     if(!is.null(input$charts)){
       safetyGraphics:::getSettingsMetadata(charts=input$charts, cols="text_key")
     } else{
@@ -306,8 +306,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   ######################################################################
   # print validation messages
   ######################################################################
- observe({
-   for (key in isolate(input_names())){
+ observeEvent(status_df(), {
+    for (key in isolate(input_names())){
      if(key %in% status_df()$text_key){
        status_short <- status_df()[status_df()$text_key==key, "message_short"]
        status_long <- status_df()[status_df()$text_key==key, "message_long"]
