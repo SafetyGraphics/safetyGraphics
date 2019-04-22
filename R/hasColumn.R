@@ -14,10 +14,15 @@
 
 hasColumn <- function(columnName, data){
   stopifnot(
-    typeof(columnName)=="character",
-    length(columnName)==1,
+    typeof(columnName)=="character" || is.null(columnName),
+    length(columnName)==1  || is.null(columnName),
     is.data.frame(data)
   )
   
-  return(toupper(columnName) %in% toupper(colnames(data)))
+  if(is.null(columnName)){
+    return(FALSE)
+  } else {
+    return(toupper(columnName) %in% toupper(colnames(data)))  
+  }
+  
 }

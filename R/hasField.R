@@ -16,18 +16,22 @@
 hasField<- function(fieldValue, columnName, data){
   stopifnot(
     length(fieldValue)==1,
-    typeof(columnName)=="character",
-    length(columnName)==1,
+    typeof(columnName)=="character" || is.null(columnName),
+    length(columnName)==1  || is.null(columnName), 
     is.data.frame(data)
   )
 
-  columnFound <- hasColumn(columnName=columnName, data=data)
-  if(columnFound){
-    validFields <- unique(data[[columnName]])
-  } else{
-    validFields <- c()
-  }
+  if(is.null(columnName)){
+    return(FALSE)
+  } else {
+    columnFound <- hasColumn(columnName=columnName, data=data)
+    if(columnFound){
+      validFields <- unique(data[[columnName]])
+    } else{
+      validFields <- c()
+    }
 
-  validFields <- unique(data[[columnName]])
-  return(fieldValue %in% validFields)
+    validFields <- unique(data[[columnName]])
+    return(fieldValue %in% validFields)
+  }
 }
