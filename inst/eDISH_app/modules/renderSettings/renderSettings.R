@@ -75,11 +75,9 @@ renderSettings <- function(input, output, session, data, settings, status){
     } else{
       NULL
     }
-<<<<<<< HEAD
+
   })
-=======
-    })
->>>>>>> dev-v0.10.0
+
 
   ######################################################################
   # create settings UI
