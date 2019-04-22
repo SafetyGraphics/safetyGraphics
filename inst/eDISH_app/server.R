@@ -35,16 +35,14 @@ settings_new <-   callModule(
   )
 
 
-# toggle css class of chart tabs
-observeEvent(settings_new$status(),{
-  
+#toggle css class of chart tabs
+observeEvent(settings_new$status(),{ 
   for (chart in settings_new$charts()){
     valid <- settings_new$status()[[chart]]$valid
-    
+
     ## code to toggle css for chart-specific tab here
-    # we will need to deal with the fact that the tabs don't have IDs :)
-    # toggleClass(class=?, id=chart_tab_id, "valid", chart_status=="valid")
-    # toggleClass(class=?, id=chart_tab_id, "invalid", chart_status=="invalid")
+    toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="valid", condition=valid==TRUE)  
+    toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="invalid", condition=valid==FALSE)  
   }
 })
 
@@ -75,10 +73,12 @@ observeEvent(settings_new$status(),{
     unselected_charts <- all_charts[!all_charts %in% selected_charts]
 
     for(chart in unselected_charts){
-      hideTab(inputId = "nav_id", target = chart)
+      hideTab(inputId = "nav_id",
+              target = chart)
     }
     for(chart in selected_charts){
-      showTab(inputId = "nav_id", target = chart)
+      showTab(inputId = "nav_id",
+              target = chart)
     }
   })
 
