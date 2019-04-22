@@ -41,13 +41,8 @@ observeEvent(settings_new$status(),{
     valid <- settings_new$status()[[chart]]$valid
 
     ## code to toggle css for chart-specific tab here
-    # we will need to deal with the fact that the tabs don't have IDs :)
-    # toggleClass(class=?, id=chart_tab_id, "valid", chart_status=="valid")
-    # toggleClass(class=?, id=chart_tab_id, "invalid", chart_status=="invalid")
-
-    toggleClass(id =paste0("tabid_",chart), class="validchart", condition=valid==TRUE)
-    toggleClass(id =paste0("tabid_",chart), class="invalidchart", condition=valid==FALSE)
-   # addClass(selector= "#nav_id li.dropdown ul li a[data-value='edish’]", class="validchart") #, condition=valid==TRUE)
+    toggleClass(selector= paste0("#nav_id li a[data-value='", chart, "']"), class="valid", condition=valid==TRUE)  
+    toggleClass(selector= paste0("#nav_id li a[data-value='", chart, "']"), class="invalid", condition=valid==FALSE)  
   }
 })
 
@@ -65,8 +60,7 @@ observeEvent(settings_new$status(),{
     appendTab(
       inputId = "nav_id",
       tab = tabPanel(
-        title = #chart,
-          span(id = paste0("tabid_", chart),  class = "validchart", chart),  
+        title = chart,
         tabfun(paste0("chart", chart))
       ),
       menuName = "Charts"
@@ -80,11 +74,11 @@ observeEvent(settings_new$status(),{
 
     for(chart in unselected_charts){
       hideTab(inputId = "nav_id",
-              target = paste0('<span id="tabid_', chart, '" class="validchart">', chart, '</span>'))
+              target = chart)
     }
     for(chart in selected_charts){
       showTab(inputId = "nav_id",
-              target = paste0('<span id="tabid_', chart, '" class="validchart">', chart, '</span>'))
+              target = chart)
     }
   })
 
