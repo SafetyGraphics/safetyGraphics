@@ -82,24 +82,39 @@ observeEvent(settings_new$status(),{
     }
   })
 
+
   # call all chart modules
   #
-  # I'm thinking this code set up (loop + callModule() using reactives) isn't ideal and
-  # the value for "valid" doesn't always get passed directly.
-  # Moving to renderChart module will hopefully help here  for (chart in all_charts){
+  # loop is broken so going back to hardcode for now.
+  # this will change in the future anyway
+  
+  # for (chart in all_charts){
+  # 
+  #  modfun <- match.fun(paste0("render_", chart, "_chart"))
+  #  callModule(
+  #    module = modfun,
+  #    id = paste0("chart", chart),
+  #    data = reactive(dataUpload_out$data_selected()),
+  #    settings = reactive(settings_new$settings()),
+  #    valid = reactive(settings_new$status()[[chart]]$valid)
+  #  )
+  # 
+  # }
 
-  for (chart in all_charts){
-
-    modfun <- match.fun(paste0("render_", chart, "_chart"))
     callModule(
-      module = modfun,
-      id = paste0("chart", chart),
+      module = render_edish_chart,
+      id = paste0("chart", "edish"),
       data = reactive(dataUpload_out$data_selected()),
       settings = reactive(settings_new$settings()),
-      valid = reactive(settings_new$status()[[chart]]$valid)
+      valid = reactive(settings_new$status()[["edish"]]$valid)
     )
-  }
-
+    callModule(
+      module = render_safetyhistogram_chart,
+      id = paste0("chart", "safetyhistogram"),
+      data = reactive(dataUpload_out$data_selected()),
+      settings = reactive(settings_new$settings()),
+      valid = reactive(settings_new$status()[["safetyhistogram"]]$valid)
+    )
 
   session$onSessionEnded(stopApp)
 }
