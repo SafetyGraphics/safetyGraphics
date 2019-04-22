@@ -75,7 +75,11 @@ renderSettings <- function(input, output, session, data, settings, status){
     } else{
       NULL
     }
+<<<<<<< HEAD
   })
+=======
+    })
+>>>>>>> dev-v0.10.0
 
   ######################################################################
   # create settings UI
@@ -283,7 +287,7 @@ renderSettings <- function(input, output, session, data, settings, status){
       unique  %>%
       group_by(text_key) %>%
       mutate(num_fail = sum(valid==FALSE)) %>%
-      mutate(icon = ifelse(num_fail==0, "<i class='glyphicon glyphicon-ok'></i>","<i class='glyphicon glyphicon-remove'></i>"))%>%
+      mutate(icon = ifelse(num_fail==0, "<i class='fa fa-check'></i>","<i class='fa fa-times'></i>"))%>%
       mutate(
         message_long = paste(message, collapse = " ") %>% trimws(),
         message_short = case_when(
