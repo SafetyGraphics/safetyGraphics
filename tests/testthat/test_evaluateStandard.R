@@ -29,7 +29,7 @@ test_that("expected number of checks (in)valid",{
   expect_equal(a[["valid_count"]],2)
   expect_equal(a[["invalid_count"]],9)
   expect_equal(a[["total_count"]],11)
-  expect_equal(a[["match_percent"]],.182)
+  expect_equal(round(a[["match_percent"]],3), .182)
   expect_true(a[["checks"]]%>%filter(text_key=="measure_col")%>%select(valid)%>%unlist)
 })
 

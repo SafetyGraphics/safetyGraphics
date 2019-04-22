@@ -25,6 +25,6 @@ TRUE,FALSE,r_ratio_cut,Default R Ratio Cut,Default cut point for R Ratio filter.
 TRUE,FALSE,showTitle,Show Chart Title? ,Specifies whether the title should be drawn above the controls.,logical,FALSE,FALSE,NA,FALSE,,appearance
 TRUE,FALSE,warningText,Warning text,"Informational text to be displayed near the top of the controls (beneath the title, if any). No warning is displayed if warningText = ''. ",character,FALSE,FALSE,NA,FALSE,,appearance
 FALSE,TRUE,unit_col,Unit column,Unit of measure variable name,character,TRUE,TRUE,character,FALSE,,data
-FALSE,TRUE,start_value,Measure start value,Value of variable defined in measure_col to be rendered in the histogram when the widget loads,character,FALSE,FALSE,NA,TRUE,measure_col,data
+FALSE,TRUE,start_value,Measure start value,Value of variable defined in measure_col to be rendered in the histogram when the widget loads,character,FALSE,FALSE,NA,TRUE,measure_col,data
 FALSE,TRUE,details,Details columns,"An optional list of specifications for details listing.  Each column to be added to details listing is a nested, named list (containing the variable name: ""value_col"" and associated label: ""label"") within the larger list.",vector,FALSE,TRUE,NA,FALSE,,data
 FALSE,TRUE,missingValues,Missing values,Values defining a missing value in the selected 'value' column,vector,FALSE,FALSE,NA,FALSE,,data
