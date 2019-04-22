@@ -41,8 +41,8 @@ observeEvent(settings_new$status(),{
     valid <- settings_new$status()[[chart]]$valid
 
     ## code to toggle css for chart-specific tab here
-    toggleClass(selector= paste0("#nav_id li a[data-value='", chart, "']"), class="valid", condition=valid==TRUE)  
-    toggleClass(selector= paste0("#nav_id li a[data-value='", chart, "']"), class="invalid", condition=valid==FALSE)  
+    toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="valid", condition=valid==TRUE)  
+    toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="invalid", condition=valid==FALSE)  
   }
 })
 
