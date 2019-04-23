@@ -445,6 +445,11 @@
                 });
         }
 
+        //parse details to array if needed
+        if (!(settings.details instanceof Array)) {
+            settings.details = typeof settings.details == 'string' ? [settings.details] : [];
+        }
+
         //If [settings.details] is not specified:
         if (!settings.details) settings.details = defaultDetails;
         else {
@@ -493,7 +498,7 @@
             settings.x_options = typeof settings.x_options == 'string' ? [settings.x_options] : [];
         }
 
-        if (!(settings.x_options instanceof Array)) {
+        if (!(settings.y_options instanceof Array)) {
             settings.y_options = typeof settings.y_options == 'string' ? [settings.y_options] : [];
         }
 
