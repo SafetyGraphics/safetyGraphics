@@ -36,7 +36,6 @@ getSettingValue <- function(key,settings){
       #If there are more keys, but the value is not a list, return NULL
       value<-NULL
     }
-  } else if (length(value) >1) {
   }
   return(value)
 }
