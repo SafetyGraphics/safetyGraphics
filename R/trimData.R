@@ -19,47 +19,31 @@
 
 
 trimData <- function(data, settings, chart="edish"){
-
+  
   ## Remove columns not in settings ##
   col_names <- colnames(data)
-
+  
   allKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$column_mapping, cols = c("text_key","setting_type"))
   dataKeys <- allKeys %>% filter(.data$setting_type !="vector") %>% pull(.data$text_key) %>% textKeysToList()
-
+  
   # Add items in vectors to list individually
   dataVectorKeys <- allKeys %>% filter(.data$setting_type =="vector") %>% pull(.data$text_key) %>% textKeysToList()
-  
-  vectorVars <- list()
-  
   for(key in dataVectorKeys){
     current<-getSettingValue(key, settings=settings)
-
     if (length(current) > 0 ) {
-      # handle vectors separately
-      if (typeof(current) == "character") {
-        for (i in 1:length(current)){
-          vectorVars <- append(vectorVars,current[i])
+      for (i in 1:length(current)){
+        newKey <- key
+        newKey[[1+length(newKey)]]<-i
+        sub <- current[[i]]
+        if(typeof(sub)=="list"){
+          newKey[[1+length(newKey)]]<-"value_col"
         }
-      } else {
-        for (i in 1:length(current)){
-          newKey <- key
-          newKey[[1+length(newKey)]]<-i
-          sub <- current[[i]]
-          if(typeof(sub)=="list"){
-            newKey[[1+length(newKey)]]<-"value_col"
-          }
-          dataKeys[[1+length(dataKeys)]]<-newKey
-        }
+        dataKeys[[1+length(dataKeys)]]<-newKey
       }
     }
   }
-
-
   
   settings_values <- map(dataKeys, function(x) {return(getSettingValue(x, settings))})
-  
-  #add variables from vectors to the list before intersect
-  settings_values <- c(settings_values, vectorVars)
   
   common_cols <- intersect(col_names,settings_values)
 

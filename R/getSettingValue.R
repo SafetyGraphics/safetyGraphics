@@ -23,6 +23,8 @@ getSettingValue <- function(key,settings){
   # Get the value for the first key
   firstKey <- key[[1]]
   value <- settings[[firstKey]]
+  
+  
   if(length(key)>1 ){
     #If there are more keys and the value is a list, iterate
     if(typeof(value)=="list"){
@@ -35,9 +37,6 @@ getSettingValue <- function(key,settings){
       value<-NULL
     }
   } else if (length(value) >1) {
-    
   }
-  
-
   return(value)
 }
