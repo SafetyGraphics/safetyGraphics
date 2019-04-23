@@ -395,7 +395,7 @@
 
         //make sure filters is an Array
         if (!(settings.filters instanceof Array)) {
-            settings.filters = [];
+            settings.filters = typeof settings.filters == 'string' ? [settings.filters] : [];
         }
 
         //Define default details.
@@ -445,6 +445,11 @@
                 });
         }
 
+        //parse details to array if needed
+        if (!(settings.details instanceof Array)) {
+            settings.details = typeof settings.details == 'string' ? [settings.details] : [];
+        }
+
         //If [settings.details] is not specified:
         if (!settings.details) settings.details = defaultDetails;
         else {
@@ -473,15 +478,29 @@
 
         // If settings.analysisFlag is null
         if (!settings.analysisFlag) settings.analysisFlag = { value_col: null, values: [] };
-
+        if (!settings.analysisFlag.value_col) settings.analysisFlag.value_col = null;
+        if (!(settings.analysisFlag.values instanceof Array)) {
+            settings.analysisFlag.values =
+                typeof settings.analysisFlag.values == 'string'
+                    ? [settings.analysisFlag.values]
+                    : [];
+        }
         //if it is null, set settings.baseline.value_col to settings.studyday_col.
         if (!settings.baseline) settings.baseline = { value_col: null, values: [] };
-        if (settings.baseline.values.length == 0) settings.baseline.values = [0];
         if (!settings.baseline.value_col) settings.baseline.value_col = settings.studyday_col;
+        if (!(settings.baseline.values instanceof Array)) {
+            settings.baseline.values =
+                typeof settings.baseline.values == 'string' ? [settings.baseline.values] : [];
+        }
 
         //parse x_ and y_options to array if needed
-        if (typeof settings.x_options == 'string') settings.x_options = [settings.x_options];
-        if (typeof settings.y_options == 'string') settings.y_options = [settings.y_options];
+        if (!(settings.x_options instanceof Array)) {
+            settings.x_options = typeof settings.x_options == 'string' ? [settings.x_options] : [];
+        }
+
+        if (!(settings.y_options instanceof Array)) {
+            settings.y_options = typeof settings.y_options == 'string' ? [settings.y_options] : [];
+        }
 
         // track initial Cutpoint (lets us detect when cutpoint should change)
         settings.cuts.x = settings.x.column;
