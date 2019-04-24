@@ -1,0 +1,387 @@
+{
+  "export": {
+    "datatab-status": {
+      "checks": {
+        "key": [
+          [
+            "id_col"
+          ],
+          [
+            "value_col"
+          ],
+          [
+            "measure_col"
+          ],
+          [
+            "normal_col_low"
+          ],
+          [
+            "normal_col_high"
+          ],
+          [
+            "studyday_col"
+          ],
+          [
+            "measure_values",
+            "ALT"
+          ],
+          [
+            "measure_values",
+            "AST"
+          ],
+          [
+            "measure_values",
+            "TB"
+          ],
+          [
+            "measure_values",
+            "ALP"
+          ],
+          [
+            "id_col"
+          ],
+          [
+            "value_col"
+          ],
+          [
+            "measure_col"
+          ],
+          [
+            "normal_col_low"
+          ],
+          [
+            "normal_col_high"
+          ],
+          [
+            "studyday_col"
+          ],
+          [
+            "visit_col"
+          ],
+          [
+            "visitn_col"
+          ],
+          [
+            "filters"
+          ],
+          [
+            "group_cols"
+          ],
+          [
+            "baseline",
+            "value_col"
+          ],
+          [
+            "analysisFlag",
+            "value_col"
+          ],
+          [
+            "measure_values",
+            "ALT"
+          ],
+          [
+            "measure_values",
+            "AST"
+          ],
+          [
+            "measure_values",
+            "TB"
+          ],
+          [
+            "measure_values",
+            "ALP"
+          ],
+          [
+            "value_col"
+          ],
+          [
+            "normal_col_low"
+          ],
+          [
+            "normal_col_high"
+          ],
+          [
+            "studyday_col"
+          ],
+          [
+            "visitn_col"
+          ]
+        ],
+        "text_key": [
+          "id_col",
+          "value_col",
+          "measure_col",
+          "normal_col_low",
+          "normal_col_high",
+          "studyday_col",
+          "measure_values--ALT",
+          "measure_values--AST",
+          "measure_values--TB",
+          "measure_values--ALP",
+          "id_col",
+          "value_col",
+          "measure_col",
+          "normal_col_low",
+          "normal_col_high",
+          "studyday_col",
+          "visit_col",
+          "visitn_col",
+          "filters",
+          "group_cols",
+          "baseline--value_col",
+          "analysisFlag--value_col",
+          "measure_values--ALT",
+          "measure_values--AST",
+          "measure_values--TB",
+          "measure_values--ALP",
+          "value_col",
+          "normal_col_low",
+          "normal_col_high",
+          "studyday_col",
+          "visitn_col"
+        ],
+        "type": [
+          "required",
+          "required",
+          "required",
+          "required",
+          "required",
+          "required",
+          "required",
+          "required",
+          "required",
+          "required",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "column",
+          "field",
+          "field",
+          "field",
+          "field",
+          "numeric",
+          "numeric",
+          "numeric",
+          "numeric",
+          "numeric"
+        ],
+        "description": [
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "value for specified key found in settings?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "column parameter from setting setting found in data?",
+          "field value from setting found in data",
+          "field value from setting found in data",
+          "field value from setting found in data",
+          "field value from setting found in data",
+          "specified column is numeric?",
+          "specified column is numeric?",
+          "specified column is numeric?",
+          "specified column is numeric?",
+          "specified column is numeric?"
+        ],
+        "value": [
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--",
+          "--No Value Given--"
+        ],
+        "valid": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "message": [
+          "id_col not specified in settings.",
+          "value_col not specified in settings.",
+          "measure_col not specified in settings.",
+          "normal_col_low not specified in settings.",
+          "normal_col_high not specified in settings.",
+          "studyday_col not specified in settings.",
+          "measure_values--ALT not specified in settings.",
+          "measure_values--AST not specified in settings.",
+          "measure_values--TB not specified in settings.",
+          "measure_values--ALP not specified in settings.",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ]
+      },
+      "valid": false,
+      "status": "10 of 31 checks failed."
+    },
+    "settingsUI-status_df": {
+      "text_key": [
+        "id_col",
+        "value_col",
+        "measure_col",
+        "normal_col_low",
+        "normal_col_high",
+        "studyday_col",
+        "measure_values--ALT",
+        "measure_values--AST",
+        "measure_values--TB",
+        "measure_values--ALP",
+        "visit_col",
+        "visitn_col",
+        "filters",
+        "group_cols",
+        "baseline--value_col",
+        "analysisFlag--value_col"
+      ],
+      "message_long": [
+        "id_col not specified in settings.",
+        "value_col not specified in settings.",
+        "measure_col not specified in settings.",
+        "normal_col_low not specified in settings.",
+        "normal_col_high not specified in settings.",
+        "studyday_col not specified in settings.",
+        "measure_values--ALT not specified in settings.",
+        "measure_values--AST not specified in settings.",
+        "measure_values--TB not specified in settings.",
+        "measure_values--ALP not specified in settings.",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "message_short": [
+        "1 failed check.",
+        "1 failed check.",
+        "1 failed check.",
+        "1 failed check.",
+        "1 failed check.",
+        "1 failed check.",
+        "1 failed check.",
+        "1 failed check.",
+        "1 failed check.",
+        "1 failed check.",
+        "OK",
+        "OK",
+        "OK",
+        "OK",
+        "OK",
+        "OK"
+      ],
+      "num_fail": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  }
+}
