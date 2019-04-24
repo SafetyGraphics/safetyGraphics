@@ -1,6 +1,6 @@
 HTMLWidgets.widget({
 
-  name: "eDISH",
+  name: "edish",
 
   type: "output",
 

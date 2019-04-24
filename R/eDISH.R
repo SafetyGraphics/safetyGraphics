@@ -1,6 +1,6 @@
-#' Create an eDISH widget
+#' Create an edish widget
 #'
-#' This function creates an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH)
+#' This function creates an interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (edish)
 #'
 #' @param data A data frame containing the labs data. Data must be structured as one record per study participant per time point per lab measure. 
 #' @param id_col Unique subject identifier variable name. Default: \code{"USUBJID"}.
@@ -15,7 +15,7 @@
 #' @param filters An optional list of specifications for filters.  Each filter is a nested, named list (containing the filter value column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.
 #' @param group_cols An optional list of specifications for grouping columns.  Each group column is a nested, named list (containing the group variable column: "value_col" and associated label: "label") within the larger list. Default: \code{NULL}.
 #' @param measure_values A list defining the data values from \code{measure_col} for the lab measures 
-#' used in eDish evaluations. Default: \preformatted{list(ALT = 'Aminotransferase, alanine (ALT)', 
+#' used in edish evaluations. Default: \preformatted{list(ALT = 'Aminotransferase, alanine (ALT)', 
 #'      AST = 'Aminotransferase, aspartate (AST)',
 #'      TB = 'Total Bilirubin',
 #'      ALP = 'Alkaline phosphatase (ALP)')}
@@ -23,8 +23,8 @@
 #' When multiple options are specified, a control allowing the user to interactively change the x variable is shown. Default: \code{c("ALT", "AST", "ALP")}.
 #' @param y_options Specifies variable options for the y-axis using the key values from \code{measure_values} (e.g. "TB"). 
 #' When multiple options are specified, a control allowing the user to interactively change the y variable is shown. Default: \code{"TB"}.
-#' @param analysisFlag An optional list defining which column (\code{value_col}) and \code{values} should be used in eDish and mDish analyses. Default: \code{NULL}.
-#' @param visit_window Default visit window used to highlight eDish points where x and y measures occurred within the specified number of days. 
+#' @param analysisFlag An optional list defining which column (\code{value_col}) and \code{values} should be used in edish and mDish analyses. Default: \code{NULL}.
+#' @param visit_window Default visit window used to highlight edish points where x and y measures occurred within the specified number of days. 
 #' Editable by user after render. Default: \code{30}.
 #' @param r_ratio_filter Specifies whether the R Ratio filter should be shown. R ratio is defined as: 
 #' (ALT value/ULN for ALT) / (ALP value/ULN for ALP). Default: \code{TRUE}.
@@ -46,8 +46,8 @@
 #' @examples 
 #' \dontrun{
 #' 
-#' ## Create eDISH figure customized to user data
-#' eDISH(data=adlbc, 
+#' ## Create edish figure customized to user data
+#' edish(data=adlbc, 
 #'       id_col = "USUBJID",
 #'       value_col = "AVAL", 
 #'       measure_col = "PARAM", 
@@ -61,7 +61,7 @@
 #'                             TB = "Bilirubin (umol/L)",
 #'                             ALP = "Alkaline Phosphatase (U/L)"))
 #' 
-#' ## Create eDISH figure using a premade settings list
+#' ## Create edish figure using a premade settings list
 #' group_cols_list <- list(
 #'   list(value_col = "TRTP", label = "Treatment"),
 #'   list(value_col = "SEX", label = "Sex"), 
@@ -90,14 +90,14 @@
 #'                             AST = "Aspartate Aminotransferase (U/L)",
 #'                             TB = "Bilirubin (umol/L)",
 #'                             ALP = "Alkaline Phosphatase (U/L)"))
-#' eDISH(data=adlbc, settings = settingsl)
+#' edish(data=adlbc, settings = settingsl)
 #' 
 #' }
 #' 
 #' @import htmlwidgets
 #'
 #' @export
-eDISH <- function(data,
+edish <- function(data,
                   id_col = "USUBJID",
                   value_col = "STRESN",
                   measure_col = "TEST",
@@ -194,7 +194,7 @@ eDISH <- function(data,
 
   # create widget
   htmlwidgets::createWidget(
-    name = 'eDISH',
+    name = 'edish',
     rSettings,
    # width = width,
    # height = height,
@@ -203,30 +203,30 @@ eDISH <- function(data,
   )
 }
 
-#' Shiny bindings for eDISH
+#' Shiny bindings for edish
 #'
-#' Output and render functions for using eDISH within Shiny
+#' Output and render functions for using edish within Shiny
 #' applications and interactive Rmd documents.
 #'
 #' @param outputId output variable to read from
 #' @param width,height Must be a valid CSS unit (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
-#' @param expr An expression that generates a eDISH
+#' @param expr An expression that generates a edish
 #' @param env The environment in which to evaluate \code{expr}.
 #' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
 #'   is useful if you want to save an expression in a variable.
 #'
-#' @name eDISH-shiny
+#' @name edish-shiny
 #'
 #' @export
-eDISHOutput <- function(outputId, width = '100%', height = '400px'){
-  htmlwidgets::shinyWidgetOutput(outputId, 'eDISH', width, height, package = 'safetyGraphics')
+output_edish <- function(outputId, width = '100%', height = '400px'){
+  htmlwidgets::shinyWidgetOutput(outputId, 'edish', width, height, package = 'safetyGraphics')
 }
 
-#' @rdname eDISH-shiny
+#' @rdname edish-shiny
 #' @export
-renderEDISH <- function(expr, env = parent.frame(), quoted = FALSE) {
+render_edish <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
-  htmlwidgets::shinyRenderWidget(expr, eDISHOutput, env, quoted = TRUE)
+  htmlwidgets::shinyRenderWidget(expr, output_edish, env, quoted = TRUE)
 }

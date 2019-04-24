@@ -20,7 +20,7 @@
 #' \dontrun{
 #' 
 #' ## Create Histogram figure customized to user data
-#'safetyHistogram(data=adlbc, 
+#'safetyhistogram(data=adlbc, 
 #'                id_col = "USUBJID",
 #'                value_col = "AVAL", 
 #'                measure_col = "PARAM", 
@@ -52,14 +52,14 @@
 #'       details = details_list,
 #'       filters = filters_list)
 #'       
-#' safetyHistogram(data=adlbc, settings = settingsl)
+#' safetyhistogram(data=adlbc, settings = settingsl)
 #' 
 #' }
 #' 
 #' @import htmlwidgets
 #'
 #' @export
-safetyHistogram <- function(data,
+safetyhistogram <- function(data,
                             id_col = "USUBJID",
                             value_col = "STRESN",
                             measure_col = "TEST",
@@ -106,7 +106,7 @@ safetyHistogram <- function(data,
 
   # create widget
   htmlwidgets::createWidget(
-    name = 'safetyHistogram',
+    name = 'safetyhistogram',
     rSettings,
     # width = width,
     # height = height,
@@ -116,30 +116,30 @@ safetyHistogram <- function(data,
   )
 }
 
-#' Shiny bindings for safetyHistogram
+#' Shiny bindings for safetyhistogram
 #'
-#' Output and render functions for using safetyHistogram within Shiny
+#' Output and render functions for using safetyhistogram within Shiny
 #' applications and interactive Rmd documents.
 #'
 #' @param outputId output variable to read from
 #' @param width,height Must be a valid CSS unit (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
-#' @param expr An expression that generates a safetyHistogram
+#' @param expr An expression that generates a safetyhistogram
 #' @param env The environment in which to evaluate \code{expr}.
 #' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
 #'   is useful if you want to save an expression in a variable.
 #'
-#' @name safetyHistogram-shiny
+#' @name safetyhistogram-shiny
 #'
 #' @export
-safetyHistogramOutput <- function(outputId, width = '100%', height = '400px'){
-  htmlwidgets::shinyWidgetOutput(outputId, 'safetyHistogram', width, height, package = 'safetyGraphics')
+output_safetyhistogram <- function(outputId, width = '100%', height = '400px'){
+  htmlwidgets::shinyWidgetOutput(outputId, 'safetyhistogram', width, height, package = 'safetyGraphics')
 }
 
-#' @rdname safetyHistogram-shiny
+#' @rdname safetyhistogram-shiny
 #' @export
-renderSafetyHistogram <- function(expr, env = parent.frame(), quoted = FALSE) {
+render_safetyhistogram <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
-  htmlwidgets::shinyRenderWidget(expr, safetyHistogramOutput, env, quoted = TRUE)
+  htmlwidgets::shinyRenderWidget(expr, output_safetyhistogram, env, quoted = TRUE)
 }

@@ -1,6 +1,6 @@
 HTMLWidgets.widget({
 
-  name: "safetyHistogram",
+  name: "safetyhistogram",
 
   type: "output",
 
