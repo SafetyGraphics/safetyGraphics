@@ -154,6 +154,8 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   }, ignoreNULL=FALSE)  ## input$charts = NULL if none are selected
 
+  # ensure outputs update upon app startup
+  outputOptions(output, "charts_wrap_ui", suspendWhenHidden = FALSE)
   outputOptions(output, "data_mapping_ui", suspendWhenHidden = FALSE)
   outputOptions(output, "measure_settings_ui", suspendWhenHidden = FALSE)
   outputOptions(output, "appearance_settings_ui", suspendWhenHidden = FALSE)
