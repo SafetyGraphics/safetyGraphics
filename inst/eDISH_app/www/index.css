@@ -46,6 +46,8 @@
   padding-left:0.3em;
 }
 
+
+
 #nav_id li.dropdown ul.dropdown-menu li a.invalid:after{
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
@@ -54,6 +56,10 @@
   padding-left:0.3em;
 }
 
+/* chart validation formatting */
+#nav_id li.dropdown ul.dropdown-menu li.active a:after{
+  color: white;
+}
 
 /* Setting Validation Coloring */
 
