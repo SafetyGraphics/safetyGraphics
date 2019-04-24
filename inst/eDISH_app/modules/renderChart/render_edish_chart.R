@@ -32,8 +32,15 @@ render_edish_chart <- function(input, output, session, data, settings, valid){
   # insert export chart button if settings pass validation
   # remove button if validation fails
   observeEvent(valid(), {
+    if (is.null(valid())){
+      valid <- FALSE
+    } else {
+      valid <- valid()
+    }
+    
     removeUI(selector = paste0("#", ns("download")))
-    if (valid()==TRUE){
+
+    if (valid==TRUE){
       insertUI (
        selector  = "div.container-fluid",
        where = "beforeEnd",
@@ -47,7 +54,7 @@ render_edish_chart <- function(input, output, session, data, settings, valid){
     else {
       removeUI(selector = paste0("#", ns("download")))
     }
-  })
+  }, ignoreNULL = FALSE)
 
 
   # Set up report generation on download button click
