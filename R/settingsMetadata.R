@@ -5,6 +5,7 @@
 #' @format A data frame with 25 rows and 10 columns
 #' \describe{
 #'    \item{chart_edish}{Flag indicating if the settings apply to the eDish Chart}
+#'    \item{chart_safetyhistogram}{Flag indicating if the settings apply to the Safety Histogram Chart}
 #'    \item{text_key}{Text key indicating the setting name. \code{'--'} delimiter indicates a nested setting}
 #'    \item{label}{Label}
 #'    \item{description}{Description}
@@ -15,6 +16,7 @@
 #'    \item{field_mapping}{Flag indicating whether the setting corresponds to a field-level mapping in the data}
 #'    \item{field_column_key}{Key for the column that provides options for the field-level mapping in the data}
 #'    \item{setting_cat}{Setting category (data, measure, appearance)}
+#'    \item{default}{Default value for non-data settings}
 #' }    
 #' 
 #' @source Created for this package

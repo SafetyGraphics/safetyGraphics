@@ -20,6 +20,9 @@ test_that("fields are found when expected",{
   expect_false(hasField(fieldValue="Not_a_real_value",columnName="PARAM",data=adlbc))
   expect_false(hasField(fieldValue=12,columnName="PARAM",data=adlbc))
 
+  # returns false for null columnName
+  expect_false(hasField(fieldValue="Bilirubin (umol/L)",columnName=NULL,data=adlbc))
+  
   # fails with invalid parameters
   expect_error(hasField(fieldValue="Bilirubin (umol/L)",columnName=c("PARAM","ID"),data=adlbc))
   expect_error(hasField(columnName="PARAM",data=list(adlbc))) #fieldValue missing

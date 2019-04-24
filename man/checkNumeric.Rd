@@ -22,10 +22,10 @@ Check that settings for mapping numeric data are associated with numeric columns
 \examples{
 testSettings<-generateSettings(standard="AdAM")
 #pass ($valid == FALSE)
-safetyGraphics:::checkNumeric(key=list("id_col"),settings=testSettings, data=adlbc) 
+safetyGraphics:::checkNumeric(key=list("id_col"),settings=testSettings, data=adlbc)
 
 #pass ($valid == TRUE)
-safetyGraphics:::checkNumeric(key=list("value_col"),settings=testSettings, data=adlbc) 
+safetyGraphics:::checkNumeric(key=list("value_col"),settings=testSettings, data=adlbc)
 
 }
 \keyword{internal}

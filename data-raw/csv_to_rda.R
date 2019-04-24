@@ -1,9 +1,18 @@
 library(usethis)
+library(dplyr)
 
 ablbc <- read.csv("data-raw/adlbc.csv")
 usethis::use_data(adlbc, overwrite = TRUE)
 
-settingsMetadata <- read.csv("data-raw/settingsMetadata.csv")
+partialSettingsMetadata <- read.csv("data-raw/settingsMetadata.csv", stringsAsFactors = FALSE)
+
+#merge defaults on to settingsMetadata
+defaults <- readRDS("data-raw/defaults.Rds")  
+
+
+settingsMetadata <- dplyr::full_join(partialSettingsMetadata, defaults, by="text_key")
+#settingsMetadata <- merge(partialSettingsMetadata, defaults, by="text_key")
+
 usethis::use_data(settingsMetadata, overwrite = TRUE)
 
 standardsMetadata <- read.csv("data-raw/standardsMetadata.csv")

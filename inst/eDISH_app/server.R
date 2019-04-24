@@ -1,66 +1,120 @@
 # Server code for safetyGraphics App
 #   - calls dataUpload module (data tab)
 #   - calls renderSettings module (settings tab)
-#   - calls renderEDishChart (chart tab)
-#   - uses render UI to append a red X or green check on tab title, 
+#   - calls chart modules (chart tab)
+#   - uses render UI to append a red X or green check on tab title,
 #      indicating whether user has satisfied requirements of that tab
 
 function(input, output, session){
 
-
-  # run dataUpload module
+  ##############################################################
+  # initialize dataUpload module
   #
   #  returns selected dataset, settings, and validation status
+  ##############################################################
   dataUpload_out <- callModule(dataUpload, "datatab")
 
-  # add status to data panel nav bar
-  #   always OK for now, since example data is loaded by default
-  output$data_tab_title = renderUI({
-   # HTML(paste("Data", icon("check", class="ok")))
-    span(tagList("Data", icon("check", class="ok")))
-  })
-  
-  # based on selected data set & generated/selected settings obj, generate settings page.
+  ##############################################################
+  # Initialize Settings Module
+  #
+  # generate settings page based on selected data set & generated/selected settings obj
   #
   #  NOTE:  module is being triggered when selected dataset changes OR when settings list changes
   #   this could cause the module to trigger twice unecessarily in some cases because the settings are generated
   #   AFTER the data is changed.
   #
-  # reutrns updated settings and validation status
-    settings_new <-   callModule(renderSettings, "settingsUI",
-                                # data = isolate(reactive(dataUpload_out$data_selected())),  # this doesnt make sense
-                                 data = reactive(dataUpload_out$data_selected()),
-                                 settings = reactive(dataUpload_out$settings()),
-                                 status = reactive(dataUpload_out$status()))
+  # returns updated settings and validation status
+  ##############################################################
+
+settings_new <-   callModule(
+    renderSettings,
+    "settingsUI",
+    data = reactive(dataUpload_out$data_selected()),
+    settings = reactive(dataUpload_out$settings()),
+    status = reactive(dataUpload_out$status())
+  )
 
 
-  # update settings navbar
-    output$settings_tab_title = renderUI({
-      if (settings_new$status()$valid==TRUE){
-        HTML(paste("Settings", icon("check", class="ok")))
-      } else {
-        HTML(paste("Settings", icon("times", class="notok")))
-      }
-    })
+#toggle css class of chart tabs
+observeEvent(settings_new$status(),{ 
+  for (chart in settings_new$charts()){
+    valid <- settings_new$status()[[chart]]$valid
 
-    # update charts navbar
-    output$chart_tab_title = renderUI({
-      if (settings_new$status()$valid==TRUE){
-        HTML(paste("Chart", icon("check", class="ok")))
-      } else {
-        HTML(paste("Chart", icon("times", class="notok")))
-      }
-    })
+    ## code to toggle css for chart-specific tab here
+    toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="valid", condition=valid==TRUE)  
+    toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="invalid", condition=valid==FALSE)  
+  }
+})
+
+  ##############################################################
+  # Initialize Charts Modules
+  ##############################################################
+
+  # set up all chart tabs from the start (allcharts defined in global.R)
+  # generated from server.R so we can do this dynamically in future..
+  for (chart in all_charts){
+
+    tabfun <- match.fun(paste0("render_", chart, "_chartUI"))  # module UI for given tab
+    tabid <- paste0(chart, "_tab_title")
+
+    appendTab(
+      inputId = "nav_id",
+      tab = tabPanel(
+        title = chart,
+        tabfun(paste0("chart", chart))
+      ),
+      menuName = "Charts"
+    )
+  }
+
+  # hide/show chart tabs in response to user selections
+  observe({
+    selected_charts <- settings_new$charts()
+    unselected_charts <- all_charts[!all_charts %in% selected_charts]
+
+    for(chart in unselected_charts){
+      hideTab(inputId = "nav_id",
+              target = chart)
+    }
+    for(chart in selected_charts){
+      showTab(inputId = "nav_id",
+              target = chart)
+    }
+  })
 
 
-  # module to render eDish chart
-  callModule(renderEDishChart, "chartEDish",
-             data = reactive(dataUpload_out$data_selected()),
-             settings = reactive(settings_new$settings()),
-             valid = reactive(settings_new$status()$valid))
-
-
+  # call all chart modules
+  #
+  # loop is broken so going back to hardcode for now.
+  # this will change in the future anyway
   
-  session$onSessionEnded(stopApp)
+  # for (chart in all_charts){
+  # 
+  #  modfun <- match.fun(paste0("render_", chart, "_chart"))
+  #  callModule(
+  #    module = modfun,
+  #    id = paste0("chart", chart),
+  #    data = reactive(dataUpload_out$data_selected()),
+  #    settings = reactive(settings_new$settings()),
+  #    valid = reactive(settings_new$status()[[chart]]$valid)
+  #  )
+  # 
+  # }
 
+    callModule(
+      module = render_edish_chart,
+      id = paste0("chart", "edish"),
+      data = reactive(dataUpload_out$data_selected()),
+      settings = reactive(settings_new$settings()),
+      valid = reactive(settings_new$status()[["edish"]]$valid)
+    )
+    callModule(
+      module = render_safetyhistogram_chart,
+      id = paste0("chart", "safetyhistogram"),
+      data = reactive(dataUpload_out$data_selected()),
+      settings = reactive(settings_new$settings()),
+      valid = reactive(settings_new$status()[["safetyhistogram"]]$valid)
+    )
+
+  session$onSessionEnded(stopApp)
 }
