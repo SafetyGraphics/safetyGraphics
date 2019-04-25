@@ -30,4 +30,4 @@ defaults <- tribble(~text_key, ~default,
              "missingValues", c("","NA","N/A")
              )
 
-saveRDS(defaults, file="data-raw/defaults.Rds")
+saveRDS(defaults, file="data-raw/settingsMetadataDefaults.Rds")
