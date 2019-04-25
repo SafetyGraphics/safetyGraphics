@@ -41,6 +41,28 @@
 #'
 #' @export
 safetyoutlierexplorer <- function(data, debug_js = FALSE, settings = NULL) {
+
+  #Custom mapping for time col (can remove after next renderer release)
+  settings$time_cols <- list(list(),list());
+  settings$time_cols[[1]]<-list(
+    type= "ordinal",
+    value_col= settings[["visit_col"]],
+    label= "Visit",
+    order_col= settings[["visitn_col"]],
+    order= NULL,
+    rotate_tick_labels= TRUE,
+    vertical_space= 100
+  )
+  settings$time_cols[[2]]<-list(
+    type= "linear",
+    value_col= settings[["studyday_col"]],
+    label= "Study Day",
+    order_col= settings[["studyday_col"]],
+    order= NULL,
+    rotate_tick_labels= FALSE,
+    vertical_space= 0
+  )
+
   rSettings = list(
     data = data,
     debug_js=debug_js,
@@ -71,19 +93,19 @@ safetyoutlierexplorer <- function(data, debug_js = FALSE, settings = NULL) {
 #' @param width,height Must be a valid CSS unit (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
-#' @param expr An expression that generates a safetyhistogram
+#' @param expr An expression that generates a safetyoutlierexplorer
 #' @param env The environment in which to evaluate \code{expr}.
 #' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
 #'   is useful if you want to save an expression in a variable.
 #'
-#' @name safetyhistogram-shiny
+#' @name safetyoutlierexplorer-shiny
 #'
 #' @export
 output_safetyoutlierexplorer <- function(outputId, width = '100%', height = '400px'){
   htmlwidgets::shinyWidgetOutput(outputId, 'safetyoutlierexplorer', width, height, package = 'safetyGraphics')
 }
 
-#' @rdname safetyhistogram-shiny
+#' @rdname safetyoutlierexplorer-shiny
 #' @export
 render_safetyoutlierexplorer <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # force quoted

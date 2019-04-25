@@ -18,10 +18,11 @@ HTMLWidgets.widget({
          console.log("R settings:")
          console.log(rSettings);
         }
+        console.log(rSettings);
 
         settings.max_width = 600;
         rSettings.data = HTMLWidgets.dataframeToD3(rSettings.data);
-        safetyHistogram(".safetyoutlierexplorerå-wrapper", settings).init(rSettings.data);
+        safetyOutlierExplorer(".safetyoutlierexplorer-wrapper", settings).init(rSettings.data);
       },
 
       resize: function(width, height) {

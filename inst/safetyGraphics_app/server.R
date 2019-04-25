@@ -142,5 +142,15 @@ observeEvent(settings_new$status(),{
     type = "htmlwidget"
   )
 
+  callModule(
+    module = renderChart,
+    id = paste0("chart", "safetyoutlierexplorer"),
+    data = reactive(dataUpload_out$data_selected()),
+    settings = reactive(settings_new$settings()),
+    valid = reactive(settings_new$status()$valid),
+    chart = "safetyoutlierexplorer",
+    type = "htmlwidget"
+  )
+  
   session$onSessionEnded(stopApp)
 }

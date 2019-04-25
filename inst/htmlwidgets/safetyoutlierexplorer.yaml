@@ -10,5 +10,5 @@ dependencies:
     stylesheet: webcharts.css
   - name: safety-outlier-explorer
     version: 2.5.3
-    src: htmlwidgets/lib/safety-histogram-2.5.3
+    src: htmlwidgets/lib/safety-outlier-explorer-2.5.3
     script: safetyOutlierExplorer.js
