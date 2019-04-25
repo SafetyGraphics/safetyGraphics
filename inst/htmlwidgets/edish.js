@@ -1,6 +1,6 @@
 HTMLWidgets.widget({
 
-  name: "eDISH",
+  name: "edish",
 
   type: "output",
 
@@ -11,7 +11,7 @@ HTMLWidgets.widget({
     return {
 
       renderValue: function(rSettings) {
-        el.innerHTML = "<div class='edish'></div>";
+        el.innerHTML = "<div class='edish-wrapper'></div>";
         var settings = rSettings.settings;
 
         if(settings.debug_js){
@@ -21,7 +21,7 @@ HTMLWidgets.widget({
 
         settings.max_width = 600;
         rSettings.data = HTMLWidgets.dataframeToD3(rSettings.data);
-        safetyedish(".edish", settings).init(rSettings.data);
+        safetyedish(".edish-wrapper", settings).init(rSettings.data);
 
       },
 

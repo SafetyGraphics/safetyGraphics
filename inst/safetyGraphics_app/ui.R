@@ -4,15 +4,21 @@ tagList(
   useShinyjs(),
   tags$head(
     tags$link(
-      rel = "stylesheet", 
+      rel = "stylesheet",
       type = "text/css",
-      href = "index.css")
+      href = "index.css"
+    ),
+    tags$link(
+      rel = "stylesheet",
+      type = "text/css",
+      href = "https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    )
   ),
   navbarPage(
-    "eDISH Shiny app",  
+    "safetyGraphics Shiny app",
     id="nav_id",
     tabPanel(
-      title = "Data", 
+      title = "Data",
       dataUploadUI("datatab")
     ),
     tabPanel(
@@ -20,7 +26,7 @@ tagList(
       fluidPage(
         renderSettingsUI("settingsUI")
       )
-    ), 
+    ),
     navbarMenu("Charts")
-  )
+    )
 )

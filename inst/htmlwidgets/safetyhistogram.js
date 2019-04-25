@@ -1,6 +1,6 @@
 HTMLWidgets.widget({
 
-  name: "safetyHistogram",
+  name: "safetyhistogram",
 
   type: "output",
 
@@ -11,7 +11,7 @@ HTMLWidgets.widget({
     return {
 
       renderValue: function(rSettings) {
-        el.innerHTML = "<div class='safetyhistogram'></div>";
+        el.innerHTML = "<div class='safetyhistogram-wrapper'></div>";
         var settings = rSettings.settings;
 
         if(settings.debug_js){
@@ -21,8 +21,7 @@ HTMLWidgets.widget({
 
         settings.max_width = 600;
         rSettings.data = HTMLWidgets.dataframeToD3(rSettings.data);
-        safetyHistogram(".safetyhistogram", settings).init(rSettings.data);
-
+        safetyHistogram(".safetyhistogram-wrapper", settings).init(rSettings.data);
       },
 
       resize: function(width, height) {

@@ -20,6 +20,6 @@ safetyGraphicsApp <- function(maxFileSize = NULL) {
     options(shiny.maxRequestSize=(maxFileSize*1024^2))  
   }
   
-  path <- system.file("eDISH_app", package = "safetyGraphics")
+  path <- system.file("safetyGraphics_app", package = "safetyGraphics")
   shiny::runApp(path, launch.browser = TRUE)
 }
