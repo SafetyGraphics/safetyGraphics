@@ -36,30 +36,30 @@ settings_new <-   callModule(
 
 
 #toggle css class of chart tabs
-observeEvent(settings_new$status(),{ 
+observeEvent(settings_new$status(),{
   for (chart in settings_new$charts()){
     valid <- settings_new$status()[[chart]]$valid
 
     ## code to toggle css for chart-specific tab here
-    toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="valid", condition=valid==TRUE)  
-    toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="invalid", condition=valid==FALSE)  
+    toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="valid", condition=valid==TRUE)
+    toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="invalid", condition=valid==FALSE)
   }
 })
 
   ##############################################################
   # Initialize Charts Modules
   ##############################################################
-  
 
-# set up all chart tabs from the start (all_charts defined in global.R) 
+
+# set up all chart tabs from the start (all_charts defined in global.R)
   for (chart in all_charts){
     tabid <- paste0(chart, "_tab_title")
-    
+
     appendTab(
       inputId = "nav_id",
       tab = tabPanel(
         title = chart,
-        render_chartUI(paste0("chart", chart))
+        renderChartUI(paste0("chart", chart))
       ),
       menuName = "Charts"
     )
@@ -67,10 +67,10 @@ observeEvent(settings_new$status(),{
 
 
   # for (chart in all_charts){
-  # 
+  #
   #   tabfun <- match.fun(paste0("render_", chart, "_chartUI"))  # module UI for given tab
   #   tabid <- paste0(chart, "_tab_title")
-  # 
+  #
   #   appendTab(
   #     inputId = "nav_id",
   #     tab = tabPanel(
@@ -80,7 +80,7 @@ observeEvent(settings_new$status(),{
   #     menuName = "Charts"
   #   )
   # }
-  # 
+  #
 
 
   # hide/show chart tabs in response to user selections
@@ -98,10 +98,10 @@ observeEvent(settings_new$status(),{
     }
   })
 
-  
-  
- 
-# 
+
+
+
+#
 #     callModule(
 #       module = render_edish_chart,
 #       id = paste0("chart", "edish"),
@@ -117,9 +117,9 @@ observeEvent(settings_new$status(),{
 #       valid = reactive(settings_new$status()[["safetyhistogram"]]$valid)
 #     )
 
-  
+
   callModule(
-    module = render_chart,
+    module = renderChart,
     id = paste0("chart", "edish"),
     data = reactive(dataUpload_out$data_selected()),
     settings = reactive(settings_new$settings()),
@@ -127,10 +127,10 @@ observeEvent(settings_new$status(),{
     chart = "edish",
     type = "htmlwidget"
   )
-  
-  
+
+
   callModule(
-    module = render_chart,
+    module = renderChart,
     id = paste0("chart", "safetyhistogram"),
     data = reactive(dataUpload_out$data_selected()),
     settings = reactive(settings_new$settings()),

@@ -18,8 +18,8 @@ all_charts <- c("edish","safetyhistogram")
 source('modules/renderSettings/renderSettingsUI.R')
 source('modules/renderSettings/renderSettings.R')
 
-source('modules/renderChart/render_chartUI.R')
-source('modules/renderChart/render_chart.R')
+source('modules/renderChart/renderChartUI.R')
+source('modules/renderChart/renderChart.R')
 
 # source('modules/renderChart/render_edish_chartUI.R')
 # source('modules/renderChart/render_edish_chart.R')
@@ -28,4 +28,3 @@ source('modules/renderChart/render_chart.R')
 
 source('modules/dataUpload/dataUploadUI.R')
 source('modules/dataUpload/dataUpload.R')
-
