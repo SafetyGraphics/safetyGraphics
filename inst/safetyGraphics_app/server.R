@@ -52,13 +52,15 @@ observeEvent(settings_new$status(),{
 
 
 # set up all chart tabs from the start (all_charts defined in global.R)
-  for (chart in all_charts){
+  for (row in 1:nrow(chartsMetadata)){
+    chart<-chartsMetadata[row,"chart"]
+    chartLabel<-chartsMetadata[row,"label"]
     tabid <- paste0(chart, "_tab_title")
 
     appendTab(
       inputId = "nav_id",
       tab = tabPanel(
-        title = chart,
+        title = chartLabel,
         renderChartUI(paste0("chart", chart))
       ),
       menuName = "Charts"
@@ -85,6 +87,7 @@ observeEvent(settings_new$status(),{
 
   # hide/show chart tabs in response to user selections
   observe({
+    all_charts <- as.vector(chartsMetadata[["chart"]])
     selected_charts <- settings_new$charts()
     unselected_charts <- all_charts[!all_charts %in% selected_charts]
 

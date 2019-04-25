@@ -1,0 +1,3 @@
+﻿chart,label,description,repo_url,settings_url,type
+edish,eDish,Interactive graphic for the Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH),https://github.com/SafetyGraphics/safety-eDISH,https://github.com/SafetyGraphics/safety-eDISH/wiki/Configuration,htmlwidget
+safetyhistogram,Safety Histogram,"Histogram showing distribution of lab measures, vital signs and other measures related to safety in clinical trials.",https://github.com/RhoInc/safety-histogram,https://github.com/RhoInc/safety-histogram/wiki/Configuration,htmlwidget
