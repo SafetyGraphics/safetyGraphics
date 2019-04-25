@@ -43,6 +43,7 @@
 safetyhistogram <- function(data, debug_js = FALSE, settings = NULL) {
   rSettings = list(
     data = data,
+    debug_js=debug_js,
     settings = jsonlite::toJSON(
       settings,
       auto_unbox = TRUE,
