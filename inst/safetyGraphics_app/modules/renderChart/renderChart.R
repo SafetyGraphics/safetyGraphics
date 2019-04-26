@@ -22,11 +22,11 @@ renderChart <- function(input, output, session, data, settings, valid, chart, ty
   ns <- session$ns
 
   # function for chart
-  chart_fun <- match.fun(chart)
+  #chart_fun <- match.fun(chart)
   # function for shiny output
-  output_fun <- match.fun(paste0("output_", chart))
+  #output_fun <- match.fun(paste0("output_", chart))
   # function for shiny render
-  render_fun <- match.fun(paste0("render_", chart))
+  #render_fun <- match.fun(paste0("render_", chart))
   # id for chart
   chart_id <- paste0("chart_", chart)
 
@@ -43,16 +43,15 @@ renderChart <- function(input, output, session, data, settings, valid, chart, ty
 
   ## code to dynamically generate the output location
   output$chart <- renderUI({
-    output_fun(ns(chart_id))
+    output_chartRenderer(ns(chart_id))
   })
 
   ## code to render widget and fill in the output location
-  output[[chart_id]] <- render_fun({
+  output[[chart_id]] <- render_chartRenderer({
     req(data())
     req(settings())
-
-    trimmed_data <- safetyGraphics:::trimData(data = data(), settings = settings())
-    chart_fun(data = trimmed_data, settings = settings())
+    #trimmed_data<-trim_data()
+    chartRenderer(data = data(), settings = settings(), chart = chart, debug_js=TRUE)
   })
 
 }
