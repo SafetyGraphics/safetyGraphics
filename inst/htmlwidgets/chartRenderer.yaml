@@ -20,3 +20,15 @@ dependencies:
     version: 2.5.3
     src: htmlwidgets/lib/safety-outlier-explorer-2.5.3
     script: safetyOutlierExplorer.js
+  - name: safety-shift-plot
+    version: 2.1.1
+    src: htmlwidgets/lib/safety-shift-plot-2.1.1
+    script: safetyShiftPlot.js
+  - name: safety-results-over-time
+    version: 2.3.2
+    src: htmlwidgets/lib/safety-results-over-time-2.3.2
+    script: safetyResultsOverTime.js
+  - name: paneled-outlier-explorer
+    version: 1.1.2
+    src: htmlwidgets/lib/paneled-outlier-explorer-1.1.2
+    script: paneledOutlierExplorer.js

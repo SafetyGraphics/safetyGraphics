@@ -42,6 +42,50 @@
 #'
 #' @export
 chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
+  # Chart specific customizastions (to be removed after js updates)
+  if(chart %in% c("paneledoutlierexplorer","safetyoutlierexplorer")){
+    settings$time_cols <- list(list(),list());
+    settings$time_cols[[1]]<-list(
+      type= "ordinal",
+      value_col= settings[["visit_col"]],
+      label= "Visit",
+      order_col= settings[["visitn_col"]],
+      order= NULL,
+      rotate_tick_labels= TRUE,
+      vertical_space= 100
+    )
+    settings$time_cols[[2]]<-list(
+      type= "linear",
+      value_col= settings[["studyday_col"]],
+      label= "Study Day",
+      order_col= settings[["studyday_col"]],
+      order= NULL,
+      rotate_tick_labels= FALSE,
+      vertical_space= 0
+    )
+  }
+
+  if(chart=="paneledoutlierexplorer"){
+    settings$lln_col <- settings[["normal_col_low"]]
+    settings$uln_col <- settings[["normal_col_high"]]
+  }
+
+  if(chart=="safetyshiftplot"){
+    settings$time_col<-settings[["visit_col"]]
+  }
+
+  if(chart=="safetyresultsovertime"){
+    settings$time_settings=list(
+      value_col= settings[["visit_col"]],
+      label= "Visit",
+      order_col= settings[["visitn_col"]],
+      order= NULL,
+      rotate_tick_labels= TRUE,
+      vertical_space= 100
+    )
+  }
+
+  #Renderer
   chartFunction<- chartsMetadata %>% filter(.data$chart==!!chart) %>% pull(.data$main)
   rSettings = list(
     data = data,

@@ -69,8 +69,8 @@ observeEvent(settings_new$status(),{
   }
 
   # hide/show chart tabs in response to user selections
+  all_charts <- as.vector(chartsMetadata[["chart"]])
   observe({
-    all_charts <- as.vector(chartsMetadata[["chart"]])
     selected_charts <- settings_new$charts()
     unselected_charts <- all_charts[!all_charts %in% selected_charts]
     for(chart in unselected_charts){
@@ -102,37 +102,17 @@ observeEvent(settings_new$status(),{
 #       valid = reactive(settings_new$status()[["safetyhistogram"]]$valid)
 #     )
 
-
+for(chart in all_charts){
   callModule(
     module = renderChart,
-    id = paste0("chart", "edish"),
+    id = paste0("chart", chart),
     data = reactive(dataUpload_out$data_selected()),
     settings = reactive(settings_new$settings()),
     valid = reactive(settings_new$status()$valid),
-    chart = "edish",
+    chart = chart,
     type = "htmlwidget"
   )
-
-
-  callModule(
-    module = renderChart,
-    id = paste0("chart", "safetyhistogram"),
-    data = reactive(dataUpload_out$data_selected()),
-    settings = reactive(settings_new$settings()),
-    valid = reactive(settings_new$status()$valid),
-    chart = "safetyhistogram",
-    type = "htmlwidget"
-  )
-
-  callModule(
-    module = renderChart,
-    id = paste0("chart", "safetyoutlierexplorer"),
-    data = reactive(dataUpload_out$data_selected()),
-    settings = reactive(settings_new$settings()),
-    valid = reactive(settings_new$status()$valid),
-    chart = "safetyoutlierexplorer",
-    type = "htmlwidget"
-  )
+}
 
   session$onSessionEnded(stopApp)
 }
