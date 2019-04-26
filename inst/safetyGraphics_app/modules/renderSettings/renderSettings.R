@@ -49,19 +49,19 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   ns <- session$ns
 
-  
+  charts<-as.vector(chartsMetadata[["chart"]])
+  labels<-as.vector(chartsMetadata[["label"]])
+  names(charts)<-labels
+
   output$charts_wrap_ui <- renderUI({
     checkboxGroupButtons(
       ns("charts"),
       label = NULL,
-      choices = c(
-        "e-DISH" = "edish",
-        "Safety Histogram" = "safetyhistogram"
-      ),
-      selected=c("edish", "safetyhistogram"),
+      choices = charts,
+      selected = charts,
       checkIcon = list(
-        yes = icon("ok", lib = "glyphicon"),
-        no = icon("remove",lib = "glyphicon")
+        yes = icon("ok-circle", lib = "glyphicon"),
+        no = icon("remove-circle",lib = "glyphicon")
       ),
       status="primary"
     )
@@ -241,9 +241,9 @@ renderSettings <- function(input, output, session, data, settings, status){
     values<- keys %>% map(~getValues(.x))
 
     inputDF <- tibble(text_key=keys, customValue=values)%>%
-      rowwise %>% 
+      rowwise %>%
       filter(!is.null(customValue[[1]]))
-    
+
     if(nrow(inputDF)>0){
       settings <- generateSettings(custom_settings=inputDF, charts=input$charts)
     }else{

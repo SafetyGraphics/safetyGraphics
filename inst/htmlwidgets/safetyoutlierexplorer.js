@@ -20,7 +20,7 @@ HTMLWidgets.widget({
         }
         console.log(rSettings);
 
-        settings.max_width = 600;
+        settings.max_width = 1000;
         rSettings.data = HTMLWidgets.dataframeToD3(rSettings.data);
         safetyOutlierExplorer(".safetyoutlierexplorer-wrapper", settings).init(rSettings.data);
       },

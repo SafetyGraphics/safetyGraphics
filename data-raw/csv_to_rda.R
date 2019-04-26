@@ -28,5 +28,5 @@ usethis::use_data(chartsMetadata, overwrite = TRUE)
 
 ### Save sample data set to /data ###
 # This is loaded by default in the app and used for testing
-ablbc <- read.csv("data-raw/adlbc.csv")
+adlbc <- read.csv("data-raw/adlbc.csv")
 usethis::use_data(adlbc, overwrite = TRUE)

@@ -61,36 +61,18 @@ observeEvent(settings_new$status(),{
       inputId = "nav_id",
       tab = tabPanel(
         title = chartLabel,
+        value = chart,
         renderChartUI(paste0("chart", chart))
       ),
       menuName = "Charts"
     )
   }
 
-
-  # for (chart in all_charts){
-  #
-  #   tabfun <- match.fun(paste0("render_", chart, "_chartUI"))  # module UI for given tab
-  #   tabid <- paste0(chart, "_tab_title")
-  #
-  #   appendTab(
-  #     inputId = "nav_id",
-  #     tab = tabPanel(
-  #       title = chart,
-  #       tabfun(paste0("chart", chart))
-  #     ),
-  #     menuName = "Charts"
-  #   )
-  # }
-  #
-
-
   # hide/show chart tabs in response to user selections
   observe({
     all_charts <- as.vector(chartsMetadata[["chart"]])
     selected_charts <- settings_new$charts()
     unselected_charts <- all_charts[!all_charts %in% selected_charts]
-
     for(chart in unselected_charts){
       hideTab(inputId = "nav_id",
               target = chart)
@@ -151,6 +133,6 @@ observeEvent(settings_new$status(),{
     chart = "safetyoutlierexplorer",
     type = "htmlwidget"
   )
-  
+
   session$onSessionEnded(stopApp)
 }

@@ -9,8 +9,8 @@ measure_values--ALP,Alkaline Phosphatase value,Value used for Alkaline Phosphata
 normal_col_low,Lower Limit of Normal column,Lower limit of normal variable name,character,TRUE,TRUE,numeric,FALSE,,data
 normal_col_high,Upper Limit of Normal column,Upper limit of normal variable name,character,TRUE,TRUE,numeric,FALSE,,data
 studyday_col,Study Day column,Visit day variable name,character,TRUE,TRUE,numeric,FALSE,,data
-visit_col,Visit column,Visit variable name,character,FALSE,TRUE,character,FALSE,,data
-visitn_col,Visit Number column,Visit number variable name,character,FALSE,TRUE,numeric,FALSE,,data
+visit_col,Visit column,Visit variable name,character,TRUE,TRUE,character,FALSE,,data
+visitn_col,Visit Number column,Visit number variable name,character,TRUE,TRUE,numeric,FALSE,,data
 filters,Filters columns,"An optional list of specifications for filters. Each filter is a nested, named list (containing the filter value column: 'value_col' and associated label: 'label') within the larger list.",vector,FALSE,TRUE,NA,FALSE,,data
 group_cols,Group columns,"An optional list of specifications for grouping columns. Each group column is a nested, named list (containing the group variable column: 'value_col' and associated label: 'label') within the larger list. ",vector,FALSE,TRUE,NA,FALSE,,data
 baseline--value_col,Baseline column,An optional list defining which column represent the baseline visit(s) of the study.,character,FALSE,TRUE,NA,FALSE,,data
@@ -28,6 +28,3 @@ unit_col,Unit column,Unit of measure variable name,character,TRUE,TRUE,character
 start_value,Measure start value,Value of variable defined in measure_col to be rendered in the histogram when the widget loads,character,FALSE,FALSE,NA,TRUE,measure_col,data
 details,Details columns,"An optional list of specifications for details listing.  Each column to be added to details listing is a nested, named list (containing the variable name: ""value_col"" and associated label: ""label"") within the larger list.",vector,FALSE,TRUE,NA,FALSE,,data
 missingValues,Missing values,Values defining a missing value in the selected 'value' column,vector,FALSE,FALSE,NA,FALSE,,data
-visits_without_data,Display visits with no data? ,controls display of visits without data for the current measure,logical,FALSE,FALSE,NA,FALSE,,appearance
-unscheduled_visits,Display unscheduled visits? ,controls display of unscheduled visits,logical,FALSE,FALSE,NA,FALSE,,appearance
-unscheduled_visit_pattern,Unscheduled Visit Pattern,a regular expression that identifies unscheduled visits,character,FALSE,FALSE,NA,FALSE,,appearance

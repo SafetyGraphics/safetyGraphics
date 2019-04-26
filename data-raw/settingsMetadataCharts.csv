@@ -28,6 +28,3 @@ unit_col,FALSE,TRUE,TRUE
 start_value,FALSE,TRUE,TRUE
 details,FALSE,TRUE,TRUE
 missingValues,FALSE,TRUE,FALSE
-visits_without_data,FALSE,FALSE,TRUE
-unscheduled_visits,FALSE,FALSE,TRUE
-unscheduled_visits_pattern,FALSE,FALSE,TRUE
