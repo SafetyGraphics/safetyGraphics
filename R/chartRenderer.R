@@ -1,6 +1,6 @@
-#' Create a Safety Histogram widget
+#' Create an interactive graphics widget
 #'
-#' This function creates an \href{https://github.com/rhoinc/safety-histogram/}{safety histogram}. See the \href{https://github.com/rhoinc/safety-histogram/wiki/Configuration}{chart docuemtnation} for details regarding the settings object.
+#' This function creates an nice interactive widget. See this vingette for more details regarding how to customize charts.
 #'
 #' @param data A data frame containing the labs data. Data must be structured as one record per study participant per time point per lab measure.
 #' @param debug_js print settings in javascript before rendering chart. Default: \code{FALSE}.
@@ -34,7 +34,7 @@
 #'       details = details_list,
 #'       filters = filters_list)
 #'
-#' safetyhistogram(data=adlbc, settings = settingsl)
+#' chartRenderer(data=adlbc, settings = settingsl, chart=safetyhistogram)
 #'
 #' }
 #'
@@ -109,7 +109,7 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
   )
 }
 
-#' Shiny bindings for safetyhistogram
+#' Shiny bindings for chartRenderer
 #'
 #' Output and render functions for using safetyhistogram within Shiny
 #' applications and interactive Rmd documents.
@@ -118,7 +118,7 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
 #' @param width,height Must be a valid CSS unit (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 #'   string and have \code{'px'} appended.
-#' @param expr An expression that generates a safetyhistogram
+#' @param expr An expression that generates a chart
 #' @param env The environment in which to evaluate \code{expr}.
 #' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
 #'   is useful if you want to save an expression in a variable.

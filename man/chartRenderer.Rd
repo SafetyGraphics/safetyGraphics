@@ -2,7 +2,7 @@
 % Please edit documentation in R/chartRenderer.R
 \name{chartRenderer}
 \alias{chartRenderer}
-\title{Create a Safety Histogram widget}
+\title{Create an interactive graphics widget}
 \usage{
 chartRenderer(data, debug_js = FALSE, settings = NULL, chart = NULL)
 }
@@ -16,7 +16,7 @@ chartRenderer(data, debug_js = FALSE, settings = NULL, chart = NULL)
 \item{chart}{name of the chart to render}
 }
 \description{
-This function creates an \href{https://github.com/rhoinc/safety-histogram/}{safety histogram}. See the \href{https://github.com/rhoinc/safety-histogram/wiki/Configuration}{chart docuemtnation} for details regarding the settings object.
+This function creates an nice interactive widget. See this vingette for more details regarding how to customize charts.
 }
 \examples{
 \dontrun{
@@ -45,7 +45,7 @@ settingsl <- list(id_col = "USUBJID",
       details = details_list,
       filters = filters_list)
 
-safetyhistogram(data=adlbc, settings = settingsl)
+chartRenderer(data=adlbc, settings = settingsl, chart=safetyhistogram)
 
 }
 

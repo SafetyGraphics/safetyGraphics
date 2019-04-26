@@ -4,7 +4,7 @@
 \alias{chartRenderer-shiny}
 \alias{output_chartRenderer}
 \alias{render_chartRenderer}
-\title{Shiny bindings for safetyhistogram}
+\title{Shiny bindings for chartRenderer}
 \usage{
 output_chartRenderer(outputId, width = "100\%", height = "400px")
 
@@ -17,7 +17,7 @@ render_chartRenderer(expr, env = parent.frame(), quoted = FALSE)
 \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
 string and have \code{'px'} appended.}
 
-\item{expr}{An expression that generates a safetyhistogram}
+\item{expr}{An expression that generates a chart}
 
 \item{env}{The environment in which to evaluate \code{expr}.}
 
