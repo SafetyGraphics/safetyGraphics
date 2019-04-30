@@ -13,8 +13,8 @@ dependencies:
     src: htmlwidgets/lib/safety-eDISH-0.16.7
     script: safetyedish.js
   - name: safety-histogram
-    version: 2.2.3
-    src: htmlwidgets/lib/safety-histogram-2.2.3
+    version: 2.3.0
+    src: htmlwidgets/lib/safety-histogram-2.3.0
     script: safetyHistogram.js
   - name: safety-outlier-explorer
     version: 2.5.3
