@@ -52,42 +52,27 @@ observeEvent(settings_new$status(),{
 
 
 # set up all chart tabs from the start (all_charts defined in global.R)
-  for (chart in all_charts){
+  for (row in 1:nrow(chartsMetadata)){
+    chart<-chartsMetadata[row,"chart"]
+    chartLabel<-chartsMetadata[row,"label"]
     tabid <- paste0(chart, "_tab_title")
 
     appendTab(
       inputId = "nav_id",
       tab = tabPanel(
-        title = chart,
+        title = chartLabel,
+        value = chart,
         renderChartUI(paste0("chart", chart))
       ),
       menuName = "Charts"
     )
   }
 
-
-  # for (chart in all_charts){
-  #
-  #   tabfun <- match.fun(paste0("render_", chart, "_chartUI"))  # module UI for given tab
-  #   tabid <- paste0(chart, "_tab_title")
-  #
-  #   appendTab(
-  #     inputId = "nav_id",
-  #     tab = tabPanel(
-  #       title = chart,
-  #       tabfun(paste0("chart", chart))
-  #     ),
-  #     menuName = "Charts"
-  #   )
-  # }
-  #
-
-
   # hide/show chart tabs in response to user selections
+  all_charts <- as.vector(chartsMetadata[["chart"]])
   observe({
     selected_charts <- settings_new$charts()
     unselected_charts <- all_charts[!all_charts %in% selected_charts]
-
     for(chart in unselected_charts){
       hideTab(inputId = "nav_id",
               target = chart)
@@ -117,27 +102,17 @@ observeEvent(settings_new$status(),{
 #       valid = reactive(settings_new$status()[["safetyhistogram"]]$valid)
 #     )
 
-
+for(chart in all_charts){
   callModule(
     module = renderChart,
-    id = paste0("chart", "edish"),
+    id = paste0("chart", chart),
     data = reactive(dataUpload_out$data_selected()),
     settings = reactive(settings_new$settings()),
     valid = reactive(settings_new$status()$valid),
-    chart = "edish",
+    chart = chart,
     type = "htmlwidget"
   )
-
-
-  callModule(
-    module = renderChart,
-    id = paste0("chart", "safetyhistogram"),
-    data = reactive(dataUpload_out$data_selected()),
-    settings = reactive(settings_new$settings()),
-    valid = reactive(settings_new$status()$valid),
-    chart = "safetyhistogram",
-    type = "htmlwidget"
-  )
+}
 
   session$onSessionEnded(stopApp)
 }

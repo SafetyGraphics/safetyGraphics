@@ -1,6 +1,6 @@
 HTMLWidgets.widget({
 
-  name: "edish",
+  name: "chartRenderer",
 
   type: "output",
 
@@ -11,18 +11,21 @@ HTMLWidgets.widget({
     return {
 
       renderValue: function(rSettings) {
-        el.innerHTML = "<div class='edish-wrapper'></div>";
+        el.innerHTML = "<div class='"+rSettings.chartFunction+"-wrapper'></div>";
         var settings = rSettings.settings;
 
         if(settings.debug_js){
          console.log("R settings:")
          console.log(rSettings);
         }
+        console.log(rSettings);
 
-        settings.max_width = 600;
+        settings.max_width = 1000;
         rSettings.data = HTMLWidgets.dataframeToD3(rSettings.data);
-        safetyedish(".edish-wrapper", settings).init(rSettings.data);
 
+
+        var chart =  window[rSettings.chartFunction]("."+rSettings.chartFunction+"-wrapper", settings)
+        chart.init(rSettings.data);
       },
 
       resize: function(width, height) {
