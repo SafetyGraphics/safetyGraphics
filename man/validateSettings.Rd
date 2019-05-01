@@ -11,22 +11,25 @@ validateSettings(data, settings, chart = "eDish")
 
 \item{settings}{The settings list to compare with the data frame.}
 
-\item{chart}{The chart type being created ("eDish" only for now)}
+\item{charts}{The charts being validated}
 }
 \value{
 A list describing the validation state for the data/settings combination. The returned list has the following properties:
 \itemize{
-\item{"valid"}{ - boolean indicating whether the settings/data combo creates a valid chart}
+\item{"valid"}{ - boolean indicating whether the settings/data combo is valid for all charts}
 \item{"status"}{ - string summarizing the validation results}
+\item{"charts"}{ - a list of lists specifying whether each chart is valid. Each item in the list has "chart" and "valid" properties}
 \item{"checkList"}{ - list of lists giving details about checks performed on individual setting specifications. Each embedded item has the following properties:}
+\itemize{
 \item{"key"}{ - list specifying the position of the property being checked. For example, `list("group_cols",1,"value_col")` corresponds to `settings[["group_cols"]][[1]][["value_col"]]`}
 \item{"text_key"}{ - list from `key` parsed to character with a "--" separator.}
 \item{"value"}{ - value of the setting}
 \item{"type"}{ - type of the check performed.}
 \item{"description"}{ - description of the check performed.}
 \item{"valid"}{ - boolean indicating whether the check was passed}
-\item{"message"}{ - string describing failed checks (where `valid=FALSE`). returns an empty string when `valid==TRUE`}
- }
+\item{"message"}{ - string describing failed checks (where `valid=FALSE`). returns an empty string when `valid==TRUE`} 
+} 
+}
 }
 \description{
 This function returns a list describing the validation status of a data set for a specified data standard
