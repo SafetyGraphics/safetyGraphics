@@ -41,15 +41,20 @@
 #' @importFrom rlang .data
 
 
-validateSettings <- function(data, settings, chart="eDish"){
+validateSettings <- function(data, settings, charts=NULL){
   
   settingStatus<-list()
   
+  # if no charts specify, use all available
+  if (is.null(charts)){
+    charts <- chartsMetadata$chart
+  }
+  
   # Check that all required parameters are not null
-  requiredChecks <- getRequiredSettings(chart = chart) %>% purrr::map(checkRequired, settings = settings)
+  requiredChecks <- getRequiredSettings(chart = charts) %>% purrr::map(checkRequired, settings = settings)
   
   #Check that non-null setting columns are found in the data
-  allKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$column_mapping, cols = c("text_key","setting_type"))
+  allKeys <- getSettingsMetadata(charts=charts, filter_expr = .data$column_mapping, cols = c("text_key","setting_type"))
   dataKeys <- allKeys %>% filter(.data$setting_type !="vector") %>% pull(.data$text_key) %>% textKeysToList()
   
   # Add items in vectors to list individually
@@ -73,7 +78,7 @@ validateSettings <- function(data, settings, chart="eDish"){
 
   #Check that non-null field/column combinations are found in the data
   fieldChecks <- NULL
-  allKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$field_mapping, cols = c("text_key","setting_type"))
+  allKeys <- getSettingsMetadata(charts=charts, filter_expr = .data$field_mapping, cols = c("text_key","setting_type"))
   if (!is.null(allKeys)){
   fieldKeys <- allKeys %>% filter(.data$setting_type!="vector")%>% pull(.data$text_key)%>%textKeysToList()
   
@@ -94,7 +99,7 @@ validateSettings <- function(data, settings, chart="eDish"){
   
   #Check that settings for mapping numeric data are associated with numeric columns
   numericChecks <- NULL
-  numericKeys <- getSettingsMetadata(charts=chart, filter_expr=.data$column_type=="numeric", cols="text_key")
+  numericKeys <- getSettingsMetadata(charts=charts, filter_expr=.data$column_type=="numeric", cols="text_key")
   if (!is.null(numericKeys)){
     numericChecks <- numericKeys %>%textKeysToList() %>% purrr::map(checkNumeric, settings=settings, data=data )
   }
@@ -119,7 +124,7 @@ validateSettings <- function(data, settings, chart="eDish"){
   settingStatus$charts <- list()
   i<-1
   for(chart in charts){
-    obj<-list(chart=chart)
+    obj<-list()
     if(settingStatus$valid){
       obj$valid<-TRUE
     }else{
@@ -130,7 +135,7 @@ validateSettings <- function(data, settings, chart="eDish"){
         unlist%>%
         all
     }
-    settingStatus$charts[[i]]<- obj
+    settingStatus$charts[[chart]]<- obj
     i<-i+1
   }
   
