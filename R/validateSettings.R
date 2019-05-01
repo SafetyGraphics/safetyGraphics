@@ -122,7 +122,6 @@ validateSettings <- function(data, settings, charts=NULL){
   
   #assess validity for each specified chart
   settingStatus$charts <- list()
-  i<-1
   for(chart in charts){
     obj<-list()
     if(settingStatus$valid){
@@ -136,7 +135,6 @@ validateSettings <- function(data, settings, charts=NULL){
         all
     }
     settingStatus$charts[[chart]]<- obj
-    i<-i+1
   }
   
   #create summary string
