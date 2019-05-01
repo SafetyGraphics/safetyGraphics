@@ -6,21 +6,24 @@
 #'
 #' @param data A data frame to check against the settings object
 #' @param settings The settings list to compare with the data frame.
-#' @param chart  The chart type being created ("eDish" only for now)
+#' @param charts  The charts being validated 
 #' @return
 #' A list describing the validation state for the data/settings combination. The returned list has the following properties:
 #' \itemize{
-#' \item{"valid"}{ - boolean indicating whether the settings/data combo creates a valid chart}
+#' \item{"valid"}{ - boolean indicating whether the settings/data combo is valid for all charts}
 #' \item{"status"}{ - string summarizing the validation results}
+#' \item{"charts"}{ - a list of lists specifying whether each chart is valid. Each item in the list has "chart" and "valid" properties}
 #' \item{"checkList"}{ - list of lists giving details about checks performed on individual setting specifications. Each embedded item has the following properties:}
-#' \item{"key"}{ - list specifying the position of the property being checked. For example, `list("group_cols",1,"value_col")` corresponds to `settings[["group_cols"]][[1]][["value_col"]]`}
+#' \itemize{
+#'\item{"key"}{ - list specifying the position of the property being checked. For example, `list("group_cols",1,"value_col")` corresponds to `settings[["group_cols"]][[1]][["value_col"]]`}
 #' \item{"text_key"}{ - list from `key` parsed to character with a "--" separator.}
 #' \item{"value"}{ - value of the setting}
 #' \item{"type"}{ - type of the check performed.}
 #' \item{"description"}{ - description of the check performed.}
 #' \item{"valid"}{ - boolean indicating whether the check was passed}
-#' \item{"message"}{ - string describing failed checks (where `valid=FALSE`). returns an empty string when `valid==TRUE`}
-#'  }
+#' \item{"message"}{ - string describing failed checks (where `valid=FALSE`). returns an empty string when `valid==TRUE`} 
+#'} 
+#'}
 #'  
 #' @examples
 #' testSettings <- generateSettings(standard="adam")
@@ -111,6 +114,25 @@ validateSettings <- function(data, settings, chart="eDish"){
   
   #valid=true if all checks pass, false otherwise
   settingStatus$valid <- settingStatus$checks%>%select(.data$valid)%>%unlist%>%all
+  
+  #assess validity for each specified chart
+  settingStatus$charts <- list()
+  i<-1
+  for(chart in charts){
+    obj<-list(chart=chart)
+    if(settingStatus$valid){
+      obj$valid<-TRUE
+    }else{
+      chart_keys <- getSettingsMetadata(charts=chart, cols ="text_key")
+      obj$valid <- settingStatus$checks%>%
+        filter(.data$text_key %in% chart_keys)%>%
+        select(.data$valid)%>%
+        unlist%>%
+        all
+    }
+    settingStatus$charts[[i]]<- obj
+    i<-i+1
+  }
   
   #create summary string
   failCount <- nrow(settingStatus$checks%>%filter(!.data$valid))

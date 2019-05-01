@@ -122,4 +122,20 @@ test_that("validateSettings works with filters and group_cols ",{
   expect_true(Passed[["valid"]])
 })
 
-
+test_that("validateSettings returns the expected charts object",{
+  # All charts are valid if overall status is valid
+  expect_equal(passed[["charts"]] %>% passed[["charts"]] %>% keep(~ .x$valid))
+  
+  # At least one chart is invalid when overal status is invalid
+  expect_true(failed[["charts"]] %>% keep(~!.x$valid) %>% length >0)
+  
+  # eDish is the only invalid chart when a measure value is invalidated
+  edishFail_settings <- validSettings
+  edishFail_settings[["measure_values"]][["AST"]]<-"INVALID!"
+  edishFail_validation<-validateSettings(edishFail_settings)
+  expect_false(edishFail_validation$valid)
+  edish_status <- edishFail_validation[["charts"]] %>% keep(~.x$chart=="edish")
+  other_status <- edishFail_validation[["charts"]] %>% keep(~.x$chart!="edish")
+  expect_false(edish_status[["valid"]])
+  expect_true(other_status %>% map_lgl(~.x$valid) %>% all)
+})
