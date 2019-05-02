@@ -93,7 +93,14 @@ for(chart in all_charts){
     chart = chart,
     type = "htmlwidget"
   )
-}
-
+  
+  callModule(
+    module = renderReports,
+    id = "reportsUI",
+    data = reactive(dataUpload_out$data_selected()),
+    settings = reactive(settings_new$settings()),
+    charts = reactive(settings_new$charts())
+  )
+  
   session$onSessionEnded(stopApp)
 }
