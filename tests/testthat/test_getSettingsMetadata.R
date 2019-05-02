@@ -4,7 +4,7 @@ library(dplyr)
 library(magrittr)
 
 #Preload the raw, custom metadata
-rawMetadata <- safetyGraphics::settingsMetadata
+rawMetadata <- safetyGraphics::settingsMetadata 
 
 customMetadata<- data.frame(
   chart_linechart = c(TRUE, FALSE),
@@ -72,7 +72,7 @@ test_that("charts parameter works as expected",{
   linesandbars <- safetyGraphics:::getSettingsMetadata(charts=c("linechart","barchart"),metadata=mergedMetadata)
   expect_equal(dim(linesandbars)[1],2)
 
-  allcharts <- safetyGraphics:::getSettingsMetadata(charts=c("linechart","barchart","edish","safetyhistogram"),metadata=mergedMetadata)
+  allcharts <- safetyGraphics:::getSettingsMetadata(metadata=mergedMetadata)
   expect_equal(dim(allcharts)[1],dim(mergedMetadata)[1])
 })
 
@@ -135,7 +135,7 @@ test_that("filter_expr parameters works as expected",{
   )
   expect_equal(safetyGraphics:::getSettingsMetadata(filter_expr=text_key=="id_col",cols="description"),"Unique subject identifier variable name.")
   expect_length(safetyGraphics:::getSettingsMetadata(filter_expr=column_type=="numeric",cols="text_key",chart="edish"),5)
-  expect_length(safetyGraphics:::getSettingsMetadata(filter_expr=setting_required,cols="text_key",chart="edish"),10)
+  expect_length(safetyGraphics:::getSettingsMetadata(filter_expr=setting_required,cols="text_key",chart="edish"),12)
 })
 
 test_that("add_standards parameters works as expected",{

@@ -38,7 +38,7 @@ settings_new <-   callModule(
 #toggle css class of chart tabs
 observeEvent(settings_new$status(),{
   for (chart in settings_new$charts()){
-    valid <- settings_new$status()[[chart]]$valid
+    valid <- settings_new$status()$charts[[chart]]
 
     ## code to toggle css for chart-specific tab here
     toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="valid", condition=valid==TRUE)
@@ -83,32 +83,13 @@ observeEvent(settings_new$status(),{
     }
   })
 
-
-
-
-#
-#     callModule(
-#       module = render_edish_chart,
-#       id = paste0("chart", "edish"),
-#       data = reactive(dataUpload_out$data_selected()),
-#       settings = reactive(settings_new$settings()),
-#       valid = reactive(settings_new$status()[["edish"]]$valid)
-#     )
-#     callModule(
-#       module = render_safetyhistogram_chart,
-#       id = paste0("chart", "safetyhistogram"),
-#       data = reactive(dataUpload_out$data_selected()),
-#       settings = reactive(settings_new$settings()),
-#       valid = reactive(settings_new$status()[["safetyhistogram"]]$valid)
-#     )
-
 for(chart in all_charts){
   callModule(
     module = renderChart,
     id = paste0("chart", chart),
     data = reactive(dataUpload_out$data_selected()),
     settings = reactive(settings_new$settings()),
-    valid = reactive(settings_new$status()$valid),
+    valid = reactive(settings_new$status()$charts[[chart]]),
     chart = chart,
     type = "htmlwidget"
   )
