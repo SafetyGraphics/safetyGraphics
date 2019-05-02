@@ -133,51 +133,15 @@ observeEvent(settings_new$status(),{
     chart = "safetyoutlierexplorer",
     type = "htmlwidget"
   )
-
-  # temp
   
-  # insert export chart button if settings pass validation
-  # remove button if validation fails
-  observeEvent(settings_new$status()[[chart]]$valid, {
-    removeUI(selector = paste0("#", "download"))
-    if (settings_new$status()[[chart]]$valid==TRUE){
-      insertUI (
-        selector  = "div.reportPanel",
-        where = "beforeEnd",
-        ui =  div(id="download", # give the container div an id for easy removal
-                  style="float: left;",
-                  span(class = "navbar-brand", #using one of the default nav bar classes to get css close
-                       style="padding: 8px;",  #then little tweak to ensure vertical alignment
-                       downloadButton("reportDL", "Export Chart")) )
-      )
-    }
-    else {
-      removeUI(selector = paste0("#", "download"))
-    }
-  })
-  
-  
-  # Set up report generation on download button click
-  output$reportDL <- downloadHandler(
-    filename = "safetyGraphicsReport.html",
-    content = function(file) {
-      # Copy the report file to a temporary directory before processing it, in case we don't
-      # have write permissions to the current working dir (which can happen when deployed).
-      templateReport <- system.file("safetyGraphics_app/modules/renderChart/safetyGraphicsReport","safetyGraphicsReport.Rmd", package = "safetyGraphics")
-      tempReport <- file.path(tempdir(), "report.Rmd")
-      file.copy(templateReport, tempReport, overwrite = TRUE)
-      print(settings_new$charts())
-      params <- list(data = dataUpload_out$data_selected(), settings = settings_new$settings(), charts=settings_new$charts() )
-      
-      rmarkdown::render(tempReport,
-                        output_file = file,
-                        params = params,  ## pass in params
-                        envir = new.env(parent = globalenv())  ## eval in child of global env
-      )
-    }
+  callModule(
+    module = renderReports,
+    id = "reportsUI",
+    data = reactive(dataUpload_out$data_selected()),
+    settings = reactive(settings_new$settings()),
+    charts = reactive(settings_new$charts())
   )
-  
-  
+
   
   session$onSessionEnded(stopApp)
 }

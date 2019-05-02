@@ -18,6 +18,9 @@ source('modules/renderSettings/renderSettings.R')
 source('modules/renderChart/renderChartUI.R')
 source('modules/renderChart/renderChart.R')
 
+source('modules/renderReports/renderReportsUI.R')
+source('modules/renderReports/renderReports.R')
+
 # source('modules/renderChart/render_edish_chartUI.R')
 # source('modules/renderChart/render_edish_chart.R')
 # source('modules/renderChart/render_safetyhistogram_chartUI.R')
