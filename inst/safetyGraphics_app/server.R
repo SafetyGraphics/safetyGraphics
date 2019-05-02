@@ -94,6 +94,8 @@ for(chart in all_charts){
     type = "htmlwidget"
   )
   
+}
+  
   callModule(
     module = renderReports,
     id = "reportsUI",
