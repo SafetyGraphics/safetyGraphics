@@ -4,7 +4,7 @@
 \alias{validateSettings}
 \title{Compare a settings object with a specified data set}
 \usage{
-validateSettings(data, settings, chart = "eDish")
+validateSettings(data, settings, charts = NULL)
 }
 \arguments{
 \item{data}{A data frame to check against the settings object}
@@ -27,8 +27,8 @@ A list describing the validation state for the data/settings combination. The re
 \item{"type"}{ - type of the check performed.}
 \item{"description"}{ - description of the check performed.}
 \item{"valid"}{ - boolean indicating whether the check was passed}
-\item{"message"}{ - string describing failed checks (where `valid=FALSE`). returns an empty string when `valid==TRUE`} 
-} 
+\item{"message"}{ - string describing failed checks (where `valid=FALSE`). returns an empty string when `valid==TRUE`}
+}
 }
 }
 \description{
@@ -39,10 +39,10 @@ This function returns a list describing the validation status of a settings/data
 }
 \examples{
 testSettings <- generateSettings(standard="adam")
-validateSettings(data=adlbc, settings=testSettings) 
+validateSettings(data=adlbc, settings=testSettings)
 # .$valid is TRUE
 testSettings$id_col <- "NotAColumn"
-validateSettings(data=adlbc, settings=testSettings) 
+validateSettings(data=adlbc, settings=testSettings)
 # .$valid is now FALSE
 
 }

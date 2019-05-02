@@ -4,7 +4,7 @@
 #'
 #' @param data a data frame to trim
 #' @param settings the settings list used to determine which rows and columns to drop
-#' @param chart the chart being created
+#' @param charts the charts being created  Default: \code{NULL} (include data needed for all available charts).
 #' @return A dataframe with unnecessary columns and rows removed
 #'
 #' @examples
@@ -18,14 +18,14 @@
 #' @keywords internal
 
 
-trimData <- function(data, settings, chart="edish"){
-  
+trimData <- function(data, settings, charts=NULL){
+
   ## Remove columns not in settings ##
   col_names <- colnames(data)
-  
-  allKeys <- getSettingsMetadata(charts=chart, filter_expr = .data$column_mapping, cols = c("text_key","setting_type"))
+
+  allKeys <- getSettingsMetadata(charts=charts, filter_expr = .data$column_mapping, cols = c("text_key","setting_type"))
   dataKeys <- allKeys %>% filter(.data$setting_type !="vector") %>% pull(.data$text_key) %>% textKeysToList()
-  
+
   # Add items in vectors to list individually
   dataVectorKeys <- allKeys %>% filter(.data$setting_type =="vector") %>% pull(.data$text_key) %>% textKeysToList()
   for(key in dataVectorKeys){
@@ -42,9 +42,9 @@ trimData <- function(data, settings, chart="edish"){
       }
     }
   }
-  
+
   settings_values <- map(dataKeys, function(x) {return(getSettingValue(x, settings))})
-  
+
   common_cols <- intersect(col_names,settings_values)
 
   data_subset <- select(data, unlist(common_cols))
