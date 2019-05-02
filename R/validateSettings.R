@@ -6,7 +6,7 @@
 #'
 #' @param data A data frame to check against the settings object
 #' @param settings The settings list to compare with the data frame.
-#' @param charts  The charts being validated 
+#' @param charts  The charts being validated
 #' @return
 #' A list describing the validation state for the data/settings combination. The returned list has the following properties:
 #' \itemize{
@@ -21,16 +21,16 @@
 #' \item{"type"}{ - type of the check performed.}
 #' \item{"description"}{ - description of the check performed.}
 #' \item{"valid"}{ - boolean indicating whether the check was passed}
-#' \item{"message"}{ - string describing failed checks (where `valid=FALSE`). returns an empty string when `valid==TRUE`} 
-#'} 
+#' \item{"message"}{ - string describing failed checks (where `valid=FALSE`). returns an empty string when `valid==TRUE`}
 #'}
-#'  
+#'}
+#'
 #' @examples
 #' testSettings <- generateSettings(standard="adam")
-#' validateSettings(data=adlbc, settings=testSettings) 
+#' validateSettings(data=adlbc, settings=testSettings)
 #' # .$valid is TRUE
 #' testSettings$id_col <- "NotAColumn"
-#' validateSettings(data=adlbc, settings=testSettings) 
+#' validateSettings(data=adlbc, settings=testSettings)
 #' # .$valid is now FALSE
 #'
 #' @export
@@ -42,21 +42,21 @@
 
 
 validateSettings <- function(data, settings, charts=NULL){
-  
+
   settingStatus<-list()
-  
+
   # if no charts specify, use all available
   if (is.null(charts)){
     charts <- chartsMetadata$chart
   }
-  
+
   # Check that all required parameters are not null
   requiredChecks <- getRequiredSettings(chart = charts) %>% purrr::map(checkRequired, settings = settings)
-  
+
   #Check that non-null setting columns are found in the data
   allKeys <- getSettingsMetadata(charts=charts, filter_expr = .data$column_mapping, cols = c("text_key","setting_type"))
   dataKeys <- allKeys %>% filter(.data$setting_type !="vector") %>% pull(.data$text_key) %>% textKeysToList()
-  
+
   # Add items in vectors to list individually
   dataVectorKeys <- allKeys %>% filter(.data$setting_type =="vector") %>% pull(.data$text_key) %>% textKeysToList()
   for(key in dataVectorKeys){
@@ -68,12 +68,12 @@ validateSettings <- function(data, settings, charts=NULL){
         sub <- current[[i]]
         if(typeof(sub)=="list"){
           newKey[[1+length(newKey)]]<-"value_col"
-        }  
-        dataKeys[[1+length(dataKeys)]]<-newKey 
+        }
+        dataKeys[[1+length(dataKeys)]]<-newKey
       }
     }
   }
-  
+
   columnChecks <- dataKeys %>% purrr::map(checkColumn, settings=settings, data=data)
 
   #Check that non-null field/column combinations are found in the data
@@ -81,7 +81,7 @@ validateSettings <- function(data, settings, charts=NULL){
   allKeys <- getSettingsMetadata(charts=charts, filter_expr = .data$field_mapping, cols = c("text_key","setting_type"))
   if (!is.null(allKeys)){
   fieldKeys <- allKeys %>% filter(.data$setting_type!="vector")%>% pull(.data$text_key)%>%textKeysToList()
-  
+
   #Add items in vectors to list individually
   fieldVectorKeys <- allKeys %>% filter(.data$setting_type=="vector")%>% pull(.data$text_key)%>%textKeysToList()
   for(key in fieldVectorKeys){
@@ -96,7 +96,7 @@ validateSettings <- function(data, settings, charts=NULL){
   }
   fieldChecks <- fieldKeys %>% purrr::map(checkField, settings=settings, data=data )
   }
-  
+
   #Check that settings for mapping numeric data are associated with numeric columns
   numericChecks <- NULL
   numericKeys <- getSettingsMetadata(charts=charts, filter_expr=.data$column_type=="numeric", cols="text_key")
@@ -109,34 +109,33 @@ validateSettings <- function(data, settings, charts=NULL){
     tibble(
       key = map(., "key"),
       text_key = map_chr(., "text_key"),
-      type = map_chr(., "type"),       
-      description= map_chr(., "description"),       
+      type = map_chr(., "type"),
+      description= map_chr(., "description"),
       value = map_chr(., "value"),
       valid = map_lgl(., "valid"),
       message = map_chr(., "message")
     )
   }
-  
+
   #valid=true if all checks pass, false otherwise
   settingStatus$valid <- settingStatus$checks%>%select(.data$valid)%>%unlist%>%all
-  
+
   #assess validity for each specified chart
   settingStatus$charts <- list()
   for(chart in charts){
-    obj<-list()
     if(settingStatus$valid){
-      obj$valid<-TRUE
+      settingStatus$charts[[chart]]<-TRUE
     }else{
       chart_keys <- getSettingsMetadata(charts=chart, cols ="text_key")
-      obj$valid <- settingStatus$checks%>%
+      valid <- settingStatus$checks%>%
         filter(.data$text_key %in% chart_keys)%>%
         select(.data$valid)%>%
         unlist%>%
         all
+      settingStatus$charts[[chart]]<-valid
     }
-    settingStatus$charts[[chart]]<- obj
   }
-  
+
   #create summary string
   failCount <- nrow(settingStatus$checks%>%filter(!.data$valid))
   checkCount <- nrow(settingStatus$checks)

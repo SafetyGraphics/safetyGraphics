@@ -263,15 +263,11 @@ renderSettings <- function(input, output, session, data, settings, status){
   status_new <- reactive({
     req(data())
     req(settings_new())
+
     name <- rev(isolate(input_names()))[1]
     settings_new <- settings_new()
-
-    out <- list()
-
     charts <- isolate(input$charts)
-    for (chart in charts){
-      out[[chart]] <- validateSettings(data(), settings_new, chart=chart)
-    }
+    out<-validateSettings(data(), settings_new, charts=charts)
 
     return(out)
   })
@@ -282,11 +278,7 @@ renderSettings <- function(input, output, session, data, settings, status){
   ######################################################################
   status_df <- reactive({
     req(status_new())
-
-    flatten(status_new()) %>%
-      keep(., names(.)=="checks") %>%
-      bind_rows() %>%
-      unique  %>%
+    status_new()[["checks"]] %>%
       group_by(text_key) %>%
       mutate(num_fail = sum(valid==FALSE)) %>%
       mutate(icon = ifelse(num_fail==0, "<i class='fa fa-check'></i>","<i class='fa fa-times'></i>"))%>%
