@@ -15,6 +15,8 @@
 #' @param settings A settings list to be used to populate control options
 #' @param ns  The namespace of the current module
 #'
+#'@import map_chr from purrr
+#'
 #' @return HTML code for the div containing the setting of interest
 createControl <- function(key, metadata, data, settings, ns){
   
@@ -22,6 +24,11 @@ createControl <- function(key, metadata, data, settings, ns){
   ctl_id <- paste0("ctl_", key)
   tt_msg <- paste0("tt_msg_", key)
   msg <- paste0("msg_", key)   
+  
+  data_choices <- names(data)
+  if ("tbl_df" %in% class(data)) {
+    names(data_choices) <- map_chr(data, ~attributes(.)$label) # SAS
+  }
   
   ### get metadata for the input
   setting_key <- as.list(strsplit(key,"\\-\\-"))
@@ -44,16 +51,16 @@ createControl <- function(key, metadata, data, settings, ns){
   placeholder <- NULL
   
   if(sm_key$column_mapping==TRUE & is.null(setting_value)){ #column mapping - no value specified
-      choices <- colnames(data)
-      placeholder <- list(onInitialize = I('function() {this.setValue("");}'))
+    choices <- colnames(data)
+    placeholder <- list(onInitialize = I('function() {this.setValue("");}'))
   } else if(sm_key$column_mapping==TRUE & !is.null(setting_value)) { #column mapping - value specified
-      choices <- unique(c(setting_value, colnames(data)))
-      placeholder <- list (onInitialize = I('function() { }'))
+    choices <- unique(c(setting_value, data_choices))
+    placeholder <- list (onInitialize = I('function() { }'))
   } else if (sm_key$field_mapping==TRUE & is.null(field_column)){ ## if there is NOT a column specified in settings
-      placeholder <- list(
-        placeholder = paste0("Please select a ", field_column_label),
-        onInitialize = I('function() {
-                         this.setValue("");}')
+    placeholder <- list(
+      placeholder = paste0("Please select a ", field_column_label),
+      onInitialize = I('function() {
+                       this.setValue("");}')
       )
   } else if (sm_key$field_mapping==TRUE & !is.null(field_column)){ ## if there is NOT a column specified in settings
     choices <- unique(c(setting_value, sort(as.character(data[,field_column])))) %>% unlist
@@ -64,7 +71,7 @@ createControl <- function(key, metadata, data, settings, ns){
   
   ### create code for the UI
   multiple <- (sm_key$setting_type=="vector")
- 
+  
   if (sm_key$column_mapping==TRUE | sm_key$field_mapping==TRUE){
     input <- selectizeInput(inputId = ns(key), label = NULL, choices = choices, options = placeholder, multiple = multiple)
   } else if (sm_key$setting_type=="vector"){
