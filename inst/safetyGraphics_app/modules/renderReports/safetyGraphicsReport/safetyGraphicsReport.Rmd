@@ -59,7 +59,7 @@ chartRenderer(data = params$data,
       settings = params$settings, chart="safetyoutlierexplorer")
 ```
 
-```{r, eval=check_explorer, echo=FALSE}
+```{r, eval=check_shiftplot, echo=FALSE}
 asis_output("### Shift Plot\\n")
 ```
 
@@ -77,7 +77,7 @@ chartRenderer(data = params$data,
       settings = params$settings, chart="safetyresultsovertime")
 ```
 
-```{r, eval=check_explorer, echo=FALSE}
+```{r, eval=check_paneled, echo=FALSE}
 asis_output("### Paneled Outlier Explorer \\n")
 ```
 
@@ -174,11 +174,11 @@ graphic_code
 
 ```
 
-```{r, eval=check_explorer, echo=FALSE}
+```{r, eval=check_paneled, echo=FALSE}
 asis_output("**Code to render Paneled Outlier Explorer chart**\\n")
 ```
 
-```{r, eval=check_explorer, comment=NA, echo=FALSE}
+```{r, eval=check_paneled, comment=NA, echo=FALSE}
 
 graphic_code <- bquote(chartRenderer(data = my_data,
       settings = .(params$settings), chart= "paneledoutlierexplorer"))
