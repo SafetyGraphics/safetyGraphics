@@ -46,6 +46,20 @@ observeEvent(settings_new$status(),{
   }
 })
 
+
+# hide charts tab if no chart selected
+observeEvent(settings_new$charts(),{
+  if (is.null(settings_new$charts())){
+    hideTab(inputId = "nav_id", target = "Charts")
+    hideTab(inputId = "nav_id", target = "Reports")
+  } else{
+    showTab(inputId = "nav_id", target = "Charts")
+    showTab(inputId = "nav_id", target = "Reports")    
+  }
+}, 
+ignoreNULL = FALSE, 
+ignoreInit = TRUE)  # so there's no hiding when the app first loads
+
   ##############################################################
   # Initialize Charts Modules
   ##############################################################
