@@ -27,6 +27,9 @@ renderReports <- function(input, output, session, data, settings, charts){
 
   }, ignoreNULL=FALSE)
   
+  
+  
+  
 
   # insert export chart(s) button if there are charts selected
   

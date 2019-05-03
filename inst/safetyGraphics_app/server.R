@@ -96,12 +96,18 @@ for(chart in all_charts){
   
 }
   
+  labeledCharts <- list()
+  for (row in 1:nrow(chartsMetadata)){
+    labeledCharts[row]<-chartsMetadata[row,"chart"]
+    names(labeledCharts)[row]<-chartsMetadata[row,"label"]
+  }
+  
   callModule(
     module = renderReports,
     id = "reportsUI",
     data = reactive(dataUpload_out$data_selected()),
     settings = reactive(settings_new$settings()),
-    charts = reactive(settings_new$charts())
+    charts = reactive(labeledCharts[labeledCharts %in% settings_new$charts()])
   )
   
   session$onSessionEnded(stopApp)
