@@ -11,6 +11,7 @@
 #' @import rmarkdown 
 #' @importFrom haven read_sas
 #' @importFrom shinyWidgets materialSwitch
+#' @importFrom tidyr gather
 #'
 #' @export
 #'

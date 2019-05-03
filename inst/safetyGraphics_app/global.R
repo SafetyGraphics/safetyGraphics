@@ -10,6 +10,7 @@ library(purrr)
 library(stringr)
 library(DT)
 library(haven)
+library(tidyr)
 
 ## source modules
 source('modules/renderSettings/renderSettingsUI.R')
