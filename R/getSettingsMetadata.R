@@ -64,22 +64,19 @@ getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, filter_exp
   }
 
   #filter the metadata based on a the filter expression
- # if (nrow(md)>0){
     filter_expr <- enexpr(filter_expr)
     if(!is.null(filter_expr)){
       stopifnot(typeof(filter_expr) %in% c("language","symbol"))
       md<-md %>% filter(!!filter_expr)
     } 
- # }
+ 
 
   #subset the metadata columns returned based on the metadata_columns option (if any)
- # if (nrow(md)>0){
     if(!is.null(cols)){
       stopifnot(typeof(cols) =="character")
       valid_cols <- intersect(cols, names(md))
       md<-md%>%select(valid_cols)
     }    
- # }
 
 
   #coerce factors to character
