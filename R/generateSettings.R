@@ -74,9 +74,6 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
       filter(!.data$column_mapping & !.data$field_mapping) %>% 
       select(text_key, default)%>% 
       rename("otherDefault"="default")
-      #,
-      #filter = !.data$column_mapping & !.data$field_mapping,
-      #cols=c("text_key","default"))
   }else{
     otherDefaults <- tibble(text_key=character(),otherDefault=character(), .rows=0)
   }
@@ -110,7 +107,6 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   #########################################################################################
   # populate the shell settings by looping through key_values and apply them to the shell
   #########################################################################################
-  #print(key_values)
   if (nrow(key_values)>0){
     for(row in 1:nrow(key_values)){
       text_key<-key_values[row,]%>%pull("text_key")
@@ -119,7 +115,6 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
       value <- key_values[row,"value"][[1]]
       finalValue <- value[[1]]
       
-      #print(paste(text_key," (",type,"):",toString(value),typeof(value),length(value),"->",finalValue,typeof(finalValue),length(finalValue)))
       shell<-setSettingsValue(
         settings = shell,
         key = key,
@@ -137,6 +132,5 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     }
   }
 
-  #print(shell)
   return(shell)
 }
