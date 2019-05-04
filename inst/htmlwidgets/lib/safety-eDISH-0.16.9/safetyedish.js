@@ -2358,7 +2358,8 @@
                     pointColor = chart.colorScale(raw[config.color_by]);
                 return disabled ? 'white' : pointColor;
             })
-            .attr('stroke-width', 1);
+            .attr('stroke-width', 1)
+            .style('clip-path', null);
     }
 
     function clearParticipantDetails() {
