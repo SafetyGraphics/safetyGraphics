@@ -26,9 +26,18 @@ createControl <- function(key, metadata, data, settings, ns){
   msg <- paste0("msg_", key)   
   
   data_choices <- names(data)
-  if ("tbl_df" %in% class(data)) {
-    names(data_choices) <- map_chr(data, ~attributes(.)$label) # SAS
+  
+  # function to get label
+  getVarLabel <- function(var){
+    lab <- attributes(var)$label
+    if (is.null(lab)){
+      return("")
+    } else {
+      return(lab)
+    }
   }
+  
+  names(data_choices) <- map_chr(data, ~getVarLabel(.)) # SAS
   
   ### get metadata for the input
   setting_key <- as.list(strsplit(key,"\\-\\-"))
@@ -51,10 +60,12 @@ createControl <- function(key, metadata, data, settings, ns){
   placeholder <- NULL
   
   if(sm_key$column_mapping==TRUE & is.null(setting_value)){ #column mapping - no value specified
-    choices <- colnames(data)
+    choices <- data_choices
     placeholder <- list(onInitialize = I('function() {this.setValue("");}'))
   } else if(sm_key$column_mapping==TRUE & !is.null(setting_value)) { #column mapping - value specified
-    choices <- unique(c(setting_value, data_choices))
+    # force the variable that's specified in settings to be first option
+    # combine vectors without losing the labels
+    choices <- c(data_choices[data_choices %in% setting_value], data_choices[! data_choices %in% setting_value])
     placeholder <- list (onInitialize = I('function() { }'))
   } else if (sm_key$field_mapping==TRUE & is.null(field_column)){ ## if there is NOT a column specified in settings
     placeholder <- list(
