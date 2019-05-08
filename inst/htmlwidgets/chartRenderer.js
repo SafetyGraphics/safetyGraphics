@@ -20,7 +20,15 @@ HTMLWidgets.widget({
         }
         console.log(rSettings);
 
-        settings.max_width = 1000;
+        
+        console.log(el.innerHTML.includes("safetyShiftPlot"))
+        if (el.innerHTML.includes("safetyedish") ) {
+          settings.max_width = 620;
+        } else if (el.innerHTML.includes("safetyShiftPlot")) {
+          settings.width = 600; 
+        } else {
+           settings.max_width = 1000;
+        }
         rSettings.data = HTMLWidgets.dataframeToD3(rSettings.data);
 
 

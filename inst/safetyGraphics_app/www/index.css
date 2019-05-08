@@ -106,3 +106,17 @@ color : blue;
 .notok {
   color: #FF0000;
 }
+
+#ssp-controls {
+  width : 26% !important;
+}
+
+#ssp-chart {
+  width : 34% !important;
+}
+
+#ssp-listing {
+  width : 36% !important;
+}
+
+
