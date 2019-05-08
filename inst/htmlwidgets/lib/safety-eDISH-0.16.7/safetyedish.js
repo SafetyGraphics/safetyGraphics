@@ -1479,7 +1479,7 @@
 
             this.titleDiv
                 .append('span')
-                .text('Safety eDish')
+                .text('Hepatic Safety Explorer')
                 .style('font-size', '1.5em')
                 .style('font-weight', 'strong')
                 .style('display', 'block');
