@@ -18,7 +18,7 @@
 #' @keywords internal
 
 
-trimData <- function(data, settings, chart="edish"){
+trimData <- function(data, settings, chart="hepexplorer"){
   
   ## Remove columns not in settings ##
   col_names <- colnames(data)

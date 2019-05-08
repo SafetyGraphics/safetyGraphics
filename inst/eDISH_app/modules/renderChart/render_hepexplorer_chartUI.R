@@ -6,7 +6,7 @@
 #'
 #' @return The UI for the Chart tab
 #'
-render_edish_chartUI <- function(id){
+render_hepexplorer_chartUI <- function(id){
   
   ns <- NS(id)
   

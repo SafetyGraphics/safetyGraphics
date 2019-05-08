@@ -57,10 +57,12 @@ observeEvent(settings_new$status(),{
     tabfun <- match.fun(paste0("render_", chart, "_chartUI"))  # module UI for given tab
     tabid <- paste0(chart, "_tab_title")
 
+    chart_title <- chart
+        
     appendTab(
       inputId = "nav_id",
       tab = tabPanel(
-        title = chart,
+        title = chart_title,
         tabfun(paste0("chart", chart))
       ),
       menuName = "Charts"
@@ -102,8 +104,8 @@ observeEvent(settings_new$status(),{
   # }
 
     callModule(
-      module = render_edish_chart,
-      id = paste0("chart", "edish"),
+      module = render_hepexplorer_chart,
+      id = paste0("chart", "hepexplorer"),
       data = reactive(dataUpload_out$data_selected()),
       settings = reactive(settings_new$settings()),
       valid = reactive(settings_new$status()[["edish"]]$valid)

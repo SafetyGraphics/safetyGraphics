@@ -21,7 +21,7 @@ dataUploadUI <- function(id){
              wellPanel(
                h3("Data upload"),
                fileInput(ns("datafile"), "Upload a csv or sas7bdat file",accept = c(".sas7bdat", ".csv"), multiple = TRUE),
-               radioButtons(ns("select_file"),"Select file for eDISH chart",
+               radioButtons(ns("select_file"),"Select file for safetyGraphics charts",
                             choiceNames = list(HTML("<p>Example data - <em style='color:green; font-size:12px;'>ADaM</em></p>")), 
                             choiceValues = "Example data")
              )

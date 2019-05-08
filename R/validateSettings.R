@@ -38,7 +38,7 @@
 #' @importFrom rlang .data
 
 
-validateSettings <- function(data, settings, chart="eDish"){
+validateSettings <- function(data, settings, chart="hepexplorer"){
   
   settingStatus<-list()
   

@@ -14,7 +14,7 @@
 #' @param data A data frame
 #' @param valid A logical indicating whether data/settings combination is valid for chart
 
-render_edish_chart <- function(input, output, session, data, settings, valid){
+render_hepexplorer_chart <- function(input, output, session, data, settings, valid){
 
   ns <- session$ns
 
@@ -48,7 +48,7 @@ render_edish_chart <- function(input, output, session, data, settings, valid){
                  style="float: right;",
                  span(class = "navbar-brand", #using one of the default nav bar classes to get css close
                     style="padding: 8px;",  #then little tweak to ensure vertical alignment
-                      downloadButton(ns("reportDL"), "Export eDISH Chart")) )
+                      downloadButton(ns("reportDL"), "Export Hepatic Explorer Chart")) )
       )
     }
     else {
@@ -59,7 +59,7 @@ render_edish_chart <- function(input, output, session, data, settings, valid){
 
   # Set up report generation on download button click
   output$reportDL <- downloadHandler(
-    filename = "eDishReport.html",
+    filename = "hepaticExplorerReport.html",
     content = function(file) {
       # Copy the report file to a temporary directory before processing it, in case we don't
       # have write permissions to the current working dir (which can happen when deployed).

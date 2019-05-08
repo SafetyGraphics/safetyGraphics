@@ -1,4 +1,4 @@
-chart_edish,chart_safetyhistogram,text_key,label,description,setting_type,setting_required,column_mapping,column_type,field_mapping,field_column_key,setting_cat
+chart_hepexplorer,chart_safetyhistogram,text_key,label,description,setting_type,setting_required,column_mapping,column_type,field_mapping,field_column_key,setting_cat
 TRUE,TRUE,id_col,ID column,Unique subject identifier variable name.,character,TRUE,TRUE,character,FALSE,,data
 TRUE,TRUE,value_col,Value column,Lab result variable name.,character,TRUE,TRUE,numeric,FALSE,,data
 TRUE,TRUE,measure_col,Measure column,Lab measure variable name,character,TRUE,TRUE,character,FALSE,,data

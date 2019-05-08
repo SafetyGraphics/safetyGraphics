@@ -55,10 +55,10 @@ renderSettings <- function(input, output, session, data, settings, status){
       ns("charts"),
       label = NULL,
       choices = c(
-        "e-DISH" = "edish",
+        "Hepatic Safety Explorer" = "hepexplorer",
         "Safety Histogram" = "safetyhistogram"
       ),
-      selected=c("edish", "safetyhistogram"),
+      selected=c("hepexplorer", "safetyhistogram"),
       checkIcon = list(
         yes = icon("ok", lib = "glyphicon"),
         no = icon("remove",lib = "glyphicon")

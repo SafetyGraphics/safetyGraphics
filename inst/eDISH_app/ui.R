@@ -9,7 +9,7 @@ tagList(
       href = "index.css")
   ),
   navbarPage(
-    "eDISH Shiny app",  
+    "safetyGraphics Shiny app",  
     id="nav_id",
     tabPanel(
       title = "Data", 
