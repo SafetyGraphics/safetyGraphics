@@ -24,7 +24,7 @@
 #' @importFrom stringr str_subset
 #' @importFrom magrittr "%>%"
 #' @import dplyr
-#' @importFrom rlang .data
+#' @importFrom rlang .datafedish
 #'
 #' @export
 

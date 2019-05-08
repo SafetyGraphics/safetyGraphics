@@ -17,7 +17,7 @@
 #' @export
 
 
-getRequiredSettings<-function(chart="eDish", metadata=safetyGraphics::settingsMetadata){
+getRequiredSettings<-function(chart="hepexplorer", metadata=safetyGraphics::settingsMetadata){
   stopifnot(typeof(chart)=="character")
   required_settings <- safetyGraphics::getSettingsMetadata(
     charts = chart, 

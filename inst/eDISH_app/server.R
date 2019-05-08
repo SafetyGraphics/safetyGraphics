@@ -108,7 +108,7 @@ observeEvent(settings_new$status(),{
       id = paste0("chart", "hepexplorer"),
       data = reactive(dataUpload_out$data_selected()),
       settings = reactive(settings_new$settings()),
-      valid = reactive(settings_new$status()[["edish"]]$valid)
+      valid = reactive(settings_new$status()[["hepexplorer"]]$valid)
     )
     callModule(
       module = render_safetyhistogram_chart,

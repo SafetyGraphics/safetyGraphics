@@ -13,11 +13,11 @@
 #' @importFrom rlang .data
 #' @keywords internal
 
-getRequiredColumns<-function(standard,chart="eDish"){
+getRequiredColumns<-function(standard,chart="hepexplorer"){
   stopifnot(
     typeof(standard)=="character",
     typeof(chart)=="character",
-    tolower(chart)=="edish"
+    tolower(chart)=="hepexplorer"
   )
   
   metadata <- safetyGraphics::getSettingsMetadata(
