@@ -41,7 +41,7 @@ lib_code
 
 writeLines("path <- 'path_to_data'") ### <-- Update this!
 writeLines("my_data <- read.csv(file.path(path, 'data.csv'))")
-graphic_code <- bquote(eDISH(data = my_data,
+graphic_code <- bquote(hepexplorer(data = my_data,
       settings = .(params$settings)))
 
 graphic_code
