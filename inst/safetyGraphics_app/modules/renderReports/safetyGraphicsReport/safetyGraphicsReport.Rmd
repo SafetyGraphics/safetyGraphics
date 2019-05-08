@@ -33,7 +33,7 @@ check_paneled <- "paneledoutlierexplorer" %in% params$charts
 
 
 ```{r, eval=check_edish, echo=FALSE}
-asis_output("### eDISH\\n")
+asis_output("### Hepatic Safety Explorer\\n")
 ```
 
 ```{r, fig.width=12, fig.height=15, eval=check_edish, echo = FALSE}
@@ -110,13 +110,13 @@ writeLines("my_data <- read.csv(file.path(path, 'data.csv'))")
 
 
 ```{r, eval=check_edish, echo=FALSE}
-asis_output("**Code to render eDISH chart**\\n")
+asis_output("**Code to render Hepatic Safety Explorer chart**\\n")
 ```
 
 ```{r, eval=check_edish, comment=NA, echo=FALSE}
 
 graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(params$settings), chart="edish"))
+      settings = .(params$settings), chart="hepexplorer"))
 
 graphic_code
 
