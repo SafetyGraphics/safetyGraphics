@@ -33,6 +33,12 @@
   cursor:help;
 }
 
+.control-wrap .num_charts label {
+font-size: 75%;
+padding-left:0.5em;
+color : blue;
+}
+
 #settingsUI-charts_wrap_ui{
   margin-top:15px;
 }
