@@ -39,6 +39,17 @@ createControl <- function(key, metadata, data, settings, ns){
   
   names(data_choices) <- paste(data_choices, map_chr(data, ~getVarLabel(.)))
 
+  
+  ## of the selected charts, which ones are relevant to the given setting?
+  charts_rel <- select(sm_key, starts_with("chart_")) %>% 
+    gather(chart, val) %>% 
+    filter(val) %>% 
+    mutate(chart = stringr::str_remove(chart, "chart_")) %>% 
+    left_join(chartsMetadata, by="chart") %>% 
+    pull(label)
+  
+  
+
   ### get metadata for the input
   setting_key <- as.list(strsplit(key,"\\-\\-"))
   setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings=settings)
@@ -99,6 +110,9 @@ createControl <- function(key, metadata, data, settings, ns){
     class="control-wrap",
     id=ns(ctl_id),
     span(title = paste0(setting_description," ",setting_required), tags$label(HTML(setting_label))),
+    span(class="num_charts", 
+         title = HTML(paste0(charts_rel, collapse="\n")), 
+         tags$label(paste0("(", length(charts_rel), ")"))),
     div(
       class="select-wrap",
       input,
