@@ -45,7 +45,7 @@ dataUpload <- function(input, output, session){
       if (length(grep(".csv", input$datafile$name[i], ignore.case = TRUE)) > 0){
         data_list[[i]] <- data.frame(read.csv(input$datafile$datapath[i], na.strings=NA))
       }else if(length(grep(".sas7bdat", input$datafile$name[i], ignore.case = TRUE)) > 0){
-        data_list[[i]] <- data.frame(haven::read_sas(input$datafile$datapath[i]))
+        data_list[[i]] <- haven::read_sas(input$datafile$datapath[i])
       }else{
         data_list[[i]] <- NULL
       }
