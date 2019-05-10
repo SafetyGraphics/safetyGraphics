@@ -27,18 +27,18 @@ createControl <- function(key, metadata, data, settings, ns){
   
   data_choices <- names(data)
   
-  # function to get label
+  # function to get labels
   getVarLabel <- function(var){
-    lab <- attributes(var)$label
+    lab <- attributes(var)$label # SAS
     if (is.null(lab)){
       return("")
     } else {
-      return(lab)
+      return(paste0(" [",lab,"]"))
     }
   }
   
-  names(data_choices) <- map_chr(data, ~getVarLabel(.)) # SAS
-  
+  names(data_choices) <- paste(data_choices, map_chr(data, ~getVarLabel(.)))
+
   ### get metadata for the input
   setting_key <- as.list(strsplit(key,"\\-\\-"))
   setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings=settings)
