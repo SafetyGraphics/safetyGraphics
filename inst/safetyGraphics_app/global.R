@@ -12,11 +12,12 @@ library(DT)
 library(haven)
 library(tidyr)
 
-# create vector of all possible charts
-all_charts <- c("edish","safetyhistogram")
-include_charts <- getShinyOption("safetygraphics_charts")
-if (!is.null(include_charts)){
-  all_charts <- all_charts[all_charts %in% include_charts]
+# subset chartsMetadata if user requests it
+if (!is.null(getShinyOption("safetygraphics_charts"))){
+  chartsMetadata_incl <- chartsMetadata[chartsMetadata$chart %in% getShinyOption("safetygraphics_charts"), ]
+  cat(nrow(chartsMetadata_incl), "of", nrow(chartsMetadata), "available charts included being loaded. Run `safetyGraphicsApp(charts=NULL)` to use all charts.")
+} else{
+  chartsMetadata_incl <- chartsMetadata
 }
 
 ## source modules

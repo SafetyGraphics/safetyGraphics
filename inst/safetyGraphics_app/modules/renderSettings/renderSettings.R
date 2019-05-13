@@ -49,8 +49,8 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   ns <- session$ns
 
-  charts<-as.vector(chartsMetadata[["chart"]])
-  labels<-as.vector(chartsMetadata[["label"]])
+  charts<-as.vector(chartsMetadata_incl[["chart"]])
+  labels<-as.vector(chartsMetadata_incl[["label"]])
   names(charts)<-labels
 
   output$charts_wrap_ui <- renderUI({
