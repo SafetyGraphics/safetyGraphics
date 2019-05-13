@@ -10,6 +10,7 @@ library(purrr)
 library(stringr)
 library(DT)
 library(haven)
+library(tidyr)
 
 # create vector of all possible charts
 all_charts <- c("edish","safetyhistogram")
@@ -24,6 +25,9 @@ source('modules/renderSettings/renderSettings.R')
 
 source('modules/renderChart/renderChartUI.R')
 source('modules/renderChart/renderChart.R')
+
+source('modules/renderReports/renderReportsUI.R')
+source('modules/renderReports/renderReports.R')
 
 # source('modules/renderChart/render_edish_chartUI.R')
 # source('modules/renderChart/render_edish_chart.R')

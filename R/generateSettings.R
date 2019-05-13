@@ -5,7 +5,7 @@
 #' The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, eDish is the only chart supported.
 #'
 #' @param standard The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"None"}.
-#' @param charts The chart or chart(s) for which settings should be generated. Default: \code{NULL} (uses all available charts).
+#' @param charts The chart or charts for which settings should be generated. Default: \code{NULL} (uses all available charts).
 #' @param useDefaults Specifies whether default values from settingsMetadata should be included in the settings object. Default: \code{TRUE}.
 #' @param partial Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.
 #' @param partial_keys Optional character vector of the matched settings if partial is TRUE. Settings should be identified using the text_key format described in ?settingsMetadata. Setting is ignored when partial is FALSE. Default: \code{NULL}.
@@ -22,10 +22,6 @@
 #'
 #' generateSettings(standard="a different standard")
 #' #returns shell settings list with no data mapping
-#'
-#' \dontrun{
-#' generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far.
-#' }
 #'
 #' @importFrom dplyr "filter" full_join
 #' @importFrom stringr str_split
@@ -74,11 +70,10 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   #############################################################################
   if(useDefaults){
     otherDefaults <- safetyGraphics::getSettingsMetadata(
-      charts = charts,
-      filter = !.data$column_mapping & !.data$field_mapping,
-      cols=c("text_key","default")
-    )%>%
-    rename("otherDefault"="default")
+      charts = charts) %>% 
+      filter(!.data$column_mapping & !.data$field_mapping) %>% 
+      select(text_key, default)%>% 
+      rename("otherDefault"="default")
   }else{
     otherDefaults <- tibble(text_key=character(),otherDefault=character(), .rows=0)
   }
@@ -92,13 +87,17 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   #############################################################################
   # Apply custom settings (if any)
   #############################################################################
-  if(!is.null(custom_settings)){
-    key_values<-full_join(key_values, custom_settings, by="text_key")
-  } else {
-    key_values$customValue<-NA
+    if(!is.null(custom_settings)){
+      key_values<-full_join(key_values, custom_settings, by="text_key")
+    } else if (nrow(key_values)>0){
+      key_values$customValue<-NA
+    }
+    
+  if (nrow(key_values)>0){
+    key_values<- key_values %>% mutate(value=ifelse(is.na(.data$customValue),.data$default,.data$customValue))
+    
   }
-
-  key_values<- key_values %>% mutate(value=ifelse(is.na(.data$customValue),.data$default,.data$customValue))
+  
 
   #############################################################################
   # create shell settings object
@@ -108,20 +107,20 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   #########################################################################################
   # populate the shell settings by looping through key_values and apply them to the shell
   #########################################################################################
-  #print(key_values)
-  for(row in 1:nrow(key_values)){
-    text_key<-key_values[row,]%>%pull("text_key")
-    key<- textKeysToList(text_key)[[1]]
-    type <- safetyGraphics::getSettingsMetadata(text_keys=text_key,cols="setting_type")
-    value <- key_values[row,"value"][[1]]
-    finalValue <- value[[1]]
-
-    #print(paste(text_key," (",type,"):",toString(value),typeof(value),length(value),"->",finalValue,typeof(finalValue),length(finalValue)))
-    shell<-setSettingsValue(
-      settings = shell,
-      key = key,
-      value = finalValue
-    )
+  if (nrow(key_values)>0){
+    for(row in 1:nrow(key_values)){
+      text_key<-key_values[row,]%>%pull("text_key")
+      key<- textKeysToList(text_key)[[1]]
+      type <- safetyGraphics::getSettingsMetadata(text_keys=text_key,cols="setting_type")
+      value <- key_values[row,"value"][[1]]
+      finalValue <- value[[1]]
+      
+      shell<-setSettingsValue(
+        settings = shell,
+        key = key,
+        value = finalValue
+      )
+    } 
   }
 
   #Coerce empty string to NULL
@@ -133,6 +132,5 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     }
   }
 
-  #print(shell)
   return(shell)
 }

@@ -49,19 +49,19 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   ns <- session$ns
 
-  
+  charts<-as.vector(chartsMetadata[["chart"]])
+  labels<-as.vector(chartsMetadata[["label"]])
+  names(charts)<-labels
+
   output$charts_wrap_ui <- renderUI({
     checkboxGroupButtons(
       ns("charts"),
       label = NULL,
-      choices = c(
-        "e-DISH" = "edish",
-        "Safety Histogram" = "safetyhistogram"
-      ),
-      selected=c("edish", "safetyhistogram"),
+      choices = charts,
+      selected = charts,
       checkIcon = list(
-        yes = icon("ok", lib = "glyphicon"),
-        no = icon("remove",lib = "glyphicon")
+        yes = icon("ok-circle", lib = "glyphicon"),
+        no = icon("remove-circle",lib = "glyphicon")
       ),
       status="primary"
     )
@@ -241,9 +241,9 @@ renderSettings <- function(input, output, session, data, settings, status){
     values<- keys %>% map(~getValues(.x))
 
     inputDF <- tibble(text_key=keys, customValue=values)%>%
-      rowwise %>% 
+      rowwise %>%
       filter(!is.null(customValue[[1]]))
-    
+
     if(nrow(inputDF)>0){
       settings <- generateSettings(custom_settings=inputDF, charts=input$charts)
     }else{
@@ -263,15 +263,11 @@ renderSettings <- function(input, output, session, data, settings, status){
   status_new <- reactive({
     req(data())
     req(settings_new())
+
     name <- rev(isolate(input_names()))[1]
     settings_new <- settings_new()
-
-    out <- list()
-
     charts <- isolate(input$charts)
-    for (chart in charts){
-      out[[chart]] <- validateSettings(data(), settings_new, chart=chart)
-    }
+    out<-validateSettings(data(), settings_new, charts=charts)
 
     return(out)
   })
@@ -282,11 +278,7 @@ renderSettings <- function(input, output, session, data, settings, status){
   ######################################################################
   status_df <- reactive({
     req(status_new())
-
-    flatten(status_new()) %>%
-      keep(., names(.)=="checks") %>%
-      bind_rows() %>%
-      unique  %>%
+    status_new()[["checks"]] %>%
       group_by(text_key) %>%
       mutate(num_fail = sum(valid==FALSE)) %>%
       mutate(icon = ifelse(num_fail==0, "<i class='fa fa-check'></i>","<i class='fa fa-times'></i>"))%>%

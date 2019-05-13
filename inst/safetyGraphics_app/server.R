@@ -38,7 +38,7 @@ settings_new <-   callModule(
 #toggle css class of chart tabs
 observeEvent(settings_new$status(),{
   for (chart in settings_new$charts()){
-    valid <- settings_new$status()[[chart]]$valid
+    valid <- settings_new$status()$charts[[chart]]
 
     ## code to toggle css for chart-specific tab here
     toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="valid", condition=valid==TRUE)
@@ -46,48 +46,49 @@ observeEvent(settings_new$status(),{
   }
 })
 
+
+# hide charts tab if no chart selected
+observeEvent(settings_new$charts(),{
+  if (is.null(settings_new$charts())){
+    hideTab(inputId = "nav_id", target = "Charts")
+    hideTab(inputId = "nav_id", target = "Reports")
+  } 
+}, 
+ignoreNULL = FALSE, 
+ignoreInit = TRUE)  # so there's no hiding when the app first loads
+
   ##############################################################
   # Initialize Charts Modules
   ##############################################################
 
 
 # set up all chart tabs from the start (all_charts defined in global.R)
-  for (chart in all_charts){
+  for (row in 1:nrow(chartsMetadata)){
+    chart<-chartsMetadata[row,"chart"]
+    chartLabel<-chartsMetadata[row,"label"]
     tabid <- paste0(chart, "_tab_title")
 
     appendTab(
       inputId = "nav_id",
       tab = tabPanel(
-        title = chart,
+        title = chartLabel,
+        value = chart,
         renderChartUI(paste0("chart", chart))
       ),
       menuName = "Charts"
     )
   }
 
-
-  # for (chart in all_charts){
-  #
-  #   tabfun <- match.fun(paste0("render_", chart, "_chartUI"))  # module UI for given tab
-  #   tabid <- paste0(chart, "_tab_title")
-  #
-  #   appendTab(
-  #     inputId = "nav_id",
-  #     tab = tabPanel(
-  #       title = chart,
-  #       tabfun(paste0("chart", chart))
-  #     ),
-  #     menuName = "Charts"
-  #   )
-  # }
-  #
-
-
   # hide/show chart tabs in response to user selections
+  all_charts <- as.vector(chartsMetadata[["chart"]])
   observe({
+    
+    # show charts and reports tabs if any charts are selected
+    showTab(inputId = "nav_id", target = "Charts")
+    showTab(inputId = "nav_id", target = "Reports")   
+    
     selected_charts <- settings_new$charts()
     unselected_charts <- all_charts[!all_charts %in% selected_charts]
-
     for(chart in unselected_charts){
       hideTab(inputId = "nav_id",
               target = chart)
@@ -98,46 +99,32 @@ observeEvent(settings_new$status(),{
     }
   })
 
-
-
-
-#
-#     callModule(
-#       module = render_edish_chart,
-#       id = paste0("chart", "edish"),
-#       data = reactive(dataUpload_out$data_selected()),
-#       settings = reactive(settings_new$settings()),
-#       valid = reactive(settings_new$status()[["edish"]]$valid)
-#     )
-#     callModule(
-#       module = render_safetyhistogram_chart,
-#       id = paste0("chart", "safetyhistogram"),
-#       data = reactive(dataUpload_out$data_selected()),
-#       settings = reactive(settings_new$settings()),
-#       valid = reactive(settings_new$status()[["safetyhistogram"]]$valid)
-#     )
-
-
+for(chart in all_charts){
   callModule(
     module = renderChart,
-    id = paste0("chart", "edish"),
+    id = paste0("chart", chart),
     data = reactive(dataUpload_out$data_selected()),
     settings = reactive(settings_new$settings()),
-    valid = reactive(settings_new$status()$valid),
-    chart = "edish",
+    valid = reactive(settings_new$status()$charts[[chart]]),
+    chart = chart,
     type = "htmlwidget"
   )
-
-
+  
+}
+  
+  labeledCharts <- list()
+  for (row in 1:nrow(chartsMetadata)){
+    labeledCharts[row]<-chartsMetadata[row,"chart"]
+    names(labeledCharts)[row]<-chartsMetadata[row,"label"]
+  }
+  
   callModule(
-    module = renderChart,
-    id = paste0("chart", "safetyhistogram"),
+    module = renderReports,
+    id = "reportsUI",
     data = reactive(dataUpload_out$data_selected()),
     settings = reactive(settings_new$settings()),
-    valid = reactive(settings_new$status()$valid),
-    chart = "safetyhistogram",
-    type = "htmlwidget"
+    charts = reactive(labeledCharts[labeledCharts %in% settings_new$charts()])
   )
-
+  
   session$onSessionEnded(stopApp)
 }

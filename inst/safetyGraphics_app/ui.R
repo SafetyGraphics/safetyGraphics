@@ -27,6 +27,12 @@ tagList(
         renderSettingsUI("settingsUI")
       )
     ),
-    navbarMenu("Charts")
+    navbarMenu("Charts"),
+    tabPanel(
+      title = "Reports",
+      fluidPage(
+        renderReportsUI("reportsUI")
+      )
     )
+  )
 )

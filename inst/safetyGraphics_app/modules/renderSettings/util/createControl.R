@@ -15,6 +15,8 @@
 #' @param settings A settings list to be used to populate control options
 #' @param ns  The namespace of the current module
 #'
+#'@import map_chr from purrr
+#'
 #' @return HTML code for the div containing the setting of interest
 createControl <- function(key, metadata, data, settings, ns){
   
@@ -23,6 +25,31 @@ createControl <- function(key, metadata, data, settings, ns){
   tt_msg <- paste0("tt_msg_", key)
   msg <- paste0("msg_", key)   
   
+  data_choices <- names(data)
+  
+  # function to get labels
+  getVarLabel <- function(var){
+    lab <- attributes(var)$label # SAS
+    if (is.null(lab)){
+      return("")
+    } else {
+      return(paste0(" [",lab,"]"))
+    }
+  }
+  
+  names(data_choices) <- paste(data_choices, map_chr(data, ~getVarLabel(.)))
+
+  
+  ## of the selected charts, which ones are relevant to the given setting?
+  charts_rel <- select(sm_key, starts_with("chart_")) %>% 
+    gather(chart, val) %>% 
+    filter(val) %>% 
+    mutate(chart = stringr::str_remove(chart, "chart_")) %>% 
+    left_join(chartsMetadata, by="chart") %>% 
+    pull(label)
+  
+  
+
   ### get metadata for the input
   setting_key <- as.list(strsplit(key,"\\-\\-"))
   setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings=settings)
@@ -44,16 +71,18 @@ createControl <- function(key, metadata, data, settings, ns){
   placeholder <- NULL
   
   if(sm_key$column_mapping==TRUE & is.null(setting_value)){ #column mapping - no value specified
-      choices <- colnames(data)
-      placeholder <- list(onInitialize = I('function() {this.setValue("");}'))
+    choices <- data_choices
+    placeholder <- list(onInitialize = I('function() {this.setValue("");}'))
   } else if(sm_key$column_mapping==TRUE & !is.null(setting_value)) { #column mapping - value specified
-      choices <- unique(c(setting_value, colnames(data)))
-      placeholder <- list (onInitialize = I('function() { }'))
+    # force the variable that's specified in settings to be first option
+    # combine vectors without losing the labels
+    choices <- c(data_choices[data_choices %in% setting_value], data_choices[! data_choices %in% setting_value])
+    placeholder <- list (onInitialize = I('function() { }'))
   } else if (sm_key$field_mapping==TRUE & is.null(field_column)){ ## if there is NOT a column specified in settings
-      placeholder <- list(
-        placeholder = paste0("Please select a ", field_column_label),
-        onInitialize = I('function() {
-                         this.setValue("");}')
+    placeholder <- list(
+      placeholder = paste0("Please select a ", field_column_label),
+      onInitialize = I('function() {
+                       this.setValue("");}')
       )
   } else if (sm_key$field_mapping==TRUE & !is.null(field_column)){ ## if there is NOT a column specified in settings
     choices <- unique(c(setting_value, sort(as.character(data[,field_column])))) %>% unlist
@@ -64,7 +93,7 @@ createControl <- function(key, metadata, data, settings, ns){
   
   ### create code for the UI
   multiple <- (sm_key$setting_type=="vector")
- 
+  
   if (sm_key$column_mapping==TRUE | sm_key$field_mapping==TRUE){
     input <- selectizeInput(inputId = ns(key), label = NULL, choices = choices, options = placeholder, multiple = multiple)
   } else if (sm_key$setting_type=="vector"){
@@ -81,6 +110,9 @@ createControl <- function(key, metadata, data, settings, ns){
     class="control-wrap",
     id=ns(ctl_id),
     span(title = paste0(setting_description," ",setting_required), tags$label(HTML(setting_label))),
+    span(class="num_charts", 
+         title = HTML(paste0(charts_rel, collapse="\n")), 
+         tags$label(paste0("(", length(charts_rel), ")"))),
     div(
       class="select-wrap",
       input,

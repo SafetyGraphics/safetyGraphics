@@ -11,7 +11,7 @@ generateSettings(standard = "None", charts = NULL,
 \arguments{
 \item{standard}{The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"None"}.}
 
-\item{charts}{The chart or chart(s) for which settings should be generated. Default: \code{NULL} (uses all available charts).}
+\item{charts}{The chart or charts for which settings should be generated. Default: \code{NULL} (uses all available charts).}
 
 \item{useDefaults}{Specifies whether default values from settingsMetadata should be included in the settings object. Default: \code{TRUE}.}
 
@@ -40,9 +40,5 @@ generateSettings(standard="adam", partial=TRUE, partial_keys=pkeys)
 
 generateSettings(standard="a different standard")
 #returns shell settings list with no data mapping
-
-\dontrun{
-generateSettings(standard="adam",chart="AEExplorer") #Throws error. Only eDish supported so far.
-}
 
 }

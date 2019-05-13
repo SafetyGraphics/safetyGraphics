@@ -12,7 +12,10 @@ defaultRequiredSettings <- list(
   list("measure_values","ALP"),
   list("normal_col_low"),
   list("normal_col_high"),
-  list("studyday_col")
+  list("studyday_col"),
+  list("visit_col"),
+  list("visitn_col"),
+  list("unit_col")
 )
 
 

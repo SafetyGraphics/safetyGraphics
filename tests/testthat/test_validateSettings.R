@@ -17,8 +17,8 @@ test_that("our basic example is valid (until we break it)",{
 })
 
 test_that("function returns a list with the expected structure",{
-  expect_named(passed,c("checks","valid","status"))
-  expect_named(failed,c("checks","valid","status"))
+  expect_named(passed,c("checks","valid","charts","status"))
+  expect_named(failed,c("checks","valid","charts","status"))
   expect_true(is_tibble(passed$checks))
   expect_type(passed$valid,"logical")
   expect_type(passed$status,"character")
@@ -122,4 +122,20 @@ test_that("validateSettings works with filters and group_cols ",{
   expect_true(Passed[["valid"]])
 })
 
-
+test_that("validateSettings returns the expected charts object",{
+  # All charts are valid if overall status is valid
+  expect_true(passed[["charts"]]%>%map_lgl(~.x)%>%all)
+  
+  # At least one chart is invalid when overal status is invalid
+  expect_false(failed[["charts"]]%>%map_lgl(~.x)%>%all)
+  
+  # eDish is the only invalid chart when a measure value is invalidated
+  edishFail_settings <- validSettings
+  edishFail_settings[["measure_values"]][["AST"]]<-"INVALID!"
+  edishFail_validation<-validateSettings(data=adlbc, settings=edishFail_settings)
+  expect_false(edishFail_validation$valid)
+  expect_false(edishFail_validation$charts%>%map_lgl(~.x)%>%all)
+  expect_false(edishFail_validation[["charts"]][["edish"]]) #edish is invalid
+  edishFail_validation[["charts"]][["edish"]]<-NULL
+  expect_true(edishFail_validation$charts%>%map_lgl(~.x)%>%all) #all other charts are valid
+})

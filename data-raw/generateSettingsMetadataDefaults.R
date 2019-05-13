@@ -27,7 +27,10 @@ defaults <- tribble(~text_key, ~default,
              "unit_col", NULL,
              "start_value", NULL,
              "details", NULL,
-             "missingValues", c("","NA","N/A")
+             "missingValues", c("","NA","N/A"),
+             "visits_without_data",FALSE,
+             "unscheduled_visits",FALSE,
+             "unscheduled_visit_pattern","/unscheduled|early termination/i"
              )
 
-saveRDS(defaults, file="data-raw/defaults.Rds")
+saveRDS(defaults, file="data-raw/settingsMetadataDefaults.Rds")
