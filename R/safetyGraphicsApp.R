@@ -18,7 +18,7 @@
 safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL) {
   
   # pass charts to include
-  shinyOptions(charts = charts)
+  shinyOptions(safetygraphics_charts = charts)
   
   #increase maximum file upload limit
   if(!is.null(maxFileSize)){
