@@ -12,6 +12,13 @@ library(DT)
 library(haven)
 library(tidyr)
 
+# create vector of all possible charts
+all_charts <- c("edish","safetyhistogram")
+include_charts <- getShinyOption("safetygraphics_charts")
+if (!is.null(include_charts)){
+  all_charts <- all_charts[all_charts %in% include_charts]
+}
+
 ## source modules
 source('modules/renderSettings/renderSettingsUI.R')
 source('modules/renderSettings/renderSettings.R')
