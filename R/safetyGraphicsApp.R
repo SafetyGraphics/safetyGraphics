@@ -3,7 +3,7 @@
 #' @param charts Character vector of charts to include 
 #' @param maxFileSize maximum file size in MB allowed for file upload.
 #'
-#' @importFrom shiny runApp
+#' @importFrom shiny runApp shinyOptions
 #' @import shinyjs
 #' @import dplyr
 #' @import DT
@@ -19,7 +19,7 @@
 safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL) {
   
   # pass charts to include
-  shinyOptions(safetygraphics_charts = charts)
+  shiny::shinyOptions(safetygraphics_charts = charts)
   
   #increase maximum file upload limit
   if(!is.null(maxFileSize)){
