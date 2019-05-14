@@ -13,6 +13,7 @@
    \item{settings_url}{Homepage for chart's settings documentation}
    \item{main}{Name of the main function used to initialize the app. The function must accept "location" and "settings" parameters (in that order) and have an .init() method, expecting a json data array.}
    \item{type}{type of chart (e.g. 'htmlwidget')}
+   \item{maxWidth}{max width for the widget}
 }}
 \source{
 Created for this package
