@@ -236,16 +236,9 @@ renderSettings <- function(input, output, session, data, settings, status){
       }
     }
 
-    
-    print(input)
-    
     req(input_names())
     keys <- input_names()
     values<- keys %>% map(~getValues(.x))
-
-    
-   # print(keys)
-  #  print(values)
     
     inputDF <- tibble(text_key=keys, customValue=values)%>%
       rowwise %>%
