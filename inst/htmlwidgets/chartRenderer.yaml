@@ -9,8 +9,8 @@ dependencies:
     script: webcharts.js
     stylesheet: webcharts.css
   - name: safety-eDish
-    version: 0.16.7
-    src: htmlwidgets/lib/safety-eDISH-0.16.7
+    version: 0.16.9
+    src: htmlwidgets/lib/safety-eDISH-0.16.9
     script: safetyedish.js
   - name: safety-histogram
     version: 2.3.0
