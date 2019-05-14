@@ -1,4 +1,4 @@
-^inst/eDISH_app/tests$
+^inst/safetyGraphics_app/tests$
 ^data-raw$
 ^.*\.Rproj$
 ^\.Rproj\.user$

@@ -86,7 +86,7 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
   }
 
   #Renderer
-  chartFunction<- chartsMetadata %>% filter(.data$chart==!!chart) %>% pull(.data$main)
+  chartFunction<- safetyGraphics::chartsMetadata %>% filter(.data$chart==!!chart) %>% pull(.data$main)
   rSettings = list(
     data = data,
     debug_js=debug_js,
