@@ -47,11 +47,11 @@ validateSettings <- function(data, settings, charts=NULL){
 
   # if no charts specify, use all available
   if (is.null(charts)){
-    charts <- chartsMetadata$chart
+    charts <- safetyGraphics::chartsMetadata$chart
   }
 
   # Check that all required parameters are not null
-  requiredChecks <- getRequiredSettings(chart = charts) %>% purrr::map(checkRequired, settings = settings)
+  requiredChecks <- getRequiredSettings(charts = charts) %>% purrr::map(checkRequired, settings = settings)
 
   #Check that non-null setting columns are found in the data
   allKeys <- getSettingsMetadata(charts=charts, filter_expr = .data$column_mapping, cols = c("text_key","setting_type"))

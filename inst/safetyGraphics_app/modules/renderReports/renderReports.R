@@ -53,7 +53,7 @@ renderReports <- function(input, output, session, data, settings, charts){
     content = function(file) {
       # Copy the report file to a temporary directory before processing it, in case we don't
       # have write permissions to the current working dir (which can happen when deployed).
-      templateReport <- system.file("safetyGraphics_app/modules/renderReports/safetyGraphicsReport","safetyGraphicsReport.Rmd", package = "safetyGraphics")
+      templateReport <- system.file("safetyGraphics_app/modules/renderReports","safetyGraphicsReport.Rmd", package = "safetyGraphics")
       tempReport <- file.path(tempdir(), "report.Rmd")
       file.copy(templateReport, tempReport, overwrite = TRUE)
       params <- list(data = data(), settings = settings(), charts=input$chk )
