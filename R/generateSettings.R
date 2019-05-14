@@ -72,7 +72,7 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     otherDefaults <- safetyGraphics::getSettingsMetadata(
       charts = charts) %>% 
       filter(!.data$column_mapping & !.data$field_mapping) %>% 
-      select(text_key, default)%>% 
+      select(.data$text_key, .data$default)%>% 
       rename("otherDefault"="default")
   }else{
     otherDefaults <- tibble(text_key=character(),otherDefault=character(), .rows=0)
