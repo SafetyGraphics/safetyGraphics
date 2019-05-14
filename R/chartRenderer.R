@@ -85,6 +85,10 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
     )
   }
 
+  #Set Chart Width
+  chartMaxWidth<- chartsMetadata %>% filter(.data$chart==!!chart) %>% pull(.data$maxWidth)
+  settings$max_width <- chartMaxWidth
+  
   #Renderer
   chartFunction<- chartsMetadata %>% filter(.data$chart==!!chart) %>% pull(.data$main)
   rSettings = list(
