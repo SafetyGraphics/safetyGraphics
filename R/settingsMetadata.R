@@ -2,10 +2,14 @@
 #'
 #' Metadata about the settings used to configure safetyGraphics charts. One record per unique setting
 #'
-#' @format A data frame with 25 rows and 10 columns
+#' @format A data frame with 29 rows and 17 columns
 #' \describe{
 #'    \item{chart_edish}{Flag indicating if the settings apply to the eDish Chart}
+#'    \item{chart_paneledoutlierexplorer}{Flag indicating if the settings apply to the Paneled Safety Outlier Explorer Chart}
 #'    \item{chart_safetyhistogram}{Flag indicating if the settings apply to the Safety Histogram Chart}
+#'    \item{chart_safetyoutlierexplorer}{Flag indicating if the settings apply to the Safety Outlier Explorer Chart}
+#'    \item{chart_safetyresultsovertime}{Flag indicating if the settings apply to the Safety Results Over Time Chart}
+#'    \item{chart_safetyshiftplot}{Flag indicating if the settings apply to the Safety Shift Plot Chart}
 #'    \item{text_key}{Text key indicating the setting name. \code{'--'} delimiter indicates a nested setting}
 #'    \item{label}{Label}
 #'    \item{description}{Description}

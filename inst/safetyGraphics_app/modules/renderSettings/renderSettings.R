@@ -189,7 +189,7 @@ renderSettings <- function(input, output, session, data, settings, status){
               col = "text_key",
               filter_expr = field_column_key==!!col
             )
-
+            
             # Toggle field-level inputs:
             #    ON  - if column-level input is selected)
             #    OFF - if column-level input is not yet selected
@@ -198,8 +198,14 @@ renderSettings <- function(input, output, session, data, settings, status){
             }
 
             if (is.null(isolate(settings()[[col]])) || ! input[[col]] == isolate(settings()[[col]])){
+              
               if (input[[col]] %in% colnames(data())){
                 choices <- unique(data()[,input[[col]]])
+                placeholder <- "Please select a value"
+              } else {
+                choices <- NULL 
+                placeholder <- paste0("Please select a ", getSettingsMetadata(col="label", text_key=col))
+              }
 
                 for (key in field_keys){
                   updateSelectizeInput(
@@ -207,13 +213,12 @@ renderSettings <- function(input, output, session, data, settings, status){
                     inputId = key,
                     choices = choices,
                     options = list(
-                      placeholder = "Please select a value",
+                      placeholder = placeholder,
                       onInitialize = I('function() {this.setValue("");}')
                     )
                   ) #update SelectizeInput
                 } #for loop
-              } #if #2
-            } #if #1
+              }#if #1
           } #observeEvent (inner)
         ) #observeEvent (outer)
       }) #lapply
