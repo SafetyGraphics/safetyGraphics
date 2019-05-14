@@ -21,7 +21,7 @@ trimSettings <- function(settings, charts=NULL){
 
 keys <- getSettingsMetadata(charts=charts, cols = c("text_key"))
 
-keys_chr <- keys  %>% safetyGraphics:::textKeysToList() %>% map_chr( ~.x[[1]]) %>% unique() 
+keys_chr <- keys  %>% textKeysToList() %>% map_chr( ~.x[[1]]) %>% unique() 
 
 settings_names <- names(settings)
 
