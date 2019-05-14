@@ -1,18 +1,18 @@
-#' Render eDISH chart - server code
+#' Render Reports Tab - server code
 #'
-#' This module creates the Chart tab for the Shiny app, which contains the interactive eDISH graphic.
+#' This module creates the Reports tab for the Shiny app, which contains the interactive eDISH graphic.
 #'
 #' Workflow:
-#' (1) A change in `data`, `settings`, or `valid` invalidates the eDISH chart output
-#' (2) Upon a change in `valid`, the export chart functionality is conditionally made available or unavailable to user
-#' (3) If "export chart" button is pressed, data and settings are passed to the parameterized report, knitted using
+#' (1) A change in `charts` invalidates the report options
+#' (2) Upon a change in `charts`, the chart list for export is updated
+#' (3) If "Export Chart(s)" button is pressed, data, settings, and the selected charts are passed to the parameterized report, knitted using
 #'     Rmarkdown, and downloaded to user computer.
 #'
 #' @param input Input objects from module namespace
 #' @param output Output objects from module namespace
 #' @param session An environment that can be used to access information and functionality relating to the session
 #' @param data A data frame  [REACTIVE]
-#' @param settings list of settings arguments for chart [REACTIVE]
+#' @param settings list of settings arguments for charts [REACTIVE]
 #' @param charts vector of charts to be subset from [REACTIVE]
 
 renderReports <- function(input, output, session, data, settings, charts){
@@ -26,8 +26,6 @@ renderReports <- function(input, output, session, data, settings, charts){
     output$checkboxes <- renderUI(checkboxes)
 
   }, ignoreNULL=FALSE)
-  
-  
   
   
 

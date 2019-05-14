@@ -1,10 +1,10 @@
-#' Render eDISH chart - UI code
+#' Render Reports Tab - UI code
 #'
-#' This module creates the Chart tab for the Shiny app, which contains the interactive eDISH graphic.
+#' This module creates the Reports tab for the Shiny app.
 
 #' @param id The module-specific ID that will get pre-pended to all element IDs
 #'
-#' @return The UI for the Chart tab
+#' @return The UI for the Reports tab
 #'
 renderReportsUI <- function(id){
 
