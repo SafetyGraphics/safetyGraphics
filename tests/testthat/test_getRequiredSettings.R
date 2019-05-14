@@ -14,8 +14,7 @@ defaultRequiredSettings <- list(
   list("normal_col_high"),
   list("studyday_col"),
   list("visit_col"),
-  list("visitn_col"),
-  list("unit_col")
+  list("visitn_col")
 )
 
 
