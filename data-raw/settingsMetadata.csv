@@ -24,7 +24,7 @@ r_ratio_filter,Show R Ratio Filter?,Specifies whether the R Ratio filter should 
 r_ratio_cut,Default R Ratio Cut,Default cut point for R Ratio filter. Ignored when r_ratio_filter = FALSE. User can update this setting via the UI when r_ratio_filter = TRUE. ,numeric,FALSE,FALSE,NA,FALSE,,appearance
 showTitle,Show Chart Title? ,Specifies whether the title should be drawn above the controls.,logical,FALSE,FALSE,NA,FALSE,,appearance
 warningText,Warning text,"Informational text to be displayed near the top of the controls (beneath the title, if any). No warning is displayed if warningText = ''. ",character,FALSE,FALSE,NA,FALSE,,appearance
-unit_col,Unit column,Unit of measure variable name,character,TRUE,TRUE,character,FALSE,,data
+unit_col,Unit column,Unit of measure variable name,character,FALSE,TRUE,character,FALSE,,data
 start_value,Measure start value,Value of variable defined in measure_col to be rendered in the histogram when the widget loads,character,FALSE,FALSE,NA,TRUE,measure_col,data
 details,Details columns,"An optional list of specifications for details listing.  Each column to be added to details listing is a nested, named list (containing the variable name: ""value_col"" and associated label: ""label"") within the larger list.",vector,FALSE,TRUE,NA,FALSE,,data
 missingValues,Missing values,Values defining a missing value in the selected 'value' column,vector,FALSE,FALSE,NA,FALSE,,data
