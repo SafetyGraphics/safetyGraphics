@@ -14,10 +14,10 @@ library(tidyr)
 
 # subset chartsMetadata if user requests it
 if (!is.null(getShinyOption("safetygraphics_charts"))){
-  chartsMetadata_incl <- chartsMetadata[chartsMetadata$chart %in% getShinyOption("safetygraphics_charts"), ]
-  cat(nrow(chartsMetadata_incl), "of", nrow(chartsMetadata), "available charts included being loaded. Run `safetyGraphicsApp(charts=NULL)` to use all charts.")
+  all_charts <- getShinyOption("safetygraphics_charts")
+  cat(length(all_charts), "of", nrow(chartsMetadata), "available charts included being loaded. Run `safetyGraphicsApp(charts=NULL)` to use all charts.")
 } else{
-  chartsMetadata_incl <- chartsMetadata
+  all_charts <- chartsMetadata$chart
 }
 
 ## source modules
