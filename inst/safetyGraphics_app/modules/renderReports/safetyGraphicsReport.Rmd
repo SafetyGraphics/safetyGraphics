@@ -19,15 +19,27 @@ library(safetyGraphics)
 library(knitr)
 check_edish <- "edish" %in% params$charts
 
+edish_settings <- trimSettings(settings=params$settings, charts="edish")
+
 check_histogram <- "safetyhistogram" %in% params$charts
+
+histogram_settings <- trimSettings(settings=params$settings, charts="safetyhistogram")
 
 check_explorer <- "safetyoutlierexplorer" %in% params$charts
 
+explorer_settings <- trimSettings(settings=params$settings, charts="safetyoutlierexplorer")
+
 check_shiftplot <- "safetyshiftplot" %in% params$charts
+
+shiftplot_settings <- trimSettings(settings=params$settings, charts="safetyshiftplot")
 
 check_resultsovertime <- "safetyresultsovertime" %in% params$charts
 
+resultsovertime_settings <- trimSettings(settings=params$settings, charts="safetyresultsovertime")
+
 check_paneled <- "paneledoutlierexplorer" %in% params$charts
+
+paneled_settings <- trimSettings(settings=params$settings, charts="paneledoutlierexplorer")
 
 ```
 
@@ -37,8 +49,9 @@ asis_output("### eDISH\\n")
 ```
 
 ```{r, fig.width=12, fig.height=15, eval=check_edish, echo = FALSE}
+
 chartRenderer(data = params$data,
-      settings = params$settings, chart="edish")
+      settings = edish_settings, chart="edish")
 ```
 
 ```{r, eval=check_histogram, echo=FALSE}
@@ -47,7 +60,7 @@ asis_output("### Histogram\\n")
 
 ```{r, fig.width=12, fig.height=15, eval=check_histogram, echo = FALSE}
 chartRenderer(data = params$data,
-      settings = params$settings, chart="safetyhistogram")
+      settings = histogram_settings, chart="safetyhistogram")
 ```
 
 ```{r, eval=check_explorer, echo=FALSE}
@@ -56,7 +69,7 @@ asis_output("### Outlier Explorer\\n")
 
 ```{r, fig.width=12, fig.height=15, eval=check_explorer, echo = FALSE}
 chartRenderer(data = params$data,
-      settings = params$settings, chart="safetyoutlierexplorer")
+      settings = explorer_settings, chart="safetyoutlierexplorer")
 ```
 
 ```{r, eval=check_shiftplot, echo=FALSE}
@@ -65,7 +78,7 @@ asis_output("### Shift Plot\\n")
 
 ```{r, fig.width=12, fig.height=15, eval=check_shiftplot, echo = FALSE}
 chartRenderer(data = params$data,
-      settings = params$settings, chart="safetyshiftplot")
+      settings = shiftplot_settings, chart="safetyshiftplot")
 ```
 
 ```{r, eval=check_resultsovertime, echo=FALSE}
@@ -74,7 +87,7 @@ asis_output("### Results Over Time \\n")
 
 ```{r, fig.width=12, fig.height=15, eval=check_resultsovertime, echo = FALSE}
 chartRenderer(data = params$data,
-      settings = params$settings, chart="safetyresultsovertime")
+      settings = resultsovertime_settings, chart="safetyresultsovertime")
 ```
 
 ```{r, eval=check_paneled, echo=FALSE}
@@ -83,7 +96,7 @@ asis_output("### Paneled Outlier Explorer \\n")
 
 ```{r, fig.width=12, fig.height=15, eval=check_paneled, echo = FALSE}
 chartRenderer(data = params$data,
-      settings = params$settings, chart="paneledoutlierexplorer")
+      settings = paneled_settings, chart="paneledoutlierexplorer")
 ```
 
 ### Info
@@ -116,7 +129,7 @@ asis_output("**Code to render eDISH chart**\\n")
 ```{r, eval=check_edish, comment=NA, echo=FALSE}
 
 graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(params$settings), chart="edish"))
+      settings = .(edish_settings), chart="edish"))
 
 graphic_code
 
@@ -129,7 +142,7 @@ asis_output("**Code to render Histogram chart**\\n")
 ```{r, eval=check_histogram, comment=NA, echo=FALSE}
 
 graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(params$settings), chart="safetyhistogram"))
+      settings = .(histogram_settings), chart="safetyhistogram"))
 
 graphic_code
 
@@ -142,7 +155,7 @@ asis_output("**Code to render Outlier Explorer chart**\\n")
 ```{r, eval=check_explorer, comment=NA, echo=FALSE}
 
 graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(params$settings), chart="safetyoutlierexplorer"))
+      settings = .(explorer_settings), chart="safetyoutlierexplorer"))
 
 graphic_code
 
@@ -155,7 +168,7 @@ asis_output("**Code to render Shift Plot chart**\\n")
 ```{r, eval=check_shiftplot, comment=NA, echo=FALSE}
 
 graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(params$settings), chart= "safetyshiftplot"))
+      settings = .(shiftplot_settings), chart= "safetyshiftplot"))
 
 graphic_code
 
@@ -168,7 +181,7 @@ asis_output("**Code to render Results Over Time chart**\\n")
 ```{r, eval=check_resultsovertime, comment=NA, echo=FALSE}
 
 graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(params$settings), chart= "safetyresultsovertime"))
+      settings = .(resultsovertime_settings), chart= "safetyresultsovertime"))
 
 graphic_code
 
@@ -181,7 +194,7 @@ asis_output("**Code to render Paneled Outlier Explorer chart**\\n")
 ```{r, eval=check_paneled, comment=NA, echo=FALSE}
 
 graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(params$settings), chart= "paneledoutlierexplorer"))
+      settings = .(paneled_settings), chart= "paneledoutlierexplorer"))
 
 graphic_code
 
