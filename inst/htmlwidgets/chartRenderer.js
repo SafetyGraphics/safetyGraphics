@@ -18,9 +18,7 @@ HTMLWidgets.widget({
          console.log("R settings:")
          console.log(rSettings);
         }
-        console.log(rSettings);
 
-        settings.max_width = 1000;
         rSettings.data = HTMLWidgets.dataframeToD3(rSettings.data);
 
 
@@ -29,9 +27,7 @@ HTMLWidgets.widget({
       },
 
       resize: function(width, height) {
-
         // TODO: code to re-render the widget with a new size
-
       }
 
     };
