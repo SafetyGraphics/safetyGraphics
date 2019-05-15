@@ -61,11 +61,16 @@ ignoreInit = TRUE)  # so there's no hiding when the app first loads
   # Initialize Charts Modules
   ##############################################################
 
+labeledCharts <- list()
+for (row in 1:nrow(filter(chartsMetadata, chart %in% all_charts))){
+  labeledCharts[row]<-filter(chartsMetadata, chart %in% all_charts)[row,"chart"]
+  names(labeledCharts)[row]<-filter(chartsMetadata, chart %in% all_charts)[row,"label"]
+}
 
 # set up all chart tabs from the start (all_charts defined in global.R)
-  for (row in 1:nrow(chartsMetadata)){
-    chart<-chartsMetadata[row,"chart"]
-    chartLabel<-chartsMetadata[row,"label"]
+  for (chartnum in 1:length(labeledCharts)){
+    chart<-labeledCharts[[chartnum]]
+    chartLabel<-names(labeledCharts)[[chartnum]]
     tabid <- paste0(chart, "_tab_title")
 
     appendTab(
@@ -80,7 +85,6 @@ ignoreInit = TRUE)  # so there's no hiding when the app first loads
   }
 
   # hide/show chart tabs in response to user selections
-  all_charts <- as.vector(chartsMetadata[["chart"]])
   observe({
     
     # show charts and reports tabs if any charts are selected
@@ -112,11 +116,6 @@ for(chart in all_charts){
   
 }
   
-  labeledCharts <- list()
-  for (row in 1:nrow(chartsMetadata)){
-    labeledCharts[row]<-chartsMetadata[row,"chart"]
-    names(labeledCharts)[row]<-chartsMetadata[row,"label"]
-  }
   
   callModule(
     module = renderReports,

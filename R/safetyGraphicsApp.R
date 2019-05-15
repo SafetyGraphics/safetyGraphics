@@ -3,7 +3,7 @@
 #' @param charts Character vector of charts to include 
 #' @param maxFileSize maximum file size in MB allowed for file upload.
 #'
-#' @importFrom shiny runApp
+#' @importFrom shiny runApp shinyOptions
 #' @import shinyjs
 #' @import dplyr
 #' @import DT
