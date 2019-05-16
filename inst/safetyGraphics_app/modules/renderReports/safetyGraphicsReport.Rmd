@@ -14,8 +14,9 @@ params:
 ## Customized Interactive Safety Graphics {.tabset .tabset-fade} 
 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, message=FALSE, warning = FALSE}
 library(safetyGraphics)
+library(knitr)
 check_edish <- "edish" %in% params$charts
 
 edish_settings <- trimSettings(settings=params$settings, charts="edish")
