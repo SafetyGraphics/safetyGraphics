@@ -212,18 +212,29 @@
 
     function settings() {
         return {
-            //Default template settings
+            //LB domain settings
             id_col: 'USUBJID',
             studyday_col: 'DY',
             value_col: 'STRESN',
             measure_col: 'TEST',
-            normal_col_high: 'STNRHI',
             normal_col_low: null,
+            normal_col_high: 'STNRHI',
             visit_col: null,
             visitn_col: null,
+
+            //DM domain settings
             group_cols: null,
             filters: null,
             details: null,
+
+            //EX domain settings
+            exposure_stdy_col: 'EXSTDY',
+            exposure_endy_col: 'EXENDY',
+            exposure_trt_col: 'EXTRT',
+            exposure_dose_col: 'EXDOSE',
+            exposure_dosu_col: 'EXDOSU',
+
+            //analysis settings
             analysisFlag: {
                 value_col: null,
                 values: []
@@ -281,7 +292,7 @@
             r_ratio_filter: true,
             r_ratio_cut: 0,
             visit_window: 30,
-            showTitle: true,
+            title: 'Hepatic Safety Explorer',
             downloadLink: true,
             warningText:
                 "This graphic has been thoroughly tested, but is not validated. Any clinical recommendations based on this tool should be confirmed using your organization's standard operating procedures.",
@@ -320,6 +331,7 @@
                     percent: null
                 }
             ],
+
             //Standard webcharts settings
             x: {
                 column: null, //set in onPreprocess/updateAxisSettings
@@ -1470,20 +1482,18 @@
     }
 
     function initTitle() {
-        if (this.config.showTitle) {
-            this.titleDiv = this.controls.wrap
-                .insert('div', '*')
-                .attr('class', 'title')
-                .style('margin-right', '1em')
-                .style('margin-bottom', '1em');
+        this.titleDiv = this.controls.wrap
+            .insert('div', '*')
+            .attr('class', 'title')
+            .style('margin-right', '1em')
+            .style('margin-bottom', '1em');
 
-            this.titleDiv
-                .append('span')
-                .text('Safety eDish')
-                .style('font-size', '1.5em')
-                .style('font-weight', 'strong')
-                .style('display', 'block');
-        }
+        this.titleDiv
+            .append('span')
+            .text(this.config.title)
+            .style('font-size', '1.5em')
+            .style('font-weight', 'strong')
+            .style('display', 'block');
     }
 
     function add(messageText, type, label, messages, callback) {
@@ -3430,7 +3440,7 @@
             {
                 column: 'relative_uln',
                 type: 'linear',
-                label: 'Lab Value (x ULN)',
+                label: null, // set in ../callbacks/onPreprocess
                 domain: null,
                 format: '.1f'
             },
@@ -3448,7 +3458,7 @@
                 per: []
             }
         ],
-        margin: { top: 20 },
+        margin: { top: 20, bottom: 70 }, // bottom margin provides space for exposure plot
         gridlines: 'xy',
         color_by: null,
         colors: ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628'],
@@ -3507,8 +3517,8 @@
 
     function onPreprocess$1() {
         var config = this.config;
-        var unit = this.config.y.column == 'relative_uln' ? ' [xULN]' : ' [xBaseline]';
-        config.y.label = 'Standardized Lab Values' + unit;
+        var unit = this.config.y.column == 'relative_uln' ? '[xULN]' : '[xBaseline]';
+        config.y.label = 'Standardized Result ' + unit;
     }
 
     function drawCutLine(d) {
@@ -3563,6 +3573,187 @@
         });
     }
 
+    function addExposure() {
+        var context = this;
+        this.svg.select('.se-exposure-supergroup').remove();
+
+        //If exposure data exists, annotate exposures beneath x-axis.
+        if (this.edish.exposure.include) {
+            var supergroup = this.svg
+                .insert('g', '.supergroup')
+                .classed('se-exposure-supergroup', true);
+            var dy = 20; // offset from chart
+            var strokeWidth = 5; // width/diameter of marks
+            this.svg.selectAll('.x.axis .tick text').attr('dy', dy + strokeWidth * 3 + 'px'); // offset x-axis tick labels
+
+            //top boundary line
+            supergroup.append('line').attr({
+                x1: -this.margin.left,
+                y1: this.plot_height + dy - strokeWidth * 2,
+                x2: this.plot_width,
+                y2: this.plot_height + dy - strokeWidth * 2,
+                stroke: 'black',
+                'stroke-opacity': 0.1
+            });
+
+            //Exposure text
+            supergroup
+                .append('text')
+                .attr({
+                    x: -3,
+                    y: this.plot_height + dy + strokeWidth,
+                    'text-anchor': 'end',
+                    textLength: this.margin.left - 3
+                })
+                .text('Exposure');
+
+            //bottom boundary line
+            supergroup.append('line').attr({
+                x1: -this.margin.left,
+                y1: this.plot_height + dy + strokeWidth * 2,
+                x2: this.plot_width,
+                y2: this.plot_height + dy + strokeWidth * 2,
+                stroke: 'black',
+                'stroke-opacity': 0.1
+            });
+
+            //Exposures
+            var groups = supergroup
+                .selectAll('g.se-exposure-group')
+                .data(this.exposure_data)
+                .enter()
+                .append('g')
+                .classed('se-exposure-group', true);
+            groups.each(function(d) {
+                var group = d3.select(this);
+
+                //draw a line if exposure start and end dates are unequal
+                if (
+                    d[context.edish.config.exposure_stdy_col] !==
+                    d[context.edish.config.exposure_endy_col]
+                ) {
+                    group
+                        .append('line')
+                        .classed('se-exposure-line', true)
+                        .attr({
+                            x1: function x1(d) {
+                                return context.x(+d[context.edish.config.exposure_stdy_col]);
+                            },
+                            y1: context.plot_height + dy,
+                            x2: function x2(d) {
+                                return context.x(+d[context.edish.config.exposure_endy_col]);
+                            },
+                            y2: context.plot_height + dy,
+                            stroke: 'black',
+                            'stroke-width': strokeWidth,
+                            'stroke-opacity': 0.25
+                        })
+                        .on('mouseover', function(d) {
+                            this.setAttribute('stroke-width', strokeWidth * 2);
+
+                            //annotate a rectangle in the chart
+                            group
+                                .append('rect')
+                                .classed('se-exposure-highlight', true)
+                                .attr({
+                                    x: function x(d) {
+                                        return context.x(
+                                            +d[context.edish.config.exposure_stdy_col]
+                                        );
+                                    },
+                                    y: 0,
+                                    width: function width(d) {
+                                        return (
+                                            context.x(+d[context.edish.config.exposure_endy_col]) -
+                                            context.x(+d[context.edish.config.exposure_stdy_col])
+                                        );
+                                    },
+                                    height: context.plot_height,
+                                    fill: 'black',
+                                    'fill-opacity': 0.25
+                                });
+                        })
+                        .on('mouseout', function(d) {
+                            this.setAttribute('stroke-width', strokeWidth);
+
+                            //remove rectangle from the chart
+                            group.select('.se-exposure-highlight').remove();
+                        })
+                        .append('title')
+                        .text(
+                            'Study Day: ' +
+                                d[context.edish.config.exposure_stdy_col] +
+                                '-' +
+                                d[context.edish.config.exposure_endy_col] +
+                                ' (' +
+                                (+d[context.edish.config.exposure_endy_col] -
+                                    +d[context.edish.config.exposure_stdy_col] +
+                                    (+d[context.edish.config.exposure_endy_col] >=
+                                        +d[context.edish.config.exposure_stdy_col])) +
+                                ' days)\nTreatment: ' +
+                                d[context.edish.config.exposure_trt_col] +
+                                '\nDose: ' +
+                                d[context.edish.config.exposure_dose_col] +
+                                ' ' +
+                                d[context.edish.config.exposure_dosu_col]
+                        );
+                }
+                //draw a circle if exposure start and end dates are equal
+                else {
+                    group
+                        .append('circle')
+                        .classed('se-exposure-circle', true)
+                        .attr({
+                            cx: function cx(d) {
+                                return context.x(+d[context.edish.config.exposure_stdy_col]);
+                            },
+                            cy: context.plot_height + dy,
+                            r: strokeWidth / 2,
+                            fill: 'black',
+                            'fill-opacity': 0.25,
+                            stroke: 'black',
+                            'stroke-opacity': 1
+                        })
+                        .on('mouseover', function(d) {
+                            this.setAttribute('r', strokeWidth);
+
+                            //annotate a vertical line in the chart
+                            group
+                                .append('line')
+                                .classed('se-exposure-highlight', true)
+                                .attr({
+                                    x1: context.x(+d[context.edish.config.exposure_stdy_col]),
+                                    y1: 0,
+                                    x2: context.x(+d[context.edish.config.exposure_stdy_col]),
+                                    y2: context.plot_height,
+                                    stroke: 'black',
+                                    'stroke-width': 1,
+                                    'stroke-opacity': 0.5,
+                                    'stroke-dasharray': '3 1'
+                                });
+                        })
+                        .on('mouseout', function(d) {
+                            this.setAttribute('r', strokeWidth / 2);
+
+                            //remove vertical line from the chart
+                            group.select('.se-exposure-highlight').remove();
+                        })
+                        .append('title')
+                        .text(
+                            'Study Day: ' +
+                                d[context.edish.config.exposure_stdy_col] +
+                                '\nTreatment: ' +
+                                d[context.edish.config.exposure_trt_col] +
+                                '\nDose: ' +
+                                d[context.edish.config.exposure_dose_col] +
+                                ' ' +
+                                d[context.edish.config.exposure_dosu_col]
+                        );
+                }
+            });
+        }
+    }
+
     function onResize() {
         var spaghetti = this;
         var config = this.config;
@@ -3597,11 +3788,50 @@
                 spaghetti.cutLine.remove();
                 spaghetti.cutLabel.remove();
             });
+
+        //annotate treatment exposure
+        addExposure.call(this);
+
+        //embiggen clip-path so points aren't clipped
+        var radius = this.config.marks.find(function(mark) {
+            return mark.type === 'circle';
+        }).radius;
+        this.svg
+            .select('.plotting-area')
+            .attr('width', this.plot_width + radius * 2 + 2) // plot width + circle radius * 2 + circle stroke width * 2
+            .attr('height', this.plot_height + radius * 2 + 2) // plot height + circle radius * 2 + circle stroke width * 2
+            .attr(
+                'transform',
+                'translate(-' +
+                    (radius + 1) + // translate left circle radius + circle stroke width
+                    ',-' +
+                    (radius + 1) + // translate up circle radius + circle stroke width
+                    ')'
+            );
     }
 
     function onDraw$1() {
+        var _this = this;
+
         var spaghetti = this;
         var eDish = this.edish;
+
+        //make sure x-domain includes the extent of the exposure data
+        if (this.edish.exposure.include) {
+            this.exposure_data = this.edish.exposure.data.filter(function(d) {
+                return d[_this.edish.config.id_col] === _this.edish.clicked_id;
+            });
+            var extent = [
+                d3.min(this.exposure_data, function(d) {
+                    return +d[_this.edish.config.exposure_stdy_col];
+                }),
+                d3.max(this.exposure_data, function(d) {
+                    return +d[_this.edish.config.exposure_endy_col];
+                })
+            ];
+            if (extent[0] < this.x_dom[0]) this.x_dom[0] = extent[0];
+            if (extent[1] > this.x_dom[1]) this.x_dom[1] = extent[1];
+        }
 
         //make sure y domain includes the current cut point for all measures
         var max_value = d3.max(spaghetti.filtered_data, function(f) {
@@ -3674,6 +3904,7 @@
         });
 
         //draw that chart
+        if (!this.exposure.include) delete defaultSettings$1.margin.bottom; // use default bottom margin when not plotting exposure
         chart.spaghetti = webcharts.createChart(
             spaghettiElement,
             defaultSettings$1,
@@ -3706,6 +3937,7 @@
 
         //add event listener to all participant level points
         points.on('click', function(d) {
+            chart.clicked_id = d.key;
             clearParticipantDetails.call(chart, d); //clear the previous participant
             chart.config.quadrants.table.wrap.style('display', 'none'); //hide the quadrant summary
 
@@ -4225,6 +4457,31 @@
         adjustTicks.call(this);
     }
 
+    var callbacks = {
+        onInit: onInit,
+        onLayout: onLayout,
+        onPreprocess: onPreprocess,
+        onDataTransform: onDataTransform,
+        onDraw: onDraw,
+        onResize: onResize$1
+    };
+
+    function init$6() {
+        var lb = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var ex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+        //const data = mergeData(lb,ex);
+        this.data = {
+            lb: lb,
+            ex: ex
+        };
+        this.chart.exposure = {
+            include: Array.isArray(ex) && ex.length,
+            data: ex
+        };
+        this.chart.init(lb);
+    }
+
     function safetyedish(element, settings) {
         var initial_settings = clone(settings);
         var defaultSettings = configuration.settings();
@@ -4242,14 +4499,17 @@
         chart.initial_settings = initial_settings;
 
         //Define callbacks.
-        chart.on('init', onInit);
-        chart.on('layout', onLayout);
-        chart.on('preprocess', onPreprocess);
-        chart.on('datatransform', onDataTransform);
-        chart.on('draw', onDraw);
-        chart.on('resize', onResize$1);
+        for (var callback in callbacks) {
+            chart.on(callback.substring(2).toLowerCase(), callbacks[callback]);
+        }
+        var se = {
+            element: element,
+            settings: settings,
+            chart: chart,
+            init: init$6
+        };
 
-        return chart;
+        return se;
     }
 
     return safetyedish;
