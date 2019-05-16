@@ -83,6 +83,8 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
       rotate_tick_labels= TRUE,
       vertical_space= 100
     )
+    
+    settings$groups = settings$group_cols
   }
 
   #Set Chart Width
