@@ -16,7 +16,6 @@ params:
 
 ```{r, echo = FALSE}
 library(safetyGraphics)
-library(knitr)
 check_edish <- "edish" %in% params$charts
 
 edish_settings <- trimSettings(settings=params$settings, charts="edish")
