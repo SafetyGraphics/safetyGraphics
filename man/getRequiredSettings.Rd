@@ -4,11 +4,11 @@
 \alias{getRequiredSettings}
 \title{Get a list of required settings}
 \usage{
-getRequiredSettings(chart = "eDish",
+getRequiredSettings(charts = NULL,
   metadata = safetyGraphics::settingsMetadata)
 }
 \arguments{
-\item{chart}{The chart for which required settings should be returned ("eDish" only for now) . Default: \code{"eDish"}.}
+\item{charts}{The chart for which required settings should be returned ("eDish" only for now) .  Default: \code{NULL} (uses all available charts).}
 
 \item{metadata}{The metadata file to be used}
 }
@@ -19,6 +19,6 @@ List of lists specifying the position of matching named elements in the format \
 Get a list of required settings for a given chart
 }
 \examples{
-safetyGraphics:::getRequiredSettings(chart="eDish")
+safetyGraphics:::getRequiredSettings(charts=c("edish","safetyHistogram"))
 
 }

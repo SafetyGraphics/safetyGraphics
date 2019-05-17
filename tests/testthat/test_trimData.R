@@ -20,12 +20,11 @@ both_settings[['analysisFlag']][['values']] <- list("Placebo","Xanomeline High D
 
 test_that("columns are removed",{
   # simple test case works
-  expect_length(trimData(adlbc, settings), 6)
-  expect_length(trimData(adlbc, baseline_settings), 6)
-  expect_length(trimData(adlbc, analysisFlag_settings), 7)
-  expect_length(trimData(adlbc, both_settings), 7)
-  expect_length(trimData(adlbc, filter_settings), 8)
- 
+  expect_length(trimData(adlbc, settings), 8)
+  expect_length(trimData(adlbc, baseline_settings), 8)
+  expect_length(trimData(adlbc, analysisFlag_settings), 9)
+  expect_length(trimData(adlbc, both_settings), 9)
+  expect_length(trimData(adlbc, filter_settings), 10)
 })
 
 test_that("rows are removed",{

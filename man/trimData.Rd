@@ -4,14 +4,14 @@
 \alias{trimData}
 \title{Removes unnecessary rows and columns}
 \usage{
-trimData(data, settings, chart = "edish")
+trimData(data, settings, charts = NULL)
 }
 \arguments{
 \item{data}{a data frame to trim}
 
 \item{settings}{the settings list used to determine which rows and columns to drop}
 
-\item{chart}{the chart being created}
+\item{charts}{the charts being created  Default: \code{NULL} (include data needed for all available charts).}
 }
 \value{
 A dataframe with unnecessary columns and rows removed
