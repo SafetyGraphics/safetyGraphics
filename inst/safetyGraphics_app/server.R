@@ -125,5 +125,45 @@ for(chart in all_charts){
     charts = reactive(labeledCharts[labeledCharts %in% settings_new$charts()])
   )
   
+  
+  
+  
+  output$about <- renderUI({
+    HTML('<h1> <b> Welcome to the Safety Graphics Shiny App  </b> </h1>  
+         <p> The Safety Graphics Shiny app is an interactive tool for evaluating clinical trial safety using
+         a flexible data pipeline. This application and corresponding 
+    <a href="https://cran.r-project.org/web/packages/safetyGraphics/index.html">safetyGraphics</a>
+         R package have been developed as part of the <a href="https://safetygraphics.github.io/">Interactive Safety Graphics (ISG) workstream</a>
+        of the ASA Biopharm-DIA Safety Working Group. </p>
+         <h3> Using the app</h3>
+        <p>Detailed instructions about using the app can be found in our 
+        <a href="https://cran.r-project.org/web/packages/safetyGraphics/vignettes/shinyUserGuide.html">vignette</a>. In short, 
+        the user will begin by loading a data file, adjust settings as needed and view the interactive charts. 
+        Finally, the user may export a self-contained, fully reproducible snapshot of the charts that can be easily shared with others.</p>
+        <h3> Interactive Charts </h2>
+        <p> The included interactive charts are built using the <code>htmlwidgets</code> framework in R. The code libraries
+        and configuration details for the underlying JavaScript charts are located below.
+        <ul>
+        <li>Hepatic Safety Explorer - 
+<a href="https://github.com/SafetyGraphics/hep-explorer">Library</a>,
+<a href="https://github.com/SafetyGraphics/hep-explorer/wiki/Configuration">Configuration</a></li>
+        <li>Histogram - 
+<a href="https://github.com/RhoInc/safety-histogram">Library</a>,
+<a href="https://github.com/RhoInc/safety-histogram/wiki/Configuration">Configuration</a></li>
+        <li>Outlier Explorer - 
+<a href="https://github.com/RhoInc/safety-outlier-explorer">Library</a>,
+<a href="https://github.com/RhoInc/safety-outlier-explorer/wiki/Configuration">Configuration</a></li>        
+        <li>Shift Plot - 
+<a href="https://github.com/RhoInc/safety-shift-plot">Library</a>,
+<a href="https://github.com/RhoInc/safety-shift-plot/wiki/Configuration">Shift Plot</a></li>
+        <li>Results Over Time - 
+<a href="https://github.com/RhoInc/safety-results-over-time">Library</a>,
+<a href="https://github.com/RhoInc/safety-results-over-time/wiki/Configuration">Configuration</a></li>
+        <li>Paneled Outlier Explorer - 
+<a href="https://github.com/RhoInc/paneled-outlier-explorer">Library</a>,
+<a href="https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration">Configuration</a></li></ul>
+        </p>')
+
+  })
   session$onSessionEnded(stopApp)
 }

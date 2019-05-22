@@ -17,6 +17,13 @@ tagList(
   navbarPage(
     "safetyGraphics Shiny app",
     id="nav_id",
+  tabPanel(
+    title = "Home", icon=icon("home"),
+    fluidRow(
+     # tags$style(type='text/css', '#about {font-size:23px;}'),
+      column(width=9, style='font-size:20px', uiOutput(outputId = "about"))
+    )
+  ),
     tabPanel(
       title = "Data",
       dataUploadUI("datatab")
