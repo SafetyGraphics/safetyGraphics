@@ -42,11 +42,10 @@ safetyGraphicsApp()
 
 ## Loading Large Files
 
-By default, Shiny only allows users to load files smaller than 5mb. If you want to load a larger file, run this code before opening the app:
+By default, Shiny only allows users to load files smaller than 5mb. If you want to load a larger file, use the maxFileSize setting when calling the app:
 
 ```
-maxFileSize<-100 #Update 100 desired max file size in megabytes
-options(shiny.maxRequestSize=(maxFileSize*1024^2))  
+safetyGraphicsApp(maxFileSize = 100)
 ```
 
 # Typical Workflow
@@ -57,15 +56,15 @@ After opening the app, you will typically follow the workflow below. In short, y
 
 This workflow lines up with the items in the toolbar for the App.
 
-<img src="https://user-images.githubusercontent.com/3680095/51495225-794ad200-1d70-11e9-9b1b-9c602dac27a1.png"  width="80%">
+<img src="https://user-images.githubusercontent.com/26064686/58193918-276c7700-7c92-11e9-80c9-f2eb77ba5d7c.png"  width="90%">
 
 More information about each step in the process is shown below.
 
 ## Load Data
 
-When you open the app, you are taken to the Data Tab with "Data Upload" and "Data Preview" panels. The preview for the pre-loaded "Example data" dataset is shown by default.
+When you open the app, you are taken to the Home Tab which contains some general information about the app and links to helpful documentation. Click on the Data Tab and you should see the "Data Upload" and "Data Preview" panels. The preview for the pre-loaded "Example data" dataset is shown by default.
 
-<img src="https://user-images.githubusercontent.com/3680095/51935405-ae7fa180-23ba-11e9-9c5b-a0e5f5202a93.png"  width="80%">
+<img src="https://user-images.githubusercontent.com/26064686/58193832-f4c27e80-7c91-11e9-918f-2fed9e034183.png"  width="90%">
 
 To load your own data, simply click the browse button and select a `.csv` or `.sas7bdat` data set. Once the file is loaded, select it in the list at the bottom of the "Data Upload Panel". Once selected, the "Data Preview" panel will update automatically (along with the Settings and Chart tabs).
 
@@ -75,7 +74,7 @@ The charts in the safetyGraphics app are specifically designed for clinical tria
 
 After loading your data, navigate to the Settings tab to customize the behavior of the charts. This tab includes a Charts panel for selecting the charts you want to visualize and other panels for different types of chart settings. For example, the "Data Mappings" panel (shown below for the "Example Data" ADaM data set) can be used to specify the column that contains the unique subject ID, and on the more general "Appearance Settings" panel, there is an option to specify a warning message to be displayed when the chart loads. You can hover the mouse over any setting label to get more details. The small numbers to the right of the settings labels indicate the number of charts that use the relevant setting. Mousing over them presents a list of these charts.
 
-<img src="https://user-images.githubusercontent.com/3680095/51495648-f1fe5e00-1d71-11e9-97e6-939ef6d08a9b.png"  width="80%">
+<img src="https://user-images.githubusercontent.com/26064686/58194007-600c5080-7c92-11e9-9312-822d3be787ef.png"  width="90%">
 
 When possible, items on the settings tab are pre-populated based on the data standard of the selected data set. See the Case Studies below for more details regarding working with non-standard data and adding customizations to the charts.
 
@@ -84,13 +83,13 @@ When possible, items on the settings tab are pre-populated based on the data sta
 Once the settings configuration is complete, click on the Charts tab to view a drop-down of the available charts. A green check will display by charts that are ready to be visualized and a red X will indicate that settings need to be changed in order to render the chart. Simply click one of the options to view it. The chart tab updates automatically when settings are changed or new data is loaded.
 More details about chart functionality will be documented in separate vignettes.  
 
-<img src="https://user-images.githubusercontent.com/3680095/51504626-c8a3f900-1d96-11e9-91d5-3641378844f1.png"  width="80%">
+<img src="https://user-images.githubusercontent.com/26064686/58194187-da3cd500-7c92-11e9-8067-76df1987e256.png"  width="90%">
 
 ## Export Results
 
 Navigate to the Reports tab to choose reports for export and click the "Export Chart(s)" button at the bottom to create a standalone copy of the charts using the current configuration. The export functionality combines the data, code, and settings for the charts in to a single file. In addition to the charts themselves, the export includes a summary of the tool, and code to recreate the customized charts in R.
 
-<img src="https://user-images.githubusercontent.com/3680095/51543124-b61ad580-1e11-11e9-8fe2-fe1a67a83583.png"  width="80%">
+<img src="https://user-images.githubusercontent.com/26064686/58194279-1a9c5300-7c93-11e9-8347-b0b0f33be05b.png"  width="90%">
 
 # Case Study #1 - Mapping Non-Standard data
 
@@ -131,35 +130,35 @@ safetyGraphicsApp()
 
 Use the "Browse.." button on the data upload section of the data tab to load a non-standard data set. We'll use the `.csv` saved [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/raw/master/inst/eDISH_app/tests/partialSDTM.csv), but the process is similar for other data sets. Notice that once the data is loaded, the app will detect whether the data matches one of those pre-loaded standards, and a note is added to indicate whether a match is found. Our sample data is a partial match for the SDTM standard. Once you select the newly loaded data set, the app should look like the screen capture below. Click on the Charts tab and note the red X's in the drop-down indicating that user customization is needed.
 
-<img src="https://user-images.githubusercontent.com/3680095/51935406-ae7fa180-23ba-11e9-9708-bdaf46cde892.png"  width="80%">
+<img src="https://user-images.githubusercontent.com/26064686/58194590-f2f9ba80-7c93-11e9-8e1f-bb71f79dbe91.png"  width="90%">
 
 ### 3. Select Columns
 
 Next, click the "Settings" tab in the nav bar at the top of the page. The page should look something like this:
 
-<img src="https://user-images.githubusercontent.com/3680095/51935407-ae7fa180-23ba-11e9-8d04-7a077329d8f5.png"  width="80%">
+<img src="https://user-images.githubusercontent.com/26064686/58195352-b9c24a00-7c95-11e9-8c75-e2ee30821ff3.png"  width="90%">
 
 Behind the scenes, a validation process is run to check if the selected settings match up with the selected data set to create a valid chart. Green (for valid) and red (for invalid) status messages are shown after each label in the Settings tab - you can hover the mouse over the status to get more details.
 
-As you can see, we've got several invalid settings with red status messages. We now need to go through and update each invalid setting and turn its status message in to a green "ok". Once all of the individual settings are valid, the red Xs in the Charts drop-down will turn to green checks, and the chart will be created. Let's hover over the first red error message to see the detailed description of the failed check:
+As you can see, we've got several invalid settings with red status messages. We now need to go through and update each invalid setting and turn its status message in to a green "ok". Once all of the individual settings are valid, the red Xs in the Charts drop-down will turn to green checks, and the chart will be created. Let's hover over the red X by the Measure Column Setting to see the detailed description of the failed check:
 
-<img src="https://user-images.githubusercontent.com/3680095/51568477-b1284700-1e4e-11e9-881d-89b6f443c4fa.png" width="30%">
+<img src="https://user-images.githubusercontent.com/26064686/58195501-17ef2d00-7c96-11e9-8550-92f63593962b.png" width="90%">
 
 As you might've guessed from the empty select box, the check failed because no value is specified for the setting. Choosing the measure column is simple. Click the select box to see pre-populated options corresponding to the columns in the data.
 
-<img src="https://user-images.githubusercontent.com/3680095/51504095-d441f080-1d93-11e9-9daf-293a027bd831.png" width="30%">
+<img src="https://user-images.githubusercontent.com/26064686/58195765-b7142480-7c96-11e9-95ea-7848314fe6a3.png" width="60%">
 
 Now select LBTEST for Measure Column and LBDY for the Study Day Column option. Your setting page should look something like this:
 
-<img src="https://user-images.githubusercontent.com/3680095/51935408-af183800-23ba-11e9-8aef-284efa1ee83a.png" width="80%">
+<img src="https://user-images.githubusercontent.com/26064686/58195966-37d32080-7c97-11e9-9081-dedf36556052.png" width="90%">
 
 Now we need to fill in the 4 inputs beneath Measure Column. You may have noticed that there were no options available for these inputs when the page loaded. This is because these options are field level data that depend on the Measure Column option. Once you selected a Measure Column, the options for these inputs were populated using the unique values found in that data column. To fill them in, just type the first few letters of lab in the text box. For example, type "Alan" for the Alanine Aminotransferase value input and select the correct option.
 
-<img src="https://user-images.githubusercontent.com/3680095/51569266-bbe3db80-1e50-11e9-8b5f-ff6a06ad73b7.png" width="30%">
+<img src="https://user-images.githubusercontent.com/26064686/58196481-656c9980-7c98-11e9-8817-04443b82f6b8.png" width="60%">
 
 Repeat the process for the other 3 "value" inputs and viola, the red x changes to a green check, and the Hepatic Explorer chart is ready.
 
-<img src="https://user-images.githubusercontent.com/3680095/51935409-af183800-23ba-11e9-8d56-7a0e49ce553a.png" width="80%">
+<img src="https://user-images.githubusercontent.com/26064686/58196573-93ea7480-7c98-11e9-8d49-36fb1de03501.png" width="90%">
 
 ### 4. View Chart
 
@@ -175,7 +174,7 @@ To export the chart, click the Reports Tab, make sure that the Hepatic Explorer 
 
 Open the downloaded file in a new tab in your browser and you'll see tabs for each of the charts and an "Info" tab. The Hepatic Explorer tab will be identical to the chart shown above, with all of your customizations intact. The "Info" tab, shown below, has a brief description of the safetyGraphics package and source code that you can use to recreate the charts in R.
 
-<img src="https://user-images.githubusercontent.com/3680095/51569925-98219500-1e52-11e9-9992-0955ebef9bf4.png" width="80%">
+<img src="https://user-images.githubusercontent.com/26064686/58196926-4c181d00-7c99-11e9-940d-e264081694a8.png" width="90%">
 
 The html file contains all of the data and code for the chartw and is easy to share. Just send the file to the person you're sharing with, and tell them to open it in their web browser (just double-click the file) - they don't even need R.
 
@@ -213,11 +212,11 @@ We'll use the pre-loaded example data for this case study, so there is no need t
 
 The `SafetyGraphics` Hepatic Explorer chart offers native support for data-driven groups and filtering. Any data column can be used to add filter and grouping controls to the chart. One common use case is to add grouping by treatment arm and filtering by site, race and sex. All of this can be done with just a few clicks. As you might have guessed, you just update the "Filter columns" and "Group columns" inputs as shown:
 
-<img src="https://user-images.githubusercontent.com/3680095/51570389-c489e100-1e53-11e9-8286-822083d96588.png" width="30%">
+<img src="https://user-images.githubusercontent.com/26064686/58197132-9d281100-7c99-11e9-8608-49ce299e0013.png" width="45%">
 
 Select "Hepatic Explorer from the Charts drop-down tab to see the following chart (with orange boxes added around the newly created filters and groups for emphasis):
 
-<img src="https://user-images.githubusercontent.com/3680095/51935411-afb0ce80-23ba-11e9-85e5-accf13d37101.png" width="80%">
+<img src="https://user-images.githubusercontent.com/26064686/58197282-ea0be780-7c99-11e9-8304-682533dccc93.png" width="90%">
 
 A word of warning - both grouping and filtering works best using categorical variables with a relatively small number of groups (less than 10 or so). With that said, there is no official limit on the number of unique values to include in a group or filter, so if you followed the example above but chose "AGE" (with over a dozen unique integer values) instead of "AGEGR1" (with 3 categorical levels), you might not love the functionality in the chart. Fortunately, it's easy to go back and update the chart to use the categorized variable instead - just go back to the settings tab and update the corresponding setting.
 
@@ -225,11 +224,11 @@ A word of warning - both grouping and filtering works best using categorical var
 
 You can also use the settings page to identify important values in the data. For the Hepatic Explorer chart, you can flag baseline values (using the "Baseline column" and "Baseline values" inputs) and values included in the analysis population (using "Analysis Flag column" and "Analysis Flag values" inputs). In both cases, you need to choose the "column" first, and then choose 1 or more corresponding "values".  Here are some suggested settings using our sample data:
 
-<img src="https://user-images.githubusercontent.com/3680095/51571343-ca34f600-1e56-11e9-986c-b6531df7a0bd.png" width="30%">
+<img src="https://user-images.githubusercontent.com/26064686/58197404-2dfeec80-7c9a-11e9-8ddf-62bc0af6577b.png" width="70%">
 
 In the Hepatic Explorer chart, adding a baseline flag enables the users to view a baseline-adjusted version of the chart. Click the chart tab, and then change the "Display Type" control to "Baseline Adjusted (mDish)".
 
-<img src="https://user-images.githubusercontent.com/3680095/51571827-251b1d00-1e58-11e9-8364-0434c17fd2c1.png" width="80%">
+<img src="https://user-images.githubusercontent.com/26064686/58197487-60104e80-7c9a-11e9-8139-6e9f3d709162.png" width="90%">
 
 We're following ADaM conventions and using "flag" columns ending in "FL" and "Y" values for the configuration here, but any column/value combination is allowed. For example, you could use study day 0 to define baseline by setting baseline column to "ADY" and baseline value to "0".
 
