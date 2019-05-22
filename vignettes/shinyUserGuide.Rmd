@@ -76,7 +76,7 @@ After loading your data, navigate to the Settings tab to customize the behavior 
 
 <img src="https://user-images.githubusercontent.com/26064686/58194007-600c5080-7c92-11e9-9312-822d3be787ef.png"  width="90%">
 
-When possible, items on the settings tab are pre-populated based on the data standard of the selected data set. See the Case Studies below for more details regarding working with non-standard data and adding customizations to the charts.
+When possible, items on the settings tab are pre-populated based on the data standard of the selected data set. If a SAS data set with labels is provided, the relevant column labels will appear within brackets [] next to their variable names. You can see this in the Data Mappings screenshot above. See the Case Studies below for more details regarding working with non-standard data and adding customizations to the charts.
 
 ## View Chart
 
