@@ -123,14 +123,21 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     } 
   }
 
-  #Coerce empty string to NULL
-  for (i in names(shell)){
-    if (!is.null(shell[[i]])){
-      if (shell[[i]]==""){
-        shell[i] <- list(NULL)
-      }
+  #Coerce empty string to NULL for data mappings
+
+  data_mappings <- safetyGraphics::getSettingsMetadata(
+    charts = charts,
+    cols="text_key",
+    filter_expr=column_mapping
+  )
+  for(text_key in data_mappings){ 
+    key <- textKeysToList(text_key)[[1]]
+    current <- getSettingValue(key,shell) 
+    if (!is.null(current)){
+      if(current == ""){
+        shell<-setSettingsValue(key=key, value=NULL, settings=shell)
+      } 
     }
   }
-
   return(shell)
 }
