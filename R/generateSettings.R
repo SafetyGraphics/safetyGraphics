@@ -126,7 +126,7 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   #Coerce empty string to NULL
   for (i in names(shell)){
     if (!is.null(shell[[i]])){
-      if (shell[[i]][1]==""){
+      if (shell[[i]]==""){
         shell[i] <- list(NULL)
       }
     }
