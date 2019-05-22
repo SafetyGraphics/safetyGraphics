@@ -20,8 +20,8 @@ tagList(
   tabPanel(
     title = "Home", icon=icon("home"),
     fluidRow(
-     # tags$style(type='text/css', '#about {font-size:23px;}'),
-      column(width=9, style='font-size:20px', uiOutput(outputId = "about"))
+      column(width=8, style='font-size:20px', uiOutput(outputId = "about")),
+      column(width=4, imageOutput(outputId = "hex"))
     )
   ),
     tabPanel(

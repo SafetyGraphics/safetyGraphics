@@ -135,12 +135,12 @@ for(chart in all_charts){
     <a href="https://cran.r-project.org/web/packages/safetyGraphics/index.html">safetyGraphics</a>
          R package have been developed as part of the <a href="https://safetygraphics.github.io/">Interactive Safety Graphics (ISG) workstream</a>
         of the ASA Biopharm-DIA Safety Working Group. </p>
-         <h3> Using the app</h3>
+         <h3><i> Using the app</i></h3>
         <p>Detailed instructions about using the app can be found in our 
         <a href="https://cran.r-project.org/web/packages/safetyGraphics/vignettes/shinyUserGuide.html">vignette</a>. In short, 
         the user will begin by loading a data file, adjust settings as needed and view the interactive charts. 
         Finally, the user may export a self-contained, fully reproducible snapshot of the charts that can be easily shared with others.</p>
-        <h3> Interactive Charts </h2>
+        <h3><i> Interactive Charts </i></h2>
         <p> The included interactive charts are built using the <code>htmlwidgets</code> framework in R. The code libraries
         and configuration details for the underlying JavaScript charts are located below.
         <ul>
@@ -162,8 +162,18 @@ for(chart in all_charts){
         <li>Paneled Outlier Explorer - 
 <a href="https://github.com/RhoInc/paneled-outlier-explorer">Library</a>,
 <a href="https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration">Configuration</a></li></ul>
-        </p>')
+        </p>
+<br>
+         <p>For more information about <code>safetyGraphics</code>, please visit our 
+<a href="https://github.com/SafetyGraphics/safetyGraphics">GitHub repository</a>.  We also welcome your suggestions in our
+<a href="https://github.com/SafetyGraphics/safetyGraphics/issues">issue tracker</a>.
+         </p>')
 
   })
+  
+  output$hex <- renderImage({
+    list(src = system.file("safetyGraphicsHex/safetyGraphicsHex.png", package = "safetyGraphics"), width="60%")
+  }, deleteFile = FALSE)
+  
   session$onSessionEnded(stopApp)
 }
