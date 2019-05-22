@@ -128,7 +128,7 @@ safetyGraphicsApp()
 
 ### 2. Load Data
 
-Use the "Browse.." button on the data upload section of the data tab to load a non-standard data set. We'll use the `.csv` saved [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/raw/master/inst/eDISH_app/tests/partialSDTM.csv), but the process is similar for other data sets. Notice that once the data is loaded, the app will detect whether the data matches one of those pre-loaded standards, and a note is added to indicate whether a match is found. Our sample data is a partial match for the SDTM standard. Once you select the newly loaded data set, the app should look like the screen capture below. Click on the Charts tab and note the red X's in the drop-down indicating that user customization is needed.
+Use the "Browse.." button on the data upload section of the data tab to load a non-standard data set. We'll use the `.csv` saved [here](https://github.com/SafetyGraphics/safetyGraphics/tree/master/inst/safetyGraphics_app/tests/partialSDTM.csv), but the process is similar for other data sets. Notice that once the data is loaded, the app will detect whether the data matches one of those pre-loaded standards, and a note is added to indicate whether a match is found. Our sample data is a partial match for the SDTM standard. Once you select the newly loaded data set, the app should look like the screen capture below. Click on the Charts tab and note the red X's in the drop-down indicating that user customization is needed.
 
 <img src="https://user-images.githubusercontent.com/26064686/58194590-f2f9ba80-7c93-11e9-8e1f-bb71f79dbe91.png"  width="90%">
 
@@ -176,7 +176,7 @@ Open the downloaded file in a new tab in your browser and you'll see tabs for ea
 
 <img src="https://user-images.githubusercontent.com/26064686/58196926-4c181d00-7c99-11e9-940d-e264081694a8.png" width="90%">
 
-The html file contains all of the data and code for the chartw and is easy to share. Just send the file to the person you're sharing with, and tell them to open it in their web browser (just double-click the file) - they don't even need R.
+The html file contains all of the data and code for the charts and is easy to share. Just send the file to the person you're sharing with, and tell them to open it in their web browser (just double-click the file) - they don't even need R.
 
 ## Summary
 
@@ -234,4 +234,4 @@ We're following ADaM conventions and using "flag" columns ending in "FL" and "Y"
 
 ### Summary
 
-This case study shows how to add some basic customizations to your Hepatic Explorer chart with a few clicks in the shiny application. Note that not all customizations are available in the shiny app. You can access more granular settings using the `htmlwidget` that creates the chart (e.g. see `?hep_explorer`) or even by looking at the documentation for the underlying [hep-explorer github repo](https://github.com/SafetyGraphics/hep-explorer) javascript library.  
+This case study shows how to add some basic customizations to your Hepatic Explorer chart with a few clicks in the shiny application. Note that not all customizations are available in the shiny app. You can access more granular settings by looking at the documentation for the underlying [hep-explorer github repo](https://github.com/SafetyGraphics/hep-explorer) javascript library.  
