@@ -49,8 +49,8 @@ renderSettings <- function(input, output, session, data, settings, status){
 
   ns <- session$ns
 
-  charts<-as.vector(filter(chartsMetadata, chart %in% all_charts)[["chart"]])
-  labels<-as.vector(filter(chartsMetadata, chart %in% all_charts)[["label"]])
+  charts<-as.vector(chartsMetadata[["chart"]])
+  labels<-as.vector(chartsMetadata[["label"]])
   names(charts)<-labels
 
   output$charts_wrap_ui <- renderUI({
@@ -190,35 +190,43 @@ renderSettings <- function(input, output, session, data, settings, status){
               filter_expr = field_column_key==!!col
             )
             
-            # Toggle field-level inputs:
-            #    ON  - if column-level input is selected)
-            #    OFF - if column-level input is not yet selected
-            for (fk in field_keys){
-              toggleState(id = fk, condition = !input[[col]]=="")
-            }
-
-            if (is.null(isolate(settings()[[col]])) || ! input[[col]] == isolate(settings()[[col]])){
-              
-              if (input[[col]] %in% colnames(data())){
-                choices <- unique(data()[,input[[col]]])
-                placeholder <- "Please select a value"
-              } else {
-                choices <- NULL 
-                placeholder <- paste0("Please select a ", getSettingsMetadata(col="label", text_key=col))
-              }
-
                 for (key in field_keys){
+                  # Toggle field-level inputs:
+                  #    ON  - if column-level input is selected)
+                  #    OFF - if column-level input is not yet selected
+                  toggleState(id = key, condition = !input[[col]]=="")
+                  
+                  # If it is the default column - populate standards
+                  if(input[[col]] == isolate(settings()[[col]]) && !is.null(isolate(settings()[[col]])))  {
+                    setting_key <- as.list(strsplit(key,"\\-\\-"))
+                    setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings= isolate(settings()))
+                    choices <- unique(c(setting_value, sort(as.character(data()[,input[[col]]])))) %>% unlist
+                    placeholder <- list (onInitialize = I('function() { }'))
+                  
+                  # If it's another column display placeholder message and set to empty 
+                  } else if(input[[col]] %in% colnames(data())) {
+                    choices <- unique(data()[,input[[col]]])
+                    placeholder <- list(
+                      placeholder = "Please select a value",
+                      onInitialize = I('function() {
+                       this.setValue("");}')
+                    )
+                  # If empty display different placeholder message
+                  } else {
+                    choices <- NULL 
+                    placeholder <- list(
+                      placeholder =  paste0("Please select a ", getSettingsMetadata(col="label", text_key=col)),
+                      onInitialize = I('function() {
+                       this.setValue("");}')
+                    )
+                  }
                   updateSelectizeInput(
                     session,
                     inputId = key,
                     choices = choices,
-                    options = list(
-                      placeholder = placeholder,
-                      onInitialize = I('function() {this.setValue("");}')
-                    )
+                    options = placeholder
                   ) #update SelectizeInput
                 } #for loop
-              }#if #1
           } #observeEvent (inner)
         ) #observeEvent (outer)
       }) #lapply
@@ -244,7 +252,7 @@ renderSettings <- function(input, output, session, data, settings, status){
     req(input_names())
     keys <- input_names()
     values<- keys %>% map(~getValues(.x))
-    
+
     inputDF <- tibble(text_key=keys, customValue=values)%>%
       rowwise %>%
       filter(!is.null(customValue[[1]]))
