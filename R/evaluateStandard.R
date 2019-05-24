@@ -37,7 +37,7 @@ evaluateStandard <- function(data, standard, includeFields=TRUE, domain="labs"){
   # Get metadata for settings using the specified standard and see if required data elements are found
   standardChecks <- getSettingsMetadata(cols=c("text_key", "column_mapping", "field_mapping", "field_column_key", "setting_required","standard_val",standard)) %>%
   rename("standard_val"=standard) %>%
-  filter(.data$column_mapping == TRUE || .data$field_mapping ==TRUE) %>%
+  filter(.data$column_mapping == TRUE | .data$field_mapping ==TRUE) %>%
   filter(.data$setting_required==TRUE) %>%
   mutate(type = ifelse(.data$column_mapping, "column", "field")) %>% 
   rowwise %>%

@@ -128,7 +128,7 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
   data_mappings <- safetyGraphics::getSettingsMetadata(
     charts = charts,
     cols="text_key",
-    filter_expr=column_mapping
+    filter_expr=.data$column_mapping
   )
   for(text_key in data_mappings){ 
     key <- textKeysToList(text_key)[[1]]
