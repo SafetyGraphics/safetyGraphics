@@ -28,3 +28,6 @@ unit_col,Unit column,Unit of measure variable name,character,FALSE,TRUE,characte
 start_value,Measure start value,Value of variable defined in measure_col to be rendered in the histogram when the widget loads,character,FALSE,FALSE,NA,TRUE,measure_col,data
 details,Details columns,"An optional list of specifications for details listing.  Each column to be added to details listing is a nested, named list (containing the variable name: ""value_col"" and associated label: ""label"") within the larger list.",vector,FALSE,TRUE,NA,FALSE,,data
 missingValues,Missing values,Values defining a missing value in the selected 'value' column,vector,FALSE,FALSE,NA,FALSE,,data
+visits_without_data,Visits without data,Controls display of visits without data for the current measure,logical,FALSE,FALSE,NA,FALSE,,data
+unscheduled_visits,Unscheduled visits,Controls display of unscheduled visits,logical,FALSE,FALSE,NA,FALSE,,data
+unscheduled_visit_pattern,Unscheduled visit pattern,A regular expression that identifies unscheduled visits,character,FALSE,FALSE,NA,FALSE,,data
