@@ -18,9 +18,9 @@ test_that("a list with the expected properties and structure is returned for all
 test_that("a warning is thrown if chart isn't found in the chart list",{
   expect_error(generateSettings(chart="aeexplorer"))
   expect_error(generateSettings(chart=""))
-  expect_silent(generateSettings(chart="eDish"))
-  expect_silent(generateSettings(chart="edish"))
-  expect_silent(generateSettings(chart="EdIsH"))
+  expect_silent(generateSettings(chart="hepExplorer"))
+  expect_silent(generateSettings(chart="hepexplorer"))
+  expect_silent(generateSettings(chart="HepexploreR"))
 })
 
 test_that("data mappings are null when setting=none, character otherwise",{
