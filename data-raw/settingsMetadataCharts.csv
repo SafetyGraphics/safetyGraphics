@@ -1,4 +1,4 @@
-text_key,edish,safetyhistogram,safetyoutlierexplorer,safetyshiftplot,safetyresultsovertime,paneledoutlierexplorer
+text_key,hepexplorer,safetyhistogram,safetyoutlierexplorer,safetyshiftplot,safetyresultsovertime,paneledoutlierexplorer
 id_col,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
 value_col,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
 measure_col,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE

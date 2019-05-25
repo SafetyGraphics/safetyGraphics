@@ -3,7 +3,7 @@
         ? (module.exports = factory(require('webcharts')))
         : typeof define === 'function' && define.amd
         ? define(['webcharts'], factory)
-        : (global.safetyedish = factory(global.webCharts));
+        : (global.hepexplorer = factory(global.webCharts));
 })(this, function(webcharts) {
     'use strict';
 
@@ -290,10 +290,11 @@
             populationProfileURL: null,
             participantProfileURL: null,
             r_ratio_filter: true,
-            r_ratio_cut: 0,
+            r_ratio: [0, null],
             visit_window: 30,
             title: 'Hepatic Safety Explorer',
             downloadLink: true,
+            filters_multiselect: true,
             warningText:
                 "This graphic has been thoroughly tested, but is not validated. Any clinical recommendations based on this tool should be confirmed using your organization's standard operating procedures.",
             //all values set in onLayout/quadrants/*.js
@@ -530,9 +531,15 @@
         return [
             {
                 type: 'number',
-                label: 'Minimum R Ratio',
-                description: 'Display points with R ratios greater or equal to X',
-                option: 'r_ratio_cut'
+                label: 'R Ratio Range',
+                description: 'Filter points based on R ratio [(ALT/ULN) / (ALP/ULN)]',
+                option: 'r_ratio[0]'
+            },
+            {
+                type: 'number',
+                label: null, //combined with r_ratio[0] control in formatRRatioControl()
+                description: null,
+                option: 'r_ratio[1]'
             },
             {
                 type: 'dropdown',
@@ -704,7 +711,7 @@
         //drop the R Ratio control if r_ratio_filter is false
         if (!settings.r_ratio_filter) {
             controlInputs = controlInputs.filter(function(controlInput) {
-                return controlInput.label != 'Minimum R Ratio';
+                return ['r_ratio[0]', 'r_ratio[1]'].indexOf(controlInput.option) == -1;
             });
         }
 
@@ -750,7 +757,8 @@
                         ? filter.label
                         : filter.value_col
                         ? filter.value_col
-                        : filter
+                        : filter,
+                    multiple: settings.filters_multiselect
                 };
                 return filter;
             });
@@ -1088,15 +1096,45 @@
         cleanData.call(this); //clean visit-level data - imputation and variable derivations
     }
 
-    function addRRatioSpan() {
+    function formatRRatioControl() {
+        var chart = this;
+        var config = this.config;
         if (this.config.r_ratio_filter) {
-            var rRatioLabel = this.controls.wrap
-                .selectAll('.control-group')
-                .filter(function(d) {
-                    return d.option === 'r_ratio_cut';
-                })
-                .select('.wc-control-label');
-            rRatioLabel.html(rRatioLabel.html() + " (<span id = 'r-ratio'></span>)");
+            var min_r_ratio = this.controls.wrap.selectAll('.control-group').filter(function(d) {
+                return d.option === 'r_ratio[0]';
+            });
+            var min_r_ratio_input = min_r_ratio.select('input');
+
+            var max_r_ratio = this.controls.wrap.selectAll('.control-group').filter(function(d) {
+                return d.option === 'r_ratio[1]';
+            });
+            var max_r_ratio_input = max_r_ratio.select('input');
+
+            min_r_ratio_input.attr('id', 'r_ratio_min');
+            max_r_ratio_input.attr('id', 'r_ratio_max');
+
+            //move the max r ratio control next to the min control
+            min_r_ratio.append('span').text(' - ');
+            min_r_ratio.append(function() {
+                return max_r_ratio_input.node();
+            });
+
+            max_r_ratio.remove();
+
+            //add a reset button
+            min_r_ratio
+                .append('button')
+                .style('padding', '0.2em 0.5em 0.2em 0.4em')
+                .style('margin-left', '0.5em')
+                .style('border-radius', '0.4em')
+                .text('Reset')
+                .on('click', function() {
+                    config.r_ratio[0] = 0;
+                    min_r_ratio.select('input#r_ratio_min').property('value', config.r_ratio[0]);
+                    config.r_ratio[1] = config.max_r_ratio;
+                    min_r_ratio.select('input#r_ratio_max').property('value', config.r_ratio[1]);
+                    chart.draw();
+                });
         }
     }
 
@@ -1408,6 +1446,7 @@
                 var initial_container = chart.element;
                 var initial_settings = chart.initial_settings;
                 var initial_data = chart.initial_data;
+                chart.emptyChartWarning.remove();
 
                 chart.destroy();
                 chart = null;
@@ -1743,14 +1782,15 @@
                 return f.type != 'subsetter';
             })
             .filter(function(f) {
-                return f.option != 'r_ratio_cut';
+                return f.option != 'r_ratio[0]';
             })
             .filter(function(f, i) {
                 return i == 0;
-            });
+            })
+            .attr('class', 'first-setting');
 
-        this.controls.setting_header = first_setting
-            .insert('div', '*')
+        this.controls.setting_header = this.controls.wrap
+            .insert('div', '.first-setting')
             .attr('class', 'subtitle')
             .style('border-top', '1px solid black')
             .style('border-bottom', '1px solid black')
@@ -1770,16 +1810,13 @@
                 .selectAll('div')
                 .filter(function(controlInput) {
                     return (
-                        controlInput.label === 'Minimum R Ratio' ||
-                        controlInput.type === 'subsetter'
+                        controlInput.label === 'R Ratio Range' || controlInput.type === 'subsetter'
                     );
                 })
                 .classed('subsetter', true);
 
-            var first_filter = this.controls.wrap.select('div.subsetter');
-
-            this.controls.filter_header = first_filter
-                .insert('div', '*')
+            this.controls.filter_header = this.controls.wrap
+                .insert('div', 'div.subsetter')
                 .attr('class', 'subtitle')
                 .style('border-top', '1px solid black')
                 .style('border-bottom', '1px solid black')
@@ -1819,12 +1856,13 @@
     }
 
     function addFootnote() {
-        this.wrap
+        this.footnote = this.wrap
             .append('div')
             .attr('class', 'footnote')
             .text('Use controls to update chart or click a point to see participant details.')
             .style('font-size', '0.7em')
             .style('padding-top', '0.1em');
+        this.footnote.timing = this.footnote.append('p');
     }
 
     function addDownloadButton() {
@@ -1865,6 +1903,21 @@
         }
     }
 
+    function initEmptyChartWarning() {
+        console.log(this);
+        this.emptyChartWarning = d3
+            .select(this.element)
+            .append('span')
+            .text('No data selected. Try updating your settings or resetting the chart. ')
+            .style('display', 'none')
+            .style('color', '#a94442')
+            .style('background-color', '#f2dede')
+            .style('border', '1px solid #ebccd1')
+            .style('padding', '0.5em')
+            .style('margin', '0 2% 12px 2%')
+            .style('border-radius', '0.2em');
+    }
+
     function onLayout() {
         layoutPanels.call(this);
 
@@ -1877,7 +1930,7 @@
         addDownloadButton.call(this);
 
         addFootnote.call(this);
-        addRRatioSpan.call(this);
+        formatRRatioControl.call(this);
         initQuadrants.call(this);
         initRugs.call(this);
         initVisitPath.call(this);
@@ -1885,6 +1938,7 @@
         initResetButton.call(this);
         initDisplayControl.call(this);
         initControlLabels.call(this);
+        initEmptyChartWarning.call(this);
     }
 
     function updateAxisSettings() {
@@ -1930,9 +1984,43 @@
                 .text(this.config.y.column + ' Reference Line');
     }
 
-    function updateRRatioSpan() {
+    function setMaxRRatio() {
+        var chart = this;
+        var config = this.config;
+        var r_ratio_wrap = chart.controls.wrap.selectAll('.control-group').filter(function(d) {
+            return d.option === 'r_ratio[0]';
+        });
+
+        //if no max value is defined, use the max value from the data
         if (this.config.r_ratio_filter) {
-            this.controls.wrap.select('#r-ratio').text('(ALT/ULN) / (ALP/ULN)');
+            if (!config.r_ratio[1]) {
+                var raw_max_r_ratio = d3.max(this.raw_data, function(d) {
+                    return d.rRatio;
+                });
+                config.max_r_ratio = Math.ceil(raw_max_r_ratio * 10) / 10; //round up to the nearest 0.1
+                config.r_ratio[1] = config.max_r_ratio;
+                chart.controls.wrap
+                    .selectAll('.control-group')
+                    .filter(function(d) {
+                        return d.option === 'r_ratio[0]';
+                    })
+                    .select('input#r_ratio_max')
+                    .property('value', config.max_r_ratio);
+            }
+
+            //make sure r_ratio[0] <= r_ratio[1]
+            if (config.r_ratio[0] > config.r_ratio[1]) {
+                config.r_ratio = config.r_ratio.reverse();
+                r_ratio_wrap.select('input#r_ratio_min').property('value', config.r_ratio[0]);
+                r_ratio_wrap.select('input#r_ratio_max').property('value', config.r_ratio[1]);
+            }
+
+            //Define flag given r-ratio minimum.
+            this.raw_data.forEach(function(participant_obj) {
+                var aboveMin = participant_obj.rRatio >= config.r_ratio[0];
+                var belowMax = participant_obj.rRatio <= config.r_ratio[1];
+                participant_obj.rRatioFlag = aboveMin & belowMax ? 'Y' : 'N';
+            });
         }
     }
 
@@ -1967,10 +2055,6 @@
             //R-ratio should be the ratio of ALT to ALP, i.e. the x-axis to the z-axis.
             participant_obj.rRatio =
                 participant_obj['ALT_relative_uln'] / participant_obj['ALP_relative_uln'];
-
-            //Define flag given r-ratio minimum.
-            participant_obj.rRatioFlag =
-                participant_obj.rRatio > this.config.r_ratio_cut ? 'Y' : 'N';
         }
     }
 
@@ -2251,8 +2335,8 @@
     function onPreprocess() {
         updateAxisSettings.call(this); //update axis label based on display type
         updateControlCutpointLabels.call(this); //update cutpoint control labels given x- and y-axis variables
-        updateRRatioSpan.call(this);
         this.raw_data = flattenData.call(this); //convert from visit-level data to participant-level data
+        setMaxRRatio.call(this);
         setLegendLabel.call(this); //update legend label based on group variable
         dropMissingValues.call(this);
     }
@@ -2485,6 +2569,12 @@
         }
     }
 
+    function hideEmptyChart() {
+        var emptyChart = this.filtered_data.length == 0;
+        this.wrap.style('display', emptyChart ? 'none' : 'inline-block');
+        this.emptyChartWarning.style('display', emptyChart ? 'inline-block' : 'none');
+    }
+
     function onDraw() {
         //clear participant Details
         clearParticipantDetails.call(this);
@@ -2504,6 +2594,7 @@
 
         //update the count in the filter label
         updateFilterLabel.call(this);
+        hideEmptyChart.call(this);
     }
 
     function drawQuadrants() {
@@ -3986,8 +4077,11 @@
                     ' @ Day ' +
                     raw[yvar + '_' + config.studyday_col],
                 dayDiff = raw['day_diff'] + ' days apart',
-                idLabel = 'Participant ID: ' + raw[config.id_col];
-            return idLabel + '\n' + xLabel + '\n' + yLabel + '\n' + dayDiff;
+                idLabel = 'Participant ID: ' + raw[config.id_col],
+                rRatioLabel = config.r_ratio_filter
+                    ? '\n' + 'Overall R Ratio: ' + d3.format('0.2f')(raw.rRatio)
+                    : '';
+            return idLabel + rRatioLabel + '\n' + xLabel + '\n' + yLabel + '\n' + dayDiff;
         });
     }
 
@@ -4431,6 +4525,26 @@
             });
     }
 
+    function updateTimingFootnote() {
+        var config = this.config;
+        var windowText =
+            config.visit_window == 0
+                ? 'on the same day'
+                : config.visit_window == 1
+                ? 'within 1 day'
+                : 'within ' + config.visit_window + ' days';
+        var timingFootnote =
+            ' Points where maximum ' +
+            config.measure_values[config.x.column] +
+            ' and ' +
+            config.measure_values[config.y.column] +
+            ' values were collected ' +
+            windowText +
+            ' are filled, others are empty.';
+
+        this.footnote.timing.text(timingFootnote);
+    }
+
     function onResize$1() {
         //add point interactivity, custom title and formatting
         addPointMouseover.call(this);
@@ -4455,6 +4569,9 @@
 
         //axis formatting
         adjustTicks.call(this);
+
+        //add timing footnote
+        updateTimingFootnote.call(this);
     }
 
     var callbacks = {

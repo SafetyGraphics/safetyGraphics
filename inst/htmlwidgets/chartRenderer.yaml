@@ -10,8 +10,8 @@ dependencies:
     stylesheet: webcharts.css
   - name: safety-eDish
     version: 0.17.0
-    src: htmlwidgets/lib/safety-eDISH-0.17.0
-    script: safetyedish.js
+    src: htmlwidgets/lib/hep-explorer-1.0.0
+    script: hepexplorer.js
   - name: safety-histogram
     version: 2.3.0
     src: htmlwidgets/lib/safety-histogram-2.3.0
