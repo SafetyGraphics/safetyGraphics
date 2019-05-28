@@ -20,7 +20,7 @@ customMetadata<- data.frame(
 
 mergedMetadata = suppressWarnings(bind_rows(
   rawMetadata%>%mutate(chart_linechart= FALSE)%>%mutate(chart_barchart= FALSE),
-  customMetadata%>%mutate(chart_edish= FALSE, chart_safetyhistogram=FALSE)
+  customMetadata%>%mutate(chart_hepexplorer= FALSE, chart_safetyhistogram=FALSE)
 ))
 
 

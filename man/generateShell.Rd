@@ -20,7 +20,7 @@ The function is designed to work with valid safetyGraphics charts.
 }
 \examples{
 
-safetyGraphics:::generateShell(charts = "eDish")
+safetyGraphics:::generateShell(charts = "hepexplorer")
 
 }
 \keyword{internal}

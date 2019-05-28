@@ -4,7 +4,7 @@
 #'
 #' @format A data frame with 29 rows and 17 columns
 #' \describe{
-#'    \item{chart_edish}{Flag indicating if the settings apply to the eDish Chart}
+#'    \item{chart_hepexplorer}{Flag indicating if the settings apply to the Hepatic Explorer Chart}
 #'    \item{chart_paneledoutlierexplorer}{Flag indicating if the settings apply to the Paneled Safety Outlier Explorer Chart}
 #'    \item{chart_safetyhistogram}{Flag indicating if the settings apply to the Safety Histogram Chart}
 #'    \item{chart_safetyoutlierexplorer}{Flag indicating if the settings apply to the Safety Outlier Explorer Chart}

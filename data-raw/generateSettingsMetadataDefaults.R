@@ -1,3 +1,5 @@
+library(tibble)
+
 defaults <- tribble(~text_key, ~default,
              "id_col", NULL,
              "value_col", NULL,
