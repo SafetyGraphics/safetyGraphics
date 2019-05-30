@@ -146,7 +146,9 @@ for(chart in all_charts){
         <ul>
         <li>Hepatic Safety Explorer - 
 <a href="https://github.com/SafetyGraphics/hep-explorer">Library</a>,
-<a href="https://github.com/SafetyGraphics/hep-explorer/wiki/Configuration">Configuration</a></li>
+<a href="https://github.com/SafetyGraphics/hep-explorer/wiki/Configuration">Configuration</a>,
+<a href="https://github.com/SafetyGraphics/SafetyGraphics.github.io/raw/master/ISG%20Hepatic%20Safety%20Explorer%20User%27s%20Manual%20%26%20Workflow%20v1.0.pdf">Clinical Workflow</a>
+        </li>
         <li>Histogram - 
 <a href="https://github.com/RhoInc/safety-histogram">Library</a>,
 <a href="https://github.com/RhoInc/safety-histogram/wiki/Configuration">Configuration</a></li>
