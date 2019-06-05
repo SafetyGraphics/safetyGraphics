@@ -134,9 +134,11 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     key <- textKeysToList(text_key)[[1]]
     current <- getSettingValue(key,shell) 
     if (!is.null(current)){
-      if(current == ""){
-        shell<-setSettingsValue(key=key, value=NULL, settings=shell)
-      } 
+      if(length(current) <=1) { 
+        if(current == ""){
+          shell<-setSettingsValue(key=key, value=NULL, settings=shell)
+        } 
+      }
     }
   }
   return(shell)
