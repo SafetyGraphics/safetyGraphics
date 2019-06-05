@@ -19,9 +19,17 @@ tagList(
     id="nav_id",
   tabPanel(
     title = "Home", icon=icon("home"),
-    fluidRow(
-      column(width=8, style='font-size:20px', uiOutput(outputId = "about")),
-      column(width=4, imageOutput(outputId = "hex"))
+    tabsetPanel(
+      tabPanel("About",
+        fluidRow(
+          column(width=8, style='font-size:20px', uiOutput(outputId = "about")),
+          column(width=4, imageOutput(outputId = "hex"))
+        )
+      ),
+      tabPanel("Clinical workflow",
+               tags$iframe(style="height:400px; width:100%; scrolling=yes",
+                                    src = "http://github.com/SafetyGraphics/SafetyGraphics.github.io/blob/master/ISG%20Hepatic%20Safety%20Explorer%20User's%20Manual%20%26%20Workflow%20v1.0.pdf")
+      )
     )
   ),
     tabPanel(
