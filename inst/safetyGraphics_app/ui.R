@@ -27,8 +27,8 @@ tagList(
         )
       ),
       tabPanel("Clinical workflow",
-               tags$iframe(style="height:400px; width:100%; scrolling=yes",
-                                    src = "http://github.com/SafetyGraphics/SafetyGraphics.github.io/blob/master/ISG%20Hepatic%20Safety%20Explorer%20User's%20Manual%20%26%20Workflow%20v1.0.pdf")
+               tags$iframe(style="height:400px; width:100%; scrolling=yes;",  `data-type`="iframe",
+                                    src = "https://cdn.jsdelivr.net/gh/SafetyGraphics/SafetyGraphics.github.io/ISG%20Hepatic%20Safety%20Explorer%20User's%20Manual%20%26%20Workflow%20v1.0.pdf")
       )
     )
   ),
