@@ -140,14 +140,16 @@ for(chart in all_charts){
         <a href="https://cran.r-project.org/web/packages/safetyGraphics/vignettes/shinyUserGuide.html">vignette</a>. In short, 
         the user will begin by loading a data file, adjust settings as needed and view the interactive charts. 
         Finally, the user may export a self-contained, fully reproducible snapshot of the charts that can be easily shared with others.</p>
-        <h3><i> Interactive Charts </i></h2>
+        <h3><i> Clinical Workflow </i></h3>        
+        This shiny app has been developed in parallel with a well-documented <a href="https://github.com/SafetyGraphics/SafetyGraphics.github.io/raw/master/ISG%20Hepatic%20Safety%20Explorer%20User%27s%20Manual%20%26%20Workflow%20v1.0.pdf">clinical workflow</a>
+ for monitoring hepatotoxicity. The workflow, written by expert physicians, provides a detailed description of how the interactive graphics can be used as part of a safety clinician’s monitoring practice.
+        <h3><i> Interactive Charts </i></h3>
         <p> The included interactive charts are built using the <code>htmlwidgets</code> framework in R. The code libraries
         and configuration details for the underlying JavaScript charts are located below.
         <ul>
         <li>Hepatic Safety Explorer - 
 <a href="https://github.com/SafetyGraphics/hep-explorer">Library</a>,
-<a href="https://github.com/SafetyGraphics/hep-explorer/wiki/Configuration">Configuration</a>,
-<a href="https://github.com/SafetyGraphics/SafetyGraphics.github.io/raw/master/ISG%20Hepatic%20Safety%20Explorer%20User%27s%20Manual%20%26%20Workflow%20v1.0.pdf">Clinical Workflow</a>
+<a href="https://github.com/SafetyGraphics/hep-explorer/wiki/Configuration">Configuration</a>
         </li>
         <li>Histogram - 
 <a href="https://github.com/RhoInc/safety-histogram">Library</a>,
@@ -157,7 +159,7 @@ for(chart in all_charts){
 <a href="https://github.com/RhoInc/safety-outlier-explorer/wiki/Configuration">Configuration</a></li>        
         <li>Shift Plot - 
 <a href="https://github.com/RhoInc/safety-shift-plot">Library</a>,
-<a href="https://github.com/RhoInc/safety-shift-plot/wiki/Configuration">Shift Plot</a></li>
+<a href="https://github.com/RhoInc/safety-shift-plot/wiki/Configuration">Configuration</a></li>
         <li>Results Over Time - 
 <a href="https://github.com/RhoInc/safety-results-over-time">Library</a>,
 <a href="https://github.com/RhoInc/safety-results-over-time/wiki/Configuration">Configuration</a></li>
