@@ -9,7 +9,7 @@
 #'
 #' @examples
 #'
-#' safetyGraphics:::generateShell(charts = "eDish")
+#' safetyGraphics:::generateShell(charts = "hepexplorer")
 #'
 #' @keywords internal
 

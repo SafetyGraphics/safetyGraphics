@@ -3,9 +3,9 @@
 
 # safetyGraphics: Clinical Trial Safety Graphics with R  <img src="inst/safetyGraphicsHex/safetyGraphicsHex.png" width = "175" height = "200" align="right" />
 
-The **safetyGraphics** package provides a framework for evaluation of clinical trial safety in R. The initial release focuses on Evaluation of Drug-Induced Serious Hepatotoxicity (eDISH). A prototype of the eDish interactive graphic is available [here](https://safetygraphics.github.io/safety-eDISH/test/) and is shown below.
+The **safetyGraphics** package provides a framework for evaluation of clinical trial safety in R. It includes several safety-focused visualizations to empower clinical data monitoring. Chief among these is the Hepatic Explorer, based on the [Evaluation of the Drug-Induced Serious Hepatotoxicity (eDish)](https://www.ncbi.nlm.nih.gov/pubmed/21332248) visualization. A demo of the Hepatic Explorer interactive graphic is available [here](https://safetygraphics.github.io/hep-explorer/test-page/example1/) and is shown below.
 
-This package is being built in conjunction with the [safety-eDISH](https://github.com/safetyGraphics/safety-eDISH) javascript library. Both packages are under active development with beta testing and an initial release planned for early 2019.
+This package is being built in conjunction with the [hep-explorer](https://github.com/SafetyGraphics/hep-explorer) javascript library.
 
 ![edishgif](https://user-images.githubusercontent.com/3680095/45834450-02b3a000-bcbc-11e8-8172-324c2fe43521.gif)
 
@@ -23,7 +23,7 @@ The Shiny app provides a simple interface for:
 ```r
 devtools::install_github("SafetyGraphics/safetyGraphics")
 library("safetyGraphics")
-chartBuilderApp() #open the shiny application
+safetyGraphicsApp() #open the shiny application
 ```
 
 ### Standalone charts
@@ -33,17 +33,22 @@ Users can also initialize customized standalone charts with a few lines of code.
 ```r
 devtools::install_github("safetyGraphics/safetyGraphics")
 library("safetyGraphics")
-eDISH(data=adlbc,
-      id_col = "USUBJID",
-      value_col = "AVAL",
-      measure_col = "PARAM",
-      visit_col = "VISIT",
-      visitn_col = "VISITNUM",
-      studyday_col = "ADY",
-      normal_col_low = "A1LO",
-      normal_col_high = "A1HI",
-      measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
-                            AST = "Aspartate Aminotransferase (U/L)",
-                            TB = "Bilirubin (umol/L)",
-                            ALP = "Alkaline Phosphatase (U/L)"))
+
+settings <- list(
+  id_col = "USUBJID",
+  value_col = "AVAL",
+  measure_col = "PARAM",
+  visit_col = "VISIT",
+  visitn_col = "VISITNUM",
+  studyday_col = "ADY",
+  normal_col_low = "A1LO",
+  normal_col_high = "A1HI",
+  measure_values = list(ALT = "Alanine Aminotransferase (U/L)",
+                        AST = "Aspartate Aminotransferase (U/L)",
+                        TB = "Bilirubin (umol/L)",
+                        ALP = "Alkaline Phosphatase (U/L)")
+  )
+
+chartRenderer(data=adlbc, settings=settings, chart="hepexplorer")
+
 ```

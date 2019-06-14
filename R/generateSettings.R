@@ -2,14 +2,15 @@
 #'
 #' This function returns a settings object for the eDish chart based on the specified data standard.
 #'
-#' The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, eDish is the only chart supported.
+#' The function is designed to work with the SDTM and ADaM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, eDish is the only chart supported.
 #'
-#' @param standard The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"None"}.
+#' @param standard The data standard for which to create settings. Valid options are "sdtm", "adam" or "none". Default: \code{"None"}.
 #' @param charts The chart or charts for which settings should be generated. Default: \code{NULL} (uses all available charts).
 #' @param useDefaults Specifies whether default values from settingsMetadata should be included in the settings object. Default: \code{TRUE}.
 #' @param partial Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.
 #' @param partial_keys Optional character vector of the matched settings if partial is TRUE. Settings should be identified using the text_key format described in ?settingsMetadata. Setting is ignored when partial is FALSE. Default: \code{NULL}.
-#' @param custom_settings a tibble with text_key and customValue columns specifiying customizations to be applied to the settings object. Default: \code{NULL}.
+#' @param custom_settings A tibble describing custom settings to be added to the settings object. Custom values overwrite default values when provided. Tibble should  have text_key and customValue columns. Default: \code{NULL}. 
+#' 
 #' @return A list containing the appropriate settings for the selected chart
 #'
 #' @examples
@@ -123,14 +124,23 @@ generateSettings <- function(standard="None", charts=NULL, useDefaults=TRUE, par
     } 
   }
 
-  #Coerce empty string to NULL
-  for (i in names(shell)){
-    if (!is.null(shell[[i]])){
-      if (shell[[i]][1]==""){
-        shell[i] <- list(NULL)
+  #Coerce empty string to NULL for data mappings
+
+  data_mappings <- safetyGraphics::getSettingsMetadata(
+    charts = charts,
+    cols="text_key",
+    filter_expr=.data$column_mapping
+  )
+  for(text_key in data_mappings){ 
+    key <- textKeysToList(text_key)[[1]]
+    current <- getSettingValue(key,shell) 
+    if (!is.null(current)){
+      if(length(current) <=1) { 
+        if(current == ""){
+          shell<-setSettingsValue(key=key, value=NULL, settings=shell)
+        } 
       }
     }
   }
-
   return(shell)
 }

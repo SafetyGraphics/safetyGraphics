@@ -129,13 +129,13 @@ test_that("validateSettings returns the expected charts object",{
   # At least one chart is invalid when overal status is invalid
   expect_false(failed[["charts"]]%>%map_lgl(~.x)%>%all)
   
-  # eDish is the only invalid chart when a measure value is invalidated
-  edishFail_settings <- validSettings
-  edishFail_settings[["measure_values"]][["AST"]]<-"INVALID!"
-  edishFail_validation<-validateSettings(data=adlbc, settings=edishFail_settings)
-  expect_false(edishFail_validation$valid)
-  expect_false(edishFail_validation$charts%>%map_lgl(~.x)%>%all)
-  expect_false(edishFail_validation[["charts"]][["edish"]]) #edish is invalid
-  edishFail_validation[["charts"]][["edish"]]<-NULL
-  expect_true(edishFail_validation$charts%>%map_lgl(~.x)%>%all) #all other charts are valid
+  # hepexplorer is the only invalid chart when a measure value is invalidated
+  hepexplorerFail_settings <- validSettings
+  hepexplorerFail_settings[["measure_values"]][["AST"]]<-"INVALID!"
+  hepexplorerFail_validation<-validateSettings(data=adlbc, settings=hepexplorerFail_settings)
+  expect_false(hepexplorerFail_validation$valid)
+  expect_false(hepexplorerFail_validation$charts%>%map_lgl(~.x)%>%all)
+  expect_false(hepexplorerFail_validation[["charts"]][["hepexplorer"]]) #hepexplorer is invalid
+  hepexplorerFail_validation[["charts"]][["hepexplorer"]]<-NULL
+  expect_true(hepexplorerFail_validation$charts%>%map_lgl(~.x)%>%all) #all other charts are valid
 })

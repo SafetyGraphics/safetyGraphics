@@ -1,4 +1,4 @@
-text_key,edish,safetyhistogram,safetyoutlierexplorer,safetyshiftplot,safetyresultsovertime,paneledoutlierexplorer
+text_key,hepexplorer,safetyhistogram,safetyoutlierexplorer,safetyshiftplot,safetyresultsovertime,paneledoutlierexplorer
 id_col,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
 value_col,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
 measure_col,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
@@ -28,3 +28,6 @@ unit_col,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE
 start_value,FALSE,TRUE,TRUE,TRUE,TRUE,FALSE
 details,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE
 missingValues,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE
+visits_without_data,FALSE,FALSE,TRUE,FALSE,TRUE,TRUE
+unscheduled_visits,FALSE,FALSE,TRUE,FALSE,TRUE,TRUE
+unscheduled_visit_pattern,FALSE,FALSE,TRUE,FALSE,TRUE,TRUE

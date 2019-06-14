@@ -17,9 +17,9 @@ params:
 ```{r, echo = FALSE, message=FALSE, warning = FALSE}
 library(safetyGraphics)
 library(knitr)
-check_edish <- "edish" %in% params$charts
+check_hepexplorer <- "hepexplorer" %in% params$charts
 
-edish_settings <- trimSettings(settings=params$settings, charts="edish")
+hepexplorer_settings <- trimSettings(settings=params$settings, charts="hepexplorer")
 
 check_histogram <- "safetyhistogram" %in% params$charts
 
@@ -44,14 +44,14 @@ paneled_settings <- trimSettings(settings=params$settings, charts="paneledoutlie
 ```
 
 
-```{r, eval=check_edish, echo=FALSE}
-asis_output("### eDISH\\n")
+```{r, eval=check_hepexplorer, echo=FALSE}
+asis_output("### Hepatic Explorer\\n")
 ```
 
-```{r, fig.width=12, fig.height=15, eval=check_edish, echo = FALSE}
+```{r, fig.width=12, fig.height=15, eval=check_hepexplorer, echo = FALSE}
 
 chartRenderer(data = params$data,
-      settings = edish_settings, chart="edish")
+      settings = hepexplorer_settings, chart="hepexplorer")
 ```
 
 ```{r, eval=check_histogram, echo=FALSE}
@@ -122,14 +122,14 @@ writeLines("my_data <- read.csv(file.path(path, 'data.csv'))")
 ```
 
 
-```{r, eval=check_edish, echo=FALSE}
-asis_output("**Code to render eDISH chart**\\n")
+```{r, eval=check_hepexplorer, echo=FALSE}
+asis_output("**Code to render Hepatic Explorer chart**\\n")
 ```
 
-```{r, eval=check_edish, comment=NA, echo=FALSE}
+```{r, eval=check_hepexplorer, comment=NA, echo=FALSE}
 
 graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(edish_settings), chart="edish"))
+      settings = .(hepexplorer_settings), chart="hepexplorer"))
 
 graphic_code
 

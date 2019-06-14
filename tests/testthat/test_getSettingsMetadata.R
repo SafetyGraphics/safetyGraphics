@@ -20,7 +20,7 @@ customMetadata<- data.frame(
 
 mergedMetadata = suppressWarnings(bind_rows(
   rawMetadata%>%mutate(chart_linechart= FALSE)%>%mutate(chart_barchart= FALSE),
-  customMetadata%>%mutate(chart_edish= FALSE, chart_safetyhistogram=FALSE)
+  customMetadata%>%mutate(chart_hepexplorer= FALSE, chart_safetyhistogram=FALSE)
 ))
 
 
@@ -43,12 +43,12 @@ test_that("Pulling from a custom metadata file works as expected",{
 test_that("charts parameter works as expected",{
 
   #return a dataframe for valid input
-  expect_is(safetyGraphics:::getSettingsMetadata(charts=c("edish")),"data.frame")
-  expect_is(safetyGraphics:::getSettingsMetadata(charts="edish"),"data.frame")
+  expect_is(safetyGraphics:::getSettingsMetadata(charts=c("hepexplorer")),"data.frame")
+  expect_is(safetyGraphics:::getSettingsMetadata(charts="hepexplorer"),"data.frame")
 
   #error if charts isn't a character
   expect_error(safetyGraphics:::getSettingsMetadata(charts=123))
-  expect_error(safetyGraphics:::getSettingsMetadata(charts=list("edish")))
+  expect_error(safetyGraphics:::getSettingsMetadata(charts=list("hepexplorer")))
 
   #return null if no valid charts are passed
   expect_true(is.null(safetyGraphics:::getSettingsMetadata(charts=c(""))))
@@ -57,13 +57,13 @@ test_that("charts parameter works as expected",{
   expect_true(is.null(safetyGraphics:::getSettingsMetadata(charts=c("notachart","stillnotachart"))))
 
   #no partial matches supported
-  expect_true(is.null(safetyGraphics:::getSettingsMetadata(charts=c("edi"))))
+  expect_true(is.null(safetyGraphics:::getSettingsMetadata(charts=c("hepexplore"))))
 
   #return a dataframe if at least one valid chart type is passed
-  expect_is(safetyGraphics:::getSettingsMetadata(charts=c("notachart","edish")),"data.frame")
+  expect_is(safetyGraphics:::getSettingsMetadata(charts=c("notachart","hepexplorer")),"data.frame")
 
   #capitalization doesn't matter
-  expect_is(safetyGraphics:::getSettingsMetadata(charts=c("EdIsH")),"data.frame")
+  expect_is(safetyGraphics:::getSettingsMetadata(charts=c("HepexploreR")),"data.frame")
 
   #get the right number of records with various combinations
   lineonly <- safetyGraphics:::getSettingsMetadata(charts=c("linechart"),metadata=mergedMetadata)
@@ -134,8 +134,8 @@ test_that("filter_expr parameters works as expected",{
     safetyGraphics:::getSettingsMetadata(text_key="id_col")
   )
   expect_equal(safetyGraphics:::getSettingsMetadata(filter_expr=text_key=="id_col",cols="description"),"Unique subject identifier variable name.")
-  expect_length(safetyGraphics:::getSettingsMetadata(filter_expr=column_type=="numeric",cols="text_key",chart="edish"),5)
-  expect_length(safetyGraphics:::getSettingsMetadata(filter_expr=setting_required,cols="text_key",chart="edish"),12)
+  expect_length(safetyGraphics:::getSettingsMetadata(filter_expr=column_type=="numeric",cols="text_key",chart="hepexplorer"),5)
+  expect_length(safetyGraphics:::getSettingsMetadata(filter_expr=setting_required,cols="text_key",chart="hepexplorer"),12)
 })
 
 test_that("add_standards parameters works as expected",{
