@@ -60,6 +60,6 @@
 adlbc
 }
 \description{
-A dataset containing anonymized lab data from a clinical trial in the CDISC ADaM format. The structure is 1 record per measure per visit per participant. See a full description of the ADaM data standard \href{https://www.cdisc.org/sites/default/files/members/standard/foundational/adam/adam_implementation_guide_v1.0.pdf}{here}.
+A dataset containing anonymized lab data from a clinical trial in the CDISC ADaM format. The structure is 1 record per measure per visit per participant. See a full description of the ADaM data standard \href{https://www.cdisc.org/standards/foundational/adam/adam-implementation-guide-v11}{here}.
 }
 \keyword{datasets}

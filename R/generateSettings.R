@@ -9,6 +9,8 @@
 #' @param useDefaults Specifies whether default values from settingsMetadata should be included in the settings object. Default: \code{TRUE}.
 #' @param partial Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.
 #' @param partial_keys Optional character vector of the matched settings if partial is TRUE. Settings should be identified using the text_key format described in ?settingsMetadata. Setting is ignored when partial is FALSE. Default: \code{NULL}.
+#' @param custom_settings A tibble describing custom settings to be added to the settings object. Custom values overwrite default values when provided. Tibble should  have text_key and customValue columns. Default: \code{NULL}. 
+#' 
 #' @return A list containing the appropriate settings for the selected chart
 #'
 #' @examples
