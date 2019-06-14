@@ -4,8 +4,8 @@ dependencies:
     src: htmlwidgets/lib/d3-3.5.17
     script: d3.v3.min.js
   - name: webcharts
-    version: 1.11.5
-    src: htmlwidgets/lib/webcharts-1.11.5
+    version: 1.11.6
+    src: htmlwidgets/lib/webcharts-1.11.6
     script: webcharts.js
     stylesheet: webcharts.css
   - name: safety-eDish
@@ -13,8 +13,8 @@ dependencies:
     src: htmlwidgets/lib/hep-explorer-1.0.1
     script: hepexplorer.js
   - name: safety-histogram
-    version: 2.3.0
-    src: htmlwidgets/lib/safety-histogram-2.3.0
+    version: 2.4.0
+    src: htmlwidgets/lib/safety-histogram-2.4.0-dev
     script: safetyHistogram.js
   - name: safety-outlier-explorer
     version: 2.5.4

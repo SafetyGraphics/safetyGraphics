@@ -6,7 +6,7 @@
           : (global.webCharts = factory(global.d3));
 })(typeof self !== 'undefined' ? self : this, function(d3) {
     'use strict';
-    var version = '1.11.5';
+    var version = '1.11.6';
 
     function init(data) {
         var _this = this;
@@ -542,24 +542,7 @@
                       y_dom: []
                   };
 
-            _this.marks[i] = {
-                id: mark.id,
-                type: mark.type,
-                per: mark.per,
-                data: mark_info.data,
-                x_dom: mark_info.x_dom,
-                y_dom: mark_info.y_dom,
-                split: mark.split,
-                text: mark.text,
-                arrange: mark.arrange,
-                order: mark.order,
-                summarizeX: mark.summarizeX,
-                summarizeY: mark.summarizeY,
-                tooltip: mark.tooltip,
-                radius: mark.radius,
-                attributes: mark.attributes,
-                values: mark.values
-            };
+            _this.marks[i] = Object.assign({}, mark, mark_info);
         });
 
         //Set domains given extents of summarized mark data.
@@ -747,23 +730,25 @@
             (this.config.y.type === 'linear' && this.config.y.bin)
         ) {
             var xy = this.config.x.type === 'linear' && this.config.x.bin ? 'x' : 'y';
-            var quant = d3.scale
+            mark.quant = d3.scale
                 .quantile()
                 .domain(
-                    d3.extent(
-                        entries.map(function(m) {
-                            return +m[_this.config[xy].column];
-                        })
-                    )
+                    this.config[xy].domain
+                        ? this.config[xy].domain
+                        : d3.extent(
+                              entries.map(function(m) {
+                                  return +m[_this.config[xy].column];
+                              })
+                          )
                 )
                 .range(d3.range(+this.config[xy].bin));
 
             entries.forEach(function(e) {
-                return (e.wc_bin = quant(e[_this.config[xy].column]));
+                return (e.wc_bin = mark.quant(e[_this.config[xy].column]));
             });
 
             this_nest.key(function(d) {
-                return quant.invertExtent(d.wc_bin);
+                return mark.quant.invertExtent(d.wc_bin);
             });
         } else {
             this_nest.key(function(d) {
