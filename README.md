@@ -3,7 +3,7 @@
 
 # safetyGraphics: Clinical Trial Safety Graphics with R  <img src="inst/safetyGraphicsHex/safetyGraphicsHex.png" width = "175" height = "200" align="right" />
 
-The **safetyGraphics** package provides a framework for evaluation of clinical trial safety in R. It includes several safety-focused visualizations to empower clinical data monitoring. Chief among these is the Hepatic Explorer, based on the [Evaluation of the Drug-Induced Serious Hepatotoxicity (eDISH)](https://www.ncbi.nlm.nih.gov/pubmed/21332248) visualization. A demo of the Hepatic Explorer interactive graphic is available [here](https://safetygraphics.github.io/hep-explorer/test-page/example1/) and is shown below.
+The **safetyGraphics** package provides a framework for evaluation of clinical trial safety in R. It includes several safety-focused visualizations to empower clinical data monitoring. Chief among these is the Hepatic Explorer, based on the [Evaluation of the Drug-Induced Serious Hepatotoxicity (eDish)](https://www.ncbi.nlm.nih.gov/pubmed/21332248) visualization. A demo of the Hepatic Explorer interactive graphic is available [here](https://safetygraphics.github.io/hep-explorer/test-page/example1/) and is shown below.
 
 This package is being built in conjunction with the [hep-explorer](https://github.com/SafetyGraphics/hep-explorer) javascript library.
 

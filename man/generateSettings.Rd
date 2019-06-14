@@ -9,7 +9,7 @@ generateSettings(standard = "None", charts = NULL,
   custom_settings = NULL)
 }
 \arguments{
-\item{standard}{The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"None"}.}
+\item{standard}{The data standard for which to create settings. Valid options are "sdtm", "adam" or "none". Default: \code{"None"}.}
 
 \item{charts}{The chart or charts for which settings should be generated. Default: \code{NULL} (uses all available charts).}
 
@@ -18,8 +18,6 @@ generateSettings(standard = "None", charts = NULL,
 \item{partial}{Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.}
 
 \item{partial_keys}{Optional character vector of the matched settings if partial is TRUE. Settings should be identified using the text_key format described in ?settingsMetadata. Setting is ignored when partial is FALSE. Default: \code{NULL}.}
-
-\item{custom_settings}{a tibble with text_key and customValue columns specifiying customizations to be applied to the settings object. Default: \code{NULL}.}
 }
 \value{
 A list containing the appropriate settings for the selected chart
@@ -28,7 +26,7 @@ A list containing the appropriate settings for the selected chart
 This function returns a settings object for the eDish chart based on the specified data standard.
 }
 \details{
-The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, eDish is the only chart supported.
+The function is designed to work with the SDTM and ADaM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, eDish is the only chart supported.
 }
 \examples{
 

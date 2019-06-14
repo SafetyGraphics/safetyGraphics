@@ -20,7 +20,7 @@ A list containing the matching \code{"standard"} from \code{"standardMetadata"} 
 This function attempts to detect the clinical data standard used in a given R data frame.
 }
 \details{
-This function compares the columns in the provided \code{"data"} with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc.org/>) standards for clinical trial data by default. Additional standards can be added by modifying the \code{"standardMetadata"} data set included as part of this package. Currently, "labs" is the only domain supported.
+This function compares the columns in the provided \code{"data"} with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and ADaM CDISC(<https://www.cdisc.org/>) standards for clinical trial data by default. Additional standards can be added by modifying the \code{"standardMetadata"} data set included as part of this package. Currently, "labs" is the only domain supported.
 }
 \examples{
 detectStandard(adlbc)[["standard"]] #adam

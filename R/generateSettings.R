@@ -2,14 +2,13 @@
 #'
 #' This function returns a settings object for the eDish chart based on the specified data standard.
 #'
-#' The function is designed to work with the SDTM and AdAM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, eDish is the only chart supported.
+#' The function is designed to work with the SDTM and ADaM CDISC(<https://www.cdisc.org/>) standards for clinical trial data. Currently, eDish is the only chart supported.
 #'
-#' @param standard The data standard for which to create settings. Valid options are "SDTM", "AdAM" or "None". Default: \code{"None"}.
+#' @param standard The data standard for which to create settings. Valid options are "sdtm", "adam" or "none". Default: \code{"None"}.
 #' @param charts The chart or charts for which settings should be generated. Default: \code{NULL} (uses all available charts).
 #' @param useDefaults Specifies whether default values from settingsMetadata should be included in the settings object. Default: \code{TRUE}.
 #' @param partial Boolean for whether or not the standard is a partial standard. Default: \code{FALSE}.
 #' @param partial_keys Optional character vector of the matched settings if partial is TRUE. Settings should be identified using the text_key format described in ?settingsMetadata. Setting is ignored when partial is FALSE. Default: \code{NULL}.
-#' @param custom_settings a tibble with text_key and customValue columns specifiying customizations to be applied to the settings object. Default: \code{NULL}.
 #' @return A list containing the appropriate settings for the selected chart
 #'
 #' @examples
