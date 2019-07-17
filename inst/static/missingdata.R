@@ -21,7 +21,7 @@ missingdata <- function(data, settings){
   ggplot(d, aes_string(y="val", 
                        x=paste0("reorder(",visit_col,",", visitn_col,")"), color="var", fill="var")) +
     geom_bar(stat="identity", position="dodge") +
-    facet_wrap(~PARAM, ncol=1) +
+    facet_wrap(as.formula(paste("~", measure_col)), ncol=1) +
     theme_bw() +
     labs(y = "% of\nSubjects",
          x="") +
