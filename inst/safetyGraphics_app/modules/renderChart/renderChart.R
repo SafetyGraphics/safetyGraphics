@@ -43,11 +43,20 @@ renderChart <- function(input, output, session, data, settings, valid, chart, ty
 
   ## code to dynamically generate the output location
   output$chart <- renderUI({
-    output_chartRenderer(ns(chart_id))
+    if (type=="htmlwidget"){
+      output_chartRenderer(ns(chart_id))
+    } else if (type=="static") {
+      plotOutput(ns(chart_id))
+    }
   })
 
   ## code to render widget and fill in the output location
-  output[[chart_id]] <- render_chartRenderer({
+  if (type=="htmlwidget"){
+    render_fun <- match.fun("render_chartRenderer")
+  } else if (type=="static"){
+    render_fun <- match.fun("renderPlot")
+  }
+  output[[chart_id]] <- render_fun({
     req(data())
     req(settings())
     #trimmed_data<-trim_data()
