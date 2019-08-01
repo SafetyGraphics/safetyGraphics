@@ -38,5 +38,6 @@ Imports:
     utils,
     haven,
     shinyWidgets,
-    tidyr
+    tidyr,
+    shinybusy
 VignetteBuilder: knitr

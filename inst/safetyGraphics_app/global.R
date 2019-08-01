@@ -11,6 +11,7 @@ library(stringr)
 library(DT)
 library(haven)
 library(tidyr)
+library(shinybusy)
 
 # subset chartsMetadata if user requests it
 if (!is.null(getShinyOption("safetygraphics_charts"))){
