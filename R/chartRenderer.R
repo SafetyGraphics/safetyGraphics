@@ -1,15 +1,17 @@
-create_static_chart <- function(rSettings){
+create_chart <- function(type, rSettings){
 
   data <- rSettings[["data"]]
   settings <- jsonlite::fromJSON(rSettings[["settings"]])
   chartFunction <- rSettings[["chartFunction"]]
 
-  chartCode <- system.file("static", paste0(chartFunction, ".R"), package = "safetyGraphics")
+  chartCode <- system.file(type, paste0(chartFunction, ".R"), package = "safetyGraphics")
   source(chartCode)
   chartFunction <- match.fun(chartFunction)
   chartFunction(data, settings)
 
 }
+
+
 
 #' Create an interactive graphics widget
 #'
@@ -130,8 +132,8 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
       package = 'safetyGraphics',
       sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE)
     )    
-  } else if (chartType=="static"){
-    create_static_chart(rSettings)
+  } else {
+    create_chart(chartType, rSettings)
   }
 }
 

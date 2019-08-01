@@ -17,7 +17,7 @@
 #' @param type type of chart (e.g. "htmlwidget")
 #' @param valid A logical indicating whether data/settings combination is valid for chart [REACTIVE]
 
-renderChart <- function(input, output, session, data, settings, valid, chart, type){
+renderChart <- function(input, output, session, data, settings, valid, chart, type, width){
 
   ns <- session$ns
 
@@ -46,7 +46,9 @@ renderChart <- function(input, output, session, data, settings, valid, chart, ty
     if (type=="htmlwidget"){
       output_chartRenderer(ns(chart_id))
     } else if (type=="static") {
-      plotOutput(ns(chart_id))
+      plotOutput(ns(chart_id), width = paste0(width, "px"))
+    }else if (type=="plotly") {
+      plotlyOutput(ns(chart_id), width = paste0(width, "px"))
     }
   })
 
@@ -55,6 +57,8 @@ renderChart <- function(input, output, session, data, settings, valid, chart, ty
     render_fun <- match.fun("render_chartRenderer")
   } else if (type=="static"){
     render_fun <- match.fun("renderPlot")
+  } else if (type=="plotly"){
+    render_fun <- match.fun("renderPlotly")
   }
   output[[chart_id]] <- render_fun({
     req(data())
