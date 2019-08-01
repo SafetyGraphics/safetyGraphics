@@ -6,3 +6,5 @@ safetyshiftplot,safetyShiftPlot,Shift Plot,Shift Plot for Safety Explorer,https:
 safetyresultsovertime,safetyResultsOverTime,Results Over Time,Population Test Results Over Time,https://github.com/RhoInc/safety-results-over-time,https://github.com/RhoInc/safety-results-over-time/wiki/Configuration,htmlwidget,1000
 paneledoutlierexplorer,paneledOutlierExplorer,Paneled Outlier Explorer,Charts showing clinical participant results for multiple measures,https://github.com/RhoIncpaneled-outlier-explorer,https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration,htmlwidget,1000
 missingdata,missingdata,Missing Data,Percentage of Missing Values,N/A,N/A,static,800
+hepexplorer_ggplot,hepexplorer_ggplot,Hepatic Safety Static Chart,Static Graphic for Exploring Liver Function Data in Clinical Trials,N/A,N/A,static,500
+hepexplorer_plotly,hepexplorer_plotly,Hepatic Safety Plotly Chart,Plotly Graphic for Exploring Liver Function Data in Clinical Trials,N/A,N/A,plotly,500
