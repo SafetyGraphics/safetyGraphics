@@ -8,3 +8,4 @@ paneledoutlierexplorer,paneledOutlierExplorer,Paneled Outlier Explorer,Charts sh
 missingdata,missingdata,Missing Data,Percentage of Missing Values,N/A,N/A,static,800
 hepexplorer_ggplot,hepexplorer_ggplot,Hepatic Safety Static Chart,Static Graphic for Exploring Liver Function Data in Clinical Trials,N/A,N/A,static,500
 hepexplorer_plotly,hepexplorer_plotly,Hepatic Safety Plotly Chart,Plotly Graphic for Exploring Liver Function Data in Clinical Trials,N/A,N/A,plotly,500
+demo_module,demo_module,Demo Shiny Module,Demo of adding a custom chart module,N/A,N/A,module,1000
