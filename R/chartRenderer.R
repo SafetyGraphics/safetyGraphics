@@ -4,7 +4,7 @@ create_chart <- function(type, rSettings){
   settings <- jsonlite::fromJSON(rSettings[["settings"]])
   chartFunction <- rSettings[["chartFunction"]]
 
-  chartCode <- system.file(type, paste0(chartFunction, ".R"), package = "safetyGraphics")
+  chartCode <- system.file("custom", type, paste0(chartFunction, ".R"), package = "safetyGraphics")
   source(chartCode)
   chartFunction <- match.fun(chartFunction)
   chartFunction(data, settings)

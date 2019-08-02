@@ -33,7 +33,7 @@ renderChart <- function(input, output, session, data, settings, valid, chart, ty
 
   if (type=="module"){
 
-    chartCode <- system.file(type, paste0(chart, ".R"), package = "safetyGraphics")
+    chartCode <- system.file("custom", type, paste0(chart, ".R"), package = "safetyGraphics")
     source(chartCode)
     chart_ui <- match.fun(paste0(chart, "_UI"))
     chart_server <- match.fun(chart)
