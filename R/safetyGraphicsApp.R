@@ -16,10 +16,13 @@
 #'
 #' @export
 #'
-safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL) {
+safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL, settingsLocation = NULL) {
   
   # pass charts to include
   shiny::shinyOptions(safetygraphics_charts = charts)
+  
+  # pass user defined metadata location
+  shiny::shinyOptions(settings_location = settingsLocation)
   
   #increase maximum file upload limit
   if(!is.null(maxFileSize)){
