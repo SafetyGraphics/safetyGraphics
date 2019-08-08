@@ -1,7 +1,8 @@
 #' Run the interactive safety graphics builder
 #'
 #' @param charts Character vector of charts to include 
-#' @param maxFileSize maximum file size in MB allowed for file upload.
+#' @param maxFileSize maximum file size in MB allowed for file upload
+#' @param settingsLocation folder location of user-defined settings metadata
 #'
 #' @importFrom shiny runApp shinyOptions
 #' @import shinyjs

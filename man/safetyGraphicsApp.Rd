@@ -4,12 +4,15 @@
 \alias{safetyGraphicsApp}
 \title{Run the interactive safety graphics builder}
 \usage{
-safetyGraphicsApp(charts = NULL, maxFileSize = NULL)
+safetyGraphicsApp(charts = NULL, maxFileSize = NULL,
+  settingsLocation = NULL)
 }
 \arguments{
 \item{charts}{Character vector of charts to include}
 
-\item{maxFileSize}{maximum file size in MB allowed for file upload.}
+\item{maxFileSize}{maximum file size in MB allowed for file upload}
+
+\item{settingsLocation}{folder location of user-defined settings metadata}
 }
 \description{
 Run the interactive safety graphics builder
