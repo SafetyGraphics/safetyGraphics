@@ -6,3 +6,5 @@
 ^packrat/
 ^\.Rprofile$
 ^cran-comments.md$
+^docs$
+^_pkgdown.yml$
