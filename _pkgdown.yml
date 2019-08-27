@@ -1,9 +1,9 @@
-url: https://pages.github.com/SafetyGraphics/safetyGraphics
+url: https://safetygraphics.github.io/SafetyGraphics
 
 template:
   params:
     bootswatch: cerulean
-    
+
 navbar:
   right:
     - icon: fa-github

@@ -83,7 +83,7 @@
 
 <div id="safetygraphics-clinical-trial-safety-graphics-with-r" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#safetygraphics-clinical-trial-safety-graphics-with-r" class="anchor"></a>safetyGraphics: Clinical Trial Safety Graphics with R <img src="inst/safetyGraphicsHex/safetyGraphicsHex.png" width="175" height="200" align="right">
+<a href="#safetygraphics-clinical-trial-safety-graphics-with-r" class="anchor"></a>safetyGraphics: Clinical Trial Safety Graphics with R <img src="https://github.com/SafetyGraphics/safetyGraphics/raw/master/inst/safetyGraphicsHex/safetyGraphicsHex.png" width="175" height="200" align="right">
 </h1></div>
 <p>The <strong>safetyGraphics</strong> package provides a framework for evaluation of clinical trial safety in R. It includes several safety-focused visualizations to empower clinical data monitoring. Chief among these is the Hepatic Explorer, based on the <a href="https://www.ncbi.nlm.nih.gov/pubmed/21332248">Evaluation of the Drug-Induced Serious Hepatotoxicity (eDish)</a> visualization. A demo of the Hepatic Explorer interactive graphic is available <a href="https://safetygraphics.github.io/hep-explorer/test-page/example1/">here</a> and is shown below.</p>
 <p>This package is being built in conjunction with the <a href="https://github.com/SafetyGraphics/hep-explorer">hep-explorer</a> javascript library.</p>
@@ -101,33 +101,33 @@
 <li>Customizing settings and data mappings</li>
 <li>Viewing and exporting the interactive graphics</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"SafetyGraphics/safetyGraphics"</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"safetyGraphics"</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span>() <span class="co">#open the shiny application</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"SafetyGraphics/safetyGraphics"</span>)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"safetyGraphics"</span>)
+<span class="kw"><a href="reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span>() <span class="co">#open the shiny application</span></code></pre></div>
 </div>
 <div id="standalone-charts" class="section level3">
 <h3 class="hasAnchor">
 <a href="#standalone-charts" class="anchor"></a>Standalone charts</h3>
 <p>Users can also initialize customized standalone charts with a few lines of code.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"safetyGraphics/safetyGraphics"</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"safetyGraphics"</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">settings &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="dt">id_col =</span> <span class="st">"USUBJID"</span>,</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">  <span class="dt">value_col =</span> <span class="st">"AVAL"</span>,</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">  <span class="dt">measure_col =</span> <span class="st">"PARAM"</span>,</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">  <span class="dt">visit_col =</span> <span class="st">"VISIT"</span>,</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">  <span class="dt">visitn_col =</span> <span class="st">"VISITNUM"</span>,</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">  <span class="dt">studyday_col =</span> <span class="st">"ADY"</span>,</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">  <span class="dt">normal_col_low =</span> <span class="st">"A1LO"</span>,</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">  <span class="dt">normal_col_high =</span> <span class="st">"A1HI"</span>,</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">  <span class="dt">measure_values =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">ALT =</span> <span class="st">"Alanine Aminotransferase (U/L)"</span>,</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">                        <span class="dt">AST =</span> <span class="st">"Aspartate Aminotransferase (U/L)"</span>,</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15">                        <span class="dt">TB =</span> <span class="st">"Bilirubin (umol/L)"</span>,</a>
-<a class="sourceLine" id="cb2-16" data-line-number="16">                        <span class="dt">ALP =</span> <span class="st">"Alkaline Phosphatase (U/L)"</span>)</a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">  )</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="kw"><a href="reference/chartRenderer.html">chartRenderer</a></span>(<span class="dt">data=</span>adlbc, <span class="dt">settings=</span>settings, <span class="dt">chart=</span><span class="st">"hepexplorer"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"safetyGraphics/safetyGraphics"</span>)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"safetyGraphics"</span>)
+
+settings &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(
+  <span class="dt">id_col =</span> <span class="st">"USUBJID"</span>,
+  <span class="dt">value_col =</span> <span class="st">"AVAL"</span>,
+  <span class="dt">measure_col =</span> <span class="st">"PARAM"</span>,
+  <span class="dt">visit_col =</span> <span class="st">"VISIT"</span>,
+  <span class="dt">visitn_col =</span> <span class="st">"VISITNUM"</span>,
+  <span class="dt">studyday_col =</span> <span class="st">"ADY"</span>,
+  <span class="dt">normal_col_low =</span> <span class="st">"A1LO"</span>,
+  <span class="dt">normal_col_high =</span> <span class="st">"A1HI"</span>,
+  <span class="dt">measure_values =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">ALT =</span> <span class="st">"Alanine Aminotransferase (U/L)"</span>,
+                        <span class="dt">AST =</span> <span class="st">"Aspartate Aminotransferase (U/L)"</span>,
+                        <span class="dt">TB =</span> <span class="st">"Bilirubin (umol/L)"</span>,
+                        <span class="dt">ALP =</span> <span class="st">"Alkaline Phosphatase (U/L)"</span>)
+  )
+
+<span class="kw"><a href="reference/chartRenderer.html">chartRenderer</a></span>(<span class="dt">data=</span>adlbc, <span class="dt">settings=</span>settings, <span class="dt">chart=</span><span class="st">"hepexplorer"</span>)</code></pre></div>
 </div>
 </div>
 </div>
@@ -140,9 +140,9 @@
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=safetyGraphics">https://​cloud.r-project.org/​package=safetyGraphics</a>
 </li>
-<li>Browse source code at <br><a href="https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics">https://​github.com/​ASA-DIA-InteractiveSafetyGraphics/​safetyGraphics</a>
+<li>Browse source code at <br><a href="https://github.com/SafetyGraphics/safetyGraphics">https://​github.com/​SafetyGraphics/​safetyGraphics</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/issues">https://​github.com/​ASA-DIA-InteractiveSafetyGraphics/​safetyGraphics/​issues</a>
+<li>Report a bug at <br><a href="https://github.com/SafetyGraphics/safetyGraphics/issues">https://​github.com/​SafetyGraphics/​safetyGraphics/​issues</a>
 </li>
 </ul>
 </div>
