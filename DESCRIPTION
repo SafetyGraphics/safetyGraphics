@@ -21,7 +21,8 @@ RoxygenNote: 6.1.1
 Suggests:
     testthat,
     shinytest,
-    knitr
+    knitr,
+    plotly
 Imports:
     dplyr,
     htmlwidgets,
@@ -38,5 +39,6 @@ Imports:
     utils,
     haven,
     shinyWidgets,
-    tidyr
+    tidyr,
+    ggplot2
 VignetteBuilder: knitr
