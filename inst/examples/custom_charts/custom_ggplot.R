@@ -3,7 +3,7 @@ library(dplyr)
 library(tidyr)
 
 
-hepexplorer_ggplot <- function(data, settings){
+custom_ggplot <- function(data, settings){
   
   id_col <- settings[["id_col"]]
   value_col <- settings[["value_col"]]

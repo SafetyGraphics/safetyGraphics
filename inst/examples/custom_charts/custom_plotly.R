@@ -4,7 +4,7 @@ library(dplyr)
 library(tidyr)
 
 
-hepexplorer_plotly <- function(data, settings){
+custom_plotly <- function(data, settings){
   
   id_col <- settings[["id_col"]]
   value_col <- settings[["value_col"]]
