@@ -5,7 +5,3 @@ safetyoutlierexplorer,safetyOutlierExplorer,Outlier Explorer,"Line Chart highlig
 safetyshiftplot,safetyShiftPlot,Shift Plot,Shift Plot for Safety Explorer,https://github.com/RhoInc/safety-shift-plot,https://github.com/RhoInc/safety-shift-plot/wiki/Configuration,htmlwidget,620
 safetyresultsovertime,safetyResultsOverTime,Results Over Time,Population Test Results Over Time,https://github.com/RhoInc/safety-results-over-time,https://github.com/RhoInc/safety-results-over-time/wiki/Configuration,htmlwidget,1000
 paneledoutlierexplorer,paneledOutlierExplorer,Paneled Outlier Explorer,Charts showing clinical participant results for multiple measures,https://github.com/RhoIncpaneled-outlier-explorer,https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration,htmlwidget,1000
-missingdata,missingdata,Missing Data,Percentage of Missing Values,N/A,N/A,static,800
-hepexplorer_ggplot,hepexplorer_ggplot,Hepatic Safety Static Chart,Static Graphic for Exploring Liver Function Data in Clinical Trials,N/A,N/A,static,500
-hepexplorer_plotly,hepexplorer_plotly,Hepatic Safety Plotly Chart,Plotly Graphic for Exploring Liver Function Data in Clinical Trials,N/A,N/A,plotly,500
-demo_module,demo_module,Demo Shiny Module,Demo of adding a custom chart module,N/A,N/A,module,1000
