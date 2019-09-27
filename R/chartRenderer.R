@@ -1,18 +1,3 @@
-create_chart <- function(type, rSettings){
-
-  data <- rSettings[["data"]]
-  settings <- jsonlite::fromJSON(rSettings[["settings"]])
-  chartFunction <- rSettings[["chartFunction"]]
-
-  chartCode <- system.file("custom", type, paste0(chartFunction, ".R"), package = "safetyGraphics")
-  source(chartCode)
-  chartFunction <- match.fun(chartFunction)
-  chartFunction(data, settings)
-
-}
-
-
-
 #' Create an interactive graphics widget
 #'
 #' This function creates an nice interactive widget. See this vingette for more details regarding how to customize charts.
@@ -133,7 +118,7 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
       sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE)
     )    
   } else {
-    create_chart(chartType, rSettings)
+    createChart(chartType, rSettings)
   }
 }
 
