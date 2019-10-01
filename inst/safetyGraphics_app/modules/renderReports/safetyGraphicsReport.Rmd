@@ -10,94 +10,44 @@ params:
   
 ---
 
-
 ## Customized Interactive Safety Graphics {.tabset .tabset-fade} 
 
-
-```{r, echo = FALSE, message=FALSE, warning = FALSE}
+```{r results='asis', echo = FALSE, message=FALSE, warning = FALSE}
 library(safetyGraphics)
 library(knitr)
-check_hepexplorer <- "hepexplorer" %in% params$charts
 
-hepexplorer_settings <- trimSettings(settings=params$settings, charts="hepexplorer")
+subchunkify_title <- function(chart) {
+  sub_chunk <- paste0("### ",chart,"\n")
+  cat(sub_chunk)
+}
 
-check_histogram <- "safetyhistogram" %in% params$charts
+subchunkify_chart <- function(chart,settings, fig_height=15, fig_width=12) {
+  g_deparsed <- paste0(deparse(     
+    function() {chartRenderer(data = params$data,
+      settings = settings, chart=chart)}
+  ), collapse = '')
 
-histogram_settings <- trimSettings(settings=params$settings, charts="safetyhistogram")
+  sub_chunk <- paste0("
+  `","``{r sub_chunk_", floor(runif(1) * 10000), ", fig.height=",
+   fig_height, ", fig.width=", fig_width, ", echo=FALSE}",
+  "\n(", 
+    g_deparsed
+    , ")()",
+  "\n`","``
+  ",'\n')
 
-check_explorer <- "safetyoutlierexplorer" %in% params$charts
+  cat(knitr::knit(text = knitr::knit_expand(text = sub_chunk), quiet = TRUE))
+}
 
-explorer_settings <- trimSettings(settings=params$settings, charts="safetyoutlierexplorer")
-
-check_shiftplot <- "safetyshiftplot" %in% params$charts
-
-shiftplot_settings <- trimSettings(settings=params$settings, charts="safetyshiftplot")
-
-check_resultsovertime <- "safetyresultsovertime" %in% params$charts
-
-resultsovertime_settings <- trimSettings(settings=params$settings, charts="safetyresultsovertime")
-
-check_paneled <- "paneledoutlierexplorer" %in% params$charts
-
-paneled_settings <- trimSettings(settings=params$settings, charts="paneledoutlierexplorer")
+for (chart in params$charts) {
+  chart_settings <- trimSettings(settings=params$settings, charts=chart)
+  subchunkify_title(chart)
+  subchunkify_chart(chart, chart_settings)
+}
 
 ```
 
 
-```{r, eval=check_hepexplorer, echo=FALSE}
-asis_output("### Hepatic Explorer\\n")
-```
-
-```{r, fig.width=12, fig.height=15, eval=check_hepexplorer, echo = FALSE}
-
-chartRenderer(data = params$data,
-      settings = hepexplorer_settings, chart="hepexplorer")
-```
-
-```{r, eval=check_histogram, echo=FALSE}
-asis_output("### Histogram\\n")
-```
-
-```{r, fig.width=12, fig.height=15, eval=check_histogram, echo = FALSE}
-chartRenderer(data = params$data,
-      settings = histogram_settings, chart="safetyhistogram")
-```
-
-```{r, eval=check_explorer, echo=FALSE}
-asis_output("### Outlier Explorer\\n")
-```
-
-```{r, fig.width=12, fig.height=15, eval=check_explorer, echo = FALSE}
-chartRenderer(data = params$data,
-      settings = explorer_settings, chart="safetyoutlierexplorer")
-```
-
-```{r, eval=check_shiftplot, echo=FALSE}
-asis_output("### Shift Plot\\n")
-```
-
-```{r, fig.width=12, fig.height=15, eval=check_shiftplot, echo = FALSE}
-chartRenderer(data = params$data,
-      settings = shiftplot_settings, chart="safetyshiftplot")
-```
-
-```{r, eval=check_resultsovertime, echo=FALSE}
-asis_output("### Results Over Time \\n")
-```
-
-```{r, fig.width=12, fig.height=15, eval=check_resultsovertime, echo = FALSE}
-chartRenderer(data = params$data,
-      settings = resultsovertime_settings, chart="safetyresultsovertime")
-```
-
-```{r, eval=check_paneled, echo=FALSE}
-asis_output("### Paneled Outlier Explorer \\n")
-```
-
-```{r, fig.width=12, fig.height=15, eval=check_paneled, echo = FALSE}
-chartRenderer(data = params$data,
-      settings = paneled_settings, chart="paneledoutlierexplorer")
-```
 
 ### Info
 
@@ -121,81 +71,38 @@ writeLines("my_data <- read.csv(file.path(path, 'data.csv'))")
 
 ```
 
+```{r results='asis', echo = FALSE, message=FALSE, warning = FALSE}
 
-```{r, eval=check_hepexplorer, echo=FALSE}
-asis_output("**Code to render Hepatic Explorer chart**\\n")
-```
+subchunkify_header <- function(chart){
+  g_deparsed <- paste0("**Code to render ",chart," chart**\n")
+      
+  cat(g_deparsed)
+}
 
-```{r, eval=check_hepexplorer, comment=NA, echo=FALSE}
+subchunkify_code <- function(chart,settings){
+  g_deparsed <- paste0(deparse(         
+    function() {
+      bquote(chartRenderer(data = my_data,
+      settings = .(settings), chart=chart))
+    }
+  ), collapse = '')
 
-graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(hepexplorer_settings), chart="hepexplorer"))
+  sub_chunk <- paste0("
+  `","``{r sub_chunk_", floor(runif(1) * 10000),", comment = NA",", echo=FALSE}",
+  "\n(", 
+    g_deparsed
+    , ")()",
+  "\n`","``
+  ",'\n')
 
-graphic_code
+  cat(knitr::knit(text = knitr::knit_expand(text = sub_chunk), quiet = TRUE))
+}
 
-```
-
-```{r, eval=check_histogram, echo=FALSE}
-asis_output("**Code to render Histogram chart**\\n")
-```
-
-```{r, eval=check_histogram, comment=NA, echo=FALSE}
-
-graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(histogram_settings), chart="safetyhistogram"))
-
-graphic_code
-
-```
-
-```{r, eval=check_explorer, echo=FALSE}
-asis_output("**Code to render Outlier Explorer chart**\\n")
-```
-
-```{r, eval=check_explorer, comment=NA, echo=FALSE}
-
-graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(explorer_settings), chart="safetyoutlierexplorer"))
-
-graphic_code
+for (chart in params$charts) {
+  chart_settings <- trimSettings(settings=params$settings, charts=chart)
+  subchunkify_header(chart)
+  subchunkify_code(chart, chart_settings)
+}
 
 ```
 
-```{r, eval=check_shiftplot, echo=FALSE}
-asis_output("**Code to render Shift Plot chart**\\n")
-```
-
-```{r, eval=check_shiftplot, comment=NA, echo=FALSE}
-
-graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(shiftplot_settings), chart= "safetyshiftplot"))
-
-graphic_code
-
-```
-
-```{r, eval=check_resultsovertime, echo=FALSE}
-asis_output("**Code to render Results Over Time chart**\\n")
-```
-
-```{r, eval=check_resultsovertime, comment=NA, echo=FALSE}
-
-graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(resultsovertime_settings), chart= "safetyresultsovertime"))
-
-graphic_code
-
-```
-
-```{r, eval=check_paneled, echo=FALSE}
-asis_output("**Code to render Paneled Outlier Explorer chart**\\n")
-```
-
-```{r, eval=check_paneled, comment=NA, echo=FALSE}
-
-graphic_code <- bquote(chartRenderer(data = my_data,
-      settings = .(paneled_settings), chart= "paneledoutlierexplorer"))
-
-graphic_code
-
-```
