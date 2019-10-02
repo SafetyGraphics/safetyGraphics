@@ -1,4 +1,4 @@
-(function(global, factory) {
+﻿(function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined'
         ? (module.exports = factory(require('d3'), require('webcharts')))
         : typeof define === 'function' && define.amd
@@ -1212,6 +1212,11 @@
             .classed('footnote footnote--bar-details', true);
     }
 
+    function preventWhiteSpaceWrap() {
+        //Style table
+        this.listing.table.style('white-space', 'nowrap');
+    }
+
     function onLayout() {
         identifyControls.call(this);
         addXdomainResetButton.call(this);
@@ -1222,6 +1227,7 @@
         addRemovedRecordsNote.call(this);
         addBorderAboveChart.call(this);
         addFootnoteContainer.call(this);
+        preventWhiteSpaceWrap.call(this);
     }
 
     function getCurrentMeasure() {
@@ -2193,7 +2199,6 @@
             clear: 'left',
             width: '100%'
         });
-        chart.listing.table.style('white-space', 'nowrap');
 
         return chart;
     }
