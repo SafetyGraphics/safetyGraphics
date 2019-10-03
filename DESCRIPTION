@@ -22,6 +22,7 @@ Suggests:
     testthat,
     shinytest,
     knitr,
+    ggplot2,
     plotly
 Imports:
     dplyr,
@@ -39,6 +40,5 @@ Imports:
     utils,
     haven,
     shinyWidgets,
-    tidyr,
-    ggplot2
+    tidyr
 VignetteBuilder: knitr

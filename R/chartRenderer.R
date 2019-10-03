@@ -39,7 +39,6 @@
 #' }
 #'
 #' @import htmlwidgets
-#' @import ggplot2
 #'
 #' @export
 chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
