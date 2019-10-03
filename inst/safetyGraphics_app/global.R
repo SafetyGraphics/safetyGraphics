@@ -12,6 +12,12 @@ library(DT)
 library(haven)
 library(tidyr)
 
+# use metadata in user settings folder if provided
+if(!is.null(getShinyOption("settings_location"))){ 
+  metadata_files <- list.files(path = getShinyOption("settings_location"), pattern = "*.rda", full.names = TRUE)
+  lapply(metadata_files,load,.GlobalEnv)
+}
+
 # subset chartsMetadata if user requests it
 if (!is.null(getShinyOption("safetygraphics_charts"))){
   all_charts <- getShinyOption("safetygraphics_charts")

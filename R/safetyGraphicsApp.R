@@ -1,7 +1,8 @@
 #' Run the interactive safety graphics builder
 #'
 #' @param charts Character vector of charts to include 
-#' @param maxFileSize maximum file size in MB allowed for file upload.
+#' @param maxFileSize maximum file size in MB allowed for file upload
+#' @param settingsLocation folder location of user-defined settings metadata
 #'
 #' @importFrom shiny runApp shinyOptions
 #' @import shinyjs
@@ -16,10 +17,13 @@
 #'
 #' @export
 #'
-safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL) {
+safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL, settingsLocation = NULL) {
   
   # pass charts to include
   shiny::shinyOptions(safetygraphics_charts = charts)
+  
+  # pass user defined metadata location
+  shiny::shinyOptions(settings_location = settingsLocation)
   
   #increase maximum file upload limit
   if(!is.null(maxFileSize)){
