@@ -29,7 +29,7 @@ subchunkify_chart <- function(chart,settings, fig_height=15, fig_width=12) {
 
   sub_chunk <- paste0("
   `","``{r sub_chunk_", floor(runif(1) * 10000), ", fig.height=",
-   fig_height, ", fig.width=", fig_width, ", echo=FALSE}",
+   fig_height, ", fig.width=", fig_width, ", echo=FALSE, message=FALSE, warning=FALSE}",
   "\n(", 
     g_deparsed
     , ")()",
@@ -83,7 +83,7 @@ subchunkify_code <- function(chart,settings){
   g_deparsed <- paste0(deparse(         
     function() {
       bquote(chartRenderer(data = my_data,
-      settings = .(settings), chart=chart))
+      settings = .(settings), chart=.(chart)))
     }
   ), collapse = '')
 
