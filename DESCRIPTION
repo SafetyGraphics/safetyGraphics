@@ -21,7 +21,9 @@ RoxygenNote: 6.1.1
 Suggests:
     testthat,
     shinytest,
-    knitr
+    knitr,
+    ggplot2,
+    plotly
 Imports:
     dplyr,
     htmlwidgets,

@@ -93,6 +93,8 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
   
   #Renderer
   chartFunction<- safetyGraphics::chartsMetadata %>% filter(.data$chart==!!chart) %>% pull(.data$main)
+  chartType <- safetyGraphics::chartsMetadata %>% filter(.data$chart==!!chart) %>% pull(.data$type)
+  
   rSettings = list(
     data = data,
     debug_js=debug_js,
@@ -103,16 +105,20 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
       null = "null"
     )
   )
-
-  # create widget
-  htmlwidgets::createWidget(
-    name = 'chartRenderer',
-    rSettings,
-    # width = width,
-    # height = height,
-    package = 'safetyGraphics',
-    sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE)
-  )
+  
+  if (chartType=="htmlwidget"){
+    # create widget
+    htmlwidgets::createWidget(
+      name = 'chartRenderer',
+      rSettings,
+      # width = width,
+      # height = height,
+      package = 'safetyGraphics',
+      sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE)
+    )    
+  } else {
+    createChart(chartType, rSettings)
+  }
 }
 
 #' Shiny bindings for chartRenderer

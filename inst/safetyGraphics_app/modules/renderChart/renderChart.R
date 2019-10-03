@@ -17,7 +17,7 @@
 #' @param type type of chart (e.g. "htmlwidget")
 #' @param valid A logical indicating whether data/settings combination is valid for chart [REACTIVE]
 
-renderChart <- function(input, output, session, data, settings, valid, chart, type){
+renderChart <- function(input, output, session, data, settings, valid, chart, type, width){
 
   ns <- session$ns
 
@@ -30,28 +30,50 @@ renderChart <- function(input, output, session, data, settings, valid, chart, ty
   # id for chart
   chart_id <- paste0("chart_", chart)
 
-  # # render eDISH chart if settings pass validation
-  # output$chart <- renderEDISH({
-  #   req(data())
-  #   req(settings())
-  #
-  #     trimmed_data <- safetyGraphics:::trimData(data = data(), settings = settings())
-  #     eDISH(data = trimmed_data, settings = settings())
-  #
-  # })
-  #
 
-  ## code to dynamically generate the output location
-  output$chart <- renderUI({
-    output_chartRenderer(ns(chart_id))
-  })
+  if (type=="module"){
 
-  ## code to render widget and fill in the output location
-  output[[chart_id]] <- render_chartRenderer({
-    req(data())
-    req(settings())
-    #trimmed_data<-trim_data()
-    chartRenderer(data = data(), settings = settings(), chart = chart, debug_js=TRUE)
-  })
+    chartCode <- system.file("custom", type, paste0(chart, ".R"), package = "safetyGraphics")
+    source(chartCode)
+    chart_ui <- match.fun(paste0(chart, "_UI"))
+    chart_server <- match.fun(chart)
+    
+    output$chart <- renderUI({
+      chart_ui(ns(chart_id))
+    })
+    
+    callModule(chart_server, chart_id)
+    
+  } else {
+    ## code to dynamically generate the output location
+    output$chart <- renderUI({
+      if (type=="htmlwidget"){
+        output_chartRenderer(ns(chart_id))
+      } else if (type=="static") {
+        plotOutput(ns(chart_id), width = paste0(width, "px"))
+      }else if (type=="plotly") {
+        plotlyOutput(ns(chart_id), width = paste0(width, "px"))
+      } else if (type=="module"){
+        hepexplorer_mod_UI(ns(chart_id))
+      }
+    })
+    
+    ## code to render widget and fill in the output location
+    if (type=="htmlwidget"){
+      render_fun <- match.fun("render_chartRenderer")
+    } else if (type=="static"){
+      render_fun <- match.fun("renderPlot")
+    } else if (type=="plotly"){
+      render_fun <- match.fun("renderPlotly")
+    } 
+    
+    output[[chart_id]] <- render_fun({
+      req(data())
+      req(settings())
+      #trimmed_data<-trim_data()
+      chartRenderer(data = data(), settings = settings(), chart = chart, debug_js=TRUE)
+    })
+  }
+ 
 
 }
