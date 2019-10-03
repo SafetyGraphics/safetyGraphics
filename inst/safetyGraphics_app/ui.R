@@ -2,6 +2,7 @@
 
 tagList(
   useShinyjs(),
+  add_busy_spinner(spin = "fading-circle", position = "bottom-left", timeout=3000),
   tags$head(
     tags$link(
       rel = "stylesheet",

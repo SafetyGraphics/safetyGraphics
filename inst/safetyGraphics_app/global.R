@@ -11,6 +11,7 @@ library(stringr)
 library(DT)
 library(haven)
 library(tidyr)
+library(shinybusy)
 
 # use metadata in user settings folder if provided
 if(!is.null(getShinyOption("settings_location"))){ 
