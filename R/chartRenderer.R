@@ -42,6 +42,13 @@
 #'
 #' @export
 chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
+ # load chart metadata (use custom data if available)
+  if(options('sg_chartsMetadata')[[1]]){
+    chartmeta<-options('sg_chartsMetadata_df')[[1]]
+  }else{
+    chartmeta<-safetyGraphics::chartsMetadata
+  }
+  
   # Chart specific customizastions (to be removed after js updates)
   if(chart %in% c("paneledoutlierexplorer","safetyoutlierexplorer")){
     settings$time_cols <- list(list(),list());
@@ -88,12 +95,12 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
   }
 
   #Set Chart Width
-  chartMaxWidth<-  safetyGraphics::chartsMetadata %>% filter(.data$chart==!!chart) %>% pull(.data$maxWidth)
+  chartMaxWidth<-  chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$maxWidth)
   settings$max_width <- chartMaxWidth
   
   #Renderer
-  chartFunction<- safetyGraphics::chartsMetadata %>% filter(.data$chart==!!chart) %>% pull(.data$main)
-  chartType <- safetyGraphics::chartsMetadata %>% filter(.data$chart==!!chart) %>% pull(.data$type)
+  chartFunction<- chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$main)
+  chartType <- chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$type)
   
   rSettings = list(
     data = data,

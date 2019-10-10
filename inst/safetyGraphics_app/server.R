@@ -104,8 +104,8 @@ for (row in 1:nrow(filter(chartsMetadata, chart %in% all_charts))){
   })
 
 for(chart in all_charts){
-  chartType <- safetyGraphics::chartsMetadata %>% filter(chart==!!chart) %>% pull(type)
-  width <- safetyGraphics::chartsMetadata %>% filter(chart==!!chart) %>% pull(maxWidth)
+  chartType <- chartsMetadata %>% filter(chart==!!chart) %>% pull(type)
+  width <- chartsMetadata %>% filter(chart==!!chart) %>% pull(maxWidth)
   callModule(
     module = renderChart,
     id = paste0("chart", chart),

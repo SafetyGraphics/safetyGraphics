@@ -18,7 +18,7 @@
 #' @param overwrite overwrite any existing chart metadata? Note that having multiple charts with the same name is not supported and will cause unexpected results. default = true
 #'
 #' @export
-#' 
+#'
 addChart <- function(
   chart,
   label="",
@@ -85,8 +85,6 @@ addChart <- function(
 
   #Fill in the column based on requiredSettings and save
   chart_col <- sym(paste0("chart_",chart))
-  print(chart_col)
   settingsMeta <- settingsMeta %>% mutate(!!chart_col := text_key %in% !!requiredSettings)
-  print(names(settingsMeta))
   saveRDS(settingsMeta, settingsMetaPath)
 }

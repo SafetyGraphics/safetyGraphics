@@ -14,9 +14,10 @@ library(tidyr)
 library(shinybusy)
 
 # use metadata in user settings folder if provided
-if(!is.null(getShinyOption("settings_location"))){ 
-  metadata_files <- list.files(path = getShinyOption("settings_location"), pattern = "*.rda", full.names = TRUE)
-  lapply(metadata_files,load,.GlobalEnv)
+if(!is.null(getShinyOption("settings_location"))){
+  chartsMetadata <-  options('sg_chartsMetadata_df')[[1]]
+  settingsMetadata <-  options('sg_settingsMetadata_df')[[1]]
+  standardsMetadata <-  options('sg_standardsMetadata_df')[[1]]
 }
 
 # subset chartsMetadata if user requests it
