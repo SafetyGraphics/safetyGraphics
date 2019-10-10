@@ -5,14 +5,16 @@
 \title{Run the interactive safety graphics builder}
 \usage{
 safetyGraphicsApp(charts = NULL, maxFileSize = NULL,
-  settingsLocation = NULL)
+  settingsLocation = NULL, customSettings = "customSettings.R")
 }
 \arguments{
 \item{charts}{Character vector of charts to include}
 
 \item{maxFileSize}{maximum file size in MB allowed for file upload}
 
-\item{settingsLocation}{folder location of user-defined settings metadata}
+\item{settingsLocation}{folder location of user-defined settings metadata. Files should be named settingsMetadata.rda, chartsMetadata.rda and standardsMetadata.rda and use the same structure established in the /data folder.}
+
+\item{customSettings}{Name of R script containing settings customizations to be run before the app is initialized. This is the recommended way to add additional charts (via addChart()), settings (addSetting()) and data standards (addStandard()). default = 'settingsLocation/customSettings.R'}
 }
 \description{
 Run the interactive safety graphics builder
