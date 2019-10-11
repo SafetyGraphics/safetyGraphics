@@ -42,10 +42,14 @@ addChart <- function(
     typeof(settings_url)=="character",
     typeof(main)=="character",
     typeof(type)=="character",
-    type %in% c("htmlwidget","plotly","static"),
+    type %in% c("htmlwidget","plotly","static","module"),
     is.numeric(maxWidth)
   )
 
+  if(nchar(label)=0){
+    label = chart
+  }
+  
   # create settings for new chart
   newChart <- list(
     chart=chart,
