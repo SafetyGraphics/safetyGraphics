@@ -36,7 +36,7 @@ addSetting<-function(
   field_column_key='', 
   setting_cat, 
   default='', 
-  charts, 
+  charts=c(), 
   settingsLocation=getwd(), 
   overwrite=TRUE
 ){
