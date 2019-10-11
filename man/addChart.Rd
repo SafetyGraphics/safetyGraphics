@@ -7,7 +7,7 @@
 addChart(chart, label = "", description = "", repo_url = "",
   settings_url = "", main = "character", type = "htmlwidget",
   maxWidth = 1000, requiredSettings = c(""),
-  settingsLocation = getwd(), overwrite = FALSE)
+  settingsLocation = getwd(), overwrite = TRUE)
 }
 \arguments{
 \item{chart}{Name of the chart - one word, all lower case}

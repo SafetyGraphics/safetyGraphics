@@ -30,7 +30,7 @@ addChart <- function(
   maxWidth=1000,
   requiredSettings=c(""),
   settingsLocation=getwd(),
-  overwrite = FALSE
+  overwrite = TRUE
 ){
 
   # check inputs
@@ -46,7 +46,7 @@ addChart <- function(
     is.numeric(maxWidth)
   )
 
-  if(nchar(label)=0){
+  if(nchar(label)==0){
     label = chart
   }
   
