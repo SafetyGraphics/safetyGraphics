@@ -43,18 +43,19 @@
 
 validateSettings <- function(data, settings, charts=NULL){
   # load chart metadata (use custom data if available)
-  if(options('sg_chartsMetadata')[[1]]){
-    chartmeta<-options('sg_chartsMetadata_df')[[1]]
-  }else{
-    chartmeta<-safetyGraphics::chartsMetadata
+  chartmeta<-safetyGraphics::chartsMetadata
+  if(!(is.null(options('sg_chartsMetadata')[[1]]))){ #if the option exists
+    if(options('sg_chartsMetadata')[[1]]){ #and it's true
+      chartmeta<-options('sg_chartsMetadata_df')[[1]] #use the custom metadata
+    }
   }
-  
-  #initialize shell settings 
+
+  #initialize shell settings
   settingStatus<-list()
 
-  # if no charts specify, use all available
+  # if no charts are specified, use all available
   if (is.null(charts)){
-    charts <- chartmeta
+    charts <- chartmeta$chart
   }
 
   # Check that all required parameters are not null

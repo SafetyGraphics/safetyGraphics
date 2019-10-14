@@ -42,13 +42,14 @@
 #'
 #' @export
 chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
- # load chart metadata (use custom data if available)
-  if(options('sg_chartsMetadata')[[1]]){
-    chartmeta<-options('sg_chartsMetadata_df')[[1]]
-  }else{
-    chartmeta<-safetyGraphics::chartsMetadata
+  # load chart metadata (use custom data if available)
+  chartmeta<-safetyGraphics::chartsMetadata
+  if(!(is.null(options('sg_chartsMetadata')[[1]]))){ #if the option exists
+    if(options('sg_chartsMetadata')[[1]]){ #and it's set to true
+      chartmeta<-options('sg_chartsMetadata_df')[[1]]
+    }
   }
-  
+
   # Chart specific customizastions (to be removed after js updates)
   if(chart %in% c("paneledoutlierexplorer","safetyoutlierexplorer")){
     settings$time_cols <- list(list(),list());
@@ -90,18 +91,18 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
       rotate_tick_labels= TRUE,
       vertical_space= 100
     )
-    
+
     settings$groups = settings$group_cols
   }
 
   #Set Chart Width
   chartMaxWidth<-  chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$maxWidth)
   settings$max_width <- chartMaxWidth
-  
+
   #Renderer
   chartFunction<- chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$main)
   chartType <- chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$type)
-  
+
   rSettings = list(
     data = data,
     debug_js=debug_js,
@@ -112,7 +113,7 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
       null = "null"
     )
   )
-  
+
   if (chartType=="htmlwidget"){
     # create widget
     htmlwidgets::createWidget(
@@ -122,7 +123,7 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
       # height = height,
       package = 'safetyGraphics',
       sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE)
-    )    
+    )
   } else {
     createChart(chartType, rSettings)
   }

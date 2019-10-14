@@ -29,12 +29,14 @@
 #' @export
 
 getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, filter_expr=NULL, add_standards=TRUE, metadata = safetyGraphics::settingsMetadata){
-  
+
   # use custom metadata if it's provided
-  if(options('sg_settingsMetadata')[[1]]){
-    metadata<-options('sg_settingsMetadata_df')[[1]]
+  if(!(is.null(options('sg_settingsMetadata')[[1]]))){ #if the option exists
+    if(options('sg_settingsMetadata')[[1]]){ # and is set to true
+      metadata<-options('sg_settingsMetadata_df')[[1]] #use the custom metdata
+    }
   }
-  
+
   md <- metadata %>% mutate(text_key=as.character(.data$text_key))
 
   if(add_standards){
@@ -74,15 +76,15 @@ getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, filter_exp
     if(!is.null(filter_expr)){
       stopifnot(typeof(filter_expr) %in% c("language","symbol"))
       md<-md %>% filter(!!filter_expr)
-    } 
- 
+    }
+
 
   #subset the metadata columns returned based on the metadata_columns option (if any)
     if(!is.null(cols)){
       stopifnot(typeof(cols) =="character")
       valid_cols <- intersect(cols, names(md))
       md<-md%>%select(valid_cols)
-    }    
+    }
 
 
   #coerce factors to character
