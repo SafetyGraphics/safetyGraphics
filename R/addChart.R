@@ -4,7 +4,6 @@
 #'
 #' This function makes it easy for users to add a new chart to the safetyGraphics shiny app, by making updates to the underlying metadata used by the package. Specifically, the function adds a row to chartsMetadata.rda describing the chart and adds a column to settingsMetadata.rda specifying which settings are used with the chart. If new settings are needed for the chart, the user should call addSetting() for each new setting required.
 #'
-#' @param settings_location path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new chart has been added.
 #' @param chart Name of the chart - one word, all lower case
 #' @param label Nicely formatted name of the chart
 #' @param description Description of the chart
@@ -14,8 +13,11 @@
 #' @param type type of chart. Should be 'htmlwidget', 'static', 'plotly' or 'module'
 #' @param maxWidth max width for the widget in pixels
 #' @param requiredSettings array of text_key values (matching those used in settingsMetadata) for the required settings for this chart
-#' @param settingsLocation folder location of user-defined settings metadata
+#' @param settingsLocation path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new chart has been added.
 #' @param overwrite overwrite any existing chart metadata? Note that having multiple charts with the same name is not supported and will cause unexpected results. default = true
+#'
+#' @importFrom rlang ":="
+#' @import dplyr
 #'
 #' @export
 #'
@@ -89,6 +91,6 @@ addChart <- function(
 
   #Fill in the column based on requiredSettings and save
   chart_col <- sym(paste0("chart_",chart))
-  settingsMeta <- settingsMeta %>% mutate(!!chart_col := text_key %in% !!requiredSettings)
+  settingsMeta <- settingsMeta %>% mutate(!!chart_col := .data$text_key %in% !!requiredSettings)
   saveRDS(settingsMeta, settingsMetaPath)
 }

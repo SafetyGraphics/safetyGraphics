@@ -28,11 +28,9 @@ addChart(chart, label = "", description = "", repo_url = "",
 
 \item{requiredSettings}{array of text_key values (matching those used in settingsMetadata) for the required settings for this chart}
 
-\item{settingsLocation}{folder location of user-defined settings metadata}
+\item{settingsLocation}{path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new chart has been added.}
 
 \item{overwrite}{overwrite any existing chart metadata? Note that having multiple charts with the same name is not supported and will cause unexpected results. default = true}
-
-\item{settings_location}{path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new chart has been added.}
 }
 \description{
 This function updates settings objects to add a new chart to the safetyGraphics shiny app

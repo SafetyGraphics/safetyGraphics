@@ -35,13 +35,9 @@ addSetting(text_key, label, description, setting_type,
 
 \item{charts}{character vector of charts using this setting}
 
-\item{settingsLocation}{folder location of user-defined settings metadata}
+\item{settingsLocation}{path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new setting has been added.}
 
 \item{overwrite}{overwrite any existing setting metadata? Note that having settings with the same name is not supported and will cause unexpected results. default = true}
-
-\item{settings_location}{path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new setting has been added.}
-
-\item{chart}{Name of the chart - one word, all lower case}
 }
 \description{
 This function updates settings objects to add a new setting parameter to the safetyGraphics shiny app
