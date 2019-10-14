@@ -7,7 +7,8 @@
 addSetting(text_key, label, description, setting_type,
   setting_required = FALSE, column_mapping = FALSE, column_type = NA,
   field_mapping = FALSE, field_column_key = "", setting_cat,
-  default = "", charts, settingsLocation = getwd(), overwrite = TRUE)
+  default = "", charts = c(), settingsLocation = getwd(),
+  overwrite = TRUE)
 }
 \arguments{
 \item{text_key}{Text key indicating the setting name. \code{'--'} delimiter indicates a nested setting}
@@ -32,7 +33,7 @@ addSetting(text_key, label, description, setting_type,
 
 \item{default}{Default value for non-data settings}
 
-\item{charts}{list of charts using this setting}
+\item{charts}{character vector of charts using this setting}
 
 \item{settingsLocation}{folder location of user-defined settings metadata}
 

@@ -2,7 +2,7 @@
 #'
 #' This function updates settings objects to add a new chart to the safetyGraphics shiny app
 #'
-#' This function makes it easy for users to adds a new chart to the safetyGraphics shiny app, by making updates to the underlying metadata used by the package. Specifically, the function adds a row to chartsMetadata.rda describing the chart and adds a column to settingsMetadata.rda specifying which settings are used with the chart. If new settings are needed for the chart, the user should call addSetting() for each new setting required.
+#' This function makes it easy for users to add a new chart to the safetyGraphics shiny app, by making updates to the underlying metadata used by the package. Specifically, the function adds a row to chartsMetadata.rda describing the chart and adds a column to settingsMetadata.rda specifying which settings are used with the chart. If new settings are needed for the chart, the user should call addSetting() for each new setting required.
 #'
 #' @param settings_location path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new chart has been added.
 #' @param chart Name of the chart - one word, all lower case
@@ -10,8 +10,8 @@
 #' @param description Description of the chart
 #' @param repo_url Homepage for chart's code repository (if any)
 #' @param settings_url Homepage for chart's settings documentation
-#' @param main Name of the main function used to initialize the app. If the type is htmlwidgets, the js function must accept "location" and "settings" parameters (in that order) and have an .init() method, expecting a json data array. Otherwise, the r function should accept named data and settings parameters, andshould be loaded in the user's namespace.
-#' @param type type of chart (e.g. 'htmlwidget')
+#' @param main Name of the main function used to initialize the app. If the type is htmlwidgets, the js function must accept "location" and "settings" parameters (in that order) and have an .init() method, expecting a json data array. Otherwise, the r function should accept named data and settings parameters, and should be loaded in the user's namespace.
+#' @param type type of chart. Should be 'htmlwidget', 'static', 'plotly' or 'module'
 #' @param maxWidth max width for the widget in pixels
 #' @param requiredSettings array of text_key values (matching those used in settingsMetadata) for the required settings for this chart
 #' @param settingsLocation folder location of user-defined settings metadata
@@ -49,7 +49,7 @@ addChart <- function(
   if(nchar(label)==0){
     label = chart
   }
-  
+
   # create settings for new chart
   newChart <- list(
     chart=chart,

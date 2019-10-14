@@ -40,33 +40,33 @@ safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL, settingsLocatio
 
   chartsMetaPath <- paste(settingsLocation,"chartsMetadata.Rds",sep="/")
   if(file.exists(chartsMetaPath)){
-    options(sg_chartsMetadata=TRUE) 
+    options(sg_chartsMetadata=TRUE)
     options(sg_chartsMetadata_df=readRDS(chartsMetaPath))
-    
+
   } else {
-    options(sg_chartsMetadata=FALSE) 
-    options(sg_chartsMetadata_df=readRDS(chartsMetaPath))
-    
+    options(sg_chartsMetadata=FALSE)
+    options(sg_chartsMetadata_df=NULL)
+
   }
-    
+
   settingsMetaPath <- paste(settingsLocation,"settingsMetadata.Rds",sep="/")
   if(file.exists(settingsMetaPath)){
-    options(sg_settingsMetadata=TRUE) 
+    options(sg_settingsMetadata=TRUE)
     options(sg_settingsMetadata_df=readRDS(settingsMetaPath))
   } else {
-    options(sg_settingsMetadata=FALSE) 
+    options(sg_settingsMetadata=FALSE)
     options(sg_settingsMetadata_df=NULL)
   }
-    
+
   standardsMetaPath <- paste(settingsLocation,"standardsMetadata.Rds",sep="/")
   if(file.exists(standardsMetaPath)){
     options(sg_standardsMetadata=TRUE)
     options(sg_standardsMetadata_df=readRDS(standardsMetaPath))
   } else {
-    options(sg_standardsMetadata=FALSE) 
+    options(sg_standardsMetadata=FALSE)
     options(sg_standardsMetadata_df=NULL)
   }
-  
+
   path <- system.file("safetyGraphics_app", package = "safetyGraphics")
   shiny::runApp(path, launch.browser = TRUE)
 }

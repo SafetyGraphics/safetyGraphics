@@ -20,9 +20,9 @@ addChart(chart, label = "", description = "", repo_url = "",
 
 \item{settings_url}{Homepage for chart's settings documentation}
 
-\item{main}{Name of the main function used to initialize the app. If the type is htmlwidgets, the js function must accept "location" and "settings" parameters (in that order) and have an .init() method, expecting a json data array. Otherwise, the r function should accept named data and settings parameters, andshould be loaded in the user's namespace.}
+\item{main}{Name of the main function used to initialize the app. If the type is htmlwidgets, the js function must accept "location" and "settings" parameters (in that order) and have an .init() method, expecting a json data array. Otherwise, the r function should accept named data and settings parameters, and should be loaded in the user's namespace.}
 
-\item{type}{type of chart (e.g. 'htmlwidget')}
+\item{type}{type of chart. Should be 'htmlwidget', 'static', 'plotly' or 'module'}
 
 \item{maxWidth}{max width for the widget in pixels}
 
@@ -38,5 +38,5 @@ addChart(chart, label = "", description = "", repo_url = "",
 This function updates settings objects to add a new chart to the safetyGraphics shiny app
 }
 \details{
-This function makes it easy for users to adds a new chart to the safetyGraphics shiny app, by making updates to the underlying metadata used by the package. Specifically, the function adds a row to chartsMetadata.rda describing the chart and adds a column to settingsMetadata.rda specifying which settings are used with the chart. If new settings are needed for the chart, the user should call addSetting() for each new setting required.
+This function makes it easy for users to add a new chart to the safetyGraphics shiny app, by making updates to the underlying metadata used by the package. Specifically, the function adds a row to chartsMetadata.rda describing the chart and adds a column to settingsMetadata.rda specifying which settings are used with the chart. If new settings are needed for the chart, the user should call addSetting() for each new setting required.
 }
