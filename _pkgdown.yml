@@ -20,6 +20,8 @@ reference:
   - title: Helper Functions
     desc: these functions are used by the main app
     contents:
+      - addChart
+      - addSetting
       - adlbc
       - chartRenderer-shiny
       - chartRenderer
@@ -28,6 +30,8 @@ reference:
       - generateSettings
       - getRequiredSettings
       - getSettingsMetadata
+      - removeCharts
+      - removeSettings
       - settingsMetadata
       - standardsMetadata
       - trimSettings

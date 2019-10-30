@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Shiny bindings for chartRenderer — chartRenderer-shiny • safetyGraphics</title>
+<title>Adds a new setting for use in the safetyGraphics shiny app — addSetting • safetyGraphics</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,10 +32,9 @@
 
 
 
-<meta property="og:title" content="Shiny bindings for chartRenderer — chartRenderer-shiny" />
+<meta property="og:title" content="Adds a new setting for use in the safetyGraphics shiny app — addSetting" />
 
-<meta property="og:description" content="Output and render functions for using safetyhistogram within Shiny
-applications and interactive Rmd documents." />
+<meta property="og:description" content="This function updates settings objects to add a new setting parameter to the safetyGraphics shiny app" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -122,49 +121,87 @@ applications and interactive Rmd documents." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Shiny bindings for chartRenderer</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/blob/master/R/chartRenderer.R'><code>R/chartRenderer.R</code></a></small>
-    <div class="hidden name"><code>chartRenderer-shiny.Rd</code></div>
+    <h1>Adds a new setting for use in the safetyGraphics shiny app</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/blob/master/R/addSetting.R'><code>R/addSetting.R</code></a></small>
+    <div class="hidden name"><code>addSetting.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Output and render functions for using safetyhistogram within Shiny
-applications and interactive Rmd documents.</p>
+    <p>This function updates settings objects to add a new setting parameter to the safetyGraphics shiny app</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>output_chartRenderer</span>(<span class='no'>outputId</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='st'>"100%"</span>, <span class='kw'>height</span> <span class='kw'>=</span> <span class='st'>"400px"</span>)
-
-<span class='fu'>render_chartRenderer</span>(<span class='no'>expr</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>(), <span class='kw'>quoted</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>addSetting</span>(<span class='no'>text_key</span>, <span class='no'>label</span>, <span class='no'>description</span>, <span class='no'>setting_type</span>,
+  <span class='kw'>setting_required</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>column_mapping</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>column_type</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>field_mapping</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>field_column_key</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='no'>setting_cat</span>,
+  <span class='kw'>default</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>charts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(), <span class='kw'>settingsLocation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span>(),
+  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>outputId</th>
-      <td><p>output variable to read from</p></td>
+      <th>text_key</th>
+      <td><p>Text key indicating the setting name. <code>'--'</code> delimiter indicates a nested setting</p></td>
     </tr>
     <tr>
-      <th>width, height</th>
-      <td><p>Must be a valid CSS unit (like <code>'100%'</code>,
-<code>'400px'</code>, <code>'auto'</code>) or a number, which will be coerced to a
-string and have <code>'px'</code> appended.</p></td>
+      <th>label</th>
+      <td><p>Label</p></td>
     </tr>
     <tr>
-      <th>expr</th>
-      <td><p>An expression that generates a chart</p></td>
+      <th>description</th>
+      <td><p>Description</p></td>
     </tr>
     <tr>
-      <th>env</th>
-      <td><p>The environment in which to evaluate <code>expr</code>.</p></td>
+      <th>setting_type</th>
+      <td><p>Expected type for setting value. Should be "character", "vector", "numeric" or "logical"</p></td>
     </tr>
     <tr>
-      <th>quoted</th>
-      <td><p>Is <code>expr</code> a quoted expression (with <code><a href='https://rdrr.io/r/base/substitute.html'>quote()</a></code>)? This
-is useful if you want to save an expression in a variable.</p></td>
+      <th>setting_required</th>
+      <td><p>Flag indicating if the setting is required</p></td>
+    </tr>
+    <tr>
+      <th>column_mapping</th>
+      <td><p>Flag indicating if the setting corresponds to a column in the associated data</p></td>
+    </tr>
+    <tr>
+      <th>column_type</th>
+      <td><p>Expected type for the data column values. Should be "character","logical" or "numeric"</p></td>
+    </tr>
+    <tr>
+      <th>field_mapping</th>
+      <td><p>Flag indicating whether the setting corresponds to a field-level mapping in the data</p></td>
+    </tr>
+    <tr>
+      <th>field_column_key</th>
+      <td><p>Key for the column that provides options for the field-level mapping in the data</p></td>
+    </tr>
+    <tr>
+      <th>setting_cat</th>
+      <td><p>Setting category (data, measure, appearance)</p></td>
+    </tr>
+    <tr>
+      <th>default</th>
+      <td><p>Default value for non-data settings</p></td>
+    </tr>
+    <tr>
+      <th>charts</th>
+      <td><p>character vector of charts using this setting</p></td>
+    </tr>
+    <tr>
+      <th>settingsLocation</th>
+      <td><p>path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new setting has been added.</p></td>
+    </tr>
+    <tr>
+      <th>overwrite</th>
+      <td><p>overwrite any existing setting metadata? Note that having settings with the same name is not supported and will cause unexpected results. default = true</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function makes it easy for users to adds a new settings to the safetyGraphics shiny app by making updates to the underlying metadata used by the package. Specifically, the function adds a row to settingsMetadata.rda describing the setting.</p>
     
 
   </div>
@@ -172,7 +209,9 @@ is useful if you want to save an expression in a variable.</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#details">Details</a></li>
+          </ul>
 
   </div>
 </div>

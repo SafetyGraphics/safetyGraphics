@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Shiny bindings for chartRenderer — chartRenderer-shiny • safetyGraphics</title>
+<title>Create a custom static or plotly R graphic — createChart • safetyGraphics</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,10 +32,9 @@
 
 
 
-<meta property="og:title" content="Shiny bindings for chartRenderer — chartRenderer-shiny" />
+<meta property="og:title" content="Create a custom static or plotly R graphic — createChart" />
 
-<meta property="og:description" content="Output and render functions for using safetyhistogram within Shiny
-applications and interactive Rmd documents." />
+<meta property="og:description" content="Create a custom static or plotly R graphic" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -122,47 +121,38 @@ applications and interactive Rmd documents." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Shiny bindings for chartRenderer</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/blob/master/R/chartRenderer.R'><code>R/chartRenderer.R</code></a></small>
-    <div class="hidden name"><code>chartRenderer-shiny.Rd</code></div>
+    <h1>Create a custom static or plotly R graphic</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/blob/master/R/createChart.R'><code>R/createChart.R</code></a></small>
+    <div class="hidden name"><code>createChart.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Output and render functions for using safetyhistogram within Shiny
-applications and interactive Rmd documents.</p>
+    <p>Create a custom static or plotly R graphic</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>output_chartRenderer</span>(<span class='no'>outputId</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='st'>"100%"</span>, <span class='kw'>height</span> <span class='kw'>=</span> <span class='st'>"400px"</span>)
-
-<span class='fu'>render_chartRenderer</span>(<span class='no'>expr</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>(), <span class='kw'>quoted</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>createChart</span>(<span class='no'>type</span>, <span class='no'>rSettings</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>outputId</th>
-      <td><p>output variable to read from</p></td>
+      <th>type</th>
+      <td><p>Type of chart. Options are <code>"static"</code> or <code>plotly</code>.</p></td>
     </tr>
     <tr>
-      <th>width, height</th>
-      <td><p>Must be a valid CSS unit (like <code>'100%'</code>,
-<code>'400px'</code>, <code>'auto'</code>) or a number, which will be coerced to a
-string and have <code>'px'</code> appended.</p></td>
-    </tr>
-    <tr>
-      <th>expr</th>
-      <td><p>An expression that generates a chart</p></td>
-    </tr>
-    <tr>
-      <th>env</th>
-      <td><p>The environment in which to evaluate <code>expr</code>.</p></td>
-    </tr>
-    <tr>
-      <th>quoted</th>
-      <td><p>Is <code>expr</code> a quoted expression (with <code><a href='https://rdrr.io/r/base/substitute.html'>quote()</a></code>)? This
-is useful if you want to save an expression in a variable.</p></td>
+      <th>rSettings</th>
+      <td><p>List containing all arguments needed for chart creation: 
+<code>rSettings = list(
+data = data,
+debug_js=debug_js,
+chartFunction = chartFunction,
+settings = jsonlite::toJSON(
+  settings,
+  auto_unbox = TRUE,
+  null = "null"
+))</code></p></td>
     </tr>
     </table>
     
