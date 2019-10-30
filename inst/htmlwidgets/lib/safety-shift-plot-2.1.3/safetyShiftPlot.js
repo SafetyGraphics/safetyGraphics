@@ -663,6 +663,12 @@
         return test_data;
     }
 
+    function initCustomEvents() {
+        var chart = this;
+        chart.participantsSelected = [];
+        chart.events.participantsSelected = new CustomEvent('participantsSelected');
+    }
+
     function onInit() {
         var _this = this;
 
@@ -709,6 +715,9 @@
                 return d.shifty;
             })
         );
+
+        //initialize custom events
+        initCustomEvents.call(this);
     }
 
     function custmoizeMeasureControl() {
@@ -1197,68 +1206,81 @@
             );
     }
 
-    function addBrush() {
+    function brushing() {
+        var _this = this;
+
+        var chart = this;
+        var config = this.config;
+        var extent = chart.brush.extent();
+        var points = this.svg.selectAll('g.point').classed('selected', false);
         var decim = d3.format('.2f');
 
-        function brushed() {
-            var _this = this;
+        points.select('circle').attr('fill-opacity', 0);
 
-            var extent = brush.extent();
-            var points = this.svg.selectAll('g.point').classed('selected', false);
+        var selected_points = points
+            .filter(function(d) {
+                var cx = _this.x(+d.values.x);
+                var cy = _this.y(+d.values.y);
+                return (
+                    extent[0][0] <= cx &&
+                    cx <= extent[1][0] &&
+                    extent[0][1] <= cy &&
+                    cy <= extent[1][1]
+                );
+            })
+            .classed('selected', true)
+            .select('circle')
+            .attr('fill-opacity', this.config.marks[0].attributes['fill-opacity']);
 
-            points.select('circle').attr('fill-opacity', 0);
+        //redraw the table with the new data
 
-            var selected_points = points
-                .filter(function(d) {
-                    var cx = _this.x(+d.values.x);
-                    var cy = _this.y(+d.values.y);
-                    return (
-                        extent[0][0] <= cx &&
-                        cx <= extent[1][0] &&
-                        extent[0][1] <= cy &&
-                        cy <= extent[1][1]
-                    );
-                })
-                .classed('selected', true)
-                .select('circle')
-                .attr('fill-opacity', this.config.marks[0].attributes['fill-opacity']);
+        var selected_data = selected_points.data().map(function(m) {
+            return m.values.raw[0];
+        });
+        chart.participantsSelected = selected_data.map(function(m) {
+            return m.key;
+        });
+        selected_data.forEach(function(d) {
+            d.shiftx = decim(d.shiftx);
+            d.shifty = decim(d.shifty);
+            d.chg = decim(d.chg);
+        });
+        this.listing.draw(selected_data);
+        if (selected_data.length === 0) this.listing.wrap.style('display', 'none');
+        else this.listing.wrap.style('display', 'block');
 
-            //redraw the table with the new data
-            var selected_data = selected_points.data().map(function(m) {
-                return m.values.raw[0];
-            });
-            selected_data.forEach(function(d) {
-                d.shiftx = decim(d.shiftx);
-                d.shifty = decim(d.shifty);
-                d.chg = decim(d.chg);
-            });
-            this.listing.draw(selected_data);
-            if (selected_data.length === 0) this.listing.wrap.style('display', 'none');
-            else this.listing.wrap.style('display', 'block');
-
-            //footnote
+        //footnote
+        this.wrap
+            .select('.record-note')
+            .style('text-align', 'right')
+            .text('Details of ' + selected_data.length + ' selected points:');
+        if (chart.brush.empty()) {
             this.wrap
                 .select('.record-note')
-                .style('text-align', 'right')
-                .text('Details of ' + selected_data.length + ' selected points:');
-            if (brush.empty()) {
-                this.wrap
-                    .select('.record-note')
-                    .style('text-align', 'center')
-                    .text('Click and drag to select points.');
-                points
-                    .select('circle')
-                    .attr('fill-opacity', this.config.marks[0].attributes['fill-opacity']);
-            }
-        } //brushed
+                .style('text-align', 'center')
+                .text('Click and drag to select points.');
+            points
+                .select('circle')
+                .attr('fill-opacity', this.config.marks[0].attributes['fill-opacity']);
+        }
+    } //brushed
 
-        var brush = d3.svg
+    function brushEnd() {
+        this.events.participantsSelected.data = this.participantsSelected;
+        this.wrap.node().dispatchEvent(this.events.participantsSelected);
+        console.log("done brushin'");
+    }
+
+    function addBrush() {
+        var chart = this;
+        chart.brush = d3.svg
             .brush()
             .x(d3.scale.identity().domain(this.x.range()))
             .y(d3.scale.identity().domain(this.y.range()))
-            .on('brush', brushed.bind(this));
+            .on('brush', brushing.bind(this))
+            .on('brushend', brushEnd.bind(this));
 
-        this.svg.call(brush);
+        this.svg.call(chart.brush);
 
         this.svg.select('rect.extent').attr({
             'shape-rendering': 'crispEdges',
