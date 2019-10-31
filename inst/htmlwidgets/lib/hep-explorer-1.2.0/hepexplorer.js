@@ -126,6 +126,19 @@
         });
     }
 
+    (function() {
+        if (typeof window.CustomEvent === 'function') return false;
+
+        function CustomEvent(event, params) {
+            params = params || { bubbles: false, cancelable: false, detail: null };
+            var evt = document.createEvent('CustomEvent');
+            evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+            return evt;
+        }
+
+        window.CustomEvent = CustomEvent;
+    })();
+
     // https://github.com/wbkd/d3-extended
     d3.selection.prototype.moveToFront = function() {
         return this.each(function() {
@@ -249,19 +262,14 @@
                 TB: 'Total Bilirubin',
                 ALP: 'Alkaline phosphatase (ALP)'
             },
-            x_options: ['ALT', 'AST', 'ALP'],
+            add_measures: false,
+            x_options: 'all',
+            x_default: 'ALT',
             y_options: ['TB'],
-            point_size: 'Uniform',
-            point_size_options: ['ALT', 'AST', 'ALP', 'TB'],
+            y_default: 'TB',
+            point_size_options: 'all',
+            point_size_default: 'Uniform',
             cuts: {
-                ALT: {
-                    relative_baseline: 3.8,
-                    relative_uln: 3
-                },
-                AST: {
-                    relative_baseline: 3.8,
-                    relative_uln: 3
-                },
                 TB: {
                     relative_baseline: 4.8,
                     relative_uln: 2
@@ -270,9 +278,10 @@
                     relative_baseline: 3.8,
                     relative_uln: 1
                 },
-                xMeasure: null, //set in syncSettings
-                yMeasure: null, //set in syncSettings
-                display: null //set in syncSettings
+                defaults: {
+                    relative_baseline: 3.8,
+                    relative_uln: 3
+                }
             },
             imputation_methods: {
                 ALT: 'data-driven',
@@ -282,6 +291,8 @@
             },
             imputation_values: null,
             display: 'relative_uln', //or "relative_baseline"
+            plot_max_values: true,
+            plot_day: null, //set in onLayout/initStudyDayControl
             display_options: [
                 { label: 'Upper limit of normal adjusted (eDish)', value: 'relative_uln' },
                 { label: 'Baseline adjusted (mDish)', value: 'relative_baseline' }
@@ -369,18 +380,21 @@
     }
 
     //Replicate settings in multiple places in the settings object
-    function syncSettings(settings) {
-        settings.marks[0].per[0] = settings.id_col;
+    function syncSettings(settings$$1) {
+        var defaults = settings();
+        settings$$1.marks[0].per[0] = settings$$1.id_col;
 
         //set grouping config
-        if (typeof settings.group_cols == 'string') {
-            settings.group_cols = [{ value_col: settings.group_cols, label: settings.group_cols }];
+        if (typeof settings$$1.group_cols == 'string') {
+            settings$$1.group_cols = [
+                { value_col: settings$$1.group_cols, label: settings$$1.group_cols }
+            ];
         }
 
-        if (!(settings.group_cols instanceof Array && settings.group_cols.length)) {
-            settings.group_cols = [{ value_col: 'NONE', label: 'None' }];
+        if (!(settings$$1.group_cols instanceof Array && settings$$1.group_cols.length)) {
+            settings$$1.group_cols = [{ value_col: 'NONE', label: 'None' }];
         } else {
-            settings.group_cols = settings.group_cols.map(function(group) {
+            settings$$1.group_cols = settings$$1.group_cols.map(function(group) {
                 return {
                     value_col: group.value_col || group,
                     label: group.label || group.value_col || group
@@ -388,33 +402,34 @@
             });
 
             var hasNone =
-                settings.group_cols
+                settings$$1.group_cols
                     .map(function(m) {
                         return m.value_col;
                     })
                     .indexOf('NONE') > -1;
             if (!hasNone) {
-                settings.group_cols.unshift({ value_col: 'NONE', label: 'None' });
+                settings$$1.group_cols.unshift({ value_col: 'NONE', label: 'None' });
             }
         }
 
-        if (settings.group_cols.length > 1) {
-            settings.color_by = settings.group_cols[1].value_col
-                ? settings.group_cols[1].value_col
-                : settings.group_cols[1];
+        if (settings$$1.group_cols.length > 1) {
+            settings$$1.color_by = settings$$1.group_cols[1].value_col
+                ? settings$$1.group_cols[1].value_col
+                : settings$$1.group_cols[1];
         } else {
-            settings.color_by = 'NONE';
+            settings$$1.color_by = 'NONE';
         }
 
         //make sure filters is an Array
-        if (!(settings.filters instanceof Array)) {
-            settings.filters = typeof settings.filters == 'string' ? [settings.filters] : [];
+        if (!(settings$$1.filters instanceof Array)) {
+            settings$$1.filters =
+                typeof settings$$1.filters == 'string' ? [settings$$1.filters] : [];
         }
 
         //Define default details.
-        var defaultDetails = [{ value_col: settings.id_col, label: 'Subject Identifier' }];
-        if (settings.filters) {
-            settings.filters.forEach(function(filter) {
+        var defaultDetails = [{ value_col: settings$$1.id_col, label: 'Subject Identifier' }];
+        if (settings$$1.filters) {
+            settings$$1.filters.forEach(function(filter) {
                 var obj = {
                     value_col: filter.value_col ? filter.value_col : filter,
                     label: filter.label
@@ -434,8 +449,8 @@
             });
         }
 
-        if (settings.group_cols) {
-            settings.group_cols
+        if (settings$$1.group_cols) {
+            settings$$1.group_cols
                 .filter(function(f) {
                     return f.value_col != 'NONE';
                 })
@@ -459,17 +474,18 @@
         }
 
         //parse details to array if needed
-        if (!(settings.details instanceof Array)) {
-            settings.details = typeof settings.details == 'string' ? [settings.details] : [];
+        if (!(settings$$1.details instanceof Array)) {
+            settings$$1.details =
+                typeof settings$$1.details == 'string' ? [settings$$1.details] : [];
         }
 
         //If [settings.details] is not specified:
-        if (!settings.details) settings.details = defaultDetails;
+        if (!settings$$1.details) settings$$1.details = defaultDetails;
         else {
             //If [settings.details] is specified:
             //Allow user to specify an array of columns or an array of objects with a column property
             //and optionally a column label.
-            settings.details.forEach(function(detail) {
+            settings$$1.details.forEach(function(detail) {
                 if (
                     defaultDetails
                         .map(function(d) {
@@ -486,45 +502,90 @@
                             : detail
                     });
             });
-            settings.details = defaultDetails;
+            settings$$1.details = defaultDetails;
         }
 
         // If settings.analysisFlag is null
-        if (!settings.analysisFlag) settings.analysisFlag = { value_col: null, values: [] };
-        if (!settings.analysisFlag.value_col) settings.analysisFlag.value_col = null;
-        if (!(settings.analysisFlag.values instanceof Array)) {
-            settings.analysisFlag.values =
-                typeof settings.analysisFlag.values == 'string'
-                    ? [settings.analysisFlag.values]
+        if (!settings$$1.analysisFlag) settings$$1.analysisFlag = { value_col: null, values: [] };
+        if (!settings$$1.analysisFlag.value_col) settings$$1.analysisFlag.value_col = null;
+        if (!(settings$$1.analysisFlag.values instanceof Array)) {
+            settings$$1.analysisFlag.values =
+                typeof settings$$1.analysisFlag.values == 'string'
+                    ? [settings$$1.analysisFlag.values]
                     : [];
         }
         //if it is null, set settings.baseline.value_col to settings.studyday_col.
-        if (!settings.baseline) settings.baseline = { value_col: null, values: [] };
-        if (!settings.baseline.value_col) settings.baseline.value_col = settings.studyday_col;
-        if (!(settings.baseline.values instanceof Array)) {
-            settings.baseline.values =
-                typeof settings.baseline.values == 'string' ? [settings.baseline.values] : [];
+        if (!settings$$1.baseline) settings$$1.baseline = { value_col: null, values: [] };
+        if (!settings$$1.baseline.value_col)
+            settings$$1.baseline.value_col = settings$$1.studyday_col;
+        if (!(settings$$1.baseline.values instanceof Array)) {
+            settings$$1.baseline.values =
+                typeof settings$$1.baseline.values == 'string' ? [settings$$1.baseline.values] : [];
         }
+
+        //merge in default measure_values if user hasn't specified changes
+        Object.keys(defaults.measure_values).forEach(function(val) {
+            if (!settings$$1.measure_values.hasOwnProperty(val))
+                settings$$1.measure_values[val] = defaults.measure_values[val];
+        });
+
+        //check for 'all' in x_, y_ and point_size_options, but keep track if all options are used for later
+        var allMeasures = Object.keys(settings$$1.measure_values);
+        settings$$1.x_options_all = settings$$1.x_options == 'all';
+        if (settings$$1.x_options == 'all') settings$$1.x_options = allMeasures;
+        settings$$1.y_options_all = settings$$1.y_options == 'all';
+        if (settings$$1.y_options == 'all') settings$$1.y_options = allMeasures;
+        settings$$1.point_size_options_all = settings$$1.point_size_options == 'all';
+        if (settings$$1.point_size_options == 'all') settings$$1.point_size_options = allMeasures;
 
         //parse x_ and y_options to array if needed
-        if (!(settings.x_options instanceof Array)) {
-            settings.x_options = typeof settings.x_options == 'string' ? [settings.x_options] : [];
+        if (!(settings$$1.x_options instanceof Array)) {
+            settings$$1.x_options =
+                typeof settings$$1.x_options == 'string' ? [settings$$1.x_options] : [];
         }
 
-        if (!(settings.y_options instanceof Array)) {
-            settings.y_options = typeof settings.y_options == 'string' ? [settings.y_options] : [];
+        if (!(settings$$1.y_options instanceof Array)) {
+            settings$$1.y_options =
+                typeof settings$$1.y_options == 'string' ? [settings$$1.y_options] : [];
         }
 
-        // track initial Cutpoint (lets us detect when cutpoint should change)
-        settings.cuts.x = settings.x.column;
-        settings.cuts.y = settings.y.column;
-        settings.cuts.display = settings.display;
+        //set starting values for axis and point size settings.
+        settings$$1.point_size =
+            settings$$1.point_size_options.indexOf(settings$$1.point_size_default) > -1
+                ? settings$$1.point_size_default
+                : settings$$1.point_size_default == 'rRatio'
+                ? 'rRatio'
+                : 'Uniform';
+        settings$$1.x.column =
+            settings$$1.x_options.indexOf(settings$$1.x_default) > -1
+                ? settings$$1.x_default
+                : settings$$1.x_options[0];
+        settings$$1.y.column =
+            settings$$1.y_options.indexOf(settings$$1.y_default) > -1
+                ? settings$$1.y_default
+                : settings$$1.y_options[0];
 
-        //Attach measure columns to axis settings.
-        settings.x.column = settings.x_options[0];
-        settings.y.column = settings.y_options[0];
+        // track initial Cutpoint  (lets us detect when cutpoint should change)
+        settings$$1.cuts.x = settings$$1.x.column;
+        settings$$1.cuts.y = settings$$1.y.column;
+        settings$$1.cuts.display = settings$$1.display;
 
-        return settings;
+        // Confirm detault cuts are set
+        settings$$1.cuts.defaults = settings$$1.cuts.defaults || defaults.cuts.defaults;
+        settings$$1.cuts.defaults.relative_uln =
+            settings$$1.cuts.defaults.relative_uln || defaults.cuts.defaults.relative_uln;
+        settings$$1.cuts.defaults.relative_baseline =
+            settings$$1.cuts.defaults.relative_baseline || defaults.cuts.defaults.relative_baseline;
+
+        // keep default cuts if user hasn't provided an alternative
+        var cutMeasures = Object.keys(settings$$1.cuts);
+        Object.keys(defaults.cuts).forEach(function(m) {
+            if (cutMeasures.indexOf(m) == -1) {
+                settings$$1.cuts[m] = defaults.cuts[m];
+            }
+        });
+
+        return settings$$1;
     }
 
     function controlInputs() {
@@ -558,6 +619,19 @@
                 start: null, // set in syncControlInputs()
                 values: null, // set in syncControlInputs()
                 require: true
+            },
+            {
+                type: 'radio',
+                option: 'plot_max_values',
+                label: 'Plot Style',
+                values: [true, false],
+                relabels: ['Max Values', 'By Study Day']
+            },
+            {
+                type: 'number',
+                label: 'Study Day',
+                description: null, //set in onDraw/updateStudyDaySlider
+                option: 'plot_day'
             },
             {
                 type: 'dropdown',
@@ -595,7 +669,7 @@
                 description: 'Parameter to set point radius',
                 options: ['point_size'],
                 start: null, // set in syncControlInputs()
-                values: ['Uniform'],
+                values: ['Uniform', 'rRatio'],
                 require: true
             },
             {
@@ -659,8 +733,8 @@
                 return controlInput.option === 'x.column';
             });
 
-            xAxisMeasureControl.description = settings.x_options.join(', ');
-            xAxisMeasureControl.start = settings.x_options[0];
+            //xAxisMeasureControl.description = settings.x_options.join(', ');
+            xAxisMeasureControl.start = settings.x.column;
             xAxisMeasureControl.values = settings.x_options;
         }
 
@@ -688,8 +762,8 @@
             var yAxisMeasureControl = controlInputs.find(function(controlInput) {
                 return controlInput.option === 'y.column';
             });
-            yAxisMeasureControl.description = settings.y_options.join(', ');
-            yAxisMeasureControl.start = settings.y_options[0];
+            //  yAxisMeasureControl.description = settings.y_options.join(', ');
+            yAxisMeasureControl.start = settings.y.column;
             yAxisMeasureControl.values = settings.y_options;
         }
 
@@ -723,7 +797,7 @@
             return ci.label === 'Point Size';
         });
 
-        pointSizeControl.start = settings.point_size || 'Uniform';
+        pointSizeControl.start = settings.point_size;
 
         settings.point_size_options.forEach(function(d) {
             pointSizeControl.values.push(d);
@@ -774,6 +848,7 @@
     };
 
     function checkMeasureDetails() {
+        var chart = this;
         var config = this.config;
         var measures = d3
             .set(
@@ -803,21 +878,67 @@
                     '.'
             );
 
+        //automatically add Measures if requested
+        if (config.add_measures) {
+            measures.forEach(function(m, i) {
+                if (specifiedMeasures.indexOf(m) == -1) {
+                    config.measure_values['m' + i] = m;
+                }
+            });
+        }
+
         //check that x_options, y_options and size_options all have value keys/values in measure_values
         var valid_options = Object.keys(config.measure_values);
-        var all_options = ['x_options', 'y_options', 'point_size_options'];
-        all_options.forEach(function(options) {
-            config[options].forEach(function(option) {
+        var all_settings = ['x_options', 'y_options', 'point_size_options'];
+        all_settings.forEach(function(setting) {
+            // remove invalid options
+            config[setting].forEach(function(option) {
                 if (valid_options.indexOf(option) == -1) {
                     delete config[options][option];
                     console.warn(
                         option +
                             " wasn't found in the measure_values index and has been removed from config." +
-                            options +
+                            setting +
                             '. This may cause problems with the chart.'
                     );
                 }
             });
+
+            // update the control input settings
+            var controlLabel =
+                setting == 'x_options'
+                    ? 'X-axis Measure'
+                    : setting == 'y_options'
+                    ? 'Y-axis Measure'
+                    : 'Point Size';
+            var input = chart.controls.config.inputs.find(function(ci) {
+                return ci.label == controlLabel;
+            });
+
+            if (input) {
+                //only update this if the input settings exist - axis inputs with only one value are deleted
+                // add options for controls requesting 'all' measures
+                if (config[setting + '_all']) {
+                    var point_size_options = d3.merge([['Uniform', 'rRatio'], valid_options]);
+                    config[setting] =
+                        setting == 'point_size_options' ? point_size_options : valid_options;
+                    input.values = config[setting];
+                }
+            }
+        });
+        console.log(config.measure_values);
+        //check that all measure_values have associated cuts
+        Object.keys(config.measure_values).forEach(function(m) {
+            // does a cut point for the measure exist? If not, create a placeholder.
+            if (!config.cuts.hasOwnProperty(m)) {
+                config.cuts[m] = {};
+            }
+
+            // does the cut have non-null baseline and ULN cuts associated, if not use the default values
+            config.cuts[m].relative_baseline =
+                config.cuts[m].relative_baseline || config.cuts.defaults.relative_baseline;
+            config.cuts[m].relative_uln =
+                config.cuts[m].relative_uln || config.cuts.defaults.relative_uln;
         });
     }
 
@@ -1056,7 +1177,7 @@
             return d;
         });
 
-        if (missingBaseline > 0)
+        if (config.debug & (missingBaseline > 0))
             console.warn(
                 'No baseline value found for ' + missingBaseline + ' of ' + sub.length + ' records.'
             );
@@ -1089,11 +1210,18 @@
         makeAnalysisFlag.call(this);
     }
 
+    function initCustomEvents() {
+        var chart = this;
+        chart.participantsSelected = [];
+        chart.events.participantsSelected = new CustomEvent('participantsSelected');
+    }
+
     function onInit() {
         checkMeasureDetails.call(this);
         iterateOverData.call(this);
         addRRatioFilter.call(this);
         cleanData.call(this); //clean visit-level data - imputation and variable derivations
+        initCustomEvents.call(this);
     }
 
     function formatRRatioControl() {
@@ -1171,6 +1299,8 @@
             });
         }
 
+        //make sure the table is visible
+        this.config.quadrants.table.wrap.style('display', null);
         //update the content of each row
         rows.data(quadrants, function(d) {
             return d.label;
@@ -1389,6 +1519,8 @@
         this.participantDetails.header = this.participantDetails.wrap
             .append('div')
             .attr('class', 'participantHeader');
+
+        //layout spaghettiPlot
         var splot = this.participantDetails.wrap.append('div').attr('class', 'spaghettiPlot');
         splot
             .append('h3')
@@ -1400,6 +1532,19 @@
 
         splot.append('div').attr('class', 'chart');
 
+        //layout rRatio plot
+        var rrplot = this.participantDetails.wrap.append('div').attr('class', 'rrPlot');
+        rrplot
+            .append('h3')
+            .attr('class', 'id')
+            .html('R Ratio by Visit')
+            .style('border-top', '2px solid black')
+            .style('border-bottom', '2px solid black')
+            .style('padding', '.2em');
+
+        rrplot.append('div').attr('class', 'chart');
+
+        //layout measure table
         var mtable = this.participantDetails.wrap.append('div').attr('class', 'measureTable');
         mtable
             .append('h3')
@@ -1451,7 +1596,7 @@
                 chart.destroy();
                 chart = null;
 
-                var newChart = safetyedish(initial_container, initial_settings);
+                var newChart = hepexplorer(initial_container, initial_settings);
                 newChart.init(initial_data);
             });
     }
@@ -1904,7 +2049,6 @@
     }
 
     function initEmptyChartWarning() {
-        console.log(this);
         this.emptyChartWarning = d3
             .select(this.element)
             .append('span')
@@ -1916,6 +2060,327 @@
             .style('padding', '0.5em')
             .style('margin', '0 2% 12px 2%')
             .style('border-radius', '0.2em');
+    }
+
+    function relabelMeasureControls() {
+        var chart = this;
+        var config = this.config;
+        var controlLabels = ['X-axis Measure', 'Y-axis Measure', 'Point Size'];
+        var controlWraps = chart.controls.wrap.selectAll('div').filter(function(controlInput) {
+            return controlLabels.indexOf(controlInput.label) > -1;
+        });
+        var controls = controlWraps.select('select');
+        var options = controls.selectAll('option');
+        var allKeys = Object.keys(config.measure_values);
+        options
+            .text(function(d) {
+                return allKeys.indexOf(d) > -1 ? config.measure_values[d] : d;
+            })
+            .property('value', function(d) {
+                return d;
+            });
+    }
+
+    function stopAnimation() {
+        var chart = this;
+        chart.svg
+            .transition()
+            .duration(0)
+            .each('end', function() {
+                chart.controls.studyDayPlayButton.datum({ state: 'play' });
+                chart.controls.studyDayPlayButton.html('&#9658;');
+                chart.draw();
+            });
+    }
+
+    function customizePlotStyleToggle() {
+        var chart = this;
+        this.controls.wrap
+            .selectAll('.control-group')
+            .filter(function(d) {
+                return d.option === 'plot_max_values';
+            })
+            .selectAll('input')
+            .on('change', function(d) {
+                chart.config.plot_max_values = d;
+                stopAnimation.call(chart);
+            });
+    }
+
+    function startAnimation() {
+        var chart = this;
+        var config = this.config;
+
+        // calculate animation duration
+        var day_count = chart.controls.studyDayRange[1] - config.plot_day;
+        var duration = day_count < 100 ? day_count * 100 : 30000;
+        var day_duration = duration / day_count;
+
+        var base_size = config.marks[0].radius || config.flex_point_size;
+        var small_size = base_size / 2;
+
+        function reposition(point) {
+            point
+                .transition()
+                .duration(day_duration)
+                .attr('cx', function(d) {
+                    return chart.x(d[config.x.column]);
+                })
+                .attr('cy', function(d) {
+                    return chart.y(d[config.y.column]);
+                })
+                .attr('r', function(d) {
+                    if (d.outOfRange) {
+                        return small_size;
+                    } else if (config.point_size == 'Uniform') {
+                        return base_size;
+                    } else {
+                        return chart.sizeScale(d[config.point_size]);
+                    }
+                })
+                .attr('fill-opacity', function(d) {
+                    return config.plot_day < d.day_range[0] ? 0 : 0.5;
+                });
+        }
+
+        function updateDatum(d, currentDay) {
+            // adds temporary x, y and size (if any) measures for the current day to the core datum (instead of under d.value)
+            // these get removed when the transition ends and chart.draw() is called.
+            var measures = [config.x.column, config.y.column];
+            if (config.point_size != 'Uniform') {
+                measures = d3.merge([measures, [config.point_size]]);
+            }
+
+            var raw = d.values.raw[0];
+            d.outOfRange = false;
+            d.day_range = raw.day_range;
+            d.moved = false;
+            measures.forEach(function(m) {
+                var vals = raw[m + '_raw'];
+                // capture the previous point position
+                d[m + '_prev'] = d[m];
+
+                // Did currentDay occur while participant was enrolled?
+                if (vals && vals.length) {
+                    // && [config.x.column, config.y.column].includes(m)) { // out-of-range should be calculated study day of with x- and y-axis measures
+                    var first = vals[0];
+                    var last = vals[vals.length - 1];
+                    var before = currentDay < first.day;
+                    var after = currentDay > last.day;
+                    d.outOfRange = d.outOfRange || before || after;
+                }
+
+                //Get the most recent data point (or the first point if participant isn't enrolled yet)
+                var getLastMeasureIndex = d3.bisector(function(d) {
+                    return d.day;
+                }).right;
+                var lastMeasureIndexPlusOne = vals ? getLastMeasureIndex(vals, currentDay) : 0;
+                var lastMeasureIndex = lastMeasureIndexPlusOne - 1;
+
+                d[m] =
+                    lastMeasureIndex >= 0
+                        ? vals[lastMeasureIndex]['value']
+                        : vals && vals.length
+                        ? vals[0].value
+                        : null;
+
+                d[m + '_length'] = d[m] - d[m + '_prev'];
+                if (d[m + '_length']) {
+                    d.moved = true;
+                }
+            });
+            return d;
+        }
+
+        function showDay(currentDay) {
+            //update the controls
+            config.plot_day = Math.floor(currentDay);
+            chart.controls.studyDayInput.node().value = config.plot_day;
+
+            //update the label
+            chart.controls.studyDayControlWrap
+                .select('span.wc-control-label')
+                .html('Showing data from: <strong>Day ' + config.plot_day + '</strong>')
+                .select('strong')
+                .style('color', 'blue');
+
+            //reposition the points
+            var marks = chart.marks[0];
+
+            var groups = marks.groups.datum(function(d) {
+                return updateDatum(d, config.plot_day);
+            });
+
+            var points = groups.select('circle').each(function(d) {
+                if (d.moved) d3.select(this).call(reposition);
+            });
+
+            //draw trails
+            var tails = groups
+                .filter(function(d) {
+                    return d.moved;
+                })
+                .insert('line', ':first-child')
+                //static attributes
+                .attr('x1', function(d) {
+                    return chart.x(d[config.x.column + '_prev']);
+                })
+                .attr('y1', function(d) {
+                    return chart.y(d[config.y.column + '_prev']);
+                })
+                .attr('stroke', function(d) {
+                    return chart.colorScale(d.values.raw[0][config.color_by]);
+                })
+                //.attr('stroke', '#999')
+
+                //transitional attributes
+                .attr('x2', function(d) {
+                    return chart.x(d[config.x.column + '_prev']);
+                })
+                .attr('y2', function(d) {
+                    return chart.y(d[config.y.column + '_prev']);
+                })
+                .attr('stroke-width', base_size);
+            tails.each(function(d) {
+                var path = d3.select(this);
+                var transition1 = path
+                    .transition()
+                    .duration(day_duration)
+                    .ease('linear')
+                    .attr('x2', function(d) {
+                        return chart.x(d[config.x.column]);
+                    })
+                    .attr('y2', function(d) {
+                        return chart.y(d[config.y.column]);
+                    });
+                var transition2 = transition1
+                    .transition()
+                    .duration(day_duration * 10)
+                    .attr('stroke-width', '0px');
+            });
+        }
+
+        function tweenStudyDay() {
+            var min = config.plot_day;
+            var max = chart.controls.studyDayRange[1];
+            var studyday = d3.interpolateNumber(min, max);
+
+            return function(t) {
+                showDay(studyday(t));
+            };
+        }
+
+        //draw the chart to clear details view
+        chart.draw();
+
+        //hide quadrant info during startAnimation
+        chart.config.quadrants.table.wrap.style('display', 'none');
+        chart.quadrant_labels.g.attr('display', 'none');
+
+        //show the stop button
+        chart.controls.studyDayPlayButton.datum({ state: 'stop' });
+        chart.controls.studyDayPlayButton.html('&#9632;');
+
+        // Initialize the Transition
+        chart.myTransition = chart.svg
+            .transition()
+            .duration(duration)
+            .ease('linear')
+            .tween('studyday', tweenStudyDay)
+            .each('end', function() {
+                chart.draw();
+            });
+    }
+
+    // &#9658; = play symbol
+    // &#9632; = stop symbol
+    // &#8634; = restart symbol
+
+    function initPlayButton() {
+        var chart = this;
+        var config = this.config;
+        chart.controls.studyDayPlayButton = chart.controls.studyDayControlWrap
+            .append('button')
+            .datum({ state: 'play' })
+            .html('&#9658;') //play symbol
+            .style('padding', '0.2em 0.5em 0.2em 0.5em')
+            .style('margin-left', '0.5em')
+            .style('border-radius', '0.4em')
+            //.style('display', 'none')
+            .on('click', function(d) {
+                var button = d3.select(this);
+                if (d.state === 'play') {
+                    startAnimation.call(chart);
+                } else if (d.state === 'restart') {
+                    config.plot_day =
+                        chart.controls.studyDayRange[0] > 0 ? chart.controls.studyDayRange[0] : 0;
+                    chart.controls.studyDayInput.node().value = config.plot_day;
+                    chart.draw();
+
+                    startAnimation.call(chart);
+                } else {
+                    stopAnimation.call(chart);
+                }
+            });
+    }
+
+    function initStudyDayControl() {
+        var chart = this;
+        var config = this.config;
+
+        // Move the study day control beneath the chart
+        chart.controls.secondary = chart.wrap
+            .insert('div', 'div.footnote')
+            .attr('class', 'wc-controls secondary-controls');
+
+        var removed = chart.controls.wrap
+            .selectAll('div')
+            .filter(function(controlInput) {
+                return controlInput.label === 'Study Day';
+            })
+            .remove();
+
+        chart.controls.studyDayControlWrap = chart.controls.secondary.append(function() {
+            return removed.node();
+        });
+
+        //convert control to a slider
+        chart.controls.studyDayInput = chart.controls.studyDayControlWrap.select('input');
+        chart.controls.studyDayInput.attr('type', 'range');
+
+        //set min and max values and add annotations
+        chart.controls.studyDayRange = d3.extent(
+            chart.imputed_data.filter(function(f) {
+                return f.key_measure;
+            }),
+            function(d) {
+                return d[config.studyday_col];
+            }
+        );
+        chart.controls.studyDayInput.attr('min', chart.controls.studyDayRange[0]);
+        chart.controls.studyDayInput.attr('max', chart.controls.studyDayRange[1]);
+
+        chart.controls.studyDayControlWrap
+            .insert('span', 'input')
+            .attr('class', 'span-description')
+            .style('display', 'inline-block')
+            .style('padding-right', '0.2em')
+            .text(chart.controls.studyDayRange[0]);
+        chart.controls.studyDayControlWrap
+            .append('span')
+            .attr('class', 'span-description')
+            .style('display', 'inline-block')
+            .style('padding-left', '0.2em')
+            .text(chart.controls.studyDayRange[1]);
+
+        //initialize plot_day to day 0 or the min value, whichever is greater
+        if (config.plot_day === null) {
+            config.plot_day =
+                chart.controls.studyDayRange[0] > 0 ? chart.controls.studyDayRange[0] : 0;
+            chart.controls.studyDayInput.node().value = config.plot_day;
+        }
+
+        initPlayButton.call(this);
     }
 
     function onLayout() {
@@ -1936,9 +2401,12 @@
         initVisitPath.call(this);
         initParticipantDetails.call(this);
         initResetButton.call(this);
+        customizePlotStyleToggle.call(this);
         initDisplayControl.call(this);
         initControlLabels.call(this);
         initEmptyChartWarning.call(this);
+        initStudyDayControl.call(this);
+        relabelMeasureControls.call(this);
     }
 
     function updateAxisSettings() {
@@ -1995,7 +2463,7 @@
         if (this.config.r_ratio_filter) {
             if (!config.r_ratio[1]) {
                 var raw_max_r_ratio = d3.max(this.raw_data, function(d) {
-                    return d.rRatio;
+                    return d.rRatio_max;
                 });
                 config.max_r_ratio = Math.ceil(raw_max_r_ratio * 10) / 10; //round up to the nearest 0.1
                 config.r_ratio[1] = config.max_r_ratio;
@@ -2051,11 +2519,246 @@
     }
 
     function calculateRRatios(d, participant_obj) {
-        if (this.config.r_ratio_filter) {
-            //R-ratio should be the ratio of ALT to ALP, i.e. the x-axis to the z-axis.
-            participant_obj.rRatio =
-                participant_obj['ALT_relative_uln'] / participant_obj['ALP_relative_uln'];
-        }
+        var chart = this;
+        var config = this.config;
+
+        // R-ratio should be the ratio of ALT to ALP
+
+        // For current time point or maximal values (depends on view)
+        participant_obj.rRatio_current =
+            participant_obj['ALT_relative_uln'] / participant_obj['ALP_relative_uln'];
+
+        //get r-ratio data for every visit where both ALT and ALP are available
+        var allMatches = chart.imputed_data.filter(function(f) {
+            return f[config.id_col] == participant_obj[config.id_col];
+        });
+
+        var raw_alt = allMatches
+            .filter(function(d) {
+                return d[config.measure_col] == config.measure_values.ALT;
+            })
+            .map(function(m) {
+                m.day = m[config.studyday_col];
+                m.alt_relative_uln = m.relative_uln;
+                return m;
+            });
+
+        participant_obj.rRatio_raw = allMatches
+            .filter(function(f) {
+                return f[config.measure_col] == config.measure_values.ALP;
+            })
+            .map(function(m) {
+                m.day = m[config.studyday_col];
+                m.alp_relative_uln = m.relative_uln;
+                return m;
+            })
+            .filter(function(f) {
+                var matched_alt = raw_alt.find(function(fi) {
+                    return fi.day == f.day;
+                });
+                f.alt_relative_uln = matched_alt ? matched_alt.relative_uln : null;
+                f.rRatio = f['alt_relative_uln'] / f['alp_relative_uln'];
+                f.value = f.rRatio;
+                return f.rRatio;
+            });
+
+        //max rRatios across visits
+        participant_obj.rRatio_max = d3.max(participant_obj.rRatio_raw, function(f) {
+            return f.rRatio;
+        }); //max rRatio for all visits
+        participant_obj.rRatio_max_anly = d3.max(
+            participant_obj.rRatio_raw.filter(function(f) {
+                return f.analysisFlag;
+            }),
+            function(f) {
+                return f.rRatio;
+            }
+        );
+
+        // rRatio at time of max ALT
+        var maxAltRecord = participant_obj.rRatio_raw
+            .filter(function(f) {
+                return f.analysisFlag;
+            })
+            .sort(function(a, b) {
+                return b.alt_relative_uln - a.alt_relative_uln; //descending sort (so max is first value)
+            })[0];
+
+        participant_obj.rRatio_max_alt = maxAltRecord ? maxAltRecord.rRatio : null;
+
+        // Use the r ratio at the tme of the max ALT value for standard eDish, otherwise use rRatio from the current time point
+        participant_obj.rRatio = config.plot_max_values
+            ? participant_obj.rRatio_max_alt
+            : participant_obj.rRatio_current;
+    }
+
+    function getMaxValues(d) {
+        var chart = this;
+        var config = this.config;
+
+        var participant_obj = {};
+        participant_obj.days_x = null;
+        participant_obj.days_y = null;
+        participant_obj.outOfRange = false;
+        Object.keys(config.measure_values).forEach(function(mKey) {
+            //get all raw data for the current measure
+            var all_matches = d
+                .filter(function(f) {
+                    return config.measure_values[mKey] == f[config.measure_col];
+                }) //get matching measures
+                .sort(function(a, b) {
+                    return a[config.studyday_col] - b[config.studyday_col];
+                });
+
+            //Drop Participants with no analysis data
+            var analysis_matches = all_matches.filter(function(f) {
+                return f.analysisFlag;
+            });
+            participant_obj.drop_participant = analysis_matches.length === 0;
+
+            if (participant_obj.drop_participant) {
+                if (config.debug) {
+                    console.warn(
+                        'No analysis records found for ' + d[0][config.id_col] + ' for ' + mKey
+                    );
+                }
+
+                participant_obj.drop_reason =
+                    'No analysis results found for 1+ key measure, including ' + mKey + '.';
+            } else {
+                //keep an array of all [value, studyday] pairs for the measure
+                participant_obj[mKey + '_raw'] = all_matches.map(function(m, i) {
+                    return {
+                        value: m[config.display],
+                        day: m[config.studyday_col]
+                    };
+                });
+
+                var currentRecord = null;
+                //get the current record for each participant
+                if (config.plot_max_values) {
+                    //get record with maximum value for the current display type
+                    var max_value = d3.max(analysis_matches, function(d) {
+                        return +d[config.display];
+                    });
+                    var currentRecords = analysis_matches.filter(function(d) {
+                        return max_value == +d[config.display];
+                    });
+                    if (config.debug & (currentRecords.length > 1)) {
+                        var firstDay = currentRecords[0][config.studyday_col];
+                        var id = currentRecords[0][config.id_col];
+                        console.warn(
+                            'Found duplicate maximum ' +
+                                mKey +
+                                ' values for ' +
+                                id +
+                                '. Using first value from study day ' +
+                                firstDay +
+                                ' for timing calculations.'
+                        );
+                    }
+                    var currentRecord = currentRecords[0];
+                    participant_obj[mKey] = +currentRecord[config.display];
+                } else {
+                    //see if all selected config.plot_day was while participant was enrolled
+                    var first = all_matches[0];
+                    var last = all_matches[all_matches.length - 1];
+
+                    if ([config.x.column, config.y.column].includes(mKey)) {
+                        // out-of-range should be calculated study day of with x- and y-axis measures
+                        var before = config.plot_day < first[config.studyday_col];
+                        var after = config.plot_day > last[config.studyday_col];
+                        participant_obj.outOfRange = participant_obj.outOfRange || before || after;
+                    }
+
+                    //get the most recent measure on or before config.plot_day
+                    var onOrBefore = all_matches.filter(function(di) {
+                        return di[config.studyday_col] <= config.plot_day;
+                    });
+                    var latest = onOrBefore[onOrBefore.length - 1];
+
+                    currentRecord = latest ? latest : first;
+                    participant_obj[mKey] = currentRecord[config.display];
+                }
+                //  var currentRecord = all_matches.find(d => participant_obj[mKey] == +d[config.display]);
+
+                //map all measure specific values
+                config.flat_cols.forEach(function(col) {
+                    participant_obj[mKey + '_' + col] = currentRecord ? currentRecord[col] : null;
+                });
+
+                //determine whether the value is above the specified threshold
+                if (config.cuts[mKey][config.display]) {
+                    config.show_quadrants = true;
+                    participant_obj[mKey + '_cut'] = config.cuts[mKey][config.display];
+                    participant_obj[mKey + '_flagged'] =
+                        participant_obj[mKey] >= participant_obj[mKey + '_cut'];
+                } else {
+                    config.show_quadrants = false;
+                    participant_obj[mKey + '_cut'] = null;
+                    participant_obj[mKey + '_flagged'] = null;
+                }
+
+                //save study days for each axis;
+                if (currentRecord) {
+                    if (mKey == config.x.column)
+                        participant_obj.days_x = currentRecord[config.studyday_col];
+                    if (mKey == config.y.column)
+                        participant_obj.days_y = currentRecord[config.studyday_col];
+                }
+            }
+        });
+
+        //Add participant level metadata
+        addParticipantLevelMetadata.call(chart, d, participant_obj);
+
+        //Calculate ratios between measures.
+        calculateRRatios.call(chart, d, participant_obj);
+
+        //calculate the day difference between x and y and total day range for all measure values
+        participant_obj.day_diff = Math.abs(participant_obj.days_x - participant_obj.days_y);
+        participant_obj.day_range = d3.extent(d, function(d) {
+            return d[config.studyday_col];
+        });
+
+        return participant_obj;
+    }
+
+    function getFlatCols() {
+        var config = this.config;
+
+        //get list of columns to flatten
+        var flat_cols = [];
+        var user_cols = [
+            'measure_col',
+            'value_col',
+            'studyday_col',
+            'normal_col_low',
+            'normal_col_high'
+        ];
+        var derived_cols = [
+            'absolute',
+            'relative_uln',
+            'relative_baseline',
+            'baseline_absolute',
+            'analysisFlag'
+        ];
+
+        // populate the full list of columns to flatten labels
+        user_cols.forEach(function(d) {
+            if (Array.isArray(d)) {
+                d.forEach(function(di) {
+                    flat_cols.push(
+                        di.hasOwnProperty('value_col') ? config[di.value_col] : config[di]
+                    );
+                });
+            } else {
+                flat_cols.push(d.hasOwnProperty('value_col') ? config[d.value_col] : config[d]);
+            }
+        });
+
+        //merge in the derived columns
+        return d3.merge([flat_cols, derived_cols]);
     }
 
     //Converts a one record per measure data object to a one record per participant objects
@@ -2063,35 +2766,12 @@
         var chart = this;
         var config = this.config;
 
-        //make a data set with one row per ID
+        //////////////////////////////////////////////
+        //make a data set with one object per ID
+        /////////////////////////////////////////////
 
-        //get list of columns to flatten
-        var colList = [];
-        var measureCols = [
-            'measure_col',
-            'value_col',
-            'studyday_col',
-            'normal_col_low',
-            'normal_col_high'
-        ];
-
-        measureCols.forEach(function(d) {
-            if (Array.isArray(d)) {
-                d.forEach(function(di) {
-                    colList.push(
-                        di.hasOwnProperty('value_col') ? config[di.value_col] : config[di]
-                    );
-                });
-            } else {
-                colList.push(d.hasOwnProperty('value_col') ? config[d.value_col] : config[d]);
-            }
-        });
-
-        //merge in the absolute and relative values
-        colList = d3.merge([
-            colList,
-            ['absolute', 'relative_uln', 'relative_baseline', 'baseline_absolute', 'analysisFlag']
-        ]);
+        //get a list of columns to flatten
+        config.flat_cols = getFlatCols.call(this);
 
         //get maximum values for each measure type
         var flat_data = d3
@@ -2100,81 +2780,7 @@
                 return f[config.id_col];
             })
             .rollup(function(d) {
-                var participant_obj = {};
-                participant_obj.days_x = null;
-                participant_obj.days_y = null;
-                Object.keys(config.measure_values).forEach(function(mKey) {
-                    //get all raw data for the current measure
-                    var matches = d
-                        .filter(function(f) {
-                            return config.measure_values[mKey] == f[config.measure_col];
-                        }) //get matching measures
-                        .filter(function(f) {
-                            return f.analysisFlag;
-                        });
-
-                    if (matches.length == 0) {
-                        if (config.debug) {
-                            console.warn(
-                                'No analysis records found for ' +
-                                    d[0][config.id_col] +
-                                    ' for ' +
-                                    mKey
-                            );
-                        }
-
-                        participant_obj.drop_participant = true;
-                        participant_obj.drop_reason =
-                            'No analysis results found for 1+ key measure, including ' + mKey + '.';
-                        return participant_obj;
-                    } else {
-                        participant_obj.drop_participant = false;
-                    }
-
-                    //get record with maximum value for the current display type
-                    participant_obj[mKey] = d3.max(matches, function(d) {
-                        return +d[config.display];
-                    });
-
-                    var maxRecord = matches.find(function(d) {
-                        return participant_obj[mKey] == +d[config.display];
-                    });
-                    //map all measure specific values
-                    colList.forEach(function(col) {
-                        participant_obj[mKey + '_' + col] = maxRecord[col];
-                    });
-
-                    //determine whether the value is above the specified threshold
-                    if (config.cuts[mKey][config.display]) {
-                        config.show_quadrants = true;
-                        participant_obj[mKey + '_cut'] = config.cuts[mKey][config.display];
-                        participant_obj[mKey + '_flagged'] =
-                            participant_obj[mKey] >= participant_obj[mKey + '_cut'];
-                    } else {
-                        config.show_quadrants = false;
-                        participant_obj[mKey + '_cut'] = null;
-                        participant_obj[mKey + '_flagged'] = null;
-                    }
-
-                    //save study days for each axis;
-                    if (mKey == config.x.column)
-                        participant_obj.days_x = maxRecord[config.studyday_col];
-                    if (mKey == config.y.column)
-                        participant_obj.days_y = maxRecord[config.studyday_col];
-                });
-
-                //Add participant level metadata
-                addParticipantLevelMetadata.call(chart, d, participant_obj);
-
-                //Calculate ratios between measures.
-                calculateRRatios.call(chart, d, participant_obj);
-
-                //calculate the day difference between x and y
-                participant_obj.day_diff = Math.abs(
-                    participant_obj.days_x - participant_obj.days_y
-                );
-
-                return participant_obj;
+                return getMaxValues.call(chart, d);
             })
             .entries(
                 this.imputed_data.filter(function(f) {
@@ -2241,14 +2847,14 @@
                     })
                 )
                 .values().length;
-            console.log(
+            console.warn(
                 'Of ' +
                     this.dropped_participants.length +
                     ' dropped participants, ' +
                     unique_dropped_participants +
                     ' are unique.'
             );
-            console.log(this.dropped_participants);
+            console.warn(this.dropped_participants);
         }
 
         chart.messages.remove(null, 'droppedPts', chart.messages); //remove message from previous render
@@ -2374,12 +2980,25 @@
         var config = this.config;
         var domain = this[dimension].domain();
         var measure = config[dimension].column;
+        var measure_long = config.measure_values[measure];
         var cut = config.cuts[measure][config.display];
+        var values = this.imputed_data
+            .filter(function(f) {
+                return f[config.measure_col] == measure_long;
+            })
+            .map(function(m) {
+                return +m[config.display];
+            })
+            .filter(function(m) {
+                return m > 0;
+            })
+            .sort(function(a, b) {
+                return a - b;
+            });
+        var val_extent = d3.extent(values);
 
-        //make sure the domain contains the cut point
-        if (cut * 1.01 >= domain[1]) {
-            domain[1] = cut * 1.01;
-        }
+        //make sure the domain contains the cut point and the max possible value for the measure
+        domain[1] = d3.max([domain[1], cut * 1.01, val_extent[1]]);
 
         // make sure the domain lower limit captures all of the raw Values
         if (this.config[dimension].type == 'linear') {
@@ -2387,21 +3006,8 @@
             domain[0] = 0;
         } else if (this.config[dimension].type == 'log') {
             // use the smallest raw value for a log axis
-            var measure = config.measure_values[config[dimension].column];
-            var values = this.imputed_data
-                .filter(function(f) {
-                    return f[config.measure_col] == measure;
-                })
-                .map(function(m) {
-                    return +m[config.display];
-                })
-                .filter(function(m) {
-                    return m > 0;
-                })
-                .sort(function(a, b) {
-                    return a - b;
-                });
-            var minValue = d3.min(values);
+
+            var minValue = val_extent[0];
 
             if (minValue < domain[0]) {
                 domain[0] = minValue;
@@ -2437,7 +3043,10 @@
     function formatPoints() {
         var chart = this;
         var config = this.config;
-        var points = this.svg.selectAll('g.point').select('circle');
+        var points = this.svg
+            .select('g.point-supergroup.mark1')
+            .selectAll('g.point')
+            .select('circle');
 
         points
             .attr('stroke', function(d) {
@@ -2457,10 +3066,21 @@
     }
 
     function clearParticipantDetails() {
+        var chart = this;
         var config = this.config;
-        var points = this.svg.selectAll('g.point').select('circle');
+        var points = this.svg
+            .select('g.point-supergroup.mark1')
+            .selectAll('g.point')
+            .select('circle');
 
         points.classed('disabled', false);
+
+        // update
+        chart.participantsSelected = [];
+        chart.events.participantsSelected.data = chart.participantsSelected;
+        chart.wrap.node().dispatchEvent(chart.events.participantsSelected);
+
+        // remove/hide details
         this.config.quadrants.table.wrap.style('display', null);
         clearVisitPath.call(this); //remove path
         clearParticipantHeader.call(this);
@@ -2468,6 +3088,7 @@
         clearRugs.call(this, 'y');
         hideMeasureTable.call(this); //remove the detail table
         formatPoints.call(this);
+
         this.participantDetails.wrap.selectAll('*').style('display', 'none');
     }
 
@@ -2575,8 +3196,42 @@
         this.emptyChartWarning.style('display', emptyChart ? 'inline-block' : 'none');
     }
 
+    function updateStudyDayControl() {
+        var chart = this;
+        var config = this.config;
+
+        // cancel the animation (if any is running)
+        var activeAnimation = chart.controls.studyDayPlayButton.datum().state == 'stop';
+        if (activeAnimation) {
+            chart.svg.transition().duration(0);
+        }
+
+        // hide study day control if viewing max values
+        chart.controls.studyDayControlWrap.style('display', config.plot_max_values ? 'none' : null);
+
+        //set the status of the play button
+        if (config.plot_day >= chart.controls.studyDayRange[1]) {
+            chart.controls.studyDayPlayButton.datum({ state: 'restart' });
+            chart.controls.studyDayPlayButton.html('&#8634;');
+        } else {
+            chart.controls.studyDayPlayButton.datum({ state: 'play' });
+            chart.controls.studyDayPlayButton.html('&#9658;');
+        }
+
+        //update the study day control label with the currently selected values
+        var currentValue = chart.controls.studyDayControlWrap.select('input').property('value');
+        chart.controls.studyDayControlWrap
+            .select('span.wc-control-label')
+            .html('Showing data from: <strong>Day ' + currentValue + '</strong>')
+            .select('strong')
+            .style('color', 'blue');
+    }
+
     function onDraw() {
-        //clear participant Details
+        //show/hide the study day controls
+        updateStudyDayControl.call(this);
+
+        //clear participant Details (if they exist)
         clearParticipantDetails.call(this);
 
         //get correct cutpoint for the current view
@@ -2597,87 +3252,6 @@
         hideEmptyChart.call(this);
     }
 
-    function drawQuadrants() {
-        var _this = this;
-
-        var config = this.config;
-        var x_var = this.config.x.column;
-        var y_var = this.config.y.column;
-
-        var x_cut = this.config.cuts[x_var][config.display];
-        var y_cut = this.config.cuts[y_var][config.display];
-
-        //position for cut-point lines
-        this.cut_lines.lines
-            .filter(function(d) {
-                return d.dimension == 'x';
-            })
-            .attr('x1', this.x(x_cut))
-            .attr('x2', this.x(x_cut))
-            .attr('y1', this.plot_height)
-            .attr('y2', 0);
-
-        this.cut_lines.lines
-            .filter(function(d) {
-                return d.dimension == 'y';
-            })
-            .attr('x1', 0)
-            .attr('x2', this.plot_width)
-            .attr('y1', function(d) {
-                return _this.y(y_cut);
-            })
-            .attr('y2', function(d) {
-                return _this.y(y_cut);
-            });
-
-        this.cut_lines.backing
-            .filter(function(d) {
-                return d.dimension == 'x';
-            })
-            .attr('x1', this.x(x_cut))
-            .attr('x2', this.x(x_cut))
-            .attr('y1', this.plot_height)
-            .attr('y2', 0);
-
-        this.cut_lines.backing
-            .filter(function(d) {
-                return d.dimension == 'y';
-            })
-            .attr('x1', 0)
-            .attr('x2', this.plot_width)
-            .attr('y1', function(d) {
-                return _this.y(y_cut);
-            })
-            .attr('y2', function(d) {
-                return _this.y(y_cut);
-            });
-
-        //position labels
-        this.quadrant_labels.g
-            .select('text.upper-right')
-            .attr('x', this.plot_width)
-            .attr('y', 0);
-
-        this.quadrant_labels.g
-            .select('text.upper-left')
-            .attr('x', 0)
-            .attr('y', 0);
-
-        this.quadrant_labels.g
-            .select('text.lower-right')
-            .attr('x', this.plot_width)
-            .attr('y', this.plot_height);
-
-        this.quadrant_labels.g
-            .select('text.lower-left')
-            .attr('x', 0)
-            .attr('y', this.plot_height);
-
-        this.quadrant_labels.text.text(function(d) {
-            return d.label + ' (' + d.percent + ')';
-        });
-    }
-
     //draw marginal rug for visit-level measures
     function drawRugs(d, axis) {
         var chart = this;
@@ -2692,46 +3266,55 @@
 
         //draw the rug
         var min_value = axis == 'x' ? chart.y.domain()[0] : chart.x.domain()[0];
-        chart[axis + '_rug']
+        var rugs = chart[axis + '_rug']
             .selectAll('text')
             .data(matches)
             .enter()
             .append('text')
-            .attr('class', 'rug-tick')
-            .attr('x', function(d) {
-                return axis == 'x' ? chart.x(d[config.display]) : chart.x(min_value);
-            })
-            .attr('y', function(d) {
-                return axis == 'y' ? chart.y(d[config.display]) : chart.y(min_value);
-            })
-            //        .attr('dy', axis == 'x' ? '-0.2em' : null)
-            .attr('text-anchor', axis == 'y' ? 'end' : null)
-            .attr('alignment-baseline', axis == 'x' ? 'hanging' : null)
-            .attr('font-size', axis == 'x' ? '6px' : null)
-            .attr('stroke', function(d) {
-                return chart.colorScale(d[config.color_by]);
+            .attr({
+                class: 'rug-tick',
+                x: function x(di) {
+                    return axis === 'x' ? chart.x(di[config.display]) : chart.x(min_value);
+                },
+                y: function y(di) {
+                    return axis === 'y' ? chart.y(di[config.display]) : chart.y(min_value);
+                },
+                dy: axis === 'y' ? 4 : 0,
+                'text-anchor': axis === 'y' ? 'end' : null,
+                'alignment-baseline': axis === 'x' ? 'hanging' : null,
+                'font-size': axis === 'x' ? '6px' : null,
+                stroke: function stroke(di) {
+                    return chart.colorScale(di[config.color_by]);
+                },
+                'stroke-width': function strokeWidth(di) {
+                    return di[config.display] === d.values[axis] ? '3px' : '1px';
+                }
             })
             .text(function(d) {
-                return axis == 'x' ? '|' : '–';
-            })
-            .append('svg:title')
-            .text(function(d) {
-                return (
-                    d[config.measure_col] +
-                    '=' +
-                    d3.format('.2f')(d.absolute) +
-                    ' (' +
-                    d3.format('.2f')(d.relative) +
-                    ' xULN) @ ' +
-                    d[config.visit_col]
-                );
+                return axis === 'x' ? '|' : '–';
             });
+
+        //Add tooltips to rugs.
+        rugs.append('svg:title').text(function(d) {
+            return (
+                d[config.measure_col] +
+                '=' +
+                d3.format('.2f')(d.absolute) +
+                ' (' +
+                d3.format('.2f')(d.relative_uln) +
+                ' xULN) @ ' +
+                d[config.visit_col] +
+                '/Study Day ' +
+                d[config.studyday_col]
+            );
+        });
     }
 
     function addPointMouseover() {
         var chart = this;
         var config = this.config;
         var points = this.marks[0].circles;
+
         //add event listener to all participant level points
         points
             .filter(function(d) {
@@ -2823,6 +3406,12 @@
                     visitObj.yMatch = null;
                 }
 
+                //get rRatio
+                var rRatio_match = d.values.raw[0].rRatio_raw.filter(function(f) {
+                    return f[config.studyday_col] == m;
+                });
+                visitObj.rRatio = rRatio_match.length ? rRatio_match[0].rRatio : null;
+
                 return visitObj;
             })
             .sort(function(a, b) {
@@ -2890,7 +3479,7 @@
             .attr('fill', function(d) {
                 return chart.colorScale(d[config.color_by]);
             })
-            .attr('fill-opacity', 0.5)
+            .attr('fill-opacity', 0)
             .transition()
             .delay(2000)
             .duration(200)
@@ -2900,13 +3489,15 @@
         visitPoints.append('title').text(function(d) {
             var xvar = config.x.column;
             var yvar = config.y.column;
+
             var studyday_label = 'Study day: ' + d.studyday + '\n',
                 visitn_label = d.visitn ? 'Visit Number: ' + d.visitn + '\n' : '',
                 visit_label = d.visit ? 'Visit: ' + d.visit + '\n' : '',
                 x_label = config.x.label + ': ' + d3.format('0.3f')(d.x) + '\n',
-                y_label = config.y.label + ': ' + d3.format('0.3f')(d.y);
+                y_label = config.y.label + ': ' + d3.format('0.3f')(d.y),
+                rRatio_label = d.rRatio ? '\nR Ratio: ' + d3.format('0.2f')(d.rRatio) : '';
 
-            return studyday_label + visit_label + visitn_label + x_label + y_label;
+            return studyday_label + visit_label + visitn_label + x_label + y_label + rRatio_label;
         });
     }
 
@@ -3910,7 +4501,7 @@
         //make sure x-domain includes the extent of the exposure data
         if (this.edish.exposure.include) {
             this.exposure_data = this.edish.exposure.data.filter(function(d) {
-                return d[_this.edish.config.id_col] === _this.edish.clicked_id;
+                return d[_this.edish.config.id_col] === _this.edish.participantsSelected[0];
             });
             var extent = [
                 d3.min(this.exposure_data, function(d) {
@@ -4021,6 +4612,162 @@
             );
     }
 
+    function drawCutLines() {
+        var chart = this;
+        var config = this.config;
+
+        //line at R Ratio = 2
+        chart.svg
+            .append('line')
+            .attr('y1', chart.y(2))
+            .attr('y2', chart.y(2))
+            .attr('x1', 0)
+            .attr('x2', chart.plot_width)
+            .attr('stroke', '#999')
+            .attr('stroke-dasharray', '3 3');
+
+        chart.svg
+            .append('text')
+            .attr('y', chart.y(2))
+            .attr('dy', '-0.2em')
+            .attr('x', chart.plot_width)
+            .attr('text-anchor', 'end')
+            .attr('alignment-baseline', 'baseline')
+            .attr('fill', '#999')
+            .text('2');
+
+        //line at R Ratio = 5
+        chart.svg
+            .append('line')
+            .attr('y1', chart.y(5))
+            .attr('y2', chart.y(5))
+            .attr('x1', 0)
+            .attr('x2', chart.plot_width)
+            .attr('stroke', '#999')
+            .attr('stroke-dasharray', '3 3');
+
+        chart.svg
+            .append('text')
+            .attr('y', chart.y(5))
+            .attr('dy', '-0.2em')
+            .attr('x', chart.plot_width)
+            .attr('text-anchor', 'end')
+            .attr('alignment-baseline', 'baseline')
+            .attr('fill', '#999')
+            .text('5');
+    }
+
+    function updateClipPath() {
+        //embiggen clip-path so points aren't clipped
+        var radius = this.config.marks.find(function(mark) {
+            return mark.type === 'circle';
+        }).radius;
+        this.svg
+            .select('.plotting-area')
+            .attr('width', this.plot_width + radius * 2 + 2) // plot width + circle radius * 2 + circle stroke width * 2
+            .attr('height', this.plot_height + radius * 2 + 2) // plot height + circle radius * 2 + circle stroke width * 2
+            .attr(
+                'transform',
+                'translate(-' +
+                    (radius + 1) + // translate left circle radius + circle stroke width
+                    ',-' +
+                    (radius + 1) + // translate up circle radius + circle stroke width
+                    ')'
+            );
+    }
+
+    function addPointTitles$2() {
+        var config = this.edish.config;
+        var points = this.marks[1].circles;
+        points.select('title').remove();
+        points.append('title').text(function(d) {
+            var raw = d.values.raw[0];
+
+            var studyday_label = 'Study day: ' + raw[config.studyday_col] + '\n',
+                visitn_label = config.visitn_col
+                    ? 'Visit Number: ' + raw[config.visitn_col] + '\n'
+                    : '',
+                visit_label = config.visit_col ? 'Visit: ' + raw[config.visit_col] + '\n' : '',
+                rratio_label = 'R Ratio: ' + d3.format('0.2f')(raw.rRatio);
+            return studyday_label + visit_label + visitn_label + rratio_label;
+        });
+    }
+
+    function onResize$1() {
+        drawCutLines.call(this);
+        updateClipPath.call(this);
+        addPointTitles$2.call(this);
+    }
+
+    function onDraw$2() {
+        var chart = this;
+        var config = this.config;
+
+        //make sure y domain includes the current cut point for all measures
+        var max_value = d3.max(chart.filtered_data, function(f) {
+            return f[chart.config.y.column];
+        });
+        var max_cut = 5;
+        var y_max = d3.max([max_value, max_cut]);
+        chart.config.y.domain = [0, y_max];
+        chart.y_dom = chart.config.y.domain;
+    }
+
+    var defaultSettings$2 = {
+        max_width: 600,
+        x: {
+            column: 'day',
+            type: 'linear',
+            label: 'Study Day'
+        },
+        y: {
+            column: 'rRatio',
+            type: 'linear',
+            label: 'R Ratio  [(ALT/ULN) / (ALP/ULN)]',
+            format: '.1f',
+            domain: [0, null]
+        },
+        marks: [
+            {
+                type: 'line',
+                per: ['id']
+            },
+            {
+                type: 'circle',
+                radius: 4,
+                per: ['id', 'day']
+            }
+        ],
+        margin: { top: 20 },
+        gridlines: 'xy',
+        aspect: 2
+    };
+
+    function init$4(d) {
+        var chart = this; //the full eDish object
+        var config = this.config; //the eDish config
+        var matches = d.values.raw[0].rRatio_raw;
+
+        if ('rRatioChart' in chart) {
+            chart.rRatioChart.destroy();
+        }
+
+        //sync settings
+        defaultSettings$2.marks[0].per = [config.id_col];
+        defaultSettings$2.marks[1].per = [config.id_col, config.studyday_col];
+
+        //draw that chart
+        var rrElement = this.element + ' .participantDetails .rrPlot .chart';
+        chart.rRatioChart = webcharts.createChart(rrElement, defaultSettings$2);
+
+        chart.rRatioChart.edish = chart; //link the full eDish object
+
+        chart.rRatioChart.on('draw', onDraw$2);
+        chart.rRatioChart.on('resize', onResize$1);
+
+        chart.rRatioChart.init(matches);
+    }
+
     function addPointClick() {
         var chart = this;
         var config = this.config;
@@ -4028,9 +4775,19 @@
 
         //add event listener to all participant level points
         points.on('click', function(d) {
-            chart.clicked_id = d.key;
+            //Stop animation.
+            chart.svg.transition().duration(0);
+            chart.controls.studyDayPlayButton.datum({ state: 'play' });
+            chart.controls.studyDayPlayButton.html('&#9658;');
+
+            // Reset the details view
             clearParticipantDetails.call(chart, d); //clear the previous participant
             chart.config.quadrants.table.wrap.style('display', 'none'); //hide the quadrant summary
+
+            //Update chart object & trigger the participantsSelected event on the overall chart.
+            chart.participantsSelected = [d.key];
+            chart.events.participantsSelected.data = chart.participantsSelected;
+            chart.wrap.node().dispatchEvent(chart.events.participantsSelected);
 
             //format the eDish chart
             points
@@ -4053,10 +4810,11 @@
             chart.participantDetails.wrap.selectAll('*').style('display', null);
             makeParticipantHeader.call(chart, d);
             init$3.call(chart, d); //NOTE: the measure table is initialized from within the spaghettiPlot
+            init$4.call(chart, d);
         });
     }
 
-    function addPointTitles$2() {
+    function addPointTitles$3() {
         var config = this.config;
         var points = this.marks[0].circles;
         points.select('title').remove();
@@ -4079,9 +4837,251 @@
                 dayDiff = raw['day_diff'] + ' days apart',
                 idLabel = 'Participant ID: ' + raw[config.id_col],
                 rRatioLabel = config.r_ratio_filter
-                    ? '\n' + 'Overall R Ratio: ' + d3.format('0.2f')(raw.rRatio)
+                    ? '\n' + 'R Ratio: ' + d3.format('0.2f')(raw.rRatio)
                     : '';
             return idLabel + rRatioLabel + '\n' + xLabel + '\n' + yLabel + '\n' + dayDiff;
+        });
+    }
+
+    function setPointSize() {
+        var _this = this;
+
+        var chart = this;
+        var config = this.config;
+        var points = this.marks[0].circles;
+
+        //create the scale
+        var base_size = config.marks[0].radius || config.flex_point_size;
+        var max_size = base_size * 5;
+        var small_size = base_size / 2;
+
+        if (config.point_size != 'Uniform') {
+            var sizeValues_all = d3.merge(
+                chart.raw_data.map(function(m) {
+                    return m[config.point_size + '_raw'];
+                })
+            );
+            var sizeDomain_all = d3.extent(sizeValues_all, function(f) {
+                return f.value;
+            });
+            var sizeDomain_max = d3.extent(
+                chart.raw_data.map(function(m) {
+                    return m[config.point_size];
+                })
+            );
+            var sizeDomain_rRatio = [
+                0,
+                d3.max(this.raw_data, function(d) {
+                    return d.rRatio_max;
+                })
+            ];
+            var sizeDomain =
+                config.point_size == 'rRatio'
+                    ? sizeDomain_rRatio
+                    : config.plot_max_values
+                    ? sizeDomain_max
+                    : sizeDomain_all;
+            chart.sizeScale = d3.scale
+                .linear()
+                .range([base_size, max_size])
+                .domain(sizeDomain);
+        }
+
+        //TODO: draw a legend (coming later?)
+
+        //set the point radius
+        points
+            .transition()
+            .attr('r', function(d) {
+                //  console.log(config.point_size);
+                var raw = d.values.raw[0];
+                //    console.log(raw);
+                if (raw.outOfRange) {
+                    return small_size;
+                } else if (config.point_size == 'Uniform') {
+                    return base_size;
+                } else {
+                    return chart.sizeScale(raw[config.point_size]);
+                }
+            })
+            .attr('cx', function(d) {
+                return _this.x(d.values.x);
+            })
+            .attr('cy', function(d) {
+                return _this.y(d.values.y);
+            });
+    }
+
+    function setPointOpacity() {
+        var config = this.config;
+        var points = this.marks[0].circles;
+
+        points.attr('fill-opacity', function(d) {
+            var raw = d.values.raw[0];
+            if (config.plot_max_values) {
+                // if viewing max values, fill based on time window
+                return raw.day_diff <= config.visit_window ? 0.5 : 0;
+            } else {
+                //fill points after participant's first day
+                return config.plot_day < raw.day_range[0] ? 0 : 0.5;
+            }
+        });
+    }
+
+    // Reposition any exisiting participant marks when the chart is resized
+    function updateParticipantMarks() {
+        var chart = this;
+        var config = this.config;
+
+        //reposition participant visit path
+        var myNewLine = d3.svg
+            .line()
+            .x(function(d) {
+                return chart.x(d.x);
+            })
+            .y(function(d) {
+                return chart.y(d.y);
+            });
+
+        chart.visitPath
+            .select('path')
+            .transition()
+            .attr('d', myNewLine);
+
+        //reposition participant visit circles and labels
+        chart.visitPath
+            .selectAll('g.visit-point')
+            .select('circle')
+            .transition()
+            .attr('cx', function(d) {
+                return chart.x(d.x);
+            })
+            .attr('cy', function(d) {
+                return chart.y(d.y);
+            });
+
+        chart.visitPath
+            .selectAll('g.visit-point')
+            .select('text.participant-visits')
+            .transition()
+            .attr('x', function(d) {
+                return chart.x(d.x);
+            })
+            .attr('y', function(d) {
+                return chart.y(d.y);
+            });
+
+        //reposition axis rugs
+        chart.x_rug
+            .selectAll('text')
+            .transition()
+            .attr('x', function(d) {
+                return chart.x(d[config.display]);
+            })
+            .attr('y', function(d) {
+                return chart.y(chart.y.domain()[0]);
+            });
+
+        chart.y_rug
+            .selectAll('text')
+            .transition()
+            .attr('x', function(d) {
+                return chart.x(chart.x.domain()[0]);
+            })
+            .attr('y', function(d) {
+                return chart.y(d[config.display]);
+            });
+    }
+
+    function customizePoints() {
+        addPointMouseover.call(this);
+        addPointClick.call(this);
+        addPointTitles$3.call(this);
+        formatPoints.call(this);
+        setPointSize.call(this);
+        setPointOpacity.call(this);
+        updateParticipantMarks.call(this);
+    }
+
+    function drawQuadrants() {
+        var _this = this;
+
+        var config = this.config;
+        var x_var = this.config.x.column;
+        var y_var = this.config.y.column;
+
+        var x_cut = this.config.cuts[x_var][config.display];
+        var y_cut = this.config.cuts[y_var][config.display];
+
+        //position for cut-point lines
+        this.cut_lines.lines
+            .filter(function(d) {
+                return d.dimension == 'x';
+            })
+            .attr('x1', this.x(x_cut))
+            .attr('x2', this.x(x_cut))
+            .attr('y1', this.plot_height)
+            .attr('y2', 0);
+
+        this.cut_lines.lines
+            .filter(function(d) {
+                return d.dimension == 'y';
+            })
+            .attr('x1', 0)
+            .attr('x2', this.plot_width)
+            .attr('y1', function(d) {
+                return _this.y(y_cut);
+            })
+            .attr('y2', function(d) {
+                return _this.y(y_cut);
+            });
+
+        this.cut_lines.backing
+            .filter(function(d) {
+                return d.dimension == 'x';
+            })
+            .attr('x1', this.x(x_cut))
+            .attr('x2', this.x(x_cut))
+            .attr('y1', this.plot_height)
+            .attr('y2', 0);
+
+        this.cut_lines.backing
+            .filter(function(d) {
+                return d.dimension == 'y';
+            })
+            .attr('x1', 0)
+            .attr('x2', this.plot_width)
+            .attr('y1', function(d) {
+                return _this.y(y_cut);
+            })
+            .attr('y2', function(d) {
+                return _this.y(y_cut);
+            });
+
+        //position labels
+        this.quadrant_labels.g.attr('display', null); //show labels if they're hidden
+        this.quadrant_labels.g
+            .select('text.upper-right')
+            .attr('x', this.plot_width)
+            .attr('y', 0);
+
+        this.quadrant_labels.g
+            .select('text.upper-left')
+            .attr('x', 0)
+            .attr('y', 0);
+
+        this.quadrant_labels.g
+            .select('text.lower-right')
+            .attr('x', this.plot_width)
+            .attr('y', this.plot_height);
+
+        this.quadrant_labels.g
+            .select('text.lower-left')
+            .attr('x', 0)
+            .attr('y', this.plot_height);
+
+        this.quadrant_labels.text.text(function(d) {
+            return d.label + ' (' + d.percent + ')';
         });
     }
 
@@ -4189,7 +5189,7 @@
 
     // credit to https://bl.ocks.org/dimitardanailov/99950eee511375b97de749b597147d19
 
-    function init$4() {
+    function init$5() {
         var drag = d3.behavior
             .drag()
             .origin(function(d) {
@@ -4323,7 +5323,7 @@
                     'N = ' +
                     d.values.length +
                     '\n' +
-                    'd3.min = ' +
+                    'Min = ' +
                     d3.min(d.values) +
                     '\n' +
                     '5th % = ' +
@@ -4332,7 +5332,7 @@
                     'Q1 = ' +
                     formatx(d3.quantile(d.values, 0.25)) +
                     '\n' +
-                    'd3.median = ' +
+                    'Median = ' +
                     formatx(d3.median(d.values)) +
                     '\n' +
                     'Q3 = ' +
@@ -4341,10 +5341,10 @@
                     '95th % = ' +
                     formatx(d3.quantile(d.values, 0.95)) +
                     '\n' +
-                    'd3.max = ' +
+                    'Max = ' +
                     d3.max(d.values) +
                     '\n' +
-                    'd3.mean = ' +
+                    'Mean = ' +
                     formatx(d3.mean(d.values)) +
                     '\n' +
                     'StDev = ' +
@@ -4353,9 +5353,10 @@
             });
     }
 
-    function init$5() {
+    function init$6() {
         // Draw box plots
-        this.svg.selectAll('g.boxplot').remove();
+        this.svg.selectAll('g.yMargin').remove();
+        this.svg.selectAll('g.xMargin').remove();
 
         // Y-axis box plot
         var yValues = this.current_data.map(function(d) {
@@ -4404,51 +5405,6 @@
         );
     }
 
-    function setPointSize() {
-        var _this = this;
-
-        var chart = this;
-        var config = this.config;
-        var points = this.svg.selectAll('g.point').select('circle');
-        if (config.point_size != 'Uniform') {
-            //create the scale
-            var sizeScale = d3.scale
-                .linear()
-                .range([2, 10])
-                .domain(
-                    d3.extent(
-                        chart.raw_data.map(function(m) {
-                            return m[config.point_size];
-                        })
-                    )
-                );
-
-            //draw a legend (coming later?)
-
-            //set the point radius
-            points
-                .transition()
-                .attr('r', function(d) {
-                    var raw = d.values.raw[0];
-                    return sizeScale(raw[config.point_size]);
-                })
-                .attr('cx', function(d) {
-                    return _this.x(d.values.x);
-                })
-                .attr('cy', function(d) {
-                    return _this.y(d.values.y);
-                });
-        }
-    }
-
-    function setPointOpacity() {
-        var config = this.config;
-        var points = this.svg.selectAll('g.point').select('circle');
-        points.attr('fill-opacity', function(d) {
-            return d.values.raw[0].day_diff <= config.visit_window ? 1 : 0;
-        }); //fill points in visit_window
-    }
-
     function adjustTicks() {
         this.svg
             .selectAll('.x.axis .tick text')
@@ -4460,118 +5416,57 @@
             .style('text-anchor', 'end');
     }
 
-    // Reposition any exisiting participant marks when the chart is resized
-    function updateParticipantMarks() {
-        var chart = this;
-        var config = this.config;
-
-        //reposition participant visit path
-        var myNewLine = d3.svg
-            .line()
-            .x(function(d) {
-                return chart.x(d.x);
-            })
-            .y(function(d) {
-                return chart.y(d.y);
-            });
-
-        chart.visitPath
-            .select('path')
-            .transition()
-            .attr('d', myNewLine);
-
-        //reposition participant visit circles and labels
-        chart.visitPath
-            .selectAll('g.visit-point')
-            .select('circle')
-            .transition()
-            .attr('cx', function(d) {
-                return chart.x(d.x);
-            })
-            .attr('cy', function(d) {
-                return chart.y(d.y);
-            });
-
-        chart.visitPath
-            .selectAll('g.visit-point')
-            .select('text.participant-visits')
-            .transition()
-            .attr('x', function(d) {
-                return chart.x(d.x);
-            })
-            .attr('y', function(d) {
-                return chart.y(d.y);
-            });
-
-        //reposition axis rugs
-        chart.x_rug
-            .selectAll('text')
-            .transition()
-            .attr('x', function(d) {
-                return chart.x(d[config.display]);
-            })
-            .attr('y', function(d) {
-                return chart.y(chart.y.domain()[0]);
-            });
-
-        chart.y_rug
-            .selectAll('text')
-            .transition()
-            .attr('x', function(d) {
-                return chart.x(chart.x.domain()[0]);
-            })
-            .attr('y', function(d) {
-                return chart.y(d[config.display]);
-            });
-    }
-
     function updateTimingFootnote() {
         var config = this.config;
-        var windowText =
-            config.visit_window == 0
-                ? 'on the same day'
-                : config.visit_window == 1
-                ? 'within 1 day'
-                : 'within ' + config.visit_window + ' days';
-        var timingFootnote =
-            ' Points where maximum ' +
-            config.measure_values[config.x.column] +
-            ' and ' +
-            config.measure_values[config.y.column] +
-            ' values were collected ' +
-            windowText +
-            ' are filled, others are empty.';
+        if (config.plot_max_values) {
+            var windowText =
+                config.visit_window == 0
+                    ? 'on the same day'
+                    : config.visit_window == 1
+                    ? 'within 1 day'
+                    : 'within ' + config.visit_window + ' days';
+            var timingFootnote =
+                ' Points where maximum ' +
+                config.measure_values[config.x.column] +
+                ' and ' +
+                config.measure_values[config.y.column] +
+                ' values were collected ' +
+                windowText +
+                ' are filled, others are empty.';
 
-        this.footnote.timing.text(timingFootnote);
+            this.footnote.timing.text(timingFootnote);
+        } else {
+            var timingFootnote =
+                "Small points are drawn when the selected day occurs outside of the participant's study enrollment; either the first collected measures (empty circle) or last collected measures (filled circle) for the participant are plotted for these points.";
+            this.footnote.timing.text(timingFootnote);
+        }
     }
 
-    function onResize$1() {
-        //add point interactivity, custom title and formatting
-        addPointMouseover.call(this);
-        addPointClick.call(this);
-        addPointTitles$2.call(this);
-        addAxisLabelTitles.call(this);
-        formatPoints.call(this);
-        setPointSize.call(this);
-        setPointOpacity.call(this);
-        updateParticipantMarks.call(this);
+    function onResize$2() {
+        //add maximum point interactivity, custom title and formatting
+        customizePoints.call(this);
 
         //draw the quadrants and add drag interactivity
         updateSummaryTable.call(this);
         drawQuadrants.call(this);
-        init$4.call(this);
+        init$5.call(this);
 
         // hide the legend if no group options are given
         toggleLegend.call(this);
 
         // add boxplots
-        init$5.call(this);
+        init$6.call(this);
 
         //axis formatting
         adjustTicks.call(this);
+        addAxisLabelTitles.call(this);
 
         //add timing footnote
         updateTimingFootnote.call(this);
+    }
+
+    function onDestroy() {
+        this.emptyChartWarning.remove();
     }
 
     var callbacks = {
@@ -4580,10 +5475,11 @@
         onPreprocess: onPreprocess,
         onDataTransform: onDataTransform,
         onDraw: onDraw,
-        onResize: onResize$1
+        onResize: onResize$2,
+        onDestroy: onDestroy
     };
 
-    function init$6() {
+    function init$7() {
         var lb = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
         var ex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
@@ -4599,7 +5495,11 @@
         this.chart.init(lb);
     }
 
-    function safetyedish(element, settings) {
+    function destroy() {
+        this.chart.destroy();
+    }
+
+    function hepexplorer(element, settings) {
         var initial_settings = clone(settings);
         var defaultSettings = configuration.settings();
         var controlInputs = configuration.controlInputs();
@@ -4619,15 +5519,16 @@
         for (var callback in callbacks) {
             chart.on(callback.substring(2).toLowerCase(), callbacks[callback]);
         }
-        var se = {
+        var hepexplorer = {
             element: element,
             settings: settings,
             chart: chart,
-            init: init$6
+            init: init$7,
+            destroy: destroy
         };
 
-        return se;
+        return hepexplorer;
     }
 
-    return safetyedish;
+    return hepexplorer;
 });

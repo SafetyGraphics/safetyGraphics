@@ -74,6 +74,19 @@
         });
     }
 
+    (function() {
+        if (typeof window.CustomEvent === 'function') return false;
+
+        function CustomEvent(event, params) {
+            params = params || { bubbles: false, cancelable: false, detail: null };
+            var evt = document.createEvent('CustomEvent');
+            evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+            return evt;
+        }
+
+        window.CustomEvent = CustomEvent;
+    })();
+
     function defineStyles() {
         var styles = [
                 /***--------------------------------------------------------------------------------------\
@@ -1060,6 +1073,12 @@
         });
     }
 
+    function initCustomEvents() {
+        var chart = this;
+        chart.participantsSelected = [];
+        chart.events.participantsSelected = new CustomEvent('participantsSelected');
+    }
+
     function init(data) {
         //Attach various data arrays to charts.
         defineData.call(this, data);
@@ -1087,6 +1106,9 @@
 
         //Define custom event listener for filters.
         customizeControls.call(this);
+
+        //initialize custom events
+        initCustomEvents.call(this);
     }
 
     function defineData$1() {
@@ -1883,6 +1905,11 @@
 
                 //Add highlighting to all charts.
                 highlightCharts.call(_this);
+
+                //trigger custom participantsSelected event
+                _this.parent.participantsSelected = _this.parent.data.IDs.selected;
+                _this.parent.events.participantsSelected.data = _this.parent.participantsSelected;
+                _this.parent.wrap.node().dispatchEvent(_this.parent.events.participantsSelected);
 
                 //Redraw charts in which the currently brushed ID(s) are inliers.
                 if (_this.parent.data.IDs.selected.length > 0)
