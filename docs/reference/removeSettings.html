@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Shiny bindings for chartRenderer — chartRenderer-shiny • safetyGraphics</title>
+<title>Remove a setting from the safetyGraphics shiny app — removeSettings • safetyGraphics</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,10 +32,9 @@
 
 
 
-<meta property="og:title" content="Shiny bindings for chartRenderer — chartRenderer-shiny" />
+<meta property="og:title" content="Remove a setting from the safetyGraphics shiny app — removeSettings" />
 
-<meta property="og:description" content="Output and render functions for using safetyhistogram within Shiny
-applications and interactive Rmd documents." />
+<meta property="og:description" content="This function updates settings objects to remove a setting parameter from the safetyGraphics shiny app" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -122,49 +121,35 @@ applications and interactive Rmd documents." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Shiny bindings for chartRenderer</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/blob/master/R/chartRenderer.R'><code>R/chartRenderer.R</code></a></small>
-    <div class="hidden name"><code>chartRenderer-shiny.Rd</code></div>
+    <h1>Remove a setting from the safetyGraphics shiny app</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/blob/master/R/removeSettings.R'><code>R/removeSettings.R</code></a></small>
+    <div class="hidden name"><code>removeSettings.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Output and render functions for using safetyhistogram within Shiny
-applications and interactive Rmd documents.</p>
+    <p>This function updates settings objects to remove a setting parameter from the safetyGraphics shiny app</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>output_chartRenderer</span>(<span class='no'>outputId</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='st'>"100%"</span>, <span class='kw'>height</span> <span class='kw'>=</span> <span class='st'>"400px"</span>)
-
-<span class='fu'>render_chartRenderer</span>(<span class='no'>expr</span>, <span class='kw'>env</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>(), <span class='kw'>quoted</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>removeSettings</span>(<span class='no'>text_keys</span>, <span class='kw'>settingsLocation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>outputId</th>
-      <td><p>output variable to read from</p></td>
+      <th>text_keys</th>
+      <td><p>Text keys indicating the setting names to be removed.</p></td>
     </tr>
     <tr>
-      <th>width, height</th>
-      <td><p>Must be a valid CSS unit (like <code>'100%'</code>,
-<code>'400px'</code>, <code>'auto'</code>) or a number, which will be coerced to a
-string and have <code>'px'</code> appended.</p></td>
-    </tr>
-    <tr>
-      <th>expr</th>
-      <td><p>An expression that generates a chart</p></td>
-    </tr>
-    <tr>
-      <th>env</th>
-      <td><p>The environment in which to evaluate <code>expr</code>.</p></td>
-    </tr>
-    <tr>
-      <th>quoted</th>
-      <td><p>Is <code>expr</code> a quoted expression (with <code><a href='https://rdrr.io/r/base/substitute.html'>quote()</a></code>)? This
-is useful if you want to save an expression in a variable.</p></td>
+      <th>settingsLocation</th>
+      <td><p>path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the setting has been removed.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function makes it easy for remove a setting from the safetyGraphics shiny app by making updates to the underlying metadata used by the package.</p>
     
 
   </div>
@@ -172,7 +157,9 @@ is useful if you want to save an expression in a variable.</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#details">Details</a></li>
+          </ul>
 
   </div>
 </div>
