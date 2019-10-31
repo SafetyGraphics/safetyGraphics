@@ -33,7 +33,7 @@ tagList(
       ),
       tabPanel("Hep Explorer workflow",
                tags$iframe(style="height:800px; width:100%; scrolling=yes;",  `data-type`="iframe",
-                                    src = "https://cdn.jsdelivr.net/gh/SafetyGraphics/SafetyGraphics.github.io/ISG%20Hepatic%20Safety%20Explorer%20User's%20Manual%20%26%20Workflow%20v1.0.pdf")
+                                    src = "https://cdn.jsdelivr.net/gh/SafetyGraphics/SafetyGraphics.github.io/guide/HepExplorerWorkflow_v1_1.pdf")
       )
     )
   ),
