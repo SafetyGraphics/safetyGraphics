@@ -32,3 +32,8 @@ dependencies:
     version: 1.1.4
     src: htmlwidgets/lib/paneled-outlier-explorer-1.1.4
     script: paneledOutlierExplorer.js
+  - name: safety-delta-delta
+    version: 1.0.0
+    src: htmlwidgets/lib/safety-delta-delta-1.0.0
+    script: safetyDeltaDelta.js
+
