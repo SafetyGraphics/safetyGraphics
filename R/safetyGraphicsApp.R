@@ -20,6 +20,10 @@
 #' @export
 #'
 safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL, settingsLocation = NULL, customSettings="customSettings.R") {
+  
+  if(is.null(settingsLocation)){
+    settingsLocation <- getwd()    
+  }
 
   # pass charts to include
   shiny::shinyOptions(safetygraphics_charts = charts)
@@ -34,6 +38,7 @@ safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL, settingsLocatio
 
   # run the custom settings file (if it exists)
   customSettingsScript<-paste(settingsLocation, customSettings,sep="/")
+
   if(file.exists(customSettingsScript)){
     source(customSettingsScript)
   }
