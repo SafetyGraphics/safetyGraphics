@@ -10,6 +10,7 @@
 #'    \item{chart_safetyoutlierexplorer}{Flag indicating if the settings apply to the Safety Outlier Explorer Chart}
 #'    \item{chart_safetyresultsovertime}{Flag indicating if the settings apply to the Safety Results Over Time Chart}
 #'    \item{chart_safetyshiftplot}{Flag indicating if the settings apply to the Safety Shift Plot Chart} 
+#'    \item{chart_safetydeltadelta}{Flag indicating if the settings apply to the Safety Delta-Delta Chart} 
 #'    \item{text_key}{Text key indicating the setting name. \code{'--'} delimiter indicates a nested setting}
 #'    \item{label}{Label}
 #'    \item{description}{Description}
