@@ -5,7 +5,7 @@
 \title{Adds a new chart for use in the safetyGraphics shiny app}
 \usage{
 addChart(chart, label = "", description = "", repo_url = "",
-  settings_url = "", main = "character", type = "htmlwidget",
+  settings_url = "", main = "character", type = "static",
   maxWidth = 1000, requiredSettings = c(""),
   settingsLocation = getwd(), overwrite = TRUE)
 }
@@ -22,7 +22,7 @@ addChart(chart, label = "", description = "", repo_url = "",
 
 \item{main}{Name of the main function used to initialize the app. If the type is htmlwidgets, the js function must accept "location" and "settings" parameters (in that order) and have an .init() method, expecting a json data array. Otherwise, the r function should accept named data and settings parameters, and should be loaded in the user's namespace.}
 
-\item{type}{type of chart. Should be 'htmlwidget', 'static', 'plotly' or 'module'}
+\item{type}{type of chart. Should be 'static', 'plotly' or 'module'}
 
 \item{maxWidth}{max width for the widget in pixels}
 
