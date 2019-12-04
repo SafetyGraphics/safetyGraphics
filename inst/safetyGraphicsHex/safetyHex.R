@@ -5,7 +5,7 @@ imgurl <- "./inst/safetyGraphicsHex/noun_heart_rate_210541_ec5d57.png"
 # sticker(
 #   imgurl,
 #   filename="./inst/safetyGraphicsHex/safetyGraphicsHex.png",
-#   package = "safetygraphics",
+#   package = "safetyGraphics",
 #   p_color = "#666666",
 #   p_size = 5,
 #   p_family = "serif",
