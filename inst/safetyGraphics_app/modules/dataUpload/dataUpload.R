@@ -33,8 +33,11 @@ dataUpload <- function(input, output, session){
 
   # initiate reactive values - list of uploaded data files
   # standard to imitate output of detectStandard.R
-  dd <- reactiveValues(data = list("Example data" = adlbc), current = 1, standard = list(list("standard" = "adam", "details" = list("adam"=list("match"="full")))))
+  dd <- reactiveValues(data = preload_data_list$data,
+                       current = preload_data_list$current,
+                       standard = preload_data_list$standard)
 
+  
   # modify reactive values when data is uploaded
   observeEvent(input$datafile,{
 
@@ -104,8 +107,10 @@ dataUpload <- function(input, output, session){
     return(choices)
   })
 
+
+  
   # update radio buttons to display dataset names and standards for selection
-  observeEvent(input$datafile, {
+ observeEvent(input$datafile, {
     req(data_choices())
     vals <- data_choices()
     names(vals) <- NULL
@@ -119,6 +124,7 @@ dataUpload <- function(input, output, session){
                        selected = prev_sel)
 
   })
+  
 
   # get selected dataset when selection changes
   data_selected <- eventReactive(input$select_file, {
