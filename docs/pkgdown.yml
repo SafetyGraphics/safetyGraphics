@@ -2,8 +2,8 @@ pandoc: 1.19.2.1
 pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
-  addCharts: ../../../../sites/github/safetyGraphics/vignettes/addCharts.html
-  shinyUserGuide: ../../../../sites/github/safetyGraphics/vignettes/shinyUserGuide.html
+  addCharts: addCharts.html
+  shinyUserGuide: shinyUserGuide.html
 urls:
   reference: https://pages.github.com/SafetyGraphics/safetyGraphics/reference
   article: https://pages.github.com/SafetyGraphics/safetyGraphics/articles
