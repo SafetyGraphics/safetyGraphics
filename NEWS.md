@@ -1,6 +1,10 @@
+# safetyGraphics v1.1.0
+
+Adds support for custom charts via new `addChart()` and `addSettings()` functions. 
+
 # safetyGraphics v1.0.0
 
-The first production release of safetyGraphics includes many inprovements including the addition of 5 new interactive graphics and an embedded help page with a detailed clinical workflow for using the tool. 
+The first production release of safetyGraphics includes many improvements including the addition of 5 new interactive graphics and an embedded help page with a detailed clinical workflow for using the tool. 
 
 # safetyGraphics v0.7.3
 
