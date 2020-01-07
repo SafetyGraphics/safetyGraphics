@@ -88,6 +88,7 @@
       <h1>safetyGraphics Shiny App - Adding Charts</h1>
                         <h4 class="author">Jeremy Wildfire</h4>
             
+
             <h4 class="date">2020-01-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/master/vignettes/addCharts.Rmd"><code>vignettes/addCharts.Rmd</code></a></small>
@@ -100,12 +101,12 @@
 <div id="overview" class="section level1">
 <h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1>
-<p>safetyGraphics is designed to serve as a flexible and extensible platform for analyzing clinical trial safety. This vignette shows how users can easily add custom charts to the safetyGraphics shiny app.</p>
+<p>The safetyGraphics package is designed to serve as a flexible and extensible platform for analyzing clinical trial safety. This vignette shows how users can easily add custom charts to the safetyGraphics shiny app.</p>
 <p>As of the v1.1 release, safetyGraphics supports 4 types of charts - Static charts, Plotly charts, Shiny Modules and HTML widgets. Behind the scenes, all 4 chart types have two major technical components: <strong>code</strong> and <strong>metadata</strong>. As such, making a custom chart requires the user to create an R script that defines the chart’s code and metadata. The examples below describe the step-by-step process for creating a chart.</p>
 </div>
-<div id="creating-a-custom-chart---step-by-step" class="section level1">
+<div id="steps-to-create-a-custom-chart" class="section level1">
 <h1 class="hasAnchor">
-<a href="#creating-a-custom-chart---step-by-step" class="anchor"></a>Creating a Custom Chart - Step-by-Step</h1>
+<a href="#steps-to-create-a-custom-chart" class="anchor"></a>Steps to Create a Custom Chart</h1>
 <p>There are 4 steps required to create a custom chart for use in <code>safetyGraphics</code>:</p>
 <ol style="list-style-type: decimal">
 <li>Create custom chart code</li>
@@ -113,122 +114,158 @@
 <li>Add the chart to the app</li>
 <li>Initialize the app</li>
 </ol>
-<p>Let’s look at these steps in more detail.</p>
+<p>The remainder of this vignette is dedicated to 4 examples that describe the process for creating custom charts in more detail. Note that full code for all examples are available in Appendix 3 at the end of this vignette.</p>
+</div>
+<div id="example-1---hello-world" class="section level1">
+<h1 class="hasAnchor">
+<a href="#example-1---hello-world" class="anchor"></a>Example 1 - Hello World</h1>
+<p>To create a trivially simple custom chart, make a file called <code>customSettings.R</code> with the following code:</p>
+<pre><code># Step 1 - Write custom chart code 
+helloWorld &lt;- function(data,settings){
+  plot(-1:1, -1:1)
+  text(runif(20, -1,1),runif(20, -1,1),"Hello World")
+}
+
+# Step 2 - Initialize Custom Settings 
+# Not Applicable!
+
+# Step 3 - Initialize the custom chart 
+addChart( 
+  chart=”hello_world”,
+  main=”helloWorld",
+  label=”Hello World”, 
+)</code></pre>
+<p>Then initialize the app (Step 4) by running:</p>
+<pre><code>&gt; setwd('/path/to/the/file/above')
+&gt; safetyGraphicsApp()</code></pre>
+<p>Once the app opens, click the charts tab to view the new custom “hello_world” chart.</p>
+<p><img src="https://user-images.githubusercontent.com/3680095/71821298-c0080980-305f-11ea-979e-6574ac30f706.png" style="max-width:700px"></p>
+</div>
+<div id="example-2---detailed-walkthrough" class="section level1">
+<h1 class="hasAnchor">
+<a href="#example-2---detailed-walkthrough" class="anchor"></a>Example 2 - Detailed Walkthrough</h1>
+<p>Our second example goes through the chart creation process step-by-step for a more realistic example. An understanding of the underlying infrastructure for safetyGraphics will help here, so we recommend reviewing the first <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Vignette:-Shiny-User-Guide">introductory vignette</a> before diving in.</p>
 <div id="step-1---create-custom-chart-code" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-1---create-custom-chart-code" class="anchor"></a>Step 1 - Create custom chart code</h2>
-<p>The first, and most complicated, step is to write the code for the custom chart. All common charting packages are supported including <code>ggplot2</code>, <code>lattice</code> and base R graphics. As a trivial example, here is the code for a simple bar chart that counts number of observations present for each type of lab measurement collected.</p>
-<pre><code>countLabs&lt;- function(data, settings){
-  counts &lt;- table(data[[setting$measure_col]])
-  barplot(counts, main=settings$barChartTitle)
-}</code></pre>
-<p>Let’s work through the different pieces of this custom chart. First and foremost, notice that the code to create the chart is wrapped in a function that takes 2 parameters as inputs: <code>data</code> and <code>settings</code>. When the chart function is called by Shiny, these parameters are generated dynamically within the app; <code>data</code> represents the user selection in the Data module, and <code>settings</code> represents the selections in the Settings Module.</p>
-<p>The <code>data</code> parameter is saved as a <code>data.frame</code>, and a preview of the current data is conveniently available in the data tab. The <code>settings</code> parameter is saved as a <code>list</code> and is slightly more complex. Each setting shown on the settings page has a unique ID (called a <code>text_key</code> in the package) that gives its position in the settings <code>list</code>. In our example, the “Measure column” setting has the ID <code>measure_col</code> and is accessed in the charting function via <code>settings$measure_col</code>. Additional technical documentation about the <code>settings</code> list is provided in Appendix 1.</p>
-<p>Note that line 2 in the function above references the measure column dynamically by combining <code>data</code> and <code>settings</code> like so: <code>data[[setting$measure_col]]</code>. This pattern, as opposed of directly specifying a column name like <code>data$PARAM</code>, allows the chart to work with any data standard. The important pattern is used repeatedly across all <code>safetyGraphics</code> charts.</p>
-<p>Line 3 of our sample function draws the bar chart using the counts created with the <code><a href="https://rdrr.io/r/base/table.html">table()</a></code> statement in line 2. Line 3 also introduces a custom setting - <code>settings$barChartTitle</code> - so that the user can provide a custom title for the chart in the shiny app if desired. All custom settings must be initialized using the <code><a href="../reference/addSetting.html">addSetting()</a></code> function; this process is described in Step 2 below.</p>
-<p>Finally, note that the process for defining custom “htmlwidget” and “shiny module” charts is slightly different than the sample code above; examples 2 and 3 below provide basic examples of those chart types.</p>
+<p>The first, and most complicated, step is to write the code for the custom chart. It’s easiest to break this process down in to 3 smaller steps.</p>
+<ol style="list-style-type: decimal">
+<li>Create customSettings.R script</li>
+<li>Make static code using sample data</li>
+<li>Covert static chart code to Function</li>
+</ol>
+<div id="step-1-1---create-customsettings-r-script" class="section level3">
+<h3 class="hasAnchor">
+<a href="#step-1-1---create-customsettings-r-script" class="anchor"></a>Step 1.1 - Create customSettings.R Script</h3>
+<p>First, Create a file called customSettings.R and save it in your working directory. All of the code in the following steps goes in this file. Note that when you run the app, custom medatadata files will be saved in your working directory, so you might want to call setwd() and put this somewhere out of the way.</p>
+</div>
+<div id="step-1-2---make-static-code-using-sample-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#step-1-2---make-static-code-using-sample-data" class="anchor"></a>Step 1.2 - Make Static Code Using Sample Data</h3>
+<p>Next, write some sample code for your chart using a sample data set (the <code>adlbc</code> data set included with safetyGraphics is a good option). Note that all common charting packages are supported including <code>ggplot2</code>, <code>lattice</code> and base R graphics. Our example makes a histogram showing the distribution of lab values:</p>
+<pre><code>library(safetyGraphics)
+ggplot(
+    data = adlbc, 
+    aes(x = PARAM, y = AVAL)
+) +
+ geom_boxplot(fill =‘blue’) +
+ scale_y_log10() +
+ theme_bw() +
+ theme(
+  axis.text.x = element_text(angle = 25, hjust = 1),    
+  axis.text = element_text(size = 12), 
+  axis.title = element_text(size = 12)
+)</code></pre>
+<p>As expected, running this code creates a simple box plot.</p>
+<p><img src="https://user-images.githubusercontent.com/3680095/71827082-70303f00-306d-11ea-8224-0944efca95ec.png" style="max-width:700px"></p>
+</div>
+<div id="step-1-3---convert-static-chart-code-to-a-function" class="section level3">
+<h3 class="hasAnchor">
+<a href="#step-1-3---convert-static-chart-code-to-a-function" class="anchor"></a>Step 1.3 - Convert Static Chart Code to a Function</h3>
+<p>After the chart is working on the sample data, you need to update it to a function that will work with any data set that the user loads in the shiny app. Replace hard coded parameters with references to the settings defined in the safetyGraphics metadata object as shown below.</p>
+<p><img src="https://user-images.githubusercontent.com/3680095/71829373-7bd23480-3072-11ea-9ac5-9b6dbb0c82d3.png" style="max-width:700px"></p>
+<p>This is the hardest part of creating a custom chart, so we’ve provided some additional notes about this process below. There is also a <a href="">technical appendix</a> at the end of this document that provides more details about the metadata objects used in this step. Finally, feel free to ask <a href="https://github.com/SafetyGraphics/safetyGraphics/issues">ask us questions</a> if you run in to problems.</p>
+<ul>
+<li>The code to create the chart must be wrapped in a function that takes 2 parameters as inputs: <code>data</code> and <code>settings</code> as shown in line 1 above. When the chart function is called by Shiny, these parameters are generated dynamically within the app; <code>data</code> represents the user selection in the Data module, and <code>settings</code> represents the selections in the Settings Module.</li>
+<li>The <code>data</code> parameter is saved as a <code>data.frame</code>, and a preview of the current data is conveniently available in the data tab.<br>
+</li>
+<li>The <code>settings</code> parameter is saved as a <code>list</code> and is slightly more complex. Each setting shown on the settings page has a unique ID (called a <code>text_key</code> in the package) that gives its position in the settings <code>list</code>. In our example, the “Measure column” setting has the ID <code>measure_col</code> and is accessed in the charting function via <code>settings$measure_col</code>. Additional technical documentation about the <code>settings</code> list is provided in Appendix 1.</li>
+<li>Lines 2-7 above create a new data frame called <code>mapped_data</code>. This isn’t required, but it simplifies the code somewhat and helps to avoid non-standard evaluation in the chart function.</li>
+<li>Note that we dynamically identify the <code>Value</code> and <code>Measure</code> columns in lines 4 and 5 by referencing the <code>settings</code> object. This code, as opposed to directly specifying a column name like <code>data$PARAM</code>, allows the chart to work with any data standard.</li>
+<li>Line 9 initializes the chart using <code>ggplot()</code> with the newly derived <code>mapped_data</code>.</li>
+<li>Line 13 introduces a custom setting - <code>settings[["boxcolor"]]</code> - so that the user can specify a color for the bars in the shiny app if desired. All custom settings must be initialized using the <code><a href="../reference/addSetting.html">addSetting()</a></code> function; this process is described in Step 2 below.</li>
+<li>Finally, note that the process for defining custom “htmlwidget” and “shiny module” charts is slightly different than the sample code above; examples 3 provides basic example for a shiny module, and htmlwidgets are discussed in Appendix 2.</li>
+</ul>
+</div>
 </div>
 <div id="step-2---add-custom-settings-to-the-app" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-2---add-custom-settings-to-the-app" class="anchor"></a>Step 2 - Add custom settings to the App</h2>
-<p>Next, we’ll add any new settings to the app using the <code><a href="../reference/addSetting.html">addSetting()</a></code> function. For our example above, we would add the <code>participant_label</code> setting as follows:</p>
-<pre><code><a href="../reference/addSetting.html">addSetting(
-  text_key="barChartTitle",
-  label="Bar Chart Title",
-  description="Title for the Lab Count Bar Chart",
+<p>Next, we’ll add any new settings to the app by calling the <code><a href="../reference/addSetting.html">addSetting()</a></code> function in our <code>customSettings.R</code> function.</p>
+<p>First, we need to determine which settings are already defined. As noted above, our chart uses 3 settings: <code>value_col</code>, <code>measure_col</code> and <code>box_color</code>. In most cases you can just examine the <code>settingsMetadata</code> data frame. Either view it with view(settingsMetadata) or use code like this:</p>
+<p><img src="https://user-images.githubusercontent.com/3680095/71829757-52fe6f00-3073-11ea-94c1-cee5e9e03553.png" style="max-width:700px"></p>
+<p>In some complex cases, it might be easier to examine the metadata object directly. To do this, you can create a shell settings object and then check to see if the settings exist:</p>
+<p><img src="https://user-images.githubusercontent.com/3680095/71829821-73c6c480-3073-11ea-973c-37281762a0b0.png" style="max-width:700px"></p>
+<p>As shown in the output above, our example uses 2 pre-loaded settings (<code>measure_col</code> and <code>value_col</code>) and one new setting (<code>boxcolor</code>). We add boxcolor to the metadata using the <code><a href="../reference/addSetting.html">addSetting()</a></code> function as shown below.</p>
+<pre><code><a href="../reference/addSetting.html">addSetting( 
+  text_key="boxcolor", 
+  label="Box Plot Color", 
+  description="The color of the boxes",
   setting_type="character",
-  setting_cat="appearance",
-  default="Lab Count",
-  settingsLocation=getwd()
-)</a></code></pre>
-<p>Repeat as needed for multiple settings. For full details about each parameter see <code><a href="../reference/addSetting.html">?addSetting</a></code>.</p>
-<p>Finally, note that if all of the settings used by your chart are already defined, you can skip this step. The full list of predefined settings can be found in the <code><a href="../reference/settingsMetadata.html">safetyGraphics::settingsMetadata</a></code> dataset included with the package.</p>
+  setting_cat="appearance", 
+  default="gray"
+) </a></code></pre>
+<p>You could repeat as needed for multiple settings. For full details about each parameter see <code><a href="../reference/addSetting.html">?addSetting</a></code>, which matches up with the column names in <code><a href="../reference/settingsMetadata.html">?settingsMetadata</a></code>.</p>
 </div>
 <div id="step-3---add-the-chart-to-the-app" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-3---add-the-chart-to-the-app" class="anchor"></a>Step 3 - Add the chart to the App</h2>
 <p>Next, we need to add the chart itself to the app using <code><a href="../reference/addChart.html">addChart()</a></code>. We’d add the example above as follows:</p>
-<pre><code><a href="../reference/addChart.html">addChart(
-  chart="count_labs", #all lower case
-  main="countLabs",  #the name of your function created in step 1
-  label="Count Labs - Demo",
-  settingsLocation = getwd(),
-  requiredSettings=c("measure_col","barChartTitle"),
-  type="static"
-)</a></code></pre>
-<p>For full details about each parameter see <code><a href="../reference/addChart.html">?addChart</a></code>.</p>
+<pre><code>addChart( 
+  chart="labdist", 
+  main="labdist", 
+  label="Lab Distribution - static", 
+  requiredSettings=c("boxcolor","value_col","measure_col"),
+  type="static”
+ )</code></pre>
+<p>For full details about each parameter see <code><a href="../reference/addChart.html">?addChart</a></code>, which matches up with the column names in <code>?chartMetadata</code>.</p>
 </div>
 <div id="step-4---initialize-the-app" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-4---initialize-the-app" class="anchor"></a>Step 4 - Initialize the app</h2>
-<p>Finally, we need to initialize the app using the updates we’ve made in the steps above. The easiest way to wrap up the code from Steps 1, 2 and 3 in a custom R script, then reference that script in a call to <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> (see Appendix 3 for the full script ready to copy/paste). For example, if you save your custom script as <code>/customChart/mySettings.R</code> then you would use the following to initialize the app:</p>
-<pre><code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp(
-  settingsLocation="/customChart",
-  customSettings="mySettings.R"
-)</a></code></pre>
-<p>As expected, you see our new “Bar Chart Title” setting under the settings tab. Let’s change that option from the default value:</p>
-<p><img width="470" alt="Screen Shot 2019-10-23 at 7 08 30 AM" src="https://user-images.githubusercontent.com/3680095/67382751-631eac00-f564-11e9-8f98-883f57ecf1a6.png"></p>
-<p>And here is our sweet new custom chart:</p>
-<div class="figure">
-<img src="https://user-images.githubusercontent.com/3680095/67382917-a37e2a00-f564-11e9-9eb0-3060cff121d5.png" alt="image"><p class="caption">image</p>
-</div>
-<p>It looks like we’ve got the same number of observations for all labs in our sample data.</p>
-<p>Three additional examples of this process are provided below. The appendices describe the technical framework in more detail and explains how to update the underlying metadata files to add a new default chart type to the application.</p>
+<p>Finally, make sure your working directory is set to the location of you customSettings.R and call safetyGraphicsApp(). The settings page for the new “Lab Distribution – Static” chart will look like this:</p>
+<p><img src="https://user-images.githubusercontent.com/3680095/71830375-973e3f00-3074-11ea-8162-88cec1bebda4.png" style="max-width:700px"></p>
+<p>And here is the chart:</p>
+<p><img src="https://user-images.githubusercontent.com/3680095/71830432-b9d05800-3074-11ea-8e95-613d4f06290e.png" style="max-width:700px"></p>
+<p>There are options that will let you save the custom code in other locations and/or automatically add a chart each time you run the app. See ?safetyGraphicsApp, ?addChart and ?addSettings for details.</p>
 </div>
 </div>
-<div id="example-1---custom-static-graphic" class="section level1">
+<div id="example-3---interactive-histogram" class="section level1">
 <h1 class="hasAnchor">
-<a href="#example-1---custom-static-graphic" class="anchor"></a>Example 1 - Custom Static Graphic</h1>
-<p>Now let’s create a custom chart that shows the distribution of lab values with a simple Box plot using <code>ggplot2</code>. The charting function is shown below, and the full script with <code><a href="../reference/addSetting.html">addSetting()</a></code> and <code><a href="../reference/addChart.html">addChart()</a></code> is saved in Appendix 3:</p>
-<pre><code>labdist&lt;-function(data,settings){
-  mapped_data &lt;- data %&gt;%
-    select(Value = settings[["value_col"]], Measure = settings[["measure_col"]])%&gt;%
-    filter(!is.na(Value))
-
-  ggplot(data = mapped_data, aes(x = Measure, y = Value)) +
-    geom_boxplot(fill = settings[["boxcolor"]]) +
-    scale_y_log10() +
-    theme_bw() +
-    theme(axis.text.x = element_text(angle = 25, hjust = 1),
-          axis.text = element_text(size = 12),
-          axis.title = element_text(size = 12))
-}</code></pre>
-<p>And here’s the chart:</p>
-<div class="figure">
-<img src="https://user-images.githubusercontent.com/14199771/67016263-eacc6c80-f0c5-11e9-9f03-9cc1f12a5a1d.png">
+<a href="#example-3---interactive-histogram" class="anchor"></a>Example 3 - Interactive Histogram</h1>
+<p>We can expand on our static boxplot from Example 2 by adding some interactivity. Placing our boxplot in a Shiny module will allow the user to make chart-specific aesthetic adjustments on the fly. In this example, we’ve added the ability to add/remove individual data points, transform the y-axis scale, and show/hide outliers:</p>
+<p><img src="https://user-images.githubusercontent.com/14199771/67016434-2ff09e80-f0c6-11e9-892b-94e57438ca9a.png" style="max-width:700px"></p>
+<p>This example expands on the static boxplot example in the following ways: - Most of the underlying code for manipulating the dataset and creating the <code>ggplot2</code> figure is identical to the static boxplot example. However, we’ve added some conditional statements to modify the boxplot based on the user selections. - Instead of a single chart function, we now have two: the module UI function, and the module server function. The UI function has the same name as the server function, with <code>_UI</code> appended. These functions should be specified (or sourced from an external file) within customSettings.R. - <code>data</code> and <code>settings</code> are passed to the module server function as reactive objects.</p>
+<p>The full code for the custom script is saved in Appendix 3.</p>
 </div>
-<p>This example expands on the initial barplot example in the following ways: - The path of the chart script is saved as <code>custom_location</code> at the top of the script and re-used throughout. - The custom script is saved as “/customBoxplot/customSettings.R”. Which simplifies calling the app to: <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp(settingsLocation="/customBoxplot")</a></code> since “customSettings.R” is the default value for the <code>customSettings</code> parameter. - The <code>labdist()</code> charting function performs some simple data manipulation to prepare the data for the plot (see the derivation of <code>mapped_data</code>. Because our settings object is generated dynamically, it is often helpful to convert these dynamic text strings into consistent names to be used in downstream charting functions that use non-standard evaluation.</p>
-</div>
-<div id="example-2---custom-shiny-module" class="section level1">
+<div id="example-4---custom-htmlwidget-coming-soon" class="section level1">
 <h1 class="hasAnchor">
-<a href="#example-2---custom-shiny-module" class="anchor"></a>Example 2 - Custom Shiny Module</h1>
-<p>We can expand on our static boxplot from Example 1 by adding some interactivity. Placing our boxplot in a Shiny module will allow the user to make chart-specific aesthetic adjustments on the fly. In this example, we’ve added the ability to add/remove individual data points, transform the y-axis scale, and show/hide outliers:</p>
-<div class="figure">
-<img src="https://user-images.githubusercontent.com/14199771/67016434-2ff09e80-f0c6-11e9-892b-94e57438ca9a.png">
-</div>
-<p>This example expands on the static boxplot example in the following ways: - Most of the underlying code for manipulating the dataset and creating the <code>ggplot2</code> figure is identical to the static boxplot example. However, we’ve added some conditional statements to modify the boxplot based on the user selections. - Instead of a single chart function, we now have two: the module UI function, and the module server function. The UI function has the same name as the server function, with <code>_UI</code> appended. These functions should be specified (our sourced from an external file) within customSettings.R. - <code>data</code> and <code>settings</code> are passed to the module server function as reactive objects.</p>
-<p>The full code for the custom script is saved in appendix 3.</p>
-</div>
-<div id="example-3---custom-htmlwidget" class="section level1">
-<h1 class="hasAnchor">
-<a href="#example-3---custom-htmlwidget" class="anchor"></a>Example 3 - Custom htmlwidget</h1>
+<a href="#example-4---custom-htmlwidget-coming-soon" class="anchor"></a>Example 4 - Custom htmlwidget (Coming soon!)</h1>
 <p>Custom <code>htmlwidgets</code> are not currently supported via <code><a href="../reference/addChart.html">addChart()</a></code> and addSetting()`, but we plan to add support in future release.</p>
 <p>For now, please contact the package development team or <a href="https://github.com/SafetyGraphics/safetyGraphics/issues">file an issue on GitHub</a> if you would like to add a custom <code>htmlwidget</code> to safetyGraphics, and we can discuss technical details.</p>
 </div>
-<div id="appendix-1---settings-framework-technical-details" class="section level1">
+<div id="appendix-1---technical-details" class="section level1">
 <h1 class="hasAnchor">
-<a href="#appendix-1---settings-framework-technical-details" class="anchor"></a>Appendix 1 - Settings Framework Technical Details</h1>
+<a href="#appendix-1---technical-details" class="anchor"></a>Appendix 1 - Technical Details</h1>
 <p>This appendix provides a detailed technical description of the settings framework used in the application. As described in the <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Vignette:-Shiny-User-Guide#update-settings">introductory vignette</a>, the settings Shiny module allows users to make a <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Vignette:-Shiny-User-Guide#case-study-1---mapping-non-standard-data">wide</a> <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Vignette:-Shiny-User-Guide#case-study-2---adding-customizations">range</a> of customizations to the charts for any given study. Understanding the underlying technical details of this settings customization process is perhaps the most complicated aspect of designing custom charts for <code>safetyGraphics</code>. This appendix is broken in to 2 sections, the first describes the structure of the settings themselves, the second describes the metadata used to generate the settings when the package is built.</p>
 <div id="settings-structure" class="section level2">
 <h2 class="hasAnchor">
 <a href="#settings-structure" class="anchor"></a>Settings Structure</h2>
 <p>Behind the scenes, the settings are stored as a <code>list</code>, which is updated in real time as the user makes changes in the Shiny settings module. A small chunk of a typical settings <code>list</code> is shown below. Note that this was generated using <code><a href="../reference/generateSettings.html">generateSettings(standard="adam")</a></code>. More details on this and other functions related to settings is provided below.</p>
-<div class="figure">
-<img src="https://user-images.githubusercontent.com/3680095/67284859-ca792500-f4ac-11e9-9c70-fc0565447b7b.png" alt="image"><p class="caption">image</p>
-</div>
-<p>As described in the examples above, the current settings <code>list</code> is passed directly to the chart function whenever a user views a chart in the shiny app. Each control in the settings module is tied to a single component in the setting <code>list</code> using a unique key, which that unique key defines setting’s position in the list. You can see the unique key for any setting, by hovering over the title for the control in the shiny app. As an example, the “ID column” control has a unique key of “id_col”, which is accessible in the settings <code>list</code> via <code>settings$id_col</code>, which would resolve to “USUBJID”, the default value for the ADaM data standard, in our sample settings above. The settings framework also supports nested settings. A double dash “–” indicates a level of nesting in the <code>list</code>, so a setting ID of “measure_values–ALT” would be accessed as <code>settings[["measure_values"]][["ALT"]]</code>, which would resolve to “Alanine Aminotransferase (U/L)” in our sample settings.</p>
+<p><img src="https://user-images.githubusercontent.com/3680095/67284859-ca792500-f4ac-11e9-9c70-fc0565447b7b.png" style="max-width:700px"></p>
+<p>As described in the examples above, the current settings <code>list</code> is passed directly to the chart function whenever a user views a chart in the shiny app. Each control in the settings module is tied to a single component in the setting <code>list</code> using a unique key. That unique key defines the setting’s position in the list. You can see the unique key for any setting by hovering over the title for the control in the shiny app. As an example, the “ID column” control has a unique key of “id_col”, which is accessible in the settings <code>list</code> via <code>settings$id_col</code>, which would resolve to “USUBJID”, the default value for the ADaM data standard, in our sample settings above. The settings framework also supports nested settings. A double dash “–” indicates a level of nesting in the <code>list</code>, so a setting ID of “measure_values–ALT” would be accessed as <code>settings[["measure_values"]][["ALT"]]</code>, which would resolve to “Alanine Aminotransferase (U/L)” in our sample settings.</p>
 <p>You can see additional details about pre-loaded settings by viewing the safetyGraphics::settingsMetadata data file that contains the default settings for the shiny app. ?settingsMetadata provides detailed data specifications for the metadata file, which also match the options available in the addSetting() function used in the examples above.</p>
-<p>The <code>safetyGraphics</code> pacakge includes several functions specifically designed for use with settings objects. As mentioned above, you can generate a default settings list for a data standard using the <code><a href="../reference/generateSettings.html">generateSettings()</a></code> function:</p>
+<p>The <code>safetyGraphics</code> package includes several functions specifically designed for use with settings objects. As mentioned above, you can generate a default settings list for a data standard using the <code><a href="../reference/generateSettings.html">generateSettings()</a></code> function:</p>
 <pre><code><a href="../reference/generateSettings.html">safetyGraphics::generateSettings()  # no standard
 safetyGraphics::generateSettings(standard="ADaM") # ADaM standard</a></code></pre>
 <p>Other functions for working with settings (all used liberally by the shiny app) include: <code><a href="../reference/getRequiredSettings.html">getRequiredSettings()</a></code>, <code><a href="../reference/generateShell.html">generateShell()</a></code>, <code><a href="../reference/getSettingKeys.html">getSettingKeys()</a></code>, <code><a href="../reference/getSettingValue.html">getSettingValue()</a></code>, <code><a href="../reference/getSettingsMetadata.html">getSettingsMetadata()</a></code>, <code><a href="../reference/setSettingsValue.html">setSettingsValue()</a></code>, <code><a href="../reference/trimSettings.html">trimSettings()</a></code> and <code><a href="../reference/validateSettings.html">validateSettings()</a></code>. The R documentation for each of these functions provides technical details and examples for common use cases. Note also that all of the charts included with the application have detailed standalone documentation referenced in the <code>repo_url</code> and <code>settings_url</code> fields found in the <code>chartsMetadata</code> file; for example, the <code>hep-explorer</code>’s configuration page is <a href="https://github.com/SafetyGraphics/hep-explorer/wiki/Configuration">here</a> and provides a lot of additional context about how each setting is used by the chart.</p>
@@ -247,17 +284,17 @@ jsonlite::toJSON(
 <p>The underlying technical framework for the metadata is somewhat complex. In general, we follow the recommendations from the <a href="http://r-pkgs.had.co.nz/data.html">Data chapter</a> in Hadley Wickham’s R Packages book. Using that workflow, we combine 5 “raw” metadata files (saved in <code>data-raw\</code>) in to 3 data files that are available as part of the package (saved in <code>data\</code> with documentation in <code>R\</code>). An R script to convert the 5 “raw” files to the 3 files in the package is saved as <code>data-raw\csv-to-rda.raw</code>, which is re-run whenever the metadata framework is updated.</p>
 <p>The <code><a href="../reference/addChart.html">addChart()</a></code> and <code><a href="../reference/addSetting.html">addSetting()</a></code> functions (and their evil twins <code><a href="../reference/removeCharts.html">removeCharts()</a></code> and <code><a href="../reference/removeSettings.html">removeSettings()</a></code>) allow users to customize these metadata files without actually rebuilding the entire package. These functions simply edit, add or remove rows from the <code>settingsMetadata</code> and <code>chartsMetadata</code> files saved in <code>data\</code> and then save local copies of the files that are used in place of the default versions. This customization is likely enough for most users, but developers looking to make permanent changes to the apps default must go a level deeper and edit the files saved in <code>data-raw/</code>. More detail about those raw files is provided below, and step-by-step instructions for creating a new default chart are provided in Appendix 2.</p>
 <ul>
-<li><p><strong>Charts metadata (chartsMetadata.csv)</strong>: This file informs the Shiny app about all of the chart modules that should be made available to the user. The structure of this file is 1 row per chart. Columns contain chart-specific details such as chart name, type, and size.</p></li>
+<li><p><strong>Charts Metadata (chartsMetadata.csv)</strong>: This file informs the Shiny app about all of the chart modules that should be made available to the user. The structure of this file is 1 row per chart. Columns contain chart-specific details such as chart name, type, and size.</p></li>
 <li><p><strong>Settings Metadata for Charts (settingsMetadataCharts.csv)</strong>: This file helps the Shiny app understand which settings are needed for the different charts. This information is incorporated in the Settings configuration and Reporting modules. The structure of this file is 1 row per unique setting and 1 column per chart. <code>TRUE</code>/<code>FALSE</code> values are used to indicate whether the setting is relevant to a given chart.</p></li>
 <li><p><strong>Settings Metadata (settingsMetadata.csv)</strong>: This file informs the Shiny app about all of the possible settings across all of the charts. Specifically, the file helps to populate the Settings tab of the app, and it also ensures that settings are successfully handed off to the charts. The structure is 1 row per setting and the columns contain information such as a description of the setting, type of setting (e.g. data mapping), and whether the setting is optional or required.</p></li>
 <li><p><strong>Settings Defaults (generateSettingsMetadataDefaults.R)</strong>: Ths file contains information about the default values for the settings (specifically for non-data mapping settings). A <code>.R</code> file is used in place of a <code>.csv</code> to preserve the R value type (numeric, string, list, etc) of the defaults. While all settings are represented (structure of 1 row per setting), all data mapping defaults should be set to <code>NULL</code> and handled in the Standards metadata file.</p></li>
-<li><p><strong>Standards metadata (standardsMetadata.csv)</strong>: This file contains information about the default values for the settings for each data standard (specifically for data mapping settings). The file helps the Shiny app automatically detect data standards in uploaded files, and automate settings configuration if the data is in a standard format. The structure of the file is 1 row per setting and 1 column per data standard. While all settings are represented, all rows corresponding to non-data mapping settings should be left blank.</p></li>
+<li><p><strong>Standards Metadata (standardsMetadata.csv)</strong>: This file contains information about the default values for the settings for each data standard (specifically for data mapping settings). The file helps the Shiny app automatically detect data standards in uploaded files and automate settings configuration if the data is in a standard format. The structure of the file is 1 row per setting and 1 column per data standard. While all settings are represented, all rows corresponding to non-data mapping settings should be left blank.</p></li>
 </ul>
 </div>
 </div>
-<div id="appendix-2---step-by-step-process-for-contributing-a-new-a-default-chart-to-safetygraphics-package" class="section level1">
+<div id="appendix-2---step-by-step-process-for-contributing-a-new-default-chart-to-safetygraphics-package" class="section level1">
 <h1 class="hasAnchor">
-<a href="#appendix-2---step-by-step-process-for-contributing-a-new-a-default-chart-to-safetygraphics-package" class="anchor"></a>Appendix 2 - Step-by-Step Process for Contributing a New a Default Chart to safetyGraphics Package</h1>
+<a href="#appendix-2---step-by-step-process-for-contributing-a-new-default-chart-to-safetygraphics-package" class="anchor"></a>Appendix 2 - Step-by-Step Process for Contributing a New Default Chart to safetyGraphics Package</h1>
 <ol style="list-style-type: decimal">
 <li><p>Make a new branch of the safetyGraphics master <a href="https://github.com/SafetyGraphics/safetyGraphics">repository</a>.</p></li>
 <li><p>Create a new charting function using the guidelines in the examples above</p></li>
@@ -299,54 +336,34 @@ jsonlite::toJSON(
 </ul>
 <ol start="6" style="list-style-type: decimal">
 <li><p>Update package documentation with <code><a href="https://rdrr.io/pkg/devtools/man/document.html">devtools::document()</a></code>.</p></li>
-<li><p>Rebuild the R package, test out the Shiny app, and make a PR to the safetyGraphics repo. # Appendix 3 - Full Custom Scripts for Examples</p></li>
+<li><p>Rebuild the R package, test out the Shiny app, and make a PR to the safetyGraphics repo.</p></li>
 </ol>
-<div id="full-code-for-step-by-step-walkthrough" class="section level2">
+</div>
+<div id="appendix-3---full-custom-scripts-for-examples" class="section level1">
+<h1 class="hasAnchor">
+<a href="#appendix-3---full-custom-scripts-for-examples" class="anchor"></a>Appendix 3 - Full Custom Scripts for Examples</h1>
+<div id="full-code-for-example-1---hello-world" class="section level2">
 <h2 class="hasAnchor">
-<a href="#full-code-for-step-by-step-walkthrough" class="anchor"></a>Full Code for Step-by-Step walkthrough</h2>
-<pre><code>#####################################################################
-# Step 1 - Write custom chart code
-#####################################################################
-countLabs&lt;- function(data, settings){
-  counts &lt;- table(data[[setting$measure_col]])
-  barplot(counts, main=settings$barChartTitle)
+<a href="#full-code-for-example-1---hello-world" class="anchor"></a>Full Code for Example 1 - Hello World</h2>
+<pre><code># Step 1 - Write custom chart code 
+helloWorld &lt;- function(data,settings){
+  plot(-1:1, -1:1)
+  text(runif(20, -1,1),runif(20, -1,1),"Hello World")
 }
 
-#####################################################################
-# Step 2 - Initialize Custom Settings
-#####################################################################
-addSetting(
-  text_key="barChartTitle",
-  label="Bar Chart Title",
-  description="Title for the Lab Count Bar Chart",
-  setting_type="character",
-  setting_cat="appearance",
-  default="Lab Count",
-  settingsLocation=getwd()
-)
+# Step 2 - Initialize Custom Settings 
+# Not Applicable!
 
-#####################################################################
-# Step 3 - Initialize the custom chart
-#####################################################################
-addChart(
-  chart="count_labs", #all lower case
-  main="countLabs",  #the name of your function created in step 1
-  label="Count Labs - Demo",
-  settingsLocation = getwd(),
-  requiredSettings=c("measure_col","barChartTitle"),
-  type="static"
-)
-
-# To initialize the chart run:
-# safetyGraphicsApp(
-#  settingsLocation="/customChart",
-#  customSettings="mySettings.R"
-#)
-</code></pre>
+# Step 3 - Initialize the custom chart 
+addChart( 
+  chart=”hello_world”,
+  main=”helloWorld",
+  label=”Hello World”, 
+)</code></pre>
 </div>
-<div id="full-code-for-example-1" class="section level2">
+<div id="full-code-for-example-2---static-histogram" class="section level2">
 <h2 class="hasAnchor">
-<a href="#full-code-for-example-1" class="anchor"></a>Full Code for Example 1</h2>
+<a href="#full-code-for-example-2---static-histogram" class="anchor"></a>Full Code for Example 2 - Static Histogram</h2>
 <pre><code>custom_location&lt;-"customBoxplot/"
 
 #####################################################################
@@ -356,11 +373,11 @@ labdist&lt;-function(data,settings){
   mapped_data &lt;- data %&gt;%
     select(Value = settings[["value_col"]], Measure = settings[["measure_col"]])%&gt;%
     filter(!is.na(Value))
-
-  ggplot(data = mapped_data, aes(x = Measure, y = Value)) +
+  
+  ggplot(data = mapped_data, aes(x = Measure, y = Value)) + 
     geom_boxplot(fill = settings[["boxcolor"]]) +
     scale_y_log10() +
-    theme_bw() +
+    theme_bw() + 
     theme(axis.text.x = element_text(angle = 25, hjust = 1),
           axis.text = element_text(size = 12),
           axis.title = element_text(size = 12))
@@ -370,12 +387,12 @@ labdist&lt;-function(data,settings){
 # Step 2 - Initialize Custom Settings
 #####################################################################
 addSetting(
-  text_key="boxcolor",
-  label="Box Plot Color",
-  description="The color of the boxes",
-  setting_type="character",
-  setting_cat="appearance",
-  default="gray",
+  text_key="boxcolor", 
+  label="Box Plot Color", 
+  description="The color of the boxes", 
+  setting_type="character", 
+  setting_cat="appearance", 
+  default="gray", 
   settingsLocation=custom_location
 )
 
@@ -385,27 +402,23 @@ addSetting(
 #####################################################################
 addChart(
   chart="labdist",
-  main="labdist",
+  main="labdist", 
   label="Lab Distribution - static",
   settingsLocation = custom_location,
   requiredSettings=c("boxcolor","value_col","measure_col"),
   type="static"
-)
-
-#To call the app run:
-#safetyGraphicsApp(settingsLocation="/customBoxplot")
-</code></pre>
+)</code></pre>
 </div>
-<div id="full-code-for-example-2" class="section level2">
+<div id="full-code-for-example-3---interactive-histogram" class="section level2">
 <h2 class="hasAnchor">
-<a href="#full-code-for-example-2" class="anchor"></a>Full Code for Example 2</h2>
+<a href="#full-code-for-example-3---interactive-histogram" class="anchor"></a>Full Code for Example 3 - Interactive Histogram</h2>
 <pre><code>custom_location&lt;-"customBoxplot/"
 
 #####################################################################
 # Step 1 - Write custom chart module code
 #####################################################################
 labdist_module_UI &lt;- function(id) {
-  ns &lt;- NS(id)
+  ns &lt;- NS(id) 
   tagList(
     checkboxInput(ns("show_points"), "Show points?", value=FALSE),
     checkboxInput(ns("show_outliers"), "Show outliers?", value=TRUE),
@@ -415,44 +428,44 @@ labdist_module_UI &lt;- function(id) {
 }
 
 labdist_module &lt;- function(input, output, session, data, settings) {
-
+  
   ns &lt;- session$ns
-
+  
   mapped_data &lt;- reactive({
     data() %&gt;%
       select(Value = settings()[["value_col"]],
              Measure = settings()[["measure_col"]])%&gt;%
-      filter(!is.na(Value))
+      filter(!is.na(Value)) 
   })
-
+  
   output$labdist &lt;- renderPlot({
-
+    
     req(mapped_data())
-
+    
     # set up the plot
     p &lt;- ggplot(data = mapped_data(), aes(x = Measure, y = Value)) +
       theme_bw() +
       theme(axis.text.x = element_text(angle = 25, hjust = 1),
             axis.text=element_text(size=12),
             axis.title = element_text(size = 12))
-
+    
     # add/remove outliers
     if (input$show_outliers){
-      p &lt;- p + geom_boxplot(fill = settings()[["boxcolor"]])
+      p &lt;- p + geom_boxplot(fill = settings()[["boxcolor"]]) 
     } else {
-      p &lt;- p + geom_boxplot(fill = settings()[["boxcolor"]], outlier.shape = NA)
+      p &lt;- p + geom_boxplot(fill = settings()[["boxcolor"]], outlier.shape = NA) 
     }
-
+    
     # log-transform scale
     if (input$scale=="Log-10"){
       p &lt;- p + scale_y_log10()
     }
-
+    
     # show individual data points
     if (input$show_points){
       p &lt;- p + geom_jitter(width = 0.2)
     }  
-
+ 
     p
   })
 }
@@ -461,12 +474,12 @@ labdist_module &lt;- function(input, output, session, data, settings) {
 # Step 2 - Initialize Custom Settings
 #####################################################################
 addSetting(
-  text_key="boxcolor",
-  label="Box Plot Color",
-  description="The color of the boxes",
-  setting_type="character",
-  setting_cat="appearance",
-  default="gray",
+  text_key="boxcolor", 
+  label="Box Plot Color", 
+  description="The color of the boxes", 
+  setting_type="character", 
+  setting_cat="appearance", 
+  default="gray", 
   settingsLocation=custom_location
 )
 
@@ -475,7 +488,7 @@ addSetting(
 #####################################################################
 addChart(
   chart="labdist_module",
-  main="labdist_module",
+  main="labdist_module", 
   label="Lab Distribution - shiny module",
   settingsLocation = custom_location,
   requiredSettings=c("boxcolor","value_col","measure_col"),
@@ -491,28 +504,30 @@ addChart(
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#overview">Overview</a></li>
+      <li><a href="#steps-to-create-a-custom-chart">Steps to Create a Custom Chart</a></li>
+      <li><a href="#example-1---hello-world">Example 1 - Hello World</a></li>
       <li>
-<a href="#creating-a-custom-chart---step-by-step">Creating a Custom Chart - Step-by-Step</a><ul class="nav nav-pills nav-stacked">
+<a href="#example-2---detailed-walkthrough">Example 2 - Detailed Walkthrough</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#step-1---create-custom-chart-code">Step 1 - Create custom chart code</a></li>
       <li><a href="#step-2---add-custom-settings-to-the-app">Step 2 - Add custom settings to the App</a></li>
       <li><a href="#step-3---add-the-chart-to-the-app">Step 3 - Add the chart to the App</a></li>
       <li><a href="#step-4---initialize-the-app">Step 4 - Initialize the app</a></li>
       </ul>
 </li>
-      <li><a href="#example-1---custom-static-graphic">Example 1 - Custom Static Graphic</a></li>
-      <li><a href="#example-2---custom-shiny-module">Example 2 - Custom Shiny Module</a></li>
-      <li><a href="#example-3---custom-htmlwidget">Example 3 - Custom htmlwidget</a></li>
+      <li><a href="#example-3---interactive-histogram">Example 3 - Interactive Histogram</a></li>
+      <li><a href="#example-4---custom-htmlwidget-coming-soon">Example 4 - Custom htmlwidget (Coming soon!)</a></li>
       <li>
-<a href="#appendix-1---settings-framework-technical-details">Appendix 1 - Settings Framework Technical Details</a><ul class="nav nav-pills nav-stacked">
+<a href="#appendix-1---technical-details">Appendix 1 - Technical Details</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#settings-structure">Settings Structure</a></li>
       <li><a href="#metadata-framework">Metadata framework</a></li>
       </ul>
 </li>
+      <li><a href="#appendix-2---step-by-step-process-for-contributing-a-new-default-chart-to-safetygraphics-package">Appendix 2 - Step-by-Step Process for Contributing a New Default Chart to safetyGraphics Package</a></li>
       <li>
-<a href="#appendix-2---step-by-step-process-for-contributing-a-new-a-default-chart-to-safetygraphics-package">Appendix 2 - Step-by-Step Process for Contributing a New a Default Chart to safetyGraphics Package</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#full-code-for-step-by-step-walkthrough">Full Code for Step-by-Step walkthrough</a></li>
-      <li><a href="#full-code-for-example-1">Full Code for Example 1</a></li>
-      <li><a href="#full-code-for-example-2">Full Code for Example 2</a></li>
+<a href="#appendix-3---full-custom-scripts-for-examples">Appendix 3 - Full Custom Scripts for Examples</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#full-code-for-example-1---hello-world">Full Code for Example 1 - Hello World</a></li>
+      <li><a href="#full-code-for-example-2---static-histogram">Full Code for Example 2 - Static Histogram</a></li>
+      <li><a href="#full-code-for-example-3---interactive-histogram">Full Code for Example 3 - Interactive Histogram</a></li>
       </ul>
 </li>
       </ul>
