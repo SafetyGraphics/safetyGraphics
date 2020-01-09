@@ -31,3 +31,4 @@ missingValues,Missing values,Values defining a missing value in the selected 'va
 visits_without_data,Visits without data,Controls display of visits without data for the current measure,logical,FALSE,FALSE,NA,FALSE,,data
 unscheduled_visits,Unscheduled visits,Controls display of unscheduled visits,logical,FALSE,FALSE,NA,FALSE,,data
 unscheduled_visit_pattern,Unscheduled visit pattern,A regular expression that identifies unscheduled visits,character,FALSE,FALSE,NA,FALSE,,data
+calculate_palt,Calculate PALT? ,Specifies whether PALT should be shown in the participant details.  PALT shows promise in predicting the percentage hepatocyte loss on the basis of the maximum value and the AUC of serum ALT observed during a DILI event.,logical,FALSE,FALSE,NA,FALSE,,appearance
