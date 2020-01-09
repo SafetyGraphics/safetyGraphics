@@ -16,11 +16,11 @@ library(shinybusy)
 
 # remove settings and charts metadata in the workspace to avoid carryover from previous instances of the app. 
 if(exists("settingsMetadata", inherits = FALSE)){
-  print(exists("settingsMetadata", inherits = FALSE))
+  rm("settingsMetadata")  
 }
 
 if(exists("chartsMetadata", inherits = FALSE)){
-  print(exists("chartsMetadata", inherits = FALSE))
+  rm("chartsMetadata")  
 }
 
 # use metadata in user settings folder if provided
