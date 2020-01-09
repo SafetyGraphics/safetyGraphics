@@ -13,6 +13,16 @@ library(haven)
 library(tidyr)
 library(shinybusy)
 
+
+# remove settings and charts metadata in the workspace to avoid carryover from previous instances of the app. 
+if(exists("settingsMetadata", inherits = FALSE)){
+  rm("settingsMetadata")  
+}
+
+if(exists("chartsMetadata", inherits = FALSE)){
+  rm("chartsMetadata")  
+}
+
 # use metadata in user settings folder if provided
 if (options('sg_chartsMetadata')[[1]]){
   chartsMetadata <-  options('sg_chartsMetadata_df')[[1]]
