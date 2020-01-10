@@ -57,8 +57,8 @@ addChart(
 Then initialize the app (Step 4) by running: 
 
 ```
-> setwd('/path/to/the/file/above')
-> safetyGraphicsApp()
+setwd('/path/to/the/file/above')
+safetyGraphicsApp()
 ```
 
 Once the app opens, click the charts tab to view the new custom "hello_world" chart. 
@@ -73,20 +73,21 @@ Our second example goes through the chart creation process step-by-step for a mo
 
 The first, and most complicated, step is to write the code for the custom chart. It's easiest to break this process down in to 3 smaller steps.  
 
-1. Create customSettings.R script
+1. Create customSettings.R file
 2. Make static code using sample data
 3. Covert static chart code to Function
 
-### Step 1.1 - Create customSettings.R Script
+### Step 1.1 - Create customSettings.R file
 
-First, Create a file called customSettings.R and save it in your working directory. All of the code in the following steps goes in this file. Note that when you run the app, custom medatadata files will be saved in your working directory, so you might want to call setwd() and put this somewhere out of the way. 
+First, create a file called customSettings.R and save it in a designated directory. All of the code in the following steps goes in this file. Note that when you run the app, custom medatadata files will be saved in the same directory as the customSettings.R file. 
 
 ### Step 1.2 - Make Static Code Using Sample Data
 
-Next, write some sample code for your chart using a sample data set (the `adlbc` data set included with safetyGraphics is a good option). Note that all common charting packages are supported including `ggplot2`, `lattice` and base R graphics.  Our example makes a histogram showing the distribution of lab values: 
+Next, write code that creates your chart using a sample data set (the `adlbc` data set included with safetyGraphics is a good option). Note that all common charting packages are supported including `ggplot2`, `lattice` and base R graphics.  Our example makes a histogram showing the distribution of lab values: 
 
 ```
 library(safetyGraphics)
+library(ggplot2)
 ggplot(
 	data = adlbc, 
 	aes(x = PARAM, y = AVAL)
@@ -107,11 +108,11 @@ As expected, running this code creates a simple box plot.
 
 ### Step 1.3 - Convert Static Chart Code to a Function
 
-After the chart is working on the sample data, you need to update it to a function that will work with any data set that the user loads in the shiny app.  Replace hard coded parameters with references to the settings defined in the safetyGraphics metadata object as shown below. 
+After the chart is working using the sample data, you need to update it to a function that will work with any data set that the user loads in the shiny app.  Replace hard coded parameters with references to the settings defined in the safetyGraphics settings object as shown below. 
 
 <img src="https://user-images.githubusercontent.com/3680095/71829373-7bd23480-3072-11ea-9ac5-9b6dbb0c82d3.png" style='max-width:700px'>
 
-This is the hardest part of creating a custom chart, so we've provided some additional notes about this process below. There is also a [technical appendix]() at the end of this document that provides more details about the metadata objects used in this step. Finally, feel free to ask [ask us questions](https://github.com/SafetyGraphics/safetyGraphics/issues) if you run in to problems. 
+This is the hardest part of creating a custom chart, so we've provided some additional notes about this process below. There is also a [technical appendix]() at the end of this document that provides more details about the metadata/settings objects used in this step. Finally, feel free to ask [ask us questions](https://github.com/SafetyGraphics/safetyGraphics/issues) if you run in to problems. 
 
  - The code to create the chart must be wrapped in a function that takes 2 parameters as inputs: `data` and `settings` as shown in line 1 above. When the chart function is called by Shiny, these parameters are generated dynamically within the app; `data` represents the user selection in the Data module, and `settings` represents the selections in the Settings Module.
   - The `data` parameter is saved as a `data.frame`, and a preview of the current data is conveniently available in the data tab.  
@@ -120,17 +121,17 @@ This is the hardest part of creating a custom chart, so we've provided some addi
 - Note that we dynamically identify the `Value` and `Measure` columns in lines 4 and 5 by referencing the `settings` object.  This code, as opposed to directly specifying a column name like `data$PARAM`, allows the chart to work with any data standard.
 - Line 9 initializes the chart using `ggplot()` with the newly derived `mapped_data`.
 - Line 13 introduces a custom setting - `settings[["boxcolor"]]` - so that the user can specify a color for the bars in the shiny app if desired. All custom settings must be initialized using the `addSetting()` function; this process is described in Step 2 below. 
-- Finally, note that the process for defining custom "htmlwidget" and "shiny module" charts is slightly different than the sample code above; examples 3 provides basic example for a shiny module, and htmlwidgets are discussed in Appendix 2. 
+- Finally, note that the process for defining custom "htmlwidget" and "shiny module" charts is slightly different than the sample code above; example 3 provides basic example for a shiny module, and htmlwidgets are discussed in Appendix 2. 
 
 ## Step 2 - Add custom settings to the App
 
 Next, we'll add any new settings to the app by calling the `addSetting()` function in our `customSettings.R` function.  
 
-First, we need to determine which settings are already defined. As noted above, our chart uses 3 settings: `value_col`, `measure_col` and `box_color`. In most cases you can just examine the  `settingsMetadata` data frame. Either view it with view(settingsMetadata) or use code like this:
+First, we need to determine which settings are already defined. As noted above, our chart uses 3 settings: `value_col`, `measure_col` and `box_color`. In most cases you can just examine the  `settingsMetadata` data frame, which contains all settings available in safetyGraphics, along with details about each. Either view it with view(settingsMetadata) or use code like this:
  
 <img src="https://user-images.githubusercontent.com/3680095/71829757-52fe6f00-3073-11ea-94c1-cee5e9e03553.png" style='max-width:700px'>
 
-In some complex cases, it might be easier to examine the metadata object directly. To do this, you can create a shell settings object and then check to see if the settings exist:
+In some complex cases, it might be easier to examine an example settings object directly (rather than the data frame representation). To do this, you can create a shell settings object and then check to see if the settings exist:
 
 <img src="https://user-images.githubusercontent.com/3680095/71829821-73c6c480-3073-11ea-973c-37281762a0b0.png" style='max-width:700px'>
 
@@ -234,7 +235,7 @@ jsonlite::toJSON(
 
 In general, there are 3 primary types of metadata used in the shiny app: chart metadata, setting metadata and data standard metadata. The metadata files that provide key information to the Shiny app and allow for the app to automatically be updated with new charts, settings, and standards. 
 
-The underlying technical framework for the metadata is somewhat complex. In general, we follow the recommendations from the [Data chapter](http://r-pkgs.had.co.nz/data.html) in Hadley Wickham's R Packages book. Using that workflow, we combine 5 "raw" metadata files (saved in `data-raw\`) in to 3 data files that are available as part of the package (saved in `data\` with documentation in `R\`). An R script to convert the 5 "raw" files to the 3 files in the package is saved as `data-raw\csv-to-rda.raw`, which is re-run whenever the metadata framework is updated. 
+The underlying technical framework for the metadata is somewhat complex. In general, we follow the recommendations from the [Data chapter](http://r-pkgs.had.co.nz/data.html) in Hadley Wickham's R Packages book. Using that workflow, we combine 5 "raw" metadata files (saved in `data-raw\`) in to 3 data files that are available as part of the package (saved in `data\` with documentation in `R\`). An R script to convert the 5 "raw" files to the 3 files in the package is saved as `data-raw\csv-to-rda.R`, which is re-run whenever the metadata framework is updated. 
 
 The `addChart()` and  `addSetting()` functions (and their evil twins `removeCharts()` and `removeSettings()`) allow users to customize these metadata files without actually rebuilding the entire package. These functions simply edit, add or remove rows from the `settingsMetadata` and `chartsMetadata` files saved in `data\` and then save local copies of the files that are used in place of the default versions. This customization is likely enough for most users, but developers looking to make permanent changes to the apps default must go a level deeper and edit the files saved in `data-raw/`. More detail about those raw files is provided below, and step-by-step instructions for creating a new default chart are provided in Appendix 2. 
 

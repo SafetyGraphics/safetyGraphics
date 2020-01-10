@@ -88,8 +88,7 @@
       <h1>safetyGraphics Shiny App - Adding Charts</h1>
                         <h4 class="author">Jeremy Wildfire</h4>
             
-
-            <h4 class="date">2020-01-06</h4>
+            <h4 class="date">2020-01-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/master/vignettes/addCharts.Rmd"><code>vignettes/addCharts.Rmd</code></a></small>
       <div class="hidden name"><code>addCharts.Rmd</code></div>
@@ -136,8 +135,8 @@ addChart(
   label=”Hello World”, 
 )</code></pre>
 <p>Then initialize the app (Step 4) by running:</p>
-<pre><code>&gt; setwd('/path/to/the/file/above')
-&gt; safetyGraphicsApp()</code></pre>
+<pre><code><a href="https://rdrr.io/r/base/getwd.html">setwd('/path/to/the/file/above')
+safetyGraphicsApp()</a></code></pre>
 <p>Once the app opens, click the charts tab to view the new custom “hello_world” chart.</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/71821298-c0080980-305f-11ea-979e-6574ac30f706.png" style="max-width:700px"></p>
 </div>
@@ -150,20 +149,21 @@ addChart(
 <a href="#step-1---create-custom-chart-code" class="anchor"></a>Step 1 - Create custom chart code</h2>
 <p>The first, and most complicated, step is to write the code for the custom chart. It’s easiest to break this process down in to 3 smaller steps.</p>
 <ol style="list-style-type: decimal">
-<li>Create customSettings.R script</li>
+<li>Create customSettings.R file</li>
 <li>Make static code using sample data</li>
 <li>Covert static chart code to Function</li>
 </ol>
-<div id="step-1-1---create-customsettings-r-script" class="section level3">
+<div id="step-1-1---create-customsettings-r-file" class="section level3">
 <h3 class="hasAnchor">
-<a href="#step-1-1---create-customsettings-r-script" class="anchor"></a>Step 1.1 - Create customSettings.R Script</h3>
-<p>First, Create a file called customSettings.R and save it in your working directory. All of the code in the following steps goes in this file. Note that when you run the app, custom medatadata files will be saved in your working directory, so you might want to call setwd() and put this somewhere out of the way.</p>
+<a href="#step-1-1---create-customsettings-r-file" class="anchor"></a>Step 1.1 - Create customSettings.R file</h3>
+<p>First, create a file called customSettings.R and save it in a designated directory. All of the code in the following steps goes in this file. Note that when you run the app, custom medatadata files will be saved in the same directory as the customSettings.R file.</p>
 </div>
 <div id="step-1-2---make-static-code-using-sample-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#step-1-2---make-static-code-using-sample-data" class="anchor"></a>Step 1.2 - Make Static Code Using Sample Data</h3>
-<p>Next, write some sample code for your chart using a sample data set (the <code>adlbc</code> data set included with safetyGraphics is a good option). Note that all common charting packages are supported including <code>ggplot2</code>, <code>lattice</code> and base R graphics. Our example makes a histogram showing the distribution of lab values:</p>
+<p>Next, write code that creates your chart using a sample data set (the <code>adlbc</code> data set included with safetyGraphics is a good option). Note that all common charting packages are supported including <code>ggplot2</code>, <code>lattice</code> and base R graphics. Our example makes a histogram showing the distribution of lab values:</p>
 <pre><code>library(safetyGraphics)
+library(ggplot2)
 ggplot(
     data = adlbc, 
     aes(x = PARAM, y = AVAL)
@@ -182,9 +182,9 @@ ggplot(
 <div id="step-1-3---convert-static-chart-code-to-a-function" class="section level3">
 <h3 class="hasAnchor">
 <a href="#step-1-3---convert-static-chart-code-to-a-function" class="anchor"></a>Step 1.3 - Convert Static Chart Code to a Function</h3>
-<p>After the chart is working on the sample data, you need to update it to a function that will work with any data set that the user loads in the shiny app. Replace hard coded parameters with references to the settings defined in the safetyGraphics metadata object as shown below.</p>
+<p>After the chart is working using the sample data, you need to update it to a function that will work with any data set that the user loads in the shiny app. Replace hard coded parameters with references to the settings defined in the safetyGraphics settings object as shown below.</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/71829373-7bd23480-3072-11ea-9ac5-9b6dbb0c82d3.png" style="max-width:700px"></p>
-<p>This is the hardest part of creating a custom chart, so we’ve provided some additional notes about this process below. There is also a <a href="">technical appendix</a> at the end of this document that provides more details about the metadata objects used in this step. Finally, feel free to ask <a href="https://github.com/SafetyGraphics/safetyGraphics/issues">ask us questions</a> if you run in to problems.</p>
+<p>This is the hardest part of creating a custom chart, so we’ve provided some additional notes about this process below. There is also a <a href="">technical appendix</a> at the end of this document that provides more details about the metadata/settings objects used in this step. Finally, feel free to ask <a href="https://github.com/SafetyGraphics/safetyGraphics/issues">ask us questions</a> if you run in to problems.</p>
 <ul>
 <li>The code to create the chart must be wrapped in a function that takes 2 parameters as inputs: <code>data</code> and <code>settings</code> as shown in line 1 above. When the chart function is called by Shiny, these parameters are generated dynamically within the app; <code>data</code> represents the user selection in the Data module, and <code>settings</code> represents the selections in the Settings Module.</li>
 <li>The <code>data</code> parameter is saved as a <code>data.frame</code>, and a preview of the current data is conveniently available in the data tab.<br>
@@ -194,7 +194,7 @@ ggplot(
 <li>Note that we dynamically identify the <code>Value</code> and <code>Measure</code> columns in lines 4 and 5 by referencing the <code>settings</code> object. This code, as opposed to directly specifying a column name like <code>data$PARAM</code>, allows the chart to work with any data standard.</li>
 <li>Line 9 initializes the chart using <code>ggplot()</code> with the newly derived <code>mapped_data</code>.</li>
 <li>Line 13 introduces a custom setting - <code>settings[["boxcolor"]]</code> - so that the user can specify a color for the bars in the shiny app if desired. All custom settings must be initialized using the <code><a href="../reference/addSetting.html">addSetting()</a></code> function; this process is described in Step 2 below.</li>
-<li>Finally, note that the process for defining custom “htmlwidget” and “shiny module” charts is slightly different than the sample code above; examples 3 provides basic example for a shiny module, and htmlwidgets are discussed in Appendix 2.</li>
+<li>Finally, note that the process for defining custom “htmlwidget” and “shiny module” charts is slightly different than the sample code above; example 3 provides basic example for a shiny module, and htmlwidgets are discussed in Appendix 2.</li>
 </ul>
 </div>
 </div>
@@ -202,9 +202,9 @@ ggplot(
 <h2 class="hasAnchor">
 <a href="#step-2---add-custom-settings-to-the-app" class="anchor"></a>Step 2 - Add custom settings to the App</h2>
 <p>Next, we’ll add any new settings to the app by calling the <code><a href="../reference/addSetting.html">addSetting()</a></code> function in our <code>customSettings.R</code> function.</p>
-<p>First, we need to determine which settings are already defined. As noted above, our chart uses 3 settings: <code>value_col</code>, <code>measure_col</code> and <code>box_color</code>. In most cases you can just examine the <code>settingsMetadata</code> data frame. Either view it with view(settingsMetadata) or use code like this:</p>
+<p>First, we need to determine which settings are already defined. As noted above, our chart uses 3 settings: <code>value_col</code>, <code>measure_col</code> and <code>box_color</code>. In most cases you can just examine the <code>settingsMetadata</code> data frame, which contains all settings available in safetyGraphics, along with details about each. Either view it with view(settingsMetadata) or use code like this:</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/71829757-52fe6f00-3073-11ea-94c1-cee5e9e03553.png" style="max-width:700px"></p>
-<p>In some complex cases, it might be easier to examine the metadata object directly. To do this, you can create a shell settings object and then check to see if the settings exist:</p>
+<p>In some complex cases, it might be easier to examine an example settings object directly (rather than the data frame representation). To do this, you can create a shell settings object and then check to see if the settings exist:</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/71829821-73c6c480-3073-11ea-973c-37281762a0b0.png" style="max-width:700px"></p>
 <p>As shown in the output above, our example uses 2 pre-loaded settings (<code>measure_col</code> and <code>value_col</code>) and one new setting (<code>boxcolor</code>). We add boxcolor to the metadata using the <code><a href="../reference/addSetting.html">addSetting()</a></code> function as shown below.</p>
 <pre><code><a href="../reference/addSetting.html">addSetting( 
@@ -281,7 +281,7 @@ jsonlite::toJSON(
 <h2 class="hasAnchor">
 <a href="#metadata-framework" class="anchor"></a>Metadata framework</h2>
 <p>In general, there are 3 primary types of metadata used in the shiny app: chart metadata, setting metadata and data standard metadata. The metadata files that provide key information to the Shiny app and allow for the app to automatically be updated with new charts, settings, and standards.</p>
-<p>The underlying technical framework for the metadata is somewhat complex. In general, we follow the recommendations from the <a href="http://r-pkgs.had.co.nz/data.html">Data chapter</a> in Hadley Wickham’s R Packages book. Using that workflow, we combine 5 “raw” metadata files (saved in <code>data-raw\</code>) in to 3 data files that are available as part of the package (saved in <code>data\</code> with documentation in <code>R\</code>). An R script to convert the 5 “raw” files to the 3 files in the package is saved as <code>data-raw\csv-to-rda.raw</code>, which is re-run whenever the metadata framework is updated.</p>
+<p>The underlying technical framework for the metadata is somewhat complex. In general, we follow the recommendations from the <a href="http://r-pkgs.had.co.nz/data.html">Data chapter</a> in Hadley Wickham’s R Packages book. Using that workflow, we combine 5 “raw” metadata files (saved in <code>data-raw\</code>) in to 3 data files that are available as part of the package (saved in <code>data\</code> with documentation in <code>R\</code>). An R script to convert the 5 “raw” files to the 3 files in the package is saved as <code>data-raw\csv-to-rda.R</code>, which is re-run whenever the metadata framework is updated.</p>
 <p>The <code><a href="../reference/addChart.html">addChart()</a></code> and <code><a href="../reference/addSetting.html">addSetting()</a></code> functions (and their evil twins <code><a href="../reference/removeCharts.html">removeCharts()</a></code> and <code><a href="../reference/removeSettings.html">removeSettings()</a></code>) allow users to customize these metadata files without actually rebuilding the entire package. These functions simply edit, add or remove rows from the <code>settingsMetadata</code> and <code>chartsMetadata</code> files saved in <code>data\</code> and then save local copies of the files that are used in place of the default versions. This customization is likely enough for most users, but developers looking to make permanent changes to the apps default must go a level deeper and edit the files saved in <code>data-raw/</code>. More detail about those raw files is provided below, and step-by-step instructions for creating a new default chart are provided in Appendix 2.</p>
 <ul>
 <li><p><strong>Charts Metadata (chartsMetadata.csv)</strong>: This file informs the Shiny app about all of the chart modules that should be made available to the user. The structure of this file is 1 row per chart. Columns contain chart-specific details such as chart name, type, and size.</p></li>

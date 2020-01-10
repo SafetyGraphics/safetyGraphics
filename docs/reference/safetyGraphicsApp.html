@@ -133,7 +133,8 @@
     </div>
 
     <pre class="usage"><span class='fu'>safetyGraphicsApp</span>(<span class='kw'>charts</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>maxFileSize</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>settingsLocation</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>customSettings</span> <span class='kw'>=</span> <span class='st'>"customSettings.R"</span>)</pre>
+  <span class='kw'>settingsLocation</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>customSettings</span> <span class='kw'>=</span> <span class='st'>"customSettings.R"</span>,
+  <span class='kw'>loadData</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,6 +154,10 @@
     <tr>
       <th>customSettings</th>
       <td><p>Name of R script containing settings customizations to be run before the app is initialized. This is the recommended way to add additional charts (via addChart()), settings (addSetting()) and data standards (addStandard()). default = 'settingsLocation/customSettings.R'</p></td>
+    </tr>
+    <tr>
+      <th>loadData</th>
+      <td><p>Option to pre-load data into the app. Defaults to <code>FALSE</code>.</p></td>
     </tr>
     </table>
     

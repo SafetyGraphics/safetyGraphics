@@ -277,6 +277,9 @@
 #&gt; 
 #&gt; $unscheduled_visit_pattern
 #&gt; [1] "/unscheduled|early termination/i"
+#&gt; 
+#&gt; $calculate_palt
+#&gt; NULL
 #&gt; </div><div class='input'><span class='fu'>generateSettings</span>(<span class='kw'>standard</span><span class='kw'>=</span><span class='st'>"SdTm"</span>) <span class='co'>#also ok</span></div><div class='output co'>#&gt; $id_col
 #&gt; [1] "USUBJID"
 #&gt; 
@@ -378,6 +381,9 @@
 #&gt; 
 #&gt; $unscheduled_visit_pattern
 #&gt; [1] "/unscheduled|early termination/i"
+#&gt; 
+#&gt; $calculate_palt
+#&gt; NULL
 #&gt; </div><div class='input'><span class='fu'>generateSettings</span>(<span class='kw'>standard</span><span class='kw'>=</span><span class='st'>"ADaM"</span>)</div><div class='output co'>#&gt; $id_col
 #&gt; [1] "USUBJID"
 #&gt; 
@@ -479,6 +485,9 @@
 #&gt; 
 #&gt; $unscheduled_visit_pattern
 #&gt; [1] "/unscheduled|early termination/i"
+#&gt; 
+#&gt; $calculate_palt
+#&gt; NULL
 #&gt; </div><div class='input'><span class='no'>pkeys</span><span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"id_col"</span>,<span class='st'>"measure_col"</span>,<span class='st'>"value_col"</span>)
 <span class='fu'>generateSettings</span>(<span class='kw'>standard</span><span class='kw'>=</span><span class='st'>"adam"</span>, <span class='kw'>partial</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>partial_keys</span><span class='kw'>=</span><span class='no'>pkeys</span>)</div><div class='output co'>#&gt; $id_col
 #&gt; [1] "USUBJID"
@@ -581,6 +590,9 @@
 #&gt; 
 #&gt; $unscheduled_visit_pattern
 #&gt; [1] "/unscheduled|early termination/i"
+#&gt; 
+#&gt; $calculate_palt
+#&gt; NULL
 #&gt; </div><div class='input'>
 <span class='fu'>generateSettings</span>(<span class='kw'>standard</span><span class='kw'>=</span><span class='st'>"a different standard"</span>)</div><div class='output co'>#&gt; $id_col
 #&gt; NULL
@@ -683,6 +695,9 @@
 #&gt; 
 #&gt; $unscheduled_visit_pattern
 #&gt; [1] "/unscheduled|early termination/i"
+#&gt; 
+#&gt; $calculate_palt
+#&gt; NULL
 #&gt; </div><div class='input'>#returns shell settings list with no data mapping
 
 </div></pre>

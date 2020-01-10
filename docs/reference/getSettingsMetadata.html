@@ -204,6 +204,7 @@
 #&gt; 30       visits_without_data              Visits without data
 #&gt; 31        unscheduled_visits               Unscheduled visits
 #&gt; 32 unscheduled_visit_pattern        Unscheduled visit pattern
+#&gt; 33            calculate_palt                 Calculate PALT? 
 #&gt;                                                                                                                                                                                                                      description
 #&gt; 1                                                                                                                                                                                       Unique subject identifier variable name.
 #&gt; 2                                                                                                                                                                                                      Lab result variable name.
@@ -237,6 +238,7 @@
 #&gt; 30                                                                                                                                                               Controls display of visits without data for the current measure
 #&gt; 31                                                                                                                                                                                        Controls display of unscheduled visits
 #&gt; 32                                                                                                                                                                       A regular expression that identifies unscheduled visits
+#&gt; 33  Specifies whether PALT should be shown in the participant details.  PALT shows promise in predicting the percentage hepatocyte loss on the basis of the maximum value and the AUC of serum ALT observed during a DILI event.
 #&gt;    setting_type setting_required column_mapping column_type field_mapping
 #&gt; 1     character             TRUE           TRUE   character         FALSE
 #&gt; 2     character             TRUE           TRUE     numeric         FALSE
@@ -270,6 +272,7 @@
 #&gt; 30      logical            FALSE          FALSE        &lt;NA&gt;         FALSE
 #&gt; 31      logical            FALSE          FALSE        &lt;NA&gt;         FALSE
 #&gt; 32    character            FALSE          FALSE        &lt;NA&gt;         FALSE
+#&gt; 33      logical            FALSE          FALSE        &lt;NA&gt;         FALSE
 #&gt;           field_column_key setting_cat
 #&gt; 1                                 data
 #&gt; 2                                 data
@@ -303,6 +306,7 @@
 #&gt; 30                                data
 #&gt; 31                                data
 #&gt; 32                                data
+#&gt; 33                          appearance
 #&gt;                                                                                                                                                                            default
 #&gt; 1                                                                                                                                                                             NULL
 #&gt; 2                                                                                                                                                                             NULL
@@ -336,6 +340,7 @@
 #&gt; 30                                                                                                                                                                           FALSE
 #&gt; 31                                                                                                                                                                           FALSE
 #&gt; 32                                                                                                                                                /unscheduled|early termination/i
+#&gt; 33                                                                                                                                                                            NULL
 #&gt;    chart_hepexplorer chart_safetyhistogram chart_safetyoutlierexplorer
 #&gt; 1               TRUE                  TRUE                        TRUE
 #&gt; 2               TRUE                  TRUE                        TRUE
@@ -369,6 +374,7 @@
 #&gt; 30             FALSE                 FALSE                        TRUE
 #&gt; 31             FALSE                 FALSE                        TRUE
 #&gt; 32             FALSE                 FALSE                        TRUE
+#&gt; 33              TRUE                 FALSE                       FALSE
 #&gt;    chart_safetyshiftplot chart_safetyresultsovertime
 #&gt; 1                   TRUE                        TRUE
 #&gt; 2                   TRUE                        TRUE
@@ -402,6 +408,7 @@
 #&gt; 30                 FALSE                        TRUE
 #&gt; 31                 FALSE                        TRUE
 #&gt; 32                 FALSE                        TRUE
+#&gt; 33                 FALSE                       FALSE
 #&gt;    chart_paneledoutlierexplorer chart_safetydeltadelta
 #&gt; 1                          TRUE                   TRUE
 #&gt; 2                          TRUE                   TRUE
@@ -435,6 +442,7 @@
 #&gt; 30                         TRUE                  FALSE
 #&gt; 31                         TRUE                  FALSE
 #&gt; 32                         TRUE                  FALSE
+#&gt; 33                        FALSE                  FALSE
 #&gt;                                 sdtm                             adam
 #&gt; 1                            USUBJID                          USUBJID
 #&gt; 2                             STRESN                             AVAL
@@ -467,7 +475,8 @@
 #&gt; 29                                                                   
 #&gt; 30                                                                   
 #&gt; 31                                                                   
-#&gt; 32                                                                   </div><div class='input'><span class='co'># Returns a full copy of settingsMetadata.Rda</span>
+#&gt; 32                                                                   
+#&gt; 33                              &lt;NA&gt;                             &lt;NA&gt;</div><div class='input'><span class='co'># Returns a full copy of settingsMetadata.Rda</span>
 
 <span class='kw pkg'>safetyGraphics</span><span class='kw ns'>:::</span><span class='fu'><a href='https://rdrr.io/pkg/safetyGraphics/man/getSettingsMetadata.html'>getSettingsMetadata</a></span>(<span class='kw'>text_keys</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"id_col"</span>))</div><div class='output co'>#&gt;   text_key     label                              description setting_type
 #&gt; 1   id_col ID column Unique subject identifier variable name.    character
