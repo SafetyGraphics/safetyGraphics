@@ -39,12 +39,12 @@ safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL,
   # run the custom settings file (if it exists)
   customSettingsScript<-file.path(settingsLocation, customSettings)  
 
-  if(file.exists(customSettingsScript)){
+  if(length(customSettingsScript)>0 && file.exists(customSettingsScript)){
     source(customSettingsScript)
   }
 
   chartsMetaPath <- file.path(settingsLocation,"chartsMetadata.Rds")  
-  if(file.exists(chartsMetaPath)){
+  if(length(chartsMetaPath)>0 && file.exists(chartsMetaPath)){
     options(sg_chartsMetadata=TRUE)
     options(sg_chartsMetadata_df=readRDS(chartsMetaPath))
 
@@ -55,7 +55,7 @@ safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL,
   }
 
   settingsMetaPath <- file.path(settingsLocation,"settingsMetadata.Rds")  
-  if(file.exists(settingsMetaPath)){
+  if(length(settingsMetaPath)>0 && file.exists(settingsMetaPath)){
     options(sg_settingsMetadata=TRUE)
     options(sg_settingsMetadata_df=readRDS(settingsMetaPath))
   } else {
@@ -64,7 +64,7 @@ safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL,
   }
 
   standardsMetaPath <- file.path(settingsLocation,"standardsMetadata.Rds")  
-  if(file.exists(standardsMetaPath)){
+  if(length(standardsMetaPath)>0 && file.exists(standardsMetaPath)){
     options(sg_standardsMetadata=TRUE)
     options(sg_standardsMetadata_df=readRDS(standardsMetaPath))
   } else {
