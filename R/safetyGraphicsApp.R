@@ -2,7 +2,7 @@
 #'
 #' @param charts Character vector of charts to include
 #' @param maxFileSize maximum file size in MB allowed for file upload
-#' @param settingsLocation folder location of user-defined settings metadata. Files should be named settingsMetadata.rda, chartsMetadata.rda and standardsMetadata.rda and use the same structure established in the /data folder.
+#' @param settingsLocation folder location of user-defined settings metadata. Files should be named settingsMetadata.rda, chartsMetadata.rda and standardsMetadata.rda and use the same structure established in the /data folder. Defaults to current working directory.   
 #' @param customSettings Name of R script containing settings customizations to be run before the app is initialized. This is the recommended way to add additional charts (via addChart()), settings (addSetting()) and data standards (addStandard()). default = 'settingsLocation/customSettings.R'
 #' @param loadData Option to pre-load data into the app. Defaults to \code{FALSE}.
 #'
