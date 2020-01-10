@@ -1,6 +1,6 @@
 context("Tests for the generateSettings() function")
 library(safetyGraphics)
-setting_names<-c("id_col","value_col","measure_col","normal_col_low","normal_col_high","studyday_col", "visit_col", "visitn_col", "filters","group_cols", "measure_values", "baseline", "analysisFlag", "x_options", "y_options", "visit_window", "r_ratio_filter", "r_ratio_cut", "showTitle", "warningText", "unit_col", "start_value", "details", "missingValues", "unscheduled_visit_pattern","unscheduled_visits","visits_without_data")
+setting_names<-c("id_col","value_col","measure_col","normal_col_low","normal_col_high","studyday_col", "visit_col", "visitn_col", "filters","group_cols", "measure_values", "baseline", "analysisFlag", "x_options", "y_options", "visit_window", "r_ratio_filter", "r_ratio_cut", "showTitle", "warningText", "unit_col", "start_value", "details", "missingValues", "unscheduled_visit_pattern","unscheduled_visits","visits_without_data",'calculate_palt')
 
 test_that("a list with the expected properties and structure is returned for all standards",{
   
