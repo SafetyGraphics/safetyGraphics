@@ -1,6 +1,6 @@
 #' Create an interactive graphics widget
 #'
-#' This function creates an nice interactive widget. See this vingette for more details regarding how to customize charts.
+#' This function creates an nice interactive widget. See the vignettes for more details regarding how to customize charts.
 #'
 #' @param data A data frame containing the labs data. Data must be structured as one record per study participant per time point per lab measure.
 #' @param debug_js print settings in javascript before rendering chart. Default: \code{FALSE}.

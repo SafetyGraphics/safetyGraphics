@@ -1,4 +1,4 @@
-#' Subset a settings object to thsoe relevant for a list of charts
+#' Subset a settings object to those relevant for a list of charts
 #'
 #' This function returns a settings object 
 #'
