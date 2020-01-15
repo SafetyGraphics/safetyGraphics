@@ -109,7 +109,7 @@ createControl <- function(key, metadata, data, settings, ns){
   div(
     class="control-wrap",
     id=ns(ctl_id),
-    span(title = paste0(setting_description," ",setting_required), tags$label(HTML(setting_label))),
+    span(title = paste0(setting_description," ",setting_required, " (text_key: ", key, ")"), tags$label(HTML(setting_label))),
     span(class="num_charts", 
          title = HTML(paste0(charts_rel, collapse="\n")), 
          tags$label(paste0("(", length(charts_rel), ")"))),

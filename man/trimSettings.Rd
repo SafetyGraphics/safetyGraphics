@@ -2,7 +2,7 @@
 % Please edit documentation in R/trimSettings.R
 \name{trimSettings}
 \alias{trimSettings}
-\title{Subset a settings object to thsoe relevant for a list of charts}
+\title{Subset a settings object to those relevant for a list of charts}
 \usage{
 trimSettings(settings, charts = NULL)
 }

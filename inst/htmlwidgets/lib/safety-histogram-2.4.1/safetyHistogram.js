@@ -2,8 +2,8 @@
     typeof exports === 'object' && typeof module !== 'undefined'
         ? (module.exports = factory(require('d3'), require('webcharts')))
         : typeof define === 'function' && define.amd
-            ? define(['d3', 'webcharts'], factory)
-            : (global.safetyHistogram = factory(global.d3, global.webCharts));
+        ? define(['d3', 'webcharts'], factory)
+        : (global.safetyHistogram = factory(global.d3, global.webCharts));
 })(this, function(d3, webcharts) {
     'use strict';
 
@@ -235,8 +235,8 @@
                         label: filter.label
                             ? filter.label
                             : filter.value_col
-                                ? filter.value_col
-                                : filter
+                            ? filter.value_col
+                            : filter
                     });
                 });
         defaultDetails.push({ value_col: settings.value_col, label: 'Result' });
@@ -270,8 +270,8 @@
                         label: detail.label
                             ? detail.label
                             : detail.value_col
-                                ? detail.value_col
-                                : detail
+                            ? detail.value_col
+                            : detail
                     });
             });
             settings.details = defaultDetails;
@@ -1146,20 +1146,20 @@
                       (this.removedRecords.nonNumeric > 1 ? 's' : '') +
                       ' with a non-numeric result were removed.'
                     : this.removedRecords.missing > 0
-                        ? this.removedRecords.missing +
-                          ' record' +
-                          (this.removedRecords.missing > 1 ? 's' : '') +
-                          ' with a missing result ' +
-                          (this.removedRecords.missing > 1 ? 'were' : 'was') +
-                          ' removed.'
-                        : this.removedRecords.nonNumeric > 0
-                            ? this.removedRecords.nonNumeric +
-                              ' record' +
-                              (this.removedRecords.nonNumeric > 1 ? 's' : '') +
-                              ' with a non-numeric result ' +
-                              (this.removedRecords.nonNumeric > 1 ? 'were' : 'was') +
-                              ' removed.'
-                            : '';
+                    ? this.removedRecords.missing +
+                      ' record' +
+                      (this.removedRecords.missing > 1 ? 's' : '') +
+                      ' with a missing result ' +
+                      (this.removedRecords.missing > 1 ? 'were' : 'was') +
+                      ' removed.'
+                    : this.removedRecords.nonNumeric > 0
+                    ? this.removedRecords.nonNumeric +
+                      ' record' +
+                      (this.removedRecords.nonNumeric > 1 ? 's' : '') +
+                      ' with a non-numeric result ' +
+                      (this.removedRecords.nonNumeric > 1 ? 'were' : 'was') +
+                      ' removed.'
+                    : '';
             this.removedRecords.container = this.controls.wrap
                 .append('div')
                 .style({
@@ -1250,8 +1250,8 @@
                 return filter.val === 'All'
                     ? true
                     : Array.isArray(filter.val)
-                        ? filter.val.includes(d[filter.col])
-                        : filter.val === d[filter.col];
+                    ? filter.val.includes(d[filter.col])
+                    : filter.val === d[filter.col];
             });
         });
 
@@ -1543,8 +1543,8 @@
             this.measure[this.measure.domain_state].stats.range > 0
                 ? Math.abs(this.measure[this.measure.domain_state].stats.range / 15) // non-zero range
                 : this.measure[this.measure.domain_state].results[0] !== 0
-                    ? Math.abs(this.measure[this.measure.domain_state].results[0] / 15) // zero range, non-zero result(s)
-                    : 1; // zero range, zero result(s)
+                ? Math.abs(this.measure[this.measure.domain_state].results[0] / 15) // zero range, non-zero result(s)
+                : 1; // zero range, zero result(s)
         if (step < 1) {
             var x10 = 0;
             do {
@@ -1973,12 +1973,12 @@
                     'title',
                     normalRanges.length > 1
                         ? this.measure.current +
-                          ' normal ranges:\n' +
-                          normalRanges
-                              .map(function(normalRange) {
-                                  return normalRange.tooltip;
-                              })
-                              .join('\n')
+                              ' normal ranges:\n' +
+                              normalRanges
+                                  .map(function(normalRange) {
+                                      return normalRange.tooltip;
+                                  })
+                                  .join('\n')
                         : this.measure.current + ' normal range: ' + normalRanges[0].tooltip
                 )
                 .style('cursor', 'default');
@@ -2180,20 +2180,23 @@
             syncedSettings
         );
         var listing = webcharts.createTable(element, listingSettings);
-
+        listing.on('layout', function() {
+            //Style table
+            this.wrap.style('display', 'none');
+            this.wrap.selectAll('.table-top,table,.table-bottom').style({
+                float: 'left',
+                clear: 'left',
+                width: '100%'
+            });
+            this.table.style('white-space', 'nowrap');
+        });
         //Attach listing to chart.
         chart.listing = listing;
         listing.chart = chart;
 
         //Initialize listing and hide initially.
+
         chart.listing.init([]);
-        chart.listing.wrap.style('display', 'none');
-        chart.listing.wrap.selectAll('.table-top,table,.table-bottom').style({
-            float: 'left',
-            clear: 'left',
-            width: '100%'
-        });
-        chart.listing.table.style('white-space', 'nowrap');
 
         return chart;
     }

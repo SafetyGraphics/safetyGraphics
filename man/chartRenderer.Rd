@@ -16,7 +16,7 @@ chartRenderer(data, debug_js = FALSE, settings = NULL, chart = NULL)
 \item{chart}{name of the chart to render}
 }
 \description{
-This function creates an nice interactive widget. See this vingette for more details regarding how to customize charts.
+This function creates an nice interactive widget. See the vignettes for more details regarding how to customize charts.
 }
 \examples{
 \dontrun{

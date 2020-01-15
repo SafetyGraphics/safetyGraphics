@@ -1,6 +1,6 @@
 Package: safetyGraphics
 Title: Create Interactive Graphics Related to Clinical Trial Safety
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: c(
 	person("Jeremy", "Wildfire", email = "jeremy_wildfire@rhoworld.com", role = c("cre","aut")),
 	person("Becca", "Krouse", role="aut"),
@@ -8,11 +8,12 @@ Authors@R: c(
 	person("Xiao","Ni", role = "aut"),
 	person("James","Buchanan", role="aut"),
 	person("Susan","Duke", role="aut"),
+	person("Interactive Safety Graphics Working Group", role = "aut"),
 	person("Rho Inc.", role = "cph"))
 Maintainer: Jeremy Wildfire <jeremy_wildfire@rhoworld.com>
 Description: A framework for evaluation of clinical trial safety. Users can interactively explore their data using the 'Shiny' application or create standalone 'htmlwidget' charts. Interactive charts are built using 'd3.js' and 'webcharts.js' 'JavaScript' libraries.
-URL: https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics
-BugReports: https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/issues
+URL: https://github.com/SafetyGraphics/safetyGraphics
+BugReports: https://github.com/SafetyGraphics/safetyGraphics/issues
 Depends: R (>= 3.5)
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -21,7 +22,9 @@ RoxygenNote: 6.1.1
 Suggests:
     testthat,
     shinytest,
-    knitr
+    knitr,
+    ggplot2,
+    plotly
 Imports:
     dplyr,
     htmlwidgets,
@@ -38,5 +41,6 @@ Imports:
     utils,
     haven,
     shinyWidgets,
-    tidyr
+    tidyr,
+    shinybusy
 VignetteBuilder: knitr

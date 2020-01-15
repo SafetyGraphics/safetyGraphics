@@ -1,0 +1,10 @@
+pandoc: 1.19.2.1
+pkgdown: 1.4.1
+pkgdown_sha: ~
+articles:
+  customWorkflows: customWorkflows.html
+  shinyUserGuide: shinyUserGuide.html
+urls:
+  reference: https://pages.github.com/SafetyGraphics/safetyGraphics/reference
+  article: https://pages.github.com/SafetyGraphics/safetyGraphics/articles
+

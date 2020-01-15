@@ -1,6 +1,6 @@
 #' Create an interactive graphics widget
 #'
-#' This function creates an nice interactive widget. See this vingette for more details regarding how to customize charts.
+#' This function creates an nice interactive widget. See the vignettes for more details regarding how to customize charts.
 #'
 #' @param data A data frame containing the labs data. Data must be structured as one record per study participant per time point per lab measure.
 #' @param debug_js print settings in javascript before rendering chart. Default: \code{FALSE}.
@@ -42,6 +42,14 @@
 #'
 #' @export
 chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
+  # load chart metadata (use custom data if available)
+  chartmeta<-safetyGraphics::chartsMetadata
+  if(!(is.null(options('sg_chartsMetadata')[[1]]))){ #if the option exists
+    if(options('sg_chartsMetadata')[[1]]){ #and it's set to true
+      chartmeta<-options('sg_chartsMetadata_df')[[1]]
+    }
+  }
+
   # Chart specific customizastions (to be removed after js updates)
   if(chart %in% c("paneledoutlierexplorer","safetyoutlierexplorer")){
     settings$time_cols <- list(list(),list());
@@ -83,16 +91,18 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
       rotate_tick_labels= TRUE,
       vertical_space= 100
     )
-    
+
     settings$groups = settings$group_cols
   }
 
   #Set Chart Width
-  chartMaxWidth<-  safetyGraphics::chartsMetadata %>% filter(.data$chart==!!chart) %>% pull(.data$maxWidth)
+  chartMaxWidth<-  chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$maxWidth)
   settings$max_width <- chartMaxWidth
-  
+
   #Renderer
-  chartFunction<- safetyGraphics::chartsMetadata %>% filter(.data$chart==!!chart) %>% pull(.data$main)
+  chartFunction<- chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$main)
+  chartType <- chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$type)
+
   rSettings = list(
     data = data,
     debug_js=debug_js,
@@ -104,15 +114,19 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
     )
   )
 
-  # create widget
-  htmlwidgets::createWidget(
-    name = 'chartRenderer',
-    rSettings,
-    # width = width,
-    # height = height,
-    package = 'safetyGraphics',
-    sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE)
-  )
+  if (chartType=="htmlwidget"){
+    # create widget
+    htmlwidgets::createWidget(
+      name = 'chartRenderer',
+      rSettings,
+      # width = width,
+      # height = height,
+      package = 'safetyGraphics',
+      sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE)
+    )
+  } else {
+    createChart(chartType, rSettings)
+  }
 }
 
 #' Shiny bindings for chartRenderer

@@ -41,4 +41,7 @@ packrat/lib*/
 
 #Local shinyTest folders
 inst/eDISH_app/tests/*-current/
+customSettings/
 
+doc
+Meta

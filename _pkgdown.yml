@@ -1,0 +1,38 @@
+url: https://pages.github.com/SafetyGraphics/safetyGraphics
+
+template:
+  params:
+    bootswatch: cerulean
+    
+navbar:
+  right:
+    - icon: fa-github
+      href: https://github.com/SafetyGraphics/safetyGraphics
+
+development:
+  mode: release
+
+
+reference:
+  - title: Main Functions
+    contents:
+      - safetyGraphicsApp
+  - title: Helper Functions
+    desc: these functions are used by the main app
+    contents:
+      - addChart
+      - addSetting
+      - adlbc
+      - chartRenderer-shiny
+      - chartRenderer
+      - chartsMetadata
+      - detectStandard
+      - generateSettings
+      - getRequiredSettings
+      - getSettingsMetadata
+      - removeCharts
+      - removeSettings
+      - settingsMetadata
+      - standardsMetadata
+      - trimSettings
+      - validateSettings
