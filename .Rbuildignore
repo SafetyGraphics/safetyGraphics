@@ -12,3 +12,5 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^doc$
+^CRAN-RELEASE$
+^customSettings$
