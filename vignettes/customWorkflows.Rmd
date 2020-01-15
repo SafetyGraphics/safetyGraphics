@@ -1,10 +1,10 @@
 ---
-title: "safetyGraphics Shiny App - Adding Charts"
+title: "safetyGraphics Shiny App - Custom Workflows"
 author: "Jeremy Wildfire"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{safetyGraphics Shiny App - Adding Charts}
+  %\VignetteIndexEntry{safetyGraphics Shiny App - Custom Workflows}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,11 +15,34 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-
 # Overview
-The safetyGraphics package is designed to serve as a flexible and extensible platform for analyzing clinical trial safety. This vignette shows how users can easily add custom charts to the safetyGraphics shiny app.
+The safetyGraphics package is designed to serve as a flexible and extensible platform for analyzing clinical trial safety. This vignette shows how users can configure the safetyGraphics shiny app with workflows using customized charts and data.
 
-As of the v1.1 release, safetyGraphics supports 4 types of charts - Static charts, Plotly charts, Shiny Modules and HTML widgets. Behind the scenes, all 4 chart types have two major technical components: **code** and **metadata**. As such, making a custom chart requires the user to create an R script that defines the chart's code and metadata. The examples below describe the step-by-step process for creating a chart.
+Version 1.1 of the package allows users to  preload their own charts and data sets for use in the safetyGraphics Shiny Application. Many types of clinical trial lab data are supported in conjunction with 4 types of charts - Static charts, Plotly charts, Shiny Modules and HTML widgets. As shown in the next section, loading data is simple, but adding custom charts is slightly more complex. Behind the scenes, all 4 chart types have two major technical components: **code** and **metadata**. As such, making a custom chart requires the user to create an R script that defines the chart's code and metadata. We provide several examples below that describe the step-by-step process for creating a chart.
+
+# Adding Custom Data
+
+Run `safetyGraphicsApp(loadData=TRUE)` to preload all data.frames from your current R session in a new instance of the safetyGraphics Shiny app. While users can still manually load additional `.csv` or `.sas7bdat` files in the app as needed, this programatic alternative allows for more flexibility for loading other data sources, and can help to automate situations where users want to load multiple files. For example, running the code below will preload several example data sets saved on our GitHub site. 
+
+```
+#Load in data sets with different data standards
+data_url <- 'https://raw.githubusercontent.com/SafetyGraphics/SafetyGraphics.github.io/master/pilot/'
+SDTM<-read.csv(paste0(data_url,'SampleData_SDTM.csv'))
+SDTM_Partial<-read.csv(paste0(data_url,'SampleData_PartialSDTM.csv'))
+AdAM_Partial<-read.csv(paste0(data_url,'SampleData_PartialADaM.csv'))
+NoStandard<-read.csv (paste0(data_url,'SampleData_NoStandard.csv'))
+AdAM <- adlbc #loadData=TRUE overrides the default behavior where adlbc is automatically preloaded into the app
+
+#Initialize the app with data from the session
+safetyGraphicsApp(loadData=TRUE)
+
+```
+
+Clicking on the data tab shows the 5 pre-loaded data sets with their different data standards. 
+
+<img src="https://user-images.githubusercontent.com/3680095/72439124-4fa26c00-3774-11ea-93f8-c014fe71caa4.png" width=300>
+
+This data load process can easily be combined with the chart workflow described below (including `customSettings.R` programs) to create easily reusable, custom workflows. 
 
 # Steps to Create a Custom Chart
 

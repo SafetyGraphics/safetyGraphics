@@ -1,6 +1,6 @@
 # safetyGraphics v1.1.0
 
-Adds support for custom charts via new `addChart()` and `addSettings()` functions. 
+Allows users to preload their own charts and data sets for use in the safetyGraphics Shiny Application. See the "Custom Workflows" Vignette for details and examples. 
 
 # safetyGraphics v1.0.0
 
