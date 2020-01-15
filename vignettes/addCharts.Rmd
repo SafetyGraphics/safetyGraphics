@@ -4,7 +4,7 @@ author: "Jeremy Wildfire"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{safetyGraphics Shiny App - User Guide}
+  %\VignetteIndexEntry{safetyGraphics Shiny App - Adding Charts}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

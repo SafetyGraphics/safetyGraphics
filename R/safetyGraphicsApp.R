@@ -2,7 +2,7 @@
 #'
 #' @param charts Character vector of charts to include
 #' @param maxFileSize maximum file size in MB allowed for file upload
-#' @param settingsLocation folder location of user-defined settings metadata. Files should be named settingsMetadata.rda, chartsMetadata.rda and standardsMetadata.rda and use the same structure established in the /data folder.
+#' @param settingsLocation folder location of user-defined settings metadata. Files should be named settingsMetadata.rda, chartsMetadata.rda and standardsMetadata.rda and use the same structure established in the /data folder. Defaults to current working directory.   
 #' @param customSettings Name of R script containing settings customizations to be run before the app is initialized. This is the recommended way to add additional charts (via addChart()), settings (addSetting()) and data standards (addStandard()). default = 'settingsLocation/customSettings.R'
 #' @param loadData Option to pre-load data into the app. Defaults to \code{FALSE}.
 #'
@@ -39,12 +39,12 @@ safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL,
   # run the custom settings file (if it exists)
   customSettingsScript<-file.path(settingsLocation, customSettings)  
 
-  if(file.exists(customSettingsScript)){
+  if(length(customSettingsScript)>0 && file.exists(customSettingsScript)){
     source(customSettingsScript)
   }
 
   chartsMetaPath <- file.path(settingsLocation,"chartsMetadata.Rds")  
-  if(file.exists(chartsMetaPath)){
+  if(length(chartsMetaPath)>0 && file.exists(chartsMetaPath)){
     options(sg_chartsMetadata=TRUE)
     options(sg_chartsMetadata_df=readRDS(chartsMetaPath))
 
@@ -55,7 +55,7 @@ safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL,
   }
 
   settingsMetaPath <- file.path(settingsLocation,"settingsMetadata.Rds")  
-  if(file.exists(settingsMetaPath)){
+  if(length(settingsMetaPath)>0 && file.exists(settingsMetaPath)){
     options(sg_settingsMetadata=TRUE)
     options(sg_settingsMetadata_df=readRDS(settingsMetaPath))
   } else {
@@ -64,7 +64,7 @@ safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL,
   }
 
   standardsMetaPath <- file.path(settingsLocation,"standardsMetadata.Rds")  
-  if(file.exists(standardsMetaPath)){
+  if(length(standardsMetaPath)>0 && file.exists(standardsMetaPath)){
     options(sg_standardsMetadata=TRUE)
     options(sg_standardsMetadata_df=readRDS(standardsMetaPath))
   } else {

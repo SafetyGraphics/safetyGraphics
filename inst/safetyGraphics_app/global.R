@@ -50,6 +50,8 @@ if(getShinyOption("sg_loadData")){
   
   # names of data in environment
   dat_names <- ls(pos=1)[sapply(ls(pos=1), function(x) inherits(get(x), "data.frame"))]
+  dat_names <- dat_names[!dat_names %in% c("chartsMetadata","standardsMetdata","settingsMetadata")]
+  
   preload_data_list$data <- lapply(dat_names, function(x) {get(x)})
   names(preload_data_list$data) <- dat_names
   
