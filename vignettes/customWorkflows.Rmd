@@ -135,7 +135,7 @@ After the chart is working using the sample data, you need to update it to a fun
 
 <img src="https://user-images.githubusercontent.com/3680095/71829373-7bd23480-3072-11ea-9ac5-9b6dbb0c82d3.png" style='max-width:700px'>
 
-This is the hardest part of creating a custom chart, so we've provided some additional notes about this process below. There is also a [technical appendix]() at the end of this document that provides more details about the metadata/settings objects used in this step. Finally, feel free to ask [ask us questions](https://github.com/SafetyGraphics/safetyGraphics/issues) if you run in to problems. 
+This is the hardest part of creating a custom chart, so we've provided some additional notes about this process below. There is also a technical appendix at the end of this document that provides more details about the metadata/settings objects used in this step. Finally, feel free to ask [ask us questions](https://github.com/SafetyGraphics/safetyGraphics/issues) if you run in to problems. 
 
  - The code to create the chart must be wrapped in a function that takes 2 parameters as inputs: `data` and `settings` as shown in line 1 above. When the chart function is called by Shiny, these parameters are generated dynamically within the app; `data` represents the user selection in the Data module, and `settings` represents the selections in the Settings Module.
   - The `data` parameter is saved as a `data.frame`, and a preview of the current data is conveniently available in the data tab.  
