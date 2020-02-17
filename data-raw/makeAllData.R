@@ -1,0 +1,1 @@
+# Function to make metadata for all available data domains
