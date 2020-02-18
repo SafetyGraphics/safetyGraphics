@@ -1,5 +1,5 @@
 text_key,label,description,setting_type,setting_required,column_mapping,column_type,field_mapping,field_column_key,setting_cat
-id_col,ID column,Unique subject identifier variable name.,character,TRUE,TRUE,character,FALSE,,data
+id_col,ID column,Unique subject identifier variable name.,character,TRUE,TRUE,character,FALSE, ,data
 seq_col,Sequence column,Event sequence number variable name,character,TRUE,TRUE,numeric,FALSE,,data
 stdy_col,AE Start day column,Event start day variable name,character,TRUE,TRUE,numeric,FALSE,,data
 endy_col,AE End day column,Event end day variable name,character,TRUE,TRUE,numeric,FALSE,,data

@@ -142,7 +142,6 @@ renderSettings <- function(input, output, session, data, settings, status){
     all_settings <- getSettingsMetadata(
       cols=c("text_key")
     )
-
     # Identify which settings in input_names() are not relevant
     settings_to_drop <- setdiff(all_settings,input_names)
 
@@ -171,7 +170,6 @@ renderSettings <- function(input, output, session, data, settings, status){
       charts=input$charts,
       filter_expr = field_mapping==TRUE
     )
-
     if(!is.null(field_rows)){
       column_keys <- field_rows %>%
         pull(field_column_key) %>%
