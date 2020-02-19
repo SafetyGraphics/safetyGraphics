@@ -18,11 +18,14 @@ HTMLWidgets.widget({
          console.log("R settings:")
          console.log(rSettings);
         }
-
+      console.log(rSettings);
         rSettings.data = HTMLWidgets.dataframeToD3(rSettings.data);
-
-
-        var chart =  window[rSettings.chartFunction]("."+rSettings.chartFunction+"-wrapper", settings)
+        if(rSettings.subFunction){
+          var chart = window[rSettings.chartFunction][rSettings.subFunction]("." + rSettings.chartFunction + "-wrapper", settings)
+        }else{
+          var chart = window[rSettings.chartFunction]("." + rSettings.chartFunction + "-wrapper", settings)
+        }
+        
         chart.init(rSettings.data);
       },
 

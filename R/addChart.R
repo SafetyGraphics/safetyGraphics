@@ -10,6 +10,7 @@
 #' @param repo_url Homepage for chart's code repository (if any)
 #' @param settings_url Homepage for chart's settings documentation
 #' @param main Name of the main function used to initialize the app. If the type is htmlwidgets, the js function must accept "location" and "settings" parameters (in that order) and have an .init() method, expecting a json data array. Otherwise, the r function should accept named data and settings parameters, and should be loaded in the user's namespace.
+#' @param sub Name of the sub function used to initialize the app. Typically, not used.
 #' @param type type of chart. Should be 'static', 'plotly' or 'module'
 #' @param maxWidth max width for the widget in pixels
 #' @param requiredSettings array of text_key values (matching those used in settingsMetadata) for the required settings for this chart
@@ -27,7 +28,8 @@ addChart <- function(
   description="",
   repo_url="",
   settings_url="",
-  main="character",
+  main="",
+  sub="",
   type='static',
   maxWidth=1000,
   requiredSettings=c(""),
@@ -43,6 +45,7 @@ addChart <- function(
     typeof(repo_url)=="character",
     typeof(settings_url)=="character",
     typeof(main)=="character",
+    typeof(sub)=="character",
     typeof(type)=="character",
     type %in% c("htmlwidget","plotly","static","module"),
     is.numeric(maxWidth)
@@ -56,6 +59,7 @@ addChart <- function(
   newChart <- list(
     chart=chart,
     main=main,
+    sub=sub,
     label=label,
     description=description,
     repo_url=repo_url,

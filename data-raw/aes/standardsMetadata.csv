@@ -6,3 +6,7 @@ endy_col,AENDY,AEENDY
 term_col,AETERM,AETERM
 filters,,
 details,,
+treatment_col,ARM,ARM
+treatment1,,
+treatment2,,
+bodsys_col,AEBODSYS,AEBODSYS

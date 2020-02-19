@@ -50,7 +50,7 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
     }
   }
 
-  # Chart specific customizastions (to be removed after js updates)
+  # Chart specific customiztions (to be removed after js updates)
   if(chart %in% c("paneledoutlierexplorer","safetyoutlierexplorer")){
     settings$time_cols <- list(list(),list());
     settings$time_cols[[1]]<-list(
@@ -95,18 +95,31 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
     settings$groups = settings$group_cols
   }
 
+  if(chart=="aeexplorer"){
+    settings$variables=list(
+      major=settings[["bodsys_col"]],
+      minor=settings[["term_col"]],
+      group=settings[["trt_col"]],
+      id=settings[["id_col"]],
+      filters=settings[["filters"]],
+      details=settings[["details"]]
+    )
+  }
+
   #Set Chart Width
   chartMaxWidth<-  chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$maxWidth)
   settings$max_width <- chartMaxWidth
 
   #Renderer
   chartFunction<- chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$main)
+  subFunction<- chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$sub)
   chartType <- chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$type)
 
   rSettings = list(
     data = data,
     debug_js=debug_js,
     chartFunction = chartFunction,
+    subFunction = subFunction,
     settings = jsonlite::toJSON(
       settings,
       auto_unbox = TRUE,

@@ -6,7 +6,6 @@ library(Hmisc)
 
 #merge defaults on to settingsMetadata
 settingsMetadata <- read.csv("data-raw/aes/settingsMetadata.csv", stringsAsFactors = FALSE)
-settingsMetadata$field_column_key <- ""
 defaults <- readRDS("data-raw/aes/settingsMetadataDefaults.Rds")
 settingsMetadata <- dplyr::full_join(settingsMetadata, defaults, by="text_key")
 
