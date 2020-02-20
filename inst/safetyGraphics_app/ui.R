@@ -18,41 +18,49 @@ tagList(
   navbarPage(
     "safetyGraphics Shiny app",
     id="nav_id",
-  tabPanel(
-    title = "Home", icon=icon("home"),
-    tabsetPanel(
-      tabPanel("About",
-        fluidRow(
-          column(width=8, style='font-size:20px', uiOutput(outputId = "about")),
-          column(width=4, imageOutput(outputId = "hex"))
+    tabPanel(
+      title = "Home", icon=icon("home"),
+      tabsetPanel(
+        tabPanel("About",
+                 fluidRow(
+                   column(width=8, style='font-size:20px', uiOutput(outputId = "about")),
+                   column(width=4, imageOutput(outputId = "hex"))
+                 )
+        ),
+        tabPanel("Shiny App User Guide",
+                 tags$iframe(style="height:800px; width:100%; scrolling=yes;",  `data-type`="iframe",
+                             src = "https://cran.r-project.org/web/packages/safetyGraphics/vignettes/shinyUserGuide.html")
+        ),
+        tabPanel("Hep Explorer workflow",
+                 tags$iframe(style="height:800px; width:100%; scrolling=yes;",  `data-type`="iframe",
+                             src = "https://cdn.jsdelivr.net/gh/SafetyGraphics/SafetyGraphics.github.io/guide/HepExplorerWorkflow_v1_1.pdf")
         )
-      ),
-      tabPanel("Shiny App User Guide",
-               tags$iframe(style="height:800px; width:100%; scrolling=yes;",  `data-type`="iframe",
-                           src = "https://cran.r-project.org/web/packages/safetyGraphics/vignettes/shinyUserGuide.html")
-      ),
-      tabPanel("Hep Explorer workflow",
-               tags$iframe(style="height:800px; width:100%; scrolling=yes;",  `data-type`="iframe",
-                                    src = "https://cdn.jsdelivr.net/gh/SafetyGraphics/SafetyGraphics.github.io/guide/HepExplorerWorkflow_v1_1.pdf")
       )
-    )
-  ),
+    ),
     tabPanel(
       title = "Data",
-      dataUploadUI("datatab")
+      mod("datatab")$ui()
     ),
     tabPanel(
       title = "Settings",
       fluidPage(
-        renderSettingsUI("settingsUI")
+        mod("settingsUI")$ui()
       )
     ),
     navbarMenu("Charts"),
     tabPanel(
       title = "Reports",
       fluidPage(
-        renderReportsUI("reportsUI")
+        mod("reports")$ui()
       )
+    ),
+    tabPanel(
+      title="Mod store",
+      mod("modstore")$ui()
+    ),
+    tabPanel(
+      title="Chart store",
+      mod("chartstore")$ui()
     )
   )
 )
