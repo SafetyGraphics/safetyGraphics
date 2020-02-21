@@ -13,7 +13,7 @@ function(input, output, session){
   # pass reactives from Data module to Settings module
   observe({
     mod("datatab") %1>1% mod("settingsUI")
-   # mod("datatab") %1>>1% mod("settingsUI") %1>>1% mod("reports")
+   # mod("datatab") %1>>1% mod("settingsUI") %1>>1% mod("reports") # alternate
     mod("datatab") %2>2% mod("settingsUI")
     mod("datatab") %3>3% mod("settingsUI")
   })
