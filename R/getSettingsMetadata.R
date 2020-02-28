@@ -41,7 +41,7 @@ getSettingsMetadata<-function(charts=NULL, text_keys=NULL, cols=NULL, filter_exp
 
   if(add_standards){
     ms<-safetyGraphics::standardsMetadata %>% mutate(text_key=as.character(.data$text_key))
-    md<-md%>%left_join(ms, by="text_key")
+    md<-md%>%left_join(ms, by=c("text_key", "domain"))
   }
 
   all_columns <- names(md)
