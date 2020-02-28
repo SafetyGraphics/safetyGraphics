@@ -5,8 +5,8 @@
 #' @return A character string containing full HTML text to be used for input label. Contains info icon to 
 #' indicate that description is available upon mouseover, setting label, and asterisk if setting is required.
 #' 
-createSettingLabel <- function(key){
-  sm <- getSettingsMetadata(text_keys=key)
+createSettingLabel <- function(key, metadata){
+  sm <- getSettingsMetadata(text_keys=key, metadata=metadata)
   setting_label <- sm$label
   required <- sm$setting_required
   paste0(setting_label)#, " <i class='fa fa-info-circle' style='color:gray'></i>" )

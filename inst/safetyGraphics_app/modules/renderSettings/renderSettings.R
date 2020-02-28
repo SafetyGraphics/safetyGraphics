@@ -45,7 +45,7 @@ source("modules/renderSettings/util/updateSettingStatus.R")
 #' \item{"settings"}{Upadted settings object based on UI/user selections}
 #' \item{"status"}{Result from validateSettings() for originally selected data + updated settings object}
 #'
-renderSettings <- function(input, output, session, data, settings, status){
+renderSettings <- function(input, output, session, data, settings, status, metadata){
   ns <- session$ns
 
   charts<-as.vector(filter(chartsMetadata, chart %in% all_charts)[["chart"]])
@@ -70,7 +70,7 @@ renderSettings <- function(input, output, session, data, settings, status){
   # Null if no charts are selected
   input_names <- reactive({
     if(!is.null(input$charts)){
-      safetyGraphics:::getSettingsMetadata(charts=input$charts, cols="text_key")
+      safetyGraphics:::getSettingsMetadata(charts=input$charts, cols="text_key", metadata=metadata) %>% unique
     } else{
       NULL
     }
@@ -93,6 +93,7 @@ renderSettings <- function(input, output, session, data, settings, status){
         settings = settings(),
         setting_cat_val = "data",
         charts=charts,
+        metadata=metadata,
         ns=ns
       )
     )
@@ -107,6 +108,7 @@ renderSettings <- function(input, output, session, data, settings, status){
         settings = settings(),
         setting_cat_val = "measure",
         charts=charts,
+        metadata=metadata,
         ns=ns
       )
     )
@@ -120,6 +122,7 @@ renderSettings <- function(input, output, session, data, settings, status){
         settings = settings(),
         setting_cat_val = "appearance",
         charts=charts,
+        metadata=metadata,
         ns=ns
       )
     )
@@ -140,7 +143,8 @@ renderSettings <- function(input, output, session, data, settings, status){
     # Get all possible metadata (input_names always reflects the current chart selections and is already filtered)
     # so I'm grabbing all of these options so I can determine which should be hidden
     all_settings <- getSettingsMetadata(
-      cols=c("text_key")
+      cols=c("text_key"),
+      metadata=metadata
     )
     # Identify which settings in input_names() are not relevant
     settings_to_drop <- setdiff(all_settings,input_names)
@@ -168,7 +172,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   observe({
     field_rows <- getSettingsMetadata(
       charts=input$charts,
-      filter_expr = field_mapping==TRUE
+      filter_expr = field_mapping==TRUE,
+      metadata = metadata
     )
     if(!is.null(field_rows)){
       column_keys <- field_rows %>%
@@ -184,7 +189,8 @@ renderSettings <- function(input, output, session, data, settings, status){
             field_keys <- getSettingsMetadata(
               charts=input$charts,
               col = "text_key",
-              filter_expr = field_column_key==!!col
+              filter_expr = field_column_key==!!col,
+              metadata = metadata
             )
 
             ### SET UP CHOICES/PLACEHOLDERS FOR SELECT INPUT UPDATES
@@ -205,7 +211,8 @@ renderSettings <- function(input, output, session, data, settings, status){
             } else {
               choices <- NULL
               placeholder <- list(
-                placeholder =  paste0("Please select a ", getSettingsMetadata(col="label", text_key=col)),
+                placeholder =  paste0("Please select a ", getSettingsMetadata(col="label", text_key=col,
+                                                                              metadata = metadata )),
                 onInitialize = I('function() {
                        this.setValue("");}')
               )
@@ -224,7 +231,9 @@ renderSettings <- function(input, output, session, data, settings, status){
                     setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings= isolate(settings()))
                     choices <- unique(c(setting_value, choices))
                   }
-
+                  if (is.null(names(choices))){
+                    names(choices) <- choices
+                  }
                   updateSelectizeInput(
                     session,
                     inputId = key,

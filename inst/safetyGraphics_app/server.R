@@ -31,7 +31,8 @@ settings_new <-   callModule(
     "settingsUI",
     data = reactive(dataUpload_out$data_selected()),
     settings = reactive(dataUpload_out$settings()),
-    status = reactive(dataUpload_out$status())
+    status = reactive(dataUpload_out$status()),
+    metadata = settingsMetadata
   )
 
 

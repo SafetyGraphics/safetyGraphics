@@ -53,9 +53,9 @@ createControl <- function(key, metadata, data, settings, ns){
   ### get metadata for the input
   setting_key <- as.list(strsplit(key,"\\-\\-"))
   setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings=settings)
-  setting_label <- createSettingLabel(key)
-  setting_description <- getSettingsMetadata(text_keys=key, cols="description")
-  setting_required <- ifelse(getSettingsMetadata(text_keys=key, cols="setting_required"),"\nSetting Required","\nSetting Optional")
+  setting_label <- createSettingLabel(key, metadata=metadata)
+  setting_description <- getSettingsMetadata(text_keys=key, cols="description", metadata=metadata)
+  setting_required <- ifelse(getSettingsMetadata(text_keys=key, cols="setting_required", metadata=metadata),"\nSetting Required","\nSetting Optional")
   
   ### if a field-level input, get metadata about the parent column-level input
   field_column <- NULL
@@ -63,7 +63,7 @@ createControl <- function(key, metadata, data, settings, ns){
 
   if (!is.null(sm_key$field_column_key)){
     field_column <- safetyGraphics:::getSettingValue(key=list(sm_key$field_column_key), settings=settings)
-    field_column_label <- getSettingsMetadata(text_key = sm_key$field_column_key, cols = "label")
+    field_column_label <- getSettingsMetadata(text_key = sm_key$field_column_key, cols = "label", metadata=metadata)
   }
   
   ### get the choices for the selectors
