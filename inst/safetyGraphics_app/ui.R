@@ -45,22 +45,5 @@ tagList(
     title = "Domain: AEs",
     mainUI("AEs")
   )
-    # tabPanel(
-    #   title = "Data",
-    #   dataUploadUI("datatab")
-    # ),
-    # tabPanel(
-    #   title = "Settings",
-    #   fluidPage(
-    #     renderSettingsUI("settingsUI")
-    #   )
-    # ),
-    # navbarMenu("Charts"),
-    # tabPanel(
-    #   title = "Reports",
-    #   fluidPage(
-    #     renderReportsUI("reportsUI")
-    #   )
-    # )
   )
 )
