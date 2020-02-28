@@ -23,13 +23,13 @@ if(exists("chartsMetadata", inherits = FALSE)){
 }
 
 # use metadata in user settings folder if provided
-if (options('sg_chartsMetadata')[[1]]){
+if (!is.null(options('sg_chartsMetadata')[[1]]) && options('sg_chartsMetadata')[[1]]){
   chartsMetadata <-  options('sg_chartsMetadata_df')[[1]]
 }
-if (options('sg_settingsMetadata')[[1]]){
+if (!is.null(options('sg_settingsMetadata')[[1]]) && options('sg_settingsMetadata')[[1]]){
   settingsMetadata <-  options('sg_settingsMetadata_df')[[1]]
 }
-if (options('sg_standardsMetadata')[[1]]){
+if (!is.null(options('sg_standardsMetadata')[[1]]) && options('sg_standardsMetadata')[[1]]){
   standardsMetadata <-  options('sg_standardsMetadata_df')[[1]]
 }
 
@@ -50,7 +50,7 @@ if (!is.null(getShinyOption("safetygraphics_charts"))){
 
 # Prepare initial datasets/labels (with info about standards) to be loaded into the app 
 # pre-load data into app if requested
-if(getShinyOption("sg_loadData")){
+if(!is.null(getShinyOption("sg_loadData")) && getShinyOption("sg_loadData")){
   preload_data_list <- list()
 
   # names of data in environment
@@ -110,5 +110,5 @@ source('modules/dataUpload/dataUploadUI.R')
 source('modules/dataUpload/dataUpload.R')
 
 
-
-
+source('modules/main/mainUI.R')
+source('modules/main/main.R')
