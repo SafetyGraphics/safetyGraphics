@@ -45,12 +45,9 @@ source("modules/renderSettings/util/updateSettingStatus.R")
 #' \item{"settings"}{Upadted settings object based on UI/user selections}
 #' \item{"status"}{Result from validateSettings() for originally selected data + updated settings object}
 #'
-renderSettings <- function(input, output, session, data, settings, status, metadata){
+renderSettings <- function(input, output, session, data, settings, status, metadata, charts){
   ns <- session$ns
 
-  charts<-as.vector(filter(chartsMetadata, chart %in% all_charts)[["chart"]])
-  labels<-as.vector(filter(chartsMetadata, chart %in% all_charts)[["label"]])
-  names(charts)<-labels
 
   output$charts_wrap_ui <- renderUI({
     checkboxGroupButtons(
