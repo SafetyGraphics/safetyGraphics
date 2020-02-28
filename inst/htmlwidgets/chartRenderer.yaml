@@ -36,4 +36,12 @@ dependencies:
     version: 1.0.0
     src: htmlwidgets/lib/safety-delta-delta-1.0.0
     script: safetyDeltaDelta.js
-
+  - name: ae-timelines
+    version: 2.1.6
+    src: htmlwidgets/lib/ae-timelines-2.1.6
+    script: aeTimelines.js
+  - name: aeexplorer
+    version: 1.11.6
+    src: htmlwidgets/lib/aeexplorer-3.3.5
+    script: aeTable.js
+    stylesheet: aeTable.css

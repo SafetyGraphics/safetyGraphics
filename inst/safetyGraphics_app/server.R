@@ -134,7 +134,6 @@ function(input, output, session){
 # 
 
 
-
   output$about <- renderUI({
     HTML('<h1> <b> Welcome to the Safety Graphics Shiny App  </b> </h1>
          <p> The Safety Graphics Shiny app is an interactive tool for evaluating clinical trial safety using

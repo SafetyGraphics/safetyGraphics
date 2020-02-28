@@ -39,10 +39,10 @@ This function returns a list describing the validation status of a settings/data
 }
 \examples{
 testSettings <- generateSettings(standard="adam")
-validateSettings(data=adlbc, settings=testSettings)
+validateSettings(data=labs, settings=testSettings)
 # .$valid is TRUE
 testSettings$id_col <- "NotAColumn"
-validateSettings(data=adlbc, settings=testSettings)
+validateSettings(data=labs, settings=testSettings)
 # .$valid is now FALSE
 
 }

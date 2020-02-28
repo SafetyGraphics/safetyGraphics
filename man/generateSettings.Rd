@@ -4,9 +4,14 @@
 \alias{generateSettings}
 \title{Generate a settings object based on a data standard}
 \usage{
-generateSettings(standard = "None", charts = NULL,
-  useDefaults = TRUE, partial = FALSE, partial_keys = NULL,
-  custom_settings = NULL)
+generateSettings(
+  standard = "None",
+  charts = NULL,
+  useDefaults = TRUE,
+  partial = FALSE,
+  partial_keys = NULL,
+  custom_settings = NULL
+)
 }
 \arguments{
 \item{standard}{The data standard for which to create settings. Valid options are "sdtm", "adam" or "none". Default: \code{"None"}.}

@@ -7,11 +7,12 @@
 #' @param ns The namespace of the current module
 #'
 #' @return A list containing the UI code for all selectors in the specified settings category.
-createSettingsUI <- function(data, settings, setting_cat_val, charts, ns){
+createSettingsUI <- function(data, settings, setting_cat_val, charts, metadata, ns){
   
-  sm <- getSettingsMetadata(charts=charts) %>% 
-    filter(setting_cat==setting_cat_val)
-
+  #filter the metadata based on the charts option (if any)
+  sm <- getSettingsMetadata(charts=charts, metadata=metadata) %>% 
+       filter(setting_cat==setting_cat_val)
+    
   lapply(sm$text_key, function(key){
     createControl(key, metadata = sm, data, settings, ns) 
   })

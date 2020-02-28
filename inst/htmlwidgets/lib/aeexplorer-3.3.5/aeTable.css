@@ -1,0 +1,369 @@
+/*------------------------------------------------------------------------------------------------\
+  AE Table style sheet
+\------------------------------------------------------------------------------------------------*/
+
+    /***--------------------------------------------------------------------------------------\
+      Table layout
+    \--------------------------------------------------------------------------------------***/
+
+        div.aeTable div.wc-navbar {
+            margin-top:5px;
+        }
+
+        div.aeTable span.headingtext {
+            color:#377EB8;
+        }
+
+        div.aeTable span.labeltext {
+            color:#BBB;
+            font-size:14px;
+        }
+
+        div.aeTable div.wc-navbar .wc-dropdown-menu li {
+            cursor: pointer;
+        }
+
+        div.aeTable div.wc-navbar ul.wc-dropdown-menu li a.disabled {
+            color: #BBB;
+        }
+
+        div.aeExplorer .wc-alert{
+            padding: 20px;
+            background-color: #f44336; /* Red */
+            color: white;
+            margin-bottom: 15px;
+            border-radius:5px;
+        }
+    /***--------------------------------------------------------------------------------------\
+      Controls layout
+    \--------------------------------------------------------------------------------------***/
+        div.aeTable .controls .filterDiv{
+            display:inline-block;
+            vertical-align:top;
+            padding-right:10px;
+
+        }
+
+        div.aeTable .controls .filterDiv.custom-filters{
+            display:block;
+        }
+
+        div.aeTable .controls .filterDiv.custom-filters select{
+            min-width: 3em;
+        }
+
+
+        /*Rate filter*/
+        div.aeTable .controls .rate-filter {
+            margin-bottom: 10px;
+        }
+
+        div.aeTable .controls .rate-filter > * {
+            display: table-cell;
+            vertical-align: middle;
+            float: left;
+        }
+
+        /*Summary Radio Buttons*/
+        div.aeTable .controls .summary-control {
+            float: left;
+            margin-bottom: 10px;
+        }
+
+        div.aeTable .controls .summary-control > * {
+            display: table-cell;
+            float: left;
+        }
+
+        div.aeTable .controls .summary-control div {
+            display: table-cell;
+            vertical-align: middle;
+            float: left;
+        }
+
+        div.aeTable .controls .summary-control div label:hover {
+            color: blue;
+        }
+
+        div.aeTable .controls .summary-control div label input {
+            float: left;
+        }
+
+        /*Rate Filter*/
+        div.aeTable span.sectionHead {
+            font-weight: bold;
+            padding-right: 10px;
+        }
+
+        div.aeTable .controls .rate-filter .rateFilterDiv > * {
+            font-size: small;
+            float: left;
+            padding: 3px;
+            display: table-cell;
+            line-height: 1.5em;
+        }
+
+        div.aeTable .controls .rate-filter span.add-on {
+            background: #eee;
+            text-align: center;
+            text-shadow: 0 1px 0 #fff;
+            border: 1px solid #ccc;
+        }
+
+        div.aeTable .controls .rate-filter span.add-on.before {
+            margin-right: -1px;
+            -webkit-border-radius: 4px 0 0 4px;
+            -moz-border-radius: 4px 0 0 4px;
+            border-radius: 4px 0 0 4px;
+        }
+
+        div.aeTable .controls .rate-filter span.add-on.after {
+            margin-left: -1px;
+            -webkit-border-radius: 0 4px 4px 0;
+            -moz-border-radius: 0 4px 4px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        div.aeTable .controls .rate-filter input {
+            text-align: right;
+            width: 40px;
+            border: 1px solid #ccc;
+        }
+
+        /* Custom Filters */
+        div.aeTable  .controls .custom-filters {
+            clear: both;
+        }
+
+        div.aeTable  .controls .custom-filters ul li {
+            margin: 0 3px 5px 0;
+        }
+
+        div.aeTable  .controls .custom-filters ul li.wc-active > a > label,
+        div.aeTable  .controls .custom-filters ul li:hover > a > label {
+            color: white;
+        }
+
+        div.aeTable  .controls .custom-filters ul li .filterType{
+            font-size: 0.8em
+        }
+
+        div.aeTable .controls .custom-filters ul li.filterCustom {
+            display:inline-block ;
+            padding-right:5px;
+        }
+
+        div.aeTable .controls .custom-filters ul li.filterCustom * {
+            display:block ;
+        }
+
+        div.aeTable .controls .custom-filters ul li.filterCustom span.filterLabel * {
+            display:inline-block ;
+        }
+
+        div.aeTable .controls .custom-filters ul li.filterCustom span.filterLabel .filterType {
+            font-style:italic;
+            padding-left:3px;
+            cursor: pointer;
+        }
+
+        /*Search*/
+        div.aeTable span.search-label {
+            padding-left:5px;
+            margin-right:5px;
+        }
+
+        div.aeTable span.search-label span.clear-search {
+            color:red;
+            padding-left:5px;
+            cursor:pointer;
+        }
+
+        div.aeTable .wc-navbar-search .search-query {
+            line-height: 1.3em;
+        }
+
+    /***--------------------------------------------------------------------------------------\
+      Summary table formatting
+    \--------------------------------------------------------------------------------------***/
+
+        div.aeTable .SummaryTable table {
+            border-collapse:collapse;
+        }
+
+        div.aeTable .SummaryTable tr td {
+            text-align:left;
+            padding: 0.5em 5px;
+        }
+
+        td.rowLabel.highlight {
+            text-decoration:underline;
+            cursor:pointer;
+        }
+
+        div.aeTable tr.major td.controls:hover {
+            cursor:pointer;
+        }
+
+        /*Handles indentation for nested rows*/
+        div.aeTable tr.minor td.rowLabel {
+            padding-left:15px;
+        }
+
+        div.aeTable .SummaryTable tr td.values,
+        div.aeTable .SummaryTable tr td.prevplot,
+        div.aeTable .SummaryTable tr td.diffplot,
+        div.aeTable .SummaryTable th {
+            text-align:center;
+        }
+
+        div.aeTable .SummaryTable th span.group-num {
+            font-size: 9pt;
+        }
+
+        div.aeTable .SummaryTable thead tr:last-of-type th,
+        div.aeTable .SummaryTable thead tr th[rowspan="2"] {
+            border-bottom: 1px solid #555;
+        }
+
+        div.aeTable .SummaryTable th,
+        div.aeTable .SummaryTable tfoot td {
+            padding: 0 5px;
+            background-color:#eee;
+            font-weight: bold;
+            border: none;
+        }
+
+        /* alignment for column header/axes*/
+        div.aeTable .SummaryTable th.prevHeader svg,
+        div.aeTable .SummaryTable th.diffplot.axis svg {
+            vertical-align: bottom;
+        }
+
+        div.aeTable .SummaryTable th.prevHeader,
+        div.aeTable .SummaryTable th.diffplot.axis {
+            padding-bottom: 0px;
+            vertical-align:bottom;
+        }
+
+        div.aeTable .SummaryTable th.prevHeader svg text,
+        div.aeTable .SummaryTable th.diffplot.axis svg text {
+            font-size: 10px;
+        }
+
+        div.aeTable .SummaryTable tfoot,
+        div.aeTable .SummaryTable thead {
+            border-top:1px #555 solid;
+            border-bottom:1px #555 solid;
+        }
+
+        div.aeTable .SummaryTable i {
+            cursor: pointer;
+            font-size: .8em;
+            top: 0px;
+        }
+
+        /* Handle visibility in various scenarios */
+        div.aeTable .SummaryTable tr.filter,
+        div.aeTable .SummaryTable table tbody.minorHidden tr.minor,
+        div.aeTable .SummaryTable tr.inactive,
+        div.aeTable .SummaryTable table.summary {
+            display:none;
+        }
+
+        div.aeTable .wc-hidden,
+        div.aeTable .controls .wc-hidden,
+        div.aeTable .controls .filterDiv.custom-filters.wc-hidden {
+            display: none;
+        }
+
+        /*using set widths to avoid funky behavior on mouseover - could maybe make the width interactive based on the data? */
+        div.aeTable .SummaryTable tr td.values {
+            min-width:100px;
+            white-space: nowrap;
+        }
+
+        div.aeTable .SummaryTable table tr:hover {
+            background-color:#eee;
+        }
+
+        div.aeTable .SummaryTable button.closeDetailTable {
+            margin-right:auto;
+            margin-left:auto;
+        }
+
+        /* Search Visibility */
+        div.aeTable .SummaryTable.search tbody:not(.search) tr, .SummaryTable.search tbody.search tr:not(.search) {
+            display:none;
+        }
+
+        div.aeTable .SummaryTable.search tbody.search tr.search, .SummaryTable.search tbody.search tr.major {
+            display:table-row;
+        }
+
+        div.aeTable .SummaryTable.search tbody tr.major td.controls span.toggle.icon {
+            display:none;
+        }
+
+        div.aeTable .SummaryTable.search tbody td.prevplot > svg > g.points > text {
+            font-size: 10px;
+        }
+
+        div.aeTable span.search {
+            background:#feb24c;
+            color:black;
+        }
+
+        div.aeTable span.icon.toggle {
+            color: inherit;
+            background-position: inherit;
+        }
+
+        div.aeTable span.icon.toggle.transparent > i,
+        div.aeTable span.icon.details.transparent > i {
+            color: transparent;
+            background-position: 1000px;
+        }
+
+    /***--------------------------------------------------------------------------------------\
+      Summary plot formatting
+    \--------------------------------------------------------------------------------------***/
+
+        div.aeTable  .axis path {
+            fill:none;
+            stroke:none;
+        }
+
+         div.aeTable .axis line {
+           fill: none;
+           stroke: #999;
+           shape-rendering: crispEdges;
+        }
+
+        div.aeTable .axis {
+            font-size:10px;
+        }
+
+    /***--------------------------------------------------------------------------------------\
+      Details table formatting
+    \--------------------------------------------------------------------------------------***/
+
+        div.aeTable .DetailTable h4 {
+            text-decoration: none;
+            font-weight: normal;
+            margin-top: 10px;
+        }
+
+        div.aeTable .DetailTable h4 b {
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        div.aeTable .DetailTable table {
+            font-size: 9pt;
+        }
+
+        div.aeTable .DetailTable th {
+            padding: 3px 5px;
+            text-align: left;
+        }
