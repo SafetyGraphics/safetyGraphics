@@ -4,10 +4,20 @@
 \alias{addChart}
 \title{Adds a new chart for use in the safetyGraphics shiny app}
 \usage{
-addChart(chart, label = "", description = "", repo_url = "",
-  settings_url = "", main = "character", type = "static",
-  maxWidth = 1000, requiredSettings = c(""),
-  settingsLocation = getwd(), overwrite = TRUE)
+addChart(
+  chart,
+  label = "",
+  description = "",
+  repo_url = "",
+  settings_url = "",
+  main = "",
+  sub = "",
+  type = "static",
+  maxWidth = 1000,
+  requiredSettings = c(""),
+  settingsLocation = getwd(),
+  overwrite = TRUE
+)
 }
 \arguments{
 \item{chart}{Name of the chart - one word, all lower case}
@@ -21,6 +31,8 @@ addChart(chart, label = "", description = "", repo_url = "",
 \item{settings_url}{Homepage for chart's settings documentation}
 
 \item{main}{Name of the main function used to initialize the app. If the type is htmlwidgets, the js function must accept "location" and "settings" parameters (in that order) and have an .init() method, expecting a json data array. Otherwise, the r function should accept named data and settings parameters, and should be loaded in the user's namespace.}
+
+\item{sub}{Name of the sub function used to initialize the app. Typically, not used.}
 
 \item{type}{type of chart. Should be 'static', 'plotly' or 'module'}
 

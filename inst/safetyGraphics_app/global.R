@@ -85,7 +85,7 @@ if(getShinyOption("sg_loadData")){
     }
   }
 } else {  # otherwise use example data
-  preload_data_list <- list(data = list("Example data" = adlbc),
+  preload_data_list <- list(data = list("Example data" = labs),
                             current = 1,
                             standard = list(list("standard" = "adam", "details" = list("adam"=list("match"="full")))),
                             display = list(HTML("<p>Example data - <em style='color:green; font-size:12px;'>ADaM</em></p>")))

@@ -3,7 +3,6 @@
 \docType{package}
 \name{SafetyGraphics}
 \alias{SafetyGraphics}
-\alias{SafetyGraphics-package}
 \title{\code{safetyGraphics} package}
 \description{
 Create Interactive Graphics Related to Clinical Trial Safety

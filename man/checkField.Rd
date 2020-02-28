@@ -25,7 +25,7 @@ This function compares settings with field values as part of the \code{validateS
 \examples{
 testSettings<-generateSettings(standard="AdAM")
 fields<-list("measure_values","TB")
-safetyGraphics:::checkField(fieldKey=fields,settings=testSettings, data=adlbc) 
+safetyGraphics:::checkField(fieldKey=fields,settings=testSettings, data=labs) 
 
 }
 \keyword{internal}
