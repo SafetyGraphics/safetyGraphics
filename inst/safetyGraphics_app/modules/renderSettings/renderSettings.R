@@ -346,7 +346,8 @@ renderSettings <- function(input, output, session, data, settings, status, metad
     list(
       charts = reactive(input$charts),
       settings = reactive(settings_new()),
-      status = reactive(status_new())
+      status = reactive(status_new()),
+      charts2  = reactive(status_new()$charts)
     )
   )
 }

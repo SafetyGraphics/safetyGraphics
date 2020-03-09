@@ -27,22 +27,24 @@
 #' \item{"settings"}{Result from generateSettings() for data_selected}
 #' \item{"status"}{Result from validateSettings() for data_selected and settings}
 #'  
-dataUpload <- function(input, output, session, domain){
+dataUpload <- function(input, output, session, domain, preload_data_list){
 
   ns <- session$ns
 
   # initiate reactive values - list of uploaded data files
   # standard to imitate output of detectStandard.R
-  dd <- reactiveValues(data = preload_data_list[[domain]]$data,
-                       current = preload_data_list[[domain]]$current,
-                       standard = preload_data_list[[domain]]$standard)
+  dd <- reactiveValues(data = preload_data_list$data,
+                       current = preload_data_list$current,
+                       standard = preload_data_list$standard)
 
   output$data_select <- renderUI({
     radioButtons(ns("select_file"),"Select file for safetyGraphics charts",
-                 choiceNames = preload_data_list[[domain]]$display,
-                 choiceValues = names(preload_data_list[[domain]]$data))
+                 choiceNames = preload_data_list$display,
+                 choiceValues = names(preload_data_list$data))
   })
 
+  # ensure outputs update upon app startup
+  outputOptions(output, "data_select", suspendWhenHidden = FALSE)
   
   # modify reactive values when data is uploaded
   observeEvent(input$datafile,{

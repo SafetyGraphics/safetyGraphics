@@ -7,9 +7,115 @@
 
 function(input, output, session){
 
-  callModule(main, "Labs", parent.session = session, domain = "labs")
-  callModule(main, "AEs", parent.session = session, domain = "aes")
   
+  configVals <- reactiveValues()
+  
+  for (d in unique(settingsMetadata$domain)){
+    configVals[[d]] <- callModule(config, d, domain = d, metadata=metadata_list, preload_data_list = preload_data_list)
+  }
+
+  charts <- reactive({
+    out <- vector()
+    for (i in names(configVals)){
+      charts <- configVals[[i]]$charts()
+      out <- c(out, charts)
+    }
+    return(out)    
+  })
+  
+  #toggle css class of chart tabs
+  observeEvent(charts(),{
+    for (chart in names(charts())){
+      valid <- charts()[[chart]]
+
+      ## code to toggle css for chart-specific tab here
+      toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="valid", condition=valid==TRUE)
+      toggleClass(selector= paste0("#nav_id li.dropdown ul.dropdown-menu li a[data-value='", chart, "']"), class="invalid", condition=valid==FALSE)
+    }
+  })
+
+
+  # hide charts tab if no chart selected
+  observeEvent(charts(),{
+    if (is.null(charts())){
+      hideTab(inputId = "nav_id", target = "Charts")
+      hideTab(inputId = "nav_id", target = "Reports")
+    }
+  },
+  ignoreNULL = FALSE,
+  ignoreInit = TRUE)  # so there's no hiding when the app first loads
+
+  
+  ##############################################################
+  # Initialize Charts Modules
+  ##############################################################
+
+  # set up all chart tabs from the start
+    for (chartnum in 1:nrow(chartsMetadata)){
+      md <- chartsMetadata[chartnum,]
+      chart<-md$chart
+      chartLabel<-md$label
+
+      appendTab(
+        session = session,
+        inputId ="nav_id",
+        tab = tabPanel(
+          title = chartLabel,
+          value = chart,
+          renderChartUI(paste0("chart", chart))
+        ),
+        menuName = "Charts"
+      )
+    }
+
+    # hide/show chart tabs in response to user selections
+    observe({
+
+      # show charts and reports tabs if any charts are selected
+      showTab(inputId = "nav_id", target = "Charts")
+      showTab(inputId = "nav_id", target = "Reports")
+
+      selected_charts <- names(charts())
+      unselected_charts <- all_charts[!all_charts %in% selected_charts]
+      for(chart in unselected_charts){
+        hideTab(inputId = "nav_id",
+                target = chart)
+      }
+      for(chart in selected_charts){
+        showTab(inputId = "nav_id",
+                target = chart)
+      }
+    })
+
+  for(chart in all_charts){
+    chartType <- chartsMetadata %>% filter(chart==!!chart) %>% pull(type)
+    width <- chartsMetadata %>% filter(chart==!!chart) %>% pull(maxWidth)
+    domain <- chartsMetadata %>% filter(chart==!!chart) %>% pull(domain)
+    callModule(
+      module = renderChart,
+      id = paste0("chart", chart),
+      data = reactive(configVals[[domain]]$data()),
+      settings = reactive(configVals[[domain]]$settings()),
+      valid = reactive(charts()[[chart]]),
+      chart = chart,
+      type = chartType,
+      width = width
+     # type = "htmlwidget"
+    )
+
+  }
+    
+
+    
+    
+      callModule(
+        module = renderReports,
+        id = "reportsUI",
+        config = configVals,
+        chartsMetadata = reactive(chartsMetadata[chartsMetadata$chart %in% names(charts()),c("chart","label","domain")])
+      )
+  
+      
   output$about <- renderUI({
     HTML('<h1> <b> Welcome to the Safety Graphics Shiny App  </b> </h1>
          <p> The Safety Graphics Shiny app is an interactive tool for evaluating clinical trial safety using
