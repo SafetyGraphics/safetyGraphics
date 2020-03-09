@@ -13,7 +13,7 @@
 #' @examples
 #' testSettings<-generateSettings(standard="AdAM")
 #' fields<-list("measure_values","TB")
-#' safetyGraphics:::checkField(fieldKey=fields,settings=testSettings, data=adlbc) 
+#' safetyGraphics:::checkField(fieldKey=fields,settings=testSettings, data=labs) 
 #' 
 #' @keywords internal
 

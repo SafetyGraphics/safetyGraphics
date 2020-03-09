@@ -4,9 +4,14 @@
 \alias{getSettingsMetadata}
 \title{Get metadata about chart settings}
 \usage{
-getSettingsMetadata(charts = NULL, text_keys = NULL, cols = NULL,
-  filter_expr = NULL, add_standards = TRUE,
-  metadata = safetyGraphics::settingsMetadata)
+getSettingsMetadata(
+  charts = NULL,
+  text_keys = NULL,
+  cols = NULL,
+  filter_expr = NULL,
+  add_standards = TRUE,
+  metadata = safetyGraphics::settingsMetadata
+)
 }
 \arguments{
 \item{charts}{optional vector of chart names used to filter the metadata. Exact matches only (case-insensitive). All rows returned by default.}

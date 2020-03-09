@@ -31,18 +31,18 @@ testSettings$filters[[3]]<-list(value_col="NotAColumn",label="Invalid Column")
 
 #pass ($valid == TRUE)
 safetyGraphics:::checkColumn(key=list("id_col"),
-                                    settings=testSettings, adlbc)
+                                    settings=testSettings, labs)
 
 #pass
 safetyGraphics:::checkColumn(key=list("filters",1,"value_col"),
-                                    settings=testSettings, adlbc)
+                                    settings=testSettings, labs)
 
 #NULL column pass
 safetyGraphics:::checkColumn(key=list("filters",2,"value_col"),
-                                    settings=testSettings, adlbc)
+                                    settings=testSettings, labs)
 
 #invalid column fails
 safetyGraphics:::checkColumn(key=list("filters",3,"value_col"),
-                                    settings=testSettings, adlbc)
+                                    settings=testSettings, labs)
 }
 \keyword{internal}

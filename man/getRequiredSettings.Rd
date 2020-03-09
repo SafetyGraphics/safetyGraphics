@@ -4,8 +4,7 @@
 \alias{getRequiredSettings}
 \title{Get a list of required settings}
 \usage{
-getRequiredSettings(charts = NULL,
-  metadata = safetyGraphics::settingsMetadata)
+getRequiredSettings(charts = NULL, metadata = safetyGraphics::settingsMetadata)
 }
 \arguments{
 \item{charts}{The chart for which required settings should be returned ("eDish" only for now) .  Default: \code{NULL} (uses all available charts).}

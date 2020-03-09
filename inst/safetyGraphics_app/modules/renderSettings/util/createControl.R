@@ -60,6 +60,7 @@ createControl <- function(key, metadata, data, settings, ns){
   ### if a field-level input, get metadata about the parent column-level input
   field_column <- NULL
   field_column_label <- NULL
+
   if (!is.null(sm_key$field_column_key)){
     field_column <- safetyGraphics:::getSettingValue(key=list(sm_key$field_column_key), settings=settings)
     field_column_label <- getSettingsMetadata(text_key = sm_key$field_column_key, cols = "label")

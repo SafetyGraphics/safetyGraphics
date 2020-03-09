@@ -17,7 +17,7 @@ test_that("a list with the expected properties and structure is returned",{
 
 test_that("correct standards are identified",{
   expect_equal(detectStandard(adlbc)[["standard"]],"adam")
-  expect_equal(detectStandard(adlbc)[["details"]][["adam"]][["match"]], "full")
+  expect_equal(detectStandard(adlbc)[["details"]][["adam"]][["match"]], "partial")
   expect_equal(detectStandard(adlbc)[["details"]][["sdtm"]][["match"]], "partial")
   
   adam_params <- c("Alanine Aminotransferase (U/L)","Aspartate Aminotransferase (U/L)","Bilirubin (umol/L)","Alkaline Phosphatase (U/L)")

@@ -4,9 +4,13 @@
 \alias{safetyGraphicsApp}
 \title{Run the interactive safety graphics builder}
 \usage{
-safetyGraphicsApp(charts = NULL, maxFileSize = NULL,
-  settingsLocation = ".", customSettings = "customSettings.R",
-  loadData = FALSE)
+safetyGraphicsApp(
+  charts = NULL,
+  maxFileSize = NULL,
+  settingsLocation = ".",
+  customSettings = "customSettings.R",
+  loadData = FALSE
+)
 }
 \arguments{
 \item{charts}{Character vector of charts to include}

@@ -5,11 +5,11 @@ library(dplyr)
 library(tibble)
 
 validSettings<-generateSettings(standard="adam")
-passed<-validateSettings(data=adlbc,settings=validSettings)
+passed<-validateSettings(data=labs,settings=validSettings)
 
 invalidSettings<-validSettings
 invalidSettings$id_col<-"not_my_id"
-failed<-validateSettings(data=adlbc,settings=invalidSettings)
+failed<-validateSettings(data=labs,settings=invalidSettings)
 
 test_that("our basic example is valid (until we break it)",{
   expect_true(passed[["valid"]])
@@ -28,7 +28,7 @@ test_that("function returns a list with the expected structure",{
 test_that("our examples have the correct number of failed checks",{
   invalidSettings2<-invalidSettings
   invalidSettings2$measure_col<-"not_a_measure_id"
-  failed2<-validateSettings(data=adlbc,settings=invalidSettings2)
+  failed2<-validateSettings(data=labs,settings=invalidSettings2)
 
   expect_equal(passed$checks%>%filter(!valid)%>%nrow,0)
   expect_equal(failed$checks%>%filter(!valid)%>%nrow,1)
@@ -41,7 +41,7 @@ test_that("our examples have the correct number of failed checks",{
 test_that("field checks fail when expected",{
   invalidFieldSettings <- validSettings
   invalidFieldSettings[["measure_values"]][["ALP"]]<-"not a field value :("
-  fieldFailed<-validateSettings(data=adlbc,settings=invalidFieldSettings)
+  fieldFailed<-validateSettings(data=labs,settings=invalidFieldSettings)
   expect_false(fieldFailed[["valid"]])
 
   failedChecks <- fieldFailed$checks%>%filter(!valid)
@@ -55,9 +55,9 @@ test_that("field checks fail when expected",{
    invalidFieldSettings$baseline[["value_col"]]<- "PARAM"
    invalidFieldSettings$baseline[["values"]] <- list("not a filter","still not a filter")
    
-   expect_false(safetyGraphics:::checkField(list("baseline","values",1),  settings=invalidFieldSettings, data=adlbc )$valid)
+   expect_false(safetyGraphics:::checkField(list("baseline","values",1),  settings=invalidFieldSettings, data=labs )$valid)
    
-   fieldFailed2<-validateSettings(data=adlbc,settings=invalidFieldSettings)
+   fieldFailed2<-validateSettings(data=labs,settings=invalidFieldSettings)
    expect_false(fieldFailed2[["valid"]])
    expect_equal(fieldFailed2$checks%>%filter(!valid)%>%nrow,2) #2 fields fail
 })
@@ -65,7 +65,7 @@ test_that("field checks fail when expected",{
 test_that("required setting checks fail when expected",{
   invalidRequiredSettings <- validSettings
   invalidRequiredSettings[["id_col"]]<-NULL
-  requiredFailed<-validateSettings(data=adlbc,settings=invalidRequiredSettings)
+  requiredFailed<-validateSettings(data=labs,settings=invalidRequiredSettings)
   expect_false(requiredFailed[["valid"]])
 
   failedChecks <- requiredFailed$checks%>%filter(!valid)
@@ -77,7 +77,7 @@ test_that("required setting checks fail when expected",{
 test_that("numeric column checks fail when no numeric values are found",{
   invalidNumericSettings <- validSettings
   invalidNumericSettings[["value_col"]]<-"USUBJID"
-  numericFailed<-validateSettings(data=adlbc,settings=invalidNumericSettings)
+  numericFailed<-validateSettings(data=labs,settings=invalidNumericSettings)
   expect_false(numericFailed[["valid"]])
   
   failedChecks <- numericFailed$checks%>%filter(!valid)
@@ -89,9 +89,9 @@ test_that("numeric column checks fail when no numeric values are found",{
 test_that("numeric column checks still fails when more than half of the values are not numeric ",{
   validNumericSettings <- validSettings
   validNumericSettings[["value_col"]]<-"someNumbers"
-  adlbc_edit<-adlbc
-  adlbc_edit$someNumbers <- c("10","11",rep("sometext", dim(adlbc_edit)[1]-2))
-  numericFailedAgain<-validateSettings(data=adlbc_edit,settings=validNumericSettings)
+  labs_edit<-labs
+  labs_edit$someNumbers <- c("10","11",rep("sometext", dim(labs_edit)[1]-2))
+  numericFailedAgain<-validateSettings(data=labs_edit,settings=validNumericSettings)
   expect_false(numericFailedAgain[["valid"]])
   partialNumericCheck <- numericFailedAgain$checks %>% filter(description=="specified column is numeric?" & text_key=="value_col")
   expect_equal(partialNumericCheck[1,"message"]%>%as.character,"10286 of 10288 values were not numeric. Records with non-numeric values may not appear in the graphic.")
@@ -101,9 +101,9 @@ test_that("numeric column checks still fails when more than half of the values a
 test_that("numeric column checks pass when more than half of the values are numeric ",{
   validNumericSettings <- validSettings
   validNumericSettings[["value_col"]]<-"someStrings"
-  adlbc_edit<-adlbc
-  adlbc_edit$someStrings <- c("b","a",rep("10", dim(adlbc_edit)[1]-2))
-  numericPassed<-validateSettings(data=adlbc_edit,settings=validNumericSettings)
+  labs_edit<-labs
+  labs_edit$someStrings <- c("b","a",rep("10", dim(labs_edit)[1]-2))
+  numericPassed<-validateSettings(data=labs_edit,settings=validNumericSettings)
   expect_true(numericPassed[["valid"]])
   partialNumericCheck <- numericPassed$checks%>%filter(description=="specified column is numeric?" & text_key=="value_col")
   expect_equal(partialNumericCheck[1,"message"]%>%as.character,"2 of 10288 values were not numeric. Records with non-numeric values may not appear in the graphic.")
@@ -118,7 +118,7 @@ test_that("validateSettings works with filters and group_cols ",{
   groupFilterSettings$group_cols <- list()
   groupFilterSettings$group_cols[[1]] <- list(value_col = "SEX",
                                      label = "SEX")
-  Passed<-validateSettings(data=adlbc,settings=groupFilterSettings)
+  Passed<-validateSettings(data=labs,settings=groupFilterSettings)
   expect_true(Passed[["valid"]])
 })
 
@@ -132,7 +132,7 @@ test_that("validateSettings returns the expected charts object",{
   # hepexplorer is the only invalid chart when a measure value is invalidated
   hepexplorerFail_settings <- validSettings
   hepexplorerFail_settings[["measure_values"]][["AST"]]<-"INVALID!"
-  hepexplorerFail_validation<-validateSettings(data=adlbc, settings=hepexplorerFail_settings)
+  hepexplorerFail_validation<-validateSettings(data=labs, settings=hepexplorerFail_settings)
   expect_false(hepexplorerFail_validation$valid)
   expect_false(hepexplorerFail_validation$charts%>%map_lgl(~.x)%>%all)
   expect_false(hepexplorerFail_validation[["charts"]][["hepexplorer"]]) #hepexplorer is invalid

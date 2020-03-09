@@ -10,11 +10,11 @@
 #' @return A list containing the matching \code{"standard"} from \code{"standardMetadata"} and a list of  \code{"details"} describing each standard considered.
 #' @examples 
 
-#' detectStandard(adlbc)[["standard"]] #adam
+#' detectStandard(labs)[["standard"]] #adam
 #' detectStandard(iris)[["standard"]] #none
 #'
 #' \dontrun{
-#'   detectStandard(adlbc,domain="AE") #throws error. AE domain not supported in this release.
+#'   detectStandard(labs,domain="AE") #throws error. AE domain not supported in this release.
 #' }
 #'
 #' @export

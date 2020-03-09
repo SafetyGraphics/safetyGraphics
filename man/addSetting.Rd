@@ -4,11 +4,22 @@
 \alias{addSetting}
 \title{Adds a new setting for use in the safetyGraphics shiny app}
 \usage{
-addSetting(text_key, label, description, setting_type,
-  setting_required = FALSE, column_mapping = FALSE, column_type = NA,
-  field_mapping = FALSE, field_column_key = "", setting_cat,
-  default = "", charts = c(), settingsLocation = getwd(),
-  overwrite = TRUE)
+addSetting(
+  text_key,
+  label,
+  description,
+  setting_type,
+  setting_required = FALSE,
+  column_mapping = FALSE,
+  column_type = NA,
+  field_mapping = FALSE,
+  field_column_key = "",
+  setting_cat,
+  default = "",
+  charts = c(),
+  settingsLocation = getwd(),
+  overwrite = TRUE
+)
 }
 \arguments{
 \item{text_key}{Text key indicating the setting name. \code{'--'} delimiter indicates a nested setting}
