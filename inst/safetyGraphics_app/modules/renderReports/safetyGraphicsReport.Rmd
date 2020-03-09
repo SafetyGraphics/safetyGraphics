@@ -1,4 +1,3 @@
-
 ---
 output:
   html_document
@@ -21,16 +20,16 @@ subchunkify_title <- function(chart) {
   cat(sub_chunk)
 }
 
-subchunkify_chart <- function(chart,settings, fig_height=15, fig_width=12) {
-  g_deparsed <- paste0(deparse(     
-    function() {chartRenderer(data = params$data,
+subchunkify_chart <- function(chart,data, settings, fig_height=15, fig_width=12) {
+  g_deparsed <- paste0(deparse(
+    function() {chartRenderer(data = data,
       settings = settings, chart=chart)}
   ), collapse = '')
 
   sub_chunk <- paste0("
   `","``{r sub_chunk_", floor(runif(1) * 10000), ", fig.height=",
    fig_height, ", fig.width=", fig_width, ", echo=FALSE, message=FALSE, warning=FALSE}",
-  "\n(", 
+  "\n(",
     g_deparsed
     , ")()",
   "\n`","``
@@ -39,11 +38,14 @@ subchunkify_chart <- function(chart,settings, fig_height=15, fig_width=12) {
   cat(knitr::knit(text = knitr::knit_expand(text = sub_chunk), quiet = TRUE))
 }
 
-for (chart in params$charts) {
-  chart_settings <- trimSettings(settings=params$settings, charts=chart)
-  subchunkify_title(chart)
-  subchunkify_chart(chart, chart_settings)
+md <- data.frame(params$charts)
+for (chart in md$chart) {
+  domain <- md[md$chart==chart,]$domain
+  chart_settings <- trimSettings(settings=params$settings[[domain]], charts=chart)
+  subchunkify_title(md[md$chart==chart,]$label)
+  subchunkify_chart(chart, params$data[[domain]], chart_settings)
 }
+
 
 ```
 
@@ -67,7 +69,11 @@ lib_code <- quote(library(safetyGraphics))
 lib_code
 
 writeLines("path <- 'path_to_data'") ### <-- Update this!
-writeLines("my_data <- read.csv(file.path(path, 'data.csv'))")
+
+domains <- unique(data.frame(params$charts)$domain)
+for(d in domains){
+  writeLines(paste0("my_", d, "_data <- read.csv(file.path(path, '", d, "_data.csv'))"))
+}
 
 ```
 
@@ -79,10 +85,11 @@ subchunkify_header <- function(chart){
   cat(g_deparsed)
 }
 
-subchunkify_code <- function(chart,settings){
+subchunkify_code <- function(chart,settings, domain){
+  dat <- sym(paste0("my_", domain, "_data"))
   g_deparsed <- paste0(deparse(         
     function() {
-      bquote(chartRenderer(data = my_data,
+      bquote(chartRenderer(data = .(dat),
       settings = .(settings), chart=.(chart)))
     }
   ), collapse = '')
@@ -98,11 +105,14 @@ subchunkify_code <- function(chart,settings){
   cat(knitr::knit(text = knitr::knit_expand(text = sub_chunk), quiet = TRUE))
 }
 
-for (chart in params$charts) {
-  chart_settings <- trimSettings(settings=params$settings, charts=chart)
-  subchunkify_header(chart)
-  subchunkify_code(chart, chart_settings)
+md <- data.frame(params$charts)
+for (chart in md$chart) {
+  domain <- md[md$chart==chart,]$domain
+  chart_settings <- trimSettings(settings=params$settings[[domain]], charts=chart)
+  subchunkify_header(md[md$chart==chart,]$label)
+  subchunkify_code(chart, chart_settings, domain)
 }
+
 
 ```
 
