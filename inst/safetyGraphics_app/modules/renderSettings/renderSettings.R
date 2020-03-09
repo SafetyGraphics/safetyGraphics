@@ -35,15 +35,17 @@ source("modules/renderSettings/util/updateSettingStatus.R")
 #' @param input Input objects from module namespace
 #' @param output Output objects from module namespace
 #' @param session An environment that can be used to access information and functionality relating to the session
-#' @param data A data frame
-#' @param settings Settings object that corresponds to data's standard - result of generateSettings().
-#' @param status A list describing the validation state for data/settings - result of validateSettings().
+#' @param data A user-selected data frame from the dataLoad module [REACTIVE]
+#' @param settings Settings object that corresponds to data's standard - result of generateSettings(). [REACTIVE]
+#' @param status A list describing the validation state for data/settings - result of validateSettings(). [REACTIVE]
+#' @param metadata A data frame of settings metadata specific to the current domain.
+#' @param charts A named vector of domain-specific charts, where the name is the chart display label, and the value is the chart name used in the code.
 #'
 #' @return A list of reactive values, including:
 #' \itemize{
-#' \item{"charts"}{A vector of chart(s) selected by the user}
 #' \item{"settings"}{Upadted settings object based on UI/user selections}
 #' \item{"status"}{Result from validateSettings() for originally selected data + updated settings object}
+#' \item{"charts"}{A named logical vector, with names corresponding to the user-selected charts, and values corresponding to the validation statuses.}
 #'
 renderSettings <- function(input, output, session, data, settings, status, metadata, charts){
   ns <- session$ns
@@ -344,10 +346,9 @@ renderSettings <- function(input, output, session, data, settings, status, metad
   ### return updated settings and status to global env.
   return(
     list(
-      charts = reactive(input$charts),
       settings = reactive(settings_new()),
       status = reactive(status_new()),
-      charts2  = reactive(status_new()$charts)
+      charts  = reactive(status_new()$charts)
     )
   )
 }

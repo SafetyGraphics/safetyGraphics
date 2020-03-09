@@ -11,9 +11,8 @@
 #' @param input Input objects from module namespace
 #' @param output Output objects from module namespace
 #' @param session An environment that can be used to access information and functionality relating to the session
-#' @param data A data frame  [REACTIVE]
-#' @param settings list of settings arguments for charts [REACTIVE]
-#' @param charts vector of charts to be subset from [REACTIVE]
+#' @param configVals The output from the config modules - user selected data, settings, and charts - captured in a reactiveValues object. One sublist per domain.[REACTIVE VALUES]
+#' @param chartsMetadata A filtered instance of the original charts metadata, containing only details needed for the reports module. [REACTIVE]
 
 renderReports <- function(input, output, session, configVals, chartsMetadata){
   
