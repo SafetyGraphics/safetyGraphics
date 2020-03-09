@@ -42,7 +42,10 @@ if (!is.null(getShinyOption("safetygraphics_charts"))){
   all_charts <- chartsMetadata$chart
 }
 
-
+metadata_list <- list(chartsMetadata = chartsMetadata,
+                 settingsMetadata = settingsMetadata,
+                 standardsMetadata = standardsMetadata,
+                 all_charts = all_charts)
 # Prepare initial datasets/labels (with info about standards) to be loaded into the app 
 # pre-load data into app if requested
 # if(!is.null(getShinyOption("sg_loadData")) && getShinyOption("sg_loadData")){
@@ -111,5 +114,5 @@ source('modules/dataUpload/dataUploadUI.R')
 source('modules/dataUpload/dataUpload.R')
 
 
-source('modules/main/mainUI.R')
-source('modules/main/main.R')
+source('modules/config/configUI.R')
+source('modules/config/config.R')
