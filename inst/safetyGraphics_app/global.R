@@ -42,10 +42,10 @@ if (!is.null(getShinyOption("safetygraphics_charts"))){
   all_charts <- chartsMetadata$chart
 }
 
-metadata_list <- list(chartsMetadata = chartsMetadata,
+metadata_list <- list(chartsMetadata = filter(chartsMetadata, chart %in% all_charts),
                  settingsMetadata = settingsMetadata,
-                 standardsMetadata = standardsMetadata,
-                 all_charts = all_charts)
+                 standardsMetadata = standardsMetadata)
+
 # Prepare initial datasets/labels (with info about standards) to be loaded into the app 
 # pre-load data into app if requested
 # if(!is.null(getShinyOption("sg_loadData")) && getShinyOption("sg_loadData")){
