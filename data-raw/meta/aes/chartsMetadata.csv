@@ -1,0 +1,3 @@
+chart,main,sub,label,description,repo_url,settings_url,type,maxWidth
+aetimelines,aeTimelines,,Adverse Event Timeline,Adverse Event Timelines,https://github.com/rhoinc/ae-timelines,https://github.com/RhoInc/ae-timelines/wiki/Configuration,htmlwidget,1000
+aeexplorer,aeTable,createChart,Adverse Event Explorer,Adverse Event Explorer,https://github.com/RhoInc/aeexplorer,https://github.com/RhoInc/aeexplorer/wiki/Configuration,htmlwidget,1000
