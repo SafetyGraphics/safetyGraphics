@@ -35,22 +35,21 @@ source("modules/renderSettings/util/updateSettingStatus.R")
 #' @param input Input objects from module namespace
 #' @param output Output objects from module namespace
 #' @param session An environment that can be used to access information and functionality relating to the session
-#' @param data A data frame
-#' @param settings Settings object that corresponds to data's standard - result of generateSettings().
-#' @param status A list describing the validation state for data/settings - result of validateSettings().
+#' @param data A user-selected data frame from the dataLoad module [REACTIVE]
+#' @param settings Settings object that corresponds to data's standard - result of generateSettings(). [REACTIVE]
+#' @param status A list describing the validation state for data/settings - result of validateSettings(). [REACTIVE]
+#' @param metadata A data frame of settings metadata specific to the current domain.
+#' @param charts A named vector of domain-specific charts, where the name is the chart display label, and the value is the chart name used in the code.
 #'
 #' @return A list of reactive values, including:
 #' \itemize{
-#' \item{"charts"}{A vector of chart(s) selected by the user}
 #' \item{"settings"}{Upadted settings object based on UI/user selections}
 #' \item{"status"}{Result from validateSettings() for originally selected data + updated settings object}
+#' \item{"charts"}{A named logical vector, with names corresponding to the user-selected charts, and values corresponding to the validation statuses.}
 #'
-renderSettings <- function(input, output, session, data, settings, status){
+renderSettings <- function(input, output, session, data, settings, status, metadata, charts){
   ns <- session$ns
 
-  charts<-as.vector(filter(chartsMetadata, chart %in% all_charts)[["chart"]])
-  labels<-as.vector(filter(chartsMetadata, chart %in% all_charts)[["label"]])
-  names(charts)<-labels
 
   output$charts_wrap_ui <- renderUI({
     checkboxGroupButtons(
@@ -70,7 +69,7 @@ renderSettings <- function(input, output, session, data, settings, status){
   # Null if no charts are selected
   input_names <- reactive({
     if(!is.null(input$charts)){
-      safetyGraphics:::getSettingsMetadata(charts=input$charts, cols="text_key")
+      safetyGraphics:::getSettingsMetadata(charts=input$charts, cols="text_key", metadata=metadata) %>% unique
     } else{
       NULL
     }
@@ -93,6 +92,7 @@ renderSettings <- function(input, output, session, data, settings, status){
         settings = settings(),
         setting_cat_val = "data",
         charts=charts,
+        metadata=metadata,
         ns=ns
       )
     )
@@ -107,6 +107,7 @@ renderSettings <- function(input, output, session, data, settings, status){
         settings = settings(),
         setting_cat_val = "measure",
         charts=charts,
+        metadata=metadata,
         ns=ns
       )
     )
@@ -120,6 +121,7 @@ renderSettings <- function(input, output, session, data, settings, status){
         settings = settings(),
         setting_cat_val = "appearance",
         charts=charts,
+        metadata=metadata,
         ns=ns
       )
     )
@@ -140,7 +142,8 @@ renderSettings <- function(input, output, session, data, settings, status){
     # Get all possible metadata (input_names always reflects the current chart selections and is already filtered)
     # so I'm grabbing all of these options so I can determine which should be hidden
     all_settings <- getSettingsMetadata(
-      cols=c("text_key")
+      cols=c("text_key"),
+      metadata=metadata
     )
     # Identify which settings in input_names() are not relevant
     settings_to_drop <- setdiff(all_settings,input_names)
@@ -168,7 +171,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   observe({
     field_rows <- getSettingsMetadata(
       charts=input$charts,
-      filter_expr = field_mapping==TRUE
+      filter_expr = field_mapping==TRUE,
+      metadata = metadata
     )
     if(!is.null(field_rows)){
       column_keys <- field_rows %>%
@@ -184,7 +188,8 @@ renderSettings <- function(input, output, session, data, settings, status){
             field_keys <- getSettingsMetadata(
               charts=input$charts,
               col = "text_key",
-              filter_expr = field_column_key==!!col
+              filter_expr = field_column_key==!!col,
+              metadata = metadata
             )
 
             ### SET UP CHOICES/PLACEHOLDERS FOR SELECT INPUT UPDATES
@@ -205,7 +210,8 @@ renderSettings <- function(input, output, session, data, settings, status){
             } else {
               choices <- NULL
               placeholder <- list(
-                placeholder =  paste0("Please select a ", getSettingsMetadata(col="label", text_key=col)),
+                placeholder =  paste0("Please select a ", getSettingsMetadata(col="label", text_key=col,
+                                                                              metadata = metadata )),
                 onInitialize = I('function() {
                        this.setValue("");}')
               )
@@ -224,7 +230,9 @@ renderSettings <- function(input, output, session, data, settings, status){
                     setting_value <- safetyGraphics:::getSettingValue(key=setting_key, settings= isolate(settings()))
                     choices <- unique(c(setting_value, choices))
                   }
-
+                  if (is.null(names(choices))){
+                    names(choices) <- choices
+                  }
                   updateSelectizeInput(
                     session,
                     inputId = key,
@@ -338,9 +346,9 @@ renderSettings <- function(input, output, session, data, settings, status){
   ### return updated settings and status to global env.
   return(
     list(
-      charts = reactive(input$charts),
       settings = reactive(settings_new()),
-      status = reactive(status_new())
+      status = reactive(status_new()),
+      charts  = reactive(status_new()$charts)
     )
   )
 }
