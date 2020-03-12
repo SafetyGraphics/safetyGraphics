@@ -36,9 +36,12 @@ for(meta in metaTypes){
 }
 setwd("..") #/data-raw
 
-usethis::use_data(standardsMetadata, overwrite = TRUE)
-usethis::use_data(chartsMetadata, overwrite = TRUE)
-usethis::use_data(settingsMetadata, overwrite = TRUE)
+meta<-list(settings=settingsMetadata, charts=chartsMetadata, standards=standardsMetadata)
+usethis::use_data(meta, overwrite = TRUE)
+
+#usethis::use_data(standardsMetadata, overwrite = TRUE)
+#usethis::use_data(chartsMetadata, overwrite = TRUE)
+#usethis::use_data(settingsMetadata, overwrite = TRUE)
 
 #create sample data sets
 setwd("sample")
