@@ -36,8 +36,8 @@ for(meta in metaTypes){
 }
 setwd("..") #/data-raw
 
-meta<-list(settings=settingsMetadata, charts=chartsMetadata, standards=standardsMetadata)
-usethis::use_data(meta, overwrite = TRUE)
+metadata<-list(settings=settingsMetadata, charts=chartsMetadata, standards=standardsMetadata)
+usethis::use_data(metadata, overwrite = TRUE)
 
 #usethis::use_data(standardsMetadata, overwrite = TRUE)
 #usethis::use_data(chartsMetadata, overwrite = TRUE)
