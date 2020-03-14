@@ -4,22 +4,21 @@
 #'
 #' This function makes it easy for remove a setting from the safetyGraphics shiny app by making updates to the underlying metadata used by the package. 
 #'
-#' @param settingsLocation path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the setting has been removed.
+#' @param domain domain of the chart
 #' @param text_keys Text keys indicating the setting names to be removed.
+#' @param metadataLocation Path where the custom settings will be loaded/saved. 
 #'
 #' @export
 
-removeSettings <- function(text_keys, settingsLocation=getwd()){
-  settingsMetaPath <- paste(settingsLocation,"settingsMetadata.Rds",sep="/")
-  if(file.exists(settingsMetaPath)){
-    settingsMeta <- readRDS(settingsMetaPath)
-  }else{
-    settingsMeta <- safetyGraphics::settingsMetadata
-  }
+removeSettings <- function(domain, text_keys, settingsLocation=getwd()){
+  # load metadata
+  metadataPath <- paste(settingsLocation,"metadata.Rds",sep="/")
+  metadata<- getMetadata(path=metadataPath)
   
   #delete rows for the specified chart
-  settingsMeta <- settingsMeta %>% filter(!(.data$text_key %in% !!text_keys))
+  metadata$settings <- metadata$settings %>%
+    filter(!(.data$text_key %in% !!text_keys & .data$domain== !!domain))
   
   #save updated metadata file
-  saveRDS(settingsMeta, settingsMetaPath)
+  saveRDS(metadata, metadataPath)
 }
