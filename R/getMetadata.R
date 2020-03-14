@@ -9,10 +9,9 @@
 #' @return list with metdata following the format specified in safetyGraphics:::metadata
 #'
 #' @examples
-#' a<-getMetadata() #returns safetygraphics:::metadata
-#' getMetadata(domian="labs") #returns lab domain only
-#' path <- file.path(getwd(), 'metadata.rds')  
-#' getMetadata(path=path #attempt to load `metadata.rds` saved in the working directory
+#' all <- getMetadata() #returns safetygraphics:::metadata
+#' labs <- getMetadata(domian="labs") #returns lab domain only
+#' custom <- file.path(getwd(), 'metadata.rds')  #attempt to load `metadata.rds` saved in the working directory
 #' 
 #' @importFrom stringr str_subset
 #' @importFrom magrittr "%>%"
@@ -21,17 +20,19 @@
 #'
 #' @export
 #' 
-getMetadata  <- function(meta = safetyGraphics::metadata, path, domain){
+#' 
+getMetadata  <- function(meta = safetyGraphics::metadata, path=NULL, domain=NULL){
     stopifnot(typeof(meta)=="list", typeof(path) %in% c("character","NULL"), typeof(domain) %in% c("character", "NULL"))
    
-    if(!is.null(path) & file.exists(path)){
-          meta <- readRDS(path)
+    if(!is.null(path)){
+        stopifnot(file.exists(path))
+        meta <- readRDS(path)
     }
 
     if(!is.null(domain)){
-        meta$settings <- meta$settings %>% filter(domain %in% !!domain)
-        meta$standards <- meta$standards %>% filter(domain %in% !!domain)
-        meta$charts <- meta$charts %>% filter(domain %in% !!domain)
+        meta$settings <- meta$settings %>% filter(domain %in% tolower(!!domain))
+        meta$standards <- meta$standards %>% filter(domain %in% tolower(!!domain))
+        meta$charts <- meta$charts %>% filter(domain %in% tolower(!!domain))
     }
     
 return(meta)
