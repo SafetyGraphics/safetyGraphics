@@ -4,6 +4,7 @@
 #'
 #' This function makes it easy for users to adds a new settings to the safetyGraphics shiny app by making updates to the underlying metadata used by the package. Specifically, the function adds a row to settingsMetadata.rda describing the setting.
 #'
+#' @param domain data domain for the setting
 #' @param text_key Text key indicating the setting name. \code{'--'} delimiter indicates a nested setting
 #' @param label Label
 #' @param description Description
@@ -15,14 +16,15 @@
 #' @param field_column_key Key for the column that provides options for the field-level mapping in the data
 #' @param setting_cat Setting category (data, measure, appearance)
 #' @param default Default value for non-data settings
-#' @param charts character vector of charts using this setting
-#' @param settingsLocation path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new setting has been added.
-#' @param overwrite overwrite any existing setting metadata? Note that having settings with the same name is not supported and will cause unexpected results. default = true
-#'
+#' @param charts Character vector of charts using this setting
+#' @param metadataLocation Path where the custom settings will be loaded/saved. 
+#' @param overwrite Overwrite any existing setting metadata? Note that having settings with the same name is not supported and will cause unexpected results. default = true
+#' 
 #' @export
 #'
 
 addSetting<-function(
+  domain,
   text_key,
   label,
   description,
@@ -35,12 +37,13 @@ addSetting<-function(
   setting_cat,
   default='',
   charts=c(),
-  settingsLocation=getwd(),
+  metadataLocation=getwd(),
   overwrite=TRUE
 ){
 
   # check inputs
   stopifnot(
+    typeof(domain)=="character",
     typeof(text_key)=="character",
     typeof(label)=="character",
     typeof(description)=="character",
@@ -58,6 +61,7 @@ addSetting<-function(
 
   # create object for new setting
   newSetting <- list(
+    domain=domain,
     text_key=text_key,
     label=label,
     description=description,
@@ -71,17 +75,12 @@ addSetting<-function(
     default=default
   )
 
-  # load settings metadata
-  settingsMetaPath <- paste(settingsLocation,"settingsMetadata.Rds",sep="/")
-  if(file.exists(settingsMetaPath)){
-    settingsMeta <- readRDS(settingsMetaPath)
-  }else{
-    settingsMeta <- safetyGraphics::settingsMetadata
-  }
-
-
+  # load metadata
+  metadataPath <- paste(settingsLocation,"metadata.Rds",sep="/")
+  metadata<- getMetadata(path=metadataPath)
+  
   # set chart flags for new setting
-  chartVars <-  names(settingsMeta)[substr(names(settingsMeta),0,6)=="chart_"]
+  chartVars <-  names(metadata$settings)[substr(names(metadata$settings),0,6)=="chart_"]
   settingCharts <- paste0("chart_",charts)
   for(varName in chartVars){
     newSetting[varName] <- varName %in% settingCharts
@@ -89,10 +88,10 @@ addSetting<-function(
 
   #delete row for the specified chart if overwrite is true
   if(overwrite){
-    settingsMeta <- settingsMeta %>% filter(.data$text_key != !!text_key)
+    metadata$settings <- metadata$settings %>% filter(!(.data$text_key == !!text_key & .data$domain== !!domain))
   }
 
   # add custom chart settings and save
-  settingsMeta[nrow(settingsMeta)+1,] <- newSetting
-  saveRDS(settingsMeta, settingsMetaPath)
+  metadata$settings[nrow(metadata$settings)+1,] <- newSetting
+  saveRDS(metadata, metadataPath)
 }

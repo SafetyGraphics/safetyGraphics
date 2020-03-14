@@ -4,6 +4,7 @@
 #'
 #' This function makes it easy for users to add a new chart to the safetyGraphics shiny app, by making updates to the underlying metadata used by the package. Specifically, the function adds a row to chartsMetadata.rda describing the chart and adds a column to settingsMetadata.rda specifying which settings are used with the chart. If new settings are needed for the chart, the user should call addSetting() for each new setting required.
 #'
+#' @param domain data domain for the chart
 #' @param chart Name of the chart - one word, all lower case
 #' @param label Nicely formatted name of the chart
 #' @param description Description of the chart
@@ -14,7 +15,7 @@
 #' @param type type of chart. Should be 'static', 'plotly' or 'module'
 #' @param maxWidth max width for the widget in pixels
 #' @param requiredSettings array of text_key values (matching those used in settingsMetadata) for the required settings for this chart
-#' @param settingsLocation path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new chart has been added.
+#' @param metadataLocation path where the custom metadata will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new chart has been added.
 #' @param overwrite overwrite any existing chart metadata? Note that having multiple charts with the same name is not supported and will cause unexpected results. default = true
 #'
 #' @importFrom rlang ":="
@@ -23,6 +24,7 @@
 #' @export
 #'
 addChart <- function(
+  domain,
   chart,
   label="",
   description="",
@@ -33,12 +35,13 @@ addChart <- function(
   type='static',
   maxWidth=1000,
   requiredSettings=c(""),
-  settingsLocation=getwd(),
+  metadataLocation=getwd(),
   overwrite = TRUE
 ){
 
   # check inputs
   stopifnot(
+    typeof(domain)=="character",
     typeof(chart)=="character",
     typeof(label)=="character",
     typeof(description)=="character",
@@ -57,6 +60,7 @@ addChart <- function(
 
   # create settings for new chart
   newChart <- list(
+    domain=domain,
     chart=chart,
     main=main,
     sub=sub,
@@ -68,33 +72,21 @@ addChart <- function(
     maxWidth=maxWidth
   )
 
-  # load charts metadata
-  chartsMetaPath <- paste(settingsLocation,"chartsMetadata.Rds",sep="/")
-  if(file.exists(chartsMetaPath)){
-    chartsMeta <- readRDS(chartsMetaPath)
-  }else{
-    chartsMeta <- safetyGraphics::chartsMetadata
-  }
-
+  # load metadata
+  metadataPath <- paste(settingsLocation,"metadata.Rds",sep="/")
+  metadata<- getMetadata(path=metadataPath)
+  
   #delete rows for the specified chart if overwrite is true
   if(overwrite){
-    chartsMeta <- chartsMeta %>% filter(.data$chart != !!chart)
+    metadata$charts <- metadata$charts %>% filter(!(.data$chart == !!chart & .data$domain== !!domain))
   }
 
   # add custom chart settings and save
-  chartsMeta[nrow(chartsMeta)+1,] <- newChart
-  saveRDS(chartsMeta, chartsMetaPath)
+  metadata$charts[nrow(metadata$charts)+1,] <- newChart
 
   # add a column for the new chart to the settings metadata
-  settingsMetaPath <- paste(settingsLocation,"settingsMetadata.Rds",sep="/")
-  if(file.exists(settingsMetaPath)){
-    settingsMeta <- readRDS(settingsMetaPath)
-  }else{
-    settingsMeta <- safetyGraphics::settingsMetadata
-  }
-
-  #Fill in the column based on requiredSettings and save
+  # Fill in the column based on requiredSettings and save
   chart_col <- sym(paste0("chart_",chart))
   settingsMeta <- settingsMeta %>% mutate(!!chart_col := .data$text_key %in% !!requiredSettings)
-  saveRDS(settingsMeta, settingsMetaPath)
+  saveRDS(metadata, metadataPath)
 }
