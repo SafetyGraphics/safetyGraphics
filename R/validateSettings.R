@@ -7,6 +7,9 @@
 #' @param data A data frame to check against the settings object
 #' @param settings The settings list to compare with the data frame.
 #' @param charts  The charts being validated
+#' @param chartsMetadata Chart metadata object following the format of safetyGraphics::chartsMetadata
+#' @param settingsMetadata Settings metadata object following the format of safetyGraphics::settingsMetadata
+#' 
 #' @return
 #' A list describing the validation state for the data/settings combination. The returned list has the following properties:
 #' \itemize{
@@ -30,7 +33,9 @@
 #' validateSettings(data=labs, settings=testSettings)
 #' # .$valid is TRUE
 #' testSettings$id_col <- "NotAColumn"
-#' validateSettings(data=labs, settings=testSettings)
+#' chartsMeta <- safetyGraphics::chartsMetadata %>% filter(domain="labs")
+#' settingsMetata <- safetyGraphics::settingsMetadata %>% filter(domain="labs")
+#' validateSettings(data=labs, settings=testSettings, chartsMetadata=chartsMeta, settingsMetadata=settingsMeta)
 #' # .$valid is now FALSE
 #'
 #' @export
@@ -41,21 +46,13 @@
 #' @importFrom rlang .data
 
 
-validateSettings <- function(data, settings, charts=NULL){
-  # load chart metadata (use custom data if available)
-  chartmeta<-safetyGraphics::chartsMetadata
-  if(!(is.null(options('sg_chartsMetadata')[[1]]))){ #if the option exists
-    if(options('sg_chartsMetadata')[[1]]){ #and it's true
-      chartmeta<-options('sg_chartsMetadata_df')[[1]] #use the custom metadata
-    }
-  }
-
+validateSettings <- function(data, settings, charts=NULL, chartsMetadata, settingsMetadata){
   #initialize shell settings
   settingStatus<-list()
 
   # if no charts are specified, use all available
   if (is.null(charts)){
-    charts <- chartmeta$chart
+    charts <- chartMetadata$chart
   }
 
   # Check that all required parameters are not null

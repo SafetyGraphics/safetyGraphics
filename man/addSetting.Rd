@@ -5,6 +5,7 @@
 \title{Adds a new setting for use in the safetyGraphics shiny app}
 \usage{
 addSetting(
+  domain,
   text_key,
   label,
   description,
@@ -17,11 +18,13 @@ addSetting(
   setting_cat,
   default = "",
   charts = c(),
-  settingsLocation = getwd(),
+  metadataLocation = getwd(),
   overwrite = TRUE
 )
 }
 \arguments{
+\item{domain}{data domain for the setting}
+
 \item{text_key}{Text key indicating the setting name. \code{'--'} delimiter indicates a nested setting}
 
 \item{label}{Label}
@@ -44,11 +47,11 @@ addSetting(
 
 \item{default}{Default value for non-data settings}
 
-\item{charts}{character vector of charts using this setting}
+\item{charts}{Character vector of charts using this setting}
 
-\item{settingsLocation}{path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new setting has been added.}
+\item{metadataLocation}{Path where the custom settings will be loaded/saved.}
 
-\item{overwrite}{overwrite any existing setting metadata? Note that having settings with the same name is not supported and will cause unexpected results. default = true}
+\item{overwrite}{Overwrite any existing setting metadata? Note that having settings with the same name is not supported and will cause unexpected results. default = true}
 }
 \description{
 This function updates settings objects to add a new setting parameter to the safetyGraphics shiny app

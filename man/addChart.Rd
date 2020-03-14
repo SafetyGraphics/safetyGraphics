@@ -5,6 +5,7 @@
 \title{Adds a new chart for use in the safetyGraphics shiny app}
 \usage{
 addChart(
+  domain,
   chart,
   label = "",
   description = "",
@@ -15,11 +16,13 @@ addChart(
   type = "static",
   maxWidth = 1000,
   requiredSettings = c(""),
-  settingsLocation = getwd(),
+  metadataLocation = getwd(),
   overwrite = TRUE
 )
 }
 \arguments{
+\item{domain}{data domain for the chart}
+
 \item{chart}{Name of the chart - one word, all lower case}
 
 \item{label}{Nicely formatted name of the chart}
@@ -40,7 +43,7 @@ addChart(
 
 \item{requiredSettings}{array of text_key values (matching those used in settingsMetadata) for the required settings for this chart}
 
-\item{settingsLocation}{path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new chart has been added.}
+\item{metadataLocation}{path where the custom metadata will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the new chart has been added.}
 
 \item{overwrite}{overwrite any existing chart metadata? Note that having multiple charts with the same name is not supported and will cause unexpected results. default = true}
 }

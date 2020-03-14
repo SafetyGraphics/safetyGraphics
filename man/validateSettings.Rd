@@ -4,7 +4,13 @@
 \alias{validateSettings}
 \title{Compare a settings object with a specified data set}
 \usage{
-validateSettings(data, settings, charts = NULL)
+validateSettings(
+  data,
+  settings,
+  charts = NULL,
+  chartsMetadata,
+  settingsMetadata
+)
 }
 \arguments{
 \item{data}{A data frame to check against the settings object}
@@ -12,6 +18,10 @@ validateSettings(data, settings, charts = NULL)
 \item{settings}{The settings list to compare with the data frame.}
 
 \item{charts}{The charts being validated}
+
+\item{chartsMetadata}{Chart metadata object following the format of safetyGraphics::chartsMetadata}
+
+\item{settingsMetadata}{Settings metadata object following the format of safetyGraphics::settingsMetadata}
 }
 \value{
 A list describing the validation state for the data/settings combination. The returned list has the following properties:
@@ -42,7 +52,9 @@ testSettings <- generateSettings(standard="adam")
 validateSettings(data=labs, settings=testSettings)
 # .$valid is TRUE
 testSettings$id_col <- "NotAColumn"
-validateSettings(data=labs, settings=testSettings)
+chartsMeta <- safetyGraphics::chartsMetadata \%>\% filter(domain="labs")
+settingsMetata <- safetyGraphics::settingsMetadata \%>\% filter(domain="labs")
+validateSettings(data=labs, settings=testSettings, chartsMetadata=chartsMeta, settingsMetadata=settingsMeta)
 # .$valid is now FALSE
 
 }
