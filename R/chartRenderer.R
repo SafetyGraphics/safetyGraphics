@@ -6,7 +6,8 @@
 #' @param debug_js print settings in javascript before rendering chart. Default: \code{FALSE}.
 #' @param settings Optional list of settings arguments to be converted to JSON using \code{jsonlite::toJSON(settings, auto_unbox = TRUE, dataframe = "rows", null = "null")}. Default: \code{NULL}.
 #' @param chart name of the chart to render
-#'
+#' @param metadata metadata using the format described in safetyGraphics::metadata
+#' 
 #' @examples
 #' \dontrun{
 #'
@@ -34,21 +35,14 @@
 #'       details = details_list,
 #'       filters = filters_list)
 #'
-#' chartRenderer(data=adlbc, settings = settingsl, chart=safetyhistogram)
+#' chartRenderer(data=labs, settings = settingsl, chart=safetyhistogram, metadata = safetyGraphics::metadata)
 #'
 #' }
 #'
 #' @import htmlwidgets
 #'
 #' @export
-chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
-  # load chart metadata (use custom data if available)
-  chartmeta<-safetyGraphics::chartsMetadata
-  if(!(is.null(options('sg_chartsMetadata')[[1]]))){ #if the option exists
-    if(options('sg_chartsMetadata')[[1]]){ #and it's set to true
-      chartmeta<-options('sg_chartsMetadata_df')[[1]]
-    }
-  }
+chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL, metadata=NULL) {
 
   # Chart specific customiztions (to be removed after js updates)
   if(chart %in% c("paneledoutlierexplorer","safetyoutlierexplorer")){
@@ -107,13 +101,13 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
   }
 
   #Set Chart Width
-  chartMaxWidth<-  chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$maxWidth)
+  chartMaxWidth<-  metadata$charts %>% filter(.data$chart==!!chart) %>% pull(.data$maxWidth)
   settings$max_width <- chartMaxWidth
 
   #Renderer
-  chartFunction<- chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$main)
-  subFunction<- chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$sub)
-  chartType <- chartmeta %>% filter(.data$chart==!!chart) %>% pull(.data$type)
+  chartFunction<- metadata$charts %>% filter(.data$chart==!!chart) %>% pull(.data$main)
+  subFunction<-  metadata$charts %>% filter(.data$chart==!!chart) %>% pull(.data$sub)
+  chartType <-  metadata$charts %>% filter(.data$chart==!!chart) %>% pull(.data$type)
 
   rSettings = list(
     data = data,
