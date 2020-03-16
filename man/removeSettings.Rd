@@ -4,12 +4,14 @@
 \alias{removeSettings}
 \title{Remove a setting from the safetyGraphics shiny app}
 \usage{
-removeSettings(text_keys, settingsLocation = getwd())
+removeSettings(domain, text_keys, settingsLocation = getwd())
 }
 \arguments{
+\item{domain}{domain of the chart}
+
 \item{text_keys}{Text keys indicating the setting names to be removed.}
 
-\item{settingsLocation}{path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the setting has been removed.}
+\item{metadataLocation}{Path where the custom settings will be loaded/saved.}
 }
 \description{
 This function updates settings objects to remove a setting parameter from the safetyGraphics shiny app

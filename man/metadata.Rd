@@ -4,7 +4,8 @@
 \name{metadata}
 \alias{metadata}
 \title{Metadata}
-\format{A list containing 3 named data frames (`settings`, `charts` and `standards`) containing metadata needed for renderering custom charts using safetyGraphics.
+\format{
+A list containing 3 named data frames (`settings`, `charts` and `standards`) containing metadata needed for renderering custom charts using safetyGraphics.
  
 \describe{
     \item{settings$chart_hepexplorer}{Flag indicating if the settings apply to the Hepatic Explorer Chart}
@@ -39,7 +40,8 @@
    \item{standards$text_key}{Text key indicating the setting name. \code{'--'} delimiter indicates a nested setting}
    \item{standards$adam}{Settings values for the ADaM standard}
    \item{standards$sdtm}{Settings values for the SDTM standard}
-}}
+}
+}
 \source{
 Created for this package
 }

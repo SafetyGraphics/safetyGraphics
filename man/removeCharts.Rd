@@ -4,12 +4,14 @@
 \alias{removeCharts}
 \title{Remove a chart from the safetyGraphics shiny app}
 \usage{
-removeCharts(charts, settingsLocation = getwd())
+removeCharts(domain, charts, metadataLocation = getwd())
 }
 \arguments{
+\item{domain}{domain of the chart}
+
 \item{charts}{Name of the chart(s) to remove - one word, all lower case}
 
-\item{settingsLocation}{path where the custom settings will be loaded/saved. If metadata is not found in that location, it will be read from the package (e.g. safetyGraphics::settingsMetadata), and then written to the specified location once the chart has been removed}
+\item{metadataLocation}{Path where the custom settings will be loaded/saved.}
 }
 \description{
 This function updates settings objects to remove chart from the safetyGraphics shiny app

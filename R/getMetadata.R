@@ -21,18 +21,27 @@
 #' @export
 #' 
 #' 
-getMetadata  <- function(meta = safetyGraphics::metadata, path=NULL, domain=NULL){
-    stopifnot(typeof(meta)=="list", typeof(path) %in% c("character","NULL"), typeof(domain) %in% c("character", "NULL"))
+getMetadata  <- function(meta = NULL, path=NULL, domain=NULL){
+  
+    stopifnot(
+     # typeof(meta)=="list", 
+      typeof(path) %in% c("character","NULL"), 
+      typeof(domain) %in% c("character", "NULL")
+    )
    
+    if(is.null(meta)){
+      meta<-safetyGraphics::metadata
+    }
+  
     if(!is.null(path)){
         stopifnot(file.exists(path))
         meta <- readRDS(path)
     }
-
+    meta<-meta
     if(!is.null(domain)){
-        meta$settings <- meta$settings %>% filter(domain %in% tolower(!!domain))
-        meta$standards <- meta$standards %>% filter(domain %in% tolower(!!domain))
-        meta$charts <- meta$charts %>% filter(domain %in% tolower(!!domain))
+      meta[["settings"]] <- meta[["settings"]] %>% filter(domain %in% tolower(!!domain))
+      meta$standards <- meta$standards %>% filter(domain %in% tolower(!!domain))
+      meta$charts <- meta$charts %>% filter(domain %in% tolower(!!domain))
     }
     
 return(meta)
