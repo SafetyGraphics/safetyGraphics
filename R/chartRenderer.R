@@ -144,7 +144,7 @@ chartRenderer <- function(data, debug_js = FALSE, settings = NULL, chart=NULL) {
 
 #' Shiny bindings for chartRenderer
 #'
-#' Output and render functions for using safetyhistogram within Shiny
+#' Output and render functions for using the chart renderer within Shiny
 #' applications and interactive Rmd documents.
 #'
 #' @param outputId output variable to read from
