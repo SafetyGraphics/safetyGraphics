@@ -2,13 +2,13 @@
 library(tidyverse)
 library(usethis)
 
-setwd("data-raw") 
-usethis::use_data(settingsMetadata, overwrite = TRUE)
 
-#create sample data sets
+#Copy metadata to /data
+setwd("data-raw") 
 meta<-read_csv("meta.csv")
 usethis::use_data(meta, overwrite = TRUE)
 
+#copy sample data sets to /data
 setwd("sample")
 aes<-read_csv("aes.csv")
 usethis::use_data(aes, overwrite = TRUE)
