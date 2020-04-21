@@ -1,0 +1,31 @@
+domain,text_key,label,description,multiple,standard_adam,standard_sdtm
+aes,id_col,ID column,Unique subject identifier variable name.,FALSE,USUBJID,USUBJID
+aes,seq_col,Sequence column,Event sequence number variable name,FALSE,ASEQ,AESEQ
+aes,stdy_col,AE Start day column,Event start day variable name,FALSE,ASTDY,AESTDY
+aes,endy_col,AE End day column,Event end day variable name,FALSE,AENDY,AEENDY
+aes,term_col,Preferred Term Column,verbatim adverse event text variable name,FALSE,AETERM,AETERM
+aes,treatment_col,Treatment Column,Treatment Column,FALSE,ARM,ARM
+aes,treatment_col--group1,Treatment 1,Treatment 1,FALSE,,
+aes,treatment_col--group2,Treatment 2,Treatment 2,FALSE,,
+aes,bodsys_col,AE Body System,AE Body System,FALSE,AEBODSYS,AEBODSYS
+aes,detail_col,Details,Details,TRUE,,
+aes,filter_cols,Filters,Filters,TRUE,,
+labs,id_col,ID column,Unique subject identifier variable name.,FALSE,USUBJID,USUBJID
+labs,value_col,Value column,Lab result variable name.,FALSE,STRESN,AVAL
+labs,measure_col,Measure column,Lab measure variable name,FALSE,TEST,PARAM
+labs,normal_low_col,Lower Limit of Normal column,Lower limit of normal variable name,FALSE,STNRLO,A1LO
+labs,normall_high_col,Upper Limit of Normal column,Upper limit of normal variable name,FALSE,STNRHI,A1HI
+labs,studyday_col,Study Day column,Visit day variable name,FALSE,DY,ADY
+labs,visit_col,Visit column,Visit variable name,FALSE,VISIT,VISIT
+labs,visitn_col,Visit Number column,Visit number variable name,FALSE,VISITNUM,VISITNUM
+labs,measure_col--ALT,Alanine Aminotransferase value,Value used for Alanine Aminotransferase in the specified measure column,FALSE,"Aminotransferase, alanine (ALT)",Alanine Aminotransferase (U/L)
+labs,measure_col--AST,Aspartate Aminotransferase value,Value used for Aspartate Aminotransferase in the specified measure column,FALSE,"Aminotransferase, aspartate (AST)",Aspartate Aminotransferase (U/L)
+labs,measure_col--TB,Total Bilirubin value,Value used for Total Bilirubin in the specified measure column,FALSE,Total Bilirubin,Bilirubin (umol/L)
+labs,measure_col--ALP,Alkaline Phosphatase value,Value used for Alkaline Phosphatase in the specified measure column,FALSE,Alkaline phosphatase (ALP),Alkaline Phosphatase (U/L)
+labs,unit_col,Unit column,Unit of measure variable name,FALSE,STRESU,
+labs,baseline_flag_col,Baseline column,An optional list defining which column represent the baseline visit(s) of the study.,FALSE,,
+labs,baseline_flag_col--values,Baseline values,An optional list defining which values (one or more) represent the baseline visit(s) of the study.,TRUE,,
+labs,analysis_flag_col,Analysis column,An optional list defining which column represent the analysis visit(s) of the study.,FALSE,,
+labs,analysis_flag_col--values,Analysis values,An optional list defining which values (one or more) represent the analysis visit(s) of the study.,TRUE,,
+labs,detail_col,Details,Details,TRUE,,
+labs,filter_cols,Filters,Filters,TRUE,,
