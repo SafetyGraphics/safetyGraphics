@@ -1,1 +1,0 @@
-## things from render settings

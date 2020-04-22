@@ -3,15 +3,15 @@
 # Preston 2.0 Notes:
 # Doens't seem like we need to include:
 #    Selecting Charts on this settings page
-#    Hiding settings that aren't releant for the selected charts
-#    Validating new settings
-#    Updating the status seytings based on validation results     
+#    Hiding settings that aren't relevant for the selected charts
 #    Printing messages concerning validation results
 #
 # Does seem like we need to include:
 #    Fill settings object based on selections [created fillSettings.R]
-#    Update field level inputs if column level changes (this will probably need to 
-#    change though based on our new metadata format though) [created updateFieldInputs.R]
+#    Update field level inputs if column level changes (this will need to 
+#    change and will be mich simpler based on our new metadata format) [created updateFieldInputs.R]
+#    Validating new settings (but way simpler) [validateSettings.R]
+#    Updating the status settings based on validation results (but way simpler) [validateSettings.R]
 #
 #########################################################################
 # Functions to include
@@ -64,34 +64,11 @@ source("modules/renderSettings/util/updateSettingStatus.R")
 renderSettings <- function(input, output, session, data, settings, status){
   ns <- session$ns
 
+  ## change to use meta instead
+  
   charts<-as.vector(filter(chartsMetadata, chart %in% all_charts)[["chart"]])
   labels<-as.vector(filter(chartsMetadata, chart %in% all_charts)[["label"]])
   names(charts)<-labels
-
-  output$charts_wrap_ui <- renderUI({
-    checkboxGroupButtons(
-      ns("charts"),
-      label = NULL,
-      choices = charts,
-      selected = charts,
-      checkIcon = list(
-        yes = icon("ok-circle", lib = "glyphicon"),
-        no = icon("remove-circle",lib = "glyphicon")
-      ),
-      status="primary"
-    )
-  })
-
-  #List of all inputs
-  # Null if no charts are selected
-  input_names <- reactive({
-    if(!is.null(input$charts)){
-      safetyGraphics:::getSettingsMetadata(charts=input$charts, cols="text_key")
-    } else{
-      NULL
-    }
-
-  })
 
 
   ######################################################################
@@ -101,6 +78,8 @@ renderSettings <- function(input, output, session, data, settings, status){
   #   - populate using data/settings
   ######################################################################
 
+
+  
   output$data_mapping_ui <- renderUI({
     charts <- isolate(input$charts)
     tagList(
@@ -141,33 +120,6 @@ renderSettings <- function(input, output, session, data, settings, status){
     )
   })
 
-  ######### Hide Settings that are not relevant to selected charts ########
-  observeEvent(input$charts,{
-
-    input_names <- isolate(input_names())
-
-    # Make sure all relevant settings are showing
-    if (!is.null(input_names)){
-      for (setting in input_names) {
-        shinyjs::show(id=paste0("ctl_",setting))
-      }
-    }
-
-    # Get all possible metadata (input_names always reflects the current chart selections and is already filtered)
-    # so I'm grabbing all of these options so I can determine which should be hidden
-    all_settings <- getSettingsMetadata(
-      cols=c("text_key")
-    )
-
-    # Identify which settings in input_names() are not relevant
-    settings_to_drop <- setdiff(all_settings,input_names)
-
-    # Use shinyJS::hide() to hide these inputs
-    for (setting in settings_to_drop) {
-      shinyjs::hide(id=paste0("ctl_",setting))
-    }
-
-  }, ignoreNULL=FALSE)  ## input$charts = NULL if none are selected
 
   # ensure outputs update upon app startup
   outputOptions(output, "charts_wrap_ui", suspendWhenHidden = FALSE)
