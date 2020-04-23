@@ -13,8 +13,8 @@
 metaMappingUI <- function(id){
     ns <- NS(id)
     tagList(
-        div(DTOutput(ns("metaViewUI")), style = "font-size: 75%"),
-        fileInput(ns("metadata_file"),"Upload custom data mappings",accept = c('.csv'))
+        DTOutput(ns("metaTable")),
+        fileInput(ns("metaFile"),"Upload custom data mappings",accept = c('.csv'))
     )
 }
 
@@ -24,10 +24,10 @@ metaMappingUI <- function(id){
 #' @param output  Shiny output object
 #' @param session Shiny session object
 #' @param metaIn Data mapping metadata used for initial loading of app
-#' @param mapping Current metadata mapping in the app
+#' @param mapping data frame representing the current metadata mapping. columns = "domain", "text_id" and "current"
 #'
 #' @export
-metaMapping <- function(input, output, session, metaIn){
+metaMapping <- function(input, output, session, metaIn, mapping=NULL){
     ns <- session$ns
   
     ##########################################################################
@@ -35,26 +35,43 @@ metaMapping <- function(input, output, session, metaIn){
     ##########################################################################
 
     # custom loaded data
-    metadata <-  eventReactive(input$metadata_file, {
-      if(is.null(input$metadata_file)){
+    metadata <-  eventReactive(input$metaFile, {
+      if(is.null(input$metaFile)){
         metaIn
       }else{
-        data.frame(
+        df<-data.frame(
           read.csv(
-            input$metadata_file$datapath, 
+            input$metaFile$datapath, 
             na.strings=NA, 
             stringsAsFactors=FALSE
           )
         )
+        
+        if(sort(names(df))==c("domain","text_id","current")){
+          df
+        }else{
+          showNotification("Sorry, not a valid mapping. Load a file with columns for 'domain','text_id' and 'current'.")
+          metaIn
+        }
       }
     }, ignoreNULL = FALSE)
     
-    output$metaViewUI <- renderDT({
-        DT::datatable(
-            metadata(), 
-            rownames = FALSE,
-            class="compact",
+    
+    metadata_mapping <- reactive(
+      if(is.null(mapping)){
+        metadata()%>%mutate(current="")
+      }else {
+        metadata() %>% left_join(mapping)  
+      }
+      
+    )
 
+    output$metaTable <- renderDT({
+        DT::datatable(
+            metadata_mapping(), 
+            rownames = FALSE,
+            options = list(paging=FALSE, ordering=FALSE),
+            class="compact"
         )
     })
 
