@@ -1,7 +1,5 @@
-# Mapping Metadata Summary Module
-
-#' @title   mappingMetaUI and mappingMeta
-#' @description  Module that displays the data mapping metadata. 
+#' @title  Metadata Mapping UI
+#' @description  UI that displays the data mapping metadata. 
 #'
 #' @section Output:
 #' \describe{

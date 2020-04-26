@@ -3,6 +3,8 @@
 export(addChart)
 export(addSetting)
 export(chartRenderer)
+export(columnMapping)
+export(columnMappingInput)
 export(detectStandard)
 export(generateSettings)
 export(getRequiredSettings)

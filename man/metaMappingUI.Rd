@@ -2,12 +2,12 @@
 % Please edit documentation in R/mod_mappingMeta.R
 \name{metaMappingUI}
 \alias{metaMappingUI}
-\title{mappingMetaUI and mappingMeta}
+\title{Metadata Mapping UI}
 \usage{
 metaMappingUI(id)
 }
 \description{
-Module that displays the data mapping metadata.
+UI that displays the data mapping metadata.
 }
 \section{Output}{
 
