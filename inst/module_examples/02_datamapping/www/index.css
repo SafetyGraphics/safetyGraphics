@@ -1,0 +1,8 @@
+.selectize-input.not-full{
+  border-color:red;
+}
+
+.selectize-input.full{
+  border-color:green;
+}
+

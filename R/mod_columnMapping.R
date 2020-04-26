@@ -6,11 +6,6 @@
 #' @param choices a list of options for the control
 #' @param default default value for the control
 #'
-#' @section Output:
-#' \describe{
-#' \item{\code{columnMapping}}{list describing the column mapping}
-#' }
-#' 
 #' @export
 
 columnMappingInput <- function(id, label, choices, default=NULL){  
@@ -27,14 +22,16 @@ columnMappingInput <- function(id, label, choices, default=NULL){
      defaultOptions <- list(onInitialize = I('function() {this.setValue("");}'))
    }
    
-    input <- selectizeInput(
-        inputId = ns("colSelect"), 
-        label = label, 
-        selected = default,
-        choices = choices, 
-        options = defaultOptions,
-        multiple = FALSE
-    )
+     selectizeInput(
+       inputId = ns("colSelect"), 
+       label = label, 
+       selected = default,
+       choices = choices, 
+       options = defaultOptions,
+       multiple = FALSE
+     )
+     
+   
 }
 
 # Column Mapping server code
@@ -42,16 +39,12 @@ columnMappingInput <- function(id, label, choices, default=NULL){
 #' @param input Shiny input object
 #' @param output  Shiny output object
 #' @param session Shiny session object
+#' 
+#' @return A reactive containing the selected column
 #'
 #' @export
 
 columnMapping <- function(input, output, session){
-  ns <- session$ns
-  
-  observeEvent(input$colSelect,{
-    print(paste("changed to",input$colSelect))
-  })
-  
-  # return the current value of the input
+  # return the current value of the column select
   reactive(input$colSelect)
 }
