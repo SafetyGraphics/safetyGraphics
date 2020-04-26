@@ -6,6 +6,9 @@
 #' \describe{
 #'    \item{domain}{Data domain}
 #'    \item{text_key}{Text key indicating the setting name. \code{'--'} delimiter indicates a field level data mapping}
+#'    \item{col_key}{Key for the column mapping}
+#'    \item{field_key}{Key for the field mapping (if any)}
+#'    \item{type}{type of mapping - "field" or "column"}
 #'    \item{label}{Label}
 #'    \item{description}{Description}
 #'    \item{multiple}{Mapping supports multiple columns/fields }
