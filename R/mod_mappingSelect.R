@@ -1,5 +1,5 @@
-#' @title   ColumnMappingUI 
-#' @description  Module that facilitates the mapping of a single column with a simple select UI
+#' @title   mappingSelectUI 
+#' @description  UI that facilitates the mapping of a single data element (column or field) with a simple select UI
 #'
 #' @param id unique id for the UI
 #' @param label associated with the control  
@@ -8,9 +8,8 @@
 #'
 #' @export
 
-columnMappingInput <- function(id, label, choices, default=NULL){  
+mappingSelectUI <- function(id, label, choices, default=NULL){  
    ns <- NS(id)
-    #select input
    
    # define placeholder code 
    defaultOptions <- NULL
@@ -30,12 +29,11 @@ columnMappingInput <- function(id, label, choices, default=NULL){
        options = defaultOptions,
        multiple = FALSE
      )
-     
-   
 }
 
-# Column Mapping server code
-
+#' @title  mappingSelect
+#' @description  server function that facilitates the mapping of a single data element (column of field) with a simple select UI
+#'
 #' @param input Shiny input object
 #' @param output  Shiny output object
 #' @param session Shiny session object
@@ -44,7 +42,7 @@ columnMappingInput <- function(id, label, choices, default=NULL){
 #'
 #' @export
 
-columnMapping <- function(input, output, session){
+mappingSelect <- function(input, output, session){
   # return the current value of the column select
   reactive(input$colSelect)
 }
