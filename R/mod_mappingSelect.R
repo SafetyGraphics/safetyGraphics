@@ -8,7 +8,7 @@
 #'
 #' @export
 
-mappingSelectUI <- function(id, label, choices, default=NULL){  
+mappingSelectUI <- function(id, label, choices=NULL, default=NULL){  
    ns <- NS(id)
    
    # define placeholder code 

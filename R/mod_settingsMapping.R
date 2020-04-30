@@ -1,4 +1,4 @@
-#' @title  Metadata Mapping UI
+#' @title  Settings view of Metadata/Mapping - UI
 #' @description  UI that displays the data mapping metadata. 
 #'
 #' @section Output:
@@ -8,7 +8,7 @@
 #' 
 #' @export
 
-metaMappingUI <- function(id){
+settingsMappingUI <- function(id){
     ns <- NS(id)
     tagList(
         DTOutput(ns("metaTable")),
@@ -16,8 +16,9 @@ metaMappingUI <- function(id){
     )
 }
 
-# Metadata Loading module server
-
+#' @title  Settings view of Metadata/Mapping - server
+#' @description  server for the display of the data mapping metadata. 
+#'
 #' @param input Shiny input object
 #' @param output  Shiny output object
 #' @param session Shiny session object
@@ -25,7 +26,8 @@ metaMappingUI <- function(id){
 #' @param mapping data frame representing the current metadata mapping. columns = "domain", "text_id" and "current"
 #'
 #' @export
-metaMapping <- function(input, output, session, metaIn, mapping=NULL){
+
+settingsMapping <- function(input, output, session, metaIn, mapping=NULL){
     ns <- session$ns
   
     ##########################################################################

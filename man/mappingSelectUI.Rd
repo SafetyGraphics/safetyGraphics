@@ -4,7 +4,7 @@
 \alias{mappingSelectUI}
 \title{mappingSelectUI}
 \usage{
-mappingSelectUI(id, label, choices, default = NULL)
+mappingSelectUI(id, label, choices = NULL, default = NULL)
 }
 \arguments{
 \item{id}{unique id for the UI}
