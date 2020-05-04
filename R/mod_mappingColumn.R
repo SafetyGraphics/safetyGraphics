@@ -50,7 +50,6 @@ mappingColumn <- function(input, output, session, meta, data){
     field_vals<-lapply(field_ids, function(field_id){
       callModule(mappingSelect,field_id)
     })
-    print(field_vals)
     observe({
       for(field_id in field_ids){
         updateSelectizeInput(

@@ -9,26 +9,14 @@
 
 mappingDomainUI <- function(id, meta, data, mapping=NULL){  
     ns <- NS(id)
-   
-    selectList <- list()
-    i<-1
-    
     #make a select for each row in the metadata
-    cols <- unique(meta$col_key)
-   
-    for(col in cols){
-      current_df <- meta %>% filter(col_key == col)
-      column_df <- current_df %>% filter(type=="column")
-      field_df <- current_df %>% filter(type=="field")
-
-      # initialize column select
-      # todo - create mappingColumnUI module, that deals with field level mapping for each column
-      selectList[[i]]<-mappingSelectUI(column_df$col_key, column_df$label, names(data))
-      i<-i+1
-   }
-
-   selectList
+    unique(meta$col_key) %>% lapply(function(col){
+      current_meta <- meta %>% filter(col_key == col)
+      #print(current_meta)
+      return(mappingColumnUI(ns(col), current_meta, data))
+    })
 }
+
 
 #' @title  mappingSelect
 #' @description  server function that facilitates the mapping of a single data element (column of field) with a simple select UI
@@ -41,17 +29,12 @@ mappingDomainUI <- function(id, meta, data, mapping=NULL){
 #'
 #' @export
 
-mappingDomain <- function(input, output, session, meta){
-  
-  print(head(meta))
-  #return a dataframe containing the current mapping
-  allSelects <- unique(meta$col_key) %>% map(callModule,module=mappingSelect, id=.)
-  browser()
-  
-  mapping <- eventReactive(
-    allSelects,
-    {}
-  )
-
-  mapping
+mappingDomain <- function(input, output, session, meta, data){
+ reactive({
+    unique(meta$col_key)%>%
+      lapply(function(col){
+        mod<-callModule(mappingColumn, col, meta%>%filter(col_key==col), data)
+        return(mod())
+      })
+  })
 }

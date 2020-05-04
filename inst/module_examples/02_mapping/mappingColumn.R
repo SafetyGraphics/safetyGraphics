@@ -25,8 +25,8 @@ ui <- tagList(
     )  
 )
 server <- function(input,output,session){
- #ex1<-callModule(mappingColumn, "ex1", id_meta, labs)
- #output$ex1Out<-renderPrint(str(ex1()))
+ ex1<-callModule(mappingColumn, "ex1", id_meta, labs)
+ output$ex1Out<-renderPrint(str(ex1()))
  
  ex2<-callModule(mappingColumn, "ex2", measure_meta, labs)
  output$ex2Out<-renderPrint(str(ex2()))
