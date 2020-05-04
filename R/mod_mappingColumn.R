@@ -15,9 +15,9 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
     for(i in 1:nrow(meta)) {
         row <- meta[i,]
         if(row$type=="column"){
-          col_ui[[i]] <- mappingSelectUI(row$text_key, row$label, names(data))  
+          col_ui[[i]] <- mappingSelectUI(ns(row$text_key), row$label, names(data))  
         }else{
-          col_ui[[i]] <- div(class="field-wrap",mappingSelectUI(row$text_key, row$label))
+          col_ui[[i]] <- div(class="field-wrap",mappingSelectUI(ns(row$text_key), row$label))
         }
     }
     col_ui
@@ -35,27 +35,46 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
 #' @export
 
 mappingColumn <- function(input, output, session, meta, data){
+  ns <- session$ns
+  
   col_meta <- meta %>% filter(type=="column")
   field_meta <- meta %>% filter(type=="field")
-  
-  # change the options in the field selects when the column select changes 
   col_val <- callModule(mappingSelect, col_meta$text_key)
-  observeEvent( col_val, {
-    print(col_val())
+  field_options <- reactive(
+    ifelse(col_val()=="", list(""), unique(data[,col_val()]))
+  )
+  # change the options in the field selects when the column select changes 
+  if(nrow(field_meta)>0){
+    field_ids <- unique(field_meta$text_key)
+    names(field_ids)<-field_ids # so that lapply() creates a named list below
+    field_vals<-lapply(field_ids, function(field_id){
+      callModule(mappingSelect,field_id)
+    })
+    print(field_vals)
+    observe({
+      for(field_id in field_ids){
+        updateSelectizeInput(
+          session,
+          inputId = paste0(field_id,"-colSelect"),
+          choices = field_options()[[1]]
+        )      
+      }    
+    })
+  }
+  
+
+  # return the values for all fields as a list   
+  meta <- reactive({
+    shell<-list()
+    shell[col_meta$text_key]<- col_val()
+    if(nrow(field_meta)>0){
+      for(field_id in field_ids){
+        shell[field_id] <- field_vals[[field_id]]()
+      }
+    }
+    return(shell)
   })
   
+  return(meta)
   
-  # return the values for all fields as a df or list 
-  
-#   print(head(meta))
-#   #return a dataframe containing the current mapping
-#   allSelects <- unique(meta$col_key) %>% map(callModule,module=mappingSelect, id=.)
-#   browser()
-  
-#   mapping <- eventReactive(
-#     allSelects,
-#     {}
-#   )
-
-#   mapping
 }
