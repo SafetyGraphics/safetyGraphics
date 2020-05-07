@@ -15,9 +15,9 @@ ui <- tagList(
          )
     ),
     fluidPage(
-        h2("Example 1: labs id_col"),
-        mappingColumnUI("ex1", id_meta, labs),
-        verbatimTextOutput("ex1Out"),    
+        #h2("Example 1: labs id_col"),
+        #mappingColumnUI("ex1", id_meta, labs),
+        #verbatimTextOutput("ex1Out"),    
         h2("Example 2: labs measure_col + fields"),
         mappingColumnUI("ex2",measure_meta, labs),
         verbatimTextOutput("ex2Out"),        

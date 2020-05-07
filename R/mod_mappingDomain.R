@@ -10,11 +10,14 @@
 mappingDomainUI <- function(id, meta, data, mapping=NULL){  
     ns <- NS(id)
     #make a select for each row in the metadata
-    unique(meta$col_key) %>% lapply(function(col){
+    domain_ui <- list()
+    cols <- unique(meta$col_key)
+    for(i in 1:length(cols)){
+      col <- cols[i]
       current_meta <- meta %>% filter(col_key == col)
-      #print(current_meta)
-      return(mappingColumnUI(ns(col), current_meta, data))
-    })
+      domain_ui[[i]] <- mappingColumnUI(ns(col), current_meta, data)
+    }
+    return(domain_ui)
 }
 
 
@@ -30,11 +33,18 @@ mappingDomainUI <- function(id, meta, data, mapping=NULL){
 #' @export
 
 mappingDomain <- function(input, output, session, meta, data){
+  col_ids <- unique(meta$col_key)
+  names(col_ids)<-col_ids # so that lapply() creates a named list below
+  col_modules <- col_ids %>% lapply(function(col){
+    callModule(mappingColumn, col, meta%>%filter(col_key==col) ,data)
+  })
+ 
  reactive({
-    unique(meta$col_key)%>%
-      lapply(function(col){
-        mod<-callModule(mappingColumn, col, meta%>%filter(col_key==col), data)
-        return(mod())
-      })
+   shell <- list()
+    for(col in col_ids){
+      shell<-c(shell, col_modules[[col]]())
+    }
+   return(shell)
   })
 }
+  
