@@ -27,7 +27,11 @@ ui <- tagList(
         
         h2("Example 4: Field Select - With default"),
         mappingSelectUI("WithDefaultField", "Body System - Cardiac Disorders", unique(aes$AEBODSYS), "CARDIAC DISORDERS"),
-        verbatimTextOutput("ex4")
+        verbatimTextOutput("ex4"),
+        
+        h2("Example 5: Field Select - With invalid default"),
+        mappingSelectUI("WithInvalidDefault", "Body System - Cardiac Disorders", unique(aes$AEBODSYS), "CARDIAC DISORDERZ"),
+        verbatimTextOutput("ex5")
     )  
 )
 server <- function(input,output,session){
@@ -39,6 +43,8 @@ server <- function(input,output,session){
  output$ex3<-renderPrint(ex3())
  ex4<-callModule(mappingSelect, "WithDefaultField")
  output$ex4<-renderPrint(ex4())
+ ex5<-callModule(mappingSelect, "WithInvalidDefault")
+ output$ex5<-renderPrint(ex5())
 }
 
 shinyApp(ui, server)
