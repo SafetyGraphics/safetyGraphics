@@ -23,10 +23,11 @@ test_that("Outputs have expected values",{
 })
 
 test_that("Changing input updates the output",{
-  app$setValue('WithDefault-colSelect',"USUBJID")
-  expect_match(app$getValue("ex2"),"USUBJID") 
+  app$setValue('NoDefault-colSelect',"AESEQ")
+  expect_equal(app$getValue("NoDefault-colSelect"),"AESEQ") 
+  Sys.sleep(.1) #TODO inplement app$waitForValue() instead of sleeping
+  expect_match(app$getValue("ex1"), "AESEQ") 
 })
 
-#print(app$getAllValues())
 app$stop()
 
