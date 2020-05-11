@@ -11,7 +11,6 @@ test_that("Inputs have expected values",{
   expect_equal(app$getValue("NoDefaultField-colSelect"),"") 
   expect_equal(app$getValue("WithDefaultField-colSelect"), "CARDIAC DISORDERS") 
   expect_equal(app$getValue("WithInvalidDefault-colSelect"), "") 
-  
 })
 
 test_that("Outputs have expected values",{
@@ -21,6 +20,11 @@ test_that("Outputs have expected values",{
   expect_match(app$getValue("ex3"),empty) 
   expect_match(app$getValue("ex4"), "CARDIAC DISORDERS") 
   expect_match(app$getValue("ex5"),empty)
+})
+
+test_that("Changing input updates the output",{
+  app$setValue('WithDefault-colSelect',"USUBJID")
+  expect_match(app$getValue("ex2"),"USUBJID") 
 })
 
 #print(app$getAllValues())
