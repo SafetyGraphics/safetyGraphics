@@ -9,13 +9,25 @@
 
 mappingDomainUI <- function(id, meta, data, mapping=NULL){  
     ns <- NS(id)
+    
+    if(is.null(mapping)){
+      keys<-unique(meta$text_key)
+      mapping<-data.frame(
+        text_key=keys, 
+        current=rep("",length(keys)),
+        stringsAsFactors=FALSE
+      )
+    }
+    
     #make a select for each row in the metadata
     domain_ui <- list()
     cols <- unique(meta$col_key)
     for(i in 1:length(cols)){
       col <- cols[i]
       current_meta <- meta %>% filter(col_key == col)
-      domain_ui[[i]] <- mappingColumnUI(ns(col), current_meta, data)
+      ids<- unique(current_meta$text_key)
+      current_mapping <- mapping %>% filter(text_key %in% ids)
+      domain_ui[[i]] <- mappingColumnUI(ns(col), current_meta, data, current_mapping)
     }
     return(domain_ui)
 }

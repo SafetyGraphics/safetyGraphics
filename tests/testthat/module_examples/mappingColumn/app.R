@@ -3,10 +3,21 @@ library(safetyGraphics)
 library(dplyr)
 library(reactlog)
 
+reactlogReset()
+
 id_meta <- meta%>%filter(domain=="labs")%>%filter(col_key=="id_col")
 measure_meta <- meta%>%filter(domain=="labs")%>%filter(col_key=="measure_col")
-mm_default<-list(measure_col="PARAM")
-mm_default[["measure_col--ALT"]]<-"Alkaline Phosphatase (U/L)"
+id_default<-data.frame(
+  text_key="id_col",
+  current="USUBJID",
+  strinsAsFactors=FALSE
+)
+
+mm_default<-data.frame(
+    text_key = c("measure_col", "measure_col--ALP"), 
+    current = c("PARAM","Alkaline Phosphatase (U/L)"),
+    stringsAsFactors = FALSE
+)
 
 ui <- tagList(
     tags$head(
@@ -17,15 +28,15 @@ ui <- tagList(
          )
     ),
     fluidPage(
-        # h2("Example 1: labs id_col"),
-        # mappingColumnUI("ex1", id_meta, labs),
-        # verbatimTextOutput("ex1Out"),
-        # h2("Example 2: labs id_col + default"),
-        # mappingColumnUI("ex2", id_meta, labs, list(id_col="USUBJID")),
-        # verbatimTextOutput("ex2Out"),
-        # h2("Example 3: labs measure_col + fields"),
-        # mappingColumnUI("ex3",measure_meta, labs),
-        # verbatimTextOutput("ex3Out"),
+        h2("Example 1: labs id_col"),
+        mappingColumnUI("ex1", id_meta, labs),
+        verbatimTextOutput("ex1Out"),
+        h2("Example 2: labs id_col + default"),
+        mappingColumnUI("ex2", id_meta, labs, id_default),
+        verbatimTextOutput("ex2Out"),
+        h2("Example 3: labs measure_col + fields"),
+        mappingColumnUI("ex3",measure_meta, labs),
+        verbatimTextOutput("ex3Out"),
         h2("Example 4: labs measure_col + fields + defaults"),
         mappingColumnUI("ex4",measure_meta, labs, mm_default),
         verbatimTextOutput("ex4Out")
@@ -33,15 +44,15 @@ ui <- tagList(
 )
 
 server <- function(input,output,session){
- # ex1<-callModule(mappingColumn, "ex1", id_meta, labs)
- # output$ex1Out<-renderPrint(str(ex1()))
- # 
- # ex2<-callModule(mappingColumn, "ex2", id_meta, labs)
- # output$ex2Out<-renderPrint(str(ex2()))
- # 
- # ex3<-callModule(mappingColumn, "ex3", measure_meta, labs)
- # output$ex3Out<-renderPrint(str(ex3()))
- 
+ ex1<-callModule(mappingColumn, "ex1", id_meta, labs)
+ output$ex1Out<-renderPrint(str(ex1()))
+
+ ex2<-callModule(mappingColumn, "ex2", id_meta, labs)
+ output$ex2Out<-renderPrint(str(ex2()))
+
+ ex3<-callModule(mappingColumn, "ex3", measure_meta, labs)
+ output$ex3Out<-renderPrint(str(ex3()))
+
  ex4<-callModule(mappingColumn, "ex4", measure_meta, labs)
  output$ex4Out<-renderPrint(str(ex4()))
 }

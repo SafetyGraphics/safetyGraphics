@@ -11,48 +11,52 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
     ns <- NS(id)
     col_ui <- list()
     
-    if(!is.null(mapping)){
-      mapping_df <- data.frame(
-        text_key = names(mapping),
-        default = unlist(mapping),
+    if(is.null(mapping)){
+      keys<-unique(meta$text_key)
+      mapping<-data.frame(
+        text_key=keys, 
+        current=rep("",length(keys)),
         stringsAsFactors=FALSE
       )
-      print(mapping_df)
-      meta <- meta %>% left_join(mapping_df)
-      print(meta$default)
-    }else{
-      mapping$default<-NULL
     }
+  
+    #all inputs should be data frames  
+    stopifnot(
+      is.data.frame(meta), 
+      is.data.frame(data), 
+      is.data.frame(mapping)
+    )
     
+    #merge default values from mapping on to full metadata
+    meta <- meta %>% left_join(mapping, by="text_key")
     col_meta <- meta %>% filter(type=="column")
+    
+    # Exactly one column mapping provided
     stopifnot(nrow(col_meta)==1)
     
     col_ui[[1]] <- mappingSelectUI(
       ns(col_meta$text_key), 
       col_meta$label, 
       names(data), 
-      col_meta$default
+      col_meta$current
     )  
     
-    if(is.null(col_meta$default)){
-      fieldOptions<-NULL
-    } else{
-      fieldOptions <-  unique(data%>%select(col_meta$default)) 
+    fieldOptions<-NULL
+    if(col_meta$current %in% names(data)){
+      fieldOptions <-  unique(data%>%pull(col_meta$current))       
     }
-    print("field options")
-    print(fieldOptions)
+    
     field_meta <- meta %>% filter(type=="field")
     if(nrow(field_meta)>0){
       for(i in 1:nrow(field_meta)) {
         row <- field_meta[i,]
-        print(row)
         col_ui[[i+1]] <- div(
           class="field-wrap",
           mappingSelectUI(
             ns(row$text_key), 
             row$label,
             fieldOptions,
-            row$default
+            row$current
           )
         )
       }
@@ -77,9 +81,7 @@ mappingColumn <- function(input, output, session, meta, data){
   col_meta <- meta %>% filter(type=="column")
   field_meta <- meta %>% filter(type=="field")
   col_val <- callModule(mappingSelect, col_meta$text_key)
-  field_options <- reactive(
-    ifelse(col_val()=="", list(""), unique(data[,col_val()]))
-  )
+  
   # change the options in the field selects when the column select changes 
   if(nrow(field_meta)>0){
     field_ids <- unique(field_meta$text_key)
@@ -87,15 +89,18 @@ mappingColumn <- function(input, output, session, meta, data){
     field_vals<-lapply(field_ids, function(field_id){
       callModule(mappingSelect,field_id)
     })
-    observe({
-      for(field_id in field_ids){
-        updateSelectizeInput(
-          session,
-          inputId = paste0(field_id,"-colSelect"),
-          choices = field_options()[[1]]
-        )      
-      }    
-    })
+     observeEvent(col_val() ,{
+       field_options <- ifelse(col_val()=="", list(""), unique(data[,col_val()]))
+       for(field_id in field_ids){
+         current <- field_vals[[field_id]]()
+         updateSelectizeInput(
+           session,
+           inputId = paste0(field_id,"-colSelect"),
+           choices = field_options[[1]],
+           selected = current 
+         )      
+       }    
+     })
   }
   
   # return the values for all fields as a list   

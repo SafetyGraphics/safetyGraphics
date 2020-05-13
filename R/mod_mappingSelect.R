@@ -19,7 +19,7 @@ mappingSelectUI <- function(id, label, choices=NULL, default=NULL){
    if (is.null(default)){
      defaultOptions <- list(onInitialize = I('function() {this.setValue("");}'))
    } else if (default %in% choices){
-     defaultOptions <- list (onInitialize = I('function() { }'))
+     defaultOptions <- list(onInitialize = I('function() {}'))
    } else {
      defaultOptions <- list(onInitialize = I('function() {this.setValue("");}'))
    }
