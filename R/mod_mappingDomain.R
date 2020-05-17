@@ -2,7 +2,7 @@
 #' @description  UI that facilitates the mapping of a full data domain
 #'
 #' @param meta metadata for the domain
-#' @param data current data file for the domain
+#' @param data data file for the domain
 #' @param mapping current data mapping
 #' 
 #' @export
@@ -40,7 +40,7 @@ mappingDomainUI <- function(id, meta, data, mapping=NULL){
 #' @param output  Shiny output object
 #' @param session Shiny session object
 #' 
-#' @return A reactive containing the selected column
+#' @return A reactive data frame containing the mapping for the domain
 #'
 #' @export
 
@@ -52,11 +52,11 @@ mappingDomain <- function(input, output, session, meta, data){
   })
  
  reactive({
-   shell <- list()
+    data<-data.frame()
     for(col in col_ids){
-      shell<-c(shell, col_modules[[col]]())
+      data<-rbind(data, col_modules[[col]]())
     }
-   return(shell)
+   return(data)
   })
 }
   

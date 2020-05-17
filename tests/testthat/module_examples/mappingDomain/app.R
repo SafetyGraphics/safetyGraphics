@@ -30,42 +30,47 @@ ui <- tagList(
     fluidPage(
         h2("Example 1: Labs Domain - measure only - no defaults"),
         mappingDomainUI("labs_one_col",measure_meta,labs),
-        verbatimTextOutput("ex1Out"),  
+        tableOutput("ex1Out"),  
         h2("Example 2: Labs Domain - measure only - with defaults"),
         mappingDomainUI("labs_one_col_defaults",measure_meta,labs,mm_default),
-        verbatimTextOutput("ex2Out"),  
+        tableOutput("ex2Out"),  
         h2("Example 3: AE Domain - no defaults"),
         mappingDomainUI("ae_NoDefault",meta%>%filter(domain=="aes"),aes),
-        verbatimTextOutput("ex3Out"),    
+        tableOutput("ex3Out"),    
         h2("Example 4: AE Domain - with defaults"),
         mappingDomainUI("ae_default",meta%>%filter(domain=="aes"),aes, aes_default),
-        verbatimTextOutput("ex4Out"),    
+        tableOutput("ex4Out"),    
         h2("Example 5: Labs Domain - no defaults"),
         mappingDomainUI("labs_NoDefault",meta%>%filter(domain=="labs"),labs),
-        verbatimTextOutput("ex5Out"),   
+        tableOutput("ex5Out"),   
         h2("Example 6: Labs Domain - with defaults"),
         mappingDomainUI("labs_default",meta%>%filter(domain=="labs"),labs,labs_default),
-        verbatimTextOutput("ex6Out"),   
+        tableOutput("ex6Out"),   
     )  
 )
 server <- function(input,output,session){
  ex1<-callModule(mappingDomain, "labs_one_col", measure_meta, labs)
- output$ex1Out<-renderPrint(str(ex1()))
+ exportTestValues(ex1_data = { ex1() })
+ output$ex1Out<-renderTable(ex1())
     
  ex2<-callModule(mappingDomain, "labs_one_col_defaults", measure_meta, labs)
- output$ex2Out<-renderPrint(str(ex2()))
+ exportTestValues(ex2_data = { ex2() })
+ output$ex2Out<-renderTable(ex2())
  
  ex3<-callModule(mappingDomain, "ae_NoDefault", meta%>%filter(domain=="aes"), aes)
- output$ex3Out<-renderPrint(str(ex3()))
+ exportTestValues(ex3_data = { ex3() })
+ output$ex3Out<-renderTable(ex3())
  
  ex4<-callModule(mappingDomain, "ae_default", meta%>%filter(domain=="aes"), aes)
- output$ex4Out<-renderPrint(str(ex4()))
+ exportTestValues(ex4_data = { ex4() })
+ output$ex4Out<-renderTable(ex4())
  
  ex5<-callModule(mappingDomain, "labs_NoDefault", meta%>%filter(domain=="labs"), labs)
- output$ex5Out<-renderPrint(str(ex5()))
+ exportTestValues(ex5_data = { ex5() })
+ output$ex5Out<-renderTable(ex5())
 
  ex6<-callModule(mappingDomain, "labs_default", meta%>%filter(domain=="labs"), labs)
- output$ex6Out<-renderPrint(str(ex6()))
+ output$ex6Out<-renderTable(ex6())
  
 }
 

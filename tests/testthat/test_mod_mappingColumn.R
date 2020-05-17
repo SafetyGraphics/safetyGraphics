@@ -1,4 +1,4 @@
-context("Tests for the mappingSelect R module")
+context("Tests for the mappingColumn R module")
 library(safetyGraphics)
 library(shinytest)
 library(testthat)
