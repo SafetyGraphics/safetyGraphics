@@ -4,7 +4,7 @@
 #' @param meta metadata for the column (and related fields)
 #' @param data current data file for the domain
 #' @param mapping current data mapping for the column (and related fields)
- 
+#' 
 #' @export
 
 mappingColumnUI <- function(id, meta, data, mapping=NULL){  
@@ -24,7 +24,9 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
     stopifnot(
       is.data.frame(meta), 
       is.data.frame(data), 
-      is.data.frame(mapping)
+      is.data.frame(mapping),
+      is.character(mapping$text_key),
+      is.character(meta$text_key)
     )
     
     #merge default values from mapping on to full metadata
@@ -71,7 +73,7 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
 #' @param output  Shiny output object
 #' @param session Shiny session object
 #' 
-#' @return A reactive containing the selected column
+#' @return A reactive data.frame providing the current value for text_key associated with the selected column
 #'
 #' @export
 
@@ -103,16 +105,16 @@ mappingColumn <- function(input, output, session, meta, data){
      })
   }
   
-  # return the values for all fields as a list   
+  # return the values for all fields as a data.frame   
   meta <- reactive({
-    shell<-list()
-    shell[col_meta$text_key]<- col_val()
+    col_meta <- data.frame(text_key = col_meta$text_key, current=col_val())
     if(nrow(field_meta)>0){
       for(field_id in field_ids){
-        shell[field_id] <- field_vals[[field_id]]()
+        field_meta <- data.frame(text_key = field_id,  current=field_vals[[field_id]]())
+        col_meta<-rbind(col_meta, field_meta)
       }
     }
-    return(shell)
+    return(col_meta)
   })
   
   return(meta)

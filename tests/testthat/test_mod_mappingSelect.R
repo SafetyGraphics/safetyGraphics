@@ -13,7 +13,7 @@ test_that("Inputs have expected values",{
   expect_equal(app$getValue("WithInvalidDefault-colSelect"), "") 
 })
 
-test_that("Outputs have expected values",{
+test_that("Module server outputs the expected values",{
   empty<-'\"\"' #output value for empty string
   expect_match(app$getValue("ex1"),empty) 
   expect_match(app$getValue("ex2"),"USUBJID") 
@@ -22,7 +22,7 @@ test_that("Outputs have expected values",{
   expect_match(app$getValue("ex5"),empty)
 })
 
-test_that("Changing input updates the output",{
+test_that("Changing input updates the server output",{
   app$setValue('NoDefault-colSelect',"AESEQ")
   expect_equal(app$getValue("NoDefault-colSelect"),"AESEQ") 
   Sys.sleep(.1) #TODO inplement app$waitForValue() instead of sleeping

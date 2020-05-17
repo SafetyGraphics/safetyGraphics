@@ -10,7 +10,7 @@ measure_meta <- meta%>%filter(domain=="labs")%>%filter(col_key=="measure_col")
 id_default<-data.frame(
   text_key="id_col",
   current="USUBJID",
-  strinsAsFactors=FALSE
+  stringsAsFactors=FALSE
 )
 
 mm_default<-data.frame(
@@ -30,31 +30,35 @@ ui <- tagList(
     fluidPage(
         h2("Example 1: labs id_col"),
         mappingColumnUI("ex1", id_meta, labs),
-        verbatimTextOutput("ex1Out"),
+        tableOutput("ex1Out"),
         h2("Example 2: labs id_col + default"),
         mappingColumnUI("ex2", id_meta, labs, id_default),
-        verbatimTextOutput("ex2Out"),
+        tableOutput("ex2Out"),
         h2("Example 3: labs measure_col + fields"),
         mappingColumnUI("ex3",measure_meta, labs),
-        verbatimTextOutput("ex3Out"),
+        tableOutput("ex3Out"),
         h2("Example 4: labs measure_col + fields + defaults"),
         mappingColumnUI("ex4",measure_meta, labs, mm_default),
-        verbatimTextOutput("ex4Out")
+        tableOutput("ex4Out")
     )  
 )
 
 server <- function(input,output,session){
  ex1<-callModule(mappingColumn, "ex1", id_meta, labs)
- output$ex1Out<-renderPrint(str(ex1()))
+ exportTestValues(ex1_data = { ex1() })
+ output$ex1Out<-renderTable(ex1())
 
  ex2<-callModule(mappingColumn, "ex2", id_meta, labs)
- output$ex2Out<-renderPrint(str(ex2()))
+ exportTestValues(ex2_data = { ex2() })
+ output$ex2Out<-renderTable(ex2())
 
  ex3<-callModule(mappingColumn, "ex3", measure_meta, labs)
- output$ex3Out<-renderPrint(str(ex3()))
+ exportTestValues(ex3_data = { ex3() })
+ output$ex3Out<-renderTable(ex3())
 
  ex4<-callModule(mappingColumn, "ex4", measure_meta, labs)
- output$ex4Out<-renderPrint(str(ex4()))
+ exportTestValues(ex4_data = {ex4()})
+ output$ex4Out<-renderTable(ex4())
 }
 
 # tell shiny to log all reactivity
