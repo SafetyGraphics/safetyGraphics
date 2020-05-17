@@ -19,6 +19,15 @@ mappingDomainUI <- function(id, meta, data, mapping=NULL){
       )
     }
     
+    #all inputs should be data frames  
+    stopifnot(
+      is.data.frame(meta), 
+      is.data.frame(data), 
+      is.data.frame(mapping),
+      is.character(mapping$text_key),
+      is.character(meta$text_key)
+    )
+
     #make a select for each row in the metadata
     domain_ui <- list()
     cols <- unique(meta$col_key)
