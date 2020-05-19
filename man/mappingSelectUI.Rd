@@ -2,18 +2,21 @@
 % Please edit documentation in R/mod_mappingSelect.R
 \name{mappingSelectUI}
 \alias{mappingSelectUI}
-\title{mappingSelectUI}
+\title{Mapping Select UI}
 \usage{
 mappingSelectUI(id, label, choices = NULL, default = NULL)
 }
 \arguments{
 \item{id}{unique id for the UI}
 
-\item{label}{associated with the control}
+\item{label}{label associated with the control}
 
 \item{choices}{a list of options for the control}
 
 \item{default}{default value for the control}
+}
+\value{
+returns the selected value wrapped in a \code{reactive()}.
 }
 \description{
 UI that facilitates the mapping of a single data element (column or field) with a simple select UI

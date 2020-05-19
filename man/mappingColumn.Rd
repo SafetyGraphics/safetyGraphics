@@ -4,7 +4,7 @@
 \alias{mappingColumn}
 \title{mappingColumn}
 \usage{
-mappingColumn(input, output, session, meta)
+mappingColumn(input, output, session, meta, data)
 }
 \arguments{
 \item{input}{Shiny input object}
@@ -14,7 +14,7 @@ mappingColumn(input, output, session, meta)
 \item{session}{Shiny session object}
 }
 \value{
-A reactive containing the selected column
+A reactive data.frame providing the current value for text_key associated with the selected column
 }
 \description{
 server function that facilitates the mapping of a single data element (column of field) with a simple select UI

@@ -4,7 +4,7 @@
 \alias{mappingDomain}
 \title{mappingSelect}
 \usage{
-mappingDomain(input, output, session, meta)
+mappingDomain(input, output, session, meta, data)
 }
 \arguments{
 \item{input}{Shiny input object}
@@ -14,7 +14,7 @@ mappingDomain(input, output, session, meta)
 \item{session}{Shiny session object}
 }
 \value{
-A reactive containing the selected column
+A reactive data frame containing the mapping for the domain
 }
 \description{
 server function that facilitates the mapping of a single data element (column of field) with a simple select UI

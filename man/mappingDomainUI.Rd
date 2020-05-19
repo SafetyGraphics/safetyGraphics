@@ -9,7 +9,7 @@ mappingDomainUI(id, meta, data, mapping = NULL)
 \arguments{
 \item{meta}{metadata for the domain}
 
-\item{data}{current data file for the domain}
+\item{data}{data file for the domain}
 
 \item{mapping}{current data mapping}
 }
