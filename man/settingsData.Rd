@@ -4,7 +4,7 @@
 \alias{settingsData}
 \title{Settings Module - data details - server}
 \usage{
-settingsData(input, output, session, allData)
+settingsData(input, output, session, domains)
 }
 \arguments{
 \item{input}{Shiny input object}
@@ -13,10 +13,8 @@ settingsData(input, output, session, allData)
 
 \item{session}{Shiny session object}
 
-\item{allData}{tibble containing the data used in the app. Columns should be c('domain','name','standard','df')}
-}
-\value{
-dataList - this may include files uploaded by the user.
+\item{domains}{named list of the data.frames for each domain
+#'}
 }
 \description{
 server for the display of the loaded data

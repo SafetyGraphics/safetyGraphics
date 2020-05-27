@@ -1,10 +1,8 @@
 #' Run the interactive safety graphics builder
 #'
-#' @param charts Character vector of charts to include
 #' @param maxFileSize maximum file size in MB allowed for file upload
-#' @param settingsLocation folder location of user-defined settings metadata. Files should be named settingsMetadata.rda, chartsMetadata.rda and standardsMetadata.rda and use the same structure established in the /data folder. Defaults to current working directory.   
-#' @param customSettings Name of R script containing settings customizations to be run before the app is initialized. This is the recommended way to add additional charts (via addChart()), settings (addSetting()) and data standards (addStandard()). default = 'settingsLocation/customSettings.R'
-#' @param loadData Option to pre-load data into the app. Defaults to \code{FALSE}.
+#' @param meta data frame containing the metadata for use in the app. See the preloaded file (\code{?metadata}) for more data specifications and details. Defaults to \code{safetygraphics::metadata}. 
+#' @param domainData list of data.frames to be loaded in to the app - 
 #'
 #' @importFrom shiny runApp shinyOptions
 #' @import shinyjs
@@ -19,66 +17,70 @@
 #'
 #' @export
 #'
-safetyGraphicsApp <- function(charts = NULL, maxFileSize = NULL,
-                              settingsLocation = ".",  
-                              customSettings="customSettings.R", 
-                              loadData=FALSE) {
-
-
-  # pass charts to include
-  shiny::shinyOptions(safetygraphics_charts = charts)
-
-  # pass user defined metadata location
-  shiny::shinyOptions(settings_location = settingsLocation)
+safetyGraphicsApp <- function(
+  maxFileSize = NULL, 
+  meta = safetyGraphics::meta, 
+  domainData=list(labs=safetyGraphics::labs, aes=safetyGraphics::aes),
+  mapping=NULL
+){
 
   #increase maximum file upload limit
   if(!is.null(maxFileSize)){
     options(shiny.maxRequestSize=(maxFileSize*1024^2))
   }
-
-  # run the custom settings file (if it exists)
-  customSettingsScript<-file.path(settingsLocation, customSettings)  
-
-  if(length(customSettingsScript)>0 && file.exists(customSettingsScript)){
-    source(customSettingsScript)
-  }
-
-  chartsMetaPath <- file.path(settingsLocation,"chartsMetadata.Rds")  
-  if(length(chartsMetaPath)>0 && file.exists(chartsMetaPath)){
-    options(sg_chartsMetadata=TRUE)
-    options(sg_chartsMetadata_df=readRDS(chartsMetaPath))
-
-  } else {
-    options(sg_chartsMetadata=FALSE)
-    options(sg_chartsMetadata_df=NULL)
-
-  }
-
-  settingsMetaPath <- file.path(settingsLocation,"settingsMetadata.Rds")  
-  if(length(settingsMetaPath)>0 && file.exists(settingsMetaPath)){
-    options(sg_settingsMetadata=TRUE)
-    options(sg_settingsMetadata_df=readRDS(settingsMetaPath))
-  } else {
-    options(sg_settingsMetadata=FALSE)
-    options(sg_settingsMetadata_df=NULL)
-  }
-
-  standardsMetaPath <- file.path(settingsLocation,"standardsMetadata.Rds")  
-  if(length(standardsMetaPath)>0 && file.exists(standardsMetaPath)){
-    options(sg_standardsMetadata=TRUE)
-    options(sg_standardsMetadata_df=readRDS(standardsMetaPath))
-  } else {
-    options(sg_standardsMetadata=FALSE)
-    options(sg_standardsMetadata_df=NULL)
+  
+  # get the data standards
+  standards <- names(domainData) %>% lapply(function(domain){
+    return(detectStandard(domain=domain, data = domainData[[domain]], meta=meta))
+  })
+  names(standards)<-names(domainData)
+  
+  # attempt to detect the data standard and generate a mapping if none is provided by the user
+  if(is.null(mapping)){
+    mapping_list <- standards %>% lapply(function(standard){
+      return(standard[["mapping"]])
+    })
+    mapping<-bind_rows(mapping_list, .id = "domain")
   }
   
-  # pre-load data into app
-  if (loadData){
-    shiny::shinyOptions(sg_loadData=TRUE)
-  } else {
-    shiny::shinyOptions(sg_loadData=FALSE)
-  }
+  # Run a Shiny app object
+  
+  css_text<-"
+.selectize-input.not-full{
+  border-color:red;
+}
 
-  path <- system.file("safetyGraphics_app", package = "safetyGraphics")
-  shiny::runApp(path, launch.browser = TRUE)
+.selectize-input.full{
+  border-color:green;
+}
+
+
+.field-wrap{
+  padding-left:1em;
+}
+
+.mapping-domain{
+padding:0.5em;
+border:1px solid black;
+border-radius:0.2em;
+margin-bottom:1em;
+max-width:45%;
+}
+"
+
+  app <- shinyApp(
+    ui =  fluidPage(
+      tags$head(
+        tags$style(HTML(css_text))
+      ),
+      h2("Data Mapping"),
+      mappingTabUI("ex1", meta, domainData, mapping, standards),
+      tableOutput("ex1Out")
+    ),
+    server = function(input, output) {
+      ex1<-callModule(mappingTab, "ex1", meta, domainData)
+      output$ex1Out<-renderTable(ex1())    
+      }
+  )
+  runApp(app, launch.browser = TRUE)
 }

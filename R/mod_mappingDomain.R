@@ -7,16 +7,10 @@
 #' 
 #' @export
 
-mappingDomainUI <- function(id, meta, data, mapping=NULL){  
+mappingDomainUI <- function(id, meta, data, mapping=NULL){
     ns <- NS(id)
-    
     if(is.null(mapping)){
-      keys<-unique(meta$text_key)
-      mapping<-data.frame(
-        text_key=keys, 
-        current=rep("",length(keys)),
-        stringsAsFactors=FALSE
-      )
+      mapping<-unique(meta[,c('text_key')]) %>% mutate(current="")
     }
     
     #all inputs should be data frames  
@@ -42,12 +36,14 @@ mappingDomainUI <- function(id, meta, data, mapping=NULL){
 }
 
 
-#' @title  mappingSelect
-#' @description  server function that facilitates the mapping of a single data element (column of field) with a simple select UI
+#' @title  mappingDomain
+#' @description  server function that facilitates the mapping of a single data domain
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object
 #' @param session Shiny session object
+#' @param meta metadata for the domain
+#' @param data clinical data for the domain
 #' 
 #' @return A reactive data frame containing the mapping for the domain
 #'

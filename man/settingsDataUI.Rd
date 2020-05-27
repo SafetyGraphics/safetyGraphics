@@ -4,7 +4,10 @@
 \alias{settingsDataUI}
 \title{Settings Module - data details}
 \usage{
-settingsDataUI(id)
+settingsDataUI(id, domains)
+}
+\arguments{
+\item{domains}{named list of the data.frames for each domain}
 }
 \description{
 Settings Module - sub-module showing details for the data loaded in the app - UI

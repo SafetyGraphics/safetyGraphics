@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_mappingDomain.R
 \name{mappingDomain}
 \alias{mappingDomain}
-\title{mappingSelect}
+\title{mappingDomain}
 \usage{
 mappingDomain(input, output, session, meta, data)
 }
@@ -12,10 +12,14 @@ mappingDomain(input, output, session, meta, data)
 \item{output}{Shiny output object}
 
 \item{session}{Shiny session object}
+
+\item{meta}{metadata for the domain}
+
+\item{data}{clinical data for the domain}
 }
 \value{
 A reactive data frame containing the mapping for the domain
 }
 \description{
-server function that facilitates the mapping of a single data element (column of field) with a simple select UI
+server function that facilitates the mapping of a single data domain
 }

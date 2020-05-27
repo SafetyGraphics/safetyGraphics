@@ -1,0 +1,79 @@
+#' @title   mappingTabUI 
+#' @description  UI that facilitates the mapping of all data domain
+#'
+#' @param meta metadata for all domains
+#' @param domainData list of data files for each domain
+#' @param mappings data frame containing stacked mappings for all domains
+#' 
+#' @importFrom stringr str_to_title
+#' 
+#' @export
+
+mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){  
+  ns <- NS(id)
+  if(is.null(mappings)){
+    mappings<-unique(meta[,c('domain','text_key')]) %>% mutate(current="")
+  }
+  # check inputs
+  stopifnot(
+    is.data.frame(meta), 
+    is.list(domainData), 
+    all(domainData %>% lapply(is.data.frame) %>% unlist),
+    is.data.frame(mappings),
+    is.character(mappings$text_key),
+    is.character(meta$text_key)
+  )
+  
+  #intialize a domain mapping for each domain in the metadata
+  domain_ui <- list()
+  domains <- unique(meta$domain)
+  for(i in 1:length(domains)){
+    current_meta <- meta %>% filter(domain == !!domains[i])
+    domain<-domains[i]
+    current_mapping <- mappings %>% filter(domain %in% !!domains[i]) %>% select(-"domain")
+    current_standard <- standards[[domain]]
+    domain_ui[[i]] <-div(class="mapping-domain",
+      h2(str_to_title(domain)),
+      h5(current_standard[["label"]]),
+      mappingDomainUI(ns(domain), current_meta, domainData[[domain]], current_mapping)
+    )
+  }
+  return(domain_ui)
+}
+
+
+#' @title  mapping module server
+#' @description  server function that facilitates the mapping of a single data domain
+#'
+#' @param input Shiny input object
+#' @param output  Shiny output object
+#' @param session Shiny session object
+#' @param meta metadata for all domains
+#' @param domainData clinical data for all domains
+#' 
+#' @return list of mappings for all domains
+#'
+#' @export
+
+mappingTab <- function(input, output, session, meta, domainData){
+  domain_ids <- unique(meta$domain)
+  names(domain_ids)<-domain_ids # so that lapply() creates a named list below
+  domain_modules <- domain_ids %>% lapply(function(domain){
+    this_meta<- meta%>%filter(domain==!!domain)
+    this_data <- domainData[[domain]]
+    callModule(mappingDomain, domain, this_meta ,this_data)
+  })
+
+  reactive({
+     data<-data.frame()
+     for(domain in domain_ids){
+       current<-domain_modules[[domain]]() 
+       current$domain <- domain
+       current <- current %>% select(domain, text_key, current)
+       data<-rbind(data, current)
+     }
+     return(data)
+   })
+  
+  #return(reactive(data.frame(1,2,3)))
+}

@@ -10,7 +10,6 @@
 mappingColumnUI <- function(id, meta, data, mapping=NULL){  
     ns <- NS(id)
     col_ui <- list()
-    
     if(is.null(mapping)){
       keys<-unique(meta$text_key)
       mapping<-data.frame(
