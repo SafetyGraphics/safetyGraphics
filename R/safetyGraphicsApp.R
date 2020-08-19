@@ -67,21 +67,45 @@ border-radius:0.2em;
 margin-bottom:1em;
 max-width:45%;
 }
+
+table.dataTable tr > td:last-of-type, table.dataTable tr > th:last-of-type {
+  border-left:2px solid black;
+  background:#d0d1e6;
+}
 "
 
   app <- shinyApp(
-    ui =  fluidPage(
+    ui =  tagList(
+      useShinyjs(),
+      #add_busy_spinner(spin = "fading-circle", position = "bottom-left", timeout=3000),
       tags$head(
-        tags$style(HTML(css_text))
+        tags$style(HTML(css_text)),
+        tags$link(
+          rel = "stylesheet",
+          type = "text/css",
+          href = "https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        )
       ),
-      h2("Data Mapping"),
-      mappingTabUI("ex1", meta, domainData, mapping, standards),
-      tableOutput("ex1Out")
+      navbarPage(
+        "safetyGraphics",
+        id="nav_id",
+        tabPanel("Home", icon=icon("home"),homeTabUI("home")),
+        tabPanel("Mapping", icon=icon("map"), mappingTabUI("mapping", meta, domainData, mapping, standards)),
+        tabPanel("Charts",  icon=icon("chart-bar")),
+        tabPanel("Reports", icon=icon("file-alt")),
+        navbarMenu('Config',icon=icon("cog"),
+          tabPanel(title = "Metadata", settingsMappingUI("metaSettings")),
+          tabPanel(title = "Domain Data", settingsDataUI("dataSettings", domains=domainData))
+        )
+      )
     ),
     server = function(input, output) {
-      ex1<-callModule(mappingTab, "ex1", meta, domainData)
-      output$ex1Out<-renderTable(ex1())    
-      }
+      current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
+      callModule(settingsData, "dataSettings", domains = domainData)
+      callModule(settingsMapping, "metaSettings", metaIn=meta, mapping=current_mapping())
+      callModule(homeTab, "home")
+    }
+    
   )
   runApp(app, launch.browser = TRUE)
 }
