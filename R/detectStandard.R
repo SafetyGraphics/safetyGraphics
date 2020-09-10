@@ -13,6 +13,8 @@
 #' detectStandard(data=safetyGraphics::aes)  #aes domain evaluated by default
 #' detectStandard(data=safetyGraphics::labs,domain="labs" ) 
 #'
+#' @importFrom stringr str_detect 
+#' 
 #' @export
 
 detectStandard <- function(data, domain=NULL, meta=safetyGraphics::meta){

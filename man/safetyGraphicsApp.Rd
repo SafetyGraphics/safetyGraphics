@@ -2,7 +2,7 @@
 % Please edit documentation in R/safetyGraphicsApp.R
 \name{safetyGraphicsApp}
 \alias{safetyGraphicsApp}
-\title{Run the interactive safety graphics builder}
+\title{Run the interactive safety graphics app}
 \usage{
 safetyGraphicsApp(
   maxFileSize = NULL,
@@ -21,5 +21,5 @@ safetyGraphicsApp(
 \item{mapping}{data.frame specifying the initial values for each data mapping. If no mapping is provided, the app will attempt to generate one via \code{detectStandard()}}
 }
 \description{
-Run the interactive safety graphics builder
+Run the interactive safety graphics app
 }

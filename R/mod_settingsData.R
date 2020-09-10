@@ -2,6 +2,8 @@
 #' @description  Settings Module - sub-module showing details for the data loaded in the app - UI
 #' 
 #' @param domains named list of the data.frames for each domain
+#' 
+#' @importFrom DT renderDT
 
 #' @export
 

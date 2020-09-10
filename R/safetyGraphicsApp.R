@@ -1,17 +1,15 @@
-#' Run the interactive safety graphics builder
+#' Run the interactive safety graphics app
 #'
 #' @param maxFileSize maximum file size in MB allowed for file upload
 #' @param meta data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}. 
 #' @param domainData mamed list of data.frames to be loaded in to the app.
 #' @param mapping data.frame specifying the initial values for each data mapping. If no mapping is provided, the app will attempt to generate one via \code{detectStandard()}
 #'
-#' @importFrom shiny runApp shinyOptions
-#' @import shinyjs
-#' @import dplyr
-#' @import DT
+#' @import shiny
+#' @importFrom shinyjs useShinyjs
+#' @importFrom DT DTOutput renderDT
 #' @importFrom purrr map keep
 #' @importFrom magrittr "%>%"
-#' @import rmarkdown
 #' @importFrom haven read_sas
 #' @importFrom shinyWidgets materialSwitch
 #' @importFrom tidyr gather
