@@ -28,8 +28,8 @@ ui <- tagList(
 )
 server <- function(input,output,session){
  callModule(settingsMapping, "NoMapping", metaIn = safetyGraphics::meta)
- callModule(settingsMapping, "PartialMapping", metaIn = safetyGraphics::meta,  mapping=partialMapping )
- callModule(settingsMapping, "FullMapping", metaIn = safetyGraphics::meta,   mapping=fullMapping)
+ callModule(settingsMapping, "PartialMapping", metaIn = safetyGraphics::meta,  mapping=reactive({partialMapping}) )
+ callModule(settingsMapping, "FullMapping", metaIn = safetyGraphics::meta,   mapping=reactive({fullMapping}))
 }
 
 shinyApp(ui, server)

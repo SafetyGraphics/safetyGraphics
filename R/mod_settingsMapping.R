@@ -23,13 +23,18 @@ settingsMappingUI <- function(id){
 #' @param output  Shiny output object
 #' @param session Shiny session object
 #' @param metaIn Data mapping metadata used for initial loading of app
-#' @param mapping data frame representing the current metadata mapping. columns = "domain", "text_id" and "current"
+#' @param mapping reactive data frame representing the current metadata mapping. columns = "domain", "text_id" and "current"
 #'
 #' @export
 
-settingsMapping <- function(input, output, session, metaIn, mapping=NULL){
+settingsMapping <- function(input, output, session, metaIn, mapping){
     ns <- session$ns
-  
+
+    #use an empty mapping if none is provided
+    if(missing(mapping)){
+      mapping<-reactive({data.frame(domain=character(0),text_id=character(0),current=character(0))})
+    }
+    
     ##########################################################################
     # Create reactive containing default or custom data mappings ("metadata")
     ##########################################################################
@@ -55,15 +60,9 @@ settingsMapping <- function(input, output, session, metaIn, mapping=NULL){
         }
       }
     }, ignoreNULL = FALSE)
-    
-    
+  
     metadata_mapping <- reactive(
-      if(is.null(mapping)){
-        metadata()%>%mutate(current="")
-      }else {
-        metadata() %>% left_join(mapping)  
-      }
-      
+        metadata() %>% left_join(mapping())  
     )
 
     output$metaTable <- renderDT({

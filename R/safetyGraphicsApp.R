@@ -44,39 +44,15 @@ safetyGraphicsApp <- function(
   
   # Run a Shiny app object
   
-  css_text<-"
-.selectize-input.not-full{
-  border-color:red;
-}
-
-.selectize-input.full{
-  border-color:green;
-}
-
-
-.field-wrap{
-  padding-left:1em;
-}
-
-.mapping-domain{
-padding:0.5em;
-border:1px solid black;
-border-radius:0.2em;
-margin-bottom:1em;
-max-width:45%;
-}
-
-table.dataTable tr > td:last-of-type, table.dataTable tr > th:last-of-type {
-  border-left:2px solid black;
-  background:#d0d1e6;
-}
-"
-
+  css_text<-readLines("inst/safetyGraphics_app/www/index.css")
+  
+  print(getwd())
   app <- shinyApp(
     ui =  tagList(
       useShinyjs(),
+     
       #add_busy_spinner(spin = "fading-circle", position = "bottom-left", timeout=3000),
-      tags$head(
+       tags$head(
         tags$style(HTML(css_text)),
         tags$link(
           rel = "stylesheet",
@@ -98,9 +74,9 @@ table.dataTable tr > td:last-of-type, table.dataTable tr > th:last-of-type {
       )
     ),
     server = function(input, output) {
-      current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
-      callModule(settingsData, "dataSettings", domains = domainData)
-      callModule(settingsMapping, "metaSettings", metaIn=meta, mapping=current_mapping())
+     current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
+     #callModule(settingsData, "dataSettings", domains = domainData)
+     callModule(settingsMapping, "metaSettings", metaIn=meta, mapping=current_mapping)
       callModule(homeTab, "home")
     }
     
