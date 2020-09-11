@@ -6,10 +6,6 @@ library(dplyr)
 dataR <- reactive({list(labs=safetyGraphics::labs, aes=safetyGraphics::aes)})
 mappingR <- reactive({list(measure_col="PARAM", value_col="AVAL")})
 
-
-
-
-
 # Test app code
 ui <- tagList(
     tags$head(
@@ -48,9 +44,9 @@ server <- function(input,output,session){
     #Example 2
     boxPlot <- function(data,settings){
         mapped_data <- data[['labs']] %>%
-            select(Value = settings[["value_col"]], Measure = settings[["measure_col"]])%>%
-            filter(!is.na(Value))
-        ggplot(data = mapped_data, aes(x = Measure, y = Value)) + 
+            select(CustomValue = settings[["value_col"]], CustomMeasure = settings[["measure_col"]])%>%
+            filter(!is.na(CustomValue))
+        ggplot(data = mapped_data, aes(x = CustomMeasure, y = CustomValue)) + 
             geom_boxplot() +
             scale_y_log10() +
             theme_bw() + 
