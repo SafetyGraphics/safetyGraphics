@@ -8,6 +8,7 @@ safetyGraphicsApp(
   maxFileSize = NULL,
   meta = safetyGraphics::meta,
   domainData = list(labs = safetyGraphics::labs, aes = safetyGraphics::aes),
+  charts = list("Test1", "Test2"),
   mapping = NULL
 )
 }
@@ -16,7 +17,9 @@ safetyGraphicsApp(
 
 \item{meta}{data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}.}
 
-\item{domainData}{mamed list of data.frames to be loaded in to the app.}
+\item{domainData}{named list of data.frames to be loaded in to the app.}
+
+\item{charts}{list of charts to be included in the app.}
 
 \item{mapping}{data.frame specifying the initial values for each data mapping. If no mapping is provided, the app will attempt to generate one via \code{detectStandard()}}
 }
