@@ -21,8 +21,8 @@ chartsRenderWidgetUI <- function(id, widgetName, widgetPackage="safetyGraphics")
 #' @param session Shiny session object
 #' @param widgetName str name of the widget
 #' @param widgetPackage str package containing the widget
-#' @param initFunction function called before the chart is generated. Should return a list of parameters that will be provided to chartFunction. returns list(data=data, settings=settings) by default.
-#' @param domain data domain  
+#' @param initFunction Function called before the chart is generated. The function should take `data` and `settings` as inputs and return `params` which should be a list which is then provided to the widget. If domain is specified, only domain-level information is passed to the init function, otherwise named lists containing information for all domains is provided. The mapping is parsed as a list using `generateMappingList()` before being passed to the init function.  By default, init returns an unmodified list of data and settings (possibly subset to the specified domain) e.g. - list(data=data, settings=settings). 
+#' @param domain data domain. NULL by default.  
 #' @param data named list of data sets [reactive]
 #' @param mapping data mapping [reactive]
 #'
@@ -57,26 +57,34 @@ chartsRenderWidget <- function(
     }
 
     params <- reactive({
-        #initialize the paramaters if specified (otherwise pass through data() and mapping())
-        params <- initFunction(data=data(), settings=mapping())
+        
+        #convert settings from data frame to list and subset to specified domain (if any)
+        settingsList <-  safetyGraphics::generateMappingList(mapping(), domain=domain)
         
         #subset data to specific domain (if specified)
         if(!is.null(domain)){
-            params$data <- params$data[[domain]]
+            domainData <- data()[[domain]]
+        }else{
+            domainData<- data()
         }
+        
+        #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
+        params <- initFunction(data=domainData, settings=settingsList)
         
         #convert list of parameters to json - subset to specific domain if specified
         params$settings <- jsonlite::toJSON(
-            safetyGraphics::generateMappingList(params$settings, domain=domain),
+            params$settings,
             auto_unbox = TRUE,
             null = "null",  
         )
         params$ns <- ns("widgetChart")
+        print(params)
         return(params)
     })
 
     # shiny render function for a widget named 'foo'
     output[["widgetChart"]] <- renderWidget({
+        print(widgetName)
         htmlwidgets::createWidget(
             name = widgetName,
             params(),
