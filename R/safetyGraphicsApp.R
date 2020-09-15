@@ -36,7 +36,7 @@ safetyGraphicsApp <- function(
   })
   names(standards)<-names(domainData)
   
-  # attempt to detect the data standard and generate a mapping if none is provided by the user
+  # attempt to generate a mapping if none is provided by the user
   if(is.null(mapping)){
     mapping_list <- standards %>% lapply(function(standard){
       return(standard[["mapping"]])

@@ -1,15 +1,15 @@
-# Note: expected to be run from the root pacakge directory
+# Note: expected to be run from the root package directory
 library(tidyverse)
 library(usethis)
 
 #Copy metadata to /data
-meta<-read_csv("meta.csv")
+meta<-read_csv("data-raw/meta.csv")
 usethis::use_data(meta, overwrite = TRUE)
 
 #copy sample data sets to /data
-aes<-read_csv("aes.csv")
+aes<-read_csv("data-raw/aes.csv")
 usethis::use_data(aes, overwrite = TRUE)
 
-labs<-read_csv("labs.csv")
+labs<-read_csv("data-raw/labs.csv")
 usethis::use_data(labs, overwrite = TRUE)
 

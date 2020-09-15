@@ -1,10 +1,10 @@
-context("Tests for the renderWidget R module")
+context("Tests for the renderStatic R module")
 library(safetyGraphics)
 library(shinytest)
 library(testthat)
 library(dplyr)
 
-app <- ShinyDriver$new("./module_examples/renderStatic")
+app <- ShinyDriver$new("./module_examples/chartsRenderStatic")
 initial<-app$getAllValues()
 
 test_that("All 3 charts are drawn and have correct axes",{
