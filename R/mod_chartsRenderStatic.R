@@ -15,22 +15,11 @@ chartsRenderStaticUI <- function(id){
 #' @param output  Shiny output object
 #' @param session Shiny session object
 #' @param chartFunction function to generate the chart.
-#' @param initFunction function called before the chart is generated. Should return a list of parameters that will be provided to chartFunction. returns list(data=data, settings=settings) by default. 
-#' @param data named list of data sets [reactive]
-#' @param mapping data mapping [reactive]
+#' @param params parameters to be passed to the widget [REACTIVE]
 #'
 #' @export
 
-chartsRenderStatic <- function(input, output, session, chartFunction, initFunction, data, mapping){
+chartsRenderStatic <- function(input, output, session, chartFunction, params){
   ns <- session$ns
-
-  if(missing(initFunction)){
-    initFunction <- function(data,settings){return(list(data=data,settings=settings))}
-  }
-
-  params <- reactive({
-    initFunction(data=data(),settings=mapping())
-  })
-
   output[["staticChart"]] <- renderPlot(do.call(chartFunction,params())) 
 }

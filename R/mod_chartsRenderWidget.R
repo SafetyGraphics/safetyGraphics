@@ -1,13 +1,17 @@
 #' @title Charts Module - render static chart UI
 #' @description  Charts Module - sub module for rendering a static chart
 #' 
+#' @param id module id
+#' @param chart chart name - must match the name of a widget in the specified pacakge
+#' @param package pacakge containing the widget
+#' 
 #' @export
 
-chartsRenderWidgetUI <- function(id, widgetName, widgetPackage="safetyGraphics"){
+chartsRenderWidgetUI <- function(id, chart, package){
 
     # shiny output binding for a widget named 'foo'
     widgetOutput <- function(outputId, width = "100%", height = "400px") {
-        htmlwidgets::shinyWidgetOutput(outputId, widgetName, width, height, package=widgetPackage)
+        htmlwidgets::shinyWidgetOutput(outputId, chart, width, height, package=package)
     }
     ns <- NS(id)
     widgetOutput(ns("widgetChart"))
@@ -19,12 +23,10 @@ chartsRenderWidgetUI <- function(id, widgetName, widgetPackage="safetyGraphics")
 #' @param input Shiny input object
 #' @param output  Shiny output object
 #' @param session Shiny session object
-#' @param widgetName str name of the widget
-#' @param widgetPackage str package containing the widget
-#' @param initFunction Function called before the chart is generated. The function should take `data` and `settings` as inputs and return `params` which should be a list which is then provided to the widget. If domain is specified, only domain-level information is passed to the init function, otherwise named lists containing information for all domains is provided. The mapping is parsed as a list using `generateMappingList()` before being passed to the init function.  By default, init returns an unmodified list of data and settings (possibly subset to the specified domain) e.g. - list(data=data, settings=settings). 
-#' @param domain data domain. NULL by default.  
-#' @param data named list of data sets [reactive]
-#' @param mapping data mapping [reactive]
+#' @param chart chart name - must match the name of a widget in the specified pacakge
+#' @param package package containing the widget. Note that package name is required for htmlwidgets. 
+#' @param params parameters to be passed to the widget [REACTIVE]
+#' @param settingsToJSON convert param$settings to json? Default = TRUE
 #'
 #' @export
 
@@ -32,18 +34,17 @@ chartsRenderWidget <- function(
     input, 
     output, 
     session,
-    widgetName, 
-    widgetPackage="safetyGraphics", 
-    initFunction, 
-    domain=NULL, 
-    data, 
-    mapping
+    chart, 
+    package, 
+    params, 
+    settingsToJSON=TRUE
 ){
     ns <- session$ns
 
+    
     # shiny output binding
     widgetOutput <- function(outputId, width = "100%", height = "400px") {
-        htmlwidgets::shinyWidgetOutput(outputId, widgetName, width, height, package=widgetPackage)
+        htmlwidgets::shinyWidgetOutput(outputId, chart, width, height, package=package)
     }
 
     # shiny render function for a widget
@@ -52,43 +53,25 @@ chartsRenderWidget <- function(
         htmlwidgets::shinyRenderWidget(expr, widgetOutput, env, quoted = TRUE)
     }
 
-    if(missing(initFunction)){
-        initFunction <- function(data,settings){return(list(data=data,settings=settings))}
-    }
-
-    params <- reactive({
-        
-        #convert settings from data frame to list and subset to specified domain (if any)
-        settingsList <-  safetyGraphics::generateMappingList(mapping(), domain=domain)
-        
-        #subset data to specific domain (if specified)
-        if(!is.null(domain)){
-            domainData <- data()[[domain]]
-        }else{
-            domainData<- data()
+    widgetParams <- reactive({
+        widgetParams<-params()
+        if(settingsToJSON){
+            widgetParams$settings <- jsonlite::toJSON(
+                widgetParams$settings,
+                auto_unbox = TRUE,
+                null = "null",  
+            )
         }
-        
-        #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
-        params <- initFunction(data=domainData, settings=settingsList)
-        
-        #convert list of parameters to json - subset to specific domain if specified
-        params$settings <- jsonlite::toJSON(
-            params$settings,
-            auto_unbox = TRUE,
-            null = "null",  
-        )
-        params$ns <- ns("widgetChart")
-        print(params)
-        return(params)
+        widgetParams$ns <- ns("widgetChart")
+        return(widgetParams)
     })
 
-    # shiny render function for a widget named 'foo'
+    # shiny render function for the widget 
     output[["widgetChart"]] <- renderWidget({
-        print(widgetName)
         htmlwidgets::createWidget(
-            name = widgetName,
-            params(),
-            package = widgetPackage,
+            name = chart,
+            widgetParams(),
+            package = package,
             sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE),     
        )
     })

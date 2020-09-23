@@ -6,7 +6,11 @@ HTMLWidgets.widget({
 
     return {
       renderValue: function(rSettings) {
-        console.log(rSettings)
+        console.log("widget started ...")
+        console.log(el)
+        //console.log(rSettings)
+        //el.innerHTML = "<div class='.hepexplorer-wrap'></div>";
+        el.innerHTML=""
         let settings = rSettings.settings;
         let data = HTMLWidgets.dataframeToD3(rSettings.data);
         var chart = hepexplorer("#"+rSettings.ns, settings)

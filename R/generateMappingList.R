@@ -16,7 +16,7 @@ generateMappingList <- function(settingsDF, domain=NULL){
   for (i in 1:length(domain_keys) ) {
     settingsList<-setMappingListValue(
       key=domain_keys[[i]],
-      value=settingsDF[i,"current"]%>%pull(), 
+      value=settingsDF[i,"current"],#%>%pull(), 
       settings=settingsList,
       forceCreate=TRUE
     )

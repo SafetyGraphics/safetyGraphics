@@ -3,9 +3,9 @@ library(safetyGraphics)
 library(ggplot2)
 library(dplyr)
 
-dataR <- reactive({list(labs=safetyGraphics::labs, aes=safetyGraphics::aes)})
-mappingR <- reactive({list(measure_col="PARAM", value_col="AVAL")})
-
+data <- list(labs=safetyGraphics::labs, aes=safetyGraphics::aes)
+mapping <- list(measure_col="PARAM", value_col="AVAL")
+params<- reactive({list(data=data,settings=mapping)})
 # Test app code
 ui <- tagList(
     tags$head(
@@ -36,9 +36,8 @@ server <- function(input,output,session){
     callModule(
         chartsRenderStatic, 
         "HelloWorld", 
-        chartFunction=helloWorld, 
-        data=reactive({}), 
-        mapping=reactive({})
+        chartFunction=helloWorld,
+        params=reactive({list()})
     )
     
     #Example 2
@@ -56,13 +55,12 @@ server <- function(input,output,session){
     }
 
     callModule(
-        chartsRenderStatic, 
-        "BoxPlot", 
-        chartFunction=boxPlot, 
-        data=dataR, 
-        mapping=mappingR
+        chartsRenderStatic,
+        "BoxPlot",
+        chartFunction=boxPlot,
+        params=params
     )
-    
+
     #Example 3
     dataInit <- function(data,settings){
         mapped_data <- data[['labs']] %>%
@@ -83,12 +81,10 @@ server <- function(input,output,session){
     }
     
     callModule(
-        chartsRenderStatic, 
-        "BoxPlot2", 
-        initFunction=dataInit,
-        chartFunction=boxPlot2, 
-        data=dataR, 
-        mapping=mappingR
+        chartsRenderStatic,
+        "BoxPlot2",
+        chartFunction=boxPlot2,
+        params=reactive({dataInit(data=data,settings=mapping)})
     )
 }
 

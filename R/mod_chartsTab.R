@@ -3,46 +3,95 @@
 #'
 #' @export
 
-chartTabUI <- function(id){
+chartsTabUI <- function(id, chart, package, label=chart, type){
+  print(chart)
+  print(label)
+  print(type)
+  print(paste("making a UI for",chart))
   ns <- NS(id)
-  uiOutput(outputId = ns("chart"))
+  chartID <- ifelse(missing(package), chart, paste0(package,"-",chart))
+  h2(paste("Chart:",label))
+  if(tolower(type=="module")){
+      #render the module UI
+      #call the module server
+  }else if(tolower(type=="htmlwidget")){
+    #render the widget 
+    chartsRenderWidgetUI(id=ns(chartID),chart=chart,package=package)
+  }else{
+      #create the static or plotly chart
+      chartsRenderStaticUI(id=ns(chartID))
+  }
 }
 
 #' @title  home tab - server
-#' @description  server for the display of the home tab  
+#' @description  server for the display of the chart tab  
 #'
 #' @param input Input objects from module namespace
 #' @param output Output objects from module namespace
 #' @param session An environment that can be used to access information and functionality relating to the session
-#' @param data list of data frames  [REACTIVE]
-#' @param mapping data frame containing mapping arguments for chart [REACTIVE]
-#' @param chartID string containing the chart ID. 
-#' @param chartMeta data frame with the following columns. \enumerate{
-#' \item `chartID` chartID
-#' \item `label` text label
-#' \item `type` type must be  'htmlwidget', 'module', 'static' or 'plotly'. Other optional parameters are: 
-#' \item `UI` a function that accepts parameters called `data` and `mapping` and returns a chart object of the expected type. Defaults to `name()`
-#' \item `server` a function that calls a shiny module server defaults to `nameServer()`. Ignored unless type='module'.
-#' \item `onInit` a function that that accepts parameters called `data` and `mapping` and returns a list of custom parameters to be passed to the UI and server functions. returns list(data=data, mapping=mapping) with no changes by default. 
-#'} If chartID isn't found in chartMeta, the system will attempt to draw a static plot with the provided data and mapping. 
+#' @param type type of chart. Must be 'htmlwidget', 'module', 'static' or 'plotly'. See ?mod_chartRenderer{{type}} for more details about each chart type
+#' @param package  package containing the widget. 
+#' @param chart chart name. Should generally match the name of the function/widget/module to be intiated. See specific renderer modules for more details. 
+#' @param chartFunction function to generate static chart. 
+#' @param initFunction function called before the chart is generated. The function should take `data` and `settings` as inputs and return `params` which should be a list which is then provided to the widget. If domain is specified, only domain-level information is passed to the init function, otherwise named lists containing information for all domains is provided. The mapping is parsed as a list using `generateMappingList()` before being passed to the init function.  By default, init returns an unmodified list of data and settings - possibly subset to the specified domain (e.g. list(data=data, settings=settings))
+#' @param domain data domain. The default (NULL) returns a named lists for data and mappings containing domains.  
+#' @param data named list of current data sets [reactive].
+#' @param mapping named list of the current data mappings [reactive].
 #' 
 #' @export
 
-chartTab <- function(input, output, session, chart, data, mapping){
+chartsTab <- function(input, output, session, chart, type, package, chartFunction, initFunction, domain=NULL, data, mapping){
+  print(paste("making a server for",chart))
   ns <- session$ns
-  
-  #prepare the parameters for the chart
-  chartParams<- list(data=data,mapping=mapping)
+  chartID <- ifelse(missing(package), chart, paste0(package,"-",chart))
+
+   if(missing(initFunction)){
+        initFunction <- function(data,settings){return(list(data=data,settings=settings))}
+    }
+
+    params <- reactive({
+        
+        #convert settings from data frame to list and subset to specified domain (if any)
+      print(mapping())
+        settingsList <-  safetyGraphics::generateMappingList(mapping(), domain=domain)
+        
+        #subset data to specific domain (if specified)
+        if(!is.null(domain)){
+            domainData <- data()[[domain]]
+        }else{
+            domainData<- data()
+        }
+        
+        #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
+        params <- initFunction(data=domainData, settings=settingsList)
+        
+        return(params)
+    })
   
   if(tolower(type=="module")){
       #render the module UI
       #call the module server
   }else if(tolower(type=="htmlwidget")){
-      #render the widget 
+    print("widget")
+      callModule(
+        chartsRenderWidget,
+        chartID,
+        chart=chart,
+        package=package,
+        params=params
+      )
   }else{
+      #attempt to load the function from the specified package if it is not provided       print("static")
+      if(missing(chartFunction)){
+        chartFunction<-match.fun(paste0(package,"::",chart))
+      }
+      print(static)
       #create the static or plotly chart
+      callModule(
+        chartsRenderStatic,
+        chartID,
+        chartFunction=chartFunction,
+        params=params
+      )
   }
-
-  
-  
 }

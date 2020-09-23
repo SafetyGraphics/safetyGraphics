@@ -1,0 +1,10 @@
+domain,package,chart,label,description,repo_url,settings_url,type,maxWidth
+labs,safetyGraphics,hepexplorer,Hepatic Safety Explorer,Interactive Graphic for Exploring Liver Function Data in Clinical Trials,https://github.com/SafetyGraphics/hep-explorer,https://github.com/SafetyGraphics/hep-explorer/wiki/Configuration,htmlwidget,620
+labs,safetyexploreR,safetyHistogram,Histogram,"Histogram showing distribution of lab measures, vital signs and other measures related to safety in clinical trials.",https://github.com/RhoInc/safety-histogram,https://github.com/RhoInc/safety-histogram/wiki/Configuration,htmlwidget,1000
+labs,safetyexploreR,safetyOutlierExplorer,Outlier Explorer,"Line Chart highlighting abnormal lab measures, vital signs and other measures related to safety in clinical trials.",https://github.com/RhoInc/safety-outlier-explorer,https://github.com/RhoInc/safety-outlier-explorer/wiki/Configuration,htmlwidget,1000
+labs,safetyexploreR,safetyShiftPlot,Shift Plot,Shift Plot for Safety Explorer,https://github.com/RhoInc/safety-shift-plot,https://github.com/RhoInc/safety-shift-plot/wiki/Configuration,htmlwidget,620
+labs,safetyexploreR,safetyResultsOvertime,Results Over Time,Population Test Results Over Time,https://github.com/RhoInc/safety-results-over-time,https://github.com/RhoInc/safety-results-over-time/wiki/Configuration,htmlwidget,1000
+labs,safetyexploreR,paneledOutlierExplorer,Paneled Outlier Explorer,Charts showing clinical participant results for multiple measures,https://github.com/RhoInc/paneled-outlier-explorer,https://github.com/RhoInc/paneled-outlier-explorer/wiki/Configuration,htmlwidget,1000
+labs,safetyexploreR,safetyDeltaDelta,Delta-Delta,Chart for exploring changes over time across multiple measures in clinical trial safety data,https://github.com/Rhoinc/safety-delta-delta,https://github.com/RhoInc/safety-delta-delta/wiki/Configuration,htmlwidget,1000
+aes,safetyexploreR,aeExplorer,Safety Explorer,,,,htmlwidget,1000
+aes,safetyexploreR,aeTimelines,Safety Timelines,,,,htmlwidget,1000

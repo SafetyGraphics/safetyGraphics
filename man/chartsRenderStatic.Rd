@@ -4,15 +4,7 @@
 \alias{chartsRenderStatic}
 \title{Charts Module - render static chart server}
 \usage{
-chartsRenderStatic(
-  input,
-  output,
-  session,
-  chartFunction,
-  initFunction,
-  data,
-  mapping
-)
+chartsRenderStatic(input, output, session, chartFunction, params)
 }
 \arguments{
 \item{input}{Shiny input object}
@@ -23,11 +15,7 @@ chartsRenderStatic(
 
 \item{chartFunction}{function to generate the chart.}
 
-\item{initFunction}{function called before the chart is generated. Should return a list of parameters that will be provided to chartFunction. returns list(data=data, settings=settings) by default.}
-
-\item{data}{named list of data sets [reactive]}
-
-\item{mapping}{data mapping [reactive]}
+\item{params}{parameters to be passed to the widget [REACTIVE]}
 }
 \description{
 server for the display of the loaded data

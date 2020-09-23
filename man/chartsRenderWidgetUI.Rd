@@ -4,7 +4,14 @@
 \alias{chartsRenderWidgetUI}
 \title{Charts Module - render static chart UI}
 \usage{
-chartsRenderWidgetUI(id, widgetName, widgetPackage = "safetyGraphics")
+chartsRenderWidgetUI(id, chart, package)
+}
+\arguments{
+\item{id}{module id}
+
+\item{chart}{chart name - must match the name of a widget in the specified pacakge}
+
+\item{package}{pacakge containing the widget}
 }
 \description{
 Charts Module - sub module for rendering a static chart

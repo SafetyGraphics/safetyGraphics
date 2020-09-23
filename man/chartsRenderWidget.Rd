@@ -8,11 +8,10 @@ chartsRenderWidget(
   input,
   output,
   session,
-  widgetName,
-  widgetPackage = "safetyGraphics",
-  initFunction,
-  data,
-  mapping
+  chart,
+  package,
+  params,
+  settingsToJSON = TRUE
 )
 }
 \arguments{
@@ -22,15 +21,13 @@ chartsRenderWidget(
 
 \item{session}{Shiny session object}
 
-\item{widgetName}{str name of the widget}
+\item{chart}{chart name - must match the name of a widget in the specified pacakge}
 
-\item{widgetPackage}{str package containing the widget}
+\item{package}{package containing the widget. Note that package name is required for htmlwidgets.}
 
-\item{initFunction}{function called before the chart is generated. Should return a list of parameters that will be provided to chartFunction. returns list(data=data, settings=settings) by default.}
+\item{params}{parameters to be passed to the widget [REACTIVE]}
 
-\item{data}{named list of data sets [reactive]}
-
-\item{mapping}{data mapping [reactive]}
+\item{settingsToJSON}{convert param$settings to json? Default = TRUE}
 }
 \description{
 server for the display of the loaded data

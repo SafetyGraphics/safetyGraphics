@@ -18,9 +18,8 @@ mapping_list <- standards %>% lapply(function(standard){
   return(standard[["mapping"]])
 })
 mapping<-bind_rows(mapping_list, .id = "domain")
-
-dataR <- reactive({domainData})
-mappingR <- reactive({mapping})
+mappingLabs <- generateMappingList(mapping,domain="labs")
+mappingAEs <- generateMappingList(mapping,domain="aes")
 
 # Test app code
 
@@ -31,7 +30,7 @@ body<-dashboardBody(
       tabName="ex1-tab",
       {
         h2("Example 1 - hepexplorer- called directly from safetyGraphics hepexplorer")
-        chartsRenderWidgetUI("ex1",widgetName="hepexplorer")        
+        chartsRenderWidgetUI("ex1",chart="hepexplorer",package="safetyGraphics")        
       }
 
     ),
@@ -39,14 +38,14 @@ body<-dashboardBody(
       tabName="ex2-tab",
       {
         h2("Example 2 - AE Explorer - called from safetyexploreR using custom init function")
-        chartsRenderWidgetUI("ex2",widgetName="aeExplorer",widgetPackage="safetyexploreR")  
+        chartsRenderWidgetUI("ex2",chart="aeExplorer",package="safetyexploreR")  
       }
     ),
     tabItem(
       tabName="ex3-tab",
       {
         h2("Example 3 - Results over time - called from safetyexploreR")
-        chartsRenderWidgetUI("ex3",widgetName="safetyResultsOverTime",widgetPackage="safetyexploreR")  
+        chartsRenderWidgetUI("ex3",chart="safetyResultsOverTime",package="safetyexploreR")  
       }
     )
   )
@@ -75,13 +74,13 @@ ui <- tagList(
 
 server <- function(input,output,session){
    # Example 1 - hep explorer
+      paramsLabs <- reactive({list(data=domainData[["labs"]],settings=mappingLabs)})
      callModule(
         chartsRenderWidget,
         "ex1",
-        widgetName="hepexplorer",
-        data=dataR,
-        mapping=mappingR,
-        domain="labs"
+        chart="hepexplorer",
+        package="safetyGraphics",
+        params=paramsLabs
     )
   
     # Example 2 - AE Explorer
@@ -96,28 +95,22 @@ server <- function(input,output,session){
       )
       return(list(data=data,settings=settings))
     }
-    
+    paramsAEs <- reactive({initAEE(data=domainData[["aes"]],settings=mappingAEs)})
     callModule(
       chartsRenderWidget,
       "ex2",
-      widgetName="aeExplorer",
-      widgetPackage="safetyexploreR",
-      data=dataR,
-      mapping=mappingR,
-      domain="aes",
-      initFunction=initAEE
+      chart="aeExplorer",
+      package="safetyexploreR",
+      params=paramsAEs
     )
     
     #Example 3 - results over time
     callModule(
       chartsRenderWidget,
       "ex3",
-      widgetName="safetyResultsOverTime",
-      widgetPackage="safetyexploreR",
-      data=dataR,
-      mapping=mappingR,
-      domain="labs"
-      #initFunction=initAEE
+      chart="safetyResultsOverTime",
+      package="safetyexploreR",
+      params=paramsLabs
     )
 }
 
