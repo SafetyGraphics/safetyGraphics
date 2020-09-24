@@ -42,4 +42,9 @@ settingsData <- function(input, output, session, domains){
       )
     })
   }
+  
+  #NOTE: There is no real need for this to be reactive right now, but in this is just a bit of future proofing for when data is more dynamic. 
+  
+  return(reactive({domains}))
+  
 }

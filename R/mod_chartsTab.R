@@ -4,9 +4,6 @@
 #' @export
 
 chartsTabUI <- function(id, chart, package, label=chart, type){
-  print(chart)
-  print(label)
-  print(type)
   print(paste("making a UI for",chart))
   ns <- NS(id)
   chartID <- ifelse(missing(package), chart, paste0(package,"-",chart))
@@ -44,24 +41,20 @@ chartsTab <- function(input, output, session, chart, type, package, chartFunctio
   print(paste("making a server for",chart))
   ns <- session$ns
   chartID <- ifelse(missing(package), chart, paste0(package,"-",chart))
-
-   if(missing(initFunction)){
-        initFunction <- function(data,settings){return(list(data=data,settings=settings))}
-    }
+    print(paste0("domain: ", domain))
 
     params <- reactive({
         
         #convert settings from data frame to list and subset to specified domain (if any)
-      print(mapping())
         settingsList <-  safetyGraphics::generateMappingList(mapping(), domain=domain)
         
         #subset data to specific domain (if specified)
         if(!is.null(domain)){
-            domainData <- data()[[domain]]
+            domainData <- data[[domain]]
         }else{
-            domainData<- data()
+            domainData<- data
         }
-        
+
         #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
         params <- initFunction(data=domainData, settings=settingsList)
         
@@ -81,11 +74,7 @@ chartsTab <- function(input, output, session, chart, type, package, chartFunctio
         params=params
       )
   }else{
-      #attempt to load the function from the specified package if it is not provided       print("static")
-      if(missing(chartFunction)){
-        chartFunction<-match.fun(paste0(package,"::",chart))
-      }
-      print(static)
+      print("static")
       #create the static or plotly chart
       callModule(
         chartsRenderStatic,

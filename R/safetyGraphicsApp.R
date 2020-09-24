@@ -5,6 +5,7 @@
 #' @param domainData named list of data.frames to be loaded in to the app.
 #' @param charts data.frame of charts to be used in the app
 #' @param mapping data.frame specifying the initial values for each data mapping. If no mapping is provided, the app will attempt to generate one via \code{detectStandard()}
+#' @param settingsPath path where customization functions are saved. All charts can have itialization (e.g. [chart]Init.R) and static charts can have charting functions (e.g. [chart]Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details. 
 #'
 #' @import shiny
 #' @importFrom shinyjs useShinyjs
@@ -22,7 +23,8 @@ safetyGraphicsApp <- function(
   meta = safetyGraphics::meta, 
   domainData=list(labs=safetyGraphics::labs, aes=safetyGraphics::aes),
   charts=safetyGraphics::charts,
-  mapping=NULL
+  mapping=NULL,
+  chartSettingsPath = paste(.libPaths(),'safetygraphics','chartSettings', sep="/")
 ){
 
   #increase maximum file upload limit
@@ -44,34 +46,38 @@ safetyGraphicsApp <- function(
     mapping<-bind_rows(mapping_list, .id = "domain")
   }
 
+  #convert charts data frame to a list and bind functions
   chartsList <- setNames(transpose(charts), charts$chart)
-  
+  chartsList <- getChartFunctions(chartsList, chartSettingsPath)
+   
   app <- shinyApp(
     ui =  app_ui(meta, domainData, mapping, standards),
     server = function(input, output) {
 
       #Initialize modules
       current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
-      current_data<-callModule(settingsData, "dataSettings", domains = domainData)
+      callModule(settingsData, "dataSettings", domains = domainData)
       callModule(settingsMapping, "metaSettings", metaIn=meta, mapping=current_mapping)
       callModule(homeTab, "home")
       
-      chartsList %>% lapply(chartsNav, chart, label, data, type)
+      #Initialize Chart UI - Adds subtabs to chart menu and initializes chart UIs
+      chartsList %>% map(~chartsNav(chart=.x$chart, label=.x$label, type=.x$type, package=.x$package))
 
-      # charts %>% invoke_rows(
-      #   callModule(
-      #     chartsTab,
-      #     chart,
-      #     chart=chart,
-      #     #chartFunction=chart$chartFunction,
-      #     #initFunction=chart$initFunction,
-      #     type=type,
-      #     package=package,
-      #     domain=domain,
-      #     data=current_data,
-      #     mapping=current_mapping    
-      #   )
-      # )
+      #Initialize Chart Servers
+      chartsList %>% map(
+        ~callModule(
+          chartsTab,
+          .x$chart,
+          chart=.x$chart,
+          chartFunction=.x$chartFunction,
+          initFunction=.x$initFunction,
+          type=.x$type,
+          package=.x$package,
+          domain=.x$domain,
+          data=domainData,
+          mapping=current_mapping    
+        )
+      )
     }
   )
   runApp(app, launch.browser = TRUE)

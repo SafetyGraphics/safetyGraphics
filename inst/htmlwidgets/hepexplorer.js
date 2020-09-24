@@ -8,6 +8,7 @@ HTMLWidgets.widget({
       renderValue: function(rSettings) {
         console.log("widget started ...")
         console.log(el)
+        console.log(rSettings)
         //console.log(rSettings)
         //el.innerHTML = "<div class='.hepexplorer-wrap'></div>";
         el.innerHTML=""

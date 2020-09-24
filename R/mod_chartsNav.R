@@ -6,8 +6,6 @@
 #' 
 
 chartsNav <- function(chart, label, package, type){
-    print(chart)
-    print(package)
     #chart$chartFunction <- NULL
     #chart$initFunction <- NULL 
     appendTab(
