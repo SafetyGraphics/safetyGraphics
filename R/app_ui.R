@@ -12,7 +12,7 @@ app_ui <- function(meta, domainData, mapping, standards){
       useShinyjs(),
       #add_busy_spinner(spin = "fading-circle", position = "bottom-left", timeout=3000),
        tags$head(
-        tags$style(HTML(readLines("inst/safetyGraphics_app/www/index.css"))),
+        tags$style(HTML(readLines( paste(.libPaths(),'safetygraphics','safetyGraphics_app', 'www','index.css', sep="/")))),
         tags$link(
           rel = "stylesheet",
           type = "text/css",

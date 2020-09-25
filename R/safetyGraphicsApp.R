@@ -5,7 +5,7 @@
 #' @param domainData named list of data.frames to be loaded in to the app.
 #' @param charts data.frame of charts to be used in the app
 #' @param mapping data.frame specifying the initial values for each data mapping. If no mapping is provided, the app will attempt to generate one via \code{detectStandard()}
-#' @param settingsPath path where customization functions are saved. All charts can have itialization (e.g. [chart]Init.R) and static charts can have charting functions (e.g. [chart]Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details. 
+#' @param settingsPath path where customization functions are saved relative to your working directory. All charts can have itialization (e.g. [chart]Init.R) and static charts can have charting functions (e.g. [chart]Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details. 
 #'
 #' @import shiny
 #' @importFrom shinyjs useShinyjs
@@ -24,13 +24,20 @@ safetyGraphicsApp <- function(
   domainData=list(labs=safetyGraphics::labs, aes=safetyGraphics::aes),
   charts=safetyGraphics::charts,
   mapping=NULL,
-  chartSettingsPath = paste(.libPaths(),'safetygraphics','chartSettings', sep="/")
+  chartSettingsPaths = NULL
 ){
 
   #increase maximum file upload limit
   if(!is.null(maxFileSize)){
     options(shiny.maxRequestSize=(maxFileSize*1024^2))
   }
+
+  # load files from default location in the package (for default charts) 
+  defaultPath <- paste(.libPaths(),'safetygraphics','chartSettings', sep="/")
+  if(!is.null(chartSettingsPaths)){
+    chartSettingsPaths <- paste(getwd(),chartSettingsPaths,sep="/")
+  }
+  chartSettingPaths <- c(defaultPath, chartSettingsPaths) 
   
   # get the data standards
   standards <- names(domainData) %>% lapply(function(domain){
@@ -48,7 +55,7 @@ safetyGraphicsApp <- function(
 
   #convert charts data frame to a list and bind functions
   chartsList <- setNames(transpose(charts), charts$chart)
-  chartsList <- getChartFunctions(chartsList, chartSettingsPath)
+  chartsList <- getChartFunctions(chartsList, chartSettingsPaths)
    
   app <- shinyApp(
     ui =  app_ui(meta, domainData, mapping, standards),

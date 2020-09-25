@@ -6,3 +6,6 @@ labs,safetyexploreR,safetyShiftPlot,Shift Plot,Shift Plot for Safety Explorer,ht
 labs,safetyexploreR,safetyResultsOverTime,Results Over Time,Population Test Results Over Time,https://github.com/RhoInc/safety-results-over-time,https://github.com/RhoInc/safety-results-over-time/wiki/Configuration,htmlwidget,1000
 aes,safetyexploreR,aeExplorer,Safety Explorer,,,,htmlwidget,1000
 aes,safetyexploreR,aeTimelines,Safety Timelines,,,,htmlwidget,1000
+labs,safetyCharts,safety_histogram,Safety Histogram (Static),"","","",static,1000
+labs,safetyCharts,safety_outlier_explorer,Outlier Explorer (Static),"","","",static,1000
+labs,safetyCharts,safety_results_over_time,Results Over Time (Static),"","","",static,1000

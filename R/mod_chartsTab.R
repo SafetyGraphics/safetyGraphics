@@ -4,7 +4,6 @@
 #' @export
 
 chartsTabUI <- function(id, chart, package, label=chart, type){
-  print(paste("making a UI for",chart))
   ns <- NS(id)
   chartID <- ifelse(missing(package), chart, paste0(package,"-",chart))
   h2(paste("Chart:",label))
@@ -38,10 +37,8 @@ chartsTabUI <- function(id, chart, package, label=chart, type){
 #' @export
 
 chartsTab <- function(input, output, session, chart, type, package, chartFunction, initFunction, domain=NULL, data, mapping){
-  print(paste("making a server for",chart))
   ns <- session$ns
   chartID <- ifelse(missing(package), chart, paste0(package,"-",chart))
-    print(paste0("domain: ", domain))
 
     params <- reactive({
         
@@ -65,7 +62,6 @@ chartsTab <- function(input, output, session, chart, type, package, chartFunctio
       #render the module UI
       #call the module server
   }else if(tolower(type=="htmlwidget")){
-    print("widget")
       callModule(
         chartsRenderWidget,
         chartID,
@@ -74,7 +70,6 @@ chartsTab <- function(input, output, session, chart, type, package, chartFunctio
         params=params
       )
   }else{
-      print("static")
       #create the static or plotly chart
       callModule(
         chartsRenderStatic,

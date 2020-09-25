@@ -8,10 +8,15 @@
 #' 
 #' @export
 #' 
-getChartFunctions <- function(chartsList, chartSettingsPath){
- #source all R files in settingsPath
-  chartSettingsSources <- list.files(chartSettingsPath, pattern = "\\.R$", ignore.case=TRUE, full.names=TRUE)
-  sapply(chartSettingsSources, source)
+getChartFunctions <- function(chartsList, chartSettingsPaths){
+ #source all R files in specified settings paths
+ for(path in chartSettingsPaths){
+    print(getwd())
+    print(path)
+    chartSettingsSources <- list.files(path, pattern = "\\Chart.R$", ignore.case=TRUE, full.names=TRUE)
+    print(chartSettingsSources)
+    sapply(chartSettingsSources, source)
+ }
 
   for(chartID in names(chartsList)){    
     #set default to NULL until function is found
