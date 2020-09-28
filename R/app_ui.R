@@ -24,6 +24,7 @@ app_ui <- function(meta, domainData, mapping, standards){
         id="nav_id",
         tabPanel("Home", icon=icon("home"),homeTabUI("home")),
         tabPanel("Mapping", icon=icon("map"), mappingTabUI("mapping", meta, domainData, mapping, standards)),
+        tabPanel("Filtering", icon=icon("filter"), filterTabUI("filter","dm")),
         navbarMenu('Charts', icon=icon("chart-bar")),
         tabPanel("Reports", icon=icon("file-alt")),
         navbarMenu('Config',icon=icon("cog"),

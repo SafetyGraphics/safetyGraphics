@@ -64,9 +64,18 @@ safetyGraphicsApp <- function(
   app <- shinyApp(
     ui =  app_ui(meta, domainData, mapping, standards),
     server = function(input, output) {
+      #NOTE: treating all data is treated as reactive to simplify workflow and allow data upload in a future release
+      #rawData <- reactive({domainData}) 
 
       #Initialize modules
       current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
+      filtered_data<-callModule(
+        filterTab, 
+        "filter", 
+        domainData=domainData, 
+        filterDomain="dm", 
+        id_col=current_mapping()[["dm"]][["id_column"]]
+      )
       callModule(settingsData, "dataSettings", domains = domainData)
       callModule(settingsMapping, "metaSettings", metaIn=meta, mapping=current_mapping)
       callModule(settingsCharts, "chartSettings",charts = chartsList)
