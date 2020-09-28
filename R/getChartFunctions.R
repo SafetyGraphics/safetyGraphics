@@ -11,21 +11,17 @@
 getChartFunctions <- function(chartsList, chartSettingsPaths){
  #source all R files in specified settings paths
  for(path in chartSettingsPaths){
-    print(getwd())
-    print(path)
-    chartSettingsSources <- list.files(path, pattern = "\\Chart.R$", ignore.case=TRUE, full.names=TRUE)
-    print(chartSettingsSources)
+    chartSettingsSources <- list.files(path, pattern = "\\.R$", ignore.case=TRUE, full.names=TRUE)  
     sapply(chartSettingsSources, source)
  }
 
-  for(chartID in names(chartsList)){    
-    #set default to NULL until function is found
+  for(chartID in names(chartsList)){  
+    #set default until function is found
     chartsList[[chartID]][["initFunction"]]<-function(data,settings){
         return(list(data=data,settings=settings))
     } 
 
     # add init function
-
     if(exists(paste0(chartID,"_init"))){
         chartsList[[chartID]][["initFunction"]] <- match.fun(paste0(chartID,"_init"))
     }

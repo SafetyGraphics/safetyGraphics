@@ -4,7 +4,7 @@
 \alias{getChartFunctions}
 \title{Get Chart Functions}
 \usage{
-getChartFunctions(chartsList, chartSettingsPath)
+getChartFunctions(chartsList, chartSettingsPaths)
 }
 \arguments{
 \item{chartsList}{List of charts and thier parameters}

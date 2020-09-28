@@ -4,9 +4,6 @@ seq_col,aes,seq_col,,column,Sequence column,Event sequence number variable name,
 stdy_col,aes,stdy_col,,column,AE Start day column,Event start day variable name,FALSE,ASTDY,AESTDY
 endy_col,aes,endy_col,,column,AE End day column,Event end day variable name,FALSE,AENDY,AEENDY
 term_col,aes,term_col,,column,Preferred Term Column,verbatim adverse event text variable name,FALSE,AETERM,AETERM
-treatment_col,aes,treatment_col,,column,Treatment Column,Treatment Column,FALSE,ARM,ARM
-treatment_values--group1,aes,treatment_col,group1,field,Treatment 1,Treatment 1,FALSE,,
-treatment_values--group2,aes,treatment_col,group2,field,Treatment 2,Treatment 2,FALSE,,
 bodsys_col,aes,bodsys_col,,column,AE Body System,AE Body System,FALSE,AEBODSYS,AEBODSYS
 detail_col,aes,detail_col,,column,Details,Details,TRUE,,
 filter_cols,aes,filter_cols,,column,Filters,Filters,TRUE,,
@@ -29,3 +26,7 @@ analysis_flag_col,labs,analysis_flag_col,,column,Analysis column,An optional lis
 analysis_flag_values,labs,analysis_flag_col,values,field,Analysis values,An optional list defining which values (one or more) represent the analysis visit(s) of the study.,TRUE,,
 detail_col,labs,detail_col,,column,Details,Details,TRUE,,
 filter_cols,labs,filter_cols,,column,Filters,Filters,TRUE,,
+id_col,dm,id_col,,column,ID column,Unique subject identifier variable name.,FALSE,USUBJID,USUBJID
+treatment_col,dm,treatment_col,,column,Treatment Column,Treatment Column,FALSE,ARM,ARM
+treatment_values--group1,dm,treatment_col,group1,field,Treatment 1,Treatment 1,FALSE,,
+treatment_values--group2,dm,treatment_col,group2,field,Treatment 2,Treatment 2,FALSE,,

@@ -21,7 +21,11 @@
 safetyGraphicsApp <- function(
   maxFileSize = NULL, 
   meta = safetyGraphics::meta, 
-  domainData=list(labs=safetyGraphics::labs, aes=safetyGraphics::aes),
+  domainData=list(
+    labs=safetyGraphics::labs, 
+    aes=safetyGraphics::aes, 
+    dm=safetyGraphics::dm
+  ),
   charts=safetyGraphics::charts,
   mapping=NULL,
   chartSettingsPaths = NULL
@@ -55,7 +59,7 @@ safetyGraphicsApp <- function(
 
   #convert charts data frame to a list and bind functions
   chartsList <- setNames(transpose(charts), charts$chart)
-  chartsList <- getChartFunctions(chartsList, chartSettingsPaths)
+  chartsList <- getChartFunctions(chartsList, chartSettingPaths)
    
   app <- shinyApp(
     ui =  app_ui(meta, domainData, mapping, standards),
@@ -65,12 +69,14 @@ safetyGraphicsApp <- function(
       current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
       callModule(settingsData, "dataSettings", domains = domainData)
       callModule(settingsMapping, "metaSettings", metaIn=meta, mapping=current_mapping)
+      callModule(settingsCharts, "chartSettings",charts = chartsList)
       callModule(homeTab, "home")
       
       #Initialize Chart UI - Adds subtabs to chart menu and initializes chart UIs
       chartsList %>% map(~chartsNav(chart=.x$chart, label=.x$label, type=.x$type, package=.x$package))
 
       #Initialize Chart Servers
+      validDomains <- tolower(names(mapping))
       chartsList %>% map(
         ~callModule(
           chartsTab,

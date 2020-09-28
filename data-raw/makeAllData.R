@@ -17,3 +17,5 @@ usethis::use_data(aes, overwrite = TRUE)
 labs<-read_csv("data-raw/labs.csv")
 usethis::use_data(labs, overwrite = TRUE)
 
+dm<-read_csv("data-raw/dm.csv")
+usethis::use_data(dm, overwrite = TRUE)

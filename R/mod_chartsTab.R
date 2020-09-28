@@ -30,13 +30,13 @@ chartsTabUI <- function(id, chart, package, label=chart, type){
 #' @param chart chart name. Should generally match the name of the function/widget/module to be intiated. See specific renderer modules for more details. 
 #' @param chartFunction function to generate static chart. 
 #' @param initFunction function called before the chart is generated. The function should take `data` and `settings` as inputs and return `params` which should be a list which is then provided to the widget. If domain is specified, only domain-level information is passed to the init function, otherwise named lists containing information for all domains is provided. The mapping is parsed as a list using `generateMappingList()` before being passed to the init function.  By default, init returns an unmodified list of data and settings - possibly subset to the specified domain (e.g. list(data=data, settings=settings))
-#' @param domain data domain. The default (NULL) returns a named lists for data and mappings containing domains.  
+#' @param domain data domain. Should correspond to a domain in `meta` or be set to "multiple" to  named lists for data and mappings containing domains.  
 #' @param data named list of current data sets [reactive].
 #' @param mapping named list of the current data mappings [reactive].
 #' 
 #' @export
 
-chartsTab <- function(input, output, session, chart, type, package, chartFunction, initFunction, domain=NULL, data, mapping){
+chartsTab <- function(input, output, session, chart, type, package, chartFunction, initFunction, domain, data, mapping){
   ns <- session$ns
   chartID <- ifelse(missing(package), chart, paste0(package,"-",chart))
 
@@ -46,10 +46,10 @@ chartsTab <- function(input, output, session, chart, type, package, chartFunctio
         settingsList <-  safetyGraphics::generateMappingList(mapping(), domain=domain)
         
         #subset data to specific domain (if specified)
-        if(!is.null(domain)){
-            domainData <- data[[domain]]
+        if(domain=="multiple"){
+            domainData <- data
         }else{
-            domainData<- data
+            domainData<- data[[domain]]
         }
 
         #customize initial the parameters if desired - otherwise pass through domain level data and mapping)

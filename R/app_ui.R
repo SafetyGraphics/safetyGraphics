@@ -28,7 +28,8 @@ app_ui <- function(meta, domainData, mapping, standards){
         tabPanel("Reports", icon=icon("file-alt")),
         navbarMenu('Config',icon=icon("cog"),
           tabPanel(title = "Metadata", settingsMappingUI("metaSettings")),
-          tabPanel(title = "Domain Data", settingsDataUI("dataSettings", domains=domainData))
+          tabPanel(title = "Domain Data", settingsDataUI("dataSettings", domains=domainData)),
+          tabPanel(title = "Charts", settingsChartsUI("chartSettings"))
         )
       )
     )

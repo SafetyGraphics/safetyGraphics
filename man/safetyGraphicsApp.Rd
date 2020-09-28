@@ -7,10 +7,11 @@
 safetyGraphicsApp(
   maxFileSize = NULL,
   meta = safetyGraphics::meta,
-  domainData = list(labs = safetyGraphics::labs, aes = safetyGraphics::aes),
+  domainData = list(labs = safetyGraphics::labs, aes = safetyGraphics::aes, dm =
+    safetyGraphics::dm),
   charts = safetyGraphics::charts,
   mapping = NULL,
-  chartSettingsPath = paste(.libPaths(), "safetygraphics", "chartSettings", sep = "/")
+  chartSettingsPaths = NULL
 )
 }
 \arguments{
@@ -24,7 +25,7 @@ safetyGraphicsApp(
 
 \item{mapping}{data.frame specifying the initial values for each data mapping. If no mapping is provided, the app will attempt to generate one via \code{detectStandard()}}
 
-\item{settingsPath}{path where customization functions are saved. All charts can have itialization (e.g. [chart]Init.R) and static charts can have charting functions (e.g. [chart]Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details.}
+\item{settingsPath}{path where customization functions are saved relative to your working directory. All charts can have itialization (e.g. [chart]Init.R) and static charts can have charting functions (e.g. [chart]Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details.}
 }
 \description{
 Run the interactive safety graphics app
