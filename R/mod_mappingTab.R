@@ -34,9 +34,18 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
     current_mapping <- mappings %>% filter(domain %in% !!domains[i]) %>% select(-"domain")
     current_standard <- standards[[domain]]
     domain_ui[[i]] <-div(class="mapping-domain",
-      h2(str_to_upper(domain)),
-      h5(current_standard[["label"]]),
-      mappingDomainUI(ns(domain), current_meta, domainData[[domain]], current_mapping)
+    div(class="domain-header",
+      span(class="domain-title", str_to_upper(domain)),
+      div(class="domain-wrap",
+          span(class="domain-label", "Dimension"),
+          span(class="domain-value", paste(dim(domainData[[domain]]),collapse="x"))
+      ),
+      div(class="domain-wrap",
+          span(class="domain-label", "Standard"),
+          span(class="domain-value", current_standard[["label"]])
+      )
+    ),
+    mappingDomainUI(ns(domain), current_meta, domainData[[domain]], current_mapping)
     )
   }
   return(domain_ui)

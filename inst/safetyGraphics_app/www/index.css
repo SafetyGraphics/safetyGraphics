@@ -6,20 +6,44 @@
   border-color:green;
 }
 
+.mapping-domain{
+  padding:1em;
+  border:1px solid black;
+  border-radius:0.2em;
+  margin-bottom:1em;
+  display:inline-block;
+  vertical-align: top;
+}
 
-.field-wrap{
+.mapping-domain .domain-header{
+  border-bottom:1px solid black;
+  margin-bottom:0.5em;
+}
+
+.mapping-domain .domain-header .domain-title{
+  font-size: 2em;  
+}
+
+.mapping-domain .domain-header .domain-wrap{
+  display:inline-grid;
+  vertical-align:top;
+  padding-left:0.5em;
+}
+
+.mapping-domain .domain-label{
+  color: #999;
+}
+
+.mapping-domain .field-wrap{
   padding-left:1em;
 }
 
-.mapping-domain{
-padding:0.5em;
-border:1px solid black;
-border-radius:0.2em;
-margin-bottom:1em;
-max-width:45%;
+.mapping-domain .field-wrap .control-label{
+  font-weight:400;
 }
 
 table.dataTable tr > td:last-of-type, table.dataTable tr > th:last-of-type {
   border-left:2px solid black;
   background:#d0d1e6;
 }
+
