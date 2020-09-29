@@ -30,7 +30,7 @@ settingsDataUI <- function(id, domains){
 #' #'
 #' @export
 
-settingsData <- function(input, output, session, domains){
+settingsData <- function(input, output, session, domains, filtered){
   ns <- session$ns
   for(domain in  names(domains)){
     output[[domain]] <- renderDT({

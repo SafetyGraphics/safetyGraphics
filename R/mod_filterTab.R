@@ -50,11 +50,12 @@ filterTabUI <- function(id, filterDomain = "dm"){
 #' 
 #' @return filtered data set
 #'
-#' @importFrom esquisse filterDF
+#' @importFrom filterDF
 #' 
 #' @export
 
 filterTab <- function(input, output, session, domainData, filterDomain, id_col){
+    
     raw <-  domainData[[filterDomain]]
 
     res_filter <- callModule(
@@ -93,9 +94,15 @@ filterTab <- function(input, output, session, domainData, filterDomain, id_col){
     
     filteredDomains <- reactive({
         #TODO add check to make sure id_col exists in all data sets. 
-        current_ids <- unique(res_filter$data_filtered()$id_col)
+        print(paste("ID is:",id_col()))
+        current_ids <- unique(res_filter$data_filtered()[[id_col()]])
         print(current_ids)
-        filteredDomains <- dataDomains %>% map(filter(.x , id_col %in% current_ids))
+        filteredDomains = list()
+        id_col <- id_col()
+        for(domain in names(domainData)){  
+            filteredDomains[[domain]] <- domainData[[domain]] %>% filter(!!sym(id_col) %in% current_ids)
+        }
+        #filteredDomains <- domainData %>% map(~filter(.x , !!id_col() %in% current_ids))
         print(head(filteredDomains))
         return(filteredDomains)
     })

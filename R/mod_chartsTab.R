@@ -47,9 +47,9 @@ chartsTab <- function(input, output, session, chart, type, package, chartFunctio
         
         #subset data to specific domain (if specified)
         if(domain=="multiple"){
-            domainData <- data
+            domainData <- data()
         }else{
-            domainData<- data[[domain]]
+            domainData<- data()[[domain]]
         }
 
         #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
