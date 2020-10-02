@@ -4,7 +4,7 @@
 #' @param filterDomain data set for the domain
 #' 
 #' @importFrom esquisse filterDF_UI
-#' @importFrom DT dataTableOutput
+#' @importFrom shiny dataTableOutput
 #' 
 #' @export
 
@@ -25,7 +25,7 @@ filterTabUI <- function(id, filterDomain = "dm"){
                     id = ns("pbar"), value = 100, 
                     total = 100, display_pct = TRUE
                 ),
-                DT::dataTableOutput(outputId = ns("table")),
+                shiny::dataTableOutput(outputId = ns("table")),
                 tags$p("Code dplyr:"),
                 verbatimTextOutput(outputId = ns("code_dplyr")),
                 tags$p("Expression:"),
@@ -50,7 +50,9 @@ filterTabUI <- function(id, filterDomain = "dm"){
 #' 
 #' @return filtered data set
 #'
-#' @importFrom filterDF
+#' @importFrom esquisse filterDF
+#' @importFrom shinyWidgets progressBar updateProgressBar
+#' @importFrom shiny renderDataTable
 #' 
 #' @export
 
@@ -76,7 +78,7 @@ filterTab <- function(input, output, session, domainData, filterDomain, id_col){
       )
     })
     
-    output$table <- DT::renderDT({
+    output$table <- shiny::renderDataTable({
       res_filter$data_filtered()
     }, options = list(pageLength = 5))
     
@@ -94,16 +96,14 @@ filterTab <- function(input, output, session, domainData, filterDomain, id_col){
     
     filteredDomains <- reactive({
         #TODO add check to make sure id_col exists in all data sets. 
-        print(paste("ID is:",id_col()))
         current_ids <- unique(res_filter$data_filtered()[[id_col()]])
-        print(current_ids)
+
         filteredDomains = list()
         id_col <- id_col()
         for(domain in names(domainData)){  
             filteredDomains[[domain]] <- domainData[[domain]] %>% filter(!!sym(id_col) %in% current_ids)
         }
         #filteredDomains <- domainData %>% map(~filter(.x , !!id_col() %in% current_ids))
-        print(head(filteredDomains))
         return(filteredDomains)
     })
     return(filteredDomains)

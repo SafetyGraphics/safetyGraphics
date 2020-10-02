@@ -23,15 +23,23 @@ app_ui <- function(meta, domainData, mapping, standards){
         "safetyGraphics",
         id="nav_id",
         tabPanel("Home", icon=icon("home"),homeTabUI("home")),
-        tabPanel("Mapping", icon=icon("map"), mappingTabUI("mapping", meta, domainData, mapping, standards)),
-        tabPanel("Filtering", icon=icon("filter"), filterTabUI("filter","dm")),
+        navbarMenu('Data',icon=icon("database"),
+          tabPanel("Preview", icon=icon("table"), settingsDataUI("dataSettings", domains=domainData)),
+          tabPanel("Mapping", icon=icon("map"), mappingTabUI("mapping", meta, domainData, mapping, standards)),
+          tabPanel("Filtering", icon=icon("filter"), filterTabUI("filter","dm"))
+        ),
         navbarMenu('Charts', icon=icon("chart-bar")),
         tabPanel("Reports", icon=icon("file-alt")),
-        navbarMenu('Config',icon=icon("cog"),
+        navbarMenu('',icon=icon("cog"),
           tabPanel(title = "Metadata", settingsMappingUI("metaSettings")),
-          tabPanel(title = "Domain Data", settingsDataUI("dataSettings", domains=domainData)),
           tabPanel(title = "Charts", settingsChartsUI("chartSettings"))
-        )
+        ),
+        tags$script(
+          HTML(
+            "var header = $('.navbar> .container-fluid');
+            header.append('<div id=\"population-header\" class=\"badge\" title=\"Selected Participants\" ><span id=\"header-count\"></span>/<span id=\"header-total\"></span></div>');"
+          )
+        )        
       )
     )
     return(ui)

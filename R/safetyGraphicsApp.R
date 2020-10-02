@@ -8,7 +8,7 @@
 #' @param settingsPath path where customization functions are saved relative to your working directory. All charts can have itialization (e.g. [chart]Init.R) and static charts can have charting functions (e.g. [chart]Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details. 
 #'
 #' @import shiny
-#' @importFrom shinyjs useShinyjs
+#' @importFrom shinyjs useShinyjs html
 #' @importFrom DT DTOutput renderDT
 #' @importFrom purrr map keep transpose
 #' @importFrom magrittr "%>%"
@@ -73,6 +73,7 @@ safetyGraphicsApp <- function(
         return(id)
       })
 
+
       filtered_data<-callModule(
         filterTab, 
         "filter", 
@@ -80,6 +81,7 @@ safetyGraphicsApp <- function(
         filterDomain="dm", 
         id_col=id_col
       )
+
       callModule(settingsData, "dataSettings", domains = domainData, filtered=filtered_data)
       callModule(settingsMapping, "metaSettings", metaIn=meta, mapping=current_mapping)
       callModule(settingsCharts, "chartSettings",charts = chartsList)
@@ -104,6 +106,14 @@ safetyGraphicsApp <- function(
           mapping=current_mapping    
         )
       )
+
+      #participant count in header
+      shinyjs::html("header-count", paste(dim(domainData[["dm"]])[1]))
+      shinyjs::html("header-total", paste(dim(domainData[["dm"]])[1]))
+      observe({
+        req(filtered_data)
+        shinyjs::html("header-count", paste0(dim(filtered_data()[["dm"]])[1]))
+      })
     }
   )
   runApp(app, launch.browser = TRUE)

@@ -4,7 +4,7 @@
 \alias{settingsData}
 \title{Settings Module - data details - server}
 \usage{
-settingsData(input, output, session, domains)
+settingsData(input, output, session, domains, filtered)
 }
 \arguments{
 \item{input}{Shiny input object}
