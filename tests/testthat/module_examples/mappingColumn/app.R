@@ -14,7 +14,7 @@ id_default<-data.frame(
 )
 
 mm_default<-data.frame(
-    text_key = c("measure_col", "measure_col--ALP"), 
+    text_key = c("measure_col", "measure_values--ALP"), 
     current = c("PARAM","Alkaline Phosphatase (U/L)"),
     stringsAsFactors = FALSE
 )
@@ -29,34 +29,34 @@ ui <- tagList(
     ),
     fluidPage(
         h2("Example 1: labs id_col"),
-        mappingColumnUI("ex1", id_meta, labs),
+        mappingColumnUI("ex1", id_meta, safetyGraphics::labs),
         tableOutput("ex1Out"),
         h2("Example 2: labs id_col + default"),
-        mappingColumnUI("ex2", id_meta, labs, id_default),
+        mappingColumnUI("ex2", id_meta, safetyGraphics::labs, id_default),
         tableOutput("ex2Out"),
         h2("Example 3: labs measure_col + fields"),
-        mappingColumnUI("ex3",measure_meta, labs),
+        mappingColumnUI("ex3",measure_meta, safetyGraphics::labs),
         tableOutput("ex3Out"),
         h2("Example 4: labs measure_col + fields + defaults"),
-        mappingColumnUI("ex4",measure_meta, labs, mm_default),
+        mappingColumnUI("ex4",measure_meta, safetyGraphics::labs, mm_default),
         tableOutput("ex4Out")
     )  
 )
 
 server <- function(input,output,session){
- ex1<-callModule(mappingColumn, "ex1", id_meta, labs)
+ ex1<-callModule(mappingColumn, "ex1", id_meta, safetyGraphics::labs)
  exportTestValues(ex1_data = { ex1() })
  output$ex1Out<-renderTable(ex1())
 
- ex2<-callModule(mappingColumn, "ex2", id_meta, labs)
+ ex2<-callModule(mappingColumn, "ex2", id_meta, safetyGraphics::labs)
  exportTestValues(ex2_data = { ex2() })
  output$ex2Out<-renderTable(ex2())
 
- ex3<-callModule(mappingColumn, "ex3", measure_meta, labs)
+ ex3<-callModule(mappingColumn, "ex3", measure_meta, safetyGraphics::labs)
  exportTestValues(ex3_data = { ex3() })
  output$ex3Out<-renderTable(ex3())
 
- ex4<-callModule(mappingColumn, "ex4", measure_meta, labs)
+ ex4<-callModule(mappingColumn, "ex4", measure_meta, safetyGraphics::labs)
  exportTestValues(ex4_data = {ex4()})
  output$ex4Out<-renderTable(ex4())
 }

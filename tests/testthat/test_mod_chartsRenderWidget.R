@@ -5,10 +5,11 @@ library(shinytest)
 library(testthat)
 library(dplyr)
 
-app <- ShinyDriver$new("./module_examples/renderWidget")
+app <- ShinyDriver$new("./module_examples/chartsRenderWidget")
 initial<-app$getAllValues()
 
 test_that("All 3 charts are drawn and have correct axes",{
+  expect_true(FALSE) #Add some tests!
   #expect_equal(substring(initial$output$`HelloWorld-staticChart`$src,1,14), "data:image/png")
   
   #expect_equal(substring(initial$output$`BoxPlot-staticChart`$src,1,14), "data:image/png")

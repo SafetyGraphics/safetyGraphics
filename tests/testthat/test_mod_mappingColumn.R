@@ -27,30 +27,30 @@ test_that("default values for inputs are set correctly in example app",{
   expect_equal(initial$input[["ex1-id_col-colSelect"]],"")
   expect_equal(initial$input[["ex2-id_col-colSelect"]],"USUBJID")
   expect_equal(initial$input[["ex3-measure_col-colSelect"]],"")
-  expect_equal(initial$input[["ex3-measure_col--ALP-colSelect"]],"")
-  expect_equal(initial$input[["ex3-measure_col--ALT-colSelect"]],"")
-  expect_equal(initial$input[["ex3-measure_col--AST-colSelect"]],"")
-  expect_equal(initial$input[["ex3-measure_col--TB-colSelect"]],"")
+  expect_equal(initial$input[["ex3-measure_values--ALP-colSelect"]],"")
+  expect_equal(initial$input[["ex3-measure_values--ALT-colSelect"]],"")
+  expect_equal(initial$input[["ex3-measure_values--AST-colSelect"]],"")
+  expect_equal(initial$input[["ex3-measure_values--TB-colSelect"]],"")
   expect_equal(initial$input[["ex4-measure_col-colSelect"]],"PARAM")
-  expect_equal(initial$input[["ex4-measure_col--ALP-colSelect"]],"Alkaline Phosphatase (U/L)")
-  expect_equal(initial$input[["ex4-measure_col--ALT-colSelect"]],"")
-  expect_equal(initial$input[["ex4-measure_col--AST-colSelect"]],"")
-  expect_equal(initial$input[["ex4-measure_col--TB-colSelect"]],"")
+  expect_equal(initial$input[["ex4-measure_values--ALP-colSelect"]],"Alkaline Phosphatase (U/L)")
+  expect_equal(initial$input[["ex4-measure_values--ALT-colSelect"]],"")
+  expect_equal(initial$input[["ex4-measure_values--AST-colSelect"]],"")
+  expect_equal(initial$input[["ex4-measure_values--TB-colSelect"]],"")
 })
 
 test_that("changing column input updates clears the field input values and updates input list",{
   app$setValue('ex4-measure_col-colSelect',"PARAMCD")
   expect_equal(app$getValue("ex4-measure_col-colSelect"),"PARAMCD") 
   Sys.sleep(.1) #TODO inplement app$waitForValue() instead of sleeping
-  expect_equal(app$getValue("ex4-measure_col--ALP-colSelect"),"") #clears the selected input
-  app$setValue('ex4-measure_col--ALP-colSelect',"ALP")
+  expect_equal(app$getValue("ex4-measure_values--ALP-colSelect"),"") #clears the selected input
+  app$setValue('ex4-measure_values--ALP-colSelect',"ALP")
   Sys.sleep(.1) #TODO inplement app$waitForValue() instead of sleeping
-  expect_equal(app$getValue("ex4-measure_col--ALP-colSelect"),"ALP") #expected new input is found
+  expect_equal(app$getValue("ex4-measure_values--ALP-colSelect"),"ALP") #expected new input is found
   #TODO: Probably be better get the new options directly using app$findElement, css is a bit of a mess though
 })
 
 
-test_that("output are data frames with the have expected values",{
+test_that("output are data frames with the  expected values",{
   #all exported values are data frames ...
   expect_true(all(sapply(initial$export,is.data.frame))) 
   
@@ -74,7 +74,7 @@ test_that("output are data frames with the have expected values",{
   expect_equal(ex4_measure_col, "PARAM")
   
   ex4_measure_col_ALP <- initial$export$ex4_data %>% 
-    filter(text_key=="measure_col--ALP") %>% 
+    filter(text_key=="measure_values--ALP") %>% 
     pull(current) %>% 
     as.character()
   expect_equal(ex4_measure_col_ALP, "Alkaline Phosphatase (U/L)")
@@ -91,11 +91,11 @@ test_that("output are data frames with the have expected values",{
     as.character()
   expect_equal(ex4_measure_col_updated, "PARAMCD")
   
-  ex4_measure_col_ALP_updated <- updated$export$ex4_data %>% 
-    filter(text_key=="measure_col--ALP") %>% 
+  ex4_measure_values_ALP_updated <- updated$export$ex4_data %>% 
+    filter(text_key=="measure_values--ALP") %>% 
     pull(current) %>% 
     as.character()
-  expect_equal(ex4_measure_col_ALP_updated, "ALP")
+  expect_equal(ex4_measure_values_ALP_updated, "ALP")
 })
 
 app$stop()
