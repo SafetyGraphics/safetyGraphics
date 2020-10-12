@@ -4,7 +4,7 @@
 \alias{filterTab}
 \title{filter module server}
 \usage{
-filterTab(input, output, session, meta, domainData)
+filterTab(input, output, session, domainData, filterDomain, id_col)
 }
 \arguments{
 \item{input}{Shiny input object}
