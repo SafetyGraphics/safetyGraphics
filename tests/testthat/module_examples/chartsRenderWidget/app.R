@@ -18,8 +18,8 @@ mapping_list <- standards %>% lapply(function(standard){
   return(standard[["mapping"]])
 })
 mapping<-bind_rows(mapping_list, .id = "domain")
-mappingLabs <- generateMappingList(mapping,domain="labs")
-mappingAEs <- generateMappingList(mapping,domain="aes")
+mappingLabs <- generateMappingList(mapping,domain="labs", pull=TRUE)
+mappingAEs <- generateMappingList(mapping,domain="aes", pull=TRUE)
 
 # Test app code
 
@@ -30,7 +30,7 @@ body<-dashboardBody(
       tabName="ex1-tab",
       {
         h2("Example 1 - hepexplorer- called directly from safetyGraphics hepexplorer")
-        chartsRenderWidgetUI("ex1",chart="hepexplorer",package="safetyGraphics")        
+        chartsRenderWidgetUI("ex1",chart="eDISH",package="safetyexploreR")      
       }
 
     ),
@@ -54,9 +54,9 @@ body<-dashboardBody(
 sidebar <- shinydashboard::dashboardSidebar(
   shinydashboard::sidebarMenu(
     id = "sidebar_tabs",
-    menuItem(text = 'Ex1: hepexplorer', tabName = 'ex1-tab', icon = icon('angle-right')),
-    menuItem(text = 'Ex2: aeExplorer', tabName = 'ex2-tab', icon = icon('angle-right')),
-    menuItem(text = 'Ex3: safetyResultsOverTime', tabName = 'ex3-tab', icon = icon('angle-right'))
+    menuItem(text = 'Ex1: Hepatic explorer', tabName = 'ex1-tab', icon = icon('angle-right')),
+    menuItem(text = 'Ex2: AE Explorer', tabName = 'ex2-tab', icon = icon('angle-right')),
+    menuItem(text = 'Ex3: Safety Results Over Time', tabName = 'ex3-tab', icon = icon('angle-right'))
   )
 )
 
@@ -74,12 +74,12 @@ ui <- tagList(
 
 server <- function(input,output,session){
    # Example 1 - hep explorer
-      paramsLabs <- reactive({list(data=domainData[["labs"]],settings=mappingLabs)})
+     paramsLabs <- reactive({list(data=domainData[["labs"]],settings=mappingLabs)})
      callModule(
         chartsRenderWidget,
         "ex1",
-        chart="hepexplorer",
-        package="safetyGraphics",
+        chart="eDISH",
+        package="safetyexploreR",
         params=paramsLabs
     )
   
