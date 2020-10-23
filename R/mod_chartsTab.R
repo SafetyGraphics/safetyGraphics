@@ -15,7 +15,7 @@ chartsTabUI <- function(id, chart, package, label=chart, type){
     chartsRenderWidgetUI(id=ns(chartID),chart=chart,package=package)
   }else{
       #create the static or plotly chart
-      chartsRenderStaticUI(id=ns(chartID))
+      chartsRenderStaticUI(id=ns(chartID), type=type)
   }
 }
 
@@ -25,7 +25,7 @@ chartsTabUI <- function(id, chart, package, label=chart, type){
 #' @param input Input objects from module namespace
 #' @param output Output objects from module namespace
 #' @param session An environment that can be used to access information and functionality relating to the session
-#' @param type type of chart. Must be 'htmlwidget', 'module', 'static' or 'plotly'. See ?mod_chartRenderer{{type}} for more details about each chart type
+#' @param type type of chart. Must be 'htmlwidget', 'module', 'plot', 'table', 'html' or 'plotly'. See ?mod_chartRenderer* functions for more details about each chart type.
 #' @param package  package containing the widget. 
 #' @param chart chart name. Should generally match the name of the function/widget/module to be intiated. See specific renderer modules for more details. 
 #' @param chartFunction function to generate static chart. 
@@ -75,7 +75,8 @@ chartsTab <- function(input, output, session, chart, type, package, chartFunctio
         chartsRenderStatic,
         chartID,
         chartFunction=chartFunction,
-        params=params
+        params=params, 
+        type=type
       )
   }
 }
