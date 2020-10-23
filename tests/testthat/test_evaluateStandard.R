@@ -4,7 +4,7 @@ library(safetyGraphics)
 test_that("basic test cases evaluate as expected",{
   expect_equal(evaluateStandard(data=labs, domain="labs", meta= meta, standard="sdtm")[["match"]],"partial")
   expect_equal(evaluateStandard(data=labs,  domain="labs", meta= meta, standard="adam")[["match"]],"full")
-  expect_equal(evaluateStandard(data=aes, domain="aes", meta= meta, standard="sdtm")[["match"]],"partial") 
+  expect_equal(evaluateStandard(data=aes, domain="aes", meta= meta, standard="sdtm")[["match"]],"full") 
   #todo add treatment to AE data and change previous test to "full"
   expect_equal(evaluateStandard(data=aes,  domain="aes", meta= meta, standard="adam")[["match"]],"partial")
   expect_equal(evaluateStandard(data=data.frame(),  domain="labs", meta= meta, standard="sdtm")[["match"]],"none")

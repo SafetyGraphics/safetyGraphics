@@ -8,7 +8,7 @@ app <- ShinyDriver$new("./module_examples/mapping")
 initial<-app$getAllValues()
 
 test_that("mappingTab works as expected",{
-  expect_true(TRUE) #todo - add some tests!
+  expect_true(FALSE) #todo - add some tests!
 })
 
 

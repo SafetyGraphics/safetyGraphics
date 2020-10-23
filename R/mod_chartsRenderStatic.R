@@ -1,11 +1,20 @@
 #' @title Charts Module - render static chart UI
 #' @description  Charts Module - sub module for rendering a static chart
 #' 
+#' @import DT
+#' 
 #' @export
 
-chartsRenderStaticUI <- function(id){
+chartsRenderStaticUI <- function(id, type){
   ns <- NS(id)
-  plotOutput(ns("staticChart"))
+  if(type=="plot"){
+    plotOutput(ns("staticPlot"))
+  } else if(type=="html"){
+    htmlOutput(ns("staticHTML"))
+  } else if(type=="table"){
+    DT::dataTableOutput(ns("staticTable"))
+  }
+  
 }
 
 #' @title  Charts Module - render static chart server
@@ -19,7 +28,13 @@ chartsRenderStaticUI <- function(id){
 #'
 #' @export
 
-chartsRenderStatic <- function(input, output, session, chartFunction, params){
+chartsRenderStatic <- function(input, output, session, chartFunction, params, type){
   ns <- session$ns
-  output[["staticChart"]] <- renderPlot(do.call(chartFunction,params())) 
+  if(type=="plot"){
+    output[["staticPlot"]] <- renderPlot(do.call(chartFunction,params())) 
+  }else if(type=="html"){
+    output[["staticHTML"]] <- renderText(do.call(chartFunction,params())) 
+  }else if(type=="table"){
+    output[["staticTable"]] <- DT::renderDataTable(do.call(chartFunction,params())) 
+  }
 }

@@ -1,12 +1,13 @@
 #' Convert mapping data.frame to a list
 #'
 #' @param mappingDF data frame containing current mapping
-#' @param domain mapping domain to return (returns all domains as a named list by default)
+#' @param domain mapping domain to return (returns all domains as a named list by default) 
+#' @param domain call pull() the value for each parameter - needed for testing only. default: FALSE
 #' 
 #' @importFrom stringr str_split 
 #' @export
 
-generateMappingList <- function(settingsDF, domain){
+generateMappingList <- function(settingsDF, domain, pull=FALSE){
   settingsList <- list()
   
   settingsDF$domain_key <- paste0(settingsDF$domain, "--", settingsDF$text_key)
@@ -16,7 +17,7 @@ generateMappingList <- function(settingsDF, domain){
   for (i in 1:length(domain_keys) ) {
     settingsList<-setMappingListValue(
       key=domain_keys[[i]],
-      value=settingsDF[i,"current"],#%>%pull(), 
+      value=ifelse(pull, settingsDF[i,"current"]%>%pull(), settingsDF[i,"current"]), 
       settings=settingsList,
       forceCreate=TRUE
     )

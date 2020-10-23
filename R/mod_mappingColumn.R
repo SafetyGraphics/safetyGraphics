@@ -90,18 +90,18 @@ mappingColumn <- function(input, output, session, meta, data){
     field_vals<-lapply(field_ids, function(field_id){
       callModule(mappingSelect,field_id)
     })
-     observeEvent(col_val() ,{
-       field_options <- ifelse(col_val()=="", list(""), unique(data[,col_val()]))
-       for(field_id in field_ids){
-         current <- field_vals[[field_id]]()
-         updateSelectizeInput(
-           session,
-           inputId = paste0(field_id,"-colSelect"),
-           choices = field_options[[1]],
-           selected = current 
-         )      
-       }    
-     })
+    observeEvent(col_val() ,{
+      field_options <- ifelse(col_val()=="", list(""), unique(data[,col_val()]))
+      for(field_id in field_ids){
+        current <- field_vals[[field_id]]()
+        updateSelectizeInput(
+          session,
+          inputId = paste0(field_id,"-colSelect"),
+          choices = field_options[[1]],
+          selected = current 
+        )      
+      }    
+    })
   }
   
   # return the values for all fields as a data.frame   

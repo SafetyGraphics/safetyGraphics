@@ -17,11 +17,11 @@ ui <- tagList(
     ),
     fluidPage(
         h2("Example 1: Basic Chart - Hello world"),
-        chartsRenderStaticUI("HelloWorld"),
+        chartsRenderStaticUI("HelloWorld", type="plot"),
         h2("Example 2: Boxplot using data and settings"),
-        chartsRenderStaticUI("BoxPlot"),
+        chartsRenderStaticUI("BoxPlot",type="plot"),
         h2("Example 3: Boxplot using custom init"),
-        chartsRenderStaticUI("BoxPlot2"),
+        chartsRenderStaticUI("BoxPlot2",type="plot"),
     )  
 )
 
@@ -37,7 +37,8 @@ server <- function(input,output,session){
         chartsRenderStatic, 
         "HelloWorld", 
         chartFunction=helloWorld,
-        params=reactive({list()})
+        params=reactive({list()}),
+        type="plot"
     )
     
     #Example 2
@@ -49,16 +50,19 @@ server <- function(input,output,session){
             geom_boxplot() +
             scale_y_log10() +
             theme_bw() + 
-            theme(axis.text.x = element_text(angle = 25, hjust = 1),
-                  axis.text = element_text(size = 12),
-                  axis.title = element_text(size = 12))
+            theme(
+                axis.text.x = element_text(angle = 25, hjust = 1),
+                axis.text = element_text(size = 12),
+                axis.title = element_text(size = 12)
+            )
     }
 
     callModule(
         chartsRenderStatic,
         "BoxPlot",
         chartFunction=boxPlot,
-        params=params
+        params=params,
+        type="plot"
     )
 
     #Example 3
@@ -75,16 +79,19 @@ server <- function(input,output,session){
             geom_boxplot(fill = settings[["boxcolor"]]) +
             scale_y_log10() +
             theme_bw() + 
-            theme(axis.text.x = element_text(angle = 25, hjust = 1),
-                  axis.text = element_text(size = 12),
-                  axis.title = element_text(size = 12))
+            theme(
+                axis.text.x = element_text(angle = 25, hjust = 1),
+                axis.text = element_text(size = 12),
+                axis.title = element_text(size = 12)
+            )
     }
     
     callModule(
         chartsRenderStatic,
         "BoxPlot2",
         chartFunction=boxPlot2,
-        params=reactive({dataInit(data=data,settings=mapping)})
+        params=reactive({dataInit(data=data,settings=mapping)}),
+        type="plot"
     )
 }
 
