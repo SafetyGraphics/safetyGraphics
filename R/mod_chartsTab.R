@@ -8,14 +8,14 @@ chartsTabUI <- function(id, chart, package, label=chart, type){
   chartID <- ifelse(missing(package), chart, paste0(package,"-",chart))
   h2(paste("Chart:",label))
   if(tolower(type=="module")){
-      #render the module UI
-      #call the module server
+    #render the module UI
+    
   }else if(tolower(type=="htmlwidget")){
     #render the widget 
     chartsRenderWidgetUI(id=ns(chartID),chart=chart,package=package)
   }else{
-      #create the static or plotly chart
-      chartsRenderStaticUI(id=ns(chartID), type=type)
+    #create the static or plotly chart
+    chartsRenderStaticUI(id=ns(chartID), type=type)
   }
 }
 
