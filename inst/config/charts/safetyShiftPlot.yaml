@@ -1,0 +1,6 @@
+label: Shift Plot
+type: htmlwidget
+domain: labs
+package: safetyCharts
+workflow:
+  widget: safetyShiftPlot

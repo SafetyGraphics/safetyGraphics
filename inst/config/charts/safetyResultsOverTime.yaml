@@ -1,0 +1,6 @@
+label: Results Over Time
+type: htmlwidget
+domain: labs
+package: safetyCharts
+workflow:
+  widget: safetyResultsOverTime

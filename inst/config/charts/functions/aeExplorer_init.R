@@ -32,6 +32,5 @@ aeExplorer_init<- function(data, settings){
             values = c("", NA, NULL)
         )
     )
-    View(settings)
     return(list(data=anly,settings=settings))
 }

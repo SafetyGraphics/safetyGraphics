@@ -6,6 +6,7 @@ library(dplyr)
 data <- list(labs=safetyGraphics::labs, aes=safetyGraphics::aes)
 mapping <- list(measure_col="PARAM", value_col="AVAL")
 params<- reactive({list(data=data,settings=mapping)})
+
 # Test app code
 ui <- tagList(
     tags$head(

@@ -1,0 +1,7 @@
+label: Safety Explorer
+type: htmlwidget
+domain: multiple
+package: safetyCharts  
+workflow:
+  init: aeExplorer_init
+  widget: aeExplorer

@@ -4,7 +4,7 @@
 \alias{chartsRenderStaticUI}
 \title{Charts Module - render static chart UI}
 \usage{
-chartsRenderStaticUI(id)
+chartsRenderStaticUI(id, type)
 }
 \description{
 Charts Module - sub module for rendering a static chart

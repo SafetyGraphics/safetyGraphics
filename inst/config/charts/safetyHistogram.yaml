@@ -1,0 +1,6 @@
+label: Histogram
+type: htmlwidget
+domain: labs
+package: safetyCharts
+workflow:
+  widget: safetyHistogram

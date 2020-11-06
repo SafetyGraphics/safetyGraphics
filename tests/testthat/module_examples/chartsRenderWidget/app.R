@@ -29,23 +29,23 @@ body<-dashboardBody(
     tabItem(
       tabName="ex1-tab",
       {
-        h2("Example 1 - hepexplorer- called directly from safetyGraphics hepexplorer")
-        chartsRenderWidgetUI("ex1",chart="eDISH",package="safetyexploreR")      
+        h2("Example 1 - hepexplorer - called directly from safetyCharts hepexplorer")
+        chartsRenderWidgetUI("ex1",chart="hepexplorer",package="safetyCharts")      
       }
 
     ),
     tabItem(
       tabName="ex2-tab",
       {
-        h2("Example 2 - AE Explorer - called from safetyexploreR using custom init function")
-        chartsRenderWidgetUI("ex2",chart="aeExplorer",package="safetyexploreR")  
+        h2("Example 2 - AE Explorer - called from safetyCharts using custom init function")
+        chartsRenderWidgetUI("ex2",chart="aeExplorer",package="safetyCharts")  
       }
     ),
     tabItem(
       tabName="ex3-tab",
       {
-        h2("Example 3 - Results over time - called from safetyexploreR")
-        chartsRenderWidgetUI("ex3",chart="safetyResultsOverTime",package="safetyexploreR")  
+        h2("Example 3 - Results over time - called from safetyCharts")
+        chartsRenderWidgetUI("ex3",chart="safetyResultsOverTime",package="safetyCharts")  
       }
     )
   )
@@ -73,13 +73,13 @@ ui <- tagList(
 )
 
 server <- function(input,output,session){
-   # Example 1 - hep explorer
-     paramsLabs <- reactive({list(data=domainData[["labs"]],settings=mappingLabs)})
-     callModule(
+  # Example 1 - hep explorer
+      paramsLabs <- reactive({list(data=domainData[["labs"]],settings=mappingLabs)})
+      callModule(
         chartsRenderWidget,
         "ex1",
-        chart="eDISH",
-        package="safetyexploreR",
+        chart="hepexplorer",
+        package="safetyCharts",
         params=paramsLabs
     )
   
@@ -100,7 +100,7 @@ server <- function(input,output,session){
       chartsRenderWidget,
       "ex2",
       chart="aeExplorer",
-      package="safetyexploreR",
+      package="safetyCharts",
       params=paramsAEs
     )
     
@@ -109,7 +109,7 @@ server <- function(input,output,session){
       chartsRenderWidget,
       "ex3",
       chart="safetyResultsOverTime",
-      package="safetyexploreR",
+      package="safetyCharts",
       params=paramsLabs
     )
 }

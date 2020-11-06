@@ -4,7 +4,7 @@
 \alias{chartsTabUI}
 \title{Charts Tab}
 \usage{
-chartsTabUI(id, chart, package, label = chart, type)
+chartsTabUI(id, name, package, label = id, type)
 }
 \description{
 Charting module

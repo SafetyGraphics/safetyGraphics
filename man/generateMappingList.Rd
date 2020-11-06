@@ -4,10 +4,10 @@
 \alias{generateMappingList}
 \title{Convert mapping data.frame to a list}
 \usage{
-generateMappingList(settingsDF, domain)
+generateMappingList(settingsDF, domain, pull = FALSE)
 }
 \arguments{
-\item{domain}{mapping domain to return (returns all domains as a named list by default)}
+\item{domain}{call pull() the value for each parameter - needed for testing only. default: FALSE}
 
 \item{mappingDF}{data frame containing current mapping}
 }

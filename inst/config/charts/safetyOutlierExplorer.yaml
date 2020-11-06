@@ -1,0 +1,6 @@
+label: Outlier Explorer
+type: htmlwidget
+domain: labs
+package: safetyCharts
+workflow:
+  widget: safetyOutlierExplorer

@@ -4,7 +4,7 @@
 \alias{chartsRenderStatic}
 \title{Charts Module - render static chart server}
 \usage{
-chartsRenderStatic(input, output, session, chartFunction, params)
+chartsRenderStatic(input, output, session, chartFunction, params, type)
 }
 \arguments{
 \item{input}{Shiny input object}
