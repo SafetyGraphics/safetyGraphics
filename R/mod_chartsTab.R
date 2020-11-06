@@ -8,7 +8,7 @@ chartsTabUI <- function(id, chart){
     h2(paste("Chart:",chart$label))
     if(tolower(chart$type=="module")){
         #render the module UI
-        #chartsRenderModule(id=ns("wrap"), chartsRenderModuleUI())
+        chartsRenderModuleUI(id=ns("wrap"), chart$functions[[chart$workflow$ui]])
     }else if(tolower(chart$type=="htmlwidget")){
         #render the widget 
         chartsRenderWidgetUI(id=ns("wrap"),chart=chart$name, package=chart$package)
@@ -62,7 +62,14 @@ chartsTab <- function(input, output, session, chart, data, mapping){
 
     if(tolower(chart$type=="module")){
         #render the module UI
-        #call the module server
+        message("chartsTab() is initializing a module at ", ns("wrap"))
+        serverFunction <- chart$functions[[chart$workflow$server]]
+        callModule(
+            module=chartsRenderModule,
+            id="wrap",
+            serverFunction=serverFunction,
+            params=params
+        )
     }else if(tolower(chart$type=="htmlwidget")){
         message("chartsTab() is initializing a widget at ", ns("wrap"))
         message("chart is ", chart$name, "; package is ", chart$package)

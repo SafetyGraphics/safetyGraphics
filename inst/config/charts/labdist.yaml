@@ -1,0 +1,6 @@
+label: Labs Distribution (custom shiny module)
+type: module
+domain: labs
+workflow:
+  ui: labdist_ui
+  server: labdist_server
