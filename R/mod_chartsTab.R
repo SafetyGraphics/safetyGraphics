@@ -3,18 +3,18 @@
 #'
 #' @export
 
-chartsTabUI <- function(id, name, package, label=id, type){
+chartsTabUI <- function(id, chart){
     ns <- NS(id)
-    h2(paste("Chart:",label))
-    if(tolower(type=="module")){
+    h2(paste("Chart:",chart$label))
+    if(tolower(chart$type=="module")){
         #render the module UI
-    
-    }else if(tolower(type=="htmlwidget")){
+        #chartsRenderModule(id=ns("wrap"), chartsRenderModuleUI())
+    }else if(tolower(chart$type=="htmlwidget")){
         #render the widget 
-        chartsRenderWidgetUI(id=ns("wrap"),chart=name, package=package)
+        chartsRenderWidgetUI(id=ns("wrap"),chart=chart$name, package=chart$package)
     }else{
         #create the static or plotly chart
-        chartsRenderStaticUI(id=ns("wrap"), type=type)
+        chartsRenderStaticUI(id=ns("wrap"), type=chart$type)
     }
 }
 

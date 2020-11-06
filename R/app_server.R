@@ -38,7 +38,7 @@ app_server <- function(input, output, session, meta, mapping, domainData, charts
         callModule(homeTab, "home")
 
         #Initialize Chart UI - Adds subtabs to chart menu - this initializes initializes chart UIs
-        charts %>% map(~chartsNav(name=.x$name, label=.x$label, type=.x$type, package=.x$package))
+        charts %>% map(chartsNav)
 
         #Initialize Chart Servers
         validDomains <- tolower(names(mapping))

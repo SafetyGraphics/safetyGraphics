@@ -5,21 +5,16 @@
 #' @export
 #' 
 
-chartsNav <- function(name, label, type, package){
-    #chart$chartFunction <- NULL
-    #chart$initFunction <- NULL 
+chartsNav <- function(chart){
     appendTab(
         inputId = "safetyGraphicsApp",
         menuName = "Charts",
         tab = tabPanel(
-            title = label, 
-            value = name, 
+            title = chart$label, 
+            value = chart$name, 
             chartsTabUI(
-                id=name,
-                name=name,
-                package=package,
-                label=label,
-                type=type
+                id=chart$name,
+                chart=chart
             )
         )
     )

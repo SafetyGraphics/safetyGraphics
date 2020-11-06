@@ -3,6 +3,8 @@
 export(app_server)
 export(app_ui)
 export(chartsNav)
+export(chartsRenderModule)
+export(chartsRenderModuleUI)
 export(chartsRenderStatic)
 export(chartsRenderStaticUI)
 export(chartsRenderWidget)
