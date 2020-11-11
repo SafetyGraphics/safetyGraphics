@@ -8,12 +8,12 @@ app_startup(domainData, meta, charts, mapping, chartSettingsPaths)
 }
 \value{
 List of elements for used to initialize the shiny app with the following parameters
- \itemize{
- \item{"meta"}{ List of configuration metadata }
- \item{"charts"}{ List of charts }
- \item{"domainData"}{ List of domain level data sets }
- \item{"mapping"}{ Initial Data Mapping  }
- \item{"standards"}{ List of domain level data standards }
+\itemize{
+\item{"meta"}{ List of configuration metadata }
+\item{"charts"}{ List of charts }
+\item{"domainData"}{ List of domain level data sets }
+\item{"mapping"}{ Initial Data Mapping  }
+\item{"standards"}{ List of domain level data standards }
 }
 }
 \description{

@@ -14,14 +14,14 @@ makeChartConfig(dirs, sourceFiles = TRUE)
 \value{
 returns a named list of charts derived from YAML files. Each element of the list contains information about a single chart, and has the following parameters:
 \itemize{
- \item{"name"}{ Name of the chart. Also the name of the element in the list - e.g. charts$aeExplorer$name is "aeExplorer"}
- \item{"label"}{ short description of the chart }
- \item{"type"}{ type of chart; options are: 'htmlwidget', 'module', 'plot', 'table', 'html' or 'plotly'.}
- \item{"domain"}{ data domain. Should correspond to a domain in `meta` or be set to "multiple" }
- \item{"package"}{ primary package (if any). Other packages can be loaded directly in workflow functions. }
- \item{"path"}{ Path to YAML file}
- \item{"workflow"}{ List of functions names used to render chart. See vignette for details. }
- \item{"functions"}{ List of functions for use in chart renderering. }
+\item{"name"}{ Name of the chart. Also the name of the element in the list - e.g. charts$aeExplorer$name is "aeExplorer"}
+\item{"label"}{ short description of the chart }
+\item{"type"}{ type of chart; options are: 'htmlwidget', 'module', 'plot', 'table', 'html' or 'plotly'.}
+\item{"domain"}{ data domain. Should correspond to a domain in \code{meta} or be set to "multiple" }
+\item{"package"}{ primary package (if any). Other packages can be loaded directly in workflow functions. }
+\item{"path"}{ Path to YAML file}
+\item{"workflow"}{ List of functions names used to render chart. See vignette for details. }
+\item{"functions"}{ List of functions for use in chart renderering. }
 }
 }
 \description{

@@ -20,7 +20,7 @@ A data frame describing the detected standard for each \code{"text_key"} in the 
 This function attempts to detect the clinical data standard used in a given R data frame.
 }
 \details{
-This function compares the columns in the provided \code{"data"} with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and ADaM CDISC(<https://www.cdisc.org/>) standards for clinical trial data by default. Additional standards can be added by modifying the \code{"meta"} data set included as part of this package.
+This function compares the columns in the provided \code{"data"} with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and ADaM CDISC(\url{https://www.cdisc.org/}) standards for clinical trial data by default. Additional standards can be added by modifying the \code{"meta"} data set included as part of this package.
 }
 \examples{
 detectStandard(data=safetyGraphics::aes)  #aes domain evaluated by default

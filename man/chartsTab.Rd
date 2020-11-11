@@ -15,9 +15,9 @@ chartsTab(input, output, session, chart, data, mapping)
 
 \item{chart}{list containing a safetyGraphics chart object. see custom chart vignette for details.}
 
-\item{data}{named list of current data sets [reactive].}
+\item{data}{named list of current data sets \link{reactive}.}
 
-\item{mapping}{tibble capturing the current data mappings [reactive].}
+\item{mapping}{tibble capturing the current data mappings \link{reactive}.}
 }
 \description{
 server for the display of the chart tab
