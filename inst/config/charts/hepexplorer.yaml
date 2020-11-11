@@ -1,6 +1,0 @@
-label: Hepatic Safety Explorer
-type: htmlwidget
-domain: labs
-package: safetyCharts  
-workflow:
-  widget: hepexplorer

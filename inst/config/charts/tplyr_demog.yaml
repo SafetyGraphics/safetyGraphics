@@ -1,6 +1,0 @@
-label: Demographics Table {Tplyr} + {DT}
-type: table
-domain: dm
-package: Tplyr
-workflow:
-  main: tplyr_demog_chart

@@ -1,7 +1,0 @@
-label: Tendril Plot {Tendril}
-type: plot
-domain: multiple
-package: Tendril
-workflow:
-  init: tendril_init
-  main: tendril_chart
