@@ -1,8 +1,6 @@
 #' @title Charts Module - render module chart UI
 #' @description  Charts Module - sub module for rendering a static chart
 #' 
-#' @import DT
-#' 
 #' @export
 
 chartsRenderModuleUI <- function(id, customModUI){
