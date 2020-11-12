@@ -64,23 +64,18 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
     message("Global Functions: ",all_functions)
     charts <- lapply(charts, 
         function(chart){
-            message("------------------",chart$name,"------------------------")
             if(hasName(chart, "package")){
-                message("has a package")
                 package_functions <- as.character(lsf.str(paste0("package:",chart$package)))
                 all_functions<-c(all_functions,package_functions)
-                message("Package :",chart$package, " has functions ",package_functions)
             }
 
             #search functions that include the charts name or the workflow function names
             chart_function_names <- c()
             for(query in c(chart$name, unlist(chart$workflow)) ){
-                message("looking for function matches")
                 matches<-all_functions[str_detect(query, all_functions)]
                 chart_function_names <- c(chart_function_names, matches)
             }
 
-            message("Functions Found: ",chart_function_names)
             chart$functions <- lapply(chart_function_names, match.fun)
             names(chart$functions) <- chart_function_names
 
