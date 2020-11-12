@@ -19,7 +19,7 @@
 #'  \item{"package"}{ primary package (if any). Other packages can be loaded directly in workflow functions. }
 #'  \item{"path"}{ Path to YAML file}
 #'  \item{"workflow"}{ List of functions names used to render chart. See vignette for details. }
-#'  \item{"functions"}{ List of functions for use in chart renderering. }
+#'  \item{"functions"}{ List of functions for use in chart renderering. These functions must be located in the global environment or `package` field of the YAML config. Function names must include either the `name` or `workflow` fields of the YAML config. }
 #' }
 #' @export
 
@@ -60,24 +60,43 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
     message("Found ", length(yaml_files), " config files: ",paste(names(charts),collapse=", "))
 
     # Bind workflow functions to chart object
-    all_functions <- lsf.str(pos=1)
-    charts <- lapply(charts, function(chart){
-        function_names <- all_functions[grep(chart$name,all_functions)]
-        chart$functions <- lapply(function_names, match.fun)
-        names(chart$functions) <- function_names
+    all_functions <- as.character(lsf.str(".GlobalEnv"))
+    message("Global Functions: ",all_functions)
+    charts <- lapply(charts, 
+        function(chart){
+            message("------------------",chart$name,"------------------------")
+            if(hasName(chart, "package")){
+                message("has a package")
+                package_functions <- as.character(lsf.str(paste0("package:",chart$package)))
+                all_functions<-c(all_functions,package_functions)
+                message("Package :",chart$package, " has functions ",package_functions)
+            }
 
-        # check that functions exist for specified workflows
-        workflow_found <- sum(unlist(chart$workflow) %in% function_names)
-        workflow_total <- length(unlist(chart$workflow)[names(unlist(chart$workflow))!="widget"])
-        message<-paste0(chart$name,": Found ", workflow_found, " of ",workflow_total, " workflow functions, and ", length(chart$functions)-workflow_found ," other functions.")
-        if(workflow_found == workflow_total){ 
-            message(symbol$tick," ",message)
-        }else{
-            message(symbol$cross," ", message)
+            #search functions that include the charts name or the workflow function names
+            chart_function_names <- c()
+            for(query in c(chart$name, unlist(chart$workflow)) ){
+                message("looking for function matches")
+                matches<-all_functions[str_detect(query, all_functions)]
+                chart_function_names <- c(chart_function_names, matches)
+            }
+
+            message("Functions Found: ",chart_function_names)
+            chart$functions <- lapply(chart_function_names, match.fun)
+            names(chart$functions) <- chart_function_names
+
+            # check that functions exist for specified workflows
+            workflow_found <- sum(unlist(chart$workflow) %in% chart_function_names)
+            workflow_total <- length(unlist(chart$workflow)[names(unlist(chart$workflow))!="widget"])
+            message<-paste0(chart$name,": Found ", workflow_found, " of ",workflow_total, " workflow functions, and ", length(chart$functions)-workflow_found ," other functions.")
+            if(workflow_found == workflow_total){ 
+                message(symbol$tick," ",message)
+            }else{
+                message(symbol$cross," ", message)
+            }
+
+            return(chart)
         }
-
-        return(chart)
-    })
+    )
 
     return(charts) 
 }

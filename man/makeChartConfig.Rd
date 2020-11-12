@@ -21,7 +21,7 @@ returns a named list of charts derived from YAML files. Each element of the list
 \item{"package"}{ primary package (if any). Other packages can be loaded directly in workflow functions. }
 \item{"path"}{ Path to YAML file}
 \item{"workflow"}{ List of functions names used to render chart. See vignette for details. }
-\item{"functions"}{ List of functions for use in chart renderering. }
+\item{"functions"}{ List of functions for use in chart renderering. These functions must be located in the global environment or \code{package} field of the YAML config. Function names must include either the \code{name} or \code{workflow} fields of the YAML config. }
 }
 }
 \description{
