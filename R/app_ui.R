@@ -9,7 +9,7 @@
 
 app_ui <- function(meta, domainData, mapping, standards){
     #read css from pacakge
-    app_css <-  HTML(readLines( paste(.libPaths(),'safetygraphics','safetyGraphics_app', 'www','index.css', sep="/")))
+    app_css <-  HTML(readLines( paste(.libPaths(),'safetyGraphics','safetyGraphics_app', 'www','index.css', sep="/")))
     
     #script to append population badge nav bar
     participant_badge<-tags$script(
