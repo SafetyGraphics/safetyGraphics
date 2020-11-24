@@ -32,7 +32,8 @@ settingsDataUI <- function(id, domains){
 
 settingsData <- function(input, output, session, domains, filtered){
   ns <- session$ns
-  for(domain in  names(domains)){
+  lapply(names(domains), function(domain){
+    
     output[[domain]] <- renderDT({
       DT::datatable(
         domains[[domain]], 
@@ -41,10 +42,5 @@ settingsData <- function(input, output, session, domains, filtered){
         class="compact"
       )
     })
-  }
-  
-  #NOTE: There is no real need for this to be reactive right now, but in this is just a bit of future proofing for when data is more dynamic. 
-  
-  return(reactive({domains}))
-  
+  })
 }
