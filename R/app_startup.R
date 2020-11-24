@@ -11,16 +11,14 @@
 #'  \item{"standards"}{ List of domain level data standards }
 #' }
 #' 
-app_startup<-function(domainData, meta, charts, mapping, chartSettingsPaths){
-
+app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, chartSettingsPaths=NULL){
     # Process charts metadata
     if(is.null(charts)){
         if(is.null(chartSettingsPaths)){
-            charts <- makeChartConfig(chartSettingsPaths)
-        }else{
             charts <- makeChartConfig()
+        }else{
+            charts <- makeChartConfig(chartSettingsPaths)
         }
-        
     }
 
     # get the data standards
