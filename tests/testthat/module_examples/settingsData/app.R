@@ -5,9 +5,9 @@ reactlogReset()
 ui <- tagList(
   fluidPage(
     h1("Example 1: Labs Only"),
-    settingsDataUI("ex1",  list(labs=labs)),
+    settingsDataUI("ex1"),
     h2("Example 2: Labs+AES"),
-    settingsDataUI("ex2", list(labs=labs,aes=aes)),
+    settingsDataUI("ex2"),
     # h2("Example 3: Labs+AEs+Extras"),
     # settingsDataUI("ex3")
   )  

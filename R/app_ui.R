@@ -35,7 +35,7 @@ app_ui <- function(meta, domainData, mapping, standards){
             id="safetyGraphicsApp",
             tabPanel("Home", icon=icon("home"),homeTabUI("home")),
             navbarMenu('Data',icon=icon("database"),
-                tabPanel("Preview", icon=icon("table"), settingsDataUI("dataSettings", domains=domainData)),
+                tabPanel("Preview", icon=icon("table"), settingsDataUI("dataSettings")),
                 tabPanel("Mapping", icon=icon("map"), mappingTabUI("mapping", meta, domainData, mapping, standards)),
                 tabPanel("Filtering", icon=icon("filter"), filterTabUI("filter","dm"))
             ),
