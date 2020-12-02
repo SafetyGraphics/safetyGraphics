@@ -27,7 +27,7 @@ chartsTab(
 
 \item{chart}{chart name. Should generally match the name of the function/widget/module to be intiated. See specific renderer modules for more details.}
 
-\item{type}{type of chart. Must be 'htmlwidget', 'module', 'static' or 'plotly'. See ?mod_chartRenderer{{type}} for more details about each chart type}
+\item{type}{type of chart. Must be 'htmlwidget', 'module', 'plot', 'table', 'html' or 'plotly'. See ?mod_chartRenderer* functions for more details about each chart type.}
 
 \item{package}{package containing the widget.}
 
@@ -35,11 +35,11 @@ chartsTab(
 
 \item{initFunction}{function called before the chart is generated. The function should take `data` and `settings` as inputs and return `params` which should be a list which is then provided to the widget. If domain is specified, only domain-level information is passed to the init function, otherwise named lists containing information for all domains is provided. The mapping is parsed as a list using `generateMappingList()` before being passed to the init function.  By default, init returns an unmodified list of data and settings - possibly subset to the specified domain (e.g. list(data=data, settings=settings))}
 
-\item{domain}{data domain. Should correspond to a domain in `meta` or be set to "multiple" to  named lists for data and mappings containing domains.}
+\item{domain}{data domain. Should correspond to a domain in `meta` or be set to "multiple", in which case, named lists for `data` and `mappings` containing all domain data are used.}
 
 \item{data}{named list of current data sets [reactive].}
 
-\item{mapping}{named list of the current data mappings [reactive].}
+\item{mapping}{tibble capturing the current data mappings [reactive].}
 }
 \description{
 server for the display of the chart tab
