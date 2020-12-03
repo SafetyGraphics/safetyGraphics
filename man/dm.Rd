@@ -7,9 +7,9 @@
 \format{
 A data frame with 306 rows and 25 variables.
 \describe{
-   \item{STUDYID}{Study Identifier}
-   \item{SUBJID}{Subject Identifier for the Study}
-   \item{USUBJID}{Unique Subject Identifier}
+\item{STUDYID}{Study Identifier}
+\item{SUBJID}{Subject Identifier for the Study}
+\item{USUBJID}{Unique Subject Identifier}
 }
 }
 \source{

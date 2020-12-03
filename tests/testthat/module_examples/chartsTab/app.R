@@ -29,7 +29,7 @@ body<-dashboardBody(
       tabName="ex1-tab",
       {
         h2("Example 1 - hepexplorer- called directly from safetyGraphics hepexplorer")
-        chartsTabUI("ex1",chart="hepexplorer",package="safetyGraphics",label="Hepatic Explorer",type="htmlwidget")        
+        chartsTabUI("ex1",name="hepexplorer",package="safetyCharts",label="Hepatic Explorer",type="htmlwidget")        
       }
 
     ),
@@ -37,35 +37,35 @@ body<-dashboardBody(
       tabName="ex2-tab",
       {
         h2("Example 2 - AE Explorer - called from safetyexploreR using custom init function")
-        chartsTabUI("ex2",chart="aeExplorer",package="safetyexploreR",label="AE Explorer",type="htmlwidget")  
+        chartsTabUI("ex2",name="aeExplorer",package="safetyexploreR",label="AE Explorer",type="htmlwidget")  
       }
     ),
     tabItem(
       tabName="ex3-tab",
       {
         h2("Example 3 - Results over time - called from safetyexploreR")
-        chartsTabUI("ex3",chart="safetyResultsOverTime",label="Lab Results Over Time", package="safetyexploreR",type="htmlwidget")  
+        chartsTabUI("ex3",name="safetyResultsOverTime",label="Lab Results Over Time", package="safetyexploreR",type="htmlwidget")  
       }
     ),
     tabItem(
       tabName="ex4-tab",
       {
         h2("Example 4 - Helloworld static chart")
-        chartsTabUI("ex4",chart="HelloWorld",label="Hello World",type="static")  
+        chartsTabUI("ex4",name="HelloWorld",label="Hello World",type="plot")  
       }
     ),
     tabItem(
       tabName="ex5-tab",
       {
-        h2("Example 5 - Helloworld static chart")
-        chartsTabUI("ex5",chart="Boxplot1",label="Box Plot 1",type="static")  
+        h2("Example 5 - Box plot")
+        chartsTabUI("ex5",name="Boxplot1",label="Box Plot 1",type="plot")  
       }
     ),
     tabItem(
       tabName="ex6-tab",
       {
-        h2("Example 6 - Helloworld static chart")
-        chartsTabUI("ex6",chart="Boxplot2",label="Custom Box Plot",type="static")  
+        h2("Example 6 - Custom Box plot")
+        chartsTabUI("ex6",name="Boxplot2",label="Custom Box Plot",type="plot")  
       }
     )
   )
@@ -97,22 +97,21 @@ ui <- tagList(
 )
 
 server <- function(input,output,session){
-   # Example 1 - hep explorer
-      paramsLabs <- reactive({list(data=domainData[["labs"]],settings=mappingLabs)})
-     callModule(
-        chartsTab,
-        "ex1",
-        chart="hepexplorer",
-        type="htmlwidget",
-        package="safetyGraphics",
-        domain="labs",
-        data=dataR,
-        mapping=mappingR
-        
-    )
+  # Example 1 - hep explorer
+  charts<-MakeChartConfig(paste(.libPaths(),'safetygraphics','config', "charts", sep="/"))
+  paramsLabs <- reactive({list(data=domainData[["labs"]],settings=mappingLabs)})
+  callModule(
+    chartsTab,
+    "ex1",
+    chart=charts$hepexplorer,
+    data=dataR,
+    mapping=mappingR
+)
   
     # Example 2 - AE Explorer
     initAEE <- function(data, settings){
+      print("intiAEEE")
+      data<-data$aes
       settings$variables=list(
         major=settings[["bodsys_col"]],
         minor=settings[["term_col"]],
@@ -123,26 +122,21 @@ server <- function(input,output,session){
       )
       return(list(data=data,settings=settings))
     }
+
+    charts$aeExplorer$functions$init <- initAEE
     callModule(
       chartsTab,
       "ex2",
-      chart="aeExplorer",
-      package="safetyexploreR",
-      type="htmlwidget",
-      domain="aes",
-      data=dataR,
+      chart=charts$aeExplorer,
       mapping=mappingR,
-      initFunction=initAEE
+      data=dataR
     )
     
     #Example 3 - results over time
     callModule(
       chartsTab,
       "ex3",
-      chart="safetyResultsOverTime",
-      package="safetyexploreR",
-      domain="labs",
-      type="htmlwidget",
+      chart=charts$safetyResultsOverTime,
       data=dataR,
       mapping=mappingR
     )
@@ -152,15 +146,22 @@ server <- function(input,output,session){
       plot(-1:1, -1:1)
       text(runif(20, -1,1),runif(20, -1,1),"Hello World")
     }
-    
+
+    helloworld_chart<-list(
+      name="HelloWorld",
+      type="plot",
+      domain="aes",
+      functions=list(
+        main=helloWorld
+      )
+    )
+
     callModule(
       chartsTab,
       "ex4",
-      chart="HelloWorld",
+      chart=helloworld_chart,
       data=dataR,
-      mapping=mappingR,
-      type="static",
-      chartFunction=helloWorld
+      mapping=mappingR
     )
     
     #Example 5
@@ -177,13 +178,19 @@ server <- function(input,output,session){
               axis.title = element_text(size = 12))
     }
     
+    box1_chart<-list(
+      name="Box1",
+      type="plot",
+      domain="labs",
+      functions=list(
+        main=boxPlot
+      )
+    )
+
     callModule(
       chartsTab,
       "ex5",
-      chart="Boxplot1",
-      chartFunction=boxPlot,
-      type="static",
-      domain="labs",
+      chart=box1_chart,
       data=dataR,
       mapping=mappingR
     )
@@ -206,17 +213,22 @@ server <- function(input,output,session){
               axis.text = element_text(size = 12),
               axis.title = element_text(size = 12))
     }
-    
+    box2_chart<-list(
+      name="Box2",
+      type="plot",
+      domain="labs",
+      functions=list(
+        main=boxPlot2,
+        init=dataInit
+      )
+    )
+
     callModule(
       chartsTab,
       "ex6",
-      chartFunction=boxPlot2,
-      chart="Boxplot2",
+      chart=box2_chart,
       data=dataR,
-      domain="labs",
-      mapping=mappingR,
-      initFunction=dataInit,
-      type="static"
+      mapping=mappingR
     )
 }
 

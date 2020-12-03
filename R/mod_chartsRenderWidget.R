@@ -8,8 +8,7 @@
 #' @export
 
 chartsRenderWidgetUI <- function(id, chart, package){
-
-    # shiny output binding for a widget named 'foo'
+    # shiny output binding for a widget
     widgetOutput <- function(outputId, width = "100%", height = "400px") {
         htmlwidgets::shinyWidgetOutput(outputId, chart, width, height, package=package)
     }
@@ -40,8 +39,7 @@ chartsRenderWidget <- function(
     settingsToJSON=TRUE
 ){
     ns <- session$ns
-
-    
+    message("chartRenderWidget() starting for ", chart)
     # shiny output binding
     widgetOutput <- function(outputId, width = "100%", height = "400px") {
         htmlwidgets::shinyWidgetOutput(outputId, chart, width, height, package=package)
@@ -54,6 +52,7 @@ chartsRenderWidget <- function(
     }
 
     widgetParams <- reactive({
+        print("Getting widget params")
         widgetParams<-params()
         if(settingsToJSON){
             widgetParams$settings <- jsonlite::toJSON(
@@ -68,11 +67,12 @@ chartsRenderWidget <- function(
 
     # shiny render function for the widget 
     output[["widgetChart"]] <- renderWidget({
+        message("Rendering Widget")
         htmlwidgets::createWidget(
             name = chart,
             widgetParams(),
             package = package,
             sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE),     
-       )
+        )
     })
 }

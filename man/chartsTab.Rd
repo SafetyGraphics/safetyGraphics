@@ -4,19 +4,7 @@
 \alias{chartsTab}
 \title{home tab - server}
 \usage{
-chartsTab(
-  input,
-  output,
-  session,
-  chart,
-  type,
-  package,
-  chartFunction,
-  initFunction,
-  domain,
-  data,
-  mapping
-)
+chartsTab(input, output, session, chart, data, mapping)
 }
 \arguments{
 \item{input}{Input objects from module namespace}
@@ -25,21 +13,11 @@ chartsTab(
 
 \item{session}{An environment that can be used to access information and functionality relating to the session}
 
-\item{chart}{chart name. Should generally match the name of the function/widget/module to be intiated. See specific renderer modules for more details.}
+\item{chart}{list containing a safetyGraphics chart object. see custom chart vignette for details.}
 
-\item{type}{type of chart. Must be 'htmlwidget', 'module', 'plot', 'table', 'html' or 'plotly'. See ?mod_chartRenderer* functions for more details about each chart type.}
+\item{data}{named list of current data sets \link{reactive}.}
 
-\item{package}{package containing the widget.}
-
-\item{chartFunction}{function to generate static chart.}
-
-\item{initFunction}{function called before the chart is generated. The function should take `data` and `settings` as inputs and return `params` which should be a list which is then provided to the widget. If domain is specified, only domain-level information is passed to the init function, otherwise named lists containing information for all domains is provided. The mapping is parsed as a list using `generateMappingList()` before being passed to the init function.  By default, init returns an unmodified list of data and settings - possibly subset to the specified domain (e.g. list(data=data, settings=settings))}
-
-\item{domain}{data domain. Should correspond to a domain in `meta` or be set to "multiple", in which case, named lists for `data` and `mappings` containing all domain data are used.}
-
-\item{data}{named list of current data sets [reactive].}
-
-\item{mapping}{tibble capturing the current data mappings [reactive].}
+\item{mapping}{tibble capturing the current data mappings \link{reactive}.}
 }
 \description{
 server for the display of the chart tab

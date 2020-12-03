@@ -45,3 +45,4 @@ Imports:
     tidyr,
     shinybusy
 VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
