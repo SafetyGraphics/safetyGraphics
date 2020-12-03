@@ -4,7 +4,7 @@
 \alias{settingsDataUI}
 \title{Settings Module - data details}
 \usage{
-settingsDataUI(id, domains)
+settingsDataUI(id)
 }
 \arguments{
 \item{domains}{named list of the data.frames for each domain}

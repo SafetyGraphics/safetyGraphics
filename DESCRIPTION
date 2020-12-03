@@ -27,6 +27,7 @@ Suggests:
     plotly
 Imports:
     dplyr,
+    esquisse,
     htmlwidgets,
     purrr,
     stringr,

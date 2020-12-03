@@ -13,8 +13,7 @@ settingsData(input, output, session, domains, filtered)
 
 \item{session}{Shiny session object}
 
-\item{domains}{named list of the data.frames for each domain
-#'}
+\item{domains}{named list of the data.frames for each domain}
 }
 \description{
 server for the display of the loaded data

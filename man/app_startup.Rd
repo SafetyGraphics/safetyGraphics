@@ -4,7 +4,13 @@
 \alias{app_startup}
 \title{Startup code for shiny app}
 \usage{
-app_startup(domainData, meta, charts, mapping, chartSettingsPaths)
+app_startup(
+  domainData = NULL,
+  meta = NULL,
+  charts = NULL,
+  mapping = NULL,
+  chartSettingsPaths = NULL
+)
 }
 \value{
 List of elements for used to initialize the shiny app with the following parameters
