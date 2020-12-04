@@ -30,3 +30,6 @@ id_col,dm,id_col,,column,ID column,Unique subject identifier variable name.,FALS
 treatment_col,dm,treatment_col,,column,Treatment Column,Treatment Column,FALSE,ARM,ARM
 treatment_values--group1,dm,treatment_col,group1,field,Treatment 1,Treatment 1,FALSE,,
 treatment_values--group2,dm,treatment_col,group2,field,Treatment 2,Treatment 2,FALSE,,
+sex_col,dm,sex_col,,column,Sex Column,Sex Column,FALSE,SEX,SEX
+race_col,dm,race_col,,column,Race Column,Race Column,FALSE,RACE,RACE
+age_col,dm,age_col,,column,Age Column,Age Column,FALSE,AGE,AGE
