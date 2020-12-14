@@ -3,20 +3,19 @@
 #'
 #' @export
 
-chartsTabUI <- function(id, chart, package, label=chart, type){
-  ns <- NS(id)
-  chartID <- ifelse(missing(package), chart, paste0(package,"-",chart))
-  h2(paste("Chart:",label))
-  if(tolower(type=="module")){
-      #render the module UI
-      #call the module server
-  }else if(tolower(type=="htmlwidget")){
-    #render the widget 
-    chartsRenderWidgetUI(id=ns(chartID),chart=chart,package=package)
-  }else{
-      #create the static or plotly chart
-      chartsRenderStaticUI(id=ns(chartID), type=type)
-  }
+chartsTabUI <- function(id, chart){
+    ns <- NS(id)
+    h2(paste("Chart:",chart$label))
+    if(tolower(chart$type=="module")){
+        #render the module UI
+        chartsRenderModuleUI(id=ns("wrap"), chart$functions[[chart$workflow$ui]])
+    }else if(tolower(chart$type=="htmlwidget")){
+        #render the widget 
+        chartsRenderWidgetUI(id=ns("wrap"),chart=chart$name, package=chart$package)
+    }else{
+        #create the static or plotly chart
+        chartsRenderStaticUI(id=ns("wrap"), type=chart$type)
+    }
 }
 
 #' @title  home tab - server
@@ -25,58 +24,71 @@ chartsTabUI <- function(id, chart, package, label=chart, type){
 #' @param input Input objects from module namespace
 #' @param output Output objects from module namespace
 #' @param session An environment that can be used to access information and functionality relating to the session
-#' @param type type of chart. Must be 'htmlwidget', 'module', 'plot', 'table', 'html' or 'plotly'. See ?mod_chartRenderer* functions for more details about each chart type.
-#' @param package  package containing the widget. 
-#' @param chart chart name. Should generally match the name of the function/widget/module to be intiated. See specific renderer modules for more details. 
-#' @param chartFunction function to generate static chart. 
-#' @param initFunction function called before the chart is generated. The function should take `data` and `settings` as inputs and return `params` which should be a list which is then provided to the widget. If domain is specified, only domain-level information is passed to the init function, otherwise named lists containing information for all domains is provided. The mapping is parsed as a list using `generateMappingList()` before being passed to the init function.  By default, init returns an unmodified list of data and settings - possibly subset to the specified domain (e.g. list(data=data, settings=settings))
-#' @param domain data domain. Should correspond to a domain in `meta` or be set to "multiple", in which case, named lists for `data` and `mappings` containing all domain data are used.  
+#' @param chart list containing a safetyGraphics chart object. see custom chart vignette for details. 
 #' @param data named list of current data sets [reactive].
 #' @param mapping tibble capturing the current data mappings [reactive].
 #' 
 #' @export
 
-chartsTab <- function(input, output, session, chart, type, package, chartFunction, initFunction, domain, data, mapping){
-  ns <- session$ns
-  chartID <- ifelse(missing(package), chart, paste0(package,"-",chart))
-
+#chartsTab <- function(input, output, session, chart, type, package, chartFunction, initFunction, domain, data, mapping){
+chartsTab <- function(input, output, session, chart, data, mapping){
+    
+    ns <- session$ns
+    message("chartsTab() starting for ",chart$name)
+    
     params <- reactive({
-        
         #convert settings from data frame to list and subset to specified domain (if any)
-        settingsList <-  safetyGraphics::generateMappingList(mapping(), domain=domain)
-        
+        settingsList <-  safetyGraphics::generateMappingList(mapping(), domain=chart$domain)
+
         #subset data to specific domain (if specified)
-        if(domain=="multiple"){
+        if(chart$domain=="multiple"){
             domainData <- data()
         }else{
-            domainData<- data()[[domain]]
+            domainData<- data()[[chart$domain]]
         }
+        params <- list(data=domainData, settings=settingsList)
 
         #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
-        params <- initFunction(data=domainData, settings=settingsList)
-        
+        if(hasName(chart,"functions")){
+            if(hasName(chart$workflow,"init")){
+                message(chart$name, " has an init.")
+                print(chart$functions[chart$workflow$init])
+                params <- do.call(chart$functions[[chart$workflow$init]], params)
+                print(params)
+            }
+        }
         return(params)
     })
-  
-  if(tolower(type=="module")){
-      #render the module UI
-      #call the module server
-  }else if(tolower(type=="htmlwidget")){
-      callModule(
-        chartsRenderWidget,
-        chartID,
-        chart=chart,
-        package=package,
-        params=params
-      )
-  }else{
-      #create the static or plotly chart
-      callModule(
-        chartsRenderStatic,
-        chartID,
-        chartFunction=chartFunction,
-        params=params, 
-        type=type
-      )
-  }
+
+    if(tolower(chart$type=="module")){
+        #render the module UI
+        message("chartsTab() is initializing a module at ", ns("wrap"))
+        serverFunction <- chart$functions[[chart$workflow$server]]
+        callModule(
+            module=chartsRenderModule,
+            id="wrap",
+            serverFunction=serverFunction,
+            params=params
+        )
+    }else if(tolower(chart$type=="htmlwidget")){
+        message("chartsTab() is initializing a widget at ", ns("wrap"))
+        message("chart is ", chart$name, "; package is ", chart$package)
+        callModule(
+            module=chartsRenderWidget,
+            id="wrap",
+            chart=chart$name,
+            package=chart$package,
+            params=params
+        )
+    }else{
+        #create the static or plotly chart
+        chartFunction <- chart$functions[[chart$workflow$main]]
+        callModule(
+            module=chartsRenderStatic,
+            id="wrap",
+            chartFunction=chartFunction,
+            params=params, 
+            type=chart$type
+        )
+    }
 }

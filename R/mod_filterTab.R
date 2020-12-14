@@ -3,7 +3,7 @@
 #'
 #' @param filterDomain data set for the domain
 #' 
-#' @importFrom esquisse filterDF_UI
+#' @import esquisse
 #' @importFrom shiny dataTableOutput
 #' 
 #' @export
@@ -50,7 +50,7 @@ filterTabUI <- function(id, filterDomain = "dm"){
 #' 
 #' @return filtered data set
 #'
-#' @importFrom esquisse filterDF
+#' @import esquisse
 #' @importFrom shinyWidgets progressBar updateProgressBar
 #' @importFrom shiny renderDataTable
 #' 
@@ -71,7 +71,7 @@ filterTab <- function(input, output, session, domainData, filterDomain, id_col){
       })
     )
 
-     observeEvent(res_filter$data_filtered(), {
+    observeEvent(res_filter$data_filtered(), {
       updateProgressBar(
         session = session, id = "pbar", 
         value = nrow(res_filter$data_filtered()), total = nrow(raw)
