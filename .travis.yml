@@ -1,7 +1,0 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
-
-dist: trusty   # Use Ubuntu 14.04 image (instead of 12.04)
-language: R
-sudo: false
-r: 3.5
-cache: packages
