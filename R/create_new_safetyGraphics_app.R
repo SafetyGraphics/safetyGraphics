@@ -30,11 +30,25 @@ create_new_safetyGraphics_app <- function(
   # write start_app.R
   cat(
     '
+    # load required libraries
     library(safetyCharts)
     library(safetyGraphics)
     
     # Start default App
-    #safetyGraphics::safetyGraphicsApp()
+    safetyGraphics::safetyGraphicsApp()
+    
+    # Run the RStudio app initialization Addin
+    
+    ## Option 1: run the following line of code
+    safetyGraphics:::app_init_addin()
+    
+    ## Option 2: open through RStudo Addin button above
+    
+    
+    # You can scaffold a new chart by calling the add_chart function. see ?add_chart for details
+    safetyGraphics::add_chart("newChart", "my new chart")
+    
+    # That is it for now!
     ',
     file= file.path(path, "start_app.R")
   )

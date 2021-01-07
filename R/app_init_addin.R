@@ -69,7 +69,7 @@ app_init_addin <- function(){
   
   server <- function(input, output, session) {
     
-    volumes <- c(Home = fs::path_home(), "R Installation" = R.home(), shinyFiles::getVolumes()())
+    volumes <- c(wd=".", Home = fs::path_home(), "R Installation" = R.home(), shinyFiles::getVolumes()())
     
     shinyFiles::shinyFileChoose(input, "file", roots = volumes, session = session)
     shinyFiles::shinyDirChoose(input, "directory", roots = volumes, session = session, restrictions = system.file(package = "base"), allowDirCreate = FALSE)

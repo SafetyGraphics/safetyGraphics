@@ -43,6 +43,8 @@ Imports:
     haven,
     shinyWidgets,
     tidyr,
-    shinybusy
+    shinybusy,
+    listviewer,
+    shinyFiles
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
