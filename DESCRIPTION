@@ -45,6 +45,7 @@ Imports:
     tidyr,
     shinybusy,
     listviewer,
-    shinyFiles
+    shinyFiles,
+    rprojroot
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
