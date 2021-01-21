@@ -43,6 +43,8 @@ Imports:
     haven,
     shinyWidgets,
     tidyr,
-    shinybusy
+    shinybusy, 
+    yaml,
+    clisymbols
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
