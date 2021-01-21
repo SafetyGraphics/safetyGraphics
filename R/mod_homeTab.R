@@ -52,7 +52,7 @@ homeTab <- function(input, output, session){
         Finally, the user may export a self-contained, fully reproducible snapshot of the charts that can be easily shared with others.</p>
         <h3><i> Clinical Workflow </i></h3>
         This shiny app has been developed in parallel with a well-documented <a href="https://github.com/SafetyGraphics/SafetyGraphics.github.io/raw/master/guide/HepExplorerWorkflow_v1_1.pdf">clinical workflow</a>
- for monitoring hepatotoxicity. The workflow, written by expert physicians, provides a detailed description of how the interactive graphics can be used as part of a safety clinician’s monitoring practice.
+ for monitoring hepatotoxicity. The workflow, written by expert physicians, provides a detailed description of how the interactive graphics can be used for clinical safety monitoring.
         <h3><i> Interactive Charts </i></h3>
         <p> The included interactive charts are built using the <code>htmlwidgets</code> framework in R. The code libraries
         and configuration details for the underlying JavaScript charts are located below.
