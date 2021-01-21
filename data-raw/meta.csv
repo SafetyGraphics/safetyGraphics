@@ -13,8 +13,8 @@ measure_col,labs,measure_col,,column,Measure column,Lab measure variable name,FA
 normal_col_low,labs,normal_col_low,,column,Lower Limit of Normal column,Lower limit of normal variable name,FALSE,A1LO,STNRLO
 normal_col_high,labs,normal_col_high,,column,Upper Limit of Normal column,Upper limit of normal variable name,FALSE,A1HI,STNRHI
 studyday_col,labs,studyday_col,,column,Study Day column,Visit day variable name,FALSE,ADY,DY
-visit_col,labs,visit_col,,column,Visit column,Visit variable name,FALSE,VISIT,VISIT
-visitn_col,labs,visitn_col,,column,Visit Number column,Visit number variable name,FALSE,VISITNUM,VISITNUM
+visit_col,labs,visit_col,,column,Visit column,Visit variable name,FALSE,AVISIT,VISIT
+visitn_col,labs,visitn_col,,column,Visit Number column,Visit number variable name,FALSE,AVISITN,VISITNUM
 measure_values--ALT,labs,measure_col,ALT,field,Alanine Aminotransferase value,Value used for Alanine Aminotransferase in the specified measure column,FALSE,Alanine Aminotransferase (U/L),"Aminotransferase, alanine (ALT)"
 measure_values--AST,labs,measure_col,AST,field,Aspartate Aminotransferase value,Value used for Aspartate Aminotransferase in the specified measure column,FALSE,Aspartate Aminotransferase (U/L),"Aminotransferase, aspartate (AST)"
 measure_values--TB,labs,measure_col,TB,field,Total Bilirubin value,Value used for Total Bilirubin in the specified measure column,FALSE,Bilirubin (umol/L),Total Bilirubin
@@ -30,3 +30,6 @@ id_col,dm,id_col,,column,ID column,Unique subject identifier variable name.,FALS
 treatment_col,dm,treatment_col,,column,Treatment Column,Treatment Column,FALSE,ARM,ARM
 treatment_values--group1,dm,treatment_col,group1,field,Treatment 1,Treatment 1,FALSE,,
 treatment_values--group2,dm,treatment_col,group2,field,Treatment 2,Treatment 2,FALSE,,
+sex_col,dm,sex_col,,column,Sex Column,Sex Column,FALSE,SEX,SEX
+race_col,dm,race_col,,column,Race Column,Race Column,FALSE,RACE,RACE
+age_col,dm,age_col,,column,Age Column,Age Column,FALSE,AGE,AGE
