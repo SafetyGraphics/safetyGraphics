@@ -44,7 +44,7 @@
   border-color:green;
 }
 
-table.dataTable tr > td:last-of-type, table.dataTable tr > th:last-of-type {
+table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr > th:last-of-type {
   border-left:2px solid black;
   background:#d0d1e6;
 }
