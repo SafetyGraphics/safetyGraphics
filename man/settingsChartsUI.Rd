@@ -6,6 +6,9 @@
 \usage{
 settingsChartsUI(id)
 }
+\arguments{
+\item{id}{module id}
+}
 \description{
 Settings Module - sub-module showing details for the charts loaded in the app - UI
 }

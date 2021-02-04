@@ -1,6 +1,9 @@
 #' @title Charts Module - render module chart UI
 #' @description  Charts Module - sub module for rendering a static chart
 #' 
+#' @param id module id
+#' @param customModUI UI function for chart module
+#' 
 #' @export
 
 chartsRenderModuleUI <- function(id, customModUI){
@@ -14,7 +17,7 @@ chartsRenderModuleUI <- function(id, customModUI){
 #' @param input Shiny input object
 #' @param output  Shiny output object
 #' @param session Shiny session object
-#' @param chartFunction function to generate the chart.
+#' @param serverFunction server function for the module
 #' @param params parameters to be passed to the widget (Reactive)
 #'
 #' @export

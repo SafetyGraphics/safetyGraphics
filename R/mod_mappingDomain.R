@@ -1,6 +1,7 @@
 #' @title   mappingDomainUI 
 #' @description  UI that facilitates the mapping of a full data domain
 #'
+#' @param id module id
 #' @param meta metadata for the domain
 #' @param data data file for the domain
 #' @param mapping current data mapping

@@ -6,6 +6,9 @@
 \usage{
 settingsMappingUI(id)
 }
+\arguments{
+\item{id}{module id}
+}
 \description{
 UI that displays the data mapping metadata.
 }

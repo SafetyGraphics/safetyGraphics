@@ -7,6 +7,8 @@
 filterTabUI(id, filterDomain = "dm")
 }
 \arguments{
+\item{id}{module id}
+
 \item{filterDomain}{data set for the domain}
 }
 \description{

@@ -2,6 +2,7 @@
 #' @param path location for new safetyGraphicsApp
 #' @param init_default_configs copy over `safetyCharts` default configs?
 #' @param open open new rstudio project?
+#' @param gui show gui? creates rstudio project if false
 #'
 #' @return Used for side effect
 #' 

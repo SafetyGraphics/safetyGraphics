@@ -16,6 +16,8 @@ chartsRenderStatic(input, output, session, chartFunction, params, type)
 \item{chartFunction}{function to generate the chart.}
 
 \item{params}{parameters to be passed to the widget (Reactive)}
+
+\item{type}{output type for the chart. Valid options are "plot", "html" and "table"}
 }
 \description{
 server for the display of the loaded data

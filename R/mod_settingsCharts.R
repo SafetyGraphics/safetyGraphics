@@ -1,6 +1,8 @@
 #' @title Settings Module - chart details
 #' @description  Settings Module - sub-module showing details for the charts loaded in the app - UI
 #'
+#' @param id module id
+#' 
 #' @importFrom listviewer renderJsonedit jsonedit jsoneditOutput
 #' @export
 
@@ -21,7 +23,7 @@ settingsChartsUI <- function(id){
 #' @param input Shiny input object
 #' @param output  Shiny output object
 #' @param session Shiny session object
-#' @param named list data frame summarizing the charts
+#' @param charts list data frame summarizing the charts
 #' 
 #' @export
 

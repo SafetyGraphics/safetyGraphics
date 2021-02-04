@@ -6,6 +6,11 @@
 \usage{
 chartsRenderStaticUI(id, type)
 }
+\arguments{
+\item{id}{module id}
+
+\item{type}{output type for the chart. Valid options are "plot", "html" and "table"}
+}
 \description{
 Charts Module - sub module for rendering a static chart
 }

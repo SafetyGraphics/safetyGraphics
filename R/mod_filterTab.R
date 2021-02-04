@@ -1,6 +1,7 @@
 #' @title  filterTabUI 
 #' @description  UI that facilitates the filtering data with esquisse::filterDF_UI
 #'
+#' @param id module id
 #' @param filterDomain data set for the domain
 #' 
 #' @import esquisse
@@ -47,6 +48,7 @@ filterTabUI <- function(id, filterDomain = "dm"){
 #' @param session Shiny session object
 #' @param domainData list of data files for each domain
 #' @param filterDomain domain to use for filtering (typically "dm")
+#' @param id_col name of id column. should be found in every data domain
 #' 
 #' @return filtered data set
 #'

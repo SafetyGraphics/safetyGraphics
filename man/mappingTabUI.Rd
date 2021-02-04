@@ -7,6 +7,8 @@
 mappingTabUI(id, meta, domainData, mappings = NULL, standards = NULL)
 }
 \arguments{
+\item{id}{module id}
+
 \item{meta}{metadata for all domains}
 
 \item{domainData}{list of data files for each domain}

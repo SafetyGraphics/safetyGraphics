@@ -6,6 +6,13 @@
 \usage{
 homeTab(input, output, session)
 }
+\arguments{
+\item{input}{mod input}
+
+\item{output}{mod output}
+
+\item{session}{mod session}
+}
 \description{
 server for the display of the home tab
 }

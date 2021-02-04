@@ -1,10 +1,11 @@
 #' @title   mappingColumnUI 
 #' @description  UI that facilitates the mapping of a column data domain
 #'
+#' @param id module id
 #' @param meta metadata for the column (and related fields)
 #' @param data current data file for the domain
 #' @param mapping current data mapping for the column (and related fields)
-#' 
+
 #' @export
 
 mappingColumnUI <- function(id, meta, data, mapping=NULL){  
@@ -71,6 +72,8 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
 #' @param input Shiny input object
 #' @param output  Shiny output object
 #' @param session Shiny session object
+#' @param meta metadata data frame for the object
+#' @param data current data file for the domain
 #' 
 #' @return A reactive data.frame providing the current value for text_key associated with the selected column
 #'

@@ -1,6 +1,9 @@
 #' @title Charts Tab
 #' @description  Charting module
 #'
+#' @param id module id
+#' @param chart list containing chart specifications
+#' 
 #' @export
 
 chartsTabUI <- function(id, chart){

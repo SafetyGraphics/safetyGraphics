@@ -7,7 +7,7 @@
 settingsDataUI(id)
 }
 \arguments{
-\item{domains}{named list of the data.frames for each domain}
+\item{id}{module id}
 }
 \description{
 Settings Module - sub-module showing details for the data loaded in the app - UI

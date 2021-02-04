@@ -7,7 +7,8 @@
 #' @param session app session
 #' @param meta data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}. 
 #' @param domainData named list of data.frames to be loaded in to the app.
-#' @param chartsList list of charts to include in the app
+#' @param mapping current mapping
+#' @param charts list of charts to include in the app
 #' 
 #' @export
 app_server <- function(input, output, session, meta, mapping, domainData, charts){

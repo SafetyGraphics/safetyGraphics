@@ -6,6 +6,11 @@
 \usage{
 chartsRenderModuleUI(id, customModUI)
 }
+\arguments{
+\item{id}{module id}
+
+\item{customModUI}{UI function for chart module}
+}
 \description{
 Charts Module - sub module for rendering a static chart
 }

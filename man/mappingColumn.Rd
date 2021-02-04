@@ -12,6 +12,10 @@ mappingColumn(input, output, session, meta, data)
 \item{output}{Shiny output object}
 
 \item{session}{Shiny session object}
+
+\item{meta}{metadata data frame for the object}
+
+\item{data}{current data file for the domain}
 }
 \value{
 A reactive data.frame providing the current value for text_key associated with the selected column

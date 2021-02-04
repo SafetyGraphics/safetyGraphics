@@ -1,6 +1,7 @@
 #' @title   mappingTabUI 
 #' @description  UI that facilitates the mapping of all data domain
-#'
+#' 
+#' @param id module id
 #' @param meta metadata for all domains
 #' @param domainData list of data files for each domain
 #' @param mappings optional data frame containing stacked mappings for all domains

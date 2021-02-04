@@ -2,6 +2,12 @@
 #' 
 #' Prepare inputs for safetyGraphics app - run before app is initialized. See ?safetyGraphicsApp for parameter definitions
 #'
+#' @param domainData named list of domain level data
+#' @param meta list of configuration metadata 
+#' @param charts list of charts
+#' @param mapping initial data mapping
+#' @param chartSettingsPaths character vector with paths to chart setting yaml files
+#' 
 #' @return List of elements for used to initialize the shiny app with the following parameters
 #'  \itemize{
 #'  \item{"meta"}{ List of configuration metadata }

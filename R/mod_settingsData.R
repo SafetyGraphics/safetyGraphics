@@ -1,7 +1,7 @@
 #' @title Settings Module - data details
 #' @description  Settings Module - sub-module showing details for the data loaded in the app - UI
 #' 
-#' @param domains named list of the data.frames for each domain
+#' @param id module id
 #' 
 #' @importFrom DT renderDT
 
@@ -25,7 +25,7 @@ settingsDataUI <- function(id){
 #' 
 #' @export
 
-settingsData <- function(input, output, session, domains, filtered){
+settingsData <- function(input, output, session, domains){
   ns <- session$ns
   #Set up tabs
   output$previews <- renderUI({

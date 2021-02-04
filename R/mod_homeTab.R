@@ -1,16 +1,19 @@
 #' @title Home Tab
 #' @description  Home Tab - sub-module showing details for the data loaded in the app - UI
 #'
+#' @param id module id
+#' 
 #' @export
 
 homeTabUI <- function(id){
   ns <- NS(id)
   tabsetPanel(
-    tabPanel("About",
-             fluidRow(
-               column(width=8, style='font-size:20px', uiOutput(outputId = ns("about"))),
-               column(width=4, imageOutput(outputId = ns("hex")))
-             )
+    tabPanel(
+      "About",
+      fluidRow(
+        column(width=8, style='font-size:20px', uiOutput(outputId = ns("about"))),
+        column(width=4, imageOutput(outputId = ns("hex")))
+      )
     ),
     tabPanel(
       "Shiny App User Guide",
@@ -34,6 +37,10 @@ homeTabUI <- function(id){
 #' @title  home tab - server
 #' @description  server for the display of the home tab  
 #'
+#' @param input mod input
+#' @param output mod output
+#' @param session mod session
+#' 
 #' @export
 
 homeTab <- function(input, output, session){
