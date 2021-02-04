@@ -70,7 +70,7 @@ settingsMapping <- function(input, output, session, metaIn, mapping){
             metadata_mapping(), 
             rownames = FALSE,
             options = list(paging=FALSE, ordering=FALSE),
-            class="compact"
+            class="compact metatable"
         )
     })
 

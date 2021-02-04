@@ -1,0 +1,11 @@
+Binding: create_new_safetyGraphics_app_gui
+Title: Create new safetyGraphics app project
+OpenFiles: start_app.R
+Icon: safetyGraphicsHex.png
+
+
+Parameter: check_default_configs
+Widget: CheckboxInput
+Label: Start with safetyCharts default configs?
+Default: On
+Position: left

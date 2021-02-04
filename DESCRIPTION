@@ -43,8 +43,15 @@ Imports:
     haven,
     shinyWidgets,
     tidyr,
+<<<<<<< HEAD
     shinybusy, 
     yaml,
     clisymbols
+=======
+    shinybusy,
+    listviewer,
+    shinyFiles,
+    rprojroot
+>>>>>>> dev
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

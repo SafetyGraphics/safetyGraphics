@@ -33,6 +33,9 @@ chartsRenderStatic <- function(input, output, session, chartFunction, params, ty
   }else if(type=="html"){
     output[["staticHTML"]] <- renderText(do.call(chartFunction,params())) 
   }else if(type=="table"){
-    output[["staticTable"]] <- DT::renderDataTable(do.call(chartFunction,params())) 
+    output[["staticTable"]] <- DT::renderDataTable(do.call(chartFunction,params()), rownames = FALSE,
+                                                   options = list(pageLength = 20,
+                                                                  ordering = FALSE,
+                                                                  searching = FALSE)) 
   }
 }
