@@ -20,6 +20,7 @@ app <- ShinyDriver$new("./module_examples/chartsRenderWidget")
 # })
 
 test_that("2nd widget renderers by default",{
+  skip_on_ci()
   outputs2<-app$getAllValues()[["output"]]
   expect_named(outputs2, c("ex2-widgetChart"))
   chart2<-jsonlite::fromJSON(outputs2[["ex2-widgetChart"]])
@@ -27,6 +28,7 @@ test_that("2nd widget renderers by default",{
 })
 
 test_that("3rd widget renderers when sidebar is clicked",{
+  skip_on_ci()
   app$setInputs(sidebar_tabs = "ex3-tab")
   outputs3<-app$getAllValues()[["output"]]
   expect_named(outputs3, c("ex2-widgetChart","ex3-widgetChart"))
