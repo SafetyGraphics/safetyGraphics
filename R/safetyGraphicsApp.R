@@ -33,7 +33,7 @@ safetyGraphicsApp <- function(
 
   app <- shinyApp(
     ui =  app_ui(config$meta, config$domainData, config$mapping, config$standards),
-    server = app_server(input, output, session, config$meta, config$mapping, config$domainData, config$charts)
+    server = app_server(config$meta, config$mapping, config$domainData, config$charts)
   )
   runApp(app, launch.browser = TRUE)
 }

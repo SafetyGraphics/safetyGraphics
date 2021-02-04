@@ -52,8 +52,8 @@ chartsTab <- function(input, output, session, chart, data, mapping){
         params <- list(data=domainData, settings=settingsList)
 
         #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
-        if(hasName(chart,"functions")){
-            if(hasName(chart$workflow,"init")){
+        if(utils::hasName(chart,"functions")){
+            if(utils::hasName(chart$workflow,"init")){
                 message(chart$name, " has an init.")
                 print(chart$functions[chart$workflow$init])
                 params <- do.call(chart$functions[[chart$workflow$init]], params)

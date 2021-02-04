@@ -31,7 +31,7 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
     
     #merge default values from mapping on to full metadata
     meta <- meta %>% left_join(mapping, by="text_key")
-    col_meta <- meta %>% filter(type=="column")
+    col_meta <- meta %>% filter(.data$type=="column")
     
     # Exactly one column mapping provided
     stopifnot(nrow(col_meta)==1)
@@ -48,7 +48,7 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
       fieldOptions <-  unique(data%>%pull(col_meta$current))       
     }
     
-    field_meta <- meta %>% filter(type=="field")
+    field_meta <- meta %>% filter(.data$type=="field")
     if(nrow(field_meta)>0){
       for(i in 1:nrow(field_meta)) {
         row <- field_meta[i,]
@@ -82,8 +82,8 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
 mappingColumn <- function(input, output, session, meta, data){
   ns <- session$ns
   
-  col_meta <- meta %>% filter(type=="column")
-  field_meta <- meta %>% filter(type=="field")
+  col_meta <- meta %>% filter(.data$type=="column")
+  field_meta <- meta %>% filter(.data$type=="field")
   col_val <- callModule(mappingSelect, col_meta$text_key)
   
   # change the options in the field selects when the column select changes 

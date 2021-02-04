@@ -4,15 +4,9 @@
 \alias{app_server}
 \title{Server for the default safetyGraphics shiny app}
 \usage{
-app_server(input, output, session, meta, mapping, domainData, charts)
+app_server(meta, mapping, domainData, charts)
 }
 \arguments{
-\item{input}{app input}
-
-\item{output}{app output}
-
-\item{session}{app session}
-
 \item{meta}{data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}.}
 
 \item{mapping}{current mapping}

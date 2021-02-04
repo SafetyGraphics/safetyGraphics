@@ -47,7 +47,7 @@ settingsMapping <- function(input, output, session, metaIn, mapping){
         metaIn
       }else{
         df<-data.frame(
-          read.csv(
+          utils::read.csv(
             input$metaFile$datapath, 
             na.strings=NA, 
             stringsAsFactors=FALSE

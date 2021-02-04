@@ -60,12 +60,12 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
     message("Found ", length(yaml_files), " config files: ",paste(names(charts),collapse=", "))
 
     # Bind workflow functions to chart object
-    all_functions <- as.character(lsf.str(".GlobalEnv"))
+    all_functions <- as.character(utils::lsf.str(".GlobalEnv"))
     message("Global Functions: ",all_functions)
     charts <- lapply(charts, 
         function(chart){
-            if(hasName(chart, "package")){
-                package_functions <- as.character(lsf.str(paste0("package:",chart$package)))
+            if(utils::hasName(chart, "package")){
+                package_functions <- as.character(utils::lsf.str(paste0("package:",chart$package)))
                 all_functions<-c(all_functions,package_functions)
             }
 

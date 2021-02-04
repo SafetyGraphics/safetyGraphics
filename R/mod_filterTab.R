@@ -93,7 +93,7 @@ filterTab <- function(input, output, session, domainData, filterDomain, id_col){
     })
     
     output$res_str <- renderPrint({
-      str(res_filter$data_filtered())
+      utils::str(res_filter$data_filtered())
     })
     
     filteredDomains <- reactive({

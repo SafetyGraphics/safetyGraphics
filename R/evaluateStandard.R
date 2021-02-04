@@ -35,31 +35,31 @@ evaluateStandard <- function(data, meta, domain, standard){
   
   domainMeta<-meta %>% filter(domain==!!domain)
   standardMap <- domainMeta%>%pull(paste0("standard_",!!standard))
-  names(standardMap)<-domainMeta%>%pull(text_key)
+  names(standardMap)<-domainMeta%>%pull(.data$text_key)
   compare_summary[["mapping"]] <- domainMeta %>% 
-    mutate(standard_col = standardMap[col_key] ) %>%
-    mutate(standard_field = ifelse(type=="field", standardMap[text_key], NA)) %>%
-    filter(!is.na(standard_col)) %>%
+    mutate(standard_col = standardMap[.data$col_key] ) %>%
+    mutate(standard_field = ifelse(.data$type=="field", standardMap[.data$text_key], NA)) %>%
+    filter(!is.na(.data$standard_col)) %>%
     rowwise %>%
     mutate(
       valid = ifelse(
-        type=="field",
-        hasField(data=data, columnName=standard_col, fieldValue=standard_field),
-        hasColumn(data=data, columnName=standard_col)
+        .data$type=="field",
+        hasField(data=data, columnName=.data$standard_col, fieldValue=.data$standard_field),
+        hasColumn(data=data, columnName=.data$standard_col)
       )
     )%>%
     mutate(
       current = ifelse(
-        valid,
+        .data$valid,
         ifelse(
-          type=="field",
-          standard_field,
-          standard_col
+          .data$type=="field",
+          .data$standard_field,
+          .data$standard_col
         ),
         NA
       )
     )%>%
-    select(text_key, current, valid)
+    select(.data$text_key, .data$current, .data$valid)
   
   stopifnot(nrow(compare_summary[["mapping"]])>0)
   

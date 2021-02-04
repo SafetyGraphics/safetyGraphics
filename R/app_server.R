@@ -2,16 +2,14 @@
 #'
 #' This function returns a server function suitable for use in shiny::runApp()
 #' 
-#' @param input app input 
-#' @param output app output
-#' @param session app session
+
 #' @param meta data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}. 
 #' @param domainData named list of data.frames to be loaded in to the app.
 #' @param mapping current mapping
 #' @param charts list of charts to include in the app
 #' 
 #' @export
-app_server <- function(input, output, session, meta, mapping, domainData, charts){
+app_server <- function(meta, mapping, domainData, charts){
     server <- function(input, output, session) {
         #Initialize modules
         
@@ -20,8 +18,8 @@ app_server <- function(input, output, session, meta, mapping, domainData, charts
         current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
 
         id_col <- reactive({
-            dm<-current_mapping()%>%filter(domain=="dm")   
-            id<-dm %>%filter(text_key=="id_col")%>%pull(current)
+            dm<-current_mapping()%>%filter(.data$domain=="dm")   
+            id<-dm %>%filter(.data$text_key=="id_col")%>%pull(.data$current)
             return(id)
         })
 
@@ -33,7 +31,7 @@ app_server <- function(input, output, session, meta, mapping, domainData, charts
             id_col=id_col
         )
 
-        callModule(settingsData, "dataSettings", domains = domainData, filtered=filtered_data)
+        callModule(settingsData, "dataSettings", domains = domainData)
         callModule(settingsMapping, "metaSettings", metaIn=meta, mapping=current_mapping)
         callModule(settingsCharts, "chartSettings",charts = charts)
         callModule(homeTab, "home")
