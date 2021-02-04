@@ -25,8 +25,8 @@ chartsTabUI <- function(id, chart){
 #' @param output Output objects from module namespace
 #' @param session An environment that can be used to access information and functionality relating to the session
 #' @param chart list containing a safetyGraphics chart object. see custom chart vignette for details. 
-#' @param data named list of current data sets [reactive].
-#' @param mapping tibble capturing the current data mappings [reactive].
+#' @param data named list of current data sets (Reactive).
+#' @param mapping tibble capturing the current data mappings (Reactive).
 #' 
 #' @export
 

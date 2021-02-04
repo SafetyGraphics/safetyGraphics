@@ -11,6 +11,7 @@
 #'  \item{"standards"}{ List of domain level data standards }
 #' }
 #' 
+#' @export
 app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, chartSettingsPaths=NULL){
     # Process charts metadata
     if(is.null(charts)){

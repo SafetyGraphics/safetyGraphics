@@ -25,7 +25,7 @@ chartsRenderWidget(
 
 \item{package}{package containing the widget. Note that package name is required for htmlwidgets.}
 
-\item{params}{parameters to be passed to the widget \link{REACTIVE}}
+\item{params}{parameters to be passed to the widget (Reactive)}
 
 \item{settingsToJSON}{convert param$settings to json? Default = TRUE}
 }

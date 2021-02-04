@@ -13,7 +13,7 @@ chartsRenderModule(input, output, session, serverFunction, params)
 
 \item{session}{Shiny session object}
 
-\item{params}{parameters to be passed to the widget \link{REACTIVE}}
+\item{params}{parameters to be passed to the widget (Reactive)}
 
 \item{chartFunction}{function to generate the chart.}
 }

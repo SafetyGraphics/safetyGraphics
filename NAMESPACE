@@ -2,6 +2,7 @@
 
 export(add_chart)
 export(app_server)
+export(app_startup)
 export(app_ui)
 export(chart_template)
 export(chartsNav)
