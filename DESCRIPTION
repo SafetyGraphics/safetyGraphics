@@ -39,13 +39,10 @@ Imports:
     listviewer,
     purrr,
     rlang,
-    rmarkdown,
     shiny,
     shinyjs,
     shinyWidgets,
     stringr,
-    tibble,
-    tidyr,
     yaml
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

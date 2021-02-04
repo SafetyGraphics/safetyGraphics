@@ -188,7 +188,7 @@ app_init_addin <- function(){
     tblMeta <- function(charts){
       
       bbb <- purrr::map(charts, ~{
-        bb <- as_tibble(t(tibble(.x)))
+        bb <- dplyr::as_tibble(t(dplyr::tibble(.x)))
         names(bb) <- names(.x)
         bb
       })
