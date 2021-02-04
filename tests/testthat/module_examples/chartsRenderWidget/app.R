@@ -3,10 +3,7 @@ library(safetyGraphics)
 library(ggplot2)
 library(dplyr)
 library(htmlwidgets)
-library(devtools)
 library(shinydashboard)
-#devtools::install_github('RhoInc/safetyexploreR')
-library(safetyexploreR)
 
 domainData <- list(labs=safetyGraphics::labs, aes=safetyGraphics::aes)
 standards <- names(domainData) %>% lapply(function(domain){

@@ -2,7 +2,7 @@ library(shiny)
 library(safetyGraphics)
 library(dplyr)
 
-reactlogReset()
+#reactlogReset()
 allData <- list(labs=safetyGraphics::labs, aes=safetyGraphics::aes)
 labs_default <- meta %>% 
     filter(domain=="labs")%>% 
@@ -42,5 +42,5 @@ server <- function(input,output,session){
  output$ex2Out<-renderTable(ex2())
 }
 
-options(shiny.reactlog = TRUE)
+#options(shiny.reactlog = TRUE)
 shinyApp(ui, server)
