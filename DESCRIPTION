@@ -45,7 +45,7 @@ Imports:
     tidyr,
     shinybusy, 
     yaml,
-    clisymbols
+    clisymbols,
     shinybusy,
     listviewer,
     shinyFiles,
