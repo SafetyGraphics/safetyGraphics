@@ -20,7 +20,6 @@ app <- ShinyDriver$new("./module_examples/chartsRenderWidget")
 # })
 
 test_that("2nd widget renderers by default",{
-  Sys.sleep(1)
   outputs2<-app$getAllValues()[["output"]]
   expect_named(outputs2, c("ex2-widgetChart"))
   chart2<-jsonlite::fromJSON(outputs2[["ex2-widgetChart"]])
