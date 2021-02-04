@@ -31,9 +31,10 @@ jobs:
           key: ${{ matrix.config.os }}-phantomjs
           restore-keys: ${{ matrix.config.os }}-phantomjs
       - name: Install PhantomJS
-        run: >
-          Rscript
-          -e "if (!shinytest::dependenciesInstalled()) shinytest::installDependencies()"
+        shell: Rscript {0}
+        run: |
+          options(install.packages.check.source = "no")
+          if (!shinytest::dependenciesInstalled()) shinytest::installDependencies()
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_: false
