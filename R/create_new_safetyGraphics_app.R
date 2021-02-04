@@ -40,7 +40,7 @@ create_new_safetyGraphics_app <- function(
     # Run the RStudio app initialization Addin
     
     ## Option 1: run the following line of code
-    safetyGraphics:::app_init_addin()
+    safetyGraphics::app_init_addin()
     
     ## Option 2: open through RStudo Addin button above
     

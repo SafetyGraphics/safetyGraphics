@@ -10,8 +10,8 @@
 #' @return a list describing to what degree the data set matches the data standard. The "match" property describes compliance with the standard as "full", "partial" or "none". The "checks" property is a list of the data elements expected for the standard and whether they are "valid" in the given data set. "total_checks", "valid_checks" and "invalid_checks" provide counts of the specified checks. "match_percent" is calculated as valid_checks/total_checks.  "mapping" is a data frame describing the detected standard for each \code{"text_key"} in the provided metadata. Columns are \code{"text_key"}, \code{"current"} containing the name of the matched column or field value in the data and \code{"match"} a boolean indicating whether the data matches the standard. 
 #'  
 #' @examples
-#' safetyGraphics:::evaluateStandard(data=adlbc, domain="labs" standard="adam") # Match is TRUE
-#' safetyGraphics:::evaluateStandard(data=adlbc, domain="labs", standard="sdtm") # Match is FALSE
+#' evaluateStandard(data=labs, meta=meta, domain="labs", standard="adam") # Match is TRUE
+#' evaluateStandard(data=labs, meta=meta, domain="labs", standard="sdtm") # Match is FALSE
 #'
 #' @import dplyr
 #' @importFrom purrr map 
@@ -44,10 +44,10 @@ evaluateStandard <- function(data, meta, domain, standard){
     mutate(
       valid = ifelse(
         type=="field",
-        safetyGraphics:::hasField(data=data, columnName=standard_col, fieldValue=standard_field),
-        safetyGraphics:::hasColumn(data=data, columnName=standard_col)
+        hasField(data=data, columnName=standard_col, fieldValue=standard_field),
+        hasColumn(data=data, columnName=standard_col)
       )
-     )%>%
+    )%>%
     mutate(
       current = ifelse(
         valid,

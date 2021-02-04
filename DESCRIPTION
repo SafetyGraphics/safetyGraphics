@@ -28,12 +28,12 @@ Suggests:
 Imports:
     dplyr,
     esquisse,
-    htmlwidgets,
-    purrr,
+    purrr, 
     stringr,
     jsonlite,
     shiny,
     magrittr,
+    htmlwidgets,
     DT,
     shinyjs,
     rmarkdown,
@@ -46,9 +46,11 @@ Imports:
     shinybusy, 
     yaml,
     clisymbols,
-    shinybusy,
     listviewer,
     shinyFiles,
-    rprojroot
+    rprojroot,
+    fs, 
+    rstudioapi, 
+    usethis
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

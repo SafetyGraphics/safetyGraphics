@@ -133,7 +133,7 @@ app_init_addin <- function(){
       chartSettingsPaths = NULL
     ){
       
-      config <- safetyGraphics:::app_startup(domainData, meta, charts, mapping, chartSettingsPaths)
+      config <- safetyGraphics::app_startup(domainData, meta, charts, mapping, chartSettingsPaths)
       
       app <- shinyApp(
         ui =  app_ui(config$meta, config$domainData, config$mapping, config$standards),
