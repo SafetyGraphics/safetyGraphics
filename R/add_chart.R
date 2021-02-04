@@ -27,11 +27,10 @@
 #' 
 #' @seealso [chart_template()]
 #' 
-#' @importFrom rprojroot find_root is_rstudio_project
-#' @importFrom fs path file_create file_exists
 #' @importFrom yaml write_yaml
 #' 
 #' @export
+
 add_chart <- function(
   path,
   name = "newplot",
@@ -44,6 +43,15 @@ add_chart <- function(
   ...
 ){
   
+  if (!requireNamespace("rprojroot", quietly = TRUE)) {
+    stop("Package \"rprojroot\" needed for this function to work. Please install it.",
+      call. = FALSE)
+  }
+
+  if (!requireNamespace("fs", quietly = TRUE)) {
+    stop("Package \"fs\" needed for this function to work. Please install it.",
+      call. = FALSE)
+  }
   proj_root <- rprojroot::find_root(rprojroot::is_rstudio_project)
   if(missing(path)){
     path <- file.path(proj_root, "config")

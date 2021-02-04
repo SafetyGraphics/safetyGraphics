@@ -13,7 +13,7 @@
 settingsMappingUI <- function(id){
     ns <- NS(id)
     tagList(
-        DTOutput(ns("metaTable")),
+        DT::DTOutput(ns("metaTable")),
         fileInput(ns("metaFile"),"Upload custom data mappings",accept = c('.csv'))
     )
 }

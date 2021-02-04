@@ -8,7 +8,6 @@
 #'
 #' @docType package
 #' @name SafetyGraphics
-#' @importFrom utils globalVariables
 #' @keywords internal
 NULL
 

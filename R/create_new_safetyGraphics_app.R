@@ -6,11 +6,6 @@
 #'
 #' @return Used for side effect
 #' 
-#' @importFrom rstudioapi isAvailable openProject
-#' @importFrom fs path_abs  path dir_copy 
-#' @importFrom usethis create_project 
-#' 
-#' 
 #' @export
 #' 
 
@@ -20,7 +15,24 @@ create_new_safetyGraphics_app <- function(
   open = TRUE,
   gui = FALSE
 ) {
-  
+
+  # Check that suggested pacakges are installed
+  if (!requireNamespace("rstudioapi", quietly = TRUE)) {
+    stop("Package \"rstudioapi\" needed for this function to work. Please install it.",
+      call. = FALSE)
+  }
+
+  if (!requireNamespace("fs", quietly = TRUE)) {
+    stop("Package \"fs\" needed for this function to work. Please install it.",
+      call. = FALSE)
+  }
+
+  if (!requireNamespace("usethis", quietly = TRUE)) {
+    stop("Package \"usethis\" needed for this function to work. Please install it.",
+      call. = FALSE)
+  }
+
+
   path <- fs::path_abs(path)
   
   if(init_default_configs){

@@ -7,14 +7,7 @@
 #' @param chartSettingsPaths path(s) where customization functions are saved relative to your working directory. All charts can have itialization (e.g. myChart_Init.R) and static charts can have charting functions (e.g. myGraphic_Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details. 
 #'
 #' @import shiny
-#' @importFrom shinyjs useShinyjs html
-#' @importFrom DT DTOutput renderDT
-#' @importFrom purrr map keep transpose
-#' @importFrom magrittr "%>%"
-#' @importFrom haven read_sas
-#' @importFrom shinyWidgets materialSwitch
-#' @importFrom tidyr gather
-#'
+#' 
 #' @export
 
 safetyGraphicsApp <- function(

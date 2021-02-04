@@ -1,14 +1,15 @@
 #' RStudio Add-in for constructing lean ADLB and ADAE data
 #' 
-#' 
 #' @import shiny
-#' @import shinyFiles
 #' @import listviewer
-#' 
 
 
 app_init_addin <- function(){
-  
+  if (!requireNamespace("shinyFiles", quietly = TRUE)) {
+    stop("Package \"shinyFiles\" needed for this function to work. Please install it.",
+      call. = FALSE)
+  }
+
   
   ui <- bootstrapPage(
     

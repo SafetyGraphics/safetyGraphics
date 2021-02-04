@@ -8,6 +8,11 @@
 #' @param mapping current mapping
 #' @param charts list of charts to include in the app
 #' 
+#' @import shiny
+#' @import dplyr
+#' @importFrom purrr map
+#' @importFrom shinyjs html
+#' 
 #' @export
 app_server <- function(meta, mapping, domainData, charts){
     server <- function(input, output, session) {
@@ -37,11 +42,11 @@ app_server <- function(meta, mapping, domainData, charts){
         callModule(homeTab, "home")
 
         #Initialize Chart UI - Adds subtabs to chart menu - this initializes initializes chart UIs
-        charts %>% map(chartsNav)
+        charts %>% purrr::map(chartsNav)
 
         #Initialize Chart Servers
         validDomains <- tolower(names(mapping))
-        charts %>% map(
+        charts %>% purrr::map(
             ~callModule(
                 module=chartsTab,
                 id=.x$name,

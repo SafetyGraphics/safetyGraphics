@@ -4,7 +4,9 @@
 #' @param domainData named list of data.frames to be loaded in to the app.
 #' @param mapping data.frame specifying the initial values for each data mapping. If no mapping is provided, the app will attempt to generate one via \code{detectStandard()}
 #' @param standards a list of information regarding data standards. Each list item should use the format returned by safetyGraphics::detectStandard.
-#' 
+#'
+#' @importFrom shinyjs useShinyjs
+#'  
 #' @export
 
 app_ui <- function(meta, domainData, mapping, standards){
@@ -21,7 +23,7 @@ app_ui <- function(meta, domainData, mapping, standards){
 
     #app UI using calls to modules
     ui<-tagList(
-        useShinyjs(),
+        shinyjs::useShinyjs(),
         tags$head(
             tags$style(app_css),
             tags$link(

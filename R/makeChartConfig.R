@@ -5,10 +5,7 @@
 #' @param dirs path to one or more directories containing yaml files (relative to working directory)
 #' @param sourceFiles boolean indicating whether to source all R files found in dirs.
 #'
-#' @import magrittr
-#' @import tools
 #' @import yaml
-#' @import clisymbols
 #' 
 #' @return returns a named list of charts derived from YAML files. Each element of the list contains information about a single chart, and has the following parameters:
 #' \itemize{
@@ -48,12 +45,19 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
         full.names = TRUE
     )
     
+    #copied from tools package
+    file_path_sans_ext <-function (x) {
+        sub("([^.]+)\\.[[:alnum:]]+$", "\\1", x)
+    }
+
     charts<-lapply(yaml_files, function(path){
         chart <- read_yaml(path)
         chart$path <- path
         chart$name <- path %>% file_path_sans_ext %>% basename
         return(chart)
     })
+
+
 
     names(charts) <- yaml_files %>% file_path_sans_ext %>% basename
 
@@ -84,9 +88,9 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
             workflow_total <- length(unlist(chart$workflow)[names(unlist(chart$workflow))!="widget"])
             message<-paste0(chart$name,": Found ", workflow_found, " of ",workflow_total, " workflow functions, and ", length(chart$functions)-workflow_found ," other functions.")
             if(workflow_found == workflow_total){ 
-                message(symbol$tick," ",message)
+                message("+ ",message)
             }else{
-                message(symbol$cross," ", message)
+                message("x ", message)
             }
 
             return(chart)

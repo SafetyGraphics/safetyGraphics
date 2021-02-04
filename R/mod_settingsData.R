@@ -33,7 +33,7 @@ settingsData <- function(input, output, session, domains){
         tabPanel(domain,
           div(
             #h3(paste0("Note: Showing filtered data. X of X rows displayed for the X selected participants.")),
-            DTOutput(ns(domain))
+            DT::DTOutput(ns(domain))
           )
         )
     })
