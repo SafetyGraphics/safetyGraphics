@@ -24,7 +24,7 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
     # Use the charts settings saved in safetycharts if no path is provided. 
     if(missing(dirs) || is.null(dirs)){
         for(lib in .libPaths()){
-            dirs<-paste(lib,'safetycharts','config', sep="/")
+            dirs<-paste(lib,'safetyCharts','config', sep="/")
             if(file.exists(dirs)) break               
         }
     }
