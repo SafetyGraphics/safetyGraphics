@@ -21,16 +21,18 @@
 #' @param type Type of chart: `plot`, `module`, or `htmlwidget`. Default is `plot` (static)
 #' @param domain associated data domain, for example `aes`, `labs`, or `multiple`
 #' @param package optional, R package that this chart is associated with.
-#' @param chart_template chart template function
+#' @param workflow list of workflow functions appropriate for chart YAML
+#' @param open boolean 
+#' @param ... additional parameters for chart_template
 #' 
 #' @seealso [chart_template()]
 #' 
-#' @importFrom rprojroot find_root is_rstudio_project
-#' @importFrom fs path file_create file_exists
 #' @importFrom yaml write_yaml
 #' 
 #' @export
+
 add_chart <- function(
+  path,
   name = "newplot",
   label = "New Static Plot",
   type = "plot",
@@ -41,9 +43,20 @@ add_chart <- function(
   ...
 ){
   
-  proj_root <- rprojroot::find_root(rprojroot::is_rstudio_project)
+  if (!requireNamespace("rprojroot", quietly = TRUE)) {
+    stop("Package \"rprojroot\" needed for this function to work. Please install it.",
+      call. = FALSE)
+  }
 
-  path <- file.path(proj_root, "config")
+  if (!requireNamespace("fs", quietly = TRUE)) {
+    stop("Package \"fs\" needed for this function to work. Please install it.",
+      call. = FALSE)
+  }
+  proj_root <- rprojroot::find_root(rprojroot::is_rstudio_project)
+  if(missing(path)){
+    path <- file.path(proj_root, "config")
+  }
+  
     
   yaml_where <- file.path(
     path, paste0(name, ".yaml")

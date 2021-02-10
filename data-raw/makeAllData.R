@@ -6,10 +6,6 @@ library(usethis)
 meta<-read_csv("data-raw/meta.csv")
 usethis::use_data(meta, overwrite = TRUE)
 
-#Copy charts list to /data
-charts<-read_csv("data-raw/charts.csv")
-usethis::use_data(charts, overwrite = TRUE)
-
 #copy sample data sets to /data
 aes<-read_csv("data-raw/aes.csv")
 usethis::use_data(aes, overwrite = TRUE)

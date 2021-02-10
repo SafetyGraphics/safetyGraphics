@@ -12,6 +12,17 @@ app_startup(
   chartSettingsPaths = NULL
 )
 }
+\arguments{
+\item{domainData}{named list of domain level data}
+
+\item{meta}{list of configuration metadata}
+
+\item{charts}{list of charts}
+
+\item{mapping}{initial data mapping}
+
+\item{chartSettingsPaths}{character vector with paths to chart setting yaml files}
+}
 \value{
 List of elements for used to initialize the shiny app with the following parameters
 \itemize{

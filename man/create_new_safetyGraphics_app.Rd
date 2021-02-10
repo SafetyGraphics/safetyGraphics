@@ -17,6 +17,8 @@ create_new_safetyGraphics_app(
 \item{init_default_configs}{copy over \code{safetyCharts} default configs?}
 
 \item{open}{open new rstudio project?}
+
+\item{gui}{show gui? creates rstudio project if false}
 }
 \value{
 Used for side effect

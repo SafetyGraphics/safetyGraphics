@@ -6,6 +6,11 @@
 \usage{
 chartsTabUI(id, chart)
 }
+\arguments{
+\item{id}{module id}
+
+\item{chart}{list containing chart specifications}
+}
 \description{
 Charting module
 }

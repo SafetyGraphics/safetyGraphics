@@ -3,9 +3,7 @@ library(safetyGraphics)
 library(ggplot2)
 library(dplyr)
 library(htmlwidgets)
-library(devtools)
 library(shinydashboard)
-#devtools::install_github('RhoInc/safetyexploreR')
 library(safetyexploreR)
 
 

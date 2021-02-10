@@ -1,6 +1,7 @@
 #' @title   mappingTabUI 
 #' @description  UI that facilitates the mapping of all data domain
-#'
+#' 
+#' @param id module id
 #' @param meta metadata for all domains
 #' @param domainData list of data files for each domain
 #' @param mappings optional data frame containing stacked mappings for all domains
@@ -75,13 +76,13 @@ mappingTab <- function(input, output, session, meta, domainData){
   })
 
   reactive({
-     data<-data.frame()
-     for(domain in domain_ids){
-       current<-domain_modules[[domain]]() 
-       current$domain <- domain
-       current <- current %>% select(domain, text_key, current)
-       data<-rbind(data, current)
-     }
-     return(data)
-   })
+    data<-data.frame()
+    for(domain in domain_ids){
+      current<-domain_modules[[domain]]() 
+      current$domain <- domain
+      current <- current %>% select(.data$domain, .data$text_key, .data$current)
+      data<-rbind(data, current)
+    }
+    return(data)
+  })
 }

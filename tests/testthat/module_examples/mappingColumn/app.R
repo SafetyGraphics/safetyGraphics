@@ -1,9 +1,8 @@
 library(shiny)
 library(safetyGraphics)
 library(dplyr)
-library(reactlog)
 
-reactlogReset()
+#reactlogReset()
 
 id_meta <- meta%>%filter(domain=="labs")%>%filter(col_key=="id_col")
 measure_meta <- meta%>%filter(domain=="labs")%>%filter(col_key=="measure_col")
@@ -62,6 +61,6 @@ server <- function(input,output,session){
 }
 
 # tell shiny to log all reactivity
-options(shiny.reactlog = TRUE)
+#options(shiny.reactlog = TRUE)
 shinyApp(ui, server)
 #shiny::showReactLog()

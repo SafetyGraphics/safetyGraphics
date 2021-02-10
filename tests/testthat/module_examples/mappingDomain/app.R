@@ -2,7 +2,7 @@ library(shiny)
 library(safetyGraphics)
 library(dplyr)
 
-reactlogReset()
+#reactlogReset()
 measure_meta <- meta%>%filter(domain=="labs")%>%filter(col_key=="measure_col")
 mm_default<-data.frame(
     text_key = c("measure_col", "measure_col--ALP"), 
@@ -76,5 +76,5 @@ server <- function(input,output,session){
  
 }
 
-options(shiny.reactlog = TRUE)
+#options(shiny.reactlog = TRUE)
 shinyApp(ui, server)

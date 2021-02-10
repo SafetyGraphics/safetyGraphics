@@ -1,7 +1,9 @@
 #' @title Settings Module - chart details
 #' @description  Settings Module - sub-module showing details for the charts loaded in the app - UI
 #'
-#' @importFrom listviewer renderJsonedit jsonedit jsoneditOutput
+#' @param id module id
+#' 
+#' @importFrom listviewer jsoneditOutput
 #' @export
 
 settingsChartsUI <- function(id){
@@ -9,7 +11,7 @@ settingsChartsUI <- function(id){
   list(
     h1("Chart Metadata"),
     tabsetPanel(
-      tabPanel("jsonedit View", jsoneditOutput(ns("chartObj"), height = "800px") ),
+      tabPanel("jsonedit View", listviewer::jsoneditOutput(ns("chartObj"), height = "800px") ),
       tabPanel("DT format", DT::DTOutput(ns("chartMetaDT"))),
       tabPanel("Verbatim", verbatimTextOutput(ns("chartList"))))
     )
@@ -21,7 +23,10 @@ settingsChartsUI <- function(id){
 #' @param input Shiny input object
 #' @param output  Shiny output object
 #' @param session Shiny session object
-#' @param named list data frame summarizing the charts
+#' @param charts list data frame summarizing the charts
+#' 
+#' @importFrom listviewer renderJsonedit jsonedit 
+#' @import dplyr
 #' 
 #' @export
 
@@ -39,7 +44,7 @@ settingsCharts <- function(input, output, session, charts){
   tblMeta <- function(charts){
     #TODO move this function to a helper file and fix warning messages
     bbb <- purrr::map(charts, ~{
-      bb <- as_tibble(t(tibble(.x)), .name_repair="unique")
+      bb <- dplyr::as_tibble(t(dplyr::tibble(.x)), .name_repair="unique")
       names(bb) <- names(.x)
       bb
     })

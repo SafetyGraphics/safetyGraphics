@@ -6,6 +6,9 @@
 \usage{
 homeTabUI(id)
 }
+\arguments{
+\item{id}{module id}
+}
 \description{
 Home Tab - sub-module showing details for the data loaded in the app - UI
 }

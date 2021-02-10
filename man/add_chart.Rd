@@ -5,6 +5,7 @@
 \title{Add chart config (adapted from golem::add_module())}
 \usage{
 add_chart(
+  path,
   name = "newplot",
   label = "New Static Plot",
   type = "plot",
@@ -16,6 +17,15 @@ add_chart(
 )
 }
 \arguments{
+\item{path}{Path to store the chart configuration files, expecting a config root folder
+
++-- config
+|  +-- aeExplorer.yaml
+|  +-- newChart.yaml
+
+|      +-- aeExplorer_init.R
+|      +-- newChart_main.R}
+
 \item{name}{The name of the chart (also name of the yaml file)}
 
 \item{label}{Label of chart}
@@ -26,16 +36,11 @@ add_chart(
 
 \item{package}{optional, R package that this chart is associated with.}
 
-\item{path}{Path to store the chart configuration files, expecting a config root folder
+\item{workflow}{list of workflow functions appropriate for chart YAML}
 
-+-- config
-|  +-- aeExplorer.yaml
-|  +-- newChart.yaml
+\item{open}{boolean}
 
-|      +-- aeExplorer_init.R
-|      +-- newChart_main.R}
-
-\item{chart_template}{chart template function}
+\item{...}{additional parameters for chart_template}
 }
 \description{
 This function creates a module inside the local \verb{config/} folder to define a new chart

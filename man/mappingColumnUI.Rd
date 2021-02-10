@@ -7,6 +7,8 @@
 mappingColumnUI(id, meta, data, mapping = NULL)
 }
 \arguments{
+\item{id}{module id}
+
 \item{meta}{metadata for the column (and related fields)}
 
 \item{data}{current data file for the domain}

@@ -8,9 +8,8 @@ Authors@R: c(
 	person("Xiao","Ni", role = "aut"),
 	person("James","Buchanan", role="aut"),
 	person("Susan","Duke", role="aut"),
-	person("Interactive Safety Graphics Working Group", role = "aut"),
-	person("Rho Inc.", role = "cph"))
-Maintainer: Jeremy Wildfire <jeremy_wildfire@rhoworld.com>
+	person("Interactive Safety Graphics Working Group", role = "aut"))
+Maintainer: Jeremy Wildfire <jeremy_wildfire@gmail.com>
 Description: A framework for evaluation of clinical trial safety. Users can interactively explore their data using the 'Shiny' application or create standalone 'htmlwidget' charts. Interactive charts are built using 'd3.js' and 'webcharts.js' 'JavaScript' libraries.
 URL: https://github.com/SafetyGraphics/safetyGraphics
 BugReports: https://github.com/SafetyGraphics/safetyGraphics/issues
@@ -20,32 +19,30 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 Suggests:
-    testthat,
-    shinytest,
-    knitr,
+    fs, 
     ggplot2,
-    plotly
+    knitr,
+    plotly,
+    rstudioapi,
+    rprojroot,
+    shinydashboard,
+    shinyFiles,
+    shinytest,
+    testthat,
+    usethis
 Imports:
     dplyr,
+    DT,
     esquisse,
     htmlwidgets,
-    purrr,
-    stringr,
     jsonlite,
-    shiny,
-    magrittr,
-    DT,
-    shinyjs,
-    rmarkdown,
-    rlang,
-    tibble,
-    utils,
-    haven,
-    shinyWidgets,
-    tidyr,
-    shinybusy,
     listviewer,
-    shinyFiles,
-    rprojroot
+    purrr,
+    rlang,
+    shiny,
+    shinyjs,
+    shinyWidgets,
+    stringr,
+    yaml
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

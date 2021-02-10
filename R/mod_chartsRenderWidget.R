@@ -24,7 +24,7 @@ chartsRenderWidgetUI <- function(id, chart, package){
 #' @param session Shiny session object
 #' @param chart chart name - must match the name of a widget in the specified pacakge
 #' @param package package containing the widget. Note that package name is required for htmlwidgets. 
-#' @param params parameters to be passed to the widget [REACTIVE]
+#' @param params parameters to be passed to the widget (Reactive)
 #' @param settingsToJSON convert param$settings to json? Default = TRUE
 #'
 #' @export

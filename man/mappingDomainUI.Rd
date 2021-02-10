@@ -7,6 +7,8 @@
 mappingDomainUI(id, meta, data, mapping = NULL)
 }
 \arguments{
+\item{id}{module id}
+
 \item{meta}{metadata for the domain}
 
 \item{data}{data file for the domain}

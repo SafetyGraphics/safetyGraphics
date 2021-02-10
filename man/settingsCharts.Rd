@@ -13,7 +13,7 @@ settingsCharts(input, output, session, charts)
 
 \item{session}{Shiny session object}
 
-\item{named}{list data frame summarizing the charts}
+\item{charts}{list data frame summarizing the charts}
 }
 \description{
 server for the display of the charts
