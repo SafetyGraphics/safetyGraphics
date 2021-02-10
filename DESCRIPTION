@@ -2,15 +2,14 @@ Package: safetyGraphics
 Title: Create Interactive Graphics Related to Clinical Trial Safety
 Version: 2.0.0
 Authors@R: c(
-	person("Jeremy", "Wildfire", email = "jeremy_wildfire@rhoworld.com", role = c("cre","aut")),
+	person("Jeremy", "Wildfire", email = "jeremy_wildfire@gmail.com", role = c("cre","aut")),
 	person("Becca", "Krouse", role="aut"),
 	person("Preston","Burns", role="aut"),
 	person("Xiao","Ni", role = "aut"),
 	person("James","Buchanan", role="aut"),
 	person("Susan","Duke", role="aut"),
-	person("Interactive Safety Graphics Working Group", role = "aut"),
-	person("Rho Inc.", role = "cph"))
-Maintainer: Jeremy Wildfire <jeremy_wildfire@rhoworld.com>
+	person("Interactive Safety Graphics Working Group", role = "aut")
+Maintainer: Jeremy Wildfire <jeremy_wildfire@gmail.com>
 Description: A framework for evaluation of clinical trial safety. Users can interactively explore their data using the 'Shiny' application or create standalone 'htmlwidget' charts. Interactive charts are built using 'd3.js' and 'webcharts.js' 'JavaScript' libraries.
 URL: https://github.com/SafetyGraphics/safetyGraphics
 BugReports: https://github.com/SafetyGraphics/safetyGraphics/issues
