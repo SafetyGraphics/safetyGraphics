@@ -56,10 +56,16 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
         chart <- read_yaml(path)
         chart$path <- path
         chart$name <- path %>% file_path_sans_ext %>% basename
+        chart$order <- ifelse(
+            is.null(chart$order),
+            length(yaml_files) + 1,
+            chart$order
+        ) %>% as.numeric
+
         return(chart)
     })
 
-
+    charts <- charts[order(purrr::map_dbl(charts, function(chart) chart$order))]
 
     names(charts) <- yaml_files %>% file_path_sans_ext %>% basename
 

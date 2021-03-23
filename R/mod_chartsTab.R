@@ -57,7 +57,6 @@ chartsTab <- function(input, output, session, chart, data, mapping){
                 message(chart$name, " has an init.")
                 print(chart$functions[chart$workflow$init])
                 params <- do.call(chart$functions[[chart$workflow$init]], params)
-                print(params)
             }
         }
         return(params)
