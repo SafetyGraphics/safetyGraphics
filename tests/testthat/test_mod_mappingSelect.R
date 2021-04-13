@@ -14,7 +14,7 @@ test_that("Inputs have expected values",{
 })
 
 test_that("Module server outputs the expected values",{
-  empty<-'\"\"' #output value for empty string
+  empty<-""
   expect_match(app$getValue("ex1"),empty) 
   expect_match(app$getValue("ex2"),"USUBJID") 
   expect_match(app$getValue("ex3"),empty) 
