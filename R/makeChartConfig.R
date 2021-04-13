@@ -65,9 +65,8 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
         return(chart)
     })
 
-    charts <- charts[order(purrr::map_dbl(charts, function(chart) chart$order))]
-
     names(charts) <- yaml_files %>% file_path_sans_ext %>% basename
+    charts <- charts[order(purrr::map_dbl(charts, function(chart) chart$order))]
 
     message("Found ", length(yaml_files), " config files: ",paste(names(charts),collapse=", "))
 
