@@ -26,7 +26,7 @@ filterTabUI <- function(id, filterDomain = "dm"){
                     id = ns("pbar"), value = 100, 
                     total = 100, display_pct = TRUE
                 ),
-                shiny::dataTableOutput(outputId = ns("table")),
+                DT::dataTableOutput(outputId = ns("table")),
                 tags$p("Code dplyr:"),
                 verbatimTextOutput(outputId = ns("code_dplyr")),
                 tags$p("Expression:"),
@@ -80,7 +80,7 @@ filterTab <- function(input, output, session, domainData, filterDomain, id_col){
       )
     })
     
-    output$table <- shiny::renderDataTable({
+    output$table <- DT::renderDataTable({
       res_filter$data_filtered()
     }, options = list(pageLength = 5))
     

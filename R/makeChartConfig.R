@@ -23,8 +23,21 @@
 makeChartConfig <- function(dirs, sourceFiles=TRUE){
     # Use the charts settings saved in safetycharts if no path is provided. 
     if(missing(dirs) || is.null(dirs)){
-        #dirs<-paste(.libPaths(),'safetycharts','chartSettings', sep="/")
-        dirs<-paste(.libPaths(),'safetycharts','config', sep="/")
+        safetyChartsFound<-FALSE
+        for(lib in .libPaths()){
+            print(lib)
+            dirs<-paste(lib,'safetyCharts','config', sep="/")               
+            if(file.exists(dirs)) {
+                print("found configs")
+                print(dirs)
+                safetyChartsFound<-TRUE   
+                break               
+            }
+        }
+
+        if(!safetyChartsFound){
+            message("safetyCharts library not found, please install safetyCharts or provide a path to custom chart configuration files. See safetyGraphics vignettes for details.")
+        }
     }
 
     if(sourceFiles){
@@ -54,12 +67,17 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
         chart <- read_yaml(path)
         chart$path <- path
         chart$name <- path %>% file_path_sans_ext %>% basename
+        chart$order <- ifelse(
+            is.null(chart$order),
+            length(yaml_files) + 1,
+            chart$order
+        ) %>% as.numeric
+
         return(chart)
     })
 
-
-
     names(charts) <- yaml_files %>% file_path_sans_ext %>% basename
+    charts <- charts[order(purrr::map_dbl(charts, function(chart) chart$order))]
 
     message("Found ", length(yaml_files), " config files: ",paste(names(charts),collapse=", "))
 
@@ -96,6 +114,5 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
             return(chart)
         }
     )
-
     return(charts) 
 }

@@ -109,7 +109,7 @@ mappingColumn <- function(input, output, session, meta, data){
   
   # return the values for all fields as a data.frame   
   meta <- reactive({
-    col_meta <- data.frame(text_key = col_meta$text_key, current=col_val())
+    col_meta <- data.frame(text_key = col_meta$text_key, current=col_val(), stringsAsFactors = FALSE)
     if(nrow(field_meta)>0){
       for(field_id in field_ids){
         field_meta <- data.frame(text_key = field_id,  current=field_vals[[field_id]]())
