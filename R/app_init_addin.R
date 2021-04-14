@@ -1,14 +1,15 @@
 #' RStudio Add-in for constructing lean ADLB and ADAE data
 #' 
-#' 
 #' @import shiny
-#' @import shinyFiles
 #' @import listviewer
-#' 
 
 
 app_init_addin <- function(){
-  
+  if (!requireNamespace("shinyFiles", quietly = TRUE)) {
+    stop("Package \"shinyFiles\" needed for this function to work. Please install it.",
+      call. = FALSE)
+  }
+
   
   ui <- bootstrapPage(
     
@@ -133,11 +134,11 @@ app_init_addin <- function(){
       chartSettingsPaths = NULL
     ){
       
-      config <- safetyGraphics:::app_startup(domainData, meta, charts, mapping, chartSettingsPaths)
+      config <- safetyGraphics::app_startup(domainData, meta, charts, mapping, chartSettingsPaths)
       
       app <- shinyApp(
         ui =  app_ui(config$meta, config$domainData, config$mapping, config$standards),
-        server = app_server(input, output, session, config$meta, config$mapping, config$domainData, config$charts)
+        server = app_server(config$meta, config$mapping, config$domainData, config$charts)
       )
     }
     
@@ -187,7 +188,7 @@ app_init_addin <- function(){
     tblMeta <- function(charts){
       
       bbb <- purrr::map(charts, ~{
-        bb <- as_tibble(t(tibble(.x)))
+        bb <- dplyr::as_tibble(t(dplyr::tibble(.x)))
         names(bb) <- names(.x)
         bb
       })

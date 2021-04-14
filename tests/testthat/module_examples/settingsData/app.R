@@ -1,6 +1,6 @@
 library(shiny)
 library(safetyGraphics)
-reactlogReset()
+#reactlogReset()
 
 ui <- tagList(
   fluidPage(
@@ -19,5 +19,5 @@ server <- function(input,output,session){
   # callModule(settingsData, "ex3", allData = rbind(lab_summary,ae_summary,extra) )
 }
 
-options(shiny.reactlog = TRUE)
+#options(shiny.reactlog = TRUE)
 shinyApp(ui, server)

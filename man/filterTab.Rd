@@ -16,6 +16,8 @@ filterTab(input, output, session, domainData, filterDomain, id_col)
 \item{domainData}{list of data files for each domain}
 
 \item{filterDomain}{domain to use for filtering (typically "dm")}
+
+\item{id_col}{name of id column. should be found in every data domain}
 }
 \value{
 filtered data set

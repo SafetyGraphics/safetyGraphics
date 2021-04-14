@@ -1,6 +1,8 @@
 #' @title  Settings view of Metadata/Mapping - UI
 #' @description  UI that displays the data mapping metadata. 
 #'
+#' @param id module id
+#' 
 #' @section Output:
 #' \describe{
 #' \item{\code{mappingMeta}}{Reactive containing the metadata to be used in the app.}
@@ -11,7 +13,7 @@
 settingsMappingUI <- function(id){
     ns <- NS(id)
     tagList(
-        DTOutput(ns("metaTable")),
+        DT::DTOutput(ns("metaTable")),
         fileInput(ns("metaFile"),"Upload custom data mappings",accept = c('.csv'))
     )
 }
@@ -45,7 +47,7 @@ settingsMapping <- function(input, output, session, metaIn, mapping){
         metaIn
       }else{
         df<-data.frame(
-          read.csv(
+          utils::read.csv(
             input$metaFile$datapath, 
             na.strings=NA, 
             stringsAsFactors=FALSE

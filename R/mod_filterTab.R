@@ -1,6 +1,7 @@
 #' @title  filterTabUI 
 #' @description  UI that facilitates the filtering data with esquisse::filterDF_UI
 #'
+#' @param id module id
 #' @param filterDomain data set for the domain
 #' 
 #' @import esquisse
@@ -25,7 +26,7 @@ filterTabUI <- function(id, filterDomain = "dm"){
                     id = ns("pbar"), value = 100, 
                     total = 100, display_pct = TRUE
                 ),
-                shiny::dataTableOutput(outputId = ns("table")),
+                DT::dataTableOutput(outputId = ns("table")),
                 tags$p("Code dplyr:"),
                 verbatimTextOutput(outputId = ns("code_dplyr")),
                 tags$p("Expression:"),
@@ -47,6 +48,7 @@ filterTabUI <- function(id, filterDomain = "dm"){
 #' @param session Shiny session object
 #' @param domainData list of data files for each domain
 #' @param filterDomain domain to use for filtering (typically "dm")
+#' @param id_col name of id column. should be found in every data domain
 #' 
 #' @return filtered data set
 #'
@@ -78,7 +80,7 @@ filterTab <- function(input, output, session, domainData, filterDomain, id_col){
       )
     })
     
-    output$table <- shiny::renderDataTable({
+    output$table <- DT::renderDataTable({
       res_filter$data_filtered()
     }, options = list(pageLength = 5))
     
@@ -91,7 +93,7 @@ filterTab <- function(input, output, session, domainData, filterDomain, id_col){
     })
     
     output$res_str <- renderPrint({
-      str(res_filter$data_filtered())
+      utils::str(res_filter$data_filtered())
     })
     
     filteredDomains <- reactive({

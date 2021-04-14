@@ -1,10 +1,11 @@
 #' @title   mappingColumnUI 
 #' @description  UI that facilitates the mapping of a column data domain
 #'
+#' @param id module id
 #' @param meta metadata for the column (and related fields)
 #' @param data current data file for the domain
 #' @param mapping current data mapping for the column (and related fields)
-#' 
+
 #' @export
 
 mappingColumnUI <- function(id, meta, data, mapping=NULL){  
@@ -30,7 +31,7 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
     
     #merge default values from mapping on to full metadata
     meta <- meta %>% left_join(mapping, by="text_key")
-    col_meta <- meta %>% filter(type=="column")
+    col_meta <- meta %>% filter(.data$type=="column")
     
     # Exactly one column mapping provided
     stopifnot(nrow(col_meta)==1)
@@ -47,7 +48,7 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
       fieldOptions <-  unique(data%>%pull(col_meta$current))       
     }
     
-    field_meta <- meta %>% filter(type=="field")
+    field_meta <- meta %>% filter(.data$type=="field")
     if(nrow(field_meta)>0){
       for(i in 1:nrow(field_meta)) {
         row <- field_meta[i,]
@@ -71,6 +72,8 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
 #' @param input Shiny input object
 #' @param output  Shiny output object
 #' @param session Shiny session object
+#' @param meta metadata data frame for the object
+#' @param data current data file for the domain
 #' 
 #' @return A reactive data.frame providing the current value for text_key associated with the selected column
 #'
@@ -79,8 +82,8 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
 mappingColumn <- function(input, output, session, meta, data){
   ns <- session$ns
   
-  col_meta <- meta %>% filter(type=="column")
-  field_meta <- meta %>% filter(type=="field")
+  col_meta <- meta %>% filter(.data$type=="column")
+  field_meta <- meta %>% filter(.data$type=="field")
   col_val <- callModule(mappingSelect, col_meta$text_key)
   
   # change the options in the field selects when the column select changes 
@@ -106,7 +109,7 @@ mappingColumn <- function(input, output, session, meta, data){
   
   # return the values for all fields as a data.frame   
   meta <- reactive({
-    col_meta <- data.frame(text_key = col_meta$text_key, current=col_val())
+    col_meta <- data.frame(text_key = col_meta$text_key, current=col_val(), stringsAsFactors = FALSE)
     if(nrow(field_meta)>0){
       for(field_id in field_ids){
         field_meta <- data.frame(text_key = field_id,  current=field_vals[[field_id]]())

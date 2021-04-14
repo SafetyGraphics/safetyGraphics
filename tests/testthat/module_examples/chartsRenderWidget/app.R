@@ -3,11 +3,7 @@ library(safetyGraphics)
 library(ggplot2)
 library(dplyr)
 library(htmlwidgets)
-library(devtools)
 library(shinydashboard)
-#devtools::install_github('RhoInc/safetyexploreR')
-library(safetyexploreR)
-
 
 domainData <- list(labs=safetyGraphics::labs, aes=safetyGraphics::aes)
 standards <- names(domainData) %>% lapply(function(domain){
@@ -26,14 +22,14 @@ mappingAEs <- generateMappingList(mapping,domain="aes", pull=TRUE)
 header <- dashboardHeader(title = span("chartRendererWidget module Test page"))
 body<-dashboardBody(
   tabItems(
-    tabItem(
-      tabName="ex1-tab",
-      {
-        h2("Example 1 - hepexplorer - called directly from safetyCharts hepexplorer")
-        chartsRenderWidgetUI("ex1",chart="hepexplorer",package="safetyCharts")      
-      }
+    # tabItem(
+    #   tabName="ex1-tab",
+    #   {
+    #     h2("Example 1 - hepexplorer - called directly from safetyCharts hepexplorer")
+    #     chartsRenderWidgetUI("ex1",chart="hepexplorer",package="safetyCharts")      
+    #   }
 
-    ),
+    # ),
     tabItem(
       tabName="ex2-tab",
       {
@@ -54,7 +50,7 @@ body<-dashboardBody(
 sidebar <- shinydashboard::dashboardSidebar(
   shinydashboard::sidebarMenu(
     id = "sidebar_tabs",
-    menuItem(text = 'Ex1: Hepatic explorer', tabName = 'ex1-tab', icon = icon('angle-right')),
+    # menuItem(text = 'Ex1: Hepatic explorer', tabName = 'ex1-tab', icon = icon('angle-right')),
     menuItem(text = 'Ex2: AE Explorer', tabName = 'ex2-tab', icon = icon('angle-right')),
     menuItem(text = 'Ex3: Safety Results Over Time', tabName = 'ex3-tab', icon = icon('angle-right'))
   )
@@ -73,15 +69,15 @@ ui <- tagList(
 )
 
 server <- function(input,output,session){
+  paramsLabs <- reactive({list(data=domainData[["labs"]],settings=mappingLabs)})
   # Example 1 - hep explorer
-      paramsLabs <- reactive({list(data=domainData[["labs"]],settings=mappingLabs)})
-      callModule(
-        chartsRenderWidget,
-        "ex1",
-        chart="hepexplorer",
-        package="safetyCharts",
-        params=paramsLabs
-    )
+    #   callModule(
+    #     chartsRenderWidget,
+    #     "ex1",
+    #     chart="hepexplorer",
+    #     package="safetyCharts",
+    #     params=paramsLabs
+    # )
   
     # Example 2 - AE Explorer
     initAEE <- function(data, settings){

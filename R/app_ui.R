@@ -4,12 +4,20 @@
 #' @param domainData named list of data.frames to be loaded in to the app.
 #' @param mapping data.frame specifying the initial values for each data mapping. If no mapping is provided, the app will attempt to generate one via \code{detectStandard()}
 #' @param standards a list of information regarding data standards. Each list item should use the format returned by safetyGraphics::detectStandard.
-#' 
+#'
+#' @importFrom shinyjs useShinyjs
+#'  
 #' @export
 
 app_ui <- function(meta, domainData, mapping, standards){
     #read css from pacakge
-    app_css <-  HTML(readLines( paste(.libPaths(),'safetyGraphics','safetyGraphics_app', 'www','index.css', sep="/")))
+    app_css <- NULL
+    for(lib in .libPaths()){
+        if(is.null(app_css)){
+            css_path <- paste(lib,'safetyGraphics','safetyGraphics_app', 'www','index.css', sep="/")
+            if(file.exists(css_path)) app_css <-  HTML(readLines(css_path))
+        }
+    }
     
     #script to append population badge nav bar
     participant_badge<-tags$script(
@@ -21,7 +29,7 @@ app_ui <- function(meta, domainData, mapping, standards){
 
     #app UI using calls to modules
     ui<-tagList(
-        useShinyjs(),
+        shinyjs::useShinyjs(),
         tags$head(
             tags$style(app_css),
             tags$link(

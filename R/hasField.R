@@ -8,8 +8,8 @@
 #' @return logical scalar. TRUE if field_value is found. FALSE otherwise
 #'
 #' @examples
-#' safetyGraphics:::hasField(fieldValue="Bilirubin (umol/L)",columnName="PARAM",data=adlbc) #TRUE
-#' safetyGraphics:::hasField(fieldValue="Not_a_real_value",columnName="",data=adlbc) #FALSE
+#' safetyGraphics:::hasField(fieldValue="Bilirubin (umol/L)",columnName="PARAM",data=labs) #TRUE
+#' safetyGraphics:::hasField(fieldValue="Not_a_real_value",columnName="",data=labs) #FALSE
 #'
 #' @keywords internal
 

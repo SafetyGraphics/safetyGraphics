@@ -1,6 +1,8 @@
 #' @title Charts Module - render static chart UI
 #' @description  Charts Module - sub module for rendering a static chart
 #' 
+#' @param id module id
+#' @param type output type for the chart. Valid options are "plot", "html" and "table"
 #' @export
 
 chartsRenderStaticUI <- function(id, type){
@@ -22,7 +24,8 @@ chartsRenderStaticUI <- function(id, type){
 #' @param output  Shiny output object
 #' @param session Shiny session object
 #' @param chartFunction function to generate the chart.
-#' @param params parameters to be passed to the widget [REACTIVE]
+#' @param params parameters to be passed to the widget (Reactive)
+#' @param type output type for the chart. Valid options are "plot", "html" and "table"
 #'
 #' @export
 

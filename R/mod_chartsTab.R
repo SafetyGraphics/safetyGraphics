@@ -1,6 +1,9 @@
 #' @title Charts Tab
 #' @description  Charting module
 #'
+#' @param id module id
+#' @param chart list containing chart specifications
+#' 
 #' @export
 
 chartsTabUI <- function(id, chart){
@@ -25,8 +28,8 @@ chartsTabUI <- function(id, chart){
 #' @param output Output objects from module namespace
 #' @param session An environment that can be used to access information and functionality relating to the session
 #' @param chart list containing a safetyGraphics chart object. see custom chart vignette for details. 
-#' @param data named list of current data sets [reactive].
-#' @param mapping tibble capturing the current data mappings [reactive].
+#' @param data named list of current data sets (Reactive).
+#' @param mapping tibble capturing the current data mappings (Reactive).
 #' 
 #' @export
 
@@ -49,12 +52,11 @@ chartsTab <- function(input, output, session, chart, data, mapping){
         params <- list(data=domainData, settings=settingsList)
 
         #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
-        if(hasName(chart,"functions")){
-            if(hasName(chart$workflow,"init")){
+        if(utils::hasName(chart,"functions")){
+            if(utils::hasName(chart$workflow,"init")){
                 message(chart$name, " has an init.")
                 print(chart$functions[chart$workflow$init])
                 params <- do.call(chart$functions[[chart$workflow$init]], params)
-                print(params)
             }
         }
         return(params)

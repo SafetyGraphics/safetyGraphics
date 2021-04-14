@@ -1,6 +1,7 @@
-
-[![Travis-CI Build Status](https://travis-ci.org/SafetyGraphics/safetyGraphics.svg?branch=master)](https://travis-ci.org/SafetyGraphics/safetyGraphics) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/safetyGraphics)](https://cran.r-project.org/package=safetyGraphics)
-
+ <!-- badges: start -->
+  [![R build status](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/workflows/R-CMD-check/badge.svg)](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/actions)
+  <!-- badges: end -->
+  
 # safetyGraphics: Clinical Trial Safety Graphics with R  <img src="https://raw.githubusercontent.com/SafetyGraphics/safetyGraphics/master/inst/safetyGraphicsHex/safetyGraphicsHex.png" width = "175" height = "200" align="right" />
 
 The **safetyGraphics** package provides a framework for evaluation of clinical trial safety in R. It includes several safety-focused visualizations to empower clinical data monitoring. Chief among these is the Hepatic Explorer, based on the [Evaluation of the Drug-Induced Serious Hepatotoxicity (eDish)](https://www.ncbi.nlm.nih.gov/pubmed/21332248) visualization. A demo of the Hepatic Explorer interactive graphic is available [here](https://safetygraphics.github.io/hep-explorer/test-page/example1/) and is shown below.

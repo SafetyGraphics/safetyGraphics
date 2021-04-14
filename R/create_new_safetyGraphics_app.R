@@ -2,13 +2,9 @@
 #' @param path location for new safetyGraphicsApp
 #' @param init_default_configs copy over `safetyCharts` default configs?
 #' @param open open new rstudio project?
+#' @param gui show gui? creates rstudio project if false
 #'
 #' @return Used for side effect
-#' 
-#' @importFrom rstudioapi isAvailable openProject
-#' @importFrom fs path_abs  path dir_copy 
-#' @importFrom usethis create_project 
-#' 
 #' 
 #' @export
 #' 
@@ -19,7 +15,24 @@ create_new_safetyGraphics_app <- function(
   open = TRUE,
   gui = FALSE
 ) {
-  
+
+  # Check that suggested pacakges are installed
+  if (!requireNamespace("rstudioapi", quietly = TRUE)) {
+    stop("Package \"rstudioapi\" needed for this function to work. Please install it.",
+      call. = FALSE)
+  }
+
+  if (!requireNamespace("fs", quietly = TRUE)) {
+    stop("Package \"fs\" needed for this function to work. Please install it.",
+      call. = FALSE)
+  }
+
+  if (!requireNamespace("usethis", quietly = TRUE)) {
+    stop("Package \"usethis\" needed for this function to work. Please install it.",
+      call. = FALSE)
+  }
+
+
   path <- fs::path_abs(path)
   
   if(init_default_configs){
@@ -40,7 +53,7 @@ create_new_safetyGraphics_app <- function(
     # Run the RStudio app initialization Addin
     
     ## Option 1: run the following line of code
-    safetyGraphics:::app_init_addin()
+    safetyGraphics::app_init_addin()
     
     ## Option 2: open through RStudo Addin button above
     

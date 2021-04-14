@@ -1,8 +1,8 @@
 #' Convert mapping data.frame to a list
 #'
-#' @param mappingDF data frame containing current mapping
+#' @param settingsDF data frame containing current mapping
 #' @param domain mapping domain to return (returns all domains as a named list by default) 
-#' @param domain call pull() the value for each parameter - needed for testing only. default: FALSE
+#' @param pull call pull() the value for each parameter - needed for testing only. default: FALSE
 #' 
 #' @importFrom stringr str_split 
 #' @export
