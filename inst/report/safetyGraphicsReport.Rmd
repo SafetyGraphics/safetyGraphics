@@ -16,9 +16,7 @@ params:
 
 # Function to create chart-level params
 create_chart_params <- function(data, chart, mapping){
-  #convert settings from data frame to list and subset to specified domain (if any)
   settingsList <-  safetyGraphics::generateMappingList(mapping, domain=chart$domain)
-  
   #subset data to specific domain (if specified)
   if(chart$domain=="multiple"){
     domainData <- data
@@ -27,6 +25,13 @@ create_chart_params <- function(data, chart, mapping){
   }
   params <- list(data=domainData, settings=settingsList)
 
+  #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
+  if(utils::hasName(chart,"functions")){
+    if(utils::hasName(chart$workflow,"init")){
+      message(chart$name, " has an init.")
+      params <- do.call(chart$functions[[chart$workflow$init]], params)
+    }
+  }
   return(params)
 }
 
@@ -34,7 +39,7 @@ create_chart_params <- function(data, chart, mapping){
 create_chart <- function(chart, params){
   if (chart$type=="htmlwidget"){
     ###Html widget code
-    widgetParams <- function(params, settingsToJSON = TRUE, ns=NS("")){
+    widgetParams <- function(params, settingsToJSON = TRUE){
       widgetParams<-params
       if(settingsToJSON){
         widgetParams$settings <- jsonlite::toJSON(
@@ -43,7 +48,7 @@ create_chart <- function(chart, params){
           null = "null",  
         )
       }
-      widgetParams$ns <- ns("widgetChart")
+      widgetParams$ns <-chart$name  #Still not working quite right. May need to refactor widgets a bit to, since some use this parameter to select the location of the wrapper div. there's no easy way to set this to the random widget value (e.g. "htmlwidget-638ca0176b34007fbdf9")
       return(widgetParams)
     }
     
@@ -89,7 +94,6 @@ create_chunk_chart <- function(chart, params, fig_height=7, fig_width=9) {
 
   cat(knitr::knit(text = knitr::knit_expand(text = sub_chunk), quiet = TRUE))
 }
-
 
 mapping <- params$mapping
 data <- params$data
