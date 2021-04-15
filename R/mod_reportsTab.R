@@ -14,7 +14,9 @@ reportsTabUI <- function(id){
       column(10,
         wellPanel(
           class="reportPanel",
-          h3("Charts"),
+          h3("Export Charts"),
+          span("Note: AE Timelines, Hepatic Explorer and Shift plot export is temporarily disabled, but will be included in v2.0. Charts implemented using shiny modules are not currently able to be exported, but may be added at a later date."),
+          hr(),
           uiOutput(ns("checkboxes")),
           downloadButton(ns("reportDL"), "Export Chart(s)")
         )    
@@ -44,15 +46,22 @@ reportsTab <- function(input, output, session, charts, data, mapping){
   
   # create checkbox for selecting charts of interest
   output$checkboxes <- renderUI({
-    
-    # no support for modules yet
-    charts_keep <- charts %>% map(., ~.$type) %>% unlist 
-    charts_keep <- ! charts_keep == "module"
+    # no support for modules or broken widgets yet
+    noExport <- c("aeTimelines","hepexplorer","safetyShiftPlot","tplyr_shift")
+    chart_type <- charts %>% map(., ~.$type) %>% unlist 
+    chart_name <- charts %>% map(., ~.$name) %>% unlist 
+    charts_keep <- ((! chart_type == "module") & (! chart_name %in% noExport))
     
     charts_labels <- charts %>% map(., ~ .$label) %>% unlist
     charts_vec <- names(charts)[charts_keep]
+  
     names(charts_vec) <- charts_labels[charts_keep]
-    checkboxGroupInput(ns('chk'), choices = charts_vec, selected = charts_vec, label = "Select Charts for Export")
+    checkboxGroupInput(
+      ns('chk'), 
+      choices = charts_vec, 
+      selected = charts_vec, 
+      label = "Select Charts for Export"
+    )
   })
   
   
@@ -84,6 +93,4 @@ reportsTab <- function(input, output, session, charts, data, mapping){
       )
     }
   )
- 
- 
 }
