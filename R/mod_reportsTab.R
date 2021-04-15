@@ -1,6 +1,8 @@
 #' @title Reports tab
 #' @description Chart export module
-#'
+#' 
+#' @param id module id
+#' 
 #' @export
 
 reportsTabUI <- function(id){
@@ -10,15 +12,12 @@ reportsTabUI <- function(id){
   fluidPage(
     fluidRow(
       column(10,
-             wellPanel(
-               class="reportPanel",
-               h3(
-                 "Charts"
-               ),
-               uiOutput(ns("checkboxes")),
-               downloadButton(ns("reportDL"), "Export Chart(s)")
-             )
-             
+        wellPanel(
+          class="reportPanel",
+          h3("Charts"),
+          uiOutput(ns("checkboxes")),
+          downloadButton(ns("reportDL"), "Export Chart(s)")
+        )    
       )
     )
   )
@@ -35,9 +34,11 @@ reportsTabUI <- function(id){
 #' @param data named list of current data sets [reactive]. 
 #' @param mapping tibble capturing the current data mappings [reactive].
 #' 
+#' @importFrom magrittr extract
+#' 
 #' @export
 
- reportsTab <- function(input, output, session, charts, data, mapping){
+reportsTab <- function(input, output, session, charts, data, mapping){
   
   ns <- session$ns 
   
@@ -51,7 +52,6 @@ reportsTabUI <- function(id){
     charts_labels <- charts %>% map(., ~ .$label) %>% unlist
     charts_vec <- names(charts)[charts_keep]
     names(charts_vec) <- charts_labels[charts_keep]
- 
     checkboxGroupInput(ns('chk'), choices = charts_vec, selected = charts_vec, label = "Select Charts for Export")
   })
   
@@ -71,9 +71,11 @@ reportsTabUI <- function(id){
       templateReport <- system.file("report","safetyGraphicsReport.Rmd", package = "safetyGraphics")
       tempReport <- file.path(tempdir(), "report.Rmd")
       file.copy(templateReport, tempReport, overwrite = TRUE)
-      params <- list(data = data(), 
-                     mapping = mapping(), 
-                     charts=charts_keep())
+      params <- list(
+        data = data(), 
+        mapping = mapping(), 
+        charts=charts_keep()
+      )
       
       rmarkdown::render(tempReport,
                         output_file = file,
