@@ -48,7 +48,7 @@ app_ui <- function(meta, domainData, mapping, standards){
                 tabPanel("Filtering", icon=icon("filter"), filterTabUI("filter","dm"))
             ),
             navbarMenu('Charts', icon=icon("chart-bar")),
-            tabPanel("Reports", icon=icon("file-alt")),
+            tabPanel("Reports", icon=icon("file-alt"), reportsTabUI("reports")),
             navbarMenu('',icon=icon("cog"),
                 tabPanel(title = "Metadata", settingsMappingUI("metaSettings")),
                 tabPanel(title = "Charts", settingsChartsUI("chartSettings"))

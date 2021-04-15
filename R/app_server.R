@@ -55,6 +55,10 @@ app_server <- function(meta, mapping, domainData, charts){
                 mapping=current_mapping    
             )
         )
+        
+        # pass all charts, filtered data, and current mappings to reports/export tab
+        callModule(reportsTab, "reports", charts = charts, data = filtered_data, mapping = current_mapping)
+        
 
         #participant count in header
         shinyjs::html("header-count", paste(dim(domainData[["dm"]])[1]))

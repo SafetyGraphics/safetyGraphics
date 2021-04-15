@@ -1,0 +1,117 @@
+---
+output:
+  html_document
+
+params:
+  data: NA
+  mapping: NA
+  charts: NA
+  
+  
+---
+
+## Customized Interactive Safety Graphics {.tabset .tabset-fade} 
+
+```{r echo = FALSE}
+
+# Function to create chart-level params
+create_chart_params <- function(data, chart, mapping){
+  settingsList <-  safetyGraphics::generateMappingList(mapping, domain=chart$domain)
+  #subset data to specific domain (if specified)
+  if(chart$domain=="multiple"){
+    domainData <- data
+  }else{
+    domainData<- data[[chart$domain]]
+  }
+  params <- list(data=domainData, settings=settingsList)
+
+  #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
+  if(utils::hasName(chart,"functions")){
+    if(utils::hasName(chart$workflow,"init")){
+      message(chart$name, " has an init.")
+      params <- do.call(chart$functions[[chart$workflow$init]], params)
+    }
+  }
+  return(params)
+}
+
+# Function to create chart
+create_chart <- function(chart, params){
+  if (chart$type=="htmlwidget"){
+    ###Html widget code
+    widgetParams <- function(params, settingsToJSON = TRUE){
+      widgetParams<-params
+      if(settingsToJSON){
+        widgetParams$settings <- jsonlite::toJSON(
+          widgetParams$settings,
+          auto_unbox = TRUE,
+          null = "null",  
+        )
+      }
+      widgetParams$ns <-chart$name  #Still not working quite right. May need to refactor widgets a bit to, since some use this parameter to select the location of the wrapper div. there's no easy way to set this to the random widget value (e.g. "htmlwidget-638ca0176b34007fbdf9")
+      return(widgetParams)
+    }
+    
+    # shiny render function for the widget 
+    htmlwidgets::createWidget(
+      name = chart$name,
+      widgetParams(params),
+      package = chart$package,
+      sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE),     
+    )  
+  } else {
+    ### static code
+    chartFunction <- chart$functions[[chart$workflow$main]]
+    do.call(chartFunction, chart_params)  
+  }  
+}
+```
+
+
+```{r results='asis', echo = FALSE, message=FALSE, warning = FALSE}
+library(safetyGraphics)
+library(knitr)
+
+
+create_chunk_title <- function(chart) {
+  sub_chunk <- paste0("### ",chart,"\n")
+  cat(sub_chunk)
+}
+
+create_chunk_chart <- function(chart, params, fig_height=7, fig_width=9) {
+  g_deparsed <- paste0(deparse(
+    function() {create_chart(chart, params)}
+  ), collapse = '')
+
+  sub_chunk <- paste0("
+  `","``{r sub_chunk_", floor(runif(1) * 10000), ", fig.height=",
+   fig_height, ", fig.width=", fig_width, ", echo=FALSE, message=FALSE, warning=FALSE}",
+  "\n(",
+    g_deparsed
+    , ")()",
+  "\n`","``
+  ",'\n')
+
+  cat(knitr::knit(text = knitr::knit_expand(text = sub_chunk), quiet = TRUE))
+}
+
+mapping <- params$mapping
+data <- params$data
+for (i in seq_along(names(params$charts))){
+  chart <- params$charts[[i]]
+  chart_params <- create_chart_params(data, chart, mapping)
+  create_chunk_title(chart$label)
+  create_chunk_chart(chart, chart_params)
+}
+
+```
+
+
+
+### Info
+
+#### Background
+The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics).
+
+safetyGraphics is an open source project built using standard web technology and will run in any modern web browser. The displays created are all dynamically linked to raw safety data which allows the tool to work with data from any safety system. The tool was originally created using Javascript/D3, but has been extended to an R tool as well using HTML Widgets.   
+
