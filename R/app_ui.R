@@ -14,7 +14,7 @@ app_ui <- function(meta, domainData, mapping, standards){
     app_css <- NULL
     for(lib in .libPaths()){
         if(is.null(app_css)){
-            css_path <- paste(lib,'safetyGraphics','safetyGraphics_app', 'www','index.css', sep="/")
+            css_path <- paste(lib,'safetyGraphics', 'www','index.css', sep="/")
             if(file.exists(css_path)) app_css <-  HTML(readLines(css_path))
         }
     }
