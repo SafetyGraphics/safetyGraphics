@@ -35,7 +35,7 @@ Suggests:
 Imports:
     dplyr,
     DT,
-    esquisse,
+    datamods,
     htmlwidgets,
     jsonlite,
     listviewer,
