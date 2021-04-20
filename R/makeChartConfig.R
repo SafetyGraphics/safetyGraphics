@@ -73,6 +73,12 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
             chart$order
         ) %>% as.numeric
 
+        chart$export <- ifelse(
+            is.null(chart$export),
+            true,
+            chart$export
+        )
+
         return(chart)
     })
 
