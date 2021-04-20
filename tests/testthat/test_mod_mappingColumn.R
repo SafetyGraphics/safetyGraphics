@@ -41,10 +41,10 @@ test_that("default values for inputs are set correctly in example app",{
 test_that("changing column input updates clears the field input values and updates input list",{
   app$setValue('ex4-measure_col-colSelect',"PARAMCD")
   expect_equal(app$getValue("ex4-measure_col-colSelect"),"PARAMCD") 
-  Sys.sleep(.1) #TODO inplement app$waitForValue() instead of sleeping
+  Sys.sleep(.5) #TODO inplement app$waitForValue() instead of sleeping
   expect_equal(app$getValue("ex4-measure_values--ALP-colSelect"),"") #clears the selected input
   app$setValue('ex4-measure_values--ALP-colSelect',"ALP")
-  Sys.sleep(.1) #TODO inplement app$waitForValue() instead of sleeping
+  Sys.sleep(.5) #TODO inplement app$waitForValue() instead of sleeping
   expect_equal(app$getValue("ex4-measure_values--ALP-colSelect"),"ALP") #expected new input is found
   #TODO: Probably be better get the new options directly using app$findElement, css is a bit of a mess though
 })
