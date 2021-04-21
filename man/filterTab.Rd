@@ -23,5 +23,5 @@ filterTab(input, output, session, domainData, filterDomain, id_col)
 filtered data set
 }
 \description{
-server function that facilitates the data filtering with the esquisse::filterDF module
+server function that facilitates the data filtering with the datamods::filter_data_server module
 }

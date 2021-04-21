@@ -1,10 +1,10 @@
 #' @title  filterTabUI 
-#' @description  UI that facilitates the filtering data with esquisse::filterDF_UI
+#' @description  UI that facilitates the filtering data with datamods::filter_data_ui
 #'
 #' @param id module id
 #' @param filterDomain data set for the domain
 #' 
-#' @import esquisse
+#' @import datamods
 #' @importFrom shiny dataTableOutput
 #' 
 #' @export
@@ -18,7 +18,7 @@ filterTabUI <- function(id, filterDomain = "dm"){
         fluidRow(
             column(
                 width = 3,
-                filterDF_UI(ns("filtering"))
+                filter_data_ui(ns("filtering"))
             ),
             column(
                 width = 9,
@@ -41,7 +41,7 @@ filterTabUI <- function(id, filterDomain = "dm"){
 
 
 #' @title  filter module server
-#' @description  server function that facilitates the data filtering with the esquisse::filterDF module
+#' @description  server function that facilitates the data filtering with the datamods::filter_data_server module
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object
@@ -52,7 +52,7 @@ filterTabUI <- function(id, filterDomain = "dm"){
 #' 
 #' @return filtered data set
 #'
-#' @import esquisse
+#' @import datamods
 #' @importFrom shinyWidgets progressBar updateProgressBar
 #' @importFrom shiny renderDataTable
 #' 
@@ -62,26 +62,25 @@ filterTab <- function(input, output, session, domainData, filterDomain, id_col){
     
     raw <-  domainData[[filterDomain]]
 
-    res_filter <- callModule(
-      module = filterDF, 
+    res_filter <- filter_data_server(
       id = "filtering", 
-      data_table = reactive({
+      data = reactive({
           return(as.data.frame(raw))
       }),
-      data_name = reactive({
+      name = reactive({
           return(filterDomain)
       })
     )
 
-    observeEvent(res_filter$data_filtered(), {
+    observeEvent(res_filter$filtered(), {
       updateProgressBar(
         session = session, id = "pbar", 
-        value = nrow(res_filter$data_filtered()), total = nrow(raw)
+        value = nrow(res_filter$filtered()), total = nrow(raw)
       )
     })
     
     output$table <- DT::renderDataTable({
-      res_filter$data_filtered()
+      res_filter$filtered()
     }, options = list(pageLength = 5))
     
     
@@ -93,12 +92,12 @@ filterTab <- function(input, output, session, domainData, filterDomain, id_col){
     })
     
     output$res_str <- renderPrint({
-      utils::str(res_filter$data_filtered())
+      utils::str(res_filter$filtered())
     })
     
     filteredDomains <- reactive({
         #TODO add check to make sure id_col exists in all data sets. 
-        current_ids <- unique(res_filter$data_filtered()[[id_col()]])
+        current_ids <- unique(res_filter$filtered()[[id_col()]])
 
         filteredDomains = list()
         id_col <- id_col()

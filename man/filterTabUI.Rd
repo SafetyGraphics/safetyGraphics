@@ -12,5 +12,5 @@ filterTabUI(id, filterDomain = "dm")
 \item{filterDomain}{data set for the domain}
 }
 \description{
-UI that facilitates the filtering data with esquisse::filterDF_UI
+UI that facilitates the filtering data with datamods::filter_data_ui
 }
