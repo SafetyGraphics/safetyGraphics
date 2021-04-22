@@ -7,7 +7,7 @@ library(shinydashboard)
 library(safetyexploreR)
 
 
-domainData <- list(labs=safetyGraphics::labs, aes=safetyGraphics::aes)
+domainData <- list(labs=safetyData::adam_adlbc, aes=safetyData::adam_adae)
 standards <- names(domainData) %>% lapply(function(domain){
   return(detectStandard(domain=domain, data = domainData[[domain]], meta=meta))
 })

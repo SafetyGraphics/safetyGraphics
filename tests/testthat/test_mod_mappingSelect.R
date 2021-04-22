@@ -25,7 +25,7 @@ test_that("Module server outputs the expected values",{
 test_that("Changing input updates the server output",{
   app$setValue('NoDefault-colSelect',"AESEQ")
   expect_equal(app$getValue("NoDefault-colSelect"),"AESEQ") 
-  Sys.sleep(.1) #TODO inplement app$waitForValue() instead of sleeping
+  Sys.sleep(.5) #TODO inplement app$waitForValue() instead of sleeping
   expect_match(app$getValue("ex1"), "AESEQ") 
 })
 

@@ -1,5 +1,6 @@
 context("Tests for the detectStandard() function")
 library(safetyGraphics)
+library(safetyData)
 library(stringr)
 
 test_that("a list with the expected properties and structure is returned",{
@@ -17,9 +18,9 @@ test_that("a list with the expected properties and structure is returned",{
 })
 
 test_that("correct standards are identified",{
-  expect_equal(detectStandard(data=labs,domain='labs')[["standard"]],"adam")
-  expect_equal(detectStandard(data=labs,domain='labs')[["details"]][["sdtm"]][["match"]], "partial")
-  expect_equal(detectStandard(data=labs,domain='labs')[["details"]][["adam"]][["match"]], "full")
+  expect_equal(detectStandard(data=safetyData::adam_adlbc,domain='labs')[["standard"]],"adam")
+  expect_equal(detectStandard(data=safetyData::adam_adlbc,domain='labs')[["details"]][["sdtm"]][["match"]], "partial")
+  expect_equal(detectStandard(data=safetyData::adam_adlbc,domain='labs')[["details"]][["adam"]][["match"]], "full")
   
   adam_params <- c("Alanine Aminotransferase (U/L)","Aspartate Aminotransferase (U/L)","Bilirubin (umol/L)","Alkaline Phosphatase (U/L)")
   adam_test_data<-data.frame(USUBJID="001",AVAL=10,PARAM=adam_params,VISIT="Visit 1",VISITNUM=1,ADY=0,A1LO=0,A1HI=20,PARAMCD="K")
