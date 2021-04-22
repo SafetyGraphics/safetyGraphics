@@ -20,8 +20,8 @@ logical scalar. TRUE if field_value is found. FALSE otherwise
 This checks whether a specific value is found in a specified column in a specified data set
 }
 \examples{
-safetyGraphics:::hasField(fieldValue="Bilirubin (umol/L)",columnName="PARAM",data=labs) #TRUE
-safetyGraphics:::hasField(fieldValue="Not_a_real_value",columnName="",data=labs) #FALSE
+safetyGraphics:::hasField(fieldValue="Bilirubin (umol/L)",columnName="PARAM",data=safetyData::adam_adlbc) #TRUE
+safetyGraphics:::hasField(fieldValue="Not_a_real_value",columnName="",data=safetyData::adam_adlbc) #FALSE
 
 }
 \keyword{internal}

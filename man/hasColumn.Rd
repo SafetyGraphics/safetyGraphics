@@ -18,8 +18,8 @@ logical scalar. TRUE if the column is found. FALSE otherwise
 Checks whether a specified column is found in a specified data set
 }
 \examples{
-safetyGraphics:::hasColumn(columnName="PARAM",data=labs) #TRUE
-safetyGraphics:::hasColumn(columnName="Not_a_column",data=labs) #FALSE
+safetyGraphics:::hasColumn(columnName="PARAM",data=safetyData::adam_adlbc) #TRUE
+safetyGraphics:::hasColumn(columnName="Not_a_column",data=safetyData::adam_adlbc) #FALSE
 
 }
 \keyword{internal}

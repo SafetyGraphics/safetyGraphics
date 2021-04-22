@@ -42,6 +42,8 @@ Imports:
     magrittr,
     purrr,
     rlang,
+    safetyData,
+    safetyCharts,
     shiny,
     shinyjs,
     shinyWidgets,
