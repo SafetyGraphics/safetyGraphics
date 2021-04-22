@@ -49,5 +49,6 @@ Imports:
     shinyWidgets,
     stringr,
     yaml
+Remotes: safetyGraphics/safetyCharts
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
