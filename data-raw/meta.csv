@@ -1,6 +1,6 @@
 text_key,domain,col_key,field_key,type,label,description,multiple,standard_adam,standard_sdtm
 id_col,aes,id_col,,column,ID column,Unique subject identifier variable name.,FALSE,USUBJID,USUBJID
-seq_col,aes,seq_col,,column,Sequence column,Event sequence number variable name,FALSE,ASEQ,AESEQ
+seq_col,aes,seq_col,,column,Sequence column,Event sequence number variable name,FALSE,AESEQ,AESEQ
 stdy_col,aes,stdy_col,,column,AE Start day column,Event start day variable name,FALSE,ASTDY,AESTDY
 endy_col,aes,endy_col,,column,AE End day column,Event end day variable name,FALSE,AENDY,AEENDY
 term_col,aes,term_col,,column,Preferred Term Column,verbatim adverse event text variable name,FALSE,AETERM,AETERM
