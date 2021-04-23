@@ -13,6 +13,12 @@ chartsRenderStaticUI <- function(id, type){
     htmlOutput(ns("staticHTML"))
   } else if(type=="table"){
     DT::dataTableOutput(ns("staticTable"))
+  } else if(type == "rtf") {
+    div(
+      downloadButton(ns("downloadRTF"), "Download RTF"),
+      DT::dataTableOutput(ns("rtfTable"))
+    )
+    
   }
   
 }
@@ -40,5 +46,17 @@ chartsRenderStatic <- function(input, output, session, chartFunction, params, ty
                                                    options = list(pageLength = 20,
                                                                   ordering = FALSE,
                                                                   searching = FALSE)) 
+  } else if(type == "rtf") {
+    output[["rtfTable"]] <- DT::renderDataTable(do.call(chartFunction,params())$table, rownames = FALSE,
+                                                options = list(pageLength = 20,
+                                                               ordering = FALSE,
+                                                               searching = FALSE)) 
+    
+    output[["downloadRTF"]] <- downloadHandler(
+      filename = "SafetyGraphics.rtf",
+      content = function(file) {
+        pharmaRTF::write_rtf(do.call(chartFunction,params()), file = file)
+      }
+    )
   }
 }
