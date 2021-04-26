@@ -2,7 +2,9 @@
 #' 
 #' Converts YAML chart configuration files to an R list and binds workflow functions. See the vignette about creating custom charts for more details.
 #' 
-#' @param dirs path to one or more directories containing yaml files (relative to working directory)
+#' @param dirs path to one or more directories containing yaml config files (relative to working directory)
+#' @param packages installed packages names containing yaml config files in the /inst/{packageLocation} folder
+#' @param packageLocation inst folder where yaml config files are located in packages
 #' @param sourceFiles boolean indicating whether to source all R files found in dirs.
 #'
 #' @import yaml
@@ -20,23 +22,25 @@
 #' }
 #' @export
 
-makeChartConfig <- function(dirs, sourceFiles=TRUE){
-    # Use the charts settings saved in safetycharts if no path is provided. 
-    if(missing(dirs) || is.null(dirs)){
-        safetyChartsFound<-FALSE
-        for(lib in .libPaths()){
-            print(lib)
-            dirs<-paste(lib,'safetyCharts','config', sep="/")               
-            if(file.exists(dirs)) {
-                print("found configs")
-                print(dirs)
-                safetyChartsFound<-TRUE   
-                break               
-            }
-        }
+makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="config", sourceFiles=TRUE){
+    if(missing(dirs)) dirs<-NULL
 
-        if(!safetyChartsFound){
-            message("safetyCharts library not found, please install safetyCharts or provide a path to custom chart configuration files. See safetyGraphics vignettes for details.")
+    # add local package installation to dirs if specified in packages
+    if(!is.null(packages)){
+        for(package in packages){
+            packageFound<-FALSE
+            for(lib in .libPaths()){
+                packageDir<-paste(lib,package,packageLocation, sep="/")               
+                if(file.exists(packageDir)) {
+                    message("Found ", packageDir,", and added it to list of chart locations.")
+                    packageFound<-TRUE   
+                    dirs<-c(dirs, packageDir)
+                    break               
+                }
+            }
+            if(!packageFound){
+                message(package, " package not found or '",packageLocation,"' folder does not exist, please install package and confirm that specified folder is found.")
+            }
         }
     }
 
@@ -50,7 +54,7 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
         )  
         sapply(r_files, source)
     }
-
+    print(dirs)
     yaml_files<-list.files(
         dirs,
         pattern = "yaml", 
