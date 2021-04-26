@@ -73,19 +73,28 @@ makeChartConfig <- function(dirs, sourceFiles=TRUE){
             chart$order
         ) %>% as.numeric
 
+        #charts should be available to export unless the are modules or chart$export is set to false
         chart$export <- ifelse(
             is.null(chart$export),
-            true,
+            TRUE,
             chart$export
         )
 
         return(chart)
     })
-
+    
     names(charts) <- yaml_files %>% file_path_sans_ext %>% basename
-    charts <- charts[order(purrr::map_dbl(charts, function(chart) chart$order))]
+    charts <- charts[order(purrr::map_dbl(charts, function(chart) chart$order))] 
 
-    message("Found ", length(yaml_files), " config files: ",paste(names(charts),collapse=", "))
+    # Drop charts where order is negative
+    drops <- charts[purrr::map_lgl(charts, function(chart) chart$order < 0)]
+    if(length(drops)>0){
+        message("Dropped ", length(drops), " charts: ",paste(names(drops),collapse=", "))
+        message("To display these charts, set the `order` parameter in the chart object or yaml file to a positive number.")
+        charts <- charts[purrr::map_lgl(charts, function(chart) chart$order >= 0)]
+    }
+
+    message("Loaded ", length(charts), " charts: ",paste(names(charts),collapse=", "))
 
     # Bind workflow functions to chart object
     all_functions <- as.character(utils::lsf.str(".GlobalEnv"))
