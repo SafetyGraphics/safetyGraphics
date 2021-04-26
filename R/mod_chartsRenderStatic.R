@@ -32,6 +32,8 @@ chartsRenderStaticUI <- function(id, type){
 #' @param chartFunction function to generate the chart.
 #' @param params parameters to be passed to the widget (Reactive)
 #' @param type output type for the chart. Valid options are "plot", "html" and "table"
+#' 
+#' @importFrom pharmaRTF write_rtf
 #'
 #' @export
 

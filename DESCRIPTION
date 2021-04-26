@@ -46,6 +46,7 @@ Imports:
     shinyjs,
     shinyWidgets,
     stringr,
-    yaml
+    yaml,
+    pharmaRTF
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
