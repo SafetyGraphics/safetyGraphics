@@ -48,7 +48,6 @@ create_chart <- function(chart, params){
           null = "null",  
         )
       }
-      widgetParams$ns <-chart$name  #Still not working quite right. May need to refactor widgets a bit to, since some use this parameter to select the location of the wrapper div. there's no easy way to set this to the random widget value (e.g. "htmlwidget-638ca0176b34007fbdf9")
       return(widgetParams)
     }
     
