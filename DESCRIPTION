@@ -40,7 +40,7 @@ Imports:
     jsonlite,
     listviewer,
     magrittr,
-    pharmaRTF
+    pharmaRTF,
     purrr,
     rlang,
     safetyData,
