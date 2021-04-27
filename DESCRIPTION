@@ -49,7 +49,6 @@ Imports:
     shinyjs,
     shinyWidgets,
     stringr,
-    yaml,
     yaml
 Remotes: safetyGraphics/safetyCharts
 VignetteBuilder: knitr
