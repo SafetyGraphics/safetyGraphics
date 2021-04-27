@@ -124,9 +124,9 @@ app_init_addin <- function(){
     
     safetyGraphicsApp1 <- function(
       domainData=list(
-        labs=safetyGraphics::labs, 
-        aes=safetyGraphics::aes, 
-        dm=safetyGraphics::dm
+        labs=safetyData::adam_adlbc, 
+        aes=safetyData::adam_adae, 
+        dm=safetyData::adam_adsl
       ),
       meta = safetyGraphics::meta, 
       charts=NULL,

@@ -47,10 +47,9 @@ reportsTab <- function(input, output, session, charts, data, mapping){
   # create checkbox for selecting charts of interest
   output$checkboxes <- renderUI({
     # no support for modules or broken widgets yet
-    noExport <- c("aeTimelines","hepexplorer","safetyShiftPlot","tplyr_shift")
     chart_type <- charts %>% map(., ~.$type) %>% unlist 
-    chart_name <- charts %>% map(., ~.$name) %>% unlist 
-    charts_keep <- ((! chart_type == "module") & (! chart_name %in% noExport))
+    chart_export <- charts %>% map(., ~.$export) %>% unlist 
+    charts_keep <- ((! chart_type == "module") & (chart_export))
     
     charts_labels <- charts %>% map(., ~ .$label) %>% unlist
     charts_vec <- names(charts)[charts_keep]

@@ -2,11 +2,10 @@ context("Tests for the evaluateStandard() function")
 library(safetyGraphics)
 
 test_that("basic test cases evaluate as expected",{
-  expect_equal(evaluateStandard(data=labs, domain="labs", meta= meta, standard="sdtm")[["match"]],"partial")
-  expect_equal(evaluateStandard(data=labs,  domain="labs", meta= meta, standard="adam")[["match"]],"full")
-  expect_equal(evaluateStandard(data=aes, domain="aes", meta= meta, standard="sdtm")[["match"]],"full") 
-  #todo add treatment to AE data and change previous test to "full"
-  expect_equal(evaluateStandard(data=aes,  domain="aes", meta= meta, standard="adam")[["match"]],"partial")
+  expect_equal(evaluateStandard(data=safetyData::adam_adlbc, domain="labs", meta= meta, standard="sdtm")[["match"]],"partial")
+  expect_equal(evaluateStandard(data=safetyData::adam_adlbc,  domain="labs", meta= meta, standard="adam")[["match"]],"full")
+  expect_equal(evaluateStandard(data=safetyData::adam_adae, domain="aes", meta= meta, standard="sdtm")[["match"]],"partial") 
+  expect_equal(evaluateStandard(data=safetyData::adam_adae,  domain="aes", meta= meta, standard="adam")[["match"]],"full")
   expect_equal(evaluateStandard(data=data.frame(),  domain="labs", meta= meta, standard="sdtm")[["match"]],"none")
 })
 
@@ -23,10 +22,11 @@ test_that("a list with the expected properties and structure is returned",{
 })
 
 test_that("expected number of checks (in)valid",{
-  expect_equal(evaluateStandard(data=labs, domain="labs", meta=meta, standard="sdtm")[["valid_count"]],3)
-  expect_equal(evaluateStandard(data=labs, domain="labs", meta=meta, standard="sdtm")[["invalid_count"]],10)
+  expect_equal(evaluateStandard(data=safetyData::adam_adlbc, domain="labs", meta=meta, standard="sdtm")[["valid_count"]],3)
+  expect_equal(evaluateStandard(data=safetyData::adam_adlbc, domain="labs", meta=meta, standard="sdtm")[["invalid_count"]],10)
   
-  labs_edit <- labs
+  labs_edit <- safetyData::adam_adlbc
+
   labs_edit$TEST <- labs_edit$PARAM
   a<-evaluateStandard(data=labs_edit, domain="labs", meta=meta, standard="sdtm")
   expect_equal(a[["valid_count"]],4)
@@ -39,9 +39,9 @@ test_that("expected number of checks (in)valid",{
 test_that("invalid options throw errors",{
   expect_error(evaluateStandard(data=list(a=1,b=2), domain="labs", meta=meta, standard="sdtm"))
   expect_error(evaluateStandard(data="notadataframe",domain="labs", meta=meta, standard="sdtm"))
-  expect_error(evaluateStandard(data=labs,domain="labs", meta=meta, standard=123))
-  expect_error(evaluateStandard(data=labs,domain="labs", meta=meta, standard="notarealstandard"))
-  expect_error(evaluateStandard(data=labs,domain="labs", meta=meta, standard="adam", includeFieldsIsNotAnOptionNow="yesPlease"))
-  expect_error(evaluateStandard(data=labs,domain="labs", meta=list(), standard="sdtm"))
-  expect_error(evaluateStandard(data=labs,domain="labs", meta=labs, standard="sdtm"))
+  expect_error(evaluateStandard(data=safetyData::adam_adlbc,domain="labs", meta=meta, standard=123))
+  expect_error(evaluateStandard(data=safetyData::adam_adlbc,domain="labs", meta=meta, standard="notarealstandard"))
+  expect_error(evaluateStandard(data=safetyData::adam_adlbc,domain="labs", meta=meta, standard="adam", includeFieldsIsNotAnOptionNow="yesPlease"))
+  expect_error(evaluateStandard(data=safetyData::adam_adlbc,domain="labs", meta=list(), standard="sdtm"))
+  expect_error(evaluateStandard(data=safetyData::adam_adlbc,domain="labs", meta=safetyData::adam_adlbc, standard="sdtm"))
 })

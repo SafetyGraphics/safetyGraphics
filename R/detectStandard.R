@@ -10,8 +10,8 @@
 #'
 #' @return A data frame describing the detected standard for each \code{"text_key"} in the provided metadata. Columns are \code{"domain"}, \code{"text_key"}, \code{"column"} and \code{"standard"}.
 #' @examples 
-#' detectStandard(data=safetyGraphics::aes)  #aes domain evaluated by default
-#' detectStandard(data=safetyGraphics::labs,domain="labs" ) 
+#' detectStandard(data=safetyData::adam_adae)  #aes domain evaluated by default
+#' detectStandard(data=safetyData::adam_adlbc,domain="labs" ) 
 #'
 #' @importFrom stringr str_detect 
 #' 

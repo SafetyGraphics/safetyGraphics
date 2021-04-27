@@ -10,7 +10,7 @@ initial<-app$getAllValues()
 test_that("UI function stops with invalid inputs (non-data.frame)",{
   id_meta <- meta%>%filter(domain=="labs")%>%filter(col_key=="id_col")
   id_mapping_list<-list(id_col="USUBJID")
-  expect_error(mappingColumnUI("test1.1", list(id_col="USUBJID"), labs)) #invalid metadata
+  expect_error(mappingColumnUI("test1.1", list(id_col="USUBJID"), safetyData::adam_adlbc)) #invalid metadata
   expect_error(mappingColumnUI("test1.2", id_meta, "invalid_data_option")) #invalid data
   expect_error(mappingColumnUI("test1.3", id_meta, labs, list(id_col="USUBJID"))) #invalid mapping
 })

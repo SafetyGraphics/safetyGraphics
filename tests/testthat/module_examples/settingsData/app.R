@@ -14,8 +14,8 @@ ui <- tagList(
 )
 
 server <- function(input,output,session){
-  callModule(settingsData, "ex1", domains = list(labs=labs))
-  callModule(settingsData, "ex2", domains = list(labs=labs,aes=aes))
+  callModule(settingsData, "ex1", domains = list(labs=safetyData::adam_adlbc))
+  callModule(settingsData, "ex2", domains = list(labs=lasafetyData::adam_adlbcs,aes=safetyData::adam_adae))
   # callModule(settingsData, "ex3", allData = rbind(lab_summary,ae_summary,extra) )
 }
 

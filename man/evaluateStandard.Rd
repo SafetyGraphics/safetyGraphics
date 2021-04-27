@@ -22,7 +22,20 @@ a list describing to what degree the data set matches the data standard. The "ma
 Determines whether the required data elements in a data standard are found in a given data frame
 }
 \examples{
-evaluateStandard(data=labs, meta=meta, domain="labs", standard="adam") # Match is TRUE
-evaluateStandard(data=labs, meta=meta, domain="labs", standard="sdtm") # Match is FALSE
+# Match is TRUE
+evaluateStandard(
+ data=safetyData::adam_adlbc, 
+ meta=meta, 
+ domain="labs", 
+ standard="adam"
+) 
+
+# Match is FALSE
+evaluateStandard(
+ data=safetyData::adam_adlbc, 
+ meta=meta, 
+ domain="labs", 
+ standard="sdtm"
+) 
 
 }

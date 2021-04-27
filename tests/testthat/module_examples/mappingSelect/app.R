@@ -11,26 +11,26 @@ ui <- tagList(
     ),
     fluidPage(
         h2("Example 1: Column select - No Default"),
-        mappingSelectUI("NoDefault","Subject ID", names(aes)),
+        mappingSelectUI("NoDefault","Subject ID", names(safetyData::adam_adae)),
         h3("Module Output"),
         verbatimTextOutput("ex1"),
         
         h2("Example 2: Column Select - With default"),
-        mappingSelectUI("WithDefault", "Subject ID", names(aes), "USUBJID"),
+        mappingSelectUI("WithDefault", "Subject ID", names(safetyData::adam_adae), "USUBJID"),
         h3("Module Output"),
         verbatimTextOutput("ex2"),
         
         h2("Example 3: Field select - No Default"),
-        mappingSelectUI("NoDefaultField","Body System - Cardiac Disorders", unique(aes$AEBODSYS)),
+        mappingSelectUI("NoDefaultField","Body System - Cardiac Disorders", unique(safetyData::adam_adae$AEBODSYS)),
         h3("Module Output"),
         verbatimTextOutput("ex3"),
         
         h2("Example 4: Field Select - With default"),
-        mappingSelectUI("WithDefaultField", "Body System - Cardiac Disorders", unique(aes$AEBODSYS), "CARDIAC DISORDERS"),
+        mappingSelectUI("WithDefaultField", "Body System - Cardiac Disorders", unique(safetyData::adam_adae$AEBODSYS), "CARDIAC DISORDERS"),
         verbatimTextOutput("ex4"),
         
         h2("Example 5: Field Select - With invalid default"),
-        mappingSelectUI("WithInvalidDefault", "Body System - Cardiac Disorders", unique(aes$AEBODSYS), "CARDIAC DISORDERZ"),
+        mappingSelectUI("WithInvalidDefault", "Body System - Cardiac Disorders", unique(safetyData::adam_adae$AEBODSYS), "CARDIAC DISORDERZ"),
         verbatimTextOutput("ex5")
     )  
 )

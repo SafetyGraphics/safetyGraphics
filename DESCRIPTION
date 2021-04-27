@@ -40,13 +40,17 @@ Imports:
     jsonlite,
     listviewer,
     magrittr,
+    pharmaRTF
     purrr,
     rlang,
+    safetyData,
+    safetyCharts,
     shiny,
     shinyjs,
     shinyWidgets,
     stringr,
     yaml,
-    pharmaRTF
+    yaml
+Remotes: safetyGraphics/safetyCharts
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
