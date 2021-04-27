@@ -3,7 +3,7 @@ library(safetyGraphics)
 library(ggplot2)
 library(dplyr)
 
-data <- list(labs=safetyGraphics::labs, aes=safetyGraphics::aes)
+data <- list(labs=safetyData::adam_adlbc, aes=safetyData::adam_adae)
 mapping <- list(measure_col="PARAM", value_col="AVAL")
 params<- reactive({list(data=data,settings=mapping)})
 

@@ -4,10 +4,19 @@
 \alias{makeChartConfig}
 \title{Make Chart Config}
 \usage{
-makeChartConfig(dirs, sourceFiles = TRUE)
+makeChartConfig(
+  dirs,
+  packages = "safetyCharts",
+  packageLocation = "config",
+  sourceFiles = TRUE
+)
 }
 \arguments{
-\item{dirs}{path to one or more directories containing yaml files (relative to working directory)}
+\item{dirs}{path to one or more directories containing yaml config files (relative to working directory)}
+
+\item{packages}{installed packages names containing yaml config files in the /inst/{packageLocation} folder}
+
+\item{packageLocation}{inst folder where yaml config files are located in packages}
 
 \item{sourceFiles}{boolean indicating whether to source all R files found in dirs.}
 }

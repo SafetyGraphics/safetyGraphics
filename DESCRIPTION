@@ -42,11 +42,14 @@ Imports:
     magrittr,
     purrr,
     rlang,
+    safetyData,
+    safetyCharts,
     shiny,
     shinyjs,
     shinyWidgets,
     stringr,
     yaml,
     pharmaRTF
+Remotes: safetyGraphics/safetyCharts
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

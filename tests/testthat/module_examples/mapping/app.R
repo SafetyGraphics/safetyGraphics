@@ -3,7 +3,7 @@ library(safetyGraphics)
 library(dplyr)
 
 #reactlogReset()
-allData <- list(labs=safetyGraphics::labs, aes=safetyGraphics::aes)
+allData <- list(labs=safetyData::adam_adlbc, aes=safetyData::adam_adae)
 labs_default <- meta %>% 
     filter(domain=="labs")%>% 
     mutate(current=standard_sdtm)%>%
