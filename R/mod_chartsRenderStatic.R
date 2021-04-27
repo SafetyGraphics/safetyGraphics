@@ -13,6 +13,12 @@ chartsRenderStaticUI <- function(id, type){
     htmlOutput(ns("staticHTML"))
   } else if(type=="table"){
     DT::dataTableOutput(ns("staticTable"))
+  } else if(type == "rtf") {
+    div(
+      downloadButton(ns("downloadRTF"), "Download RTF"),
+      DT::dataTableOutput(ns("rtfTable"))
+    )
+    
   }
   
 }
@@ -26,6 +32,8 @@ chartsRenderStaticUI <- function(id, type){
 #' @param chartFunction function to generate the chart.
 #' @param params parameters to be passed to the widget (Reactive)
 #' @param type output type for the chart. Valid options are "plot", "html" and "table"
+#' 
+#' @importFrom pharmaRTF write_rtf
 #'
 #' @export
 
@@ -40,5 +48,17 @@ chartsRenderStatic <- function(input, output, session, chartFunction, params, ty
                                                    options = list(pageLength = 20,
                                                                   ordering = FALSE,
                                                                   searching = FALSE)) 
+  } else if(type == "rtf") {
+    output[["rtfTable"]] <- DT::renderDataTable(do.call(chartFunction,params())$table, rownames = FALSE,
+                                                options = list(pageLength = 20,
+                                                               ordering = FALSE,
+                                                               searching = FALSE)) 
+    
+    output[["downloadRTF"]] <- downloadHandler(
+      filename = "SafetyGraphics.rtf",
+      content = function(file) {
+        pharmaRTF::write_rtf(do.call(chartFunction,params()), file = file)
+      }
+    )
   }
 }
