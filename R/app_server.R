@@ -17,9 +17,6 @@
 app_server <- function(meta, mapping, domainData, charts){
     server <- function(input, output, session) {
         #Initialize modules
-        
-
-        #TODO: add mapping to function call. 
         current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
 
         id_col <- reactive({
@@ -37,7 +34,7 @@ app_server <- function(meta, mapping, domainData, charts){
         )
 
         callModule(settingsData, "dataSettings", domains = domainData)
-        callModule(settingsMapping, "metaSettings", metaIn=meta, mapping=current_mapping)
+        callModule(settingsMapping, "metaSettings", metadata=meta, mapping=current_mapping)
         callModule(settingsCharts, "chartSettings",charts = charts)
         callModule(homeTab, "home")
 

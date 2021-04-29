@@ -4,7 +4,7 @@
 \alias{settingsMapping}
 \title{Settings view of Metadata/Mapping - server}
 \usage{
-settingsMapping(input, output, session, metaIn, mapping)
+settingsMapping(input, output, session, metadata, mapping)
 }
 \arguments{
 \item{input}{Shiny input object}
@@ -13,7 +13,7 @@ settingsMapping(input, output, session, metaIn, mapping)
 
 \item{session}{Shiny session object}
 
-\item{metaIn}{Data mapping metadata used for initial loading of app}
+\item{metadata}{Data mapping metadata used for initial loading of app}
 
 \item{mapping}{reactive data frame representing the current metadata mapping. columns = "domain", "text_id" and "current"}
 }

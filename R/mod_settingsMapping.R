@@ -3,20 +3,30 @@
 #'
 #' @param id module id
 #' 
-#' @section Output:
-#' \describe{
-#' \item{\code{mappingMeta}}{Reactive containing the metadata to be used in the app.}
-#' }
+#' @import rclipboard
 #' 
 #' @export
 
 settingsMappingUI <- function(id){
-    ns <- NS(id)
-    tagList(
-        DT::DTOutput(ns("metaTable")),
-        fileInput(ns("metaFile"),"Upload custom data mappings",accept = c('.csv'))
-    )
-}
+  ns <- NS(id)
+  tabsetPanel(
+    tabPanel("Summary",
+      tagList(
+        rclipboard::rclipboardSetup(),
+        DT::DTOutput(ns("metaTable"))
+      )      
+    ),
+    tabPanel(
+      "Code",
+      HTML("The code below creates an R object that can be passed to the <code>mapping</code> parameter of <code>safetyGraphicsApp()</code> to regenerate the current mapping."),
+      code(
+        verbatimTextOutput(ns("mappingCode"))
+      ),
+      uiOutput(ns("copyMapping"))
+    ),
+    type="pills"
+  )
+}  
 
 #' @title  Settings view of Metadata/Mapping - server
 #' @description  server for the display of the data mapping metadata. 
@@ -24,12 +34,15 @@ settingsMappingUI <- function(id){
 #' @param input Shiny input object
 #' @param output  Shiny output object
 #' @param session Shiny session object
-#' @param metaIn Data mapping metadata used for initial loading of app
+#' @param metadata Data mapping metadata used for initial loading of app
 #' @param mapping reactive data frame representing the current metadata mapping. columns = "domain", "text_id" and "current"
 #'
+#' @import rclipboard
+#' @import yaml
+#' 
 #' @export
 
-settingsMapping <- function(input, output, session, metaIn, mapping){
+settingsMapping <- function(input, output, session, metadata, mapping){
     ns <- session$ns
 
     #use an empty mapping if none is provided
@@ -39,32 +52,10 @@ settingsMapping <- function(input, output, session, metaIn, mapping){
     
     ##########################################################################
     # Create reactive containing default or custom data mappings ("metadata")
-    ##########################################################################
+    #########################################################################
 
-    # custom loaded data
-    metadata <-  eventReactive(input$metaFile, {
-      if(is.null(input$metaFile)){
-        metaIn
-      }else{
-        df<-data.frame(
-          utils::read.csv(
-            input$metaFile$datapath, 
-            na.strings=NA, 
-            stringsAsFactors=FALSE
-          )
-        )
-        
-        if(sort(names(df))==c("domain","text_id","current")){
-          df
-        }else{
-          showNotification("Sorry, not a valid mapping. Load a file with columns for 'domain','text_id' and 'current'.")
-          metaIn
-        }
-      }
-    }, ignoreNULL = FALSE)
-  
     metadata_mapping <- reactive(
-        metadata() %>% left_join(mapping())  
+        metadata %>% left_join(mapping())  
     )
 
     output$metaTable <- renderDT({
@@ -76,5 +67,19 @@ settingsMapping <- function(input, output, session, metaIn, mapping){
         )
     })
 
+    #Show code to recreate current mapping
+    codeString<-reactive({
+      paste(
+        "# Code for current data mapping\n",
+        "customMapping<-\n",
+        paste(deparse(mapping()), collapse="\n"),
+        "# call `safetyGraphics(mapping=customMapping)` to restart the app using this mapping"
+      )
+      
+    })
+    output$mappingCode <- renderText({codeString()})
+    output$copyMapping <- renderUI({
+      rclipboard::rclipButton("clipbtn", "Copy to Clipboard", codeString(), icon("clipboard"))
+    })
     return(metadata)
 }
