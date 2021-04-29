@@ -16,17 +16,28 @@ chartsTabUI <- function(id, chart){
         links<-purrr::map2(
             chart$links, 
             names(chart$links), 
-            ~tags$small(
-                a(
-                    stringr::str_to_title(.y), 
-                    href=.x,
-                    class="chart-link"
-                )
+            ~a(
+                .y, 
+                href=.x,
+                class="chart-link"
             )
         )
+        links<-div(tags$small("Links"), links, class="pull-right")
+
     }else{
         links<-NULL
     }
+    
+    labelDiv<-div(tags$small("Chart"),chart$label)
+    typeDiv<-div(tags$small("Type"), chart$type)
+    dataDiv<-div(tags$small("Data Domain"), chart$domain)
+    header<-div(
+        labelDiv,
+        typeDiv,
+        dataDiv, 
+        links,
+        class="chart-header"
+    )
 
     chartWrap <- NULL
     if(tolower(chart$type=="module")){
@@ -40,7 +51,7 @@ chartsTabUI <- function(id, chart){
         chartWrap<-chartsRenderStaticUI(id=ns("wrap"), type=chart$type)
     }
     
-    return(list(h4(chart$label, links), hr(), chartWrap))
+    return(list(header, chartWrap))
 }
 
 #' @title  home tab - server
