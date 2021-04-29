@@ -41,6 +41,7 @@ Imports:
     listviewer,
     magrittr,
     purrr,
+    rclipboard,
     rlang,
     safetyData,
     safetyCharts,
