@@ -55,3 +55,7 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
 #dataSettings-previews .nav-tabs{
   margin-bottom: 1em;
 }
+
+.chart-link{
+  padding-right:0.5em;
+}
