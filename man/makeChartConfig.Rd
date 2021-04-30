@@ -30,7 +30,7 @@ returns a named list of charts derived from YAML files. Each element of the list
 \item{"domain"}{ Data domain. Should correspond to a domain in \code{meta} or be set to "multiple" }
 \item{"package"}{ Primary package (if any). Other packages can be loaded directly in workflow functions. }
 \item{"order"}{ Integer order in which to display the chart. If order is a negative number, the chart is dropped. }
-\itme{"export"}{ Logical flag indicating whether the chart can be exported to an html report. True by default, except for when type is module. }
+\item{"export"}{ Logical flag indicating whether the chart can be exported to an html report. True by default, except for when type is module. }
 \item{"path"}{ Path to YAML file}
 \item{"links"}{ Named list of link names/urls to be shown in the chart header. }
 \item{"workflow"}{ List of functions names used to render chart. See vignette for details. }

@@ -12,7 +12,7 @@
 chartsTabUI <- function(id, chart){
     ns <- NS(id)    
     # Chart header with description and links
-    if(hasName(chart,"links")){
+    if(utils::hasName(chart,"links")){
         links<-purrr::map2(
             chart$links, 
             names(chart$links), 
