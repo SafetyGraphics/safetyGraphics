@@ -23,12 +23,16 @@ makeChartConfig(
 \value{
 returns a named list of charts derived from YAML files. Each element of the list contains information about a single chart, and has the following parameters:
 \itemize{
+\item{"env"}{ Environment for the chart. Must be set to "safetyGraphics" or the chart is dropped.}
 \item{"name"}{ Name of the chart. Also the name of the element in the list - e.g. charts$aeExplorer$name is "aeExplorer"}
-\item{"label"}{ short description of the chart }
-\item{"type"}{ type of chart; options are: 'htmlwidget', 'module', 'plot', 'table', 'html' or 'plotly'.}
-\item{"domain"}{ data domain. Should correspond to a domain in \code{meta} or be set to "multiple" }
-\item{"package"}{ primary package (if any). Other packages can be loaded directly in workflow functions. }
+\item{"label"}{ Short description of the chart }
+\item{"type"}{ Type of chart; options are: 'htmlwidget', 'module', 'plot', 'table', 'html' or 'plotly'.}
+\item{"domain"}{ Data domain. Should correspond to a domain in \code{meta} or be set to "multiple" }
+\item{"package"}{ Primary package (if any). Other packages can be loaded directly in workflow functions. }
+\item{"order"}{ Integer order in which to display the chart. If order is a negative number, the chart is dropped. }
+\itme{"export"}{ Logical flag indicating whether the chart can be exported to an html report. True by default, except for when type is module. }
 \item{"path"}{ Path to YAML file}
+\item{"links"}{ Named list of link names/urls to be shown in the chart header. }
 \item{"workflow"}{ List of functions names used to render chart. See vignette for details. }
 \item{"functions"}{ List of functions for use in chart renderering. These functions must be located in the global environment or \code{package} field of the YAML config. Function names must include either the \code{name} or \code{workflow} fields of the YAML config. }
 }
