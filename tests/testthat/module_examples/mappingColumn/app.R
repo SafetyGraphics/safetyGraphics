@@ -20,7 +20,7 @@ adam_default<-data.frame(
 
 sdtm_default<-data.frame(
     text_key = c("measure_col", "measure_values--ALP"), 
-    current = c("LBTEST",""),
+    current = c("LBTEST","Alkaline Phosphatase"),
     stringsAsFactors = FALSE
 )
 
@@ -78,7 +78,7 @@ server <- function(input,output,session){
     output$ex5Out<-renderTable(ex5())
 
     ex6<-callModule(mappingColumn, "ex6", measure_meta, safetyData::sdtm_lb)
-    exportTestValues(ex4_data = {ex6()})
+    exportTestValues(ex6_data = {ex6()})
     output$ex6Out<-renderTable(ex6())
 }
 

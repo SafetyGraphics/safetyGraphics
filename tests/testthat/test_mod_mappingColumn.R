@@ -36,6 +36,17 @@ test_that("default values for inputs are set correctly in example app",{
   expect_equal(initial$input[["ex4-measure_values--ALT-colSelect"]],"")
   expect_equal(initial$input[["ex4-measure_values--AST-colSelect"]],"")
   expect_equal(initial$input[["ex4-measure_values--TB-colSelect"]],"")
+  # SDTM Data test
+  expect_equal(initial$input[["ex5-measure_col-colSelect"]],"")
+  expect_equal(initial$input[["ex5-measure_values--ALP-colSelect"]],"")
+  expect_equal(initial$input[["ex5-measure_values--ALT-colSelect"]],"")
+  expect_equal(initial$input[["ex5-measure_values--AST-colSelect"]],"")
+  expect_equal(initial$input[["ex5-measure_values--TB-colSelect"]],"")
+  expect_equal(initial$input[["ex6-measure_col-colSelect"]],"LBTEST")
+  expect_equal(initial$input[["ex6-measure_values--ALP-colSelect"]],"Alkaline Phosphatase")
+  expect_equal(initial$input[["ex6-measure_values--ALT-colSelect"]],"")
+  expect_equal(initial$input[["ex6-measure_values--AST-colSelect"]],"")
+  expect_equal(initial$input[["ex6-measure_values--TB-colSelect"]],"")
 })
 
 test_that("changing column input updates clears the field input values and updates input list",{
@@ -62,6 +73,8 @@ test_that("output are data frames with the  expected values",{
   expect_equal(nrow(initial$export$ex2_data),1)
   expect_equal(nrow(initial$export$ex3_data),5)
   expect_equal(nrow(initial$export$ex4_data),5)
+  expect_equal(nrow(initial$export$ex5_data),5)
+  expect_equal(nrow(initial$export$ex6_data),5)
   
   #initial values are set as expected
   ex2_id_col <- initial$export$ex2_data %>% filter(text_key=="id_col") %>% pull(current) %>% as.character()
@@ -79,6 +92,18 @@ test_that("output are data frames with the  expected values",{
     as.character()
   expect_equal(ex4_measure_col_ALP, "Alkaline Phosphatase (U/L)")
   
+  ex6_measure_col <- initial$export$ex6_data %>% 
+    filter(text_key=="measure_col") %>% 
+    pull(current) %>% 
+    as.character()
+  expect_equal(ex6_measure_col, "LBTEST")
+  
+  ex6_measure_col_ALP <- initial$export$ex6_data %>% 
+    filter(text_key=="measure_values--ALP") %>% 
+    pull(current) %>% 
+    as.character()
+  expect_equal(ex6_measure_col_ALP, "Alkaline Phosphatase")
+
   #values from previous tests are set as expected
   updated<-app$getAllValues()
   
