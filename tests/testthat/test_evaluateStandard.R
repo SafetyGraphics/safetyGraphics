@@ -22,17 +22,17 @@ test_that("a list with the expected properties and structure is returned",{
 })
 
 test_that("expected number of checks (in)valid",{
-  expect_equal(evaluateStandard(data=safetyData::adam_adlbc, domain="labs", meta=meta, standard="sdtm")[["valid_count"]],3)
-  expect_equal(evaluateStandard(data=safetyData::adam_adlbc, domain="labs", meta=meta, standard="sdtm")[["invalid_count"]],10)
+  expect_equal(evaluateStandard(data=safetyData::adam_adlbc, domain="labs", meta=meta, standard="sdtm")[["valid_count"]],4)
+  expect_equal(evaluateStandard(data=safetyData::adam_adlbc, domain="labs", meta=meta, standard="sdtm")[["invalid_count"]],9)
   
   labs_edit <- safetyData::adam_adlbc
 
-  labs_edit$TEST <- labs_edit$PARAM
+  labs_edit$LBTEST <- labs_edit$PARAM
   a<-evaluateStandard(data=labs_edit, domain="labs", meta=meta, standard="sdtm")
-  expect_equal(a[["valid_count"]],4)
-  expect_equal(a[["invalid_count"]],9)
+  expect_equal(a[["valid_count"]],5)
+  expect_equal(a[["invalid_count"]],8)
   expect_equal(a[["total_count"]],13)
-  expect_equal(round(a[["match_percent"]],3), .308)
+  expect_equal(round(a[["match_percent"]],3), .385)
   expect_true(a[["mapping"]]%>%filter(text_key=="measure_col")%>%select(valid)%>%unlist)
 })
 

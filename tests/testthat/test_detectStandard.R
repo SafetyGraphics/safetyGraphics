@@ -28,8 +28,8 @@ test_that("correct standards are identified",{
   expect_equal(detectStandard(data=adam_test_data, domain="labs")[["details"]][["adam"]][["match"]], "full")
   expect_equal(detectStandard(data=adam_test_data, domain="labs")[["details"]][["sdtm"]][["match"]], "partial")
   
-  sdtm_params<-c("Aminotransferase, alanine (ALT)","Aminotransferase, aspartate (AST)","Total Bilirubin","Alkaline phosphatase (ALP)")
-  sdtm_test_data<-data.frame(USUBJID="001",STRESN=10,TEST=sdtm_params,VISIT="Visit 1",VISITNUM=1,DY=0,STNRLO=0,STNRHI=20,STRESU="K")
+  sdtm_params<-c("Alanine Aminotransferase","Aspartate Aminotransferase","Bilirubin","Alkaline Phosphatase")
+  sdtm_test_data<-data.frame(USUBJID="001",LBSTRESN=10,LBTEST=sdtm_params,VISIT="Visit 1",VISITNUM=1,LBDY=0,LBSTNRLO=0,LBSTNRHI=20,LBSTRESU="K")
   expect_equal(detectStandard(sdtm_test_data, domain="labs")[["standard"]],"sdtm")
   expect_equal(detectStandard(sdtm_test_data, domain="labs")[["details"]][["sdtm"]][["match"]], "full")
   expect_equal(detectStandard(sdtm_test_data, domain="labs")[["details"]][["adam"]][["match"]], "partial")
