@@ -4,21 +4,54 @@
 #' @param id module id
 #' @param chart list containing chart specifications
 #' 
+#' @importFrom stringr str_to_title
+#' @importFrom purrr map2
+#' 
 #' @export
 
 chartsTabUI <- function(id, chart){
-    ns <- NS(id)
-    h2(paste("Chart:",chart$label))
+    ns <- NS(id)    
+    # Chart header with description and links
+    if(utils::hasName(chart,"links")){
+        links<-purrr::map2(
+            chart$links, 
+            names(chart$links), 
+            ~a(
+                .y, 
+                href=.x,
+                class="chart-link"
+            )
+        )
+        links<-div(tags$small("Links"), links, class="pull-right")
+
+    }else{
+        links<-NULL
+    }
+    
+    labelDiv<-div(tags$small("Chart"),chart$label)
+    typeDiv<-div(tags$small("Type"), chart$type)
+    dataDiv<-div(tags$small("Data Domain"), chart$domain)
+    header<-div(
+        labelDiv,
+        typeDiv,
+        dataDiv, 
+        links,
+        class="chart-header"
+    )
+
+    chartWrap <- NULL
     if(tolower(chart$type=="module")){
         #render the module UI
-        chartsRenderModuleUI(id=ns("wrap"), chart$functions[[chart$workflow$ui]])
+        chartWrap <- chartsRenderModuleUI(id=ns("wrap"), chart$functions[[chart$workflow$ui]])
     }else if(tolower(chart$type=="htmlwidget")){
         #render the widget 
-        chartsRenderWidgetUI(id=ns("wrap"),chart=chart$name, package=chart$package)
+        chartWrap<-chartsRenderWidgetUI(id=ns("wrap"),chart=chart$name, package=chart$package)
     }else{
         #create the static or plotly chart
-        chartsRenderStaticUI(id=ns("wrap"), type=chart$type)
+        chartWrap<-chartsRenderStaticUI(id=ns("wrap"), type=chart$type)
     }
+    
+    return(list(header, chartWrap))
 }
 
 #' @title  home tab - server

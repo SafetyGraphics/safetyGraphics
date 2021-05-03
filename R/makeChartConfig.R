@@ -8,15 +8,20 @@
 #' @param sourceFiles boolean indicating whether to source all R files found in dirs.
 #'
 #' @import yaml
+#' @import purrr
 #' 
 #' @return returns a named list of charts derived from YAML files. Each element of the list contains information about a single chart, and has the following parameters:
 #' \itemize{
+#'  \item{"env"}{ Environment for the chart. Must be set to "safetyGraphics" or the chart is dropped.}
 #'  \item{"name"}{ Name of the chart. Also the name of the element in the list - e.g. charts$aeExplorer$name is "aeExplorer"}
-#'  \item{"label"}{ short description of the chart }
-#'  \item{"type"}{ type of chart; options are: 'htmlwidget', 'module', 'plot', 'table', 'html' or 'plotly'.}
-#'  \item{"domain"}{ data domain. Should correspond to a domain in `meta` or be set to "multiple" }
-#'  \item{"package"}{ primary package (if any). Other packages can be loaded directly in workflow functions. }
+#'  \item{"label"}{ Short description of the chart }
+#'  \item{"type"}{ Type of chart; options are: 'htmlwidget', 'module', 'plot', 'table', 'html' or 'plotly'.}
+#'  \item{"domain"}{ Data domain. Should correspond to a domain in `meta` or be set to "multiple" }
+#'  \item{"package"}{ Primary package (if any). Other packages can be loaded directly in workflow functions. }
+#'  \item{"order"}{ Integer order in which to display the chart. If order is a negative number, the chart is dropped. }
+#'  \item{"export"}{ Logical flag indicating whether the chart can be exported to an html report. True by default, except for when type is module. }
 #'  \item{"path"}{ Path to YAML file}
+#'  \item{"links"}{ Named list of link names/urls to be shown in the chart header. }
 #'  \item{"workflow"}{ List of functions names used to render chart. See vignette for details. }
 #'  \item{"functions"}{ List of functions for use in chart renderering. These functions must be located in the global environment or `package` field of the YAML config. Function names must include either the `name` or `workflow` fields of the YAML config. }
 #' }
@@ -54,7 +59,7 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
         )  
         sapply(r_files, source)
     }
-    print(dirs)
+
     yaml_files<-list.files(
         dirs,
         pattern = "yaml", 
@@ -71,11 +76,19 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
         chart <- read_yaml(path)
         chart$path <- path
         chart$name <- path %>% file_path_sans_ext %>% basename
+
         chart$order <- ifelse(
             is.null(chart$order),
             length(yaml_files) + 1,
             chart$order
         ) %>% as.numeric
+
+        #check for valid environment 
+        chart$envValid <- ifelse(
+            is.null(chart$env),
+            FALSE,
+            tolower(chart$env)=="safetygraphics"
+        )
 
         #charts should be available to export unless the are modules or chart$export is set to false
         chart$export <- ifelse(
@@ -86,18 +99,27 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
 
         return(chart)
     })
-    
+
     names(charts) <- yaml_files %>% file_path_sans_ext %>% basename
-    charts <- charts[order(purrr::map_dbl(charts, function(chart) chart$order))] 
+
+    # Drop charts where env is not set to safetyGraphics
+    envDrops <- charts[purrr::map_lgl(charts, function(chart) !chart$envValid)]
+    if(length(envDrops)>0){
+        message("Excluded ", length(envDrops), " yaml files with: ",paste(purrr::map_chr(envDrops, ~.x$path),collapse=", "))
+        message("`env` paramter missing or not set to 'safetyGraphics'")
+        charts <- charts[purrr::map_lgl(charts, function(chart) chart$envValid)]
+    }
 
     # Drop charts where order is negative
-    drops <- charts[purrr::map_lgl(charts, function(chart) chart$order < 0)]
-    if(length(drops)>0){
-        message("Dropped ", length(drops), " charts: ",paste(names(drops),collapse=", "))
+    orderDrops <- charts[purrr::map_lgl(charts, function(chart) chart$order < 0)]
+    if(length(orderDrops)>0){
+        message("Dropped ", length(orderDrops), " charts: ",paste(names(orderDrops),collapse=", "))
         message("To display these charts, set the `order` parameter in the chart object or yaml file to a positive number.")
         charts <- charts[purrr::map_lgl(charts, function(chart) chart$order >= 0)]
     }
-
+    
+    # sort charts based on order
+    charts <- charts[order(purrr::map_dbl(charts, function(chart) chart$order))] 
     message("Loaded ", length(charts), " charts: ",paste(names(charts),collapse=", "))
 
     # Bind workflow functions to chart object

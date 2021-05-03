@@ -55,3 +55,34 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
 #dataSettings-previews .nav-tabs{
   margin-bottom: 1em;
 }
+
+
+.chart-header{
+  background: #e7e7e7;
+  padding: 0.5em 0.5em 0.2em 0.5em;
+  margin-top:-20px;
+  margin-right: -15px;
+  margin-left: -15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #bbb;
+}
+
+.chart-header *{
+  display:inline-block;
+  padding-left:0.4em;
+}
+
+.chart-header strong{
+  font-size:1.2em;
+}
+
+.chart-header small{
+  font-size:0.8em;
+  color:#999;
+}
+
+.chart-header .chart-link{
+  padding-right:0.5em;
+}
+
+
