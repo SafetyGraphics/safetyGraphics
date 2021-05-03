@@ -42,6 +42,7 @@ Imports:
     magrittr,
     pharmaRTF,
     purrr,
+    rclipboard,
     rlang,
     safetyData,
     safetyCharts,
@@ -49,7 +50,8 @@ Imports:
     shinyjs,
     shinyWidgets,
     stringr,
-    yaml
+    yaml,
+    pharmaRTF
 Remotes: safetyGraphics/safetyCharts
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

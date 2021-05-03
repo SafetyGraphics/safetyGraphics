@@ -12,10 +12,3 @@ settingsMappingUI(id)
 \description{
 UI that displays the data mapping metadata.
 }
-\section{Output}{
-
-\describe{
-\item{\code{mappingMeta}}{Reactive containing the metadata to be used in the app.}
-}
-}
-
