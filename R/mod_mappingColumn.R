@@ -45,7 +45,7 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
     
     fieldOptions<-NULL
     if(col_meta$current %in% names(data)){
-      fieldOptions <-  unique(data%>%pull(col_meta$current))       
+      fieldOptions <-  unique(data%>%pull(col_meta$current))    
     }
     
     field_meta <- meta %>% filter(.data$type=="field")
@@ -94,13 +94,18 @@ mappingColumn <- function(input, output, session, meta, data){
       callModule(mappingSelect,field_id)
     })
     observeEvent(col_val() ,{
-      field_options <- ifelse(col_val()=="", list(""), unique(data[,col_val()]))
+
+      if(col_val()==""){
+        field_options<- list("")
+      }else{
+        field_options<-unique(data%>%pull(col_val()))
+      }
       for(field_id in field_ids){
         current <- field_vals[[field_id]]()
         updateSelectizeInput(
           session,
           inputId = paste0(field_id,"-colSelect"),
-          choices = field_options[[1]],
+          choices = field_options,
           selected = current 
         )      
       }    
