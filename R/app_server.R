@@ -19,8 +19,9 @@ app_server <- function(meta, mapping, domainData, charts){
         #Initialize modules
         current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
 
+        filter_domain <- ifelse(hasName(domainData, "dm"), "dm", names(domainData)[[1]])
         id_col <- reactive({
-            dm<-current_mapping()%>%filter(.data$domain=="dm")   
+            dm<-current_mapping()%>%filter(.data$domain==filter_domain)   
             id<-dm %>%filter(.data$text_key=="id_col")%>%pull(.data$current)
             return(id)
         })
@@ -29,13 +30,13 @@ app_server <- function(meta, mapping, domainData, charts){
             filterTab, 
             "filter", 
             domainData=domainData, 
-            filterDomain="dm", 
+            filterDomain=filter_domain, 
             id_col=id_col
         )
 
         callModule(settingsData, "dataSettings", domains = domainData)
         callModule(settingsMapping, "metaSettings", metadata=meta, mapping=current_mapping)
-        callModule(settingsCharts, "chartSettings",charts = charts)
+        callModule(settingsCharts, "chartSettings", charts = charts)
         callModule(homeTab, "home")
 
         #Initialize Chart UI - Adds subtabs to chart menu - this initializes initializes chart UIs
@@ -56,14 +57,14 @@ app_server <- function(meta, mapping, domainData, charts){
         # pass all charts, filtered data, and current mappings to reports/export tab
         callModule(reportsTab, "reports", charts = charts, data = filtered_data, mapping = current_mapping)
         
-
         #participant count in header
-        shinyjs::html("header-count", paste(dim(domainData[["dm"]])[1]))
-        shinyjs::html("header-total", paste(dim(domainData[["dm"]])[1]))
-        observe({
-            req(filtered_data)
-            shinyjs::html("header-count", paste0(dim(filtered_data()[["dm"]])[1]))
-        })
+        # ids <- domainData[[filter_domain]][[id_col()]]
+        # shinyjs::html("header-count", paste(dim(domainData[["dm"]])[1]))
+        # shinyjs::html("header-total", paste(dim(domainData[["dm"]])[1]))
+        # observe({
+        #     req(filtered_data)
+        #     shinyjs::html("header-count", paste0(dim(filtered_data()[["dm"]])[1]))
+        # })
     }
     return(server)
 }
