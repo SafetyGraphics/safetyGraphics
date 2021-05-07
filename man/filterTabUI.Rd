@@ -4,7 +4,7 @@
 \alias{filterTabUI}
 \title{filterTabUI}
 \usage{
-filterTabUI(id, filterDomain = "dm")
+filterTabUI(id)
 }
 \arguments{
 \item{id}{module id}
