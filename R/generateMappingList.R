@@ -23,7 +23,7 @@ generateMappingList <- function(settingsDF, domain, pull=FALSE){
     )
   }
 
-  if(domain=="multiple"){
+  if(length(domain)>1){
     return(settingsList)
   }else{
     return(settingsList[[domain]])

@@ -29,6 +29,13 @@ app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, fil
         }
     }
 
+    #Drop charts if data for required domain(s) is not found
+    chart_drops <- charts %>% purrr::keep(~(!all(.x$domain %in% names(domainData))))
+    if(length(chart_drops)>0){
+        message("Dropping ", length(chart_drops), " chart(s) with missing data domains: ", paste(names(chart_drops), collapse=", "))
+    }
+    charts <- charts %>% purrr::keep(~all(.x$domain %in% names(domainData)))
+    
     # get the data standards
     standards <- names(domainData) %>% lapply(function(domain){
         return(detectStandard(domain=domain, data = domainData[[domain]], meta=meta))
