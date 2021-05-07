@@ -26,9 +26,12 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
     is.character(meta$text_key)
   )
   
-  #intialize a domain mapping for each domain in the metadata
+  #intialize a domain mapping for each domain in the metadata with a data set in domainData
   domain_ui <- list()
-  domains <- unique(meta$domain)
+  metaDomains <- unique(meta$domain)
+  dataDomains <- names(domainData)
+  domains <- metaDomains[metaDomains %in% dataDomains]
+
   for(i in 1:length(domains)){
     current_meta <- meta %>% filter(domain == !!domains[i])
     domain<-domains[i]
@@ -67,7 +70,15 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
 #' @export
 
 mappingTab <- function(input, output, session, meta, domainData){
-  domain_ids <- unique(meta$domain)
+  metaDomains <- unique(meta$domain)
+  dataDomains <- names(domainData)
+  domain_ids <- metaDomains[metaDomains %in% dataDomains]
+
+  if(length(domain_ids) < length(metaDomains)){
+    domains_noData <- metaDomains[!(metaDomains %in% dataDomains)]
+    message("No data sets provided for the following domains listed in metadata: ",paste(domains_noData, collapse=", "))
+  }
+
   names(domain_ids)<-domain_ids # so that lapply() creates a named list below
   domain_modules <- domain_ids %>% lapply(function(domain){
     this_meta<- meta%>%filter(domain==!!domain)
