@@ -6,6 +6,7 @@
 #' @param meta list of configuration metadata 
 #' @param charts list of charts
 #' @param mapping initial data mapping
+#' @param filterDomain domain used for the data/filter tab. Demographics ("`dm`") is used by default. Using a domain that is not one record per participant is not recommended. 
 #' @param chartSettingsPaths character vector with paths to chart setting yaml files
 #' 
 #' @return List of elements for used to initialize the shiny app with the following parameters
@@ -18,7 +19,7 @@
 #' }
 #' 
 #' @export
-app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, chartSettingsPaths=NULL){
+app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, filterDomain=NULL, chartSettingsPaths=NULL){
     # Process charts metadata
     if(is.null(charts)){
         if(is.null(chartSettingsPaths)){
@@ -47,7 +48,8 @@ app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, cha
         charts=charts,
         domainData=domainData,
         mapping=mapping,
-        standards=standards
+        standards=standards,
+        filterDomain=filterDomain
     ) 
     
     # Check config

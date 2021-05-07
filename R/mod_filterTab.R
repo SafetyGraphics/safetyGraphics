@@ -9,7 +9,7 @@
 #' 
 #' @export
 
-filterTabUI <- function(id, filterDomain = "dm"){  
+filterTabUI <- function(id){  
     ns <- NS(id)
 
     filter_ui<-list(
