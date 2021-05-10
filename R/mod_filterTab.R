@@ -13,7 +13,7 @@ filterTabUI <- function(id){
 
     filter_ui<-list(
         h1(paste("Participant Selector")),
-        span("This page dynamically filters the participants in the demographics (dm) data set. Only the selected participants are included in charts."),
+        span("This page dynamically filters participants across all data domains. Only the selected participants are included in charts."),
         fluidRow(
             column(
                 width = 3,
@@ -35,7 +35,7 @@ filterTabUI <- function(id){
             )
         )
     )
-  return(filter_ui)
+    return(filter_ui)
 }
 
 
@@ -47,7 +47,8 @@ filterTabUI <- function(id){
 #' @param session Shiny session object
 #' @param domainData list of data files for each domain
 #' @param filterDomain domain to use for filtering (typically "dm")
-#' @param id_col name of id column. should be found in every data domain
+#' @param current_mapping current data mapping
+#' @param tabID ID for the tab containing the filter UI (used for testing)
 #' 
 #' @return filtered data set
 #'
@@ -57,54 +58,74 @@ filterTabUI <- function(id){
 #' 
 #' @export
 
-filterTab <- function(input, output, session, domainData, filterDomain, id_col){
+filterTab <- function(input, output, session, domainData, filterDomain, current_mapping, tabID="Filtering"){
+
+    # Check to see if data can be filtered using current settings.
+    filterCheck<-filterTabChecks(domainData, filterDomain, current_mapping)
     
-    raw <-  domainData[[filterDomain]]
+    raw <-  reactive({
+        if(filterCheck()){
+            return(domainData[[filterDomain]])
+        }else{
+            return(data.frame()) #use empty data frame as placeholder 
+        }
+        
+    })
 
     res_filter <- filter_data_server(
-      id = "filtering", 
-      data = reactive({
-          return(as.data.frame(raw))
-      }),
-      name = reactive({
-          return(filterDomain)
-      })
+        id = "filtering", 
+        data = raw,
+        name = reactive({
+            return(filterDomain)
+        })
     )
 
     observeEvent(res_filter$filtered(), {
-      updateProgressBar(
-        session = session, id = "pbar", 
-        value = nrow(res_filter$filtered()), total = nrow(raw)
-      )
+        updateProgressBar(
+            session = session, id = "pbar", 
+            value = nrow(res_filter$filtered()), total = nrow(raw)
+        )
     })
     
     output$table <- DT::renderDataTable({
-      res_filter$filtered()
+        res_filter$filtered()
     }, options = list(pageLength = 5))
     
     
     output$code_dplyr <- renderPrint({
-      res_filter$code$dplyr
+        res_filter$code$dplyr
     })
     output$code <- renderPrint({
-      res_filter$code$expr
+        res_filter$code$expr
     })
     
     output$res_str <- renderPrint({
-      utils::str(res_filter$filtered())
-    })
-    
-    filteredDomains <- reactive({
-        #TODO add check to make sure id_col exists in all data sets. 
-        current_ids <- unique(res_filter$filtered()[[id_col()]])
+        utils::str(res_filter$filtered())
+    }) 
 
-        filteredDomains = list()
-        id_col <- id_col()
-        for(domain in names(domainData)){  
-            filteredDomains[[domain]] <- domainData[[domain]] %>% filter(!!sym(id_col) %in% current_ids)
+    # Set up filtering UI
+    filteredDomains<- reactive({
+        if(filterCheck()){
+            print("checks passed")
+            id_col <- reactive({
+                filter_data <- current_mapping() %>% filter(.data$domain==filterDomain)   
+                id<- filter_data %>% filter(.data$text_key=="id_col")%>%pull(.data$current)
+                return(id)
+            })
+
+            current_ids <- unique(res_filter$filtered()[[id_col()]])
+            filteredDomains = list()
+            for(domain in names(domainData)){  
+                filteredDomains[[domain]] <- domainData[[domain]] %>% filter(!!sym(id_col()) %in% current_ids)
+            }
+            return(filteredDomains)
+        }else{
+            print("checks failed")
+            # Return the raw data and disable the UI Tab
+            #message(filterCheckNote)
+            hideTab(inputId = "safetyGraphicsApp", target = tabID) #hide filter tab
+            return(domainData)
         }
-        #filteredDomains <- domainData %>% map(~filter(.x , !!id_col() %in% current_ids))
-        return(filteredDomains)
     })
     return(filteredDomains)
 }
