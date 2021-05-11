@@ -1,17 +1,9 @@
 library(shiny)
-library(safetyGraphics)
 library(dplyr)
+#library(safetyGraphics)
+devtools::load_all()
 
 #reactlogReset()
-domainData <- list(
-    labs=safetyData::adam_adlbc, 
-    aes=safetyData::adam_adae, 
-    dm=safetyData::adam_adsl
-)
-
-mapping <- meta %>% 
-    mutate(current=standard_adam)%>%
-    select(domain, text_key,current) 
 
 ui <- tagList(
     tags$head(
@@ -39,12 +31,23 @@ ui <- tagList(
 )
 
 server <- function(input,output,session){
+
+    ex1_data <- list(
+        labs=safetyData::adam_adlbc, 
+        aes=safetyData::adam_adae, 
+        dm=safetyData::adam_adsl
+    )
+
+    ex1_mapping <- meta %>% 
+        mutate(current=standard_adam)%>%
+        select(domain, text_key,current) 
+
     ex1<-callModule(
         filterTab, 
         "ex1", 
-        domainData=domainData, 
+        domainData=ex1_data, 
         filterDomain="dm", 
-        current_mapping=reactive({mapping}),
+        current_mapping=reactive({ex1_mapping}),
         tabID="Example 1"
     )
         
@@ -70,6 +73,8 @@ server <- function(input,output,session){
     )
         
     exportTestValues(ex2_data = { ex2() })
+
+    
     output$ex2Out<-renderText(
         paste(
             purrr::map2(
@@ -83,4 +88,5 @@ server <- function(input,output,session){
 }
 
 #options(shiny.reactlog = TRUE)
+devtools::load_all()
 shinyApp(ui, server)

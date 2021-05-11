@@ -47,7 +47,7 @@ filterTabChecks <- function(domainData, filterDomain, current_mapping){
         }
         print(filterCheckNote)
         return(currentStatus)
-    })
-
+    })  
+    
     return(filterCheck)
 }

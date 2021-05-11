@@ -62,23 +62,17 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
 
     # Check to see if data can be filtered using current settings.
     filterCheck<-filterTabChecks(domainData, filterDomain, current_mapping)
-    
-    raw <-  reactive({
-        if(filterCheck()){
-            return(domainData[[filterDomain]])
-        }else{
-            return(data.frame()) #use empty data frame as placeholder 
-        }
-        
+    raw <- reactive({
+        req(filterCheck())
+        domainData[[filterDomain]]
     })
-
+    
     res_filter <- filter_data_server(
         id = "filtering", 
         data = raw,
-        name = reactive({
-            return(filterDomain)
-        })
-    )
+        name = reactive({filterDomain})
+    )  
+    
 
     observeEvent(res_filter$filtered(), {
         updateProgressBar(
@@ -86,22 +80,27 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
             value = nrow(res_filter$filtered()), total = nrow(raw)
         )
     })
-    
-    output$table <- DT::renderDataTable({
-        res_filter$filtered()
-    }, options = list(pageLength = 5))
-    
-    
-    output$code_dplyr <- renderPrint({
-        res_filter$code$dplyr
+
+    observe({
+        req(res_filter$filtered())
+        
+        output$table <- DT::renderDataTable({
+            res_filter$filtered()
+        }, options = list(pageLength = 5))
+        
+        
+        output$code_dplyr <- renderPrint({
+            res_filter$code
+        })
+        output$code <- renderPrint({
+            res_filter$expr
+        })
+        
+        output$res_str <- renderPrint({
+            utils::str(res_filter$filtered())
+        }) 
     })
-    output$code <- renderPrint({
-        res_filter$code$expr
-    })
-    
-    output$res_str <- renderPrint({
-        utils::str(res_filter$filtered())
-    }) 
+
 
     # Set up filtering UI
     filteredDomains<- reactive({
