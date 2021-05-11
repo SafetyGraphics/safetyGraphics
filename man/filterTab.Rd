@@ -4,7 +4,15 @@
 \alias{filterTab}
 \title{filter module server}
 \usage{
-filterTab(input, output, session, domainData, filterDomain, id_col)
+filterTab(
+  input,
+  output,
+  session,
+  domainData,
+  filterDomain,
+  current_mapping,
+  tabID = "Filtering"
+)
 }
 \arguments{
 \item{input}{Shiny input object}
@@ -17,7 +25,9 @@ filterTab(input, output, session, domainData, filterDomain, id_col)
 
 \item{filterDomain}{domain to use for filtering (typically "dm")}
 
-\item{id_col}{name of id column. should be found in every data domain}
+\item{current_mapping}{current data mapping}
+
+\item{tabID}{ID for the tab containing the filter UI (used for testing)}
 }
 \value{
 filtered data set

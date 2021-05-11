@@ -1,5 +1,3 @@
-
-
 #' @title filter module checks
 #' @description function that checks whether the current data and settings are appropriate for the filter tab
 #'
@@ -29,20 +27,32 @@ filterTabChecks <- function(domainData, filterDomain, current_mapping){
             currentStatus <- FALSE
             filterCheckNote <- "the specified filter domain is not found in provided data."
         }else{
-            # Make sure id_col is specified in all domains.
-            id_col <- reactive({
-                filter_data <- current_mapping() %>% filter(.data$domain==filterDomain)   
-                id<- filter_data %>% filter(.data$text_key=="id_col")%>%pull(.data$current)
-                return(id)
-            })
-            id_check <- all(domainData %>% purrr::map_lgl(~{id_col() %in% colnames(.x)}))
-            if(!id_check){
+            # Make sure id_col is specified for filterDomain in the mapping and has 1+ characters          
+            filter_data <- current_mapping() %>% 
+                filter(.data$domain==filterDomain)  %>%
+                filter(.data$text_key=="id_col")          
+            id_col_found <- nrow(filter_data)==1 & nchar(filter_data[1,"current"])>0
+            
+            if(!id_col_found){
                 currentStatus <- FALSE
-                filterCheckNote <- "id_col is not found in one or more data domain. Update mappings and try again. "
-            }else if(FALSE){
-                # Warn if id_col is non-unique in filter domain.
-            }else if(FALSE){
-                # Warn if id_col differs across domains.
+                filterCheckNote <- "id_col is not specified for the filterDomain in the metadata provided."
+            }else{
+                # Make sure id_col is specified in all domains.
+                id_col <- reactive({
+                    filter_data <- current_mapping() %>% filter(.data$domain==filterDomain)   
+                    id<- filter_data %>% filter(.data$text_key=="id_col")%>%pull(.data$current)
+                    return(id)
+                })
+
+                id_check <- all(domainData %>% purrr::map_lgl(~{id_col() %in% colnames(.x)}))
+                if(!id_check){
+                    currentStatus <- FALSE
+                    filterCheckNote <- "id_col is not found in one or more data domain. Update mappings and try again. "
+                }else if(FALSE){
+                    # TODO: Warn, but proceed if id_col is non-unique in filter domain.
+                }else if(FALSE){
+                    # TODO: Warn, but proceed if id_col differs across domains.
+                }
             }
         }
         if(!currentStatus){
