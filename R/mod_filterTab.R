@@ -54,6 +54,7 @@ filterTabUI <- function(id){
 #'
 #' @import datamods
 #' @importFrom shinyWidgets progressBar updateProgressBar
+#' @importFrom shinyjs show hide
 #' @importFrom shiny renderDataTable
 #' 
 #' @export
@@ -62,17 +63,24 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
 
     # Check to see if data can be filtered using current settings.
     filterCheck<-filterTabChecks(domainData, filterDomain, current_mapping)
+    
+    # Calculate raw data and show filter tab if checks pass
     raw <- reactive({
         req(filterCheck())
+        shinyjs::show(selector = paste0(".navbar li a[data-value=",tabID,"]"))
         domainData[[filterDomain]]
     })
     
+    # Hide filter tab if checks fail
+    observeEvent(!filterCheck(), {
+        shinyjs::hide(selector = paste0(".navbar li a[data-value=",tabID,"]"))
+    })
+
     res_filter <- filter_data_server(
         id = "filtering", 
         data = raw,
         name = reactive({filterDomain})
     )  
-    
 
     observeEvent(res_filter$filtered(), {
         updateProgressBar(
@@ -90,10 +98,10 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
         
         
         output$code_dplyr <- renderPrint({
-            res_filter$code
+            res_filter$code()
         })
         output$code <- renderPrint({
-            res_filter$expr
+            res_filter$expr()
         })
         
         output$res_str <- renderPrint({
@@ -105,7 +113,6 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
     # Set up filtering UI
     filteredDomains<- reactive({
         if(filterCheck()){
-            print("checks passed")
             id_col <- reactive({
                 filter_data <- current_mapping() %>% filter(.data$domain==filterDomain)   
                 id<- filter_data %>% filter(.data$text_key=="id_col")%>%pull(.data$current)
@@ -118,11 +125,7 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
                 filteredDomains[[domain]] <- domainData[[domain]] %>% filter(!!sym(id_col()) %in% current_ids)
             }
             return(filteredDomains)
-        }else{
-            print("checks failed")
-            # Return the raw data and disable the UI Tab
-            #message(filterCheckNote)
-            hideTab(inputId = "safetyGraphicsApp", target = tabID) #hide filter tab
+        }else{        
             return(domainData)
         }
     })

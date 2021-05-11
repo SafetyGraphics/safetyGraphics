@@ -19,15 +19,15 @@ filterTabChecks <- function(domainData, filterDomain, current_mapping){
     # Check to see if data can be filtered using current settings.
     filterCheck<-reactive({
         currentStatus <- TRUE
-        filterCheckNote<-"ok"
+        filterCheckNote<-NULL
         if(is.null(filterDomain)){
             # Make sure filterDomain exists.
             currentStatus <- FALSE
-            filterCheckNote <- "Filter Domain Not specified."
+            filterCheckNote <- "the filter domain is not specified."
         }else if(!(filterDomain %in% names(domainData))){
             # Make sure the filterDomain is found in the data
             currentStatus <- FALSE
-            filterCheckNote <- "Specified Filter Domain not found in provided data."
+            filterCheckNote <- "the specified filter domain is not found in provided data."
         }else{
             # Make sure id_col is specified in all domains.
             id_col <- reactive({
@@ -38,14 +38,16 @@ filterTabChecks <- function(domainData, filterDomain, current_mapping){
             id_check <- all(domainData %>% purrr::map_lgl(~{id_col() %in% colnames(.x)}))
             if(!id_check){
                 currentStatus <- FALSE
-                filterCheckNote <- "ID_col is not found in one or more data domain."
+                filterCheckNote <- "id_col is not found in one or more data domain. Update mappings and try again. "
             }else if(FALSE){
                 # Warn if id_col is non-unique in filter domain.
             }else if(FALSE){
                 # Warn if id_col differs across domains.
             }
         }
-        print(filterCheckNote)
+        if(!currentStatus){
+            message("Filters not available because ", filterCheckNote)
+        }
         return(currentStatus)
     })  
     

@@ -1,11 +1,11 @@
 library(shiny)
 library(dplyr)
-#library(safetyGraphics)
-devtools::load_all()
+library(safetyGraphics)
 
 #reactlogReset()
 
 ui <- tagList(
+    shinyjs::useShinyjs(),
     tags$head(
         tags$link(
             rel = "stylesheet",
@@ -14,17 +14,20 @@ ui <- tagList(
         )
     ),
     navbarPage(
-        "safetyGraphics",
-        tabPanel(
-            "Example 1", 
-            h2("Example 1: Defaults"),
+        "Filters",
+        id="safetyGraphicsApp",
+        tabPanel("Home",
             verbatimTextOutput("ex1Out"),  
+            verbatimTextOutput("ex2Out")  
+        ),
+        tabPanel(
+            "Ex1", 
+            h2("Example 1: Defaults"),
             filterTabUI("ex1")
         ),
         tabPanel(
-            "Example 2", 
+            "Ex2", 
             h2("Example 2: Labs only (Filters disabled)"),
-            verbatimTextOutput("ex2Out"),  
             filterTabUI("ex2")
         )
     )
@@ -48,7 +51,7 @@ server <- function(input,output,session){
         domainData=ex1_data, 
         filterDomain="dm", 
         current_mapping=reactive({ex1_mapping}),
-        tabID="Example 1"
+        tabID="Ex1"
     )
         
     exportTestValues(ex1_data = { ex1() })
@@ -69,7 +72,7 @@ server <- function(input,output,session){
         domainData=list(labs=safetyData::adam_adlbc), 
         filterDomain=NULL, 
         current_mapping=reactive({mapping}),
-        tabID="Example 2"
+        tabID="Ex2"
     )
         
     exportTestValues(ex2_data = { ex2() })
