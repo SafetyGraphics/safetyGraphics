@@ -12,12 +12,6 @@ filterTabChecks(domainData, filterDomain, current_mapping)
 \item{filterDomain}{domain to use for filtering (typically "dm")}
 
 \item{current_mapping}{current data mapping (REACTIVE)}
-
-\item{input}{Shiny input object}
-
-\item{output}{Shiny output object}
-
-\item{session}{Shiny session object}
 }
 \value{
 reactive that returns a boolean indicating whether the checks passed and filtering can be initiailized

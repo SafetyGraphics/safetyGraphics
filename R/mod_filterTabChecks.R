@@ -1,9 +1,6 @@
 #' @title filter module checks
 #' @description function that checks whether the current data and settings are appropriate for the filter tab
 #'
-#' @param input Shiny input object
-#' @param output  Shiny output object
-#' @param session Shiny session object
 #' @param domainData list of data files for each domain
 #' @param filterDomain domain to use for filtering (typically "dm")
 #' @param current_mapping current data mapping (REACTIVE)
