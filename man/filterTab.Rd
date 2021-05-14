@@ -11,7 +11,8 @@ filterTab(
   domainData,
   filterDomain,
   current_mapping,
-  tabID = "Filtering"
+  tabID = "Filtering",
+  filterVars = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ filterTab(
 \item{current_mapping}{current data mapping}
 
 \item{tabID}{ID for the tab containing the filter UI (used for testing)}
+
+\item{filterVars}{Variables to use for filtering (used for testing)}
 }
 \value{
 filtered data set
