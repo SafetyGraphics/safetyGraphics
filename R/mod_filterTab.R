@@ -48,6 +48,7 @@ filterTabUI <- function(id){
 #' @param domainData list of data files for each domain
 #' @param filterDomain domain to use for filtering (typically "dm")
 #' @param current_mapping current data mapping
+#' @param filterVars Variables to use for filtering (used for testing)
 #' @param tabID ID for the tab containing the filter UI (used for testing)
 #' 
 #' @return filtered data set
@@ -59,7 +60,7 @@ filterTabUI <- function(id){
 #' 
 #' @export
 
-filterTab <- function(input, output, session, domainData, filterDomain, current_mapping, tabID="Filtering"){
+filterTab <- function(input, output, session, domainData, filterDomain, current_mapping, tabID="Filtering", filterVars=NULL){
 
     # Check to see if data can be filtered using current settings.
     filterCheck<-filterTabChecks(domainData, filterDomain, current_mapping)
@@ -79,7 +80,8 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
     res_filter <- filter_data_server(
         id = "filtering", 
         data = raw,
-        name = reactive({filterDomain})
+        name = reactive({filterDomain}),
+        vars = reactive({filterVars})
     )  
 
     observeEvent(res_filter$filtered(), {

@@ -1,8 +1,10 @@
 context("Tests for the renderStatic R module")
 library(safetyGraphics)
+library(shiny)
 library(shinytest)
 library(testthat)
 library(dplyr)
+
 
 app <- ShinyDriver$new("./module_examples/chartsRenderStatic")
 initial<-app$getAllValues()

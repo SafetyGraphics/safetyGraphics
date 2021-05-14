@@ -72,7 +72,8 @@ server <- function(input,output,session){
         domainData=ex1_data, 
         filterDomain="dm", 
         current_mapping=reactive({ex1_mapping}),
-        tabID="Ex1"
+        tabID="Ex1",
+        filterVars="SITEID"
     )
         
     exportTestValues(ex1_data = { ex1() })
