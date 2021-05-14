@@ -69,12 +69,15 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
     raw <- reactive({
         req(filterCheck())
         shinyjs::show(selector = paste0(".navbar li a[data-value=",tabID,"]"))
+        shinyjs::show(selector = paste0(".navbar #population-header"))
+
         domainData[[filterDomain]]
     })
     
     # Hide filter tab if checks fail
     observeEvent(!filterCheck(), {
         shinyjs::hide(selector = paste0(".navbar li a[data-value=",tabID,"]"))
+        shinyjs::hide(selector = paste0(".navbar #population-header"))
     })
 
     res_filter <- filter_data_server(
@@ -85,10 +88,25 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
     )  
 
     observeEvent(res_filter$filtered(), {
+        print("changing counts")
         updateProgressBar(
-            session = session, id = "pbar", 
-            value = nrow(res_filter$filtered()), total = nrow(raw)
+            session = session, 
+            id = "pbar", 
+            value = nrow(res_filter$filtered()), total = nrow(raw())
         )
+
+        shinyjs::html(
+            "header-count", 
+            nrow(res_filter$filtered()),
+            asis=TRUE    
+        )
+
+        shinyjs::html(
+            "header-total", 
+            nrow(raw()),
+            asis=TRUE
+        )
+
     })
 
     observe({

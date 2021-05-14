@@ -23,10 +23,10 @@ app_ui <- function(meta, domainData, mapping, standards){
     participant_badge<-tags$script(
         HTML(
             "var header = $('.navbar> .container-fluid');
-            header.append('<div id=\"population-header\" class=\"badge\" title=\"Selected Participants\" ></div>');"
+            header.append('<div id=\"population-header\" class=\"badge\" title=\"Selected Participants\" ><span id=\"header-count\"></span>/<span id=\"header-total\"></span></div>');"
         )
     )
-
+    
     #app UI using calls to modules
     ui<-tagList(
         shinyjs::useShinyjs(),
