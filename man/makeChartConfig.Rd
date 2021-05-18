@@ -27,7 +27,7 @@ returns a named list of charts derived from YAML files. Each element of the list
 \item{"name"}{ Name of the chart. Also the name of the element in the list - e.g. charts$aeExplorer$name is "aeExplorer"}
 \item{"label"}{ Short description of the chart }
 \item{"type"}{ Type of chart; options are: 'htmlwidget', 'module', 'plot', 'table', 'html' or 'plotly'.}
-\item{"domain"}{ Data domain. Should correspond to a domain in \code{meta} or be set to "multiple" }
+\item{"domain"}{ Data domain. Should correspond to one or more domains in \code{meta} }
 \item{"package"}{ Primary package (if any). Other packages can be loaded directly in workflow functions. }
 \item{"order"}{ Integer order in which to display the chart. If order is a negative number, the chart is dropped. }
 \item{"export"}{ Logical flag indicating whether the chart can be exported to an html report. True by default, except for when type is module. }

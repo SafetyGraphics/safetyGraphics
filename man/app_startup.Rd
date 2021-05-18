@@ -9,6 +9,7 @@ app_startup(
   meta = NULL,
   charts = NULL,
   mapping = NULL,
+  filterDomain = NULL,
   chartSettingsPaths = NULL
 )
 }
@@ -20,6 +21,8 @@ app_startup(
 \item{charts}{list of charts}
 
 \item{mapping}{initial data mapping}
+
+\item{filterDomain}{domain used for the data/filter tab. Demographics ("\code{dm}") is used by default. Using a domain that is not one record per participant is not recommended.}
 
 \item{chartSettingsPaths}{character vector with paths to chart setting yaml files}
 }

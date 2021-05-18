@@ -23,7 +23,7 @@ app_ui <- function(meta, domainData, mapping, standards){
     participant_badge<-tags$script(
         HTML(
             "var header = $('.navbar> .container-fluid');
-            header.append('<div id=\"population-header\" class=\"badge\" title=\"Selected Participants\" ><span id=\"header-count\"></span>/<span id=\"header-total\"></span></div>');"
+            header.append('<div id=\"population-header\" class=\"badge\" title=\"Selected Participants\" ></div>');"
         )
     )
 
@@ -45,7 +45,7 @@ app_ui <- function(meta, domainData, mapping, standards){
             navbarMenu('Data',icon=icon("database"),
                 tabPanel("Preview", icon=icon("table"), settingsDataUI("dataSettings")),
                 tabPanel("Mapping", icon=icon("map"), mappingTabUI("mapping", meta, domainData, mapping, standards)),
-                tabPanel("Filtering", icon=icon("filter"), filterTabUI("filter","dm"))
+                tabPanel("Filtering", icon=icon("filter"), filterTabUI("filter"))
             ),
             navbarMenu('Charts', icon=icon("chart-bar")),
             tabPanel("Reports", icon=icon("file-alt"), reportsTabUI("reports")),

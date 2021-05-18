@@ -50,8 +50,7 @@ Imports:
     shinyjs,
     shinyWidgets,
     stringr,
-    yaml,
-    pharmaRTF
+    yaml
 Remotes: safetyGraphics/safetyCharts
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

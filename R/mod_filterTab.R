@@ -2,14 +2,13 @@
 #' @description  UI that facilitates the filtering data with datamods::filter_data_ui
 #'
 #' @param id module id
-#' @param filterDomain data set for the domain
 #' 
 #' @import datamods
 #' @importFrom shiny dataTableOutput
 #' 
 #' @export
 
-filterTabUI <- function(id, filterDomain = "dm"){  
+filterTabUI <- function(id){  
     ns <- NS(id)
 
     filter_ui<-list(

@@ -30,7 +30,7 @@ chartsTabUI <- function(id, chart){
     
     labelDiv<-div(tags$small("Chart"),chart$label)
     typeDiv<-div(tags$small("Type"), chart$type)
-    dataDiv<-div(tags$small("Data Domain"), chart$domain)
+    dataDiv<-div(tags$small("Data Domain"), paste(chart$domain,collapse=" "))
     header<-div(
         labelDiv,
         typeDiv,
@@ -77,7 +77,7 @@ chartsTab <- function(input, output, session, chart, data, mapping){
         settingsList <-  safetyGraphics::generateMappingList(mapping(), domain=chart$domain)
 
         #subset data to specific domain (if specified)
-        if(chart$domain=="multiple"){
+        if(length(chart$domain)>1){
             domainData <- data()
         }else{
             domainData<- data()[[chart$domain]]
