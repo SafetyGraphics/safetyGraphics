@@ -22,35 +22,15 @@ app_server <- function(meta, mapping, domainData, charts, filterDomain){
 
         #Initialize modules
         current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
-
-        # Initialize the filter tab if filterDomain is specified, otherwise return raw data
-        if(!is.null(filterDomain)){
-            id_col <- reactive({
-                dm<-current_mapping()%>%filter(.data$domain==filterDomain)   
-                id<-dm %>%filter(.data$text_key=="id_col")%>%pull(.data$current)
-                return(id)
-            })
-            
-            filtered_data<-callModule(
-                filterTab, 
-                "filter", 
-                domainData=domainData, 
-                filterDomain=filterDomain, 
-                id_col=id_col
-            )
-                
-            #participant count in header
-            shinyjs::html("population-header","<span id=\"header-count\"></span>/<span id=\"header-total\"></span>")
-            shinyjs::html("header-count", paste(dim(domainData[["dm"]])[1]))
-            shinyjs::html("header-total", paste(dim(domainData[["dm"]])[1]))
-            observe({
-                req(filtered_data)
-                shinyjs::html("header-count", paste0(dim(filtered_data()[["dm"]])[1]))
-            })
-        }else{
-            hideTab(inputId = "safetyGraphicsApp", target = "Filtering") #hide filter tab
-            filtered_data<-reactive({domainData})
-        }         
+        
+        # Initialize the filter tab 
+        filtered_data<-callModule(
+            filterTab, 
+            "filter", 
+            domainData=domainData, 
+            filterDomain=filterDomain, 
+            current_mapping=current_mapping
+        )
         
 
         callModule(settingsData, "dataSettings", domains = domainData)

@@ -1,6 +1,7 @@
 context("Tests for the renderWidget R module")
 library(safetyGraphics)
 library(htmlwidgets)
+library(shiny)
 library(shinytest)
 library(testthat)
 library(dplyr)
