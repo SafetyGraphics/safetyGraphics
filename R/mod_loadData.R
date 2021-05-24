@@ -8,10 +8,14 @@
 
 loadDataUI <- function(id, domain=NULL){ 
   ns <- NS(id)
-  span(
+  div(
     strong(paste(domain,"-")),
     textOutput(outputId = ns("name"), inline=TRUE),
     actionButton(ns("load_data"), "Load"),
+    hidden(
+      actionLink(ns("preview_data"), "Preview")
+    )
+    
   )
 }
 
@@ -25,6 +29,7 @@ loadData <- function(input, output, session, domain) {
   ns <- session$ns
   fileSummary <- reactiveVal()
   fileSummary("<No Data Loaded>")
+
   observeEvent(input$load_data, {
     import_modal(
       id = ns("import_modal"),
@@ -45,9 +50,23 @@ loadData <- function(input, output, session, domain) {
         ")"
       )
     )
+    shinyjs::show("preview_data")
   })
   
   output$name <- renderText({fileSummary()})
+
+  observeEvent(input$preview_data,{
+    req(imported$data())
+    showModal(
+      modalDialog(
+        title=paste("Preview of '",domain,"' domain:", imported$name()),
+        DT::renderDataTable({
+          DT::datatable(imported$data(), escape = FALSE)
+        }),
+        size="l"
+      )
+    )
+  })
 
   return(reactive({imported$data()}))
 }

@@ -6,13 +6,9 @@
 #' 
 #' @export
 
-loadDomainsUI <- function(id, domain=NULL){ 
+loadDomainsUI <- function(id, domains){ 
   ns <- NS(id)
-  # span(
-  #   strong(domain),
-  #   textOutput(outputId = ns("name"), inline=TRUE),
-  #   actionButton(ns("load_data"), "Load"),
-  # )
+  ui <- domains %>% map(~loadDataUI(ns(.x), domain=.x))
 }
 
 #' @title   loadDataServer
@@ -21,24 +17,16 @@ loadDomainsUI <- function(id, domain=NULL){
 #' @param domains List of data domains to be loaded
 
 #' @export
-loadDomains <- function(input, output, session, domain) {
-  ns <- session$ns
-  # fileSummary <- reactiveValues()
-  # fileSummary$text <- "Load Files"
-  # observeEvent(input$load_data, {
-  #   import_modal(
-  #     id = ns("import_modal"),
-  #     from = c("env", "file"),
-  #     title = paste(domain,"data to be used in application")
-  #   )
-  #   fileSummary$text <- paste(
-  #       imported$name(),
-  #       paste(dim(imported$data()),collapse="x")
-  #     )
-  # })
-
-  # imported <- import_server("import_modal", return_class = "tbl_df")
-  # output$name <- renderPrint({fileSummary()})
-
-  # return(reactive({imported$data()}))
+loadDomains <- function(input, output, session, domains) {
+  names(domains) <-domains #so that lapply will create a named list
+  domainModules <- domains %>% lapply(function(domain){
+      callModule(loadData,domain, domain=domain)
+  })
+  reactive({
+    domainData <- list()
+    for(domain in domains){
+      domainData[[domain]] <- domainModules[[domain]]()
+    }
+    return(domainData)
+  })
 }
