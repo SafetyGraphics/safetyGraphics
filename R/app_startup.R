@@ -50,10 +50,12 @@ app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, fil
         mapping<-bind_rows(mapping_list, .id = "domain")
     }
 
-    # Set filterDomain to null if no data exists
-    if(!filterDomain %in% names(domainData)){
-        message("No data found for specified filter domain of '",filterDomain,"', so filter functionality has been deactivated.")
-        filterDomain<-NULL
+    # Set filterDomain to NULL if specified domain doesn't exist
+    if(!is.null(filterDomain)){
+        if(!filterDomain %in% names(domainData)){
+            message("No data found for specified filter domain of '",filterDomain,"', so filter functionality has been deactivated.")
+            filterDomain<-NULL
+        }
     }
 
     config<-list(
