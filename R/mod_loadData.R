@@ -2,7 +2,7 @@
 #' @description  UI that facilitates the mapping of a column data domain
 #'
 #' @param id module id
-#' @param domains character vector with domains to be loaded
+#' @param domain character vector with domains to be loaded 
 #' 
 #' @export
 
@@ -22,14 +22,13 @@ loadDataUI <- function(id, domain=NULL){
 #' @title   loadDataServer
 #' @description  UI that facilitates the mapping of a column data domain
 #'
-#' @param domains List of data domains to be loaded
+#' @param domain List of data domains to be loaded
 
 #' @export
 loadData <- function(input, output, session, domain) {
   ns <- session$ns
   fileSummary <- reactiveVal()
   fileSummary("<No Data Loaded>")
-
   observeEvent(input$load_data, {
     import_modal(
       id = ns("import_modal"),
@@ -68,6 +67,6 @@ loadData <- function(input, output, session, domain) {
     )
   })
 
-  return(reactive({imported$data()}))
+  return(imported)
 }
 
