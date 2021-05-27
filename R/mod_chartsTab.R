@@ -12,33 +12,7 @@
 chartsTabUI <- function(id, chart){
     ns <- NS(id)    
     # Chart header with description and links
-    if(utils::hasName(chart,"links")){
-        links<-purrr::map2(
-            chart$links, 
-            names(chart$links), 
-            ~a(
-                .y, 
-                href=.x,
-                class="chart-link"
-            )
-        )
-        links<-div(tags$small("Links"), links, class="pull-right")
-
-    }else{
-        links<-NULL
-    }
-    
-    labelDiv<-div(tags$small("Chart"),chart$label)
-    typeDiv<-div(tags$small("Type"), chart$type)
-    dataDiv<-div(tags$small("Data Domain"), paste(chart$domain,collapse=" "))
-    header<-div(
-        labelDiv,
-        typeDiv,
-        dataDiv, 
-        links,
-        class="chart-header"
-    )
-
+    header<-makeChartSummary(chart)
     chartWrap <- NULL
     if(tolower(chart$type=="module")){
         #render the module UI

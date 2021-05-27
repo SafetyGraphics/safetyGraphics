@@ -14,14 +14,16 @@ safetyGraphicsInit <- function(charts=makeChartConfig()){
     div(id="step1",
       h2("Step 1: Select Charts"),
       loadChartsUI("load-charts", charts=charts_init),
-      actionButton("submit-charts","Submit Charts")        
     ),
     div(id="step2",
-      h2("Step 2: Load Domain"),
+      h2("Step 2: Load Data for each Domain"),
       loadDomainsUI("load-data"),
       textOutput("dataSummary"),
-      actionButton("start-app","Submit Data and Start App"),
-      actionButton("start-over","Start Over")
+    ),
+    div(id="step3",
+      h2("Step 3: Code to intialize the app"),
+      textOutput("appCode"),
+      actionButton("runApp","Run App")
     )
   )
 
@@ -29,6 +31,7 @@ safetyGraphicsInit <- function(charts=makeChartConfig()){
     charts<-callModule(loadCharts, "load-charts",charts=charts_init)
     domains <- reactive({unique(charts() %>% map(~.x$domain) %>% unlist())})
     domainData <- callModule(loadDomains, "load-data", domains)
+
     output$dataSummary <- renderText({
       domainData() %>% map_chr(~paste(dim(.x()),collapse="x"))
     })
