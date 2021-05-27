@@ -4,7 +4,7 @@
 \alias{chartsNav}
 \title{Add a navbar tab that initializes the Chart Module UI}
 \usage{
-chartsNav(chart)
+chartsNav(chart, ns)
 }
 \arguments{
 \item{chart}{chart metadata}

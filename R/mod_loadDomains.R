@@ -2,7 +2,7 @@
 #' @description  UI that facilitates the mapping of a column data domain
 #'
 #' @param id module id
-#' @param domains   acter vector with initial domains to be loaded}
+#' @param domains character vector with initial domains to be loaded
 #' 
 #' @export
 

@@ -8,6 +8,8 @@ loadDomainsUI(id)
 }
 \arguments{
 \item{id}{module id}
+
+\item{domains}{character vector with initial domains to be loaded}
 }
 \description{
 UI that facilitates the mapping of a column data domain

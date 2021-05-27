@@ -85,4 +85,20 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   padding-right:0.5em;
 }
 
+.chart-sortable{
+  font-size:0.8em;
+}
+.chart-sortable *{
+  display:inline-block;
+  padding-left:0.4em;
+}
+
+.chart-sortable strong{
+  font-size:1.2em;
+}
+
+.chart-sortable small{
+  font-size:0.8em;
+  color:#999;
+}
 
