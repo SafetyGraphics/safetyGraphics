@@ -5,7 +5,7 @@
 #' @export
 #' 
 
-chartsNav <- function(chart){
+chartsNav <- function(chart,ns){
     appendTab(
         inputId = "safetyGraphicsApp",
         menuName = "Charts",
@@ -13,7 +13,7 @@ chartsNav <- function(chart){
             title = chart$label, 
             value = chart$name, 
             chartsTabUI(
-                id=chart$name,
+                id=ns(chart$name),
                 chart=chart
             )
         )

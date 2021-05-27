@@ -9,8 +9,9 @@
 #'  
 #' @export
 
-app_ui <- function(meta, domainData, mapping, standards){
+safetyGraphicsUI <- function(id, meta, domainData, mapping, standards){
     #read css from pacakge
+    ns<-NS(id)
     app_css <- NULL
     for(lib in .libPaths()){
         if(is.null(app_css)){
@@ -40,18 +41,18 @@ app_ui <- function(meta, domainData, mapping, standards){
         ),
         navbarPage(
             "safetyGraphics",
-            id="safetyGraphicsApp",
-            tabPanel("Home", icon=icon("home"),homeTabUI("home")),
+            id=ns("safetyGraphicsApp"),
+            tabPanel("Home", icon=icon("home"),homeTabUI(ns("home"))),
             navbarMenu('Data',icon=icon("database"),
-                tabPanel("Preview", icon=icon("table"), settingsDataUI("dataSettings")),
-                tabPanel("Mapping", icon=icon("map"), mappingTabUI("mapping", meta, domainData, mapping, standards)),
-                tabPanel("Filtering", icon=icon("filter"), filterTabUI("filter"))
+                tabPanel("Preview", icon=icon("table"), settingsDataUI(ns("dataSettings"))),
+                tabPanel("Mapping", icon=icon("map"), mappingTabUI(ns("mapping"), meta, domainData, mapping, standards)),
+                tabPanel("Filtering", icon=icon("filter"), filterTabUI(ns("filter")))
             ),
             navbarMenu('Charts', icon=icon("chart-bar")),
-            tabPanel("Reports", icon=icon("file-alt"), reportsTabUI("reports")),
+            tabPanel("Reports", icon=icon("file-alt"), reportsTabUI(ns("reports"))),
             navbarMenu('',icon=icon("cog"),
-                tabPanel(title = "Metadata", settingsMappingUI("metaSettings")),
-                tabPanel(title = "Charts", settingsChartsUI("chartSettings"))
+                tabPanel(title = "Metadata", settingsMappingUI(ns("metaSettings"))),
+                tabPanel(title = "Charts", settingsChartsUI(ns("chartSettings")))
             ),
             participant_badge
         )
