@@ -3,7 +3,7 @@
 #' @param charts chart object
 #' 
 #' @import shiny
-#' @importFrom shinyjs hidden hide show delay
+#' @importFrom shinyjs hidden hide show delay disabled disable enable
 
 #' 
 #' @export
@@ -27,10 +27,13 @@ safetyGraphicsInit <- function(charts=makeChartConfig(),delayTime=1000){
       sidebarLayout(
         position="right",
         sidebarPanel(
-          textOutput("dataSummary"),
+          h4("Data Loader"),
           loadDomainsUI("load-data"),
+          textOutput("dataSummary"),
           hr(),
-          actionButton("runApp","Run App",class = "btn-block")
+          shinyjs::disabled(
+            actionButton("runApp","Run App",class = "btn-block")
+          )
         ),
         mainPanel(  
           loadChartsUI("load-charts", charts=charts_init),
@@ -50,13 +53,36 @@ safetyGraphicsInit <- function(charts=makeChartConfig(),delayTime=1000){
     domains <- reactive({unique(charts() %>% map(~.x$domain) %>% unlist())})
     domainDataR <- callModule(loadDomains, "load-data", domains) #this is a reactive list with reactives (?!)
     domainData <- reactive({domainDataR() %>% map(~.x())})
-    output$dataSummary <- renderText({
-      ifelse(
-        length(domainDataR())==0, 
-        "Select charts and then load data.",
-        "Load data for selected domains and then initialize"
+
+    initStatus <- reactive({
+      chartCount<-length(charts())
+      domainCount<-length(domainData())
+      loadCount<-sum(domainData() %>% map_lgl(~!is.null(.x)))
+      notAllLoaded <- any(domainData() %>% map_lgl(~is.null(.x)))
+      ready<-FALSE
+      if(domainCount==0){
+        status<-paste("No charts selected. Select one or more charts and then load domain data to initilize app.")
+      }else if(notAllLoaded) {
+        status<-paste(chartCount, " charts selected. ",loadCount," of ",domainCount," data domains loaded. Load remaining data domains to initialize app.")
+      }else{
+        status<-paste("Loaded ",loadCount," data domains for ",chartCount," charts. Click 'Run App' button to initialize app.")
+        ready<-TRUE
+      }
+      return(
+        list(
+          status=status,
+          ready=ready
+        )
       )
-      #domainDataR() %>% map_chr(~paste(dim(.x()),collapse="x")) #Update this to be something useful
+    })
+
+    output$dataSummary <- renderText({initStatus()$status})
+    observe({
+      if(initStatus()$ready){
+        shinyjs::enable(id="runApp")
+      } else {
+        shinyjs::disable(id="runApp")
+      }
     })
 
 

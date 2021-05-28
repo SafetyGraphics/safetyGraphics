@@ -14,17 +14,17 @@ loadChartsUI <- function(id, charts=makeChartConfig()){
     labels <- charts%>%map(~makeChartSummary(.x,showLinks=FALSE,class="chart-sortable"))
     div(
         sortable::bucket_list(
-            header = "Select Charts, Load Data and then Run App",
+            header = h4("Chart Loader"),
             group_name = ns("chartList"),
             orientation = "horizontal",
             add_rank_list(
                 text = "Active Charts",
-                labels = NULL,
+                labels = labels,
                 input_id = ns("active")
             ),
             add_rank_list(
                 text = "Inactive Charts",
-                labels = labels,
+                labels = NULL,
                 input_id = ns("inactive")
             )
         )
