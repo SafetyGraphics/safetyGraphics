@@ -4,7 +4,7 @@
 \alias{safetyGraphicsInit}
 \title{Run the interactive safety graphics app}
 \usage{
-safetyGraphicsInit(charts = makeChartConfig(), delayTime = 500)
+safetyGraphicsInit(charts = makeChartConfig(), delayTime = 1000)
 }
 \arguments{
 \item{charts}{chart object}

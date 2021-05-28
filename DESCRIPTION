@@ -49,6 +49,7 @@ Imports:
     shiny,
     shinyjs,
     shinyWidgets,
+    sortable,
     stringr,
     yaml
 Remotes: safetyGraphics/safetyCharts
