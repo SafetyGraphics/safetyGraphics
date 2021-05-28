@@ -23,7 +23,10 @@ loadDataUI <- function(id, domain=NULL){
 #' @description  UI that facilitates the mapping of a column data domain
 #'
 #' @param domain List of data domains to be loaded
-
+#' @param input Shiny input object
+#' @param output Shiny output object
+#' @param session Shiny session object
+#' 
 #' @export
 loadData <- function(input, output, session, domain) {
   ns <- session$ns

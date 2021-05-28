@@ -2,7 +2,6 @@
 #' @description  UI that facilitates the mapping of a column data domain
 #'
 #' @param id module id
-#' @param domains character vector with initial domains to be loaded
 #' 
 #' @export
 
@@ -15,8 +14,12 @@ loadDomainsUI <- function(id){
 #' @description  UI that facilitates the mapping of a column data domain
 #'
 #' @param domains List of data domains to be loaded {reactive}
-
+#' @param input Shiny input object
+#' @param output Shiny output object
+#' @param session Shiny session object
+#' 
 #' @export
+
 loadDomains <- function(input, output, session, domains) {
   ns <- session$ns
   

@@ -8,6 +8,8 @@ chartsNav(chart, ns)
 }
 \arguments{
 \item{chart}{chart metadata}
+
+\item{ns}{namespace}
 }
 \description{
 Add a navbar tab that initializes the Chart Module UI

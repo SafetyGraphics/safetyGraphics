@@ -137,8 +137,18 @@ app_init_addin <- function(){
       config <- safetyGraphics::app_startup(domainData, meta, charts, mapping, chartSettingsPaths)
       
       app <- shinyApp(
-        ui =  app_ui(config$meta, config$domainData, config$mapping, config$standards),
-        server = app_server(config$meta, config$mapping, config$domainData, config$charts)
+        ui =  safetyGraphicsUI("sg",config$meta, config$domainData, config$mapping, config$standards),
+        server = function(input,output,session){
+          callModule(
+            safetyGraphicsServer,
+            "sg",
+            config$meta, 
+            config$mapping, 
+            config$domainData, 
+            config$charts, 
+            config$filterDomain
+          )
+        }
       )
     }
     

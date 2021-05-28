@@ -1,5 +1,6 @@
 #' UI for the default safetyGraphics shiny app
 #'
+#' @param id module ID
 #' @param meta data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}. 
 #' @param domainData named list of data.frames to be loaded in to the app.
 #' @param mapping data.frame specifying the initial values for each data mapping. If no mapping is provided, the app will attempt to generate one via \code{detectStandard()}

@@ -7,6 +7,8 @@
 safetyGraphicsUI(id, meta, domainData, mapping, standards)
 }
 \arguments{
+\item{id}{module ID}
+
 \item{meta}{data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}.}
 
 \item{domainData}{named list of data.frames to be loaded in to the app.}

@@ -2,7 +2,9 @@
 #'
 #' This function returns a server function suitable for use in shiny::runApp()
 #' 
-
+#' @param input Shiny input object
+#' @param output Shiny output object
+#' @param session Shiny session object
 #' @param meta data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}. 
 #' @param domainData named list of data.frames to be loaded in to the app.
 #' @param mapping current mapping

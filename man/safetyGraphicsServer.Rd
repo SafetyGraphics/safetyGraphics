@@ -16,6 +16,12 @@ safetyGraphicsServer(
 )
 }
 \arguments{
+\item{input}{Shiny input object}
+
+\item{output}{Shiny output object}
+
+\item{session}{Shiny session object}
+
 \item{meta}{data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}.}
 
 \item{mapping}{current mapping}

@@ -7,6 +7,12 @@
 loadData(input, output, session, domain)
 }
 \arguments{
+\item{input}{Shiny input object}
+
+\item{output}{Shiny output object}
+
+\item{session}{Shiny session object}
+
 \item{domain}{List of data domains to be loaded}
 }
 \description{

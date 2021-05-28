@@ -1,8 +1,9 @@
 #' Add a navbar tab that initializes the Chart Module UI
 #'
 #' @param chart  chart metadata 
+#' @param ns namespace
 #' 
-#' @export
+#' @export 
 #' 
 
 chartsNav <- function(chart,ns){

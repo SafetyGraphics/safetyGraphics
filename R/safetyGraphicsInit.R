@@ -1,10 +1,10 @@
 #' Run the interactive safety graphics app
 #'
 #' @param charts chart object
+#' @param delayTime time (in ms) between drawing app UI and starting server. Default set to 1000 (1 second), but could need to be higher on slow machine. 
 #' 
 #' @import shiny
 #' @importFrom shinyjs hidden hide show delay disabled disable enable
-
 #' 
 #' @export
 

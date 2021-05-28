@@ -7,7 +7,13 @@
 loadCharts(input, output, session, charts = makeChartConfig())
 }
 \arguments{
-\item{domains}{List of data domains to be loaded}
+\item{input}{Shiny input object}
+
+\item{output}{Shiny output object}
+
+\item{session}{Shiny session object}
+
+\item{charts}{Initial list of charts}
 }
 \description{
 server that facilitates selection of charts for safetyGraphicsApp

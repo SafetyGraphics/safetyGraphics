@@ -35,7 +35,10 @@ loadChartsUI <- function(id, charts=makeChartConfig()){
 #' @title   loadCharts
 #' @description  server that facilitates selection of charts for safetyGraphicsApp
 #'
-#' @param domains List of data domains to be loaded
+#' @param input Shiny input object
+#' @param output Shiny output object
+#' @param session Shiny session object
+#' @param charts Initial list of charts
 
 #' @export
 loadCharts <- function(input, output, session, charts=makeChartConfig()) {

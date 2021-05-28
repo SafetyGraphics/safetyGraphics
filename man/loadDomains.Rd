@@ -7,6 +7,12 @@
 loadDomains(input, output, session, domains)
 }
 \arguments{
+\item{input}{Shiny input object}
+
+\item{output}{Shiny output object}
+
+\item{session}{Shiny session object}
+
 \item{domains}{List of data domains to be loaded {reactive}}
 }
 \description{

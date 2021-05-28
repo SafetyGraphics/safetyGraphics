@@ -8,6 +8,8 @@ safetyGraphicsInit(charts = makeChartConfig(), delayTime = 1000)
 }
 \arguments{
 \item{charts}{chart object}
+
+\item{delayTime}{time (in ms) between drawing app UI and starting server. Default set to 1000 (1 second), but could need to be higher on slow machine.}
 }
 \description{
 Run the interactive safety graphics app
