@@ -8,7 +8,7 @@
 #' 
 #' @export
 
-safetyGraphicsInit <- function(charts=makeChartConfig(),delayTime=500){
+safetyGraphicsInit <- function(charts=makeChartConfig(),delayTime=1000){
   charts_init<-charts
   app_css <- NULL
   for(lib in .libPaths()){
@@ -58,42 +58,42 @@ safetyGraphicsInit <- function(charts=makeChartConfig(),delayTime=500){
       )
       #domainDataR() %>% map_chr(~paste(dim(.x()),collapse="x")) #Update this to be something useful
     })
-    config<- reactive({
-      app_startup(
-        domainData = domainData(),
-        meta = safetyGraphics::meta, 
-        charts= charts(), 
-        mapping=NULL, 
-        filterDomain="dm", 
-        chartSettingsPaths = NULL
-      )
-    })
 
-    output$sg <- renderUI({
-      safetyGraphicsUI(
-        "sg",
-        config()$meta, 
-        config()$domainData, 
-        config()$mapping, 
-        config()$standards
-      )    
-    })
 
     observeEvent(input$runApp,{
       print("running the app server now :p")
       shinyjs::hide(id="init")
       shinyjs::show(id="sg-app")
+      config<- app_startup(
+        domainData = domainData(),
+        meta = safetyGraphics::meta, 
+        charts= charts(),
+        #mapping=NULL, 
+        filterDomain="dm", 
+        #chartSettingsPaths = NULL
+      )
+    
+      output$sg <- renderUI({
+        safetyGraphicsUI(
+          "sg",
+          config$meta, 
+          config$domainData, 
+          config$mapping, 
+          config$standards
+        )    
+      })
+
       # delay is needed to get the appendTab in mod_chartsNav to trigger properly 
       shinyjs::delay(
         delayTime,
         callModule(
           safetyGraphicsServer,
           "sg",
-          config()$meta, 
-          config()$mapping, 
-          config()$domainData, 
-          config()$charts, 
-          config()$filterDomain
+          config$meta, 
+          config$mapping, 
+          config$domainData, 
+          config$charts, 
+          config$filterDomain
         )
       )
     })
