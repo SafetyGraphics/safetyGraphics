@@ -1,11 +1,12 @@
 #' Add a navbar tab that initializes the Chart Module UI
 #'
 #' @param chart  chart metadata 
+#' @param ns namespace
 #' 
-#' @export
+#' @export 
 #' 
 
-chartsNav <- function(chart){
+chartsNav <- function(chart,ns){
     appendTab(
         inputId = "safetyGraphicsApp",
         menuName = "Charts",
@@ -13,7 +14,7 @@ chartsNav <- function(chart){
             title = chart$label, 
             value = chart$name, 
             chartsTabUI(
-                id=chart$name,
+                id=ns(chart$name),
                 chart=chart
             )
         )
