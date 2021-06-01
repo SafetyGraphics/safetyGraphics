@@ -4,7 +4,7 @@
 #' 
 #' @param dirs path to one or more directories containing yaml config files (relative to working directory)
 #' @param packages installed packages names containing yaml config files in the /inst/{packageLocation} folder
-#' @param packageLocation inst folder where yaml config files are located in packages
+#' @param packageLocation inst folder where yaml config files (and possibly R functions referenced in yaml workflow) are located in `packages`
 #' @param sourceFiles boolean indicating whether to source all R files found in dirs.
 #'
 #' @import yaml
@@ -35,8 +35,11 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
         for(package in packages){
             packageFound<-FALSE
             for(lib in .libPaths()){
+                
                 packageDir<-paste(lib,package,packageLocation, sep="/")               
                 if(file.exists(packageDir)) {
+                    loaded <- do.call(require,list(package))
+                    if(!loaded) do.call(library,list(package)) #Attach the library to the search list if it is installed
                     message("Found ", packageDir,", and added it to list of chart locations.")
                     packageFound<-TRUE   
                     dirs<-c(dirs, packageDir)

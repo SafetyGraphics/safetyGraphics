@@ -16,7 +16,7 @@ makeChartConfig(
 
 \item{packages}{installed packages names containing yaml config files in the /inst/{packageLocation} folder}
 
-\item{packageLocation}{inst folder where yaml config files are located in packages}
+\item{packageLocation}{inst folder where yaml config files (and possibly R functions referenced in yaml workflow) are located in \code{packages}}
 
 \item{sourceFiles}{boolean indicating whether to source all R files found in dirs.}
 }
