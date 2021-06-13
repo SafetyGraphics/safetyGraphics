@@ -3,8 +3,8 @@ id_col,aes,id_col,,column,ID column,Unique subject identifier variable name.,FAL
 seq_col,aes,seq_col,,column,Sequence column,Event sequence number variable name,FALSE,AESEQ,AESEQ
 stdy_col,aes,stdy_col,,column,AE Start day column,Event start day variable name,FALSE,ASTDY,AESTDY
 endy_col,aes,endy_col,,column,AE End day column,Event end day variable name,FALSE,AENDY,AEENDY
-term_col,aes,term_col,,column,Preferred Term Column,verbatim adverse event text variable name,FALSE,AETERM,AETERM
-bodsys_col,aes,bodsys_col,,column,AE Body System,AE Body System,FALSE,AEBODSYS,AEBODSYS
+term_col,aes,term_col,,column,Preferred Term Column,Dictionary-Derived Term,FALSE,AEDECOD,AEDECOD
+bodsys_col,aes,bodsys_col,,column,AE Body System,Body System or Organ Class,FALSE,AEBODSYS,AEBODSYS
 id_col,labs,id_col,,column,ID column,Unique subject identifier variable name.,FALSE,USUBJID,USUBJID
 value_col,labs,value_col,,column,Value column,Lab result variable name.,FALSE,AVAL,LBSTRESN
 measure_col,labs,measure_col,,column,Measure column,Lab measure variable name,FALSE,PARAM,LBTEST

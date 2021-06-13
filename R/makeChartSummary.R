@@ -15,7 +15,8 @@ makeChartSummary<- function(chart, showLinks=TRUE, class="chart-header"){
             ~a(
                 .y, 
                 href=.x,
-                class="chart-link"
+                class="chart-link",
+                target='_blank'
             )
         )
         links<-div(tags$small("Links"), links, class="pull-right")
