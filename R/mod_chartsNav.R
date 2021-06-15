@@ -11,7 +11,7 @@ chartsNav <- function(chart,ns){
         inputId = "safetyGraphicsApp",
         menuName = "Charts",
         tab = tabPanel(
-            title = chart$label, 
+            title = makeChartSummary(chart, showLinks=FALSE, class="chart-nav"), 
             value = chart$name, 
             chartsTabUI(
                 id=ns(chart$name),
