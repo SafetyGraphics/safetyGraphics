@@ -201,5 +201,4 @@ server <- function(input,output,session){
 }
 
 #options(shiny.reactlog = TRUE)
-devtools::load_all()
 shinyApp(ui, server)
