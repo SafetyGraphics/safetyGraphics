@@ -37,21 +37,35 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
     domain<-domains[i]
     current_mapping <- mappings %>% filter(domain %in% !!domains[i]) %>% select(-"domain")
     current_standard <- standards[[domain]]
-    domain_ui[[i]] <-div(class="mapping-domain",
-    div(class="domain-header",
-      span(class="domain-title", str_to_upper(domain)),
-      div(class="domain-wrap",
-          span(class="domain-label", "Dimension"),
-          span(class="domain-value", paste(dim(domainData[[domain]]),collapse="x"))
+    domain_ui[[i]] <-
+    div(class="mapping-domain",
+      div(class="domain-header",
+        span(class="domain-title", str_to_upper(domain)),
+        div(class="domain-wrap",
+            span(class="domain-label", "Dimension"),
+            span(class="domain-value", paste(dim(domainData[[domain]]),collapse="x")),
+        ),
+        div(class="domain-wrap",
+            span(class="domain-label", "Standard"),
+            span(class="domain-value", current_standard[["label"]])
+        )
       ),
-      div(class="domain-wrap",
-          span(class="domain-label", "Standard"),
-          span(class="domain-value", current_standard[["label"]])
+      fluidRow(
+        column(4, mappingDomainUI(ns(domain), current_meta, domainData[[domain]], current_mapping)),
+        column(8,  DT::DTOutput(ns(paste0(domain,"-preview"))))
       )
-    ),
-    mappingDomainUI(ns(domain), current_meta, domainData[[domain]], current_mapping)
     )
   }
+  domain_ui<- list(      
+    actionButton(
+      paste(domain,"-preview"),
+      "Toggle Data Previews", 
+      icon=icon("table")
+    ),
+    br(),
+    domain_ui
+  )
+
   return(domain_ui)
 }
 
@@ -78,6 +92,18 @@ mappingTab <- function(input, output, session, meta, domainData){
     domains_noData <- metaDomains[!(metaDomains %in% dataDomains)]
     message("No data sets provided for the following domains listed in metadata: ",paste(domains_noData, collapse=", "))
   }
+
+  #show data previews
+  lapply(domain_ids, function(domain){
+    output[[paste0(domain,"-preview")]] <- renderDT({
+      DT::datatable(
+        domainData[[domain]], 
+        rownames = FALSE,
+        options = list(),
+        class="compact"
+      )
+    })
+  })
 
   names(domain_ids)<-domain_ids # so that lapply() creates a named list below
   domain_modules <- domain_ids %>% lapply(function(domain){
