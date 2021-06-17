@@ -53,7 +53,7 @@ create_chart <- function(chart, params){
     
     # shiny render function for the widget 
     htmlwidgets::createWidget(
-      name = chart$name,
+      name = chart$workflow$widget,
       widgetParams(params),
       package = chart$package,
       sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE),     
