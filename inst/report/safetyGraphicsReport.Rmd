@@ -18,7 +18,7 @@ params:
 create_chart_params <- function(data, chart, mapping){
   settingsList <-  safetyGraphics::generateMappingList(mapping, domain=chart$domain)
   #subset data to specific domain (if specified)
-  if(chart$domain=="multiple"){
+  if(length(chart$domain)>1){
     domainData <- data
   }else{
     domainData<- data[[chart$domain]]
@@ -53,7 +53,7 @@ create_chart <- function(chart, params){
     
     # shiny render function for the widget 
     htmlwidgets::createWidget(
-      name = chart$name,
+      name = chart$workflow$widget,
       widgetParams(params),
       package = chart$package,
       sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE),     

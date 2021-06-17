@@ -19,7 +19,7 @@ chartsTabUI <- function(id, chart){
         chartWrap <- chartsRenderModuleUI(id=ns("wrap"), chart$functions[[chart$workflow$ui]])
     }else if(tolower(chart$type=="htmlwidget")){
         #render the widget 
-        chartWrap<-chartsRenderWidgetUI(id=ns("wrap"),chart=chart$name, package=chart$package)
+        chartWrap<-chartsRenderWidgetUI(id=ns("wrap"),chart=chart$workflow$widget, package=chart$package)
     }else{
         #create the static or plotly chart
         chartWrap<-chartsRenderStaticUI(id=ns("wrap"), type=chart$type)
@@ -81,11 +81,11 @@ chartsTab <- function(input, output, session, chart, data, mapping){
         )
     }else if(tolower(chart$type=="htmlwidget")){
         message("chartsTab() is initializing a widget at ", ns("wrap"))
-        message("chart is ", chart$name, "; package is ", chart$package)
+        message("chart is ", chart$workflow$widget, "; package is ", chart$package)
         callModule(
             module=chartsRenderWidget,
             id="wrap",
-            chart=chart$name,
+            chart=chart$workflow$widget,
             package=chart$package,
             params=params
         )
