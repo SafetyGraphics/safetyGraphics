@@ -7,7 +7,8 @@
 #' @param standards a list of information regarding data standards. Each list item should use the format returned by safetyGraphics::detectStandard.
 #'
 #' @importFrom shinyjs useShinyjs
-#'  
+#' @importFrom shinybusy add_busy_spinner 
+#' 
 #' @export
 
 safetyGraphicsUI <- function(id, meta, domainData, mapping, standards){
@@ -32,6 +33,7 @@ safetyGraphicsUI <- function(id, meta, domainData, mapping, standards){
     #app UI using calls to modules
     ui<-tagList(
         shinyjs::useShinyjs(),
+        add_busy_spinner(spin = "atom", position="bottom-right"),
         tags$head(
             tags$style(app_css),
             tags$link(
