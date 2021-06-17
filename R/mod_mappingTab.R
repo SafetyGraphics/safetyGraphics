@@ -37,8 +37,7 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
     domain<-domains[i]
     current_mapping <- mappings %>% filter(domain %in% !!domains[i]) %>% select(-"domain")
     current_standard <- standards[[domain]]
-    domain_ui[[i]] <-
-    div(class="mapping-domain",
+    domain_ui[[i]] <-div(class="mapping-domain",
       div(class="domain-header",
         span(class="domain-title", str_to_upper(domain)),
         div(class="domain-wrap",
@@ -77,6 +76,8 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
 #' 
 #' @return list of mappings for all domains
 #'
+#' @import shinyjs
+#' 
 #' @export
 
 mappingTab <- function(input, output, session, meta, domainData){

@@ -44,19 +44,17 @@ safetyGraphicsUI <- function(id, meta, domainData, mapping, standards){
             "safetyGraphics",
             id=ns("safetyGraphicsApp"),
             tabPanel("Home", icon=icon("home"),homeTabUI(ns("home"))),
-            navbarMenu('Data',icon=icon("database"),
-                tabPanel("Preview", icon=icon("table"), settingsDataUI(ns("dataSettings"))),
-                tabPanel("Mapping", icon=icon("map"), mappingTabUI(ns("mapping"), meta, domainData, mapping, standards)),
-                tabPanel("Filtering", icon=icon("filter"), filterTabUI(ns("filter")))
-            ),
+            tabPanel("Mapping", icon=icon("map"), mappingTabUI(ns("mapping"), meta, domainData, mapping, standards)),
+            tabPanel("Filtering", icon=icon("filter"), filterTabUI(ns("filter"))),
             navbarMenu('Charts', icon=icon("chart-bar")),
             tabPanel("Reports", icon=icon("file-alt"), reportsTabUI(ns("reports"))),
             navbarMenu('',icon=icon("cog"),
                 tabPanel(title = "Metadata", settingsMappingUI(ns("metaSettings"))),
-                tabPanel(title = "Charts", settingsChartsUI(ns("chartSettings")))
-            ),
-            participant_badge
-        )
+                tabPanel(title = "Charts", settingsChartsUI(ns("chartSettings"))),
+                tabPanel(title = "Data", icon=icon("table"), settingsDataUI(ns("dataSettings")))
+            )
+        ),
+        participant_badge
     )
     return(ui)
 }
