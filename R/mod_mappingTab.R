@@ -50,18 +50,14 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
             span(class="domain-value", current_standard[["label"]])
         )
       ),
-      fluidRow(
-        column(4, mappingDomainUI(ns(domain), current_meta, domainData[[domain]], current_mapping)),
-        column(8,  DT::DTOutput(ns(paste0(domain,"-preview"))))
+      div(class="domain-body",
+        div(class="domain-controls", mappingDomainUI(ns(domain), current_meta, domainData[[domain]], current_mapping)),
+        div(class="domain-preview", DT::DTOutput(ns(paste0(domain,"-preview"))))
       )
     )
   }
   domain_ui<- list(      
-    actionButton(
-      paste(domain,"-preview"),
-      "Toggle Data Previews", 
-      icon=icon("table")
-    ),
+    checkboxInput(ns("toggleData"), "Show Data Previews?", TRUE),
     br(),
     domain_ui
   )
@@ -93,13 +89,26 @@ mappingTab <- function(input, output, session, meta, domainData){
     message("No data sets provided for the following domains listed in metadata: ",paste(domains_noData, collapse=", "))
   }
 
+  observeEvent(input$toggleData,{
+    print(input$toggleData)
+    if(input$toggleData){
+      shinyjs::addClass(class="show-preview", selector = ".domain-body")
+      shinyjs::show(selector = ".domain-body .domain-preview")
+    }else{
+      shinyjs::removeClass(class="show-preview", selector = ".domain-body")
+      shinyjs::hide(selector = ".domain-body .domain-preview")
+    }
+  })
+
   #show data previews
   lapply(domain_ids, function(domain){
     output[[paste0(domain,"-preview")]] <- renderDT({
       DT::datatable(
         domainData[[domain]], 
         rownames = FALSE,
-        options = list(),
+        options = list(
+          scrollX=TRUE
+        ),
         class="compact"
       )
     })

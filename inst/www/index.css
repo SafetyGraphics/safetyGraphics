@@ -1,4 +1,7 @@
+/* Mapping Module formatting */
+
 .mapping-domain{
+  max-width:100%;
   padding:1em;
   border:1px solid black;
   border-radius:0.2em;
@@ -40,6 +43,20 @@
 
 .mapping-domain .selectize-input.full{
   border-color:green;
+}
+
+.mapping-domain .domain-body>*{
+  display:inline-block;
+  vertical-align:top;
+}
+
+.mapping-domain .domain-body.show-preview .domain-controls{
+  width:25%;
+}
+
+.mapping-domain .domain-body.show-preview  .domain-preview{
+  width:74%;
+  overflow-x:scroll;  
 }
 
 table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr > th:last-of-type {
@@ -101,4 +118,3 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   font-size:0.8em;
   color:#999;
 }
-
