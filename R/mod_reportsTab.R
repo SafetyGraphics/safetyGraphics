@@ -37,6 +37,7 @@ reportsTabUI <- function(id){
 #' @param mapping tibble capturing the current data mappings [reactive].
 #' 
 #' @importFrom magrittr extract
+#' @importFrom shinybusy show_modal_spinner remove_modal_spinner
 #' 
 #' @export
 
@@ -84,12 +85,13 @@ reportsTab <- function(input, output, session, charts, data, mapping){
         mapping = mapping(), 
         charts=charts_keep()
       )
-      
+      show_modal_spinner(text="Creating html report. This might take a while for multiple charts/large data sets.") # show the modal window
       rmarkdown::render(tempReport,
                         output_file = file,
                         params = params,  ## pass in params
                         envir = new.env(parent = globalenv())  ## eval in child of global env
       )
+      remove_modal_spinner() # remove it when done
     }
   )
 }
