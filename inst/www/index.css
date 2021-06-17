@@ -51,11 +51,11 @@
 }
 
 .mapping-domain .domain-body.show-preview .domain-controls{
-  width:25%;
+  width:250px;
 }
 
 .mapping-domain .domain-body.show-preview  .domain-preview{
-  width:74%;
+  width:700px;
   overflow-x:scroll;  
 }
 
