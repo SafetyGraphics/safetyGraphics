@@ -50,13 +50,8 @@
   vertical-align:top;
 }
 
-.mapping-domain .domain-body.show-preview .domain-controls{
-  width:250px;
-}
-
-.mapping-domain .domain-body.show-preview  .domain-preview{
-  width:700px;
-  overflow-x:scroll;  
+.mapping-domain .domain-body .domain-controls{
+  padding:0.5em;
 }
 
 table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr > th:last-of-type {

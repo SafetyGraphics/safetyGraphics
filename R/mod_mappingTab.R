@@ -49,9 +49,9 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
             span(class="domain-value", current_standard[["label"]])
         )
       ),
-      div(class="domain-body",
-        div(class="domain-controls", mappingDomainUI(ns(domain), current_meta, domainData[[domain]], current_mapping)),
-        div(class="domain-preview", DT::DTOutput(ns(paste0(domain,"-preview"))))
+      div(class="domain-body row",
+        div(class="domain-controls col-md-3", mappingDomainUI(ns(domain), current_meta, domainData[[domain]], current_mapping)),
+        div(class="domain-preview col-md-9", DT::DTOutput(ns(paste0(domain,"-preview"))))
       )
     )
   }
@@ -91,12 +91,11 @@ mappingTab <- function(input, output, session, meta, domainData){
   }
 
   observeEvent(input$toggleData,{
-    print(input$toggleData)
     if(input$toggleData){
-      shinyjs::addClass(class="show-preview", selector = ".domain-body")
+      shinyjs::addClass(class="col-md-3", selector = ".domain-controls")
       shinyjs::show(selector = ".domain-body .domain-preview")
     }else{
-      shinyjs::removeClass(class="show-preview", selector = ".domain-body")
+      shinyjs::removeClass(class="col-md-3", selector = ".domain-controls")
       shinyjs::hide(selector = ".domain-body .domain-preview")
     }
   })
