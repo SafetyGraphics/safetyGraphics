@@ -68,6 +68,7 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   margin-bottom: 1em;
 }
 
+/* Formatting for charts metadata on chart page headers */
 
 .chart-header{
   background: #e7e7e7;
@@ -97,6 +98,7 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   padding-right:0.5em;
 }
 
+/* Formatting for charts items in init item sorter */
 .chart-sortable{
   font-size:0.8em;
 }
@@ -113,3 +115,22 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   font-size:0.8em;
   color:#999;
 }
+
+/* Formatting for charts items in nav dropdown */
+.chart-nav *{
+  display:inline-block;
+}
+
+.chart-nav div:not(:first-child){
+  font-size:0.8em;
+  color: #999;
+}
+
+.chart-nav div:last-child::before{
+  content: "/";
+}
+
+.chart-nav small{
+  display:none;
+}
+
