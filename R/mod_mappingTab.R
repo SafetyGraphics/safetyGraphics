@@ -38,20 +38,29 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
     current_mapping <- mappings %>% filter(domain %in% !!domains[i]) %>% select(-"domain")
     current_standard <- standards[[domain]]
     domain_ui[[i]] <-div(class="mapping-domain",
-    div(class="domain-header",
-      span(class="domain-title", str_to_upper(domain)),
-      div(class="domain-wrap",
-          span(class="domain-label", "Dimension"),
-          span(class="domain-value", paste(dim(domainData[[domain]]),collapse="x"))
+      div(class="domain-header",
+        span(class="domain-title", str_to_upper(domain)),
+        div(class="domain-wrap",
+            span(class="domain-label", "Dimension"),
+            span(class="domain-value", paste(dim(domainData[[domain]]),collapse="x")),
+        ),
+        div(class="domain-wrap",
+            span(class="domain-label", "Standard"),
+            span(class="domain-value", current_standard[["label"]])
+        )
       ),
-      div(class="domain-wrap",
-          span(class="domain-label", "Standard"),
-          span(class="domain-value", current_standard[["label"]])
+      div(class="domain-body row",
+        div(class="domain-controls col-md-3", mappingDomainUI(ns(domain), current_meta, domainData[[domain]], current_mapping)),
+        div(class="domain-preview col-md-9", DT::DTOutput(ns(paste0(domain,"-preview"))))
       )
-    ),
-    mappingDomainUI(ns(domain), current_meta, domainData[[domain]], current_mapping)
     )
   }
+  domain_ui<- list(      
+    checkboxInput(ns("toggleData"), "Show Data Previews?", TRUE),
+    br(),
+    domain_ui
+  )
+
   return(domain_ui)
 }
 
@@ -67,6 +76,8 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
 #' 
 #' @return list of mappings for all domains
 #'
+#' @import shinyjs
+#' 
 #' @export
 
 mappingTab <- function(input, output, session, meta, domainData){
@@ -78,6 +89,30 @@ mappingTab <- function(input, output, session, meta, domainData){
     domains_noData <- metaDomains[!(metaDomains %in% dataDomains)]
     message("No data sets provided for the following domains listed in metadata: ",paste(domains_noData, collapse=", "))
   }
+
+  observeEvent(input$toggleData,{
+    if(input$toggleData){
+      shinyjs::addClass(class="col-md-3", selector = ".domain-controls")
+      shinyjs::show(selector = ".domain-body .domain-preview")
+    }else{
+      shinyjs::removeClass(class="col-md-3", selector = ".domain-controls")
+      shinyjs::hide(selector = ".domain-body .domain-preview")
+    }
+  })
+
+  #show data previews
+  lapply(domain_ids, function(domain){
+    output[[paste0(domain,"-preview")]] <- renderDT({
+      DT::datatable(
+        domainData[[domain]], 
+        rownames = FALSE,
+        options = list(
+          scrollX=TRUE
+        ),
+        class="compact"
+      )
+    })
+  })
 
   names(domain_ids)<-domain_ids # so that lapply() creates a named list below
   domain_modules <- domain_ids %>% lapply(function(domain){
