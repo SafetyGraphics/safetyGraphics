@@ -15,7 +15,6 @@ reportsTabUI <- function(id){
         wellPanel(
           class="reportPanel",
           h3("Export Charts"),
-          span("Note: AE Timelines, Hepatic Explorer and Shift plot export is temporarily disabled, but will be included in v2.0. Charts implemented using shiny modules are not currently able to be exported, but may be added at a later date."),
           hr(),
           uiOutput(ns("checkboxes")),
           downloadButton(ns("reportDL"), "Export Chart(s)")
