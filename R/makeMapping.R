@@ -22,7 +22,7 @@ makeMapping <- function(domainData, meta, autoMapping, customMapping ){
         names(standards)<-names(domainData)
         
         auto_mapping_list <- standards %>% map(~.x$mapping)
-        auto_mapping_df<-bind_rows(auto_mapping_list, .id = "domain") %>% select(-valid)
+        auto_mapping_df<-bind_rows(auto_mapping_list, .id = "domain") %>% select(-.data$valid)
     }else{
         # otherwise initialize NULL standards/mapping
         standards<-NULL 
@@ -42,8 +42,8 @@ makeMapping <- function(domainData, meta, autoMapping, customMapping ){
 
     # merge auto_mapping on to user_mapping - if both are provided, keep user mapping
     combined_mapping_df <- full_join(user_mapping_df, auto_mapping_df, by=c("domain","text_key")) %>%
-        mutate(current = ifelse(is.na(current.x),current.y,current.x)) %>%
-        select(-current.x,-current.y)
+        mutate(current = ifelse(is.na(.data$current.x),.data$current.y,.data$current.x)) %>%
+        select(-.data$current.x,-.data$current.y)
     
     return(list(standard=standards, mapping=combined_mapping_df))
 }
