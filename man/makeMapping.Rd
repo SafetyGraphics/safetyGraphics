@@ -11,18 +11,15 @@ makeMapping(domainData, meta, autoMapping, customMapping)
 
 \item{meta}{data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}.}
 
-\item{autoMapping}{boolean indicating whether the app should attempt to automatically detect data standards and generate mappings for the data provided. Values specified in the \code{mapping} parameter overwrite automatically generated mappings when both are found. Defaults to true.#'}
+\item{autoMapping}{boolean indicating whether the app should use \code{safetyGraphics::detectStandard()} to detect data standards and automatically generate mappings for the data provided. Values specified in the \code{customMapping} parameter overwrite auto-generated mappings when both are found. Defaults to true.}
 
-\item{mapping}{list specifying the initial mapping values for each data mapping for each domain (e.g. list(aes= list(id_col='USUBJID', seq_col='AESEQ')).}
+\item{customMapping}{optional list specifying initial mapping values within each data mapping (e.g. list(aes= list(id_col='USUBJID', seq_col='AESEQ')).}
 }
 \value{
-List of elements for used to initialize the shiny app with the following parameters
+List containing data standard information adn mapping
 \itemize{
-\item{"meta"}{ List of configuration metadata }
-\item{"charts"}{ List of charts }
-\item{"domainData"}{ List of domain level data sets }
-\item{"mapping"}{ Initial Data Mapping  }
-\item{"standards"}{ List of domain level data standards }
+\item{"mapping"}{ Initial Data Mapping }
+\item{"standards"}{ List of domain level data standards (or NULL if autoMapping is false) }
 }
 }
 \description{

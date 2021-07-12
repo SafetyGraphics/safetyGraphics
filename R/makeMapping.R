@@ -2,16 +2,13 @@
 #' 
 #' @param domainData named list of data.frames to be loaded in to the app. Sample AdAM data from the safetyData package used by default
 #' @param meta data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}. 
-#' @param mapping list specifying the initial mapping values for each data mapping for each domain (e.g. list(aes= list(id_col='USUBJID', seq_col='AESEQ')). 
-#' @param autoMapping boolean indicating whether the app should attempt to automatically detect data standards and generate mappings for the data provided. Values specified in the `mapping` parameter overwrite automatically generated mappings when both are found. Defaults to true.#'
+#' @param customMapping optional list specifying initial mapping values within each data mapping (e.g. list(aes= list(id_col='USUBJID', seq_col='AESEQ')). 
+#' @param autoMapping boolean indicating whether the app should use `safetyGraphics::detectStandard()` to detect data standards and automatically generate mappings for the data provided. Values specified in the `customMapping` parameter overwrite auto-generated mappings when both are found. Defaults to true.
 #' 
-#' @return List of elements for used to initialize the shiny app with the following parameters
+#' @return List containing data standard information adn mapping
 #'  \itemize{
-#'  \item{"meta"}{ List of configuration metadata }
-#'  \item{"charts"}{ List of charts }
-#'  \item{"domainData"}{ List of domain level data sets }
-#'  \item{"mapping"}{ Initial Data Mapping  }
-#'  \item{"standards"}{ List of domain level data standards }
+#'  \item{"mapping"}{ Initial Data Mapping }
+#'  \item{"standards"}{ List of domain level data standards (or NULL if autoMapping is false) }
 #' }
 #' 
 #' @export
@@ -31,7 +28,6 @@ makeMapping <- function(domainData, meta, autoMapping, customMapping ){
         standards<-NULL 
         auto_mapping_df<-data.frame(domain=character(), text_key=character(), current=character())
     }
-    print(head(auto_mapping_df))
 
     # convert user mappings to data frame
     user_mapping_df <- data.frame(domain=character(), text_key=character(), current=character())
