@@ -18,11 +18,20 @@ settingsMappingUI <- function(id){
     ),
     tabPanel(
       "Code",
-      HTML("The code below creates an R object that can be passed to the <code>mapping</code> parameter of <code>safetyGraphicsApp()</code> to regenerate the current mapping."),
-      code(
-        verbatimTextOutput(ns("mappingCode"))
+      h3("Code to Reproduce Current Mapping"),
+      HTML("Save <code>mapping.yaml</code> to your working directory, and then run <code>initApp.R</code>."),
+      h4(
+        "mapping.yaml  ",
+        uiOutput(ns("yamlCopy"), style="display:inline-block"),
+        downloadButton(ns("yamlDownload"), "Download", style="display:inline-block")
       ),
-      uiOutput(ns("copyMapping"))
+      verbatimTextOutput(ns("yamlMapping")),
+      h4(
+        "initApp.R  ",
+        uiOutput(ns("initCopy"), style="display:inline-block"),
+        downloadButton(ns("initDownload"), "Download", style="display:inline-block")
+      ),      
+      verbatimTextOutput(ns("initCode")),
     ),
     type="pills"
   )
@@ -43,43 +52,74 @@ settingsMappingUI <- function(id){
 #' @export
 
 settingsMapping <- function(input, output, session, metadata, mapping){
-    ns <- session$ns
+  ns <- session$ns
 
-    #use an empty mapping if none is provided
-    if(missing(mapping)){
-      mapping<-reactive({data.frame(domain=character(0),text_id=character(0),current=character(0))})
-    }
-    
-    ##########################################################################
-    # Create reactive containing default or custom data mappings ("metadata")
-    #########################################################################
+  #use an empty mapping if none is provided
+  if(missing(mapping)){
+    mapping<-reactive({data.frame(domain=character(0),text_id=character(0),current=character(0))})
+  }
+  
+  ##########################################################################
+  # Create reactive containing default or custom data mappings ("metadata")
+  #########################################################################
 
-    metadata_mapping <- reactive(
-        metadata %>% left_join(mapping())  
-    )
+  metadata_mapping <- reactive(
+      metadata %>% left_join(mapping())  
+  )
 
-    output$metaTable <- renderDT({
-        DT::datatable(
-            metadata_mapping(), 
-            rownames = FALSE,
-            options = list(paging=FALSE, ordering=FALSE),
-            class="compact metatable"
-        )
-    })
-
-    #Show code to recreate current mapping
-    codeString<-reactive({
-      paste(
-        "# Code for current data mapping\n",
-        "customMapping<-\n",
-        paste(deparse(mapping()), collapse="\n"),
-        "# call `safetyGraphics(mapping=customMapping)` to restart the app using this mapping"
+  output$metaTable <- renderDT({
+      DT::datatable(
+          metadata_mapping(), 
+          rownames = FALSE,
+          options = list(paging=FALSE, ordering=FALSE),
+          class="compact metatable"
       )
-      
-    })
-    output$mappingCode <- renderText({codeString()})
-    output$copyMapping <- renderUI({
-      rclipboard::rclipButton("clipbtn", "Copy to Clipboard", codeString(), icon("clipboard"))
-    })
-    return(metadata)
+  })
+
+  # mapping.yaml for current mapping
+  yamlString <- reactive({
+    as.yaml(generateMappingList(mapping()))
+  })
+  output$yamlMapping <- renderText({yamlString()})
+  output$yamlCopy <- renderUI({
+    rclipboard::rclipButton("clipbtn", "Copy to Clipboard", yamlString(), icon("clipboard"))
+  })
+  output$yamlDownload <- downloadHandler(
+    filename = "mapping.yaml",
+    content = function(file) {
+      writeLines(yamlString(), file)
+    }
+  )
+
+  # initApp.R
+  initCode<- paste(
+    "library(safetyGraphics)",
+    "#Initialize safetyGraphics App",
+    "#Load mapping",
+    "#!!!!-- Update path if mapping.yaml isn't saved in working directory --!!!! ",
+    "mapping <- read_yaml('mapping.yaml')", 
+    "",
+    "#Load Data",
+    "#!!!!-- Demo data from safetyData should be updated by user --!!!!",
+    "dataList <- list(",
+    "  labs=safetyData::adam_adlbc,", 
+    "  aes=safetyData::adam_adae,",
+    "  dm=safetyData::adam_adsl",
+    ")",
+    "#Initialize app",
+    "safetyGraphicsApp(data=dataList, mapping=mapping)",
+    sep="\n"
+  ) 
+  output$initCode <- renderText(initCode)
+  output$initCopy <- renderUI({
+    rclipboard::rclipButton("clipbtn2", "Copy to Clipboard", initCode, icon("clipboard"))
+  })
+  output$yamlDownload <- downloadHandler(
+    filename = "initApp.R",
+    content = function(file) {
+      writeLines(initCode, file)
+    }
+  )
+
+  return(metadata)
 }
