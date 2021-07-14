@@ -16,7 +16,7 @@ makeMapping(domainData, meta, autoMapping, customMapping)
 \item{customMapping}{optional list specifying initial mapping values within each data mapping (e.g. list(aes= list(id_col='USUBJID', seq_col='AESEQ')).}
 }
 \value{
-List containing data standard information adn mapping
+List containing data standard information and mapping
 \itemize{
 \item{"mapping"}{ Initial Data Mapping }
 \item{"standards"}{ List of domain level data standards (or NULL if autoMapping is false) }

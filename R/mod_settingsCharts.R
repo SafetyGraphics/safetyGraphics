@@ -13,8 +13,10 @@ settingsChartsUI <- function(id){
     tabsetPanel(
       tabPanel("jsonedit View", listviewer::jsoneditOutput(ns("chartObj"), height = "800px") ),
       tabPanel("DT format", DT::DTOutput(ns("chartMetaDT"))),
-      tabPanel("Verbatim", verbatimTextOutput(ns("chartList"))))
+      tabPanel("Verbatim", verbatimTextOutput(ns("chartList"))),
+      tabPanel("YAML", verbatimTextOutput(ns("chartYAML"))) 
     )
+  )
 }
 
 #' @title  Settings Module - charts details - server
@@ -58,5 +60,11 @@ settingsCharts <- function(input, output, session, charts){
   output$chartMetaDT <- DT::renderDT({
     DT::datatable( tblMeta(charts) )
   })
-  
+
+  output$chartYAML <- renderText({
+    as.yaml(charts)
+  })
+
+  # Script to load YAML with expressions/functions: `read_yaml("charts.yaml", eval.expr=TRUE)`
+
 }

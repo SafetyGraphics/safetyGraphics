@@ -5,7 +5,7 @@
 #' @param customMapping optional list specifying initial mapping values within each data mapping (e.g. list(aes= list(id_col='USUBJID', seq_col='AESEQ')). 
 #' @param autoMapping boolean indicating whether the app should use `safetyGraphics::detectStandard()` to detect data standards and automatically generate mappings for the data provided. Values specified in the `customMapping` parameter overwrite auto-generated mappings when both are found. Defaults to true.
 #' 
-#' @return List containing data standard information adn mapping
+#' @return List containing data standard information and mapping
 #'  \itemize{
 #'  \item{"mapping"}{ Initial Data Mapping }
 #'  \item{"standards"}{ List of domain level data standards (or NULL if autoMapping is false) }
