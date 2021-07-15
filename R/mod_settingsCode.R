@@ -7,8 +7,13 @@
 settingsCodeUI <- function(id){
   ns <- NS(id)
   list(
-    h3("Code to Reproduce Current Mapping"),
-    HTML("Save <code>mapping.yaml</code> to your working directory, and then run <code>initApp.R</code>."),
+    rclipboard::rclipboardSetup(),
+    br(),
+    p(
+      icon("info-circle"),
+      HTML("Code to Restart app with current settings is shown below. Save <code>mapping.yaml</code> to your working directory, and then run <code>initApp.R</code>."),
+      class="info"
+    ),
     h4(
       "mapping.yaml  ",
       uiOutput(ns("yamlCopy"), style="display:inline-block"),

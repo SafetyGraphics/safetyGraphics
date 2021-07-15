@@ -6,15 +6,12 @@
 
 settingsTabUI <- function(id){
   ns <- NS(id)
-  list(
-    h1("Chart Metadata"),
-    tabsetPanel(
-      tabPanel(title = "Code", icon=icon("code"), settingsCodeUI(ns("codeSettings"))),
-      tabPanel(title = "Mapping", icon=icon("map"), settingsMappingUI(ns("metaSettings"))),
-      tabPanel(title = "Charts", icon=icon("chart-line"), settingsChartsUI(ns("chartSettings"))),
-      tabPanel(title = "Data", icon=icon("table"), settingsDataUI(ns("dataSettings"))),
-      type="pills" 
-    )
+  tabsetPanel(
+    tabPanel(title = "Mapping", icon=icon("map"), settingsMappingUI(ns("metaSettings"))),
+    tabPanel(title = "Charts", icon=icon("chart-line"), settingsChartsUI(ns("chartSettings"))),
+    tabPanel(title = "Data", icon=icon("table"), settingsDataUI(ns("dataSettings"))),
+    tabPanel(title = "Code", icon=icon("code"), settingsCodeUI(ns("codeSettings"))),
+    type="pills" 
   )
 }
 

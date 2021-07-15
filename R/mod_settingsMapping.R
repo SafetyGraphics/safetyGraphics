@@ -10,7 +10,11 @@
 settingsMappingUI <- function(id){
   ns <- NS(id)
   tagList(
-    rclipboard::rclipboardSetup(),
+    p(
+      icon("info-circle"), 
+      span("The table below shows details related to data mapping. Full metadata for each data domain is shown along with the current mapping in the last column in blue). Both metadata and the current mapping can be exported for re-use on the settings/code tab."),
+      class="info"
+    ),
     DT::DTOutput(ns("metaTable"))
   ) 
 }  
@@ -53,4 +57,5 @@ settingsMapping <- function(input, output, session, metadata, mapping){
           class="compact metatable"
       )
   })
+
 }

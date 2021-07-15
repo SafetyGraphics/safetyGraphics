@@ -134,3 +134,11 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   display:none;
 }
 
+p.info{
+  border-radius:0.5em; 
+  padding:0.5em;
+  margin-top:0.5em;
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border:1px solid #bee5eb;
+}

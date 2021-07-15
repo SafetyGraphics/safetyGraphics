@@ -9,7 +9,12 @@
 settingsChartsUI <- function(id){
   ns <- NS(id)
   list(
-    h1("Chart Metadata"),
+    br(),
+    p(
+      icon("info-circle"),
+      "Full details regarding the charts are shown below. Charts specifications are saved in an R list, and can be exported for re-use on the settings/code tab. ",
+      class="info"
+    ),
     tabsetPanel(
       tabPanel("jsonedit View", listviewer::jsoneditOutput(ns("chartObj"), height = "800px") ),
       tabPanel("DT format", DT::DTOutput(ns("chartMetaDT"))),
