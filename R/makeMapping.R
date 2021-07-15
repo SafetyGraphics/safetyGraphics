@@ -35,8 +35,14 @@ makeMapping <- function(domainData, meta, autoMapping, customMapping ){
         domainMap <- customMapping[[dom]]
         for(key in names(domainMap)){
             val <- domainMap[[key]]
-            new_row <- data.frame(domain=dom, text_key=key, current=val)
-            user_mapping_df<- rbind(user_mapping_df,new_row)
+            # TODO - make this recursive at some point
+            if(typeof(val)=="list"){
+                new_rows <- data.frame(domain=dom, text_key=paste0(key,"--",names(val)), current=unlist(val))
+                user_mapping_df <- rbind(user_mapping_df,new_rows)
+            }else{
+                new_row <- data.frame(domain=dom, text_key=key, current=val)
+                user_mapping_df<- rbind(user_mapping_df,new_row)
+            }
         }        
     }
 

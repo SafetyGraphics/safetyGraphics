@@ -125,6 +125,7 @@ settingsCode <- function(input, output, session, mapping, charts){
   # initApp.R
   initString<- paste(
     "library(safetyGraphics)",
+    "library(yaml)",
     "#Initialize safetyGraphics App",
     "#Load mapping",
     "#NOTE: Update path if mapping.yaml isn't saved in working directory --!!!! ",
@@ -145,7 +146,7 @@ settingsCode <- function(input, output, session, mapping, charts){
     "",
     "#Initialize app",
     "#NOTE: This assumes the default meta data is used. See ?safetyGraphicsApp for more details and customization options.",
-    "safetyGraphicsApp(data=dataList, mapping=mapping, charts=charts)",
+    "safetyGraphicsApp(domainData=dataList, mapping=mapping, charts=charts)",
     sep="\n"
   ) 
   output$initText <- renderText(initString)

@@ -93,10 +93,29 @@ test_that("unique domains in customMapping are added",{
 test_that("unique mapping values for existing domains in customMapping are added",{
   myCustomMapping3 <- myCustomMapping
   myCustomMapping3$aes$other_col <- "other"
-  ex5<-makeMapping(testData, safetyGraphics::meta, TRUE,  myCustomMapping3)
+  ex6<-makeMapping(testData, safetyGraphics::meta, TRUE,  myCustomMapping3)
 
   #1 row added
-  expect_equal(nrow(ex5$mapping), nrow(ex1$mapping)+1)
-  ae_other_val <- ex5$mapping %>% filter(domain=="aes") %>% filter(text_key=="other_col") %>% pull(current)
+  expect_equal(nrow(ex6$mapping), nrow(ex1$mapping)+1)
+  ae_other_val <- ex6$mapping %>% filter(domain=="aes") %>% filter(text_key=="other_col") %>% pull(current)
   expect_equal(ae_other_val, myCustomMapping3$aes$other_col)
+})
+
+test_that("nested values in custom mapping work as expected",{
+  myCustomMapping4 <- myCustomMapping
+  myCustomMapping4$labs$measure_values$ALT <- "AnotherAlt"
+  myCustomMapping4$labs$measure_values$OTHER <- "Other"
+  myCustomMapping4$aes$fake_values <- list(other1="Other1", other2="other2")
+  ex7<-makeMapping(testData, safetyGraphics::meta, TRUE,  myCustomMapping4)
+
+  #1 row added
+  expect_equal(nrow(ex7$mapping), nrow(ex1$mapping)+3)
+  labs_measure_alt_val <- ex7$mapping %>% filter(domain=="labs") %>% filter(text_key=="measure_values--ALT") %>% pull(current)
+  expect_equal(labs_measure_alt_val, myCustomMapping4$labs$measure_values$ALT)
+  labs_measure_other_val <- ex7$mapping %>% filter(domain=="labs") %>% filter(text_key=="measure_values--OTHER") %>% pull(current)
+  expect_equal(labs_measure_other_val, myCustomMapping4$labs$measure_values$OTHER)
+  ae_fake1_val <- ex7$mapping %>% filter(domain=="aes") %>% filter(text_key=="fake_values--other1") %>% pull(current)
+  expect_equal(ae_fake1_val, myCustomMapping4$aes$fake_values$other1)
+  ae_fake2_val <- ex7$mapping %>% filter(domain=="aes") %>% filter(text_key=="fake_values--other2") %>% pull(current)
+  expect_equal(ae_fake2_val, myCustomMapping4$aes$fake_values$other2)
 })
