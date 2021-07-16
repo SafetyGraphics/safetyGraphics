@@ -28,7 +28,7 @@ settingsTabUI <- function(id){
 #' 
 #' @export
 
-settingsTab <- function(id, input, output, session, domains, metadata, mapping, charts){
+settingsTab <- function(input, output, session, domains, metadata, mapping, charts){
   callModule(settingsCode, "codeSettings",  mapping=mapping, charts=charts)
   callModule(settingsData, "dataSettings", domains = domains)
   callModule(settingsMapping, "metaSettings", metadata=metadata, mapping=mapping)

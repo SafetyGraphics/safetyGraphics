@@ -87,6 +87,8 @@ settingsCodeUI <- function(id){
 #' @param mapping mapping
 #' @param charts charts
 #' 
+#' @importFrom utils zip
+#' 
 #' @export
 
 settingsCode <- function(input, output, session, mapping, charts){

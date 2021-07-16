@@ -4,7 +4,7 @@
 \alias{settingsTab}
 \title{Server for the setting page}
 \usage{
-settingsTab(id, input, output, session, domains, metadata, mapping, charts)
+settingsTab(input, output, session, domains, metadata, mapping, charts)
 }
 \arguments{
 \item{input}{Shiny input object}
