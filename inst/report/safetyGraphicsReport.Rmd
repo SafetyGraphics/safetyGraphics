@@ -71,12 +71,6 @@ create_chart <- function(chart, params){
 library(safetyGraphics)
 library(knitr)
 
-
-create_chunk_title <- function(chart) {
-  sub_chunk <- paste0("### ",chart,"\n")
-  cat(sub_chunk)
-}
-
 create_chunk_chart <- function(chart, params, fig_height=7, fig_width=9) {
   g_deparsed <- paste0(deparse(
     function() {create_chart(chart, params)}
@@ -98,8 +92,10 @@ mapping <- params$mapping
 data <- params$data
 for (i in seq_along(names(params$charts))){
   chart <- params$charts[[i]]
-  chart_params <- create_chart_params(data, chart, mapping)
-  create_chunk_title(chart$label)
+  chart_params <- makeChartParams(data, chart, mapping)
+  # Make title
+  cat(paste0("### ",chart,"\n"))
+  
   create_chunk_chart(chart, chart_params)
 }
 

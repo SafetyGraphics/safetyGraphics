@@ -10,22 +10,37 @@
 #' @export
 
 chartsTabUI <- function(id, chart){
-    ns <- NS(id)    
-    # Chart header with description and links
-    header<-makeChartSummary(chart)
-    chartWrap <- NULL
-    if(tolower(chart$type=="module")){
-        #render the module UI
-        chartWrap <- chartsRenderModuleUI(id=ns("wrap"), chart$functions[[chart$workflow$ui]])
-    }else if(tolower(chart$type=="htmlwidget")){
-        #render the widget 
-        chartWrap<-chartsRenderWidgetUI(id=ns("wrap"),chart=chart$workflow$widget, package=chart$package)
-    }else{
-        #create the static or plotly chart
-        chartWrap<-chartsRenderStaticUI(id=ns("wrap"), type=chart$type)
-    }
-    
-    return(list(header, chartWrap))
+  ns <- NS(id)    
+  # Chart header with description and links
+  header<-makeChartSummary(chart)
+
+  # Make Chart Wrapper
+  if(chart$type=="plot"){
+    chartWrap<-plotOutput(ns("chart-wrap"))
+  }else if(chart$type=="html"){
+    chartWrap<-htmlOutput(ns("chart-wrap"))
+  }else if(chart$type=="table"){
+    chartWrap<-DT::dataTableOutput(ns("chart-wrap"))
+  }else if(chart$type=="rtf"){
+    chartWrap<-div(
+      downloadButton(ns("downloadRTF"), "Download RTF"),
+      DT::dataTableOutput(ns("chart-wrap"))
+    )
+  }else if(chart$type=="htmlwidget"){
+    chartWrap<-htmlwidgets::shinyWidgetOutput(
+      ns("chart-wrap"), 
+      chart$workflow$widget, 
+      "100%", 
+      "100%",
+      package=chart$package
+    )
+  }else if(chart$type=="module"){
+    chartWrap<-chart$functions[[chart$workflow$ui]](ns("chart-wrap"))
+  }else{
+    chartWrap <- div("Invalid Chart Type")
+  }
+
+  return(list(header, chartWrap))
 }
 
 #' @title  home tab - server
@@ -41,63 +56,89 @@ chartsTabUI <- function(id, chart){
 #' @export
 
 #chartsTab <- function(input, output, session, chart, type, package, chartFunction, initFunction, domain, data, mapping){
-chartsTab <- function(input, output, session, chart, data, mapping){
+chartsTab <- function(input, output, session, chart, data, mapping){  
+  ns <- session$ns
+  message("chartsTab() starting for ",chart$name)
+
+  # Initialize chart-specific parameters  
+  params <- reactive({ 
+    makeChartParams(
+      data = data(),
+      mapping= mapping(),
+      chart=chart
+    )
+  })
+
+  # Helper functions for html widget render
+  widgetOutput <- function(outputId, width = "100%", height = "400px") {
+    htmlwidgets::shinyWidgetOutput(outputId, chart, width, height, package=package)
+  }
+
+  renderWidget <- function(expr, env = parent.frame(), quoted = FALSE) {
+    if (!quoted) { expr <- substitute(expr) } # force quoted
+    htmlwidgets::shinyRenderWidget(expr, widgetOutput, env, quoted = TRUE)
+  }
+
+  # Draw the chart
+ 
+  if(chart$type=="plot"){
+    output[["chart-wrap"]] <- renderPlot(
+      do.call(
+        chart$functions[[chart$workflow$main]],
+        params()
+      )
+    ) 
+  }else if(chart$type=="html"){
+    output[["chart-wrap"]] <- renderText(
+      do.call(
+        chart$functions[[chart$workflow$main]],
+        params()
+      )
+    ) 
+  }else if(chart$type=="table"){
+    output[["chart-wrap"]] <- DT::renderDataTable(
+      do.call(
+        chart$functions[[chart$workflow$main]], 
+        params()
+      ), 
+      rownames = FALSE,
+      options = list(
+        pageLength = 20,
+        ordering = FALSE,
+        searching = FALSE
+      )
+    ) 
+  }else if(chart$type=="htmlwidget"){
+    output[["chart-wrap"]] <- renderWidget(
+      htmlwidgets::createWidget(
+        name = chart$workflow$widget,
+        params(),
+        package = chart$package,
+        sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE),     
+      )
+    )
+  }else if(chart$type=="module"){
+    callModule( 
+      chart$functions[[chart$workflow$server]], 
+      "chart-wrap", 
+      params
+    )
+  } else if(type == "rtf") {
+    output[["chart-wrap"]] <- DT::renderDataTable(
+      do.call(chartFunction,params())$table, 
+      rownames = FALSE,
+      options = list(
+        pageLength = 20,
+        ordering = FALSE,
+        searching = FALSE
+      )
+    ) 
     
-    ns <- session$ns
-    message("chartsTab() starting for ",chart$name)
-    
-    params <- reactive({
-        #convert settings from data frame to list and subset to specified domain (if any)
-        settingsList <-  safetyGraphics::generateMappingList(mapping(), domain=chart$domain)
-
-        #subset data to specific domain (if specified)
-        if(length(chart$domain)>1){
-            domainData <- data()
-        }else{
-            domainData<- data()[[chart$domain]]
-        }
-        params <- list(data=domainData, settings=settingsList)
-
-        #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
-        if(utils::hasName(chart,"functions")){
-            if(utils::hasName(chart$workflow,"init")){
-                message(chart$name, " has an init.")
-                print(chart$functions[chart$workflow$init])
-                params <- do.call(chart$functions[[chart$workflow$init]], params)
-            }
-        }
-        return(params)
-    })
-
-    if(tolower(chart$type=="module")){
-        #render the module UI
-        message("chartsTab() is initializing a module at ", ns("wrap"))
-        serverFunction <- chart$functions[[chart$workflow$server]]
-        callModule(
-            module=chartsRenderModule,
-            id="wrap",
-            serverFunction=serverFunction,
-            params=params
-        )
-    }else if(tolower(chart$type=="htmlwidget")){
-        message("chartsTab() is initializing a widget at ", ns("wrap"))
-        message("chart is ", chart$workflow$widget, "; package is ", chart$package)
-        callModule(
-            module=chartsRenderWidget,
-            id="wrap",
-            chart=chart$workflow$widget,
-            package=chart$package,
-            params=params
-        )
-    }else{
-        #create the static or plotly chart
-        chartFunction <- chart$functions[[chart$workflow$main]]
-        callModule(
-            module=chartsRenderStatic,
-            id="wrap",
-            chartFunction=chartFunction,
-            params=params, 
-            type=chart$type
-        )
-    }
+    output[["downloadRTF"]] <- downloadHandler(
+      filename = "SafetyGraphics.rtf",
+      content = function(file) {
+        pharmaRTF::write_rtf(do.call(chartFunction,params()), file = file)
+      }
+    )
+  }
 }
