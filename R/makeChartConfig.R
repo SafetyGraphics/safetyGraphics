@@ -145,6 +145,34 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
             chart$functions <- lapply(chart_function_names, match.fun)
             names(chart$functions) <- chart_function_names
 
+            # Define UI function unless one is provided
+            if(!utils::hasName(chart$functions, "ui")){
+                if(chart$type=="plot"){
+                    chart$functions$ui<-plotOutput
+                }else if(chart$type=="html"){
+                    chart$functions$ui<-htmlOutput
+                }else if(chart$type=="table"){
+                    chart$functions$ui<-DT::dataTableOutput
+                # }else if(chart$type=="rtf"){
+                #     chart$functions$ui<-div(
+                #     downloadButton(ns("downloadRTF"), "Download RTF"),
+                #     DT::dataTableOutput(ns("chart-wrap"))
+                #     )
+                }else if(chart$type=="htmlwidget"){
+                    chart$functions$ui<-function(id){
+                        htmlwidgets::shinyWidgetOutput(
+                            id, 
+                            chart$workflow$widget, 
+                            "100%", 
+                            "100%",
+                            package=chart$package
+                        )
+                    }
+                }else if (chart$type=="module"){
+                    chart$functions$ui<-chart$functions[[chart$workflow$ui]]
+                }
+            }
+
             # check that functions exist for specified workflows
             workflow_found <- sum(unlist(chart$workflow) %in% chart_function_names)
             workflow_total <- length(unlist(chart$workflow)[names(unlist(chart$workflow))!="widget"])

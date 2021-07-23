@@ -10,36 +10,11 @@
 #' @export
 
 chartsTabUI <- function(id, chart){
-  ns <- NS(id)    
+  ns <- shiny::NS(id)    
   # Chart header with description and links
   header<-makeChartSummary(chart)
-
-  # Make Chart Wrapper
-  if(chart$type=="plot"){
-    chartWrap<-plotOutput(ns("chart-wrap"))
-  }else if(chart$type=="html"){
-    chartWrap<-htmlOutput(ns("chart-wrap"))
-  }else if(chart$type=="table"){
-    chartWrap<-DT::dataTableOutput(ns("chart-wrap"))
-  }else if(chart$type=="rtf"){
-    chartWrap<-div(
-      downloadButton(ns("downloadRTF"), "Download RTF"),
-      DT::dataTableOutput(ns("chart-wrap"))
-    )
-  }else if(chart$type=="htmlwidget"){
-    chartWrap<-htmlwidgets::shinyWidgetOutput(
-      ns("chart-wrap"), 
-      chart$workflow$widget, 
-      "100%", 
-      "100%",
-      package=chart$package
-    )
-  }else if(chart$type=="module"){
-    chartWrap<-chart$functions[[chart$workflow$ui]](ns("chart-wrap"))
-  }else{
-    chartWrap <- div("Invalid Chart Type")
-  }
-
+  chartWrap<-chart$functions$ui(ns("chart-wrap"))
+  
   return(list(header, chartWrap))
 }
 
