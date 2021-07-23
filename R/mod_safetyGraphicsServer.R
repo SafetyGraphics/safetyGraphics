@@ -32,9 +32,6 @@ safetyGraphicsServer <- function(input, output, session, meta, mapping, domainDa
     )
     
 
-    callModule(settingsData, "dataSettings", domains = domainData)
-    callModule(settingsMapping, "metaSettings", metadata=meta, mapping=current_mapping)
-    callModule(settingsCharts, "chartSettings", charts = charts)
     callModule(homeTab, "home")
 
     #Initialize Chart UI - Adds subtabs to chart menu - this initializes initializes chart UIs
@@ -54,5 +51,8 @@ safetyGraphicsServer <- function(input, output, session, meta, mapping, domainDa
     
     # pass all charts, filtered data, and current mappings to reports/export tab
     callModule(reportsTab, "reports", charts = charts, data = filtered_data, mapping = current_mapping)
+
+    callModule(settingsTab, "settings", domains = domainData,  metadata=meta, mapping=current_mapping, charts = charts)
+
 }
 

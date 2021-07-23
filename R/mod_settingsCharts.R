@@ -9,12 +9,18 @@
 settingsChartsUI <- function(id){
   ns <- NS(id)
   list(
-    h1("Chart Metadata"),
+    br(),
+    p(
+      icon("info-circle"),
+      "Full details regarding the charts are shown below. Charts specifications are saved in an R list, and can be exported for re-use on the settings/code tab. ",
+      class="info"
+    ),
     tabsetPanel(
       tabPanel("jsonedit View", listviewer::jsoneditOutput(ns("chartObj"), height = "800px") ),
-      tabPanel("DT format", DT::DTOutput(ns("chartMetaDT"))),
-      tabPanel("Verbatim", verbatimTextOutput(ns("chartList"))))
+      tabPanel("Verbatim", verbatimTextOutput(ns("chartList"))),
+      tabPanel("YAML", verbatimTextOutput(ns("chartYAML"))) 
     )
+  )
 }
 
 #' @title  Settings Module - charts details - server
@@ -36,27 +42,15 @@ settingsCharts <- function(input, output, session, charts){
   output$chartObj <- listviewer::renderJsonedit({
     listviewer::jsonedit(charts)
   })
+
   output$chartList <- renderPrint({
     print(charts)
   })
-  
-  
-  tblMeta <- function(charts){
-    #TODO move this function to a helper file and fix warning messages
-    bbb <- purrr::map(charts, ~{
-      bb <- dplyr::as_tibble(t(dplyr::tibble(.x)), .name_repair="unique")
-      names(bb) <- names(.x)
-      bb
-    })
-    
-    bbbb<- do.call(bind_rows,  bbb)
-    
-  }
-  
-  
-  # DT for charts meta data
-  output$chartMetaDT <- DT::renderDT({
-    DT::datatable( tblMeta(charts) )
+
+  output$chartYAML <- renderText({
+    as.yaml(charts)
   })
+
   
+
 }

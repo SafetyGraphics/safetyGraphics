@@ -9,22 +9,25 @@ app_startup(
   meta = NULL,
   charts = NULL,
   mapping = NULL,
+  autoMapping = NULL,
   filterDomain = NULL,
   chartSettingsPaths = NULL
 )
 }
 \arguments{
-\item{domainData}{named list of domain level data}
+\item{domainData}{named list of data.frames to be loaded in to the app. Sample AdAM data from the safetyData package used by default}
 
-\item{meta}{list of configuration metadata}
+\item{meta}{data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}.}
 
-\item{charts}{list of charts}
+\item{charts}{list of charts in the format produced by safetyGraphics::makeChartConfig()}
 
-\item{mapping}{initial data mapping}
+\item{mapping}{list specifying the initial mapping values for each data mapping for each domain (e.g. list(aes= list(id_col='USUBJID', seq_col='AESEQ')).}
+
+\item{autoMapping}{boolean indicating whether the app should attempt to automatically detect data standards and generate mappings for the data provided. Values specified in the \code{mapping} parameter overwrite automatically generated mappings when both are found. Defaults to true.}
 
 \item{filterDomain}{domain used for the data/filter tab. Demographics ("\code{dm}") is used by default. Using a domain that is not one record per participant is not recommended.}
 
-\item{chartSettingsPaths}{character vector with paths to chart setting yaml files}
+\item{chartSettingsPaths}{path(s) where customization functions are saved relative to your working directory. All charts can have itialization (e.g. myChart_Init.R) and static charts can have charting functions (e.g. myGraphic_Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details.}
 }
 \value{
 List of elements for used to initialize the shiny app with the following parameters
@@ -37,5 +40,5 @@ List of elements for used to initialize the shiny app with the following paramet
 }
 }
 \description{
-Prepare inputs for safetyGraphics app - run before app is initialized. See ?safetyGraphicsApp for parameter definitions
+Prepare inputs for safetyGraphics app - run before app is initialized.
 }
