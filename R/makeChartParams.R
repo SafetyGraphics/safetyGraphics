@@ -26,14 +26,22 @@ makeChartParams <- function(data, chart, mapping){
     }
   }
 
-  # convert settings to json for widgets
+  # format parameters for htmlwidget
   if(chart$type == "htmlwidget"){
-    params$rSettings <- params$settings
-    params$settings <- jsonlite::toJSON(
+    widgetParams <- list(
+      name=chart$workflow$widget, 
+      package=chart$package,
+      sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE),
+      x=list()
+    )
+    widgetParams$x$data <- params$data
+    widgetParams$x$rSettings <- params$settings
+    widgetParams$x$settings <- jsonlite::toJSON(
       params$settings,
       auto_unbox = TRUE,
       null = "null",  
     )
+    params <- widgetParams
   }
 
   return(params)

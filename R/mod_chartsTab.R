@@ -14,7 +14,7 @@ chartsTabUI <- function(id, chart){
   # Chart header with description and links
   header<-makeChartSummary(chart)
   chartWrap<-chart$functions$ui(ns("chart-wrap"))
-  
+
   return(list(header, chartWrap))
 }
 
@@ -44,76 +44,71 @@ chartsTab <- function(input, output, session, chart, data, mapping){
     )
   })
 
-  # Helper functions for html widget render
-  widgetOutput <- function(outputId, width = "100%", height = "400px") {
-    htmlwidgets::shinyWidgetOutput(outputId, chart, width, height, package=package)
-  }
-
-  renderWidget <- function(expr, env = parent.frame(), quoted = FALSE) {
-    if (!quoted) { expr <- substitute(expr) } # force quoted
-    htmlwidgets::shinyRenderWidget(expr, widgetOutput, env, quoted = TRUE)
-  }
-
   # Draw the chart
- 
-  if(chart$type=="plot"){
-    output[["chart-wrap"]] <- renderPlot(
-      do.call(
-        chart$functions[[chart$workflow$main]],
-        params()
-      )
-    ) 
-  }else if(chart$type=="html"){
-    output[["chart-wrap"]] <- renderText(
-      do.call(
-        chart$functions[[chart$workflow$main]],
-        params()
-      )
-    ) 
-  }else if(chart$type=="table"){
-    output[["chart-wrap"]] <- DT::renderDataTable(
-      do.call(
-        chart$functions[[chart$workflow$main]], 
-        params()
-      ), 
-      rownames = FALSE,
-      options = list(
-        pageLength = 20,
-        ordering = FALSE,
-        searching = FALSE
-      )
-    ) 
-  }else if(chart$type=="htmlwidget"){
-    output[["chart-wrap"]] <- renderWidget(
-      htmlwidgets::createWidget(
-        name = chart$workflow$widget,
-        params(),
-        package = chart$package,
-        sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE),     
-      )
+  output[["chart-wrap"]] <- chart$functions$server(
+    do.call(
+      chart$functions$main,
+      params()
     )
-  }else if(chart$type=="module"){
-    callModule( 
-      chart$functions[[chart$workflow$server]], 
-      "chart-wrap", 
-      params
-    )
-  } else if(type == "rtf") {
-    output[["chart-wrap"]] <- DT::renderDataTable(
-      do.call(chartFunction,params())$table, 
-      rownames = FALSE,
-      options = list(
-        pageLength = 20,
-        ordering = FALSE,
-        searching = FALSE
-      )
-    ) 
+  )
+  # if(chart$type=="plot"){
+  #   output[["chart-wrap"]] <- renderPlot(
+  #     do.call(
+  #       chart$functions[[chart$workflow$main]],
+  #       params()
+  #     )
+  #   ) 
+  # }else if(chart$type=="html"){
+  #   output[["chart-wrap"]] <- renderText(
+  #     do.call(
+  #       chart$functions[[chart$workflow$main]],
+  #       params()
+  #     )
+  #   ) 
+  # }else if(chart$type=="table"){
+  #   output[["chart-wrap"]] <- DT::renderDataTable(
+  #     do.call(
+  #       chart$functions[[chart$workflow$main]], 
+  #       params()
+  #     ), 
+  #     rownames = FALSE,
+  #     options = list(
+  #       pageLength = 20,
+  #       ordering = FALSE,
+  #       searching = FALSE
+  #     )
+  #   ) 
+  # }else if(chart$type=="htmlwidget"){
+  #   output[["chart-wrap"]] <- renderWidget(
+  #     htmlwidgets::createWidget(
+  #       name = chart$workflow$widget,
+  #       params(),
+  #       package = chart$package,
+  #       sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE),     
+  #     )
+  #   )
+  # }else if(chart$type=="module"){
+  #   callModule( 
+  #     chart$functions[[chart$workflow$server]], 
+  #     "chart-wrap", 
+  #     params
+  #   )
+  # } else if(type == "rtf") {
+  #   output[["chart-wrap"]] <- DT::renderDataTable(
+  #     do.call(chartFunction,params())$table, 
+  #     rownames = FALSE,
+  #     options = list(
+  #       pageLength = 20,
+  #       ordering = FALSE,
+  #       searching = FALSE
+  #     )
+  #   ) 
     
-    output[["downloadRTF"]] <- downloadHandler(
-      filename = "SafetyGraphics.rtf",
-      content = function(file) {
-        pharmaRTF::write_rtf(do.call(chartFunction,params()), file = file)
-      }
-    )
-  }
+  #   output[["downloadRTF"]] <- downloadHandler(
+  #     filename = "SafetyGraphics.rtf",
+  #     content = function(file) {
+  #       pharmaRTF::write_rtf(do.call(chartFunction,params()), file = file)
+  #     }
+  #   )
+  # }
 }

@@ -126,65 +126,7 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
     message("Loaded ", length(charts), " charts: ",paste(names(charts),collapse=", "))
 
     # Bind workflow functions to chart object
-    all_functions <- as.character(utils::lsf.str(".GlobalEnv"))
-    message("Global Functions: ",all_functions)
-    charts <- lapply(charts, 
-        function(chart){
-            if(utils::hasName(chart, "package")){
-                package_functions <- as.character(utils::lsf.str(paste0("package:",chart$package)))
-                all_functions<-c(all_functions,package_functions)
-            }
-
-            #search functions that include the charts name or the workflow function names
-            chart_function_names <- c()
-            for(query in c(chart$name, unlist(chart$workflow)) ){
-                matches<-all_functions[str_detect(query, all_functions)]
-                chart_function_names <- c(chart_function_names, matches)
-            }
-
-            chart$functions <- lapply(chart_function_names, match.fun)
-            names(chart$functions) <- chart_function_names
-
-            # Define UI function unless one is provided
-            if(!utils::hasName(chart$functions, "ui")){
-                if(chart$type=="plot"){
-                    chart$functions$ui<-plotOutput
-                }else if(chart$type=="html"){
-                    chart$functions$ui<-htmlOutput
-                }else if(chart$type=="table"){
-                    chart$functions$ui<-DT::dataTableOutput
-                # }else if(chart$type=="rtf"){
-                #     chart$functions$ui<-div(
-                #     downloadButton(ns("downloadRTF"), "Download RTF"),
-                #     DT::dataTableOutput(ns("chart-wrap"))
-                #     )
-                }else if(chart$type=="htmlwidget"){
-                    chart$functions$ui<-function(id){
-                        htmlwidgets::shinyWidgetOutput(
-                            id, 
-                            chart$workflow$widget, 
-                            "100%", 
-                            "100%",
-                            package=chart$package
-                        )
-                    }
-                }else if (chart$type=="module"){
-                    chart$functions$ui<-chart$functions[[chart$workflow$ui]]
-                }
-            }
-
-            # check that functions exist for specified workflows
-            workflow_found <- sum(unlist(chart$workflow) %in% chart_function_names)
-            workflow_total <- length(unlist(chart$workflow)[names(unlist(chart$workflow))!="widget"])
-            message<-paste0(chart$name,": Found ", workflow_found, " of ",workflow_total, " workflow functions, and ", length(chart$functions)-workflow_found ," other functions.")
-            if(workflow_found == workflow_total){ 
-                message("+ ",message)
-            }else{
-                message("x ", message)
-            }
-
-            return(chart)
-        }
-    )
+    charts <- lapply(charts, makeChartConfigFunctions)
+    
     return(charts) 
 }
