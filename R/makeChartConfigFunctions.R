@@ -58,7 +58,6 @@ makeChartConfigFunctions <- function(chart){
     }else if(chart$type=="htmlwidget"){
         # Helper functions for html widget render
         widgetOutput <- function(outputId, width = "100%", height = "400px") {
-            print("widgetoutput")
             htmlwidgets::shinyWidgetOutput(outputId, chart$workflow$widget, width, height, package=chart$package)
         }
 
