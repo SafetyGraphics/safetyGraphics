@@ -19,7 +19,7 @@ makeChartSummary<- function(chart, showLinks=TRUE, class="chart-header"){
                 target='_blank'
             )
         )
-        links<-div(tags$small("Links"), links, class="pull-right")
+        links<-div(tags$small("Links"), links)
     }else{
         links<-NULL
     }

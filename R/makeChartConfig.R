@@ -127,6 +127,5 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
 
     # Bind workflow functions to chart object
     charts <- lapply(charts, makeChartConfigFunctions)
-    
     return(charts) 
 }

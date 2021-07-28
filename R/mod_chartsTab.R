@@ -11,7 +11,7 @@
 
 chartsTabUI <- function(id, chart){
   ns <- shiny::NS(id)    
-  header<-makeChartSummary(chart)
+  header<-div(class=ns("header"), makeChartSummary(chart))
   chartWrap<-chart$functions$ui(ns("chart-wrap"))
 
   return(list(header, chartWrap))
@@ -53,5 +53,34 @@ chartsTab <- function(input, output, session, chart, data, mapping){
       )
     )
   }
-  
+
+  # Set up chart export button
+  insertUI(
+    paste0(".",ns("header"), " .chart-header"), 
+    where="beforeEnd",
+    ui=downloadButton(ns("reportDL"), "Export Chart", class="pull-right btn-success btn-xs")
+  )
+
+  output$reportDL <- downloadHandler(
+    filename = paste0("sg-",chart$name,".html"),
+    content = function(file) {
+      # Copy the report file to a temporary directory before processing it, in case we don't
+      # have write permissions to the current working dir (which can happen when deployed).
+      templateReport <- system.file("report","safetyGraphicsReport.Rmd", package = "safetyGraphics")
+      tempReport <- file.path(tempdir(), "report.Rmd")
+      file.copy(templateReport, tempReport, overwrite = TRUE)
+      report_params <- list(
+        data = data(), 
+        mapping = mapping(), 
+        chart = chart
+      )
+      
+      rmarkdown::render(
+        tempReport,
+        output_file = file,
+        params = report_params,  ## pass in params
+        envir = new.env(parent = globalenv())  ## eval in child of global env
+      )
+    }
+  )
 }

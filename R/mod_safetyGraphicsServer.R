@@ -47,9 +47,8 @@ safetyGraphicsServer <- function(input, output, session, meta, mapping, domainDa
             mapping=current_mapping    
         )
     )
-    
-    # pass all charts, filtered data, and current mappings to reports/export tab
-    callModule(reportsTab, "reports", charts = charts, data = filtered_data, mapping = current_mapping)
+
+    #Setting tab
     callModule(settingsTab, "settings", domains = domainData,  metadata=meta, mapping=current_mapping, charts = charts)
 }
 

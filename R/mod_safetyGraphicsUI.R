@@ -47,7 +47,6 @@ safetyGraphicsUI <- function(id, meta, domainData, mapping, standards){
             tabPanel("Mapping", icon=icon("map"), mappingTabUI(ns("mapping"), meta, domainData, mapping, standards)),
             tabPanel("Filtering", icon=icon("filter"), filterTabUI(ns("filter"))),
             navbarMenu('Charts', icon=icon("chart-bar")),
-            tabPanel("Reports", icon=icon("file-alt"), reportsTabUI(ns("reports"))),
             tabPanel('',icon=icon("cog"), settingsTabUI(ns("settings")))
         ),
         participant_badge

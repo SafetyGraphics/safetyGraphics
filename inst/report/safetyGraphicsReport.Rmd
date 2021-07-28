@@ -5,46 +5,68 @@ output:
 params:
   data: NA
   mapping: NA
-  charts: NA
+  chart: NA
 ---
 
-## Customized Interactive Safety Graphics {.tabset .tabset-fade} 
+
+```{css, echo=FALSE}
+
+.chart-md{
+  padding: 0.5em 0.5em 0.2em 0.5em;
+  background: #e7e7e7;
+  margin-right: -15px;
+  margin-left: -15px;
+  margin-bottom: 15px;
+  border: 1px solid #bbb;
+}
+
+.chart-md *{
+  display:inline-block;
+  padding-left:0.4em;
+}
+
+.chart-md strong{
+  font-size:1.2em;
+}
+
+.chart-md small{
+  font-size:0.8em;
+  color:#999;
+}
+
+.chart-md .chart-link{
+  padding-right:0.5em;
+}
+```
 
 ```{r results='asis', echo = FALSE, message=FALSE, warning = FALSE}
 library(safetyGraphics)
 library(knitr)
+library(rmarkdown)
 
 mapping <- params$mapping
 data <- params$data
-for (i in seq_along(names(params$charts))){
-  chart <- params$charts[[i]]
-  chart_params <- makeChartParams(data, chart, mapping)
-  # Make title
-  cat(paste0("### ",chart$name,"\n"))
+chart<-params$chart
 
-  sub_chunk <- paste0(
-    "`",
-    "``{r sub_chunk_", 
-    floor(runif(1) * 10000), 
-    ", fig.height=7, fig.width=9, echo=FALSE, message=FALSE, warning=FALSE}",
-    "\n",
-    "do.call(chart$functions$main, chart_params)",
-    "\n`",
-    "``",
-    '\n'
-  )
-
-  cat(knitr::knit(
-    text = knitr::knit_expand(text = sub_chunk), 
-    quiet = TRUE)
-  )
-}
-
+header <- makeChartSummary(chart, class="chart-md")
+chart_params <- makeChartParams(data, chart, mapping)
 ```
+## {safetyGraphics}: `r params$chart$label` report {.tabset .tabset-fade} 
+### `r params$chart$label`
 
-### Info
-#### Background
-The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics).
+`r header`
 
-safetyGraphics is an open source project built using standard web technology and will run in any modern web browser. The displays created are all dynamically linked to raw safety data which allows the tool to work with data from any safety system. The tool was originally created using Javascript/D3, but has been extended to an R tool as well using HTML Widgets.   
+```{r  fig.height=7, fig.width=9, echo=FALSE, message=FALSE, warning=FALSE}
+  do.call(chart$functions$main, chart_params)
+```  
+
+### Code 
+
+```{r echo=FALSE, comment=""}
+  deparse(chart$functions$main)
+```
+Coming soon
+
+### Background
+This chart was generataed using the safetyGraphics shiny app. The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics). 
 
