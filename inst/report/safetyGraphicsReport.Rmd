@@ -6,65 +6,13 @@ params:
   data: NA
   mapping: NA
   charts: NA
-  
-  
 ---
 
 ## Customized Interactive Safety Graphics {.tabset .tabset-fade} 
 
-```{r echo = FALSE}
-# Function to create chart
-create_chart <- function(chart, params){
-  if (chart$type=="htmlwidget"){
-    ###Html widget code
-    widgetParams <- function(params, settingsToJSON = TRUE){
-      widgetParams<-params
-      if(settingsToJSON){
-        widgetParams$settings <- jsonlite::toJSON(
-          widgetParams$settings,
-          auto_unbox = TRUE,
-          null = "null",  
-        )
-      }
-      return(widgetParams)
-    }
-    
-    # shiny render function for the widget 
-    htmlwidgets::createWidget(
-      name = chart$workflow$widget,
-      widgetParams(params),
-      package = chart$package,
-      sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE),     
-    )  
-  } else {
-    ### static code
-    chartFunction <- chart$functions[[chart$workflow$main]]
-    do.call(chartFunction, chart_params)  
-  }  
-}
-```
-
-
 ```{r results='asis', echo = FALSE, message=FALSE, warning = FALSE}
 library(safetyGraphics)
 library(knitr)
-
-create_chunk_chart <- function(chart, params, fig_height=7, fig_width=9) {
-  g_deparsed <- paste0(deparse(
-    function() {create_chart(chart, params)}
-  ), collapse = '')
-
-  sub_chunk <- paste0("
-  `","``{r sub_chunk_", floor(runif(1) * 10000), ", fig.height=",
-   fig_height, ", fig.width=", fig_width, ", echo=FALSE, message=FALSE, warning=FALSE}",
-  "\n(",
-    g_deparsed
-    , ")()",
-  "\n`","``
-  ",'\n')
-
-  cat(knitr::knit(text = knitr::knit_expand(text = sub_chunk), quiet = TRUE))
-}
 
 mapping <- params$mapping
 data <- params$data
@@ -72,17 +20,29 @@ for (i in seq_along(names(params$charts))){
   chart <- params$charts[[i]]
   chart_params <- makeChartParams(data, chart, mapping)
   # Make title
-  cat(paste0("### ",chart,"\n"))
+  cat(paste0("### ",chart$name,"\n"))
 
-  create_chunk_chart(chart, chart_params)
+  sub_chunk <- paste0(
+    "`",
+    "``{r sub_chunk_", 
+    floor(runif(1) * 10000), 
+    ", fig.height=7, fig.width=9, echo=FALSE, message=FALSE, warning=FALSE}",
+    "\n",
+    "do.call(chart$functions$main, chart_params)",
+    "\n`",
+    "``",
+    '\n'
+  )
+
+  cat(knitr::knit(
+    text = knitr::knit_expand(text = sub_chunk), 
+    quiet = TRUE)
+  )
 }
 
 ```
 
-
-
 ### Info
-
 #### Background
 The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics).
 
