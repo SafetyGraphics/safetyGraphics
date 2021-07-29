@@ -41,8 +41,7 @@ params:
 
 ```{r results='asis', echo = FALSE, message=FALSE, warning = FALSE}
 library(safetyGraphics)
-library(knitr)
-library(rmarkdown)
+library(yaml)
 
 mapping <- params$mapping
 data <- params$data
@@ -50,6 +49,12 @@ chart<-params$chart
 
 header <- makeChartSummary(chart, class="chart-md")
 chart_params <- makeChartParams(data, chart, mapping)
+
+mapping_list<-generateMappingList(mapping %>% filter(domain %in% chart$domain))
+if(length(mapping_list)==1){
+  mapping_list <- mapping_list[[1]]
+}
+
 ```
 ## {safetyGraphics}: `r params$chart$label` report {.tabset .tabset-fade} 
 ### `r params$chart$label`
@@ -62,10 +67,13 @@ chart_params <- makeChartParams(data, chart, mapping)
 
 ### Code 
 
-```{r echo=FALSE, comment=""}
-  deparse(chart$functions$main)
+This chart can be re-run using the code below after updating to load your data. 
+
+#### Chart Code 
+
 ```
-Coming soon
+`r paste(makeChartExport(chart, mapping_list),collapse="\n")`
+```
 
 ### Background
 This chart was generataed using the safetyGraphics shiny app. The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics). 

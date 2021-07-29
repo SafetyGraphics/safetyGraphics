@@ -9,6 +9,7 @@
 #' @return returns the chart object with a new functions object added. 
 #' 
 #' @export
+
 makeChartConfigFunctions <- function(chart){
     all_functions <- as.character(utils::lsf.str(".GlobalEnv"))
     
@@ -69,6 +70,7 @@ makeChartConfigFunctions <- function(chart){
         chart$functions$ui<-widgetOutput
         chart$functions$server<-renderWidget
         chart$functions$main<-htmlwidgets::createWidget 
+        chart$workflow$main <- "htmlwidgets::createWidget"
 
     }else if (chart$type=="module"){
         chart$functions$ui<-chart$functions[[chart$workflow$ui]]

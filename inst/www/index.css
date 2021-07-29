@@ -99,6 +99,10 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   padding-right:0.5em;
 }
 
+.chart-header .btn{
+  margin-right:0.5em;
+}
+
 /* Formatting for charts items in init item sorter */
 .chart-sortable{
   font-size:0.8em;
@@ -143,3 +147,5 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   background-color: #d1ecf1;
   border:1px solid #bee5eb;
 }
+
+

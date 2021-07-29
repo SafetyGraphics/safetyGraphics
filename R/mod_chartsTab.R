@@ -52,35 +52,57 @@ chartsTab <- function(input, output, session, chart, data, mapping){
         params()
       )
     )
+  
+    # Downolad R script
+    insertUI(
+      paste0(".",ns("header"), " .chart-header"), 
+      where="beforeEnd",
+      ui=downloadButton(ns("scriptDL"), "R script", class="pull-right btn-xs dl-btn")
+    )
+    
+    mapping_list<-reactive({
+      mapping_list <- generateMappingList(mapping() %>% filter(domain %in% chart$domain))
+      if(length(mapping_list)==1){
+        mapping_list <- mapping_list[[1]]
+      }
+      return(mapping_list)
+    })
+
+    output$scriptDL <- downloadHandler(
+      filename = paste0("sg-",chart$name,".R"),
+      content = function(file) {
+        writeLines(makeChartExport(chart, mapping_list()), file)
+      }
+    )
+
+    # Set up chart export button
+    insertUI(
+      paste0(".",ns("header"), " .chart-header"), 
+      where="beforeEnd",
+      ui=downloadButton(ns("reportDL"), "html report", class="pull-right btn-primary btn-xs")
+    )
+
+    output$reportDL <- downloadHandler(
+      filename = paste0("sg-",chart$name,".html"),
+      content = function(file) {
+        # Copy the report file to a temporary directory before processing it, in case we don't
+        # have write permissions to the current working dir (which can happen when deployed).
+        templateReport <- system.file("report","safetyGraphicsReport.Rmd", package = "safetyGraphics")
+        tempReport <- file.path(tempdir(), "report.Rmd")
+        file.copy(templateReport, tempReport, overwrite = TRUE)
+        report_params <- list(
+          data = data(), 
+          mapping = mapping(), 
+          chart = chart
+        )
+        
+        rmarkdown::render(
+          tempReport,
+          output_file = file,
+          params = report_params,  ## pass in params
+          envir = new.env(parent = globalenv())  ## eval in child of global env
+        )
+      }
+    )
   }
-
-  # Set up chart export button
-  insertUI(
-    paste0(".",ns("header"), " .chart-header"), 
-    where="beforeEnd",
-    ui=downloadButton(ns("reportDL"), "Export Chart", class="pull-right btn-success btn-xs")
-  )
-
-  output$reportDL <- downloadHandler(
-    filename = paste0("sg-",chart$name,".html"),
-    content = function(file) {
-      # Copy the report file to a temporary directory before processing it, in case we don't
-      # have write permissions to the current working dir (which can happen when deployed).
-      templateReport <- system.file("report","safetyGraphicsReport.Rmd", package = "safetyGraphics")
-      tempReport <- file.path(tempdir(), "report.Rmd")
-      file.copy(templateReport, tempReport, overwrite = TRUE)
-      report_params <- list(
-        data = data(), 
-        mapping = mapping(), 
-        chart = chart
-      )
-      
-      rmarkdown::render(
-        tempReport,
-        output_file = file,
-        params = report_params,  ## pass in params
-        envir = new.env(parent = globalenv())  ## eval in child of global env
-      )
-    }
-  )
 }
