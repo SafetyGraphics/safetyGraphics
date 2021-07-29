@@ -1,11 +1,11 @@
 ---
 output:
   html_document
-
 params:
   data: NA
   mapping: NA
   chart: NA
+title: "{safetyGraphics}: `r params$chart$label` report"
 ---
 
 
@@ -56,7 +56,7 @@ if(length(mapping_list)==1){
 }
 
 ```
-## {safetyGraphics}: `r params$chart$label` report {.tabset .tabset-fade} 
+## {.tabset .tabset-fade} 
 ### `r params$chart$label`
 
 `r header`
@@ -65,16 +65,19 @@ if(length(mapping_list)==1){
   do.call(chart$functions$main, chart_params)
 ```  
 
-### Code 
+### Details 
 
-This chart can be re-run using the code below after updating to load your data. 
+#### Background
+
+This chart was generated using the safetyGraphics shiny app. The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics). 
 
 #### Chart Code 
+
+This chart can be re-run using the code below after updating to load your data. 
 
 ```
 `r paste(makeChartExport(chart, mapping_list),collapse="\n")`
 ```
 
-### Background
-This chart was generataed using the safetyGraphics shiny app. The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics). 
+
 
