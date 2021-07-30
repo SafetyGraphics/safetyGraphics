@@ -7,11 +7,11 @@
 makeChartParams(data, chart, mapping)
 }
 \arguments{
+\item{data}{list of domain-level data}
+
 \item{chart}{list containing chart specifications}
 
 \item{mapping}{data frame with current mapping}
-
-\item{dataDomains}{list of domain-level data}
 }
 \description{
 Updates raw data and mapping for use with a specific chart

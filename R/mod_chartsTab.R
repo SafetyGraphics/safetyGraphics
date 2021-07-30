@@ -33,6 +33,7 @@ chartsTab <- function(input, output, session, chart, data, mapping){
   ns <- session$ns
   message("chartsTab() starting for ",chart$name)
 
+  print(chart$label)
   # Initialize chart-specific parameters  
   params <- reactive({ 
     makeChartParams(
@@ -61,7 +62,7 @@ chartsTab <- function(input, output, session, chart, data, mapping){
     )
     
     mapping_list<-reactive({
-      mapping_list <- generateMappingList(mapping() %>% filter(domain %in% chart$domain))
+      mapping_list <- generateMappingList(mapping() %>% filter(.data$domain %in% chart$domain))
       if(length(mapping_list)==1){
         mapping_list <- mapping_list[[1]]
       }

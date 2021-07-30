@@ -1,7 +1,7 @@
 #' @title Make Chart Parameters
 #' @description Updates raw data and mapping for use with a specific chart
 #'
-#' @param dataDomains list of domain-level data
+#' @param data list of domain-level data
 #' @param chart list containing chart specifications
 #' @param mapping data frame with current mapping
 #' 
