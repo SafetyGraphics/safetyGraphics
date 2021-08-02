@@ -31,6 +31,14 @@ app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, aut
         }
     }
 
+    # Drop charts where order is negative
+    orderDrops <- charts[purrr::map_lgl(charts, function(chart) chart$order < 0)]
+    if(length(orderDrops)>0){
+        message("Dropped ", length(orderDrops), " charts: ",paste(names(orderDrops),collapse=", "))
+        message("To display these charts, set the `order` parameter in the chart object or yaml file to a positive number.")
+        charts <- charts[purrr::map_lgl(charts, function(chart) chart$order >= 0)]
+    }
+    
     #Drop charts if data for required domain(s) is not found
     chart_drops <- charts %>% purrr::keep(~(!all(.x$domain %in% names(domainData))))
     if(length(chart_drops)>0){

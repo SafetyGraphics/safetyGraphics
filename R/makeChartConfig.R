@@ -112,14 +112,6 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
         message("`env` paramter missing or not set to 'safetyGraphics'")
         charts <- charts[purrr::map_lgl(charts, function(chart) chart$envValid)]
     }
-
-    # Drop charts where order is negative
-    orderDrops <- charts[purrr::map_lgl(charts, function(chart) chart$order < 0)]
-    if(length(orderDrops)>0){
-        message("Dropped ", length(orderDrops), " charts: ",paste(names(orderDrops),collapse=", "))
-        message("To display these charts, set the `order` parameter in the chart object or yaml file to a positive number.")
-        charts <- charts[purrr::map_lgl(charts, function(chart) chart$order >= 0)]
-    }
     
     # sort charts based on order
     charts <- charts[order(purrr::map_dbl(charts, function(chart) chart$order))] 
