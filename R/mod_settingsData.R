@@ -9,8 +9,13 @@
 
 settingsDataUI <- function(id){
   ns <- NS(id)
-  div(
-    h2("Data Domain Previews"),
+  list(
+    br(),
+    p(
+      icon("info-circle"),
+      "Previews of the data for each domain are provided below.",
+      class="info"
+    ),
     uiOutput(ns('previews'))
   )
 }

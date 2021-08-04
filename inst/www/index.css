@@ -71,6 +71,7 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
 /* Formatting for charts metadata on chart page headers */
 
 .chart-header{
+  height:35px;
   background: #e7e7e7;
   padding: 0.5em 0.5em 0.2em 0.5em;
   margin-top:-20px;
@@ -96,6 +97,10 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
 
 .chart-header .chart-link{
   padding-right:0.5em;
+}
+
+.chart-header .btn{
+  margin-right:0.5em;
 }
 
 /* Formatting for charts items in init item sorter */
@@ -133,4 +138,14 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
 .chart-nav small{
   display:none;
 }
+
+.info{
+  border-radius:0.5em; 
+  padding:0.5em;
+  margin-top:0.5em;
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border:1px solid #bee5eb;
+}
+
 

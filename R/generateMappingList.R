@@ -7,7 +7,7 @@
 #' @importFrom stringr str_split 
 #' @export
 
-generateMappingList <- function(settingsDF, domain, pull=FALSE){
+generateMappingList <- function(settingsDF, domain=NULL, pull=FALSE){
   settingsList <- list()
   
   settingsDF$domain_key <- paste0(settingsDF$domain, "--", settingsDF$text_key)
@@ -23,7 +23,9 @@ generateMappingList <- function(settingsDF, domain, pull=FALSE){
     )
   }
 
-  if(length(domain)>1){
+  if(is.null(domain)){
+    return(settingsList)
+  }else if(length(domain)>1){
     return(settingsList)
   }else{
     return(settingsList[[domain]])

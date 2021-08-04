@@ -4,7 +4,7 @@
 \alias{generateMappingList}
 \title{Convert mapping data.frame to a list}
 \usage{
-generateMappingList(settingsDF, domain, pull = FALSE)
+generateMappingList(settingsDF, domain = NULL, pull = FALSE)
 }
 \arguments{
 \item{settingsDF}{data frame containing current mapping}

@@ -76,7 +76,7 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
 #' 
 #' @return list of mappings for all domains
 #'
-#' @import shinyjs
+#' @importFrom shinyjs addClass show removeClass hide
 #' 
 #' @export
 
