@@ -112,51 +112,12 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
         message("`env` paramter missing or not set to 'safetyGraphics'")
         charts <- charts[purrr::map_lgl(charts, function(chart) chart$envValid)]
     }
-
-    # Drop charts where order is negative
-    orderDrops <- charts[purrr::map_lgl(charts, function(chart) chart$order < 0)]
-    if(length(orderDrops)>0){
-        message("Dropped ", length(orderDrops), " charts: ",paste(names(orderDrops),collapse=", "))
-        message("To display these charts, set the `order` parameter in the chart object or yaml file to a positive number.")
-        charts <- charts[purrr::map_lgl(charts, function(chart) chart$order >= 0)]
-    }
     
     # sort charts based on order
     charts <- charts[order(purrr::map_dbl(charts, function(chart) chart$order))] 
     message("Loaded ", length(charts), " charts: ",paste(names(charts),collapse=", "))
 
     # Bind workflow functions to chart object
-    all_functions <- as.character(utils::lsf.str(".GlobalEnv"))
-    message("Global Functions: ",all_functions)
-    charts <- lapply(charts, 
-        function(chart){
-            if(utils::hasName(chart, "package")){
-                package_functions <- as.character(utils::lsf.str(paste0("package:",chart$package)))
-                all_functions<-c(all_functions,package_functions)
-            }
-
-            #search functions that include the charts name or the workflow function names
-            chart_function_names <- c()
-            for(query in c(chart$name, unlist(chart$workflow)) ){
-                matches<-all_functions[str_detect(query, all_functions)]
-                chart_function_names <- c(chart_function_names, matches)
-            }
-
-            chart$functions <- lapply(chart_function_names, match.fun)
-            names(chart$functions) <- chart_function_names
-
-            # check that functions exist for specified workflows
-            workflow_found <- sum(unlist(chart$workflow) %in% chart_function_names)
-            workflow_total <- length(unlist(chart$workflow)[names(unlist(chart$workflow))!="widget"])
-            message<-paste0(chart$name,": Found ", workflow_found, " of ",workflow_total, " workflow functions, and ", length(chart$functions)-workflow_found ," other functions.")
-            if(workflow_found == workflow_total){ 
-                message("+ ",message)
-            }else{
-                message("x ", message)
-            }
-
-            return(chart)
-        }
-    )
+    charts <- lapply(charts, makeChartConfigFunctions)
     return(charts) 
 }

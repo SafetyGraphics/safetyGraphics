@@ -1,116 +1,83 @@
 ---
 output:
   html_document
-
 params:
   data: NA
   mapping: NA
-  charts: NA
-  
-  
+  chart: NA
+title: "{safetyGraphics}: `r params$chart$label` report"
 ---
 
-## Customized Interactive Safety Graphics {.tabset .tabset-fade} 
 
-```{r echo = FALSE}
+```{css, echo=FALSE}
 
-# Function to create chart-level params
-create_chart_params <- function(data, chart, mapping){
-  settingsList <-  safetyGraphics::generateMappingList(mapping, domain=chart$domain)
-  #subset data to specific domain (if specified)
-  if(length(chart$domain)>1){
-    domainData <- data
-  }else{
-    domainData<- data[[chart$domain]]
-  }
-  params <- list(data=domainData, settings=settingsList)
-
-  #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
-  if(utils::hasName(chart,"functions")){
-    if(utils::hasName(chart$workflow,"init")){
-      message(chart$name, " has an init.")
-      params <- do.call(chart$functions[[chart$workflow$init]], params)
-    }
-  }
-  return(params)
+.chart-md{
+  padding: 0.5em 0.5em 0.2em 0.5em;
+  background: #e7e7e7;
+  margin-right: -15px;
+  margin-left: -15px;
+  margin-bottom: 15px;
+  border: 1px solid #bbb;
 }
 
-# Function to create chart
-create_chart <- function(chart, params){
-  if (chart$type=="htmlwidget"){
-    ###Html widget code
-    widgetParams <- function(params, settingsToJSON = TRUE){
-      widgetParams<-params
-      if(settingsToJSON){
-        widgetParams$settings <- jsonlite::toJSON(
-          widgetParams$settings,
-          auto_unbox = TRUE,
-          null = "null",  
-        )
-      }
-      return(widgetParams)
-    }
-    
-    # shiny render function for the widget 
-    htmlwidgets::createWidget(
-      name = chart$workflow$widget,
-      widgetParams(params),
-      package = chart$package,
-      sizingPolicy = htmlwidgets::sizingPolicy(viewer.suppress=TRUE, browser.external = TRUE),     
-    )  
-  } else {
-    ### static code
-    chartFunction <- chart$functions[[chart$workflow$main]]
-    do.call(chartFunction, chart_params)  
-  }  
+.chart-md *{
+  display:inline-block;
+  padding-left:0.4em;
+}
+
+.chart-md strong{
+  font-size:1.2em;
+}
+
+.chart-md small{
+  font-size:0.8em;
+  color:#999;
+}
+
+.chart-md .chart-link{
+  padding-right:0.5em;
 }
 ```
-
 
 ```{r results='asis', echo = FALSE, message=FALSE, warning = FALSE}
 library(safetyGraphics)
-library(knitr)
-
-
-create_chunk_title <- function(chart) {
-  sub_chunk <- paste0("### ",chart,"\n")
-  cat(sub_chunk)
-}
-
-create_chunk_chart <- function(chart, params, fig_height=7, fig_width=9) {
-  g_deparsed <- paste0(deparse(
-    function() {create_chart(chart, params)}
-  ), collapse = '')
-
-  sub_chunk <- paste0("
-  `","``{r sub_chunk_", floor(runif(1) * 10000), ", fig.height=",
-   fig_height, ", fig.width=", fig_width, ", echo=FALSE, message=FALSE, warning=FALSE}",
-  "\n(",
-    g_deparsed
-    , ")()",
-  "\n`","``
-  ",'\n')
-
-  cat(knitr::knit(text = knitr::knit_expand(text = sub_chunk), quiet = TRUE))
-}
+library(yaml)
 
 mapping <- params$mapping
 data <- params$data
-for (i in seq_along(names(params$charts))){
-  chart <- params$charts[[i]]
-  chart_params <- create_chart_params(data, chart, mapping)
-  create_chunk_title(chart$label)
-  create_chunk_chart(chart, chart_params)
+chart<-params$chart
+
+header <- makeChartSummary(chart, class="chart-md")
+chart_params <- makeChartParams(data, chart, mapping)
+
+mapping_list<-generateMappingList(mapping %>% filter(domain %in% chart$domain))
+if(length(mapping_list)==1){
+  mapping_list <- mapping_list[[1]]
 }
 
 ```
+## {.tabset .tabset-fade} 
+### `r params$chart$label`
 
+`r header`
 
+```{r  fig.height=7, fig.width=9, echo=FALSE, message=FALSE, warning=FALSE}
+  do.call(chart$functions$main, chart_params)
+```  
 
-### Info
+### Details 
 
 #### Background
-The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics).
 
-safetyGraphics is an open source project built using standard web technology and will run in any modern web browser. The displays created are all dynamically linked to raw safety data which allows the tool to work with data from any safety system. The tool was originally created using Javascript/D3, but has been extended to an R tool as well using HTML Widgets.   
+This chart was generated using the safetyGraphics shiny app. The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics). 
+
+#### Chart Code 
+
+This chart can be re-run using the code below after updating to load your data. 
+
+```
+`r paste(makeChartExport(chart, mapping_list),collapse="\n")`
+```
+
+
 

@@ -10,22 +10,11 @@
 #' @export
 
 chartsTabUI <- function(id, chart){
-    ns <- NS(id)    
-    # Chart header with description and links
-    header<-makeChartSummary(chart)
-    chartWrap <- NULL
-    if(tolower(chart$type=="module")){
-        #render the module UI
-        chartWrap <- chartsRenderModuleUI(id=ns("wrap"), chart$functions[[chart$workflow$ui]])
-    }else if(tolower(chart$type=="htmlwidget")){
-        #render the widget 
-        chartWrap<-chartsRenderWidgetUI(id=ns("wrap"),chart=chart$workflow$widget, package=chart$package)
-    }else{
-        #create the static or plotly chart
-        chartWrap<-chartsRenderStaticUI(id=ns("wrap"), type=chart$type)
-    }
-    
-    return(list(header, chartWrap))
+  ns <- shiny::NS(id)    
+  header<-div(class=ns("header"), makeChartSummary(chart))
+  chartWrap<-chart$functions$ui(ns("chart-wrap"))
+
+  return(list(header, chartWrap))
 }
 
 #' @title  home tab - server
@@ -40,64 +29,81 @@ chartsTabUI <- function(id, chart){
 #' 
 #' @export
 
-#chartsTab <- function(input, output, session, chart, type, package, chartFunction, initFunction, domain, data, mapping){
-chartsTab <- function(input, output, session, chart, data, mapping){
-    
-    ns <- session$ns
-    message("chartsTab() starting for ",chart$name)
-    
-    params <- reactive({
-        #convert settings from data frame to list and subset to specified domain (if any)
-        settingsList <-  safetyGraphics::generateMappingList(mapping(), domain=chart$domain)
+chartsTab <- function(input, output, session, chart, data, mapping){  
+  ns <- session$ns
+  message("chartsTab() starting for ",chart$name)
 
-        #subset data to specific domain (if specified)
-        if(length(chart$domain)>1){
-            domainData <- data()
-        }else{
-            domainData<- data()[[chart$domain]]
-        }
-        params <- list(data=domainData, settings=settingsList)
+  print(chart$label)
+  # Initialize chart-specific parameters  
+  params <- reactive({ 
+    makeChartParams(
+      data = data(),
+      mapping = mapping(),
+      chart = chart
+    )
+  })
 
-        #customize initial the parameters if desired - otherwise pass through domain level data and mapping)
-        if(utils::hasName(chart,"functions")){
-            if(utils::hasName(chart$workflow,"init")){
-                message(chart$name, " has an init.")
-                print(chart$functions[chart$workflow$init])
-                params <- do.call(chart$functions[[chart$workflow$init]], params)
-            }
-        }
-        return(params)
+  # Draw the chart
+  if(chart$type=="module"){
+    callModule(chart$functions$main, "chart-wrap", params)
+  }else{
+    output[["chart-wrap"]] <- chart$functions$server(
+      do.call(
+        chart$functions$main,
+        params()
+      )
+    )
+  
+    # Downolad R script
+    insertUI(
+      paste0(".",ns("header"), " .chart-header"), 
+      where="beforeEnd",
+      ui=downloadButton(ns("scriptDL"), "R script", class="pull-right btn-xs dl-btn")
+    )
+    
+    mapping_list<-reactive({
+      mapping_list <- generateMappingList(mapping() %>% filter(.data$domain %in% chart$domain))
+      if(length(mapping_list)==1){
+        mapping_list <- mapping_list[[1]]
+      }
+      return(mapping_list)
     })
 
-    if(tolower(chart$type=="module")){
-        #render the module UI
-        message("chartsTab() is initializing a module at ", ns("wrap"))
-        serverFunction <- chart$functions[[chart$workflow$server]]
-        callModule(
-            module=chartsRenderModule,
-            id="wrap",
-            serverFunction=serverFunction,
-            params=params
+    output$scriptDL <- downloadHandler(
+      filename = paste0("sg-",chart$name,".R"),
+      content = function(file) {
+        writeLines(makeChartExport(chart, mapping_list()), file)
+      }
+    )
+
+    # Set up chart export button
+    insertUI(
+      paste0(".",ns("header"), " .chart-header"), 
+      where="beforeEnd",
+      ui=downloadButton(ns("reportDL"), "html report", class="pull-right btn-primary btn-xs")
+    )
+
+    output$reportDL <- downloadHandler(
+      filename = paste0("sg-",chart$name,".html"),
+      content = function(file) {
+        # Copy the report file to a temporary directory before processing it, in case we don't
+        # have write permissions to the current working dir (which can happen when deployed).
+        templateReport <- system.file("report","safetyGraphicsReport.Rmd", package = "safetyGraphics")
+        tempReport <- file.path(tempdir(), "report.Rmd")
+        file.copy(templateReport, tempReport, overwrite = TRUE)
+        report_params <- list(
+          data = data(), 
+          mapping = mapping(), 
+          chart = chart
         )
-    }else if(tolower(chart$type=="htmlwidget")){
-        message("chartsTab() is initializing a widget at ", ns("wrap"))
-        message("chart is ", chart$workflow$widget, "; package is ", chart$package)
-        callModule(
-            module=chartsRenderWidget,
-            id="wrap",
-            chart=chart$workflow$widget,
-            package=chart$package,
-            params=params
+        
+        rmarkdown::render(
+          tempReport,
+          output_file = file,
+          params = report_params,  ## pass in params
+          envir = new.env(parent = globalenv())  ## eval in child of global env
         )
-    }else{
-        #create the static or plotly chart
-        chartFunction <- chart$functions[[chart$workflow$main]]
-        callModule(
-            module=chartsRenderStatic,
-            id="wrap",
-            chartFunction=chartFunction,
-            params=params, 
-            type=chart$type
-        )
-    }
+      }
+    )
+  }
 }

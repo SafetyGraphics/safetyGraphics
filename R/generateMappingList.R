@@ -25,6 +25,8 @@ generateMappingList <- function(settingsDF, domain=NULL, pull=FALSE){
 
   if(is.null(domain)){
     return(settingsList)
+  }else if(length(domain)>1){
+    return(settingsList)
   }else{
     return(settingsList[[domain]])
   }
