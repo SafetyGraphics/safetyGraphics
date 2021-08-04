@@ -43,7 +43,12 @@ loadChartsUI <- function(id, charts=makeChartConfig()){
 #' @export
 loadCharts <- function(input, output, session, charts=makeChartConfig()) {
     chartsR<-reactive({
-        charts %>% purrr::keep(~.x$name %in% input$active)
+        charts %>% 
+            purrr::keep(~.x$name %in% input$active) %>%
+            map(function(chart){
+                chart$order <- match(chart$name, input$active)
+                return(chart)
+            })
     })
     return(chartsR)
 }

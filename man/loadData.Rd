@@ -4,7 +4,7 @@
 \alias{loadData}
 \title{loadDataServer}
 \usage{
-loadData(input, output, session, domain)
+loadData(input, output, session, domain, visible = TRUE)
 }
 \arguments{
 \item{input}{Shiny input object}
@@ -13,7 +13,7 @@ loadData(input, output, session, domain)
 
 \item{session}{Shiny session object}
 
-\item{domain}{List of data domains to be loaded}
+\item{domain}{data domain to be loaded}
 }
 \description{
 UI that facilitates the mapping of a column data domain

@@ -53,7 +53,8 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
   server <- function(input,output,session){ 
     #initialize the chart selection moduls
     charts<-callModule(loadCharts, "load-charts",charts=charts_init) 
-    domainDataR<-all_domains %>% map(~callModule(loadData,.x,domain=.x, visible=.x %in% current_domains))
+    domainDataR<-all_domains %>% map(~callModule(loadData,.x,domain=.x))
+    names(domainDataR) <- all_domains
     domainData<- reactive({domainDataR %>% map(~.x())})
 
 
@@ -74,6 +75,7 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
 
     initStatus <- reactive({
       currentData <- domainData()
+      print(names(currentData))
       chartCount<-length(charts())
       domainCount<-length(currentData)
       loadCount<-sum(currentData %>% map_lgl(~!is.null(.x)))
@@ -114,9 +116,10 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
         charts= charts(),
         #mapping=NULL, 
         filterDomain="dm", 
+        autoMapping=TRUE, 
         #chartSettingsPaths = NULL
       )
-    
+          
       output$sg <- renderUI({
         safetyGraphicsUI(
           "sg",

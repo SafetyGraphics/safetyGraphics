@@ -28,7 +28,8 @@ loadDataUI <- function(id, domain=NULL){
 #' @param session Shiny session object
 #' 
 #' @export
-loadData <- function(input, output, session, domain, visible=TRUE) {
+
+loadData <- function(input, output, session, domain) {
   ns <- session$ns
   
   fileSummary <- reactiveVal()

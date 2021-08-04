@@ -39,8 +39,9 @@ makeChartConfigFunctions <- function(chart){
         chart$functions$main<-chart$functions[[chart$workflow$main]]
     }else if(chart$type=="table"){
         chart$functions$ui<-DT::dataTableOutput
-        chart$functions$server<-function(expr ){
+        chart$functions$server<-function(expr){
             DT::renderDataTable(
+                expr, 
                 rownames = FALSE,
                 options = list(
                     pageLength = 20,
@@ -50,12 +51,6 @@ makeChartConfigFunctions <- function(chart){
             )
         }
         chart$functions$main<-chart$functions[[chart$workflow$main]]
-    #}
-    # }else if(chart$type=="rtf"){
-    #     chart$functions$ui<-div(
-    #     downloadButton(ns("downloadRTF"), "Download RTF"),
-    #     DT::dataTableOutput(ns("chart-wrap"))
-    #     )
     }else if(chart$type=="htmlwidget"){
         # Helper functions for html widget render
         widgetOutput <- function(outputId, width = "100%", height = "400px") {
@@ -71,8 +66,7 @@ makeChartConfigFunctions <- function(chart){
         chart$functions$server<-renderWidget
         chart$functions$main<-htmlwidgets::createWidget 
         chart$workflow$main <- "htmlwidgets::createWidget"
-
-    }else if (chart$type=="module"){
+    }else if(chart$type=="module"){
         chart$functions$ui<-chart$functions[[chart$workflow$ui]]
         chart$functions$server<-callModule
         chart$functions$main <- chart$functions[[chart$workflow$server]]
