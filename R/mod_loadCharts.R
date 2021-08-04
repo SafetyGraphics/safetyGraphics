@@ -16,7 +16,7 @@ loadChartsUI <- function(id, charts=makeChartConfig()){
         sortable::bucket_list(
             header = h4("Chart Loader"),
             group_name = ns("chartList"),
-            orientation = "horizontal",
+            orientation = "vertical",
             add_rank_list(
                 text = "Active Charts",
                 labels = labels,
