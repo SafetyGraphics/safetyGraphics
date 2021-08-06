@@ -80,9 +80,9 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
     initStatus <- reactive({
       currentData <- domainData()
       chartCount<-length(charts())
-      domainCount<-length(currentData)
+      domainCount<-length(current_domains())
       loadCount<-sum(currentData %>% map_lgl(~!is.null(.x)))
-      notAllLoaded <- any(currentData %>% map_lgl(~is.null(.x)))
+      notAllLoaded <- sum(currentData %>% map_lgl(~!is.null(.x))) < domainCount
       ready<-FALSE
       if(domainCount==0){
         status<-paste("No charts selected. Select one or more charts and then load domain data to initilize app.")
@@ -113,7 +113,7 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
       shinyjs::hide(id="init")
       shinyjs::show(id="sg-app")
       config<- app_startup(
-        domainData = domainData(),
+        domainData = domainData() %>% keep(~!is.null(.x)),
         meta = safetyGraphics::meta, 
         charts= charts(),
         #mapping=NULL, 
