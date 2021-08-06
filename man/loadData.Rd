@@ -4,7 +4,7 @@
 \alias{loadData}
 \title{loadDataServer}
 \usage{
-loadData(input, output, session, domain, visible = TRUE)
+loadData(input, output, session, domain)
 }
 \arguments{
 \item{input}{Shiny input object}
