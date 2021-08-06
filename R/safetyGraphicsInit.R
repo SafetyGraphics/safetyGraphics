@@ -8,8 +8,10 @@
 #' 
 #' @export
 
-safetyGraphicsInit <- function(charts=makeChartConfig(),delayTime=1000){
+safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
   charts_init<-charts
+  all_domains <- charts_init %>% map(~.x$domain) %>% unlist() %>% unique()
+
   app_css <- NULL
   for(lib in .libPaths()){
     if(is.null(app_css)){
@@ -23,12 +25,12 @@ safetyGraphicsInit <- function(charts=makeChartConfig(),delayTime=1000){
     tags$head(tags$style(app_css)),
     div(
       id="init",
-      titlePanel("safetyGraphics Initialization app"),
+      titlePanel("safetyGraphics Initializer"),
       sidebarLayout(
         position="right",
         sidebarPanel(
           h4("Data Loader"),
-          loadDomainsUI("load-data"),
+          all_domains %>% map(~loadDataUI(.x, domain=.x)),
           textOutput("dataSummary"),
           hr(),
           shinyjs::disabled(
@@ -36,6 +38,11 @@ safetyGraphicsInit <- function(charts=makeChartConfig(),delayTime=1000){
           )
         ),
         mainPanel(  
+          p(
+            icon("info-circle"),
+            "First, select charts by dragging items between the lists below. Next, load the required data domains using the controls on the right. Finally, click Run App to start the safetyGraphics Shiny App. Reload the webpage to select new charts/data.",
+            class="info"
+          ),
           loadChartsUI("load-charts", charts=charts_init),
         )
       ),
@@ -49,16 +56,33 @@ safetyGraphicsInit <- function(charts=makeChartConfig(),delayTime=1000){
   )
 
   server <- function(input,output,session){ 
-    charts<-callModule(loadCharts, "load-charts",charts=charts_init)
-    domains <- reactive({unique(charts() %>% map(~.x$domain) %>% unlist())})
-    domainDataR <- callModule(loadDomains, "load-data", domains) #this is a reactive list with reactives (?!)
-    domainData <- reactive({domainDataR() %>% map(~.x())})
+    #initialize the chart selection moduls
+    charts<-callModule(loadCharts, "load-charts",charts=charts_init) 
+    domainDataR<-all_domains %>% map(~callModule(loadData,.x,domain=.x))
+    names(domainDataR) <- all_domains
+    domainData<- reactive({domainDataR %>% map(~.x())})
+
+
+    current_domains <- reactive({
+      charts() %>% map(~.x$domain) %>% unlist() %>% unique()
+    })
+
+    observe({
+      for(domain in all_domains){
+        if(domain %in% current_domains()){
+          shinyjs::show(id=paste0(domain,"-wrap"))
+        }else{
+          shinyjs::hide(id=paste0(domain,"-wrap"))
+        }
+      }
+    })
 
     initStatus <- reactive({
+      currentData <- domainData()
       chartCount<-length(charts())
-      domainCount<-length(domainData())
-      loadCount<-sum(domainData() %>% map_lgl(~!is.null(.x)))
-      notAllLoaded <- any(domainData() %>% map_lgl(~is.null(.x)))
+      domainCount<-length(current_domains())
+      loadCount<-sum(currentData %>% map_lgl(~!is.null(.x)))
+      notAllLoaded <- sum(currentData %>% map_lgl(~!is.null(.x))) < domainCount
       ready<-FALSE
       if(domainCount==0){
         status<-paste("No charts selected. Select one or more charts and then load domain data to initilize app.")
@@ -85,20 +109,19 @@ safetyGraphicsInit <- function(charts=makeChartConfig(),delayTime=1000){
       }
     })
 
-
     observeEvent(input$runApp,{
-      print("running the app server now :p")
       shinyjs::hide(id="init")
       shinyjs::show(id="sg-app")
       config<- app_startup(
-        domainData = domainData(),
+        domainData = domainData() %>% keep(~!is.null(.x)),
         meta = safetyGraphics::meta, 
         charts= charts(),
         #mapping=NULL, 
         filterDomain="dm", 
+        autoMapping=TRUE, 
         #chartSettingsPaths = NULL
       )
-    
+          
       output$sg <- renderUI({
         safetyGraphicsUI(
           "sg",
@@ -126,6 +149,5 @@ safetyGraphicsInit <- function(charts=makeChartConfig(),delayTime=1000){
   }
 
   app <- shinyApp(ui = ui, server = server)
-
   runApp(app, launch.browser = TRUE)
 }
