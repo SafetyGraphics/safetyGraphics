@@ -11,20 +11,22 @@
 
 loadChartsUI <- function(id, charts=makeChartConfig()){ 
     ns <- NS(id)
-    labels <- charts%>%map(~makeChartSummary(.x,showLinks=FALSE,class="chart-sortable"))
+    inactive <- charts%>%keep(~.x$order < 1)%>%map(~makeChartSummary(.x,showLinks=FALSE,class="chart-sortable"))
+    active <- charts%>%keep(~.x$order >= 1)%>%map(~makeChartSummary(.x,showLinks=FALSE,class="chart-sortable"))
+
     div(
         sortable::bucket_list(
             header = h4("Chart Loader"),
             group_name = ns("chartList"),
-            orientation = "vertical",
+            orientation = "horizontal",
             add_rank_list(
                 text = "Active Charts",
-                labels = labels,
+                labels = active,
                 input_id = ns("active")
             ),
             add_rank_list(
                 text = "Inactive Charts",
-                labels = NULL,
+                labels = inactive,
                 input_id = ns("inactive")
             )
         )

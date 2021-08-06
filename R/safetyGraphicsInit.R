@@ -25,7 +25,7 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
     tags$head(tags$style(app_css)),
     div(
       id="init",
-      titlePanel("safetyGraphics Initialization app"),
+      titlePanel("safetyGraphics Initializer"),
       sidebarLayout(
         position="right",
         sidebarPanel(
@@ -38,6 +38,11 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
           )
         ),
         mainPanel(  
+          p(
+            icon("info-circle"),
+            "First, select charts by dragging items between the lists below. Next, load the required data domains using the controls on the right. Finally, click Run App to start the safetyGraphics Shiny App. Reload the webpage to select new charts/data.",
+            class="info"
+          ),
           loadChartsUI("load-charts", charts=charts_init),
         )
       ),
@@ -63,7 +68,6 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
     })
 
     observe({
-      print(paste("current domains are:",paste(current_domains(),collapse=",")))
       for(domain in all_domains){
         if(domain %in% current_domains()){
           shinyjs::show(id=paste0(domain,"-wrap"))
@@ -75,7 +79,6 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
 
     initStatus <- reactive({
       currentData <- domainData()
-      print(names(currentData))
       chartCount<-length(charts())
       domainCount<-length(currentData)
       loadCount<-sum(currentData %>% map_lgl(~!is.null(.x)))
@@ -107,7 +110,6 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
     })
 
     observeEvent(input$runApp,{
-      print("running the app server now :p")
       shinyjs::hide(id="init")
       shinyjs::show(id="sg-app")
       config<- app_startup(
@@ -147,6 +149,5 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
   }
 
   app <- shinyApp(ui = ui, server = server)
-  #app <- shinyApp(ui = ui, server = function(input,output,session){})
   runApp(app, launch.browser = TRUE)
 }
