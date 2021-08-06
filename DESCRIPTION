@@ -51,7 +51,8 @@ Imports:
     shinyWidgets,
     sortable,
     stringr,
-    yaml
+    yaml,
+    shinybusy
 Remotes: safetyGraphics/safetyCharts
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
