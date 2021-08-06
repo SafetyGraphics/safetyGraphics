@@ -57,6 +57,27 @@ loadCharts <- function(input, output, session, charts=makeChartConfig()) {
         )
     })
 
+    # Sync input and reactiveValues
+    observeEvent(input$active,{
+        rv$active <- charts %>% 
+            purrr::keep(~.x$name %in% input$active)%>%
+            map(~makeChartSummary(.x,showLinks=FALSE,class="chart-sortable"))
+        rv$inactive <- charts %>% 
+            purrr::keep(~.x$name %in% input$inactive)%>%
+            map(~makeChartSummary(.x,showLinks=FALSE,class="chart-sortable"))
+    })
+
+    observeEvent(input$inactive,{
+        rv$active <- charts %>% 
+            purrr::keep(~.x$name %in% input$active)%>%
+            map(~makeChartSummary(.x,showLinks=FALSE,class="chart-sortable"))
+        rv$inactive <- charts %>% 
+            purrr::keep(~.x$name %in% input$inactive)%>%
+            map(~makeChartSummary(.x,showLinks=FALSE,class="chart-sortable"))
+
+    })
+
+    # Update reactiveValues/Input on add/remove button clicks
     observeEvent(input$addCharts,{
         rv$active <- labels
         rv$inactive <- NULL
