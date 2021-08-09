@@ -39,7 +39,7 @@ app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, aut
         charts <- charts[purrr::map_lgl(charts, function(chart) chart$order >= 0)]
     }
 
-    chartOrder <- order(charts %>% map_int(~.x$order) %>% unlist())
+    chartOrder <- order(charts %>% map_dbl(~.x$order) %>% unlist())
     charts <- charts[chartOrder]
     
     #Drop charts if data for required domain(s) is not found
