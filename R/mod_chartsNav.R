@@ -7,7 +7,6 @@
 #' 
 
 chartsNav <- function(chart,ns){
-    print(chart$name)
     appendTab(
         inputId = "safetyGraphicsApp",
         menuName = "Charts",

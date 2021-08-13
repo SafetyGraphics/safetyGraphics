@@ -31,9 +31,7 @@ chartsTabUI <- function(id, chart){
 
 chartsTab <- function(input, output, session, chart, data, mapping){  
   ns <- session$ns
-  message("chartsTab() starting for ",chart$name)
-
-  print(chart$label)
+  
   # Initialize chart-specific parameters  
   params <- reactive({ 
     makeChartParams(

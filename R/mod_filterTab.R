@@ -88,7 +88,6 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
     )  
 
     observeEvent(res_filter$filtered(), {
-        print("changing counts")
         updateProgressBar(
             session = session, 
             id = "pbar", 
