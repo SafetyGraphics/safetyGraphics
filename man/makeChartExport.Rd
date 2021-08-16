@@ -2,7 +2,7 @@
 % Please edit documentation in R/makeChartExport.R
 \name{makeChartExport}
 \alias{makeChartExport}
-\title{Make Chart Config Functions}
+\title{Make Chart Export}
 \usage{
 makeChartExport(chart, mapping)
 }
@@ -12,8 +12,8 @@ makeChartExport(chart, mapping)
 \item{mapping}{mapping object like the one generatedf by makeMapping().}
 }
 \value{
-returns the chart object with an export script added.
+returns a character vector that can be saved as R code.
 }
 \description{
-Binds needed functions to a chart object based on chart type.
+Creates R code that allows chart to be exported
 }
