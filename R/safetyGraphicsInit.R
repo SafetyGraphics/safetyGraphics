@@ -2,15 +2,22 @@
 #'
 #' @param charts chart object
 #' @param delayTime time (in ms) between drawing app UI and starting server. Default set to 1000 (1 second), but could need to be higher on slow machine. 
+#' @param maxFileSize maximum file size in MB allowed for file upload
 #' 
 #' @import shiny
 #' @importFrom shinyjs hidden hide show delay disabled disable enable
 #' 
 #' @export
 
-safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000){
+safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000, maxFileSize = NULL){
   charts_init<-charts
   all_domains <- charts_init %>% map(~.x$domain) %>% unlist() %>% unique()
+
+  #increase maximum file upload limit
+  if(!is.null(maxFileSize)){
+    options(shiny.maxRequestSize=(maxFileSize*1024^2))
+  }
+
 
   app_css <- NULL
   for(lib in .libPaths()){
