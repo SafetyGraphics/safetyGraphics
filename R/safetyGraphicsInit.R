@@ -16,6 +16,9 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000, maxFile
   #increase maximum file upload limit
   if(!is.null(maxFileSize)){
     options(shiny.maxRequestSize=(maxFileSize*1024^2))
+    if(maxFileSize > 100){
+      message("NOTE: Loading very large files may cause performance issues in the safetyGraphics app.")
+    }
   }
 
 
