@@ -26,6 +26,7 @@ safetyGraphicsApp <- function(
   filterDomain="dm",
   chartSettingsPaths = NULL
 ){
+  message("Initializing safetyGraphicsApp")
   config <- app_startup(domainData, meta, charts, mapping, autoMapping, filterDomain, chartSettingsPaths)
 
   app <- shinyApp(

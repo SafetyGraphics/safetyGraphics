@@ -40,18 +40,19 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
                 if(file.exists(packageDir)) {
                     loaded <- do.call(require,list(package))
                     if(!loaded) do.call(library,list(package)) #Attach the library to the search list if it is installed
-                    message("Found ", packageDir,", and added it to list of chart locations.")
+                    message("- Found the {",package,"} package and added ", packageDir," to list of chart locations.")
                     packageFound<-TRUE   
                     dirs<-c(dirs, packageDir)
                     break               
                 }
             }
             if(!packageFound){
-                message(package, " package not found or '",packageLocation,"' folder does not exist, please install package and confirm that specified folder is found.")
+                message("{",package, "} package not found or '",packageLocation,"' folder does not exist, please install package and confirm that specified folder is found.")
             }
         }
     }
 
+    # Source all files in specified directories if requested
     if(sourceFiles){
         r_files<-list.files(
             dirs, 
@@ -63,6 +64,12 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
         sapply(r_files, source)
     }
 
+    #copied from tools package
+    file_path_sans_ext <-function (x) {
+        sub("([^.]+)\\.[[:alnum:]]+$", "\\1", x)
+    }
+    
+    # Create chart objects from YAML files in specified location
     yaml_files<-list.files(
         dirs,
         pattern = "yaml", 
@@ -70,54 +77,27 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
         full.names = TRUE
     )
     
-    #copied from tools package
-    file_path_sans_ext <-function (x) {
-        sub("([^.]+)\\.[[:alnum:]]+$", "\\1", x)
-    }
+    charts_raw <- yaml_files %>% 
+        map(function(path){
+            chart<-read_yaml(path)
+            chart$path <- path
+            if(!hasName(chart,"name")){
+                chart$name <- path %>% file_path_sans_ext %>% basename        
+            }
+            return(chart)
+        })
 
-    charts<-lapply(yaml_files, function(path){
-        chart <- read_yaml(path)
-        chart$path <- path
-        chart$name <- path %>% file_path_sans_ext %>% basename
+    charts <- charts_raw %>% map(prepareChart)
+    names(charts) <- charts %>% map_chr(~.x$name)
 
-        chart$order <- ifelse(
-            is.null(chart$order),
-            length(yaml_files) + 1,
-            chart$order
-        ) %>% as.numeric
-
-        #check for valid environment 
-        chart$envValid <- ifelse(
-            is.null(chart$env),
-            FALSE,
-            tolower(chart$env)=="safetygraphics"
+    message(
+        "- Found ", 
+        length(charts), 
+        " charts in the following location(s): ", 
+        paste(dirs,collapse="; "),
+        "\n  * ",
+        paste(names(charts),collapse="\n  * ")
         )
 
-        #charts should be available to export unless the are modules or chart$export is set to false
-        chart$export <- ifelse(
-            is.null(chart$export),
-            TRUE,
-            chart$export
-        )
-
-        return(chart)
-    })
-
-    names(charts) <- yaml_files %>% file_path_sans_ext %>% basename
-
-    # Drop charts where env is not set to safetyGraphics
-    envDrops <- charts[purrr::map_lgl(charts, function(chart) !chart$envValid)]
-    if(length(envDrops)>0){
-        message("Excluded ", length(envDrops), " yaml files with: ",paste(purrr::map_chr(envDrops, ~.x$path),collapse=", "))
-        message("`env` paramter missing or not set to 'safetyGraphics'")
-        charts <- charts[purrr::map_lgl(charts, function(chart) chart$envValid)]
-    }
-    
-    # sort charts based on order
-    charts <- charts[order(purrr::map_dbl(charts, function(chart) chart$order))] 
-    message("Loaded ", length(charts), " charts: ",paste(names(charts),collapse=", "))
-
-    # Bind workflow functions to chart object
-    charts <- lapply(charts, makeChartConfigFunctions)
     return(charts) 
 }
