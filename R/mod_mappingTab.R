@@ -31,8 +31,10 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
   metaDomains <- unique(meta$domain)
   dataDomains <- names(domainData)
   domains <- metaDomains[metaDomains %in% dataDomains]
-
+  print(standards)
+  
   for(i in 1:length(domains)){
+    
     current_meta <- meta %>% filter(domain == !!domains[i])
     domain<-domains[i]
     current_mapping <- mappings %>% filter(domain %in% !!domains[i]) %>% select(-"domain")
@@ -55,8 +57,10 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
       )
     )
   }
-  domain_ui<- list(      
-    checkboxInput(ns("toggleData"), "Show Data Previews?", TRUE),
+  domain_ui<- list(
+    h1("Data Mapping"),
+    span("This page dynamically establishes which columns and fields from the loaded data map to different chart properties. When possible, data standards are automatically detected and values are pre-filled."),
+    checkboxInput(ns("toggleData"), "Show Data Previews?", FALSE),
     br(),
     domain_ui
   )
