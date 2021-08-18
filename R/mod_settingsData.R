@@ -13,7 +13,7 @@ settingsDataUI <- function(id){
     br(),
     p(
       icon("info-circle"),
-      "Previews of the data for each domain are provided below.",
+      "Previews of the data for each domain are provided below. The current data (saved as an .RDS) can be exported for re-use on the settings/code tab.",
       class="info"
     ),
     uiOutput(ns('previews'))

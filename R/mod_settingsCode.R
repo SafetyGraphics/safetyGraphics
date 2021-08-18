@@ -19,18 +19,31 @@ settingsCodeUI <- function(id){
     # app.zip
     h4(
       "sg_app.zip  ",
-      downloadButton(ns("appDownload"), "Download", style="display:inline-block")
+      downloadButton(ns("appDownload"), "Download", style="display:inline-block"),
     ),
+    checkboxInput(ns("toggleDataDL"), "Download Domain Data?", TRUE),
     div(
       icon("info-circle"),
-      HTML("sg_app.zip contains 3 files: 
+      HTML("sg_app.zip contains 3 or 4 files: 
         <ul> 
           <li><code>mapping.yaml</code></li>
           <li><code>charts.yaml</code></li>
           <li><code>initApp.R</code></li>
+          <li><code>domainData.RDS</code> (if selected)</li> 
         </ul>
         To re-initialize the app with your current settings. Download <code>sg_app.zip</code>, unzip it in your R working directory, and then run <code>initApp.R</code> after review in the notes in the code. Note that these files update in real-time when mappings are updated in the app, so make sure to download new copies if you make changes to the mapping.
       "
+      ), class="info"
+    ),
+
+    # domainData.RDA
+    h4(
+      "domainData.RDS  ",
+      downloadButton(ns("dataDownload"), "Download", style="display:inline-block")
+    ),
+    div(
+      icon("info-circle"),
+      HTML("domainData.RDS contains the (unfiltered) domain data loaded in the app. The data can be loaded using `readRDS()` and passed to the `domainData` parameter in `safetyGraphicsApp()`. WARNING: Exported data files may be quite large, so it may be better to simply re-load your data directly (e.g. using the `{rio}` package)"
       ), class="info"
     ),
 
@@ -86,12 +99,13 @@ settingsCodeUI <- function(id){
 #' @param session Shiny session object
 #' @param mapping mapping
 #' @param charts charts
+#' @param domainData data list
 #' 
 #' @importFrom utils zip
 #' 
 #' @export
 
-settingsCode <- function(input, output, session, mapping, charts){
+settingsCode <- function(input, output, session, mapping, charts, domainData){
   if(missing(mapping)){
     mapping<-reactive({data.frame(domain=character(0),text_id=character(0),current=character(0))})
   }
@@ -162,7 +176,13 @@ settingsCode <- function(input, output, session, mapping, charts){
     }
   )
 
-  
+  # domainData.RDS
+  output$dataDownload <- downloadHandler(
+    filename = "domainData.RDS",
+    content = function(fname) {
+      saveRDS(domainData,fname)
+    }
+  )
 
   # sg_app.zip
   output$appDownload <- downloadHandler(
@@ -177,10 +197,16 @@ settingsCode <- function(input, output, session, mapping, charts){
       writeLines(chartsString, chartsPath)
       writeLines(mappingString(), mappingPath)
       writeLines(initString, initPath)
-    
-      zip(zipfile=fname, files=c(chartsPath, mappingPath, initPath),extras = '-j')
+      allFiles <- c(chartsPath, mappingPath, initPath)
+
+      if(input$toggleDataDL){
+        dataPath <- file.path(tmpdir, "domainData.RDS")
+        saveRDS(domainData,dataPath)
+        allFiles <- c(allFiles, dataPath)
+      } 
+
+      zip(zipfile=fname, files=allFiles ,extras = '-j')
     },
     contentType = "application/zip"
   )
-
 }

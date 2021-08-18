@@ -4,7 +4,7 @@
 \alias{settingsCode}
 \title{Server for the setting code page}
 \usage{
-settingsCode(input, output, session, mapping, charts)
+settingsCode(input, output, session, mapping, charts, domainData)
 }
 \arguments{
 \item{input}{Shiny input object}
@@ -16,6 +16,8 @@ settingsCode(input, output, session, mapping, charts)
 \item{mapping}{mapping}
 
 \item{charts}{charts}
+
+\item{domainData}{data list}
 }
 \description{
 Server for the setting code page
