@@ -126,7 +126,12 @@ settingsCode <- function(input, output, session, mapping, charts, domainData){
   )
 
   # charts.yaml for current charts
-  chartsString <- as.yaml(charts)
+  charts_raw <- charts %>% map(function(chart){
+    chart$functions <- NULL
+    return(chart)
+  })
+
+  chartsString <- as.yaml(charts_raw)
   output$chartsText <- renderText({chartsString})
   output$chartsCopy <- renderUI({
     rclipboard::rclipButton("clipbtn", "Copy to Clipboard", chartsString, icon("clipboard"))
@@ -152,9 +157,10 @@ settingsCode <- function(input, output, session, mapping, charts, domainData){
     "#####################################################################################################################",
     "",
     "library(safetyGraphics)",
+    "library(safetyCharts)",
     "library(yaml)",
     "mapping <- read_yaml('mapping.yaml')", 
-    "charts <- read_yaml('charts.yaml', eval.expr=TRUE)", 
+    "charts <- read_yaml('charts.yaml')", 
     "domainData <- readRDS('domainData.RDS')",
     "safetyGraphicsApp(domainData=domainData, mapping=mapping, charts=charts)",
     sep="\n"
