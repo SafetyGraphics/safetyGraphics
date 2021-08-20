@@ -69,7 +69,6 @@ app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, aut
     # generate mappings and data standards
     mappingObj <- makeMapping(domainData, meta, autoMapping, mapping)
 
-    print(mappingObj)
     config<-list(
         meta=meta,
         charts=charts,
