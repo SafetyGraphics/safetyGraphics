@@ -82,7 +82,7 @@ app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, aut
         charts=charts,
         domainData=domainData,
         mapping=mappingObj$mapping,
-        standards=mappingObj$standards,
+        standards=mappingObj$standard,
         filterDomain=filterDomain
     ) 
 
