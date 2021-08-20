@@ -31,7 +31,6 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
   metaDomains <- unique(meta$domain)
   dataDomains <- names(domainData)
   domains <- metaDomains[metaDomains %in% dataDomains]
-  print(standards)
   
   for(i in 1:length(domains)){
     
