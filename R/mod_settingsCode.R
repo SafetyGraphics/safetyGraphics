@@ -19,18 +19,31 @@ settingsCodeUI <- function(id){
     # app.zip
     h4(
       "sg_app.zip  ",
-      downloadButton(ns("appDownload"), "Download", style="display:inline-block")
+      downloadButton(ns("appDownload"), "Download", style="display:inline-block"),
     ),
+    checkboxInput(ns("toggleDataDL"), "Download Domain Data?", TRUE),
     div(
       icon("info-circle"),
-      HTML("sg_app.zip contains 3 files: 
+      HTML("sg_app.zip contains 3 or 4 files: 
         <ul> 
           <li><code>mapping.yaml</code></li>
           <li><code>charts.yaml</code></li>
           <li><code>initApp.R</code></li>
+          <li><code>domainData.RDS</code> (if selected)</li> 
         </ul>
         To re-initialize the app with your current settings. Download <code>sg_app.zip</code>, unzip it in your R working directory, and then run <code>initApp.R</code> after review in the notes in the code. Note that these files update in real-time when mappings are updated in the app, so make sure to download new copies if you make changes to the mapping.
       "
+      ), class="info"
+    ),
+
+    # domainData.RDA
+    h4(
+      "domainData.RDS  ",
+      downloadButton(ns("dataDownload"), "Download", style="display:inline-block")
+    ),
+    div(
+      icon("info-circle"),
+      HTML("domainData.RDS contains the (unfiltered) domain data loaded in the app. The data can be loaded using `readRDS()` and passed to the `domainData` parameter in `safetyGraphicsApp()`. WARNING: Exported data files may be quite large, so it may be better to simply re-load your data directly (e.g. using the `{rio}` package)"
       ), class="info"
     ),
 
@@ -86,12 +99,13 @@ settingsCodeUI <- function(id){
 #' @param session Shiny session object
 #' @param mapping mapping
 #' @param charts charts
+#' @param domainData data list
 #' 
 #' @importFrom utils zip
 #' 
 #' @export
 
-settingsCode <- function(input, output, session, mapping, charts){
+settingsCode <- function(input, output, session, mapping, charts, domainData){
   if(missing(mapping)){
     mapping<-reactive({data.frame(domain=character(0),text_id=character(0),current=character(0))})
   }
@@ -112,7 +126,12 @@ settingsCode <- function(input, output, session, mapping, charts){
   )
 
   # charts.yaml for current charts
-  chartsString <- as.yaml(charts)
+  charts_raw <- charts %>% map(function(chart){
+    chart$functions <- NULL
+    return(chart)
+  })
+
+  chartsString <- as.yaml(charts_raw)
   output$chartsText <- renderText({chartsString})
   output$chartsCopy <- renderUI({
     rclipboard::rclipButton("clipbtn", "Copy to Clipboard", chartsString, icon("clipboard"))
@@ -126,29 +145,24 @@ settingsCode <- function(input, output, session, mapping, charts){
 
   # initApp.R
   initString<- paste(
+    "#####################################################################################################################",
+    "# Initialize the safetyGraphics Shiny App using exported settings and data",
+    "#",
+    "# This code was generated in the safetyGraphics Shiny App to help re-initialize the app with the current settings.",
+    "# The code assumes that `mapping.yaml`, `charts.yaml` and `domainData.RDS` were downloaded from the app and saved ",
+    "# in you working directory. It also assumes that the default meta data included in the app is used. However, there ",
+    "# are likely many use cases where this workflow is not ideal and some customization is needed.  See ?safetyGraphicsApp ",
+    "# and the pacakge vignettes for more details and customization options.",
+    "#",
+    "#####################################################################################################################",
+    "",
     "library(safetyGraphics)",
+    "library(safetyCharts)",
     "library(yaml)",
-    "#Initialize safetyGraphics App",
-    "#Load mapping",
-    "#NOTE: Update path if mapping.yaml isn't saved in working directory --!!!! ",
     "mapping <- read_yaml('mapping.yaml')", 
-    "",
-    "#Load Charts",
-    "#NOTE: Update path if charts.yaml isn't saved in working directory. --!!!! ",
-    "#NOTE: This can be removed if default charts from `safetyCharts` are being used --!!!! ",
-    "charts <- read_yaml('charts.yaml', eval.expr=TRUE)", 
-    "",
-    "#Load Data",
-    "#NOTE: Demo data from safetyData should be updated by user --!!!!",
-    "dataList <- list(",
-    "  labs=safetyData::adam_adlbc,", 
-    "  aes=safetyData::adam_adae,",
-    "  dm=safetyData::adam_adsl",
-    ")",
-    "",
-    "#Initialize app",
-    "#NOTE: This assumes the default meta data is used. See ?safetyGraphicsApp for more details and customization options.",
-    "safetyGraphicsApp(domainData=dataList, mapping=mapping, charts=charts)",
+    "charts <- read_yaml('charts.yaml')", 
+    "domainData <- readRDS('domainData.RDS')",
+    "safetyGraphicsApp(domainData=domainData, mapping=mapping, charts=charts)",
     sep="\n"
   ) 
   output$initText <- renderText(initString)
@@ -162,7 +176,13 @@ settingsCode <- function(input, output, session, mapping, charts){
     }
   )
 
-  
+  # domainData.RDS
+  output$dataDownload <- downloadHandler(
+    filename = "domainData.RDS",
+    content = function(fname) {
+      saveRDS(domainData,fname)
+    }
+  )
 
   # sg_app.zip
   output$appDownload <- downloadHandler(
@@ -177,10 +197,16 @@ settingsCode <- function(input, output, session, mapping, charts){
       writeLines(chartsString, chartsPath)
       writeLines(mappingString(), mappingPath)
       writeLines(initString, initPath)
-    
-      zip(zipfile=fname, files=c(chartsPath, mappingPath, initPath),extras = '-j')
+      allFiles <- c(chartsPath, mappingPath, initPath)
+
+      if(input$toggleDataDL){
+        dataPath <- file.path(tmpdir, "domainData.RDS")
+        saveRDS(domainData,dataPath)
+        allFiles <- c(allFiles, dataPath)
+      } 
+
+      zip(zipfile=fname, files=allFiles ,extras = '-j')
     },
     contentType = "application/zip"
   )
-
 }

@@ -31,6 +31,14 @@ app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, aut
         }
     }
 
+    # Attempt to bind chart functions if none are provided
+    charts <- charts %>% map(function(chart){
+        if(!hasName(chart,"functions")){
+            chart <- prepareChart(chart)
+        } 
+        return(chart)
+    })
+
     # Drop charts where order is negative
     orderDrops <- charts[purrr::map_lgl(charts, function(chart) chart$order < 0)]
     if(length(orderDrops)>0){
