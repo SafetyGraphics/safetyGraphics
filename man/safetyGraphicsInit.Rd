@@ -4,12 +4,18 @@
 \alias{safetyGraphicsInit}
 \title{Run the interactive safety graphics app}
 \usage{
-safetyGraphicsInit(charts = makeChartConfig(), delayTime = 1000)
+safetyGraphicsInit(
+  charts = makeChartConfig(),
+  delayTime = 1000,
+  maxFileSize = NULL
+)
 }
 \arguments{
 \item{charts}{chart object}
 
 \item{delayTime}{time (in ms) between drawing app UI and starting server. Default set to 1000 (1 second), but could need to be higher on slow machine.}
+
+\item{maxFileSize}{maximum file size in MB allowed for file upload}
 }
 \description{
 Run the interactive safety graphics app
