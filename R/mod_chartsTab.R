@@ -51,29 +51,30 @@ chartsTab <- function(input, output, session, chart, data, mapping){
         params()
       )
     )
+  }
+  # Download R script
+  insertUI(
+    paste0(".",ns("header"), " .chart-header"), 
+    where="beforeEnd",
+    ui=downloadButton(ns("scriptDL"), "R script", class="pull-right btn-xs dl-btn")
+  )
   
-    # Downolad R script
-    insertUI(
-      paste0(".",ns("header"), " .chart-header"), 
-      where="beforeEnd",
-      ui=downloadButton(ns("scriptDL"), "R script", class="pull-right btn-xs dl-btn")
-    )
-    
-    mapping_list<-reactive({
-      mapping_list <- generateMappingList(mapping() %>% filter(.data$domain %in% chart$domain))
-      if(length(mapping_list)==1){
-        mapping_list <- mapping_list[[1]]
-      }
-      return(mapping_list)
-    })
+  mapping_list<-reactive({
+    mapping_list <- generateMappingList(mapping() %>% filter(.data$domain %in% chart$domain))
+    if(length(mapping_list)==1){
+      mapping_list <- mapping_list[[1]]
+    }
+    return(mapping_list)
+  })
 
-    output$scriptDL <- downloadHandler(
-      filename = paste0("sg-",chart$name,".R"),
-      content = function(file) {
-        writeLines(makeChartExport(chart, mapping_list()), file)
-      }
-    )
+  output$scriptDL <- downloadHandler(
+    filename = paste0("sg-",chart$name,".R"),
+    content = function(file) {
+      writeLines(makeChartExport(chart, mapping_list()), file)
+    }
+  )
 
+  if(chart$type !="module"){
     # Set up chart export button
     insertUI(
       paste0(".",ns("header"), " .chart-header"), 
