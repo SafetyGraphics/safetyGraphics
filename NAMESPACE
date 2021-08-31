@@ -84,5 +84,3 @@ importFrom(stringr,str_to_upper)
 importFrom(utils,hasName)
 importFrom(utils,zip)
 importFrom(yaml,as.yaml)
-importFrom(yaml,write_yaml)
-
