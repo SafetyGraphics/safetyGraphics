@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_loadCharts.R
 \name{loadCharts}
 \alias{loadCharts}
-\title{loadCharts}
+\title{Server for the chart loading module used in safetyGraphicsInit()}
 \usage{
 loadCharts(input, output, session, charts = makeChartConfig())
 }
@@ -13,8 +13,8 @@ loadCharts(input, output, session, charts = makeChartConfig())
 
 \item{session}{Shiny session object}
 
-\item{charts}{Initial list of charts}
+\item{charts}{list containing chart specifications like those returned by \link{makeChartConfig}.}
 }
 \description{
-server that facilitates selection of charts for safetyGraphicsApp
+Server for the chart loading module used in safetyGraphicsInit()
 }

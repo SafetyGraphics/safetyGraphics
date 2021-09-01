@@ -1,4 +1,4 @@
-#' UI for the settings page
+#' @title UI for the settings tab
 #'
 #' @param id module ID
 #'  

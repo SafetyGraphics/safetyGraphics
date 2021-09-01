@@ -1,5 +1,4 @@
-#' @title   mappingTabUI 
-#' @description  UI that facilitates the mapping of all data domain
+#' @title UI for mapping tab covering of all data domains
 #' 
 #' @param id module id
 #' @param meta metadata for all domains
@@ -68,8 +67,7 @@ mappingTabUI <- function(id, meta, domainData, mappings=NULL, standards=NULL){
 }
 
 
-#' @title  mapping module server
-#' @description  server function that facilitates the mapping of a single data domain
+#' @title Server for mapping tab covering of all data domains
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object

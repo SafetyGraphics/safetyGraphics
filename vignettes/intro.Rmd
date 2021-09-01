@@ -1,10 +1,10 @@
 ---
-title: "safetyGraphics - Intro"
+title: "Intro to Shiny App"
 author: "Jeremy Wildfire"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Intro}
+  %\VignetteIndexEntry{Intro to Shiny App}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_mappingDomain.R
 \name{mappingDomain}
 \alias{mappingDomain}
-\title{mappingDomain}
+\title{Server that facilitates the mapping of a full data domain}
 \usage{
 mappingDomain(input, output, session, meta, data)
 }
@@ -21,5 +21,5 @@ mappingDomain(input, output, session, meta, data)
 A reactive data frame containing the mapping for the domain
 }
 \description{
-server function that facilitates the mapping of a single data domain
+Server that facilitates the mapping of a full data domain
 }

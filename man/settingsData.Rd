@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_settingsData.R
 \name{settingsData}
 \alias{settingsData}
-\title{Settings Module - data details - server}
+\title{Server for settings tab showing current data}
 \usage{
 settingsData(input, output, session, domains)
 }
@@ -16,5 +16,5 @@ settingsData(input, output, session, domains)
 \item{domains}{named list of the data.frames for each domain}
 }
 \description{
-server for the display of the loaded data
+Server for settings tab showing current data
 }

@@ -1,8 +1,7 @@
-#' @title   loadChartsUI 
-#' @description  UI that helps users pick charts
+#' @title UI for the chart loading module used in safetyGraphicsInit()
 #'
 #' @param id module id
-#' @param charts list of charts
+#' @param charts list containing chart specifications like those returned by \link{makeChartConfig}. 
 #' 
 #' @importFrom purrr keep
 #' @importFrom sortable bucket_list add_rank_list
@@ -21,15 +20,15 @@ loadChartsUI <- function(id, charts=makeChartConfig()){
     ) 
 }
 
-#' @title   loadCharts
-#' @description  server that facilitates selection of charts for safetyGraphicsApp
+#' @title Server for the chart loading module used in safetyGraphicsInit()
 #'
 #' @param input Shiny input object
 #' @param output Shiny output object
 #' @param session Shiny session object
-#' @param charts Initial list of charts
-
+#' @param charts list containing chart specifications like those returned by \link{makeChartConfig}. 
+#' 
 #' @export
+
 loadCharts <- function(input, output, session, charts=makeChartConfig()) {
     ns<-session$ns
     labels<-charts%>%map(~makeChartSummary(.x,showLinks=FALSE,class="chart-sortable"))

@@ -1,5 +1,4 @@
-#' @title filter module checks
-#' @description function that checks whether the current data and settings are appropriate for the filter tab
+#' @title  Checks for whether the current data and settings support a filter tab
 #'
 #' @param domainData list of data files for each domain
 #' @param filterDomain domain to use for filtering (typically "dm")

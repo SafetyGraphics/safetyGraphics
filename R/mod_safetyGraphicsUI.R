@@ -1,4 +1,5 @@
-#' UI for the default safetyGraphics shiny app
+#' UI for the core safetyGraphics app including Home, Mapping, Filter, Charts and Settings modules.  
+#'
 #'
 #' @param id module ID
 #' @param meta data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}. 

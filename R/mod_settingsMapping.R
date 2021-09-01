@@ -1,6 +1,5 @@
-#' @title  Settings view of Metadata/Mapping - UI
-#' @description  UI that displays the data mapping metadata. 
-#'
+#' @title UI for settings tab showing current mapping
+#' 
 #' @param id module id
 #' 
 #' @import rclipboard
@@ -19,8 +18,7 @@ settingsMappingUI <- function(id){
   ) 
 }  
 
-#' @title  Settings view of Metadata/Mapping - server
-#' @description  server for the display of the data mapping metadata. 
+#' @title Server for settings tab showing current mapping
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object

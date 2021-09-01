@@ -1,4 +1,4 @@
-#' Add a navbar tab that initializes the Chart Module UI
+#' Adds a navbar tab that initializes the Chart Module UI
 #'
 #' @param chart  chart metadata 
 #' @param ns namespace

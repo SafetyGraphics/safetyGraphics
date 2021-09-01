@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_safetyGraphicsServer.R
 \name{safetyGraphicsServer}
 \alias{safetyGraphicsServer}
-\title{Server for the default safetyGraphics shiny app}
+\title{Server for core safetyGraphics app including Home, Mapping, Filter, Charts and Settings modules.}
 \usage{
 safetyGraphicsServer(
   input,

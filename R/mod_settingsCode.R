@@ -1,5 +1,5 @@
-#' UI for the settings page
-#'
+#' @title UI for settings tab providing code to re-start the app with current data/settings
+#' 
 #' @param id module ID
 #'  
 #' @export
@@ -92,8 +92,8 @@ settingsCodeUI <- function(id){
   
 }
 
-#' @title  Server for the setting code page
-#'
+#' @title Server for settings tab providing code to re-start the app with current data/settings
+#' 
 #' @param input Shiny input object
 #' @param output  Shiny output object
 #' @param session Shiny session object

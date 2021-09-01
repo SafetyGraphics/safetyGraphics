@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_mappingDomain.R
 \name{mappingDomainUI}
 \alias{mappingDomainUI}
-\title{mappingDomainUI}
+\title{UI that facilitates the mapping of a full data domain}
 \usage{
 mappingDomainUI(id, meta, data, mapping = NULL)
 }

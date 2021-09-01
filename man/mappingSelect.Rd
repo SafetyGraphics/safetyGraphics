@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_mappingSelect.R
 \name{mappingSelect}
 \alias{mappingSelect}
-\title{mappingSelect}
+\title{Server that facilitates the mapping of a single data element (column or field) with a simple select UI}
 \usage{
 mappingSelect(input, output, session)
 }
@@ -17,5 +17,5 @@ mappingSelect(input, output, session)
 A reactive containing the selected column
 }
 \description{
-server function that facilitates the mapping of a single data element (column of field) with a simple select UI
+Server that facilitates the mapping of a single data element (column or field) with a simple select UI
 }

@@ -1,5 +1,4 @@
-#' @title   mappingColumnUI 
-#' @description  UI that facilitates the mapping of a column data domain
+#' @title  UI that facilitates the mapping of a column data (and any associated fields) 
 #'
 #' @param id module id
 #' @param meta metadata for the column (and related fields)
@@ -66,8 +65,7 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
     col_ui
 }
 
-#' @title  mappingColumn
-#' @description  server function that facilitates the mapping of a single data element (column of field) with a simple select UI
+#' @title  Server that facilitates the mapping of a column data (and any associated fields) 
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object

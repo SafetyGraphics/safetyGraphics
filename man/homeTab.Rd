@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_homeTab.R
 \name{homeTab}
 \alias{homeTab}
-\title{home tab - server}
+\title{Server for the filter module in datamods::filter_data_ui}
 \usage{
 homeTab(input, output, session)
 }
@@ -14,5 +14,5 @@ homeTab(input, output, session)
 \item{session}{mod session}
 }
 \description{
-server for the display of the home tab
+Server for the filter module in datamods::filter_data_ui
 }

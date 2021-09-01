@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_settingsCode.R
 \name{settingsCodeUI}
 \alias{settingsCodeUI}
-\title{UI for the settings page}
+\title{UI for settings tab providing code to re-start the app with current data/settings}
 \usage{
 settingsCodeUI(id)
 }
@@ -10,5 +10,5 @@ settingsCodeUI(id)
 \item{id}{module ID}
 }
 \description{
-UI for the settings page
+UI for settings tab providing code to re-start the app with current data/settings
 }

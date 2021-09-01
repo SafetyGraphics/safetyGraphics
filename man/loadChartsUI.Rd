@@ -2,15 +2,15 @@
 % Please edit documentation in R/mod_loadCharts.R
 \name{loadChartsUI}
 \alias{loadChartsUI}
-\title{loadChartsUI}
+\title{UI for the chart loading module used in safetyGraphicsInit()}
 \usage{
 loadChartsUI(id, charts = makeChartConfig())
 }
 \arguments{
 \item{id}{module id}
 
-\item{charts}{list of charts}
+\item{charts}{list containing chart specifications like those returned by \link{makeChartConfig}.}
 }
 \description{
-UI that helps users pick charts
+UI for the chart loading module used in safetyGraphicsInit()
 }

@@ -1,5 +1,4 @@
-#' @title  filterTabUI 
-#' @description  UI that facilitates the filtering data with datamods::filter_data_ui
+#' @title UI for the filter module in datamods::filter_data_ui
 #'
 #' @param id module id
 #' 
@@ -39,8 +38,7 @@ filterTabUI <- function(id){
 }
 
 
-#' @title  filter module server
-#' @description  server function that facilitates the data filtering with the datamods::filter_data_server module
+#' @title Server for the filter module in datamods::filter_data_ui
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object

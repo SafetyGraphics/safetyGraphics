@@ -1,5 +1,4 @@
-#' @title   mappingDomainUI 
-#' @description  UI that facilitates the mapping of a full data domain
+#' @title  UI that facilitates the mapping of a full data domain
 #'
 #' @param id module id
 #' @param meta metadata for the domain
@@ -37,8 +36,7 @@ mappingDomainUI <- function(id, meta, data, mapping=NULL){
 }
 
 
-#' @title  mappingDomain
-#' @description  server function that facilitates the mapping of a single data domain
+#' @title  Server that facilitates the mapping of a full data domain
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object

@@ -1,8 +1,7 @@
-#' @title Charts Tab
-#' @description  Charting module
+#' @title UI for chart module, designed to be re-used for each chart generated. 
 #'
 #' @param id module id
-#' @param chart list containing chart specifications
+#' @param chart list containing chart specifications like those returned by \link{makeChartConfig}. 
 #' 
 #' @importFrom stringr str_to_title
 #' @importFrom purrr map2
@@ -17,13 +16,12 @@ chartsTabUI <- function(id, chart){
   return(list(header, chartWrap))
 }
 
-#' @title  home tab - server
-#' @description  server for the display of the chart tab  
+#' @title Server for chart module, designed to be re-used for each chart generated. 
 #'
 #' @param input Input objects from module namespace
 #' @param output Output objects from module namespace
 #' @param session An environment that can be used to access information and functionality relating to the session
-#' @param chart list containing a safetyGraphics chart object. see custom chart vignette for details. 
+#' @param chart list containing a safetyGraphics chart object like those returned by \link{makeChartConfig}.
 #' @param data named list of current data sets (Reactive).
 #' @param mapping tibble capturing the current data mappings (Reactive).
 #' 
