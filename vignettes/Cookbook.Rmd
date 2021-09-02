@@ -1,0 +1,145 @@
+---
+title: "Cookbook"
+author: "Jeremy Wildfire"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Cookbook}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Cookbook Vignette
+
+This vignette contains a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios. For a general overview of the app see [this vignette](). For more details about adding custom charts, see [this vignette]().
+
+##  Setup and installation
+
+safetyGraphics requires R v4 or higher. These examples have been tested using RStudio v1.4, but should work on other platforms with proper configuration. 
+
+You can install `{safetyGraphics}` from CRAN like any other R package: 
+
+```
+install.packages("safetyGraphics")
+library("safetyGraphics")
+```
+
+Or to use the most recent development version from GitHub, call:
+
+``` 
+devtools::install_github("safetyGraphics/safetyCharts", ref="dev")
+library(safetyCharts)
+devtools::install_github("safetyGraphics/safetyGraphics", ref="dev")
+library(safetyGraphics)
+safetyGraphics::safetyGraphicsApp()
+```
+
+## Example 1 - Default App
+
+To run the app with no customizations using sample AdAM data from the {safetyData} package, install the package and run:
+
+```
+safetyGraphics::safetyGraphicsApp()
+```
+
+## Example 2 - SDTM Data
+
+The data passed in to the safetyGraphics app can be customized using the `data` parameter in `safetyGraphicsApp()`. For example, to run the app with SDTM data saved in `{safetyData}`, call: 
+
+```
+sdtm <- list(
+    dm=safetyData::sdtm_dm,
+    aes=safetyData::sdtm_ae,
+    labs=safetyData::sdtm_lb
+)
+
+safetyGraphics::safetyGraphicsApp(domainData=sdtm)
+```
+
+## Example 3 - Single Data Domain
+
+Running the app for a single data domain, is similar: 
+
+```
+justLabs <- list(labs=safetyData::adam_adlbc)
+safetyGraphics::safetyGraphicsApp(domainData=justLabs)
+```
+
+Note that charts with missing data are automatically dropped and the filtering tab is not present since it requires demographics data by default. 
+
+## Example 4 - Drop Unwanted Charts
+
+Users can also generate a list of charts and then drop charts that they don't want to include. For example, if you wanted to drop charts with `type` of "htmlwidgets" you could run this code.
+
+```
+library(purrr)
+charts <- makeChartConfig() #gets charts from safetyCharts pacakge by default
+notWidgets <- charts %>% purrr::keep(~.x$type != "htmlwidget")
+safetyGraphicsApp(charts=notWidgets)
+```
+
+## Example 6 - Add a chart
+
+The code below adds a new simple chart showing participants' age distribution by sex. 
+
+```
+ageDist <- function(data, settings){
+    p<-ggplot(data = data, aes_(x=as.name(settings$age_col))) +
+        geom_histogram() + 
+        facet_wrap(as.name(settings$sex_col))
+    return(p)
+}
+ageDist_chart<-list(
+    env="safetyGraphics",
+    name="ageDist",
+    label="Age Distribution",
+    type="plot",
+    domain="dm",
+    workflow=list(
+        main="ageDist"
+    )
+)
+charts <- makeChartConfig() 
+charts$ageDist<-ageDist_chart
+safetyGraphicsApp(charts=charts)
+```
+  
+For extensive details on adding and customizing different types of charts, see this [vignette](chartConfiguration).
+
+## Example 7 - Non-standard data
+
+Next, let's initialize the the app with non-standard data. {safetyGraphics} automatically detects AdAM and SDTM data when possible, but for non-standard data, the user must provide a data mapping. This can be done in the app using the data/mapping tab, or can be done when the app is initialized by passing a `mapping` list to `safetyGraphicsApp()`. For example:
+
+```
+notAdAM <- list(labs=safetyData::adam_adlbc %>% rename(id = USUBJID))
+idMapping<- list(labs=list(id_col="id"))
+safetyGraphicsApp(domainData=notAdAM, mapping=idMapping)
+```
+
+## Example 8 - Non-standard data #2
+
+For a more realistic example, consider [this labs data set (csv)](https://raw.githubusercontent.com/SafetyGraphics/SafetyGraphics.github.io/master/pilot/SampleData_NoStandard.csv). The data can be loaded in to safetyGraphics with the code below, but several items in the mapping page need to be filled in:
+
+```
+labs <- read.csv("https://raw.githubusercontent.com/SafetyGraphics/SafetyGraphics.github.io/master/pilot/SampleData_NoStandard.csv")
+safetyGraphics::safetyGraphicsApp(domainData=list(labs=labs))
+```
+
+<img src="https://user-images.githubusercontent.com/3680095/117977142-85227f80-b2fe-11eb-9f86-bbeb8ffb8bf4.png" alt="drawing" width="200"/>
+
+Fortunately there is no need to re-enter this mapping information in every time you re-start the app. After filling in these values once, you can export code to restart the app *with the specified settings pre-populated*. First, click on the setting icon in the header and then on "code" to see this page: 
+
+<img src='https://user-images.githubusercontent.com/3680095/131856905-4c98f537-1bf0-46e5-98d7-821ea2546435.png'  style='max-width:700px'>
+
+The YAML code provided here captures the updates you've made on the mapping page. To re-start the app with those settings, just save these YAML code in a new file called `customSettings.yaml` in your working directory, and then call: 
+
+```
+labs <- read.csv("https://raw.githubusercontent.com/SafetyGraphics/SafetyGraphics.github.io/master/pilot/SampleData_NoStandard.csv")
+customMapping <- read_yaml("customSettings.yaml")
+safetyGraphics::safetyGraphicsApp(
+    domainData=list(labs=labs),
+    mapping=customMapping   
+)
+``` 
+
+Note, that for more complex customizations, the setting page also provides a `.zip` file with a fully re-usable version of the app. 
