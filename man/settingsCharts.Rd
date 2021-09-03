@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_settingsCharts.R
 \name{settingsCharts}
 \alias{settingsCharts}
-\title{Settings Module - charts details - server}
+\title{Server for settings tab showing details for the charts loaded in the app}
 \usage{
 settingsCharts(input, output, session, charts)
 }
@@ -16,5 +16,5 @@ settingsCharts(input, output, session, charts)
 \item{charts}{list data frame summarizing the charts}
 }
 \description{
-server for the display of the charts
+Server for settings tab showing details for the charts loaded in the app
 }

@@ -1,4 +1,4 @@
-#' UI for the settings page
+#' @title UI for the settings tab
 #'
 #' @param id module ID
 #'  
@@ -16,7 +16,7 @@ settingsTabUI <- function(id){
 }
 
 
-#' @title  Server for the setting page
+#' @title Server for the setting page
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object

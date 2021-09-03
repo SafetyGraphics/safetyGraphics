@@ -2,7 +2,7 @@
 % Please edit documentation in R/safetyGraphicsInit.R
 \name{safetyGraphicsInit}
 \alias{safetyGraphicsInit}
-\title{Run the interactive safety graphics app}
+\title{App to select charts, load data and then initialize the core safetyGraphics app}
 \usage{
 safetyGraphicsInit(
   charts = makeChartConfig(),
@@ -18,5 +18,5 @@ safetyGraphicsInit(
 \item{maxFileSize}{maximum file size in MB allowed for file upload}
 }
 \description{
-Run the interactive safety graphics app
+App to select charts, load data and then initialize the core safetyGraphics app
 }

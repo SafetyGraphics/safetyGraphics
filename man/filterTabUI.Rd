@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_filterTab.R
 \name{filterTabUI}
 \alias{filterTabUI}
-\title{filterTabUI}
+\title{UI for the filter module in datamods::filter_data_ui}
 \usage{
 filterTabUI(id)
 }
@@ -10,5 +10,5 @@ filterTabUI(id)
 \item{id}{module id}
 }
 \description{
-UI that facilitates the filtering data with datamods::filter_data_ui
+UI for the filter module in datamods::filter_data_ui
 }

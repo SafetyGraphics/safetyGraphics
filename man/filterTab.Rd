@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_filterTab.R
 \name{filterTab}
 \alias{filterTab}
-\title{filter module server}
+\title{Server for the filter module in datamods::filter_data_ui}
 \usage{
 filterTab(
   input,
@@ -36,5 +36,5 @@ filterTab(
 filtered data set
 }
 \description{
-server function that facilitates the data filtering with the datamods::filter_data_server module
+Server for the filter module in datamods::filter_data_ui
 }

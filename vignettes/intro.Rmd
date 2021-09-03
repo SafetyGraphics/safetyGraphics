@@ -1,0 +1,139 @@
+---
+title: "Intro to Shiny App"
+author: "Jeremy Wildfire"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Intro to Shiny App}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Intro Vignette
+
+The `safetyGraphics` shiny app provides an easy-to-use shiny interface for creating shareable safety graphics for any study. This vignette provides an overview of the app's functionality, shows how to initialize the app with your own study data, and provides links to technical resources explaining how to customize the app.  
+
+# safetyGraphics Demo
+
+A demo of shiny application using data from the [{safetyData} package](https://github.com/SafetyGraphics/safetyData) is hosted [here](https://jwildfire.shinyapps.io/safetyGraphics/). The app can also be initialized with the `safetyGraphicsApp()` function in the R console - see Appendix 1 for details. 
+
+Let's take a quick look at the various pages in the app.
+
+## Home Tab
+
+A home page has a basic overview of the app.
+
+<img src="https://user-images.githubusercontent.com/3680095/129045822-da67d223-bc25-42ee-81c5-3c07bfcac2bd.png" style='max-width:700px'>
+
+## Mapping Tab
+
+The Mapping tab is used to tell charts which data columns and fields to use for various chart components. 
+
+<img src="https://user-images.githubusercontent.com/3680095/129053835-117fc779-0bda-4b8c-8ffe-0df8f5316a06.png" style='max-width:700px'>
+
+This mapping process makes it easy to re-use charts across many different studies. You can see previews of the loaded data using the checkbox at the top of the page. The demo data has 3 data domains (labs, adverse events (aes) and demographics (dm)), but others can be added as well. The mapping tab is automatically filled in for common data standards, like the ADaM data shown here, but can also be filled in manually for non-standard data. 
+
+## Filtering Tab
+
+The Filtering tab allows users to interactively select which participants to include in charts. 
+
+<img src="https://user-images.githubusercontent.com/3680095/129056678-2e1dc2e0-15f9-435c-abff-326076ed3c8d.png" style='max-width:700px'>
+
+This tab is created using the filter functionality included in the [{datamods} package](https://github.com/dreamRs/datamods#filter). Whenever data is filtered in this tab, those filtered data are used in all charts (across all data domains). Note that the number of participants selected is always shown in the upper right hand corner of the app. 
+
+## Charts Tab
+
+Clicking the Charts tab opens a dropdown menu containing a series of charts related to clinical trial safety. Clicking the [Hepatic Safety Explorer](https://github.com/safetyGraphics/hep-explorer) opens this page:
+
+<img src="https://user-images.githubusercontent.com/3680095/129057688-14ed7de8-66c3-432e-840c-641eb0c29f27.png" style='max-width:700px'>
+
+safetyGraphics supports many different kinds of charts including web-based interactive graphics using {htmlwidgets} (like the chart shown above), static plots, plotly plots and custom shiny modules. Each chart has a header that provides details about the chart, links to chart-specific resources and buttons that allow users to download a stand-alone html report or a .R file that reproduces the chart. See the [Chart Configuration Vignette](ChartConfiguration) for more detail about the safetyGraphics charting framework. 
+
+## ⚙️ (Settings) Tab
+
+Finally, the Settings tab - shown as a gear icon ⚙️ -  contains technical details that can be used to customize/troubleshoot the app. Clicking on the "Code" sub-tab (shown below) allows you to download a zip file that can be used to re-open the app with with any customizations that have been made during your current session. 
+
+<img src="https://user-images.githubusercontent.com/3680095/129060242-9da1cda2-ab27-4b7c-95c4-c1dc4a52523a.png" style='max-width:700px'>
+
+# Loading Study Data
+
+There are 2 primary ways to load your study data in to the safetyGraphics shiny app: 
+
+1. Using `safetyGraphicsInit()` shiny interface
+2. Passing data directly to `safetyGraphicsApp()`
+
+## Loading data with `safetyGraphicsInit()` 
+
+The `safetyGraphicsInit()` function starts a simple app that allows users to select charts and then load the data required via a point-and-click interface as shown below:
+
+<img src="https://user-images.githubusercontent.com/3680095/129047100-9203201e-124c-456f-b9fc-0b5c79b47a52.png" style='max-width:700px'>
+
+The app dynamically determines which data sets are required for the selected charts and updates the "Data Loader" UI when the charts selection changes. Below, we've selected 2 charts from the labs domain - so the other data domains are automatically hidden. 
+
+<img src="https://user-images.githubusercontent.com/3680095/129047478-c1583ffa-2b3c-4e5c-9d51-2bd9c93e7c97.png" style='max-width:700px'>
+
+Once you've picked charts, click the "Load" buttons in the "Data Loader" section to select data files for each domain.  Data is loaded using the import functionality from the [`{datamods}` package](https://github.com/dreamRs/datamods#import) which allows you to select data  loaded in your R session or load data files directly from your file system. `{datamods}` supports any file format that [{rio}](https://cran.r-project.org/web/packages/rio/index.html) can handle including text files, Excel, SAS and SPSS format. 
+
+Once you've loaded files for all of the active data domains, the "Run App" button will become active. Click it to initialize the app. 
+
+## Passing data to `safetyGraphicsApp()`
+ 
+You can also initialize the app with custom data directly from the R console. The basic workflow is as follows: 
+
+1. Load your data in to the R session
+2. Save your data as a named list. The name of each list item should correspond to a safetyGraphics data domain. 
+3. Run `safetyGraphicsApp()` using the `domainData` to pass the list of data frames. 
+
+Here is a simple example that starts the app with SDTM data from the safetyData library: 
+
+```
+library(safetyData)
+sdtm <- list(
+    dm=safetyData::sdtm_dm,
+    aes=safetyData::sdtm_ae,
+    labs=safetyData::sdtm_lb
+)
+
+safetyGraphics::safetyGraphicsApp(domainData=sdtm)
+```
+
+This example and other use cases are described in the `safetyGraphics Cookbook - Advanced Examples` Vignette.  
+
+# Additional Resources
+
+Several additional vignettes are available for more advanced topics: 
+- [Chart Configuration Vignette](ChartConfiguration) - details about the charting process including technical specifications and step-by-step instructions
+- [Cookbook Vignette](Cookbook) - a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios
+- [Technical FAQ Vignette](TechnicalFAQ) Vignette - vignette discussing security, validation and other technical issues
+
+The {safetyGraphics} app is maintained by the Interactive Safety Graphics (ISG) subteam of the ASA Biopharm-DIA Safety Working Group. You can learn more about the team and find links to recent presentations and publications at our [home page](https://safetygraphics.github.io/).  
+
+# Appendix 1 - Initialization code
+
+We suggest running the app in RStudio with R version 4.0 or higher. The following code installs the {safetyGraphics} package and initializes the app demo: 
+
+```
+install.packages('safetyGraphics')
+library(safetyGraphics)
+safetyGraphicsApp() 
+```
+
+Or to use the initialization workflow: 
+
+```
+install.packages('safetyGraphics')
+library(safetyGraphics)
+safetyGraphicsInit() 
+```
+
+Or you can install the most recent development version of {safetyGraphics} and the companion package {safetyCharts} directly from GitHub:
+
+```
+install.packages("devtools")
+library(devtools)
+devtools::install_github("safetyGraphics/safetyGraphics") 
+library(safetyGraphics)
+devtools::install_github("safetyGraphics/safetyCharts") 
+library(safetyCharts)
+safetyGraphicsApp() #or safetyGraphicsInit()
+```

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_settingsTab.R
 \name{settingsTabUI}
 \alias{settingsTabUI}
-\title{UI for the settings page}
+\title{UI for the settings tab}
 \usage{
 settingsTabUI(id)
 }
@@ -10,5 +10,5 @@ settingsTabUI(id)
 \item{id}{module ID}
 }
 \description{
-UI for the settings page
+UI for the settings tab
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_settingsCode.R
 \name{settingsCode}
 \alias{settingsCode}
-\title{Server for the setting code page}
+\title{Server for settings tab providing code to re-start the app with current data/settings}
 \usage{
 settingsCode(input, output, session, mapping, charts, domainData)
 }
@@ -20,5 +20,5 @@ settingsCode(input, output, session, mapping, charts, domainData)
 \item{domainData}{data list}
 }
 \description{
-Server for the setting code page
+Server for settings tab providing code to re-start the app with current data/settings
 }

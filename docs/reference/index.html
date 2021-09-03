@@ -8,23 +8,29 @@
 
 <title>Function reference • safetyGraphics</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,7 +38,9 @@
 
 
 
+
 <meta property="og:title" content="Function reference" />
+
 
 
 
@@ -49,7 +57,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -63,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safetyGraphics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -71,33 +79,38 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/customWorkflows.html">safetyGraphics Shiny App - Custom Workflows</a>
+      <a href="../articles/intro.html">Intro to Shiny App</a>
     </li>
     <li>
-      <a href="../articles/shinyUserGuide.html">safetyGraphics Shiny App - User Guide</a>
+      <a href="../articles/chartConfiguration.html">Chart Configuration</a>
+    </li>
+    <li>
+      <a href="../articles/cookbook.html">Examples Cookbook</a>
+    </li>
+    <li>
+      <a href="../articles/technicalFAQ.html">Technical FAQ</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../reference/index.html">Functions</a>
+</li>
+<li>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/SafetyGraphics/safetyGraphics">
@@ -132,60 +145,264 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-main-functions" class="hasAnchor"><a href="#section-main-functions" class="anchor"></a>Main Functions</h2>
+          <h2 id="section-main-shiny-app-functions" class="hasAnchor"><a href="#section-main-shiny-app-functions" class="anchor"></a>Main Shiny App Functions</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
           <p><code><a href="safetyGraphicsApp.html">safetyGraphicsApp()</a></code> </p>
         </td>
-        <td><p>Run the interactive safety graphics builder</p></td>
+        <td><p>Run the core safetyGraphics App</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="safetyGraphicsInit.html">safetyGraphicsInit()</a></code> </p>
+        </td>
+        <td><p>App to select charts, load data and then initialize the core safetyGraphics app</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-shiny-modules" class="hasAnchor"><a href="#section-shiny-modules" class="anchor"></a>Shiny Modules</h2>
+          <p class="section-desc"><p>Reusable Shiny Modules</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="safetyGraphicsServer.html">safetyGraphicsServer()</a></code> </p>
+        </td>
+        <td><p>Server for core safetyGraphics app including Home, Mapping, Filter, Charts and Settings modules.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="safetyGraphicsUI.html">safetyGraphicsUI()</a></code> </p>
+        </td>
+        <td><p>UI for the core safetyGraphics app including Home, Mapping, Filter, Charts and Settings modules.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="chartsTab.html">chartsTab()</a></code> </p>
+        </td>
+        <td><p>Server for chart module, designed to be re-used for each chart generated.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="chartsTabUI.html">chartsTabUI()</a></code> </p>
+        </td>
+        <td><p>UI for chart module, designed to be re-used for each chart generated.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="filterTab.html">filterTab()</a></code> </p>
+        </td>
+        <td><p>Server for the filter module in datamods::filter_data_ui</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="filterTabUI.html">filterTabUI()</a></code> </p>
+        </td>
+        <td><p>UI for the filter module in datamods::filter_data_ui</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="homeTab.html">homeTab()</a></code> </p>
+        </td>
+        <td><p>Server for the filter module in datamods::filter_data_ui</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="homeTabUI.html">homeTabUI()</a></code> </p>
+        </td>
+        <td><p>UI for the home module</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="loadCharts.html">loadCharts()</a></code> </p>
+        </td>
+        <td><p>Server for the chart loading module used in safetyGraphicsInit()</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="loadChartsUI.html">loadChartsUI()</a></code> </p>
+        </td>
+        <td><p>UI for the chart loading module used in safetyGraphicsInit()</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="loadData.html">loadData()</a></code> </p>
+        </td>
+        <td><p>Server for the data loading module used in safetyGraphicsInit()</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="loadDataUI.html">loadDataUI()</a></code> </p>
+        </td>
+        <td><p>UI for the data loading module used in safetyGraphicsInit()</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mappingTab.html">mappingTab()</a></code> </p>
+        </td>
+        <td><p>Server for mapping tab covering of all data domains</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mappingTabUI.html">mappingTabUI()</a></code> </p>
+        </td>
+        <td><p>UI for mapping tab covering of all data domains</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mappingDomain.html">mappingDomain()</a></code> </p>
+        </td>
+        <td><p>Server that facilitates the mapping of a full data domain</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mappingDomainUI.html">mappingDomainUI()</a></code> </p>
+        </td>
+        <td><p>UI that facilitates the mapping of a full data domain</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mappingColumn.html">mappingColumn()</a></code> </p>
+        </td>
+        <td><p>Server that facilitates the mapping of a column data (and any associated fields)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mappingColumnUI.html">mappingColumnUI()</a></code> </p>
+        </td>
+        <td><p>UI that facilitates the mapping of a column data (and any associated fields)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mappingSelect.html">mappingSelect()</a></code> </p>
+        </td>
+        <td><p>Server that facilitates the mapping of a single data element (column or field) with a simple select UI</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mappingSelectUI.html">mappingSelectUI()</a></code> </p>
+        </td>
+        <td><p>UI that facilitates the mapping of a single data element (column or field) with a simple select UI</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="settingsTab.html">settingsTab()</a></code> </p>
+        </td>
+        <td><p>Server for the setting page</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="settingsTabUI.html">settingsTabUI()</a></code> </p>
+        </td>
+        <td><p>UI for the settings tab</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="settingsCharts.html">settingsCharts()</a></code> </p>
+        </td>
+        <td><p>Server for settings tab showing details for the charts loaded in the app</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="settingsChartsUI.html">settingsChartsUI()</a></code> </p>
+        </td>
+        <td><p>UI for settings tab showing details for the charts loaded in the app</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="settingsData.html">settingsData()</a></code> </p>
+        </td>
+        <td><p>Server for settings tab showing current data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="settingsDataUI.html">settingsDataUI()</a></code> </p>
+        </td>
+        <td><p>UI for settings tab showing current data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="settingsMapping.html">settingsMapping()</a></code> </p>
+        </td>
+        <td><p>Server for settings tab showing current mapping</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="settingsMappingUI.html">settingsMappingUI()</a></code> </p>
+        </td>
+        <td><p>UI for settings tab showing current mapping</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="settingsCode.html">settingsCode()</a></code> </p>
+        </td>
+        <td><p>Server for settings tab providing code to re-start the app with current data/settings</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="settingsCodeUI.html">settingsCodeUI()</a></code> </p>
+        </td>
+        <td><p>UI for settings tab providing code to re-start the app with current data/settings</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-data" class="hasAnchor"><a href="#section-data" class="anchor"></a>Data</h2>
+          <p class="section-desc"><p>Data sets used in the apps</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="meta.html">meta</a></code> </p>
+        </td>
+        <td><p>Metadata data frame containing information about the data mapping used to configure safetyGraphics charts. One record per unique data mapping</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
           <h2 id="section-helper-functions" class="hasAnchor"><a href="#section-helper-functions" class="anchor"></a>Helper Functions</h2>
-          <p class="section-desc"><p>these functions are used by the main app</p></p>
+          <p class="section-desc"><p>Utility functions used in the apps</p></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
-          <p><code><a href="addChart.html">addChart()</a></code> </p>
+          <p><code><a href="app_startup.html">app_startup()</a></code> </p>
         </td>
-        <td><p>Adds a new chart for use in the safetyGraphics shiny app</p></td>
+        <td><p>Startup code for shiny app</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="addSetting.html">addSetting()</a></code> </p>
+          <p><code><a href="chartsNav.html">chartsNav()</a></code> </p>
         </td>
-        <td><p>Adds a new setting for use in the safetyGraphics shiny app</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="adlbc.html">adlbc</a></code> </p>
-        </td>
-        <td><p>Safety measures sample data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="chartRenderer-shiny.html">output_chartRenderer()</a></code> <code><a href="chartRenderer-shiny.html">render_chartRenderer()</a></code> </p>
-        </td>
-        <td><p>Shiny bindings for chartRenderer</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="chartRenderer.html">chartRenderer()</a></code> </p>
-        </td>
-        <td><p>Create an interactive graphics widget</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="chartsMetadata.html">chartsMetadata</a></code> </p>
-        </td>
-        <td><p>Charts Metadata</p></td>
+        <td><p>Adds a navbar tab that initializes the Chart Module UI</p></td>
       </tr><tr>
         
         <td>
@@ -195,79 +412,77 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="generateSettings.html">generateSettings()</a></code> </p>
+          <p><code><a href="evaluateStandard.html">evaluateStandard()</a></code> </p>
         </td>
-        <td><p>Generate a settings object based on a data standard</p></td>
+        <td><p>Evaluate a data set against a data standard</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="getRequiredSettings.html">getRequiredSettings()</a></code> </p>
+          <p><code><a href="filterTabChecks.html">filterTabChecks()</a></code> </p>
         </td>
-        <td><p>Get a list of required settings</p></td>
+        <td><p>Checks for whether the current data and settings support a filter tab</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="getSettingsMetadata.html">getSettingsMetadata()</a></code> </p>
+          <p><code><a href="generateMappingList.html">generateMappingList()</a></code> </p>
         </td>
-        <td><p>Get metadata about chart settings</p></td>
+        <td><p>Convert mapping data.frame to a list</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="removeCharts.html">removeCharts()</a></code> </p>
+          <p><code><a href="makeChartConfig.html">makeChartConfig()</a></code> </p>
         </td>
-        <td><p>Remove a chart from the safetyGraphics shiny app</p></td>
+        <td><p>Make Chart Config</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="removeSettings.html">removeSettings()</a></code> </p>
+          <p><code><a href="makeChartExport.html">makeChartExport()</a></code> </p>
         </td>
-        <td><p>Remove a setting from the safetyGraphics shiny app</p></td>
+        <td><p>Make Chart Export</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="settingsMetadata.html">settingsMetadata</a></code> </p>
+          <p><code><a href="makeChartParams.html">makeChartParams()</a></code> </p>
         </td>
-        <td><p>Settings Metadata</p></td>
+        <td><p>Make Chart Parameters</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="standardsMetadata.html">standardsMetadata</a></code> </p>
+          <p><code><a href="makeChartSummary.html">makeChartSummary()</a></code> </p>
         </td>
-        <td><p>Standards Metadata</p></td>
+        <td><p>html chart summary</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="trimSettings.html">trimSettings()</a></code> </p>
+          <p><code><a href="makeMapping.html">makeMapping()</a></code> </p>
         </td>
-        <td><p>Subset a settings object to those relevant for a list of charts</p></td>
+        <td><p>Create data mapping based on data standards and user input</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="validateSettings.html">validateSettings()</a></code> </p>
+          <p><code><a href="prepareChart.html">prepareChart()</a></code> </p>
         </td>
-        <td><p>Compare a settings object with a specified data set</p></td>
+        <td><p>Prepare a chart object for safetyGraphcis</p></td>
       </tr>
     </tbody>
     </table>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-main-functions">Main Functions</a></li>
-      <li><a href="#section-helper-functions">Helper Functions</a></li>
-    </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jeremy Wildfire, Becca Krouse, Preston Burns, Xiao Ni, James Buchanan, Susan Duke, Interactive Safety Graphics Working Group.</p>
+  <p>Developed by Jeremy Wildfire, Becca Krouse, Preston Burns, Xiao Ni, James Buchanan, Susan Duke.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

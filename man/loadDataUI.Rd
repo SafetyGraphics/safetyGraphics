@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_loadData.R
 \name{loadDataUI}
 \alias{loadDataUI}
-\title{loadDataUI}
+\title{UI for the data loading module used in safetyGraphicsInit()}
 \usage{
 loadDataUI(id, domain = NULL)
 }
@@ -12,5 +12,5 @@ loadDataUI(id, domain = NULL)
 \item{domain}{character vector with domains to be loaded}
 }
 \description{
-UI that facilitates the mapping of a column data domain
+UI for the data loading module used in safetyGraphicsInit()
 }

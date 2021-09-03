@@ -2,7 +2,7 @@
 % Please edit documentation in R/safetyGraphicsApp.R
 \name{safetyGraphicsApp}
 \alias{safetyGraphicsApp}
-\title{Run the interactive safety graphics app}
+\title{Run the core safetyGraphics App}
 \usage{
 safetyGraphicsApp(
   domainData = list(labs = safetyData::adam_adlbc, aes = safetyData::adam_adae, dm =
@@ -31,5 +31,5 @@ safetyGraphicsApp(
 \item{chartSettingsPaths}{path(s) where customization functions are saved relative to your working directory. All charts can have itialization (e.g. myChart_Init.R) and static charts can have charting functions (e.g. myGraphic_Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details.}
 }
 \description{
-Run the interactive safety graphics app
+Run the core safetyGraphics App
 }

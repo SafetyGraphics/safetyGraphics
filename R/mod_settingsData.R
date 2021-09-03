@@ -1,5 +1,4 @@
-#' @title Settings Module - data details
-#' @description  Settings Module - sub-module showing details for the data loaded in the app - UI
+#' @title UI for settings tab showing current data
 #' 
 #' @param id module id
 #' 
@@ -20,8 +19,7 @@ settingsDataUI <- function(id){
   )
 }
 
-#' @title  Settings Module - data details - server
-#' @description  server for the display of the loaded data  
+#' @title Server for settings tab showing current data
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object

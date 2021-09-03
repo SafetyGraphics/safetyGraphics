@@ -1,5 +1,4 @@
-#' @title   loadDataUI 
-#' @description  UI that facilitates the mapping of a column data domain
+#' @title UI for the data loading module used in safetyGraphicsInit()
 #'
 #' @param id module id
 #' @param domain character vector with domains to be loaded 
@@ -19,8 +18,7 @@ loadDataUI <- function(id, domain=NULL){
   )
 }
 
-#' @title   loadDataServer
-#' @description  UI that facilitates the mapping of a column data domain
+#' @title Server for the data loading module used in safetyGraphicsInit()
 #'
 #' @param domain data domain to be loaded
 #' @param input Shiny input object

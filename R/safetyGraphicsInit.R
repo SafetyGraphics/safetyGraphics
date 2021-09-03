@@ -1,4 +1,4 @@
-#' Run the interactive safety graphics app
+#' App to select charts, load data and then initialize the core safetyGraphics app 
 #'
 #' @param charts chart object
 #' @param delayTime time (in ms) between drawing app UI and starting server. Default set to 1000 (1 second), but could need to be higher on slow machine. 

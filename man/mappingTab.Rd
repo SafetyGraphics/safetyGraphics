@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_mappingTab.R
 \name{mappingTab}
 \alias{mappingTab}
-\title{mapping module server}
+\title{Server for mapping tab covering of all data domains}
 \usage{
 mappingTab(input, output, session, meta, domainData)
 }
@@ -21,5 +21,5 @@ mappingTab(input, output, session, meta, domainData)
 list of mappings for all domains
 }
 \description{
-server function that facilitates the mapping of a single data domain
+Server for mapping tab covering of all data domains
 }

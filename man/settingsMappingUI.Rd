@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_settingsMapping.R
 \name{settingsMappingUI}
 \alias{settingsMappingUI}
-\title{Settings view of Metadata/Mapping - UI}
+\title{UI for settings tab showing current mapping}
 \usage{
 settingsMappingUI(id)
 }
@@ -10,5 +10,5 @@ settingsMappingUI(id)
 \item{id}{module id}
 }
 \description{
-UI that displays the data mapping metadata.
+UI for settings tab showing current mapping
 }

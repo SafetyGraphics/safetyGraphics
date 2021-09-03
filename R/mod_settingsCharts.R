@@ -1,5 +1,4 @@
-#' @title Settings Module - chart details
-#' @description  Settings Module - sub-module showing details for the charts loaded in the app - UI
+#' @title UI for settings tab showing details for the charts loaded in the app 
 #'
 #' @param id module id
 #' 
@@ -23,8 +22,7 @@ settingsChartsUI <- function(id){
   )
 }
 
-#' @title  Settings Module - charts details - server
-#' @description  server for the display of the charts
+#' @title Server for settings tab showing details for the charts loaded in the app 
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object

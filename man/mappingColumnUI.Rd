@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_mappingColumn.R
 \name{mappingColumnUI}
 \alias{mappingColumnUI}
-\title{mappingColumnUI}
+\title{UI that facilitates the mapping of a column data (and any associated fields)}
 \usage{
 mappingColumnUI(id, meta, data, mapping = NULL)
 }
@@ -16,5 +16,5 @@ mappingColumnUI(id, meta, data, mapping = NULL)
 \item{mapping}{current data mapping for the column (and related fields)}
 }
 \description{
-UI that facilitates the mapping of a column data domain
+UI that facilitates the mapping of a column data (and any associated fields)
 }

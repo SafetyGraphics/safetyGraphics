@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_chartsNav.R
 \name{chartsNav}
 \alias{chartsNav}
-\title{Add a navbar tab that initializes the Chart Module UI}
+\title{Adds a navbar tab that initializes the Chart Module UI}
 \usage{
 chartsNav(chart, ns)
 }
@@ -12,5 +12,5 @@ chartsNav(chart, ns)
 \item{ns}{namespace}
 }
 \description{
-Add a navbar tab that initializes the Chart Module UI
+Adds a navbar tab that initializes the Chart Module UI
 }

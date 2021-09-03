@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_chartsTab.R
 \name{chartsTab}
 \alias{chartsTab}
-\title{home tab - server}
+\title{Server for chart module, designed to be re-used for each chart generated.}
 \usage{
 chartsTab(input, output, session, chart, data, mapping)
 }
@@ -13,12 +13,12 @@ chartsTab(input, output, session, chart, data, mapping)
 
 \item{session}{An environment that can be used to access information and functionality relating to the session}
 
-\item{chart}{list containing a safetyGraphics chart object. see custom chart vignette for details.}
+\item{chart}{list containing a safetyGraphics chart object like those returned by \link{makeChartConfig}.}
 
 \item{data}{named list of current data sets (Reactive).}
 
 \item{mapping}{tibble capturing the current data mappings (Reactive).}
 }
 \description{
-server for the display of the chart tab
+Server for chart module, designed to be re-used for each chart generated.
 }

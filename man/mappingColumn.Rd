@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_mappingColumn.R
 \name{mappingColumn}
 \alias{mappingColumn}
-\title{mappingColumn}
+\title{Server that facilitates the mapping of a column data (and any associated fields)}
 \usage{
 mappingColumn(input, output, session, meta, data)
 }
@@ -21,5 +21,5 @@ mappingColumn(input, output, session, meta, data)
 A reactive data.frame providing the current value for text_key associated with the selected column
 }
 \description{
-server function that facilitates the mapping of a single data element (column of field) with a simple select UI
+Server that facilitates the mapping of a column data (and any associated fields)
 }

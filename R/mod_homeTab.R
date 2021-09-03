@@ -1,5 +1,4 @@
-#' @title Home Tab
-#' @description  Home Tab - sub-module showing details for the data loaded in the app - UI
+#' @title UI for the home module
 #'
 #' @param id module id
 #' 
@@ -13,8 +12,7 @@ homeTabUI <- function(id){
   )  
 }
 
-#' @title  home tab - server
-#' @description  server for the display of the home tab  
+#' @title Server for the filter module in datamods::filter_data_ui
 #'
 #' @param input mod input
 #' @param output mod output
