@@ -3,7 +3,7 @@
 \docType{data}
 \name{meta}
 \alias{meta}
-\title{meta}
+\title{Metadata data frame containing information about the data mapping used to configure safetyGraphics charts. One record per unique data mapping}
 \format{
 A data frame with 31 rows and 7 columns
 \describe{

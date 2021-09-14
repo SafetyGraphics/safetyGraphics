@@ -52,6 +52,5 @@ Imports:
     stringr,
     yaml,
     shinybusy
-Remotes: safetyGraphics/safetyCharts
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
