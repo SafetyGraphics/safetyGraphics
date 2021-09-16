@@ -3,6 +3,7 @@ library(safetyGraphics)
 library(shinytest)
 library(testthat)
 
+skip_on_cran()
 app <- ShinyDriver$new("./module_examples/mappingSelect")
 
 test_that("Inputs have expected values",{

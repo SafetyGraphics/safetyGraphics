@@ -104,7 +104,7 @@ charts$ageDist<-ageDist_chart
 safetyGraphicsApp(charts=charts)
 ```
   
-For extensive details on adding and customizing different types of charts, see this [vignette](chartConfiguration).
+For extensive details on adding and customizing different types of charts, see this [vignette](https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration).
 
 ## Example 7 - Non-standard data
 
