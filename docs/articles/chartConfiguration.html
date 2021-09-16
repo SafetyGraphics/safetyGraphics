@@ -88,13 +88,13 @@
 
       
 
-      </header><script src="chartConfiguration_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><script src="chartConfiguration_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Chart Configuration</h1>
                         <h4 class="author">Jeremy Wildfire</h4>
             
-            <h4 class="date">2021-09-02</h4>
+            <h4 class="date">2021-09-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/master/vignettes/ChartConfiguration.Rmd"><code>vignettes/ChartConfiguration.Rmd</code></a></small>
       <div class="hidden name"><code>ChartConfiguration.Rmd</code></div>
@@ -200,7 +200,7 @@ spaghettiPlot(
     settings
 )</a></code></pre>
 <p>Running the code above should create a plot with 4 panels:</p>
-<p><img src="https://user-images.githubusercontent.com/3680095/129230685-35b297be-34df-4766-a158-8028ff23ddde.png" style="max-width:700px"></p>
+<p><img src="https://user-images.githubusercontent.com/3680095/133291550-8f008f42-5ac8-41dd-8f6c-d8c8004e7336.jpg" style="max-width:700px"></p>
 <p>With minor modifications, this chart can be added to the {safetyGraphics} shiny app, which allows us to create the chart with any mappings/data combination loaded in the app. The <code>spaghettiPlot()</code> function above is already written to work with safetyGraphics, so we just need to create the chart configuration object. This time we’ll capture the configuration in a <a href="https://yaml.org/">YAML</a> file.</p>
 <pre><code>env: safetyGraphics
 label: Spaghetti Plot
@@ -217,7 +217,7 @@ charts &lt;- makeChartConfig()
 charts$spaghetti&lt;-prepareChart(read_yaml('spaghetti.yaml'))
 safetyGraphicsApp(charts=charts)</a></code></pre>
 <p>Under the charts tab, you’ll see:</p>
-<p><img src="https://user-images.githubusercontent.com/3680095/129575084-71b08ad4-4f09-479b-b1c3-b4845c115717.png" style="max-width:700px"></p>
+<p><img src="https://user-images.githubusercontent.com/3680095/133292056-6a76836c-a7dc-4532-95ca-de12bd00ca2c.jpg" style="max-width:700px"></p>
 <p>If you look closely at the <code>spaghettiPlot()</code> code above, you’ll noticed some details that make the chart work in the app:</p>
 <ul>
 <li>The chart function is written as a function taking <code>data</code> and <code>settings</code> as inputs. This is the expected parameterization for most charts in {safetyGraphics}.</li>
@@ -293,7 +293,7 @@ workflow:
 links:
   safetyCharts: https://github.com/SafetyGraphics/safetycharts</code></pre>
 <p>Initializing the app as usual by adding it to the chart list: <code>charts$outlierMod&lt;-prepareChart(read_yaml('outlierMod.yaml'))</code></p>
-<p>Unselecting a few measures gives the following display: <img src="https://user-images.githubusercontent.com/3680095/129578650-56ee66ea-591b-42a1-9a7f-7aa3a5247a18.png" style="max-width:700px"></p>
+<p>Unselecting a few measures gives the following display: <img src="https://user-images.githubusercontent.com/3680095/133292396-6c51500a-5a59-4887-a8e8-1904a7f23860.jpg" style="max-width:700px"></p>
 </div>
 <div id="example-4---htmlwidgets-and-init-functions" class="section level1">
 <h1 class="hasAnchor">
