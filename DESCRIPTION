@@ -8,7 +8,7 @@ Authors@R: c(
 	person("Xiao","Ni", role = "aut"),
 	person("James","Buchanan", role="aut"),
 	person("Susan","Duke", role="aut"))
-Maintainer: Jeremy Wildfire <jeremy_wildfire@gmail.com>
+Maintainer: Jeremy Wildfire <jwildfire@gmail.com>
 Description: A framework for evaluation of clinical trial safety. Users can interactively explore their data using the 'Shiny' application or create standalone 'htmlwidget' charts. Interactive charts are built using 'd3.js' and 'webcharts.js' 'JavaScript' libraries.
 URL: https://github.com/SafetyGraphics/safetyGraphics
 BugReports: https://github.com/SafetyGraphics/safetyGraphics/issues
@@ -18,39 +18,39 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 Suggests:
-    fs, 
-    ggplot2,
-    knitr,
-    plotly,
-    rmarkdown,
-    markdown,
-    rstudioapi,
-    rprojroot,
-    shinydashboard,
-    shinyFiles,
-    shinytest,
-    testthat,
-    usethis
+    fs (>= 1.5.0),
+    ggplot2 (>= 3.3.5),
+    knitr (>= 1.34),
+    plotly (>= 4.9.4.1),
+    rmarkdown (>= 2.10),
+    markdown (>= 1.1),
+    rstudioapi (>= 0.13),
+    rprojroot (>= 2.0.2),
+    shinydashboard (>= 0.7.1),
+    shinyFiles (>= 0.9.0),
+    shinytest (>= 1.5.0),
+    testthat (>= 3.0.4),
+    usethis (>= 2.0.1)
 Imports:
-    dplyr,
-    DT,
-    datamods,
-    htmlwidgets,
-    jsonlite,
-    listviewer,
-    magrittr,
-    pharmaRTF,
-    purrr,
-    rclipboard,
-    rlang,
-    safetyData,
-    safetyCharts,
-    shiny,
-    shinyjs,
-    shinyWidgets,
-    sortable,
-    stringr,
-    yaml,
-    shinybusy
+    dplyr (>= 1.0.0),
+    DT (>= 0.19),
+    datamods (>= 1.1.5),
+    htmlwidgets (>= 1.5),
+    jsonlite (>= 1.7.2),
+    listviewer (>= 3.0.0),
+    magrittr (>= 2.0.1),
+    pharmaRTF (>= 0.1.3),
+    purrr (>= 0.3.4),
+    rclipboard (>= 0.1.3),
+    rlang (>= 0.4.11),
+    safetyData (>= 1.0.0),
+    safetyCharts (>= 0.2),
+    shiny (>= 1.6.0),
+    shinyjs (>= 2.0.0),
+    shinyWidgets (>= 0.6.1),
+    sortable (>= 0.4.4),
+    stringr (>= 1.4.0),
+    yaml (>= 2.2.1),
+    shinybusy (>= 0.2.2)
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

@@ -1,5 +1,5 @@
  <!-- badges: start -->
-  [![R build status](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/workflows/R-CMD-check/badge.svg)](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics/actions)
+  [![R build status](https://github.com/SafetyGraphics/safetyGraphics/workflows/R-CMD-check/badge.svg)](https://github.com/SafetyGraphics/safetyGraphics/actions)
   <!-- badges: end -->
   
 # safetyGraphics: Clinical Trial Monitoring with R  <img src="https://raw.githubusercontent.com/SafetyGraphics/safetyGraphics/master/inst/safetyGraphicsHex/safetyGraphicsHex.png" width = "175" height = "200" align="right" />
@@ -13,15 +13,15 @@ The {safetyGraphics} package provides a framework for evaluating of clinical tri
 A demo of the app using sample data is available [here](https://jwildfire.shinyapps.io/safetyGraphics/) or can be initialized as follows:
 
 ```r
-devtools::install_github("SafetyGraphics/safetyGraphics")
+install.packages("safetyGraphics")
 library("safetyGraphics")
 safetyGraphicsApp() #open the shiny application
 ```
 
 The most common workflow is for a user to initialize the app with their data, adjust settings as needed, and view the interactive charts. Finally, the user can share any chart by exporting its source code or by generating a self-contained, fully reproducible report that can be shared with others. 
 
-Instructions for loading study data are provided in the <a target="_blank" href="https://cran.r-project.org/web/packages/safetyGraphics/vignettes/intro.html">introductory vignette</a> and more complex customizations are provided in the <a target="_blank" href="https://cran.r-project.org/web/packages/safetyGraphics/vignettes/intro.html">cookbook vignette</a>. 
+Instructions for loading study data are provided in the <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Intro">introductory vignette</a> and more complex customizations are provided in the <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Cookbook">cookbook vignette</a>. 
 
 # Charts 
-The app is built to support a wide variety of chart types including static plots (e.g. from <a target="_blank" href="https://cran.r-project.org/web/packages/ggplot2/index.html">{ggplot2}</a>), shiny modules, <a target="_blank" href="https://cran.r-project.org/web/packages/htmlwidgets/index.html">{htmlwidgets}</a> and even static outputs like RTFs. Several pre-configured charts are included in the companion <a target="_blank" href="https://www.github.com/safetyGraphics/safetyCharts">{safetyCharts}</a> R Package, and are available by default in the app. Other charts can be added using the process descibed in <a target="_blank" href="https://cran.r-project.org/web/packages/safetyGraphics/vignettes/chartConfig.html">this vignette</a>. 
+The app is built to support a wide variety of chart types including static plots (e.g. from <a target="_blank" href="https://cran.r-project.org/package=ggplot2">{ggplot2}</a>), shiny modules, <a target="_blank" href="https://cran.r-project.org/package=htmlwidgets">{htmlwidgets}</a> and even static outputs like RTFs. Several pre-configured charts are included in the companion <a target="_blank" href="https://www.github.com/safetyGraphics/safetyCharts">{safetyCharts}</a> R Package, and are available by default in the app. Other charts can be added using the process descibed in <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration">this vignette</a>. 
 

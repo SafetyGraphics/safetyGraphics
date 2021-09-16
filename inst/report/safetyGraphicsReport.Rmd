@@ -69,7 +69,7 @@ if(length(mapping_list)==1){
 
 #### Background
 
-This chart was generated using the safetyGraphics shiny app. The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics). 
+This chart was generated using the safetyGraphics shiny app. The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/SafetyGraphics/safetyGraphics). 
 
 #### Chart Code 
 

@@ -11,7 +11,7 @@ vignette: >
 
 # Cookbook Vignette
 
-This vignette contains a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios. For a general overview of the app see [this vignette](). For more details about adding custom charts, see [this vignette]().
+This vignette contains a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios. For a general overview of the app see [this vignette](https://github.com/SafetyGraphics/safetyGraphics/wiki/Intro). For more details about adding custom charts, see [this vignette](https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration).
 
 ##  Setup and installation
 
