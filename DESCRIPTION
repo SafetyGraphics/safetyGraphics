@@ -52,7 +52,10 @@ Imports:
     sortable,
     stringr,
     yaml,
-    shinybusy
+    shinybusy,
+    pkgload,
+    golem,
+    config
 Remotes: safetyGraphics/safetyCharts
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

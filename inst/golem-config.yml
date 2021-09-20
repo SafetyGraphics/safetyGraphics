@@ -1,0 +1,8 @@
+default:
+  golem_name: safetyGraphics
+  golem_version: 2.0.0
+  app_prod: no
+production:
+  app_prod: yes
+dev:
+  golem_wd: !expr here::here()

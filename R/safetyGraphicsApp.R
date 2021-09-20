@@ -10,6 +10,7 @@
 #'
 #' @import shiny
 #' @import safetyData
+#' @importFrom golem with_golem_options
 #' 
 #' @export
 
@@ -43,5 +44,8 @@ safetyGraphicsApp <- function(
       )
     }
   )
-  runApp(app, launch.browser = TRUE)
+  with_golem_options(
+    app = app, golem_opts = NULL
+  )
+  #runApp(app)
 }
