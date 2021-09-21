@@ -2,7 +2,7 @@
 % Please edit documentation in R/prepareChart.R
 \name{prepareChart}
 \alias{prepareChart}
-\title{Prepare a chart object for safetyGraphcis}
+\title{Sets default values and binds needed functions to a chart object based on chart type.}
 \usage{
 prepareChart(chart)
 }
