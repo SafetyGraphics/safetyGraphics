@@ -2,11 +2,23 @@
 #'
 #' @param id module id
 #' 
-#' @importFrom listviewer jsoneditOutput
 #' @export
 
 settingsChartsUI <- function(id){
   ns <- NS(id)
+  if(isNamespaceLoaded("listviewer")){
+    tabs<-tabsetPanel(
+      tabPanel("List Explorer", listviewer::jsoneditOutput(ns("chartObj"), height = "800px")),
+      tabPanel("Verbatim", verbatimTextOutput(ns("chartList"))),
+      tabPanel("YAML", verbatimTextOutput(ns("chartYAML"))) 
+    )
+  }else{
+    tabs<- tabsetPanel(
+      tabPanel("Verbatim", verbatimTextOutput(ns("chartList"))),
+      tabPanel("YAML", verbatimTextOutput(ns("chartYAML"))) 
+    )
+  }
+    
   list(
     br(),
     p(
@@ -14,11 +26,7 @@ settingsChartsUI <- function(id){
       "Full details regarding the charts are shown below. Charts specifications are saved in an R list, and can be exported for re-use on the settings/code tab. ",
       class="info"
     ),
-    tabsetPanel(
-      tabPanel("jsonedit View", listviewer::jsoneditOutput(ns("chartObj"), height = "800px") ),
-      tabPanel("Verbatim", verbatimTextOutput(ns("chartList"))),
-      tabPanel("YAML", verbatimTextOutput(ns("chartYAML"))) 
-    )
+    tabs
   )
 }
 
@@ -29,17 +37,17 @@ settingsChartsUI <- function(id){
 #' @param session Shiny session object
 #' @param charts list data frame summarizing the charts
 #' 
-#' @importFrom listviewer renderJsonedit jsonedit 
 #' @import dplyr
 #' 
 #' @export
 
 settingsCharts <- function(input, output, session, charts){
   ns <- session$ns
-  
-  output$chartObj <- listviewer::renderJsonedit({
-    listviewer::jsonedit(charts)
-  })
+  if(isNamespaceLoaded("listviewer")){
+    output$chartObj <- listviewer::renderJsonedit({
+      listviewer::jsonedit(charts)
+    })
+  }
 
   output$chartList <- renderPrint({
     print(charts)
