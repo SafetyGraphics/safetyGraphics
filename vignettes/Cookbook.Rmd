@@ -11,7 +11,7 @@ vignette: >
 
 # Cookbook Vignette
 
-This vignette contains a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios. For a general overview of the app see [this vignette](Intro). For more details about adding custom charts, see [this vignette](chartConfiguration).
+This vignette contains a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios. For a general overview of the app see [this vignette](https://github.com/SafetyGraphics/safetyGraphics/wiki/Intro). For more details about adding custom charts, see [this vignette](https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration).
 
 ##  Setup and installation
 
@@ -104,7 +104,7 @@ charts$ageDist<-ageDist_chart
 safetyGraphicsApp(charts=charts)
 ```
   
-For extensive details on adding and customizing different types of charts, see this [vignette](chartConfiguration).
+For extensive details on adding and customizing different types of charts, see this [vignette](https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration).
 
 ## Example 7 - Non-standard data
 

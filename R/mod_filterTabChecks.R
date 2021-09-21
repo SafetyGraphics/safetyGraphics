@@ -4,7 +4,7 @@
 #' @param filterDomain domain to use for filtering (typically "dm")
 #' @param current_mapping current data mapping (REACTIVE)
 #' 
-#' @return reactive that returns a boolean indicating whether the checks passed and filtering can be initiailized
+#' @return reactive that returns a boolean indicating whether the checks passed and filtering can be initialized
 #' 
 #' @export
 

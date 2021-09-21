@@ -88,13 +88,13 @@
 
       
 
-      </header><script src="intro_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><script src="intro_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Intro to Shiny App</h1>
                         <h4 class="author">Jeremy Wildfire</h4>
             
-            <h4 class="date">2021-09-02</h4>
+            <h4 class="date">2021-09-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -138,7 +138,7 @@
 <a href="#charts-tab" class="anchor"></a>Charts Tab</h2>
 <p>Clicking the Charts tab opens a dropdown menu containing a series of charts related to clinical trial safety. Clicking the <a href="https://github.com/safetyGraphics/hep-explorer">Hepatic Safety Explorer</a> opens this page:</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/129057688-14ed7de8-66c3-432e-840c-641eb0c29f27.png" style="max-width:700px"></p>
-<p>safetyGraphics supports many different kinds of charts including web-based interactive graphics using {htmlwidgets} (like the chart shown above), static plots, plotly plots and custom shiny modules. Each chart has a header that provides details about the chart, links to chart-specific resources and buttons that allow users to download a stand-alone html report or a .R file that reproduces the chart. See the <a href="ChartConfiguration">Chart Configuration Vignette</a> for more detail about the safetyGraphics charting framework.</p>
+<p>safetyGraphics supports many different kinds of charts including web-based interactive graphics using {htmlwidgets} (like the chart shown above), static plots, plotly plots and custom shiny modules. Each chart has a header that provides details about the chart, links to chart-specific resources and buttons that allow users to download a stand-alone html report or a .R file that reproduces the chart. See the <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration">Chart Configuration Vignette</a> for more detail about the safetyGraphics charting framework.</p>
 </div>
 <div id="settings-tab" class="section level2">
 <h2 class="hasAnchor">
@@ -164,7 +164,7 @@
 <p><img src="https://user-images.githubusercontent.com/3680095/129047100-9203201e-124c-456f-b9fc-0b5c79b47a52.png" style="max-width:700px"></p>
 <p>The app dynamically determines which data sets are required for the selected charts and updates the “Data Loader” UI when the charts selection changes. Below, we’ve selected 2 charts from the labs domain - so the other data domains are automatically hidden.</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/129047478-c1583ffa-2b3c-4e5c-9d51-2bd9c93e7c97.png" style="max-width:700px"></p>
-<p>Once you’ve picked charts, click the “Load” buttons in the “Data Loader” section to select data files for each domain. Data is loaded using the import functionality from the <a href="https://github.com/dreamRs/datamods#import"><code>{datamods}</code> package</a> which allows you to select data loaded in your R session or load data files directly from your file system. <a href="https://github.com/dreamRs/datamods">datamods</a> supports any file format that <a href="https://cran.r-project.org/web/packages/rio/index.html">{rio}</a> can handle including text files, Excel, SAS and SPSS format.</p>
+<p>Once you’ve picked charts, click the “Load” buttons in the “Data Loader” section to select data files for each domain. Data is loaded using the import functionality from the <a href="https://github.com/dreamRs/datamods#import"><code>{datamods}</code> package</a> which allows you to select data loaded in your R session or load data files directly from your file system. <a href="https://github.com/dreamRs/datamods">datamods</a> supports any file format that <a href="https://cran.r-project.org/package=rio">{rio}</a> can handle including text files, Excel, SAS and SPSS format.</p>
 <p>Once you’ve loaded files for all of the active data domains, the “Run App” button will become active. Click it to initialize the app.</p>
 </div>
 <div id="passing-data-to-safetygraphicsapp" class="section level2">
@@ -192,7 +192,7 @@ safetyGraphics::safetyGraphicsApp(domainData=sdtm)</a></code></pre>
 <div id="additional-resources" class="section level1">
 <h1 class="hasAnchor">
 <a href="#additional-resources" class="anchor"></a>Additional Resources</h1>
-<p>Several additional vignettes are available for more advanced topics: - <a href="ChartConfiguration">Chart Configuration Vignette</a> - details about the charting process including technical specifications and step-by-step instructions - <a href="Cookbook">Cookbook Vignette</a> - a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios - <a href="TechnicalFAQ">Technical FAQ Vignette</a> Vignette - vignette discussing security, validation and other technical issues</p>
+<p>Several additional vignettes are available for more advanced topics: - <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration">Chart Configuration Vignette</a> - details about the charting process including technical specifications and step-by-step instructions - <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Cookbook">Cookbook Vignette</a> - a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios - <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/TechnicalFAQ">Technical FAQ Vignette</a> Vignette - vignette discussing security, validation and other technical issues</p>
 <p>The {safetyGraphics} app is maintained by the Interactive Safety Graphics (ISG) subteam of the ASA Biopharm-DIA Safety Working Group. You can learn more about the team and find links to recent presentations and publications at our <a href="https://safetygraphics.github.io/">home page</a>.</p>
 </div>
 <div id="appendix-1---initialization-code" class="section level1">

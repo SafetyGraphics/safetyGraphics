@@ -120,7 +120,7 @@ spaghettiPlot(
 
 Running the code above should create a plot with 4 panels:
 
-<img src="https://user-images.githubusercontent.com/3680095/129230685-35b297be-34df-4766-a158-8028ff23ddde.png" style='max-width:700px'>
+<img src="https://user-images.githubusercontent.com/3680095/133291550-8f008f42-5ac8-41dd-8f6c-d8c8004e7336.jpg" style='max-width:700px'>
 
 With minor modifications, this chart can be added to the {safetyGraphics} shiny app, which allows us to create the chart with any mappings/data combination loaded in the app. The `spaghettiPlot()` function above is already written to work with safetyGraphics, so we just need to create the chart configuration object. This time we'll capture the configuration in a [YAML](https://yaml.org/) file.
 
@@ -146,7 +146,7 @@ safetyGraphicsApp(charts=charts)
 ```
 Under the charts tab, you'll see: 
 
-<img src="https://user-images.githubusercontent.com/3680095/129575084-71b08ad4-4f09-479b-b1c3-b4845c115717.png" style='max-width:700px'>
+<img src="https://user-images.githubusercontent.com/3680095/133292056-6a76836c-a7dc-4532-95ca-de12bd00ca2c.jpg" style='max-width:700px'>
 
 If you look closely at the `spaghettiPlot()` code above, you'll noticed some details that make the chart work in the app:  
 
@@ -240,7 +240,7 @@ Initializing the app as usual by adding it to the chart list:
 `charts$outlierMod<-prepareChart(read_yaml('outlierMod.yaml'))`
 
 Unselecting a few measures gives the following display: 
-<img src="https://user-images.githubusercontent.com/3680095/129578650-56ee66ea-591b-42a1-9a7f-7aa3a5247a18.png" style='max-width:700px'>
+<img src="https://user-images.githubusercontent.com/3680095/133292396-6c51500a-5a59-4887-a8e8-1904a7f23860.jpg" style='max-width:700px'>
 
 # Example 4 - htmlwidgets and init functions
 

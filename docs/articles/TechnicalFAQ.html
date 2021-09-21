@@ -88,13 +88,13 @@
 
       
 
-      </header><script src="TechnicalFAQ_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><script src="TechnicalFAQ_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Technical FAQ</h1>
                         <h4 class="author">Jeremy Wildfire</h4>
             
-            <h4 class="date">2021-09-02</h4>
+            <h4 class="date">2021-09-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/master/vignettes/TechnicalFAQ.Rmd"><code>vignettes/TechnicalFAQ.Rmd</code></a></small>
       <div class="hidden name"><code>TechnicalFAQ.Rmd</code></div>
@@ -140,15 +140,15 @@
 <div id="q-do-i-have-to-use-a-certain-data-standard-with-safetygraphics" class="section level2">
 <h2 class="hasAnchor">
 <a href="#q-do-i-have-to-use-a-certain-data-standard-with-safetygraphics" class="anchor"></a>Q: Do I have to use a certain data standard with safetyGraphics?</h2>
-<p><strong>A</strong>: No. Any standard (or non-standard) data can be loaded as long as it meets the <a href="Intro#appendix-2---minimum-data-requirements">minimum data requirements</a> for the selected data domain. Metadata capturing default CDISC standards are included with the app (see <code><a href="../reference/meta.html">?safetyGraphics::meta</a></code>) so that data mappings can be automatically populated when AdAM and SDTM data are loaded. Other data standards require the user to manually complete the data mapping in the mapping tab - see the <a href="cookbook">cookbook vignette</a> for examples.</p>
+<p><strong>A</strong>: No. Any standard (or non-standard) data can be loaded as long as it meets the <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Intro#appendix-2---minimum-data-requirements">minimum data requirements</a> for the selected data domain. Metadata capturing default CDISC standards are included with the app (see <code><a href="../reference/meta.html">?safetyGraphics::meta</a></code>) so that data mappings can be automatically populated when AdAM and SDTM data are loaded. Other data standards require the user to manually complete the data mapping in the mapping tab - see the <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/cookbook">cookbook vignette</a> for examples.</p>
 </div>
 <div id="q-what-data-sources-does-safetygraphics-support-how-do-i-load-custom-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#q-what-data-sources-does-safetygraphics-support-how-do-i-load-custom-data" class="anchor"></a>Q: What data sources does safetyGraphics support? How do I load custom data?</h2>
-<p><strong>A</strong>: This topic is covered in detail in the <a href="Intro#loading-study-data">Loading data section of the Introductory vignette</a><code>safetyGraphics</code> is designed to support a flexible data pipeline that supports many data types. In short, data can be loaded using the the <code>dataDomains</code> parameter in the <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> function or via the <code><a href="../reference/safetyGraphicsInit.html">safetyGraphicsInit()</a></code> graphical user interface.</p>
-<p><code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> - custom data can be loaded via the <code>dataDomains</code> parameter, which should be a list containing <code>dataframes</code> or <code>tibbles</code> for each clinical domain; that list can be populated by importing data from any number of sources including databases, sas files or <a href="https://r4ds.had.co.nz/data-import.html">any number of other sources</a>. See the <a href="cookbook">cookbook vignette</a> for some basic examples of loading custom data.</p>
+<p><strong>A</strong>: This topic is covered in detail in the [Loading data section of the Introductory vignette]<a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Intro#loading-study-data" class="uri">https://github.com/SafetyGraphics/safetyGraphics/wiki/Intro#loading-study-data</a>)<code>safetyGraphics</code> is designed to support a flexible data pipeline that supports many data types. In short, data can be loaded using the the <code>dataDomains</code> parameter in the <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> function or via the <code><a href="../reference/safetyGraphicsInit.html">safetyGraphicsInit()</a></code> graphical user interface.</p>
+<p><code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> - custom data can be loaded via the <code>dataDomains</code> parameter, which should be a list containing <code>dataframes</code> or <code>tibbles</code> for each clinical domain; that list can be populated by importing data from any number of sources including databases, sas files or <a href="https://r4ds.had.co.nz/data-import.html">any number of other sources</a>. See the <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/cookbook">cookbook vignette</a> for some basic examples of loading custom data.</p>
 <p><code><a href="../reference/safetyGraphicsInit.html">safetyGraphicsInit()</a></code> - allows users to load tabular data from a variety of sources using the point-and-click interface provided in the {datamods} package.</p>
-<p>More detail is provided in the <a href="Intro#loading-study-data">Loading data section of the Introductory vignette</a></p>
+<p>More detail is provided in the <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Intro#loading-study-data">Loading data section of the Introductory vignette</a></p>
 </div>
 <div id="q-how-can-the-safetygraphics-app-be-shared" class="section level2">
 <h2 class="hasAnchor">

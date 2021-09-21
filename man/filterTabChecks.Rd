@@ -14,7 +14,7 @@ filterTabChecks(domainData, filterDomain, current_mapping)
 \item{current_mapping}{current data mapping (REACTIVE)}
 }
 \value{
-reactive that returns a boolean indicating whether the checks passed and filtering can be initiailized
+reactive that returns a boolean indicating whether the checks passed and filtering can be initialized
 }
 \description{
 Checks for whether the current data and settings support a filter tab

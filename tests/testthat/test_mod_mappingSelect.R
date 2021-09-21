@@ -3,9 +3,11 @@ library(safetyGraphics)
 library(shinytest)
 library(testthat)
 
+skip_on_cran()
 app <- ShinyDriver$new("./module_examples/mappingSelect")
 
 test_that("Inputs have expected values",{
+  skip_on_cran()
   expect_equal(app$getValue("NoDefault-colSelect"),"") 
   expect_equal(app$getValue("WithDefault-colSelect"),"USUBJID") 
   expect_equal(app$getValue("NoDefaultField-colSelect"),"") 
@@ -14,6 +16,7 @@ test_that("Inputs have expected values",{
 })
 
 test_that("Module server outputs the expected values",{
+  skip_on_cran()
   empty<-""
   expect_match(app$getValue("ex1"),empty) 
   expect_match(app$getValue("ex2"),"USUBJID") 
@@ -23,6 +26,7 @@ test_that("Module server outputs the expected values",{
 })
 
 test_that("Changing input updates the server output",{
+  skip_on_cran()
   app$setValue('NoDefault-colSelect',"AESEQ")
   expect_equal(app$getValue("NoDefault-colSelect"),"AESEQ") 
   Sys.sleep(.5) #TODO inplement app$waitForValue() instead of sleeping

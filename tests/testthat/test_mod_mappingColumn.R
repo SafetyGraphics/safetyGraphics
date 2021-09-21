@@ -4,10 +4,12 @@ library(shinytest)
 library(testthat)
 library(stringr)
 
+skip_on_cran()
 app <- ShinyDriver$new("./module_examples/mappingColumn")
 initial<-app$getAllValues()
 
 test_that("UI function stops with invalid inputs (non-data.frame)",{
+  skip_on_cran()
   id_meta <- meta%>%filter(domain=="labs")%>%filter(col_key=="id_col")
   id_mapping_list<-list(id_col="USUBJID")
   expect_error(mappingColumnUI("test1.1", list(id_col="USUBJID"), safetyData::adam_adlbc)) #invalid metadata
@@ -16,6 +18,7 @@ test_that("UI function stops with invalid inputs (non-data.frame)",{
 })
 
 test_that("the correct number of inputs are created (1 per field/column)",{
+  skip_on_cran()
   inputs <- names(initial$input)
   expect_length(str_subset(inputs,"ex1"),1)
   expect_length(str_subset(inputs,"ex2"),1)
@@ -24,6 +27,7 @@ test_that("the correct number of inputs are created (1 per field/column)",{
 })
 
 test_that("default values for inputs are set correctly in example app",{
+  skip_on_cran()
   expect_equal(initial$input[["ex1-id_col-colSelect"]],"")
   expect_equal(initial$input[["ex2-id_col-colSelect"]],"USUBJID")
   expect_equal(initial$input[["ex3-measure_col-colSelect"]],"")
@@ -50,6 +54,7 @@ test_that("default values for inputs are set correctly in example app",{
 })
 
 test_that("changing column input updates clears the field input values and updates input list",{
+  skip_on_cran()
   app$setValue('ex4-measure_col-colSelect',"PARAMCD")
   expect_equal(app$getValue("ex4-measure_col-colSelect"),"PARAMCD") 
   Sys.sleep(.5) #TODO inplement app$waitForValue() instead of sleeping
@@ -62,6 +67,7 @@ test_that("changing column input updates clears the field input values and updat
 
 
 test_that("output are data frames with the  expected values",{
+  skip_on_cran()
   #all exported values are data frames ...
   expect_true(all(sapply(initial$export,is.data.frame))) 
   

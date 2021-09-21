@@ -1,4 +1,4 @@
-#' Prepare a chart object for safetyGraphcis
+#' Prepare a chart object for safetyGraphics
 #' 
 #' Sets default values and binds needed functions to a chart object based on chart type. 
 #' 

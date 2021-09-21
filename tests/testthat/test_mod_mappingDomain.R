@@ -6,10 +6,12 @@ library(testthat)
 library(stringr)
 library(dplyr)
 
+skip_on_cran()
 app <- ShinyDriver$new("./module_examples/mappingDomain")
 initial<-app$getAllValues()
 
 test_that("UI function stops with invalid inputs (non-data.frame)",{
+  skip_on_cran()
   id_meta <- safetyGraphics::meta%>%filter(domain=="labs")%>%filter(col_key=="id_col")
   id_mapping_list<-list(id_col="USUBJID")
   expect_error(mappingDomainUI("test1.1", list(id_col="USUBJID"), safetyData::adam_adlbc)) #invalid metadata
@@ -18,6 +20,7 @@ test_that("UI function stops with invalid inputs (non-data.frame)",{
 })
 
 test_that("the correct number of inputs are created (1 per field/column)",{
+  skip_on_cran()
   inputs <- names(initial$input)
   expect_length(str_subset(inputs,"ex1"),5)
   expect_length(str_subset(inputs,"ex2"),5)
@@ -28,6 +31,7 @@ test_that("the correct number of inputs are created (1 per field/column)",{
 })
 
 test_that("output are data frames with the have expected values",{
+  skip_on_cran()
   #all exported values are data frames ...
   expect_true(all(sapply(initial$export,is.data.frame))) 
   
