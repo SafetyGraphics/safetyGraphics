@@ -1,5 +1,5 @@
  <!-- badges: start -->
-  [![R build status](https://www.github.com/safetyGraphics/safetyGraphics/workflows/R-CMD-check/badge.svg)](https://github.com/SafetyGraphics/safetyGraphics/actions)
+  [![R build status](https://www.github.com/safetyGraphics/safetyGraphics/workflows/R-CMD-check-main/badge.svg)](https://github.com/SafetyGraphics/safetyGraphics/actions)
   <!-- badges: end -->
   
 # safetyGraphics: Clinical Trial Monitoring with R  <img src="https://raw.githubusercontent.com/SafetyGraphics/safetyGraphics/master/inst/safetyGraphicsHex/safetyGraphicsHex.png" width = "175" height = "200" align="right" />
