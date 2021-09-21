@@ -42,9 +42,9 @@ Imports:
     sortable (>= 0.4.4),
     stringr (>= 1.4.0),
     yaml (>= 2.2.1),
-    shinybusy (>= 0.2.2)
 Enhances:
     listviewer (>= 3.0.0),
+    shinybusy (>= 0.2.2),
     shinyWidgets (>= 0.6.1)
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
