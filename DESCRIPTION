@@ -24,7 +24,10 @@ Suggests:
     shinydashboard (>= 0.7.1),
     shinytest (>= 1.5.0),
     testthat (>= 3.0.4),
-    usethis (>= 2.0.1)
+    usethis (>= 2.0.1),
+    listviewer (>= 3.0.0),
+    shinybusy (>= 0.2.2),
+    shinyWidgets (>= 0.6.1)
 Imports:
     dplyr (>= 1.0.0),
     DT (>= 0.19),
@@ -41,10 +44,6 @@ Imports:
     shinyjs (>= 2.0.0),
     sortable (>= 0.4.4),
     stringr (>= 1.4.0),
-    yaml (>= 2.2.1),
-Enhances:
-    listviewer (>= 3.0.0),
-    shinybusy (>= 0.2.2),
-    shinyWidgets (>= 0.6.1)
+    yaml (>= 2.2.1)
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
