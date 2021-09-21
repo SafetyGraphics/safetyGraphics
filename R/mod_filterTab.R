@@ -9,7 +9,13 @@
 
 filterTabUI <- function(id){  
     ns <- NS(id)
-
+    if(isNamespaceLoaded("shinyWidgets")){
+        countObj<-  shinyWidgets::progressBar(
+            id = ns("pbar"), value = 100, 
+            total = 100, display_pct = TRUE
+        )
+    }
+    
     filter_ui<-list(
         h1(paste("Participant Selector")),
         span("This page dynamically filters participants across all data domains. Only the selected participants are included in charts."),
@@ -20,10 +26,7 @@ filterTabUI <- function(id){
             ),
             column(
                 width = 9,
-                progressBar(
-                    id = ns("pbar"), value = 100, 
-                    total = 100, display_pct = TRUE
-                ),
+                countObj,
                 DT::dataTableOutput(outputId = ns("table")),
                 tags$p("Code dplyr:"),
                 verbatimTextOutput(outputId = ns("code_dplyr")),
@@ -52,7 +55,6 @@ filterTabUI <- function(id){
 #' @return filtered data set
 #'
 #' @import datamods
-#' @importFrom shinyWidgets progressBar updateProgressBar
 #' @importFrom shinyjs show hide
 #' @importFrom shiny renderDataTable
 #' 
@@ -68,7 +70,6 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
         req(filterCheck())
         shinyjs::show(selector = paste0(".navbar li a[data-value=",tabID,"]"))
         shinyjs::show(selector = paste0(".navbar #population-header"))
-
         domainData[[filterDomain]]
     })
     
@@ -86,11 +87,13 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
     )  
 
     observeEvent(res_filter$filtered(), {
-        updateProgressBar(
-            session = session, 
-            id = "pbar", 
-            value = nrow(res_filter$filtered()), total = nrow(raw())
-        )
+        if(isNamespaceLoaded("shinyWidgets")){
+            shinyWidgets::updateProgressBar(
+                session = session, 
+                id = "pbar", 
+                value = nrow(res_filter$filtered()), total = nrow(raw())
+            )
+        }
 
         shinyjs::html(
             "header-count", 
