@@ -1,3 +1,16 @@
+# safetyGraphics v2.0.0
+
+Version 2 of {safetyGraphics} is a major update that adds the following features: 
+
+- Added support for multiple data domains 
+- Streamlined support for multiple chart types 
+- Improved chart export and newly added full-app export
+- Single filtering module for all charts
+- New "Config" tab summarizing app configuration
+- Created new `safetyGraphicsInit()` app with a simple UI that can initialize the app with custom data/charts
+
+For more details, see the fully updated vingettes.
+
 # safetyGraphics v1.1.0
 
 Allows users to preload their own charts and data sets for use in the safetyGraphics Shiny Application. See the "Custom Workflows" Vignette for details and examples. 
