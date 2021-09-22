@@ -2,7 +2,6 @@
 ^data-raw$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\.travis\.yml$
 ^packrat/
 ^\.Rprofile$
 ^cran-comments.md$
@@ -14,3 +13,5 @@
 ^doc$
 ^CRAN-RELEASE$
 ^customSettings$
+^\.github$
+^LICENSE\.md$

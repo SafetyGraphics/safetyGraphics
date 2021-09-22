@@ -5,6 +5,24 @@ template:
     bootswatch: cerulean
     
 navbar:
+  title: safetyGraphics
+  left:
+    - icon: fa-home fa-lg
+      href: index.html
+    - text: Vignettes
+      menu:
+        - text: Intro to Shiny App
+          href: articles/intro.html
+        - text: Chart Configuration
+          href: articles/chartConfiguration.html
+        - text: Examples Cookbook
+          href: articles/cookbook.html
+        - text: Technical FAQ
+          href: articles/technicalFAQ.html
+    - text: Functions
+      href: reference/index.html
+    - text: News
+      href: news/index.html
   right:
     - icon: fa-github
       href: https://github.com/SafetyGraphics/safetyGraphics
@@ -12,27 +30,60 @@ navbar:
 development:
   mode: release
 
-
 reference:
-  - title: Main Functions
+  - title: Main Shiny App Functions
     contents:
       - safetyGraphicsApp
-  - title: Helper Functions
-    desc: these functions are used by the main app
+      - safetyGraphicsInit
+  - title: Shiny Modules
+    desc: Reusable Shiny Modules 
+    contents: 
+      - safetyGraphicsServer
+      - safetyGraphicsUI
+      - chartsTab
+      - chartsTabUI
+      - filterTab
+      - filterTabUI
+      - homeTab
+      - homeTabUI
+      - loadCharts
+      - loadChartsUI
+      - loadData
+      - loadDataUI
+      - mappingTab
+      - mappingTabUI
+      - mappingDomain
+      - mappingDomainUI
+      - mappingColumn
+      - mappingColumnUI
+      - mappingSelect
+      - mappingSelectUI
+      - settingsTab
+      - settingsTabUI
+      - settingsCharts
+      - settingsChartsUI
+      - settingsData
+      - settingsDataUI
+      - settingsMapping
+      - settingsMappingUI
+      - settingsCode
+      - settingsCodeUI
+  - title: Data
+    desc: Data sets used in the apps
     contents:
-      - addChart
-      - addSetting
-      - adlbc
-      - chartRenderer-shiny
-      - chartRenderer
-      - chartsMetadata
+      - meta
+  - title: Helper Functions
+    desc: Utility functions used in the apps
+    contents:
+      - app_startup
+      - chartsNav
       - detectStandard
-      - generateSettings
-      - getRequiredSettings
-      - getSettingsMetadata
-      - removeCharts
-      - removeSettings
-      - settingsMetadata
-      - standardsMetadata
-      - trimSettings
-      - validateSettings
+      - evaluateStandard
+      - filterTabChecks
+      - generateMappingList
+      - makeChartConfig
+      - makeChartExport
+      - makeChartParams
+      - makeChartSummary
+      - makeMapping
+      - prepareChart

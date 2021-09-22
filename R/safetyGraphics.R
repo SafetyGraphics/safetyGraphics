@@ -4,11 +4,10 @@
 #'
 #' Learn more on
 #' \href{https://CRAN.R-project.org/package=safetyGraphics}{CRAN}
-#' or \href{https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics}{GitHub}
+#' or \href{https://github.com/SafetyGraphics/safetyGraphics}{GitHub}
 #'
 #' @docType package
 #' @name SafetyGraphics
-#' @importFrom utils globalVariables
 #' @keywords internal
 NULL
 

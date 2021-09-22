@@ -7,8 +7,8 @@
 #' @return logical scalar. TRUE if the column is found. FALSE otherwise
 #'
 #' @examples
-#' safetyGraphics:::hasColumn(columnName="PARAM",data=adlbc) #TRUE
-#' safetyGraphics:::hasColumn(columnName="Not_a_column",data=adlbc) #FALSE
+#' safetyGraphics:::hasColumn(columnName="PARAM",data=safetyData::adam_adlbc) #TRUE
+#' safetyGraphics:::hasColumn(columnName="Not_a_column",data=safetyData::adam_adlbc) #FALSE
 #'
 #' @keywords internal
 

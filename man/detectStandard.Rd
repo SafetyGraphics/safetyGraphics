@@ -4,30 +4,26 @@
 \alias{detectStandard}
 \title{Detect the data standard used for a data set}
 \usage{
-detectStandard(data, includeFields = TRUE, domain = "labs")
+detectStandard(data, domain = NULL, meta = safetyGraphics::meta)
 }
 \arguments{
-\item{data}{A data frame in which to detect the data standard}
+\item{data}{A data frame in which to detect the data standard - required.}
 
-\item{includeFields}{specifies whether to check the data set for field level data in addition to columns.  Default: \code{TRUE}.}
+\item{domain}{the domain to evaluate - should match a value of \code{meta$domain}. Uses the first value in \code{meta$domain} if no value is provided.}
 
-\item{domain}{The data domain for the data set provided.  Default: \code{"labs"}.}
+\item{meta}{the metadata containing the data standards. - default = safetyGraphics::meta}
 }
 \value{
-A list containing the matching \code{"standard"} from \code{"standardMetadata"} and a list of  \code{"details"} describing each standard considered.
+A data frame describing the detected standard for each \code{"text_key"} in the provided metadata. Columns are \code{"domain"}, \code{"text_key"}, \code{"column"} and \code{"standard"}.
 }
 \description{
 This function attempts to detect the clinical data standard used in a given R data frame.
 }
 \details{
-This function compares the columns in the provided \code{"data"} with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and ADaM CDISC(<https://www.cdisc.org/>) standards for clinical trial data by default. Additional standards can be added by modifying the \code{"standardMetadata"} data set included as part of this package. Currently, "labs" is the only domain supported.
+This function compares the columns in the provided \code{"data"} with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and ADaM CDISC(\url{https://www.cdisc.org/}) standards for clinical trial data by default. Additional standards can be added by modifying the \code{"meta"} data set included as part of this package.
 }
 \examples{
-detectStandard(adlbc)[["standard"]] #adam
-detectStandard(iris)[["standard"]] #none
-
-\dontrun{
-  detectStandard(adlbc,domain="AE") #throws error. AE domain not supported in this release.
-}
+detectStandard(data=safetyData::adam_adae)  #aes domain evaluated by default
+detectStandard(data=safetyData::adam_adlbc,domain="labs" ) 
 
 }

@@ -1,0 +1,5 @@
+Name: Add Safety Chart
+Description: Add new custom chart
+Binding: app_init_addin
+Interactive: false
+

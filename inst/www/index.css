@@ -1,0 +1,151 @@
+/* Mapping Module formatting */
+
+.mapping-domain{
+  max-width:100%;
+  padding:1em;
+  border:1px solid black;
+  border-radius:0.2em;
+  margin-bottom:1em;
+  display:inline-block;
+  vertical-align: top;
+}
+
+.mapping-domain .domain-header{
+  border-bottom:1px solid black;
+  margin-bottom:0.5em;
+}
+
+.mapping-domain .domain-header .domain-title{
+  font-size: 2em;  
+}
+
+.mapping-domain .domain-header .domain-wrap{
+  display:inline-grid;
+  vertical-align:top;
+  padding-left:0.5em;
+}
+
+.mapping-domain .domain-label{
+  color: #999;
+}
+
+.mapping-domain .field-wrap{
+  padding-left:1em;
+}
+
+.mapping-domain .field-wrap .control-label{
+  font-weight:400;
+}
+
+.mapping-domain .selectize-input.not-full{
+  border-color:red;
+}
+
+.mapping-domain .selectize-input.full{
+  border-color:green;
+}
+
+.mapping-domain .domain-body>*{
+  display:inline-block;
+  vertical-align:top;
+}
+
+.mapping-domain .domain-body .domain-controls{
+  padding:0.5em;
+}
+
+table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr > th:last-of-type {
+  border-left:2px solid black;
+  background:#d0d1e6;
+}
+
+#population-header{
+  float:right;
+  margin-top:1em;
+}
+
+#dataSettings-previews .nav-tabs{
+  margin-bottom: 1em;
+}
+
+/* Formatting for charts metadata on chart page headers */
+
+.chart-header{
+  height:35px;
+  background: #e7e7e7;
+  padding: 0.5em 0.5em 0.2em 0.5em;
+  margin-top:-20px;
+  margin-right: -15px;
+  margin-left: -15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #bbb;
+}
+
+.chart-header *{
+  display:inline-block;
+  padding-left:0.4em;
+}
+
+.chart-header strong{
+  font-size:1.2em;
+}
+
+.chart-header small{
+  font-size:0.8em;
+  color:#999;
+}
+
+.chart-header .chart-link{
+  padding-right:0.5em;
+}
+
+.chart-header .btn{
+  margin-right:0.5em;
+}
+
+/* Formatting for charts items in init item sorter */
+.chart-sortable{
+  font-size:0.8em;
+}
+.chart-sortable *{
+  display:inline-block;
+  padding-left:0.4em;
+}
+
+.chart-sortable strong{
+  font-size:1.2em;
+}
+
+.chart-sortable small{
+  font-size:0.8em;
+  color:#999;
+}
+
+/* Formatting for charts items in nav dropdown */
+.chart-nav *{
+  display:inline-block;
+}
+
+.chart-nav div:not(:first-child){
+  font-size:0.8em;
+  color: #999;
+}
+
+.chart-nav div:last-child::before{
+  content: "/";
+}
+
+.chart-nav small{
+  display:none;
+}
+
+.info{
+  border-radius:0.5em; 
+  padding:0.5em;
+  margin-top:0.5em;
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border:1px solid #bee5eb;
+}
+
+

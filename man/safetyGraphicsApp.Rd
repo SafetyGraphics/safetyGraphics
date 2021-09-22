@@ -2,23 +2,34 @@
 % Please edit documentation in R/safetyGraphicsApp.R
 \name{safetyGraphicsApp}
 \alias{safetyGraphicsApp}
-\title{Run the interactive safety graphics builder}
+\title{Run the core safetyGraphics App}
 \usage{
-safetyGraphicsApp(charts = NULL, maxFileSize = NULL,
-  settingsLocation = ".", customSettings = "customSettings.R",
-  loadData = FALSE)
+safetyGraphicsApp(
+  domainData = list(labs = safetyData::adam_adlbc, aes = safetyData::adam_adae, dm =
+    safetyData::adam_adsl),
+  meta = safetyGraphics::meta,
+  charts = NULL,
+  mapping = NULL,
+  autoMapping = TRUE,
+  filterDomain = "dm",
+  chartSettingsPaths = NULL
+)
 }
 \arguments{
-\item{charts}{Character vector of charts to include}
+\item{domainData}{named list of data.frames to be loaded in to the app. Sample AdAM data from the safetyData package used by default}
 
-\item{maxFileSize}{maximum file size in MB allowed for file upload}
+\item{meta}{data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}.}
 
-\item{settingsLocation}{folder location of user-defined settings metadata. Files should be named settingsMetadata.rda, chartsMetadata.rda and standardsMetadata.rda and use the same structure established in the /data folder. Defaults to current working directory.}
+\item{charts}{list of charts in the format produced by safetyGraphics::makeChartConfig()}
 
-\item{customSettings}{Name of R script containing settings customizations to be run before the app is initialized. This is the recommended way to add additional charts (via addChart()), settings (addSetting()) and data standards (addStandard()). default = 'settingsLocation/customSettings.R'}
+\item{mapping}{list specifying the initial mapping values for each data mapping for each domain (e.g. list(aes= list(id_col='USUBJID', seq_col='AESEQ')).}
 
-\item{loadData}{Option to pre-load data into the app. Defaults to \code{FALSE}.}
+\item{autoMapping}{boolean indicating whether the app should attempt to automatically detect data standards and generate mappings for the data provided. Values specified in the \code{mapping} parameter overwrite automatically generated mappings when both are found. Defaults to true.}
+
+\item{filterDomain}{domain used for the data/filter tab. Demographics ("\code{dm}") is used by default. Using a domain that is not one record per participant is not recommended.}
+
+\item{chartSettingsPaths}{path(s) where customization functions are saved relative to your working directory. All charts can have initialization (e.g. myChart_Init.R) and static charts can have charting functions (e.g. myGraphic_Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details.}
 }
 \description{
-Run the interactive safety graphics builder
+Run the core safetyGraphics App
 }

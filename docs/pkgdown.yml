@@ -1,9 +1,12 @@
-pandoc: 1.19.2.1
-pkgdown: 1.4.1
+pandoc: 2.11.4
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  customWorkflows: customWorkflows.html
-  shinyUserGuide: shinyUserGuide.html
+  Cookbook: Cookbook.html
+  TechnicalFAQ: TechnicalFAQ.html
+  chartConfiguration: chartConfiguration.html
+  intro: intro.html
+last_built: 2021-09-21T20:52Z
 urls:
   reference: https://pages.github.com/SafetyGraphics/safetyGraphics/reference
   article: https://pages.github.com/SafetyGraphics/safetyGraphics/articles

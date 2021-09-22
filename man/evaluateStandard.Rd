@@ -4,26 +4,38 @@
 \alias{evaluateStandard}
 \title{Evaluate a data set against a data standard}
 \usage{
-evaluateStandard(data, standard, includeFields = TRUE, domain = "labs")
+evaluateStandard(data, meta, domain, standard)
 }
 \arguments{
-\item{data}{data.frame to evaluate}
+\item{data}{A data frame in which to detect the data standard}
+
+\item{meta}{the metadata containing the data standards.}
+
+\item{domain}{the domain to evaluate - should match a value of \code{meta$domain}}
 
 \item{standard}{standard to evaluate}
-
-\item{includeFields}{should field level data be evaluated?}
-
-\item{domain}{data domain. "labs" only for now.}
 }
 \value{
-a list describing to what degree the data set matches the data standard. The "match" property describes compliance with the standard as "full", "partial" or "none". The "checks" property is a list of the data elements expected for the standard and whether they are "valid" in the given data set. "total_checks", "valid_checks" and "invalid_checks" provide counts of the specified checks. "match_percent" is calculated as valid_checks/total_checks.
+a list describing to what degree the data set matches the data standard. The "match" property describes compliance with the standard as "full", "partial" or "none". The "checks" property is a list of the data elements expected for the standard and whether they are "valid" in the given data set. "total_checks", "valid_checks" and "invalid_checks" provide counts of the specified checks. "match_percent" is calculated as valid_checks/total_checks.  "mapping" is a data frame describing the detected standard for each \code{"text_key"} in the provided metadata. Columns are \code{"text_key"}, \code{"current"} containing the name of the matched column or field value in the data and \code{"match"} a boolean indicating whether the data matches the standard.
 }
 \description{
 Determines whether the required data elements in a data standard are found in a given data frame
 }
 \examples{
-safetyGraphics:::evaluateStandard(data=adlbc, standard="adam") # Match is TRUE
-safetyGraphics:::evaluateStandard(data=adlbc, standard="sdtm") # Match is FALSE
+# Match is TRUE
+evaluateStandard(
+ data=safetyData::adam_adlbc, 
+ meta=meta, 
+ domain="labs", 
+ standard="adam"
+) 
+
+# Match is FALSE
+evaluateStandard(
+ data=safetyData::adam_adlbc, 
+ meta=meta, 
+ domain="labs", 
+ standard="sdtm"
+) 
 
 }
-\keyword{internal}

@@ -1,0 +1,83 @@
+---
+output:
+  html_document
+params:
+  data: NA
+  mapping: NA
+  chart: NA
+title: "{safetyGraphics}: `r params$chart$label` report"
+---
+
+
+```{css, echo=FALSE}
+
+.chart-md{
+  padding: 0.5em 0.5em 0.2em 0.5em;
+  background: #e7e7e7;
+  margin-right: -15px;
+  margin-left: -15px;
+  margin-bottom: 15px;
+  border: 1px solid #bbb;
+}
+
+.chart-md *{
+  display:inline-block;
+  padding-left:0.4em;
+}
+
+.chart-md strong{
+  font-size:1.2em;
+}
+
+.chart-md small{
+  font-size:0.8em;
+  color:#999;
+}
+
+.chart-md .chart-link{
+  padding-right:0.5em;
+}
+```
+
+```{r results='asis', echo = FALSE, message=FALSE, warning = FALSE}
+library(safetyGraphics)
+library(yaml)
+
+mapping <- params$mapping
+data <- params$data
+chart<-params$chart
+
+header <- makeChartSummary(chart, class="chart-md")
+chart_params <- makeChartParams(data, chart, mapping)
+
+mapping_list<-generateMappingList(mapping %>% filter(domain %in% chart$domain))
+if(length(mapping_list)==1){
+  mapping_list <- mapping_list[[1]]
+}
+
+```
+## {.tabset .tabset-fade} 
+### `r params$chart$label`
+
+`r header`
+
+```{r  fig.height=7, fig.width=9, echo=FALSE, message=FALSE, warning=FALSE}
+  do.call(chart$functions$main, chart_params)
+```  
+
+### Details 
+
+#### Background
+
+This chart was generated using the safetyGraphics shiny app. The safetyGraphics package provides a framework for evaluation of clinical trial safety in R. Examples and additional documentation are available [here](https://github.com/SafetyGraphics/safetyGraphics). 
+
+#### Chart Code 
+
+This chart can be re-run using the code below after updating to load your data. 
+
+```
+`r paste(makeChartExport(chart, mapping_list),collapse="\n")`
+```
+
+
+

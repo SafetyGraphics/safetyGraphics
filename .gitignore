@@ -44,4 +44,5 @@ inst/eDISH_app/tests/*-current/
 customSettings/
 
 doc
-Meta
+/Meta
+/R/Old

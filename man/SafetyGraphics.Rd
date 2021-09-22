@@ -3,7 +3,6 @@
 \docType{package}
 \name{SafetyGraphics}
 \alias{SafetyGraphics}
-\alias{SafetyGraphics-package}
 \title{\code{safetyGraphics} package}
 \description{
 Create Interactive Graphics Related to Clinical Trial Safety
@@ -11,6 +10,6 @@ Create Interactive Graphics Related to Clinical Trial Safety
 \details{
 Learn more on
 \href{https://CRAN.R-project.org/package=safetyGraphics}{CRAN}
-or \href{https://github.com/ASA-DIA-InteractiveSafetyGraphics/safetyGraphics}{GitHub}
+or \href{https://github.com/SafetyGraphics/safetyGraphics}{GitHub}
 }
 \keyword{internal}
