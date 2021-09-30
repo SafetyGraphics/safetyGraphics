@@ -10,7 +10,6 @@
 #'
 #' @import shiny
 #' @import safetyData
-#' @importFrom golem with_golem_options
 #' 
 #' @export
 
@@ -25,7 +24,8 @@ safetyGraphicsApp <- function(
   mapping=NULL,
   autoMapping=TRUE,
   filterDomain="dm",
-  chartSettingsPaths = NULL
+  chartSettingsPaths = NULL,
+  run_now = TRUE
 ){
   message("Initializing safetyGraphicsApp")
   config <- app_startup(domainData, meta, charts, mapping, autoMapping, filterDomain, chartSettingsPaths)
@@ -44,8 +44,9 @@ safetyGraphicsApp <- function(
       )
     }
   )
-  with_golem_options(
-    app = app, golem_opts = NULL
-  )
-  #runApp(app)
+  
+  if(run_now)
+    runApp(app)
+  else
+    app
 }

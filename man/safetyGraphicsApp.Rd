@@ -12,7 +12,8 @@ safetyGraphicsApp(
   mapping = NULL,
   autoMapping = TRUE,
   filterDomain = "dm",
-  chartSettingsPaths = NULL
+  chartSettingsPaths = NULL,
+  run_now = TRUE
 )
 }
 \arguments{
