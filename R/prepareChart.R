@@ -18,7 +18,7 @@ prepareChart <- function(chart){
     if(!hasName(chart,"name")) chart$name <- "safetyGraphicsChart"
     
     # Remove whitespace (if any) from chart$name
-    chart$name<-stringr::str_replace_all(x, "[[:space:]]", "")
+    chart$name<-stringr::str_replace_all(chart$name, "[[:space:]]", "")
 
     # Chart should be exportable by default
     if(!hasName(chart,"export")) chart$export <- TRUE
