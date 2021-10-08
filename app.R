@@ -2,4 +2,4 @@
 # To deploy, run: rsconnect::deployApp()
 # Or use the blue button on top of this file
 pkgload::load_all(export_all = FALSE,helpers = FALSE,attach_testthat = FALSE)
-safetyGraphics::safetyGraphicsApp(run_now = FALSE) # add parameters here (if any)
+safetyGraphics::safetyGraphicsApp(runNow = FALSE) # add parameters here (if any)
