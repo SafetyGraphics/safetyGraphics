@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_filterTabChecks.R
 \name{filterTabChecks}
 \alias{filterTabChecks}
-\title{filter module checks}
+\title{Checks for whether the current data and settings support a filter tab}
 \usage{
 filterTabChecks(domainData, filterDomain, current_mapping)
 }
@@ -14,8 +14,8 @@ filterTabChecks(domainData, filterDomain, current_mapping)
 \item{current_mapping}{current data mapping (REACTIVE)}
 }
 \value{
-reactive that returns a boolean indicating whether the checks passed and filtering can be initiailized
+reactive that returns a boolean indicating whether the checks passed and filtering can be initialized
 }
 \description{
-function that checks whether the current data and settings are appropriate for the filter tab
+Checks for whether the current data and settings support a filter tab
 }

@@ -8,23 +8,29 @@
 
 <title>Detect the data standard used for a data set — detectStandard • safetyGraphics</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,10 +38,10 @@
 
 
 
-<meta property="og:title" content="Detect the data standard used for a data set — detectStandard" />
 
+<meta property="og:title" content="Detect the data standard used for a data set — detectStandard" />
 <meta property="og:description" content="This function attempts to detect the clinical data standard used in a given R data frame." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -52,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -66,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safetyGraphics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -74,33 +80,38 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/customWorkflows.html">safetyGraphics Shiny App - Custom Workflows</a>
+      <a href="../articles/intro.html">Intro to Shiny App</a>
     </li>
     <li>
-      <a href="../articles/shinyUserGuide.html">safetyGraphics Shiny App - User Guide</a>
+      <a href="../articles/chartConfiguration.html">Chart Configuration</a>
+    </li>
+    <li>
+      <a href="../articles/cookbook.html">Examples Cookbook</a>
+    </li>
+    <li>
+      <a href="../articles/technicalFAQ.html">Technical FAQ</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../reference/index.html">Functions</a>
+</li>
+<li>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/SafetyGraphics/safetyGraphics">
@@ -127,68 +138,265 @@
     </div>
 
     <div class="ref-description">
-    
     <p>This function attempts to detect the clinical data standard used in a given R data frame.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>detectStandard</span>(<span class='no'>data</span>, <span class='kw'>includeFields</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>domain</span> <span class='kw'>=</span> <span class='st'>"labs"</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>detectStandard</span><span class='op'>(</span><span class='va'>data</span>, domain <span class='op'>=</span> <span class='cn'>NULL</span>, meta <span class='op'>=</span> <span class='fu'>safetyGraphics</span><span class='fu'>::</span><span class='va'><a href='meta.html'>meta</a></span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>A data frame in which to detect the data standard</p></td>
-    </tr>
-    <tr>
-      <th>includeFields</th>
-      <td><p>specifies whether to check the data set for field level data in addition to columns.  Default: <code>TRUE</code>.</p></td>
+      <td><p>A data frame in which to detect the data standard - required.</p></td>
     </tr>
     <tr>
       <th>domain</th>
-      <td><p>The data domain for the data set provided.  Default: <code>"labs"</code>.</p></td>
+      <td><p>the domain to evaluate - should match a value of <code>meta$domain</code>. Uses the first value in <code>meta$domain</code> if no value is provided.</p></td>
+    </tr>
+    <tr>
+      <th>meta</th>
+      <td><p>the metadata containing the data standards. - default = safetyGraphics::meta</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list containing the matching <code>"standard"</code> from <code>"standardMetadata"</code> and a list of  <code>"details"</code> describing each standard considered.</p>
-    
+    <p>A data frame describing the detected standard for each <code>"text_key"</code> in the provided metadata. Columns are <code>"domain"</code>, <code>"text_key"</code>, <code>"column"</code> and <code>"standard"</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function compares the columns in the provided <code>"data"</code> with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and ADaM CDISC(&lt;https://www.cdisc.org/&gt;) standards for clinical trial data by default. Additional standards can be added by modifying the <code>"standardMetadata"</code> data set included as part of this package. Currently, "labs" is the only domain supported.</p>
-    
+    <p>This function compares the columns in the provided <code>"data"</code> with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and ADaM CDISC(<a href='https://www.cdisc.org/'>https://www.cdisc.org/</a>) standards for clinical trial data by default. Additional standards can be added by modifying the <code>"meta"</code> data set included as part of this package.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>detectStandard</span>(<span class='no'>adlbc</span>)<span class='kw'>[[</span><span class='st'>"standard"</span>]] <span class='co'>#adam</span></div><div class='output co'>#&gt; [1] "adam"</div><div class='input'><span class='fu'>detectStandard</span>(<span class='no'>iris</span>)<span class='kw'>[[</span><span class='st'>"standard"</span>]] <span class='co'>#none</span></div><div class='output co'>#&gt; [1] "none"</div><div class='input'>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-  <span class='fu'>detectStandard</span>(<span class='no'>adlbc</span>,<span class='kw'>domain</span><span class='kw'>=</span><span class='st'>"AE"</span>) <span class='co'>#throws error. AE domain not supported in this release.</span>
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>detectStandard</span><span class='op'>(</span>data<span class='op'>=</span><span class='fu'>safetyData</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/safetyData/man/adam_adae.html'>adam_adae</a></span><span class='op'>)</span>  <span class='co'>#aes domain evaluated by default</span>
+</div><div class='output co'>#&gt; $details
+#&gt; $details$adam
+#&gt; $details$adam$standard
+#&gt; [1] "adam"
+#&gt; 
+#&gt; $details$adam$mapping
+#&gt; <span style='color: #949494;'># A tibble: 6 × 3</span>
+#&gt; <span style='color: #949494;'># Rowwise: </span>
+#&gt;   text_key   current  valid
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> id_col     USUBJID  TRUE 
+#&gt; <span style='color: #BCBCBC;'>2</span> seq_col    AESEQ    TRUE 
+#&gt; <span style='color: #BCBCBC;'>3</span> stdy_col   ASTDY    TRUE 
+#&gt; <span style='color: #BCBCBC;'>4</span> endy_col   AENDY    TRUE 
+#&gt; <span style='color: #BCBCBC;'>5</span> term_col   AETERM   TRUE 
+#&gt; <span style='color: #BCBCBC;'>6</span> bodsys_col AEBODSYS TRUE 
+#&gt; 
+#&gt; $details$adam$total_count
+#&gt; [1] 6
+#&gt; 
+#&gt; $details$adam$valid_count
+#&gt; [1] 6
+#&gt; 
+#&gt; $details$adam$invalid_count
+#&gt; [1] 0
+#&gt; 
+#&gt; $details$adam$match_percent
+#&gt; [1] 1
+#&gt; 
+#&gt; $details$adam$match
+#&gt; [1] "full"
+#&gt; 
+#&gt; $details$adam$label
+#&gt; [1] "ADaM"
+#&gt; 
+#&gt; 
+#&gt; $details$sdtm
+#&gt; $details$sdtm$standard
+#&gt; [1] "sdtm"
+#&gt; 
+#&gt; $details$sdtm$mapping
+#&gt; <span style='color: #949494;'># A tibble: 6 × 3</span>
+#&gt; <span style='color: #949494;'># Rowwise: </span>
+#&gt;   text_key   current  valid
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> id_col     USUBJID  TRUE 
+#&gt; <span style='color: #BCBCBC;'>2</span> seq_col    AESEQ    TRUE 
+#&gt; <span style='color: #BCBCBC;'>3</span> stdy_col   <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'>4</span> endy_col   <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'>5</span> term_col   AETERM   TRUE 
+#&gt; <span style='color: #BCBCBC;'>6</span> bodsys_col AEBODSYS TRUE 
+#&gt; 
+#&gt; $details$sdtm$total_count
+#&gt; [1] 6
+#&gt; 
+#&gt; $details$sdtm$valid_count
+#&gt; [1] 4
+#&gt; 
+#&gt; $details$sdtm$invalid_count
+#&gt; [1] 2
+#&gt; 
+#&gt; $details$sdtm$match_percent
+#&gt; [1] 0.6666667
+#&gt; 
+#&gt; $details$sdtm$match
+#&gt; [1] "partial"
+#&gt; 
+#&gt; $details$sdtm$label
+#&gt; [1] "Partial SDTM"
+#&gt; 
+#&gt; $details$sdtm$details
+#&gt; [1] "(4/6 cols/fields matched)"
+#&gt; 
+#&gt; 
+#&gt; 
+#&gt; $standard
+#&gt; [1] "adam"
+#&gt; 
+#&gt; $label
+#&gt; [1] "ADaM"
+#&gt; 
+#&gt; $standard_percent
+#&gt; [1] 1
+#&gt; 
+#&gt; $mapping
+#&gt; <span style='color: #949494;'># A tibble: 6 × 3</span>
+#&gt; <span style='color: #949494;'># Rowwise: </span>
+#&gt;   text_key   current  valid
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> id_col     USUBJID  TRUE 
+#&gt; <span style='color: #BCBCBC;'>2</span> seq_col    AESEQ    TRUE 
+#&gt; <span style='color: #BCBCBC;'>3</span> stdy_col   ASTDY    TRUE 
+#&gt; <span style='color: #BCBCBC;'>4</span> endy_col   AENDY    TRUE 
+#&gt; <span style='color: #BCBCBC;'>5</span> term_col   AETERM   TRUE 
+#&gt; <span style='color: #BCBCBC;'>6</span> bodsys_col AEBODSYS TRUE 
+#&gt; </div><div class='input'><span class='fu'>detectStandard</span><span class='op'>(</span>data<span class='op'>=</span><span class='fu'>safetyData</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/safetyData/man/adam_adlbc.html'>adam_adlbc</a></span>,domain<span class='op'>=</span><span class='st'>"labs"</span> <span class='op'>)</span> 
+</div><div class='output co'>#&gt; $details
+#&gt; $details$adam
+#&gt; $details$adam$standard
+#&gt; [1] "adam"
+#&gt; 
+#&gt; $details$adam$mapping
+#&gt; <span style='color: #949494;'># A tibble: 12 × 3</span>
+#&gt; <span style='color: #949494;'># Rowwise: </span>
+#&gt;    text_key            current                          valid
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>               <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                            <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> id_col              USUBJID                          TRUE 
+#&gt; <span style='color: #BCBCBC;'> 2</span> value_col           AVAL                             TRUE 
+#&gt; <span style='color: #BCBCBC;'> 3</span> measure_col         PARAM                            TRUE 
+#&gt; <span style='color: #BCBCBC;'> 4</span> normal_col_low      A1LO                             TRUE 
+#&gt; <span style='color: #BCBCBC;'> 5</span> normal_col_high     A1HI                             TRUE 
+#&gt; <span style='color: #BCBCBC;'> 6</span> studyday_col        ADY                              TRUE 
+#&gt; <span style='color: #BCBCBC;'> 7</span> visit_col           VISIT                            TRUE 
+#&gt; <span style='color: #BCBCBC;'> 8</span> visitn_col          VISITNUM                         TRUE 
+#&gt; <span style='color: #BCBCBC;'> 9</span> measure_values--ALT Alanine Aminotransferase (U/L)   TRUE 
+#&gt; <span style='color: #BCBCBC;'>10</span> measure_values--AST Aspartate Aminotransferase (U/L) TRUE 
+#&gt; <span style='color: #BCBCBC;'>11</span> measure_values--TB  Bilirubin (umol/L)               TRUE 
+#&gt; <span style='color: #BCBCBC;'>12</span> measure_values--ALP Alkaline Phosphatase (U/L)       TRUE 
+#&gt; 
+#&gt; $details$adam$total_count
+#&gt; [1] 12
+#&gt; 
+#&gt; $details$adam$valid_count
+#&gt; [1] 12
+#&gt; 
+#&gt; $details$adam$invalid_count
+#&gt; [1] 0
+#&gt; 
+#&gt; $details$adam$match_percent
+#&gt; [1] 1
+#&gt; 
+#&gt; $details$adam$match
+#&gt; [1] "full"
+#&gt; 
+#&gt; $details$adam$label
+#&gt; [1] "ADaM"
+#&gt; 
+#&gt; 
+#&gt; $details$sdtm
+#&gt; $details$sdtm$standard
+#&gt; [1] "sdtm"
+#&gt; 
+#&gt; $details$sdtm$mapping
+#&gt; <span style='color: #949494;'># A tibble: 13 × 3</span>
+#&gt; <span style='color: #949494;'># Rowwise: </span>
+#&gt;    text_key            current  valid
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>               <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> id_col              USUBJID  TRUE 
+#&gt; <span style='color: #BCBCBC;'> 2</span> value_col           LBSTRESN TRUE 
+#&gt; <span style='color: #BCBCBC;'> 3</span> measure_col         <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'> 4</span> normal_col_low      <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'> 5</span> normal_col_high     <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'> 6</span> studyday_col        <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'> 7</span> visit_col           VISIT    TRUE 
+#&gt; <span style='color: #BCBCBC;'> 8</span> visitn_col          VISITNUM TRUE 
+#&gt; <span style='color: #BCBCBC;'> 9</span> measure_values--ALT <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'>10</span> measure_values--AST <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'>11</span> measure_values--TB  <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'>12</span> measure_values--ALP <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'>13</span> unit_col            <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; 
+#&gt; $details$sdtm$total_count
+#&gt; [1] 13
+#&gt; 
+#&gt; $details$sdtm$valid_count
+#&gt; [1] 4
+#&gt; 
+#&gt; $details$sdtm$invalid_count
+#&gt; [1] 9
+#&gt; 
+#&gt; $details$sdtm$match_percent
+#&gt; [1] 0.3076923
+#&gt; 
+#&gt; $details$sdtm$match
+#&gt; [1] "partial"
+#&gt; 
+#&gt; $details$sdtm$label
+#&gt; [1] "Partial SDTM"
+#&gt; 
+#&gt; $details$sdtm$details
+#&gt; [1] "(4/13 cols/fields matched)"
+#&gt; 
+#&gt; 
+#&gt; 
+#&gt; $standard
+#&gt; [1] "adam"
+#&gt; 
+#&gt; $label
+#&gt; [1] "ADaM"
+#&gt; 
+#&gt; $standard_percent
+#&gt; [1] 1
+#&gt; 
+#&gt; $mapping
+#&gt; <span style='color: #949494;'># A tibble: 12 × 3</span>
+#&gt; <span style='color: #949494;'># Rowwise: </span>
+#&gt;    text_key            current                          valid
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>               <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                            <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> id_col              USUBJID                          TRUE 
+#&gt; <span style='color: #BCBCBC;'> 2</span> value_col           AVAL                             TRUE 
+#&gt; <span style='color: #BCBCBC;'> 3</span> measure_col         PARAM                            TRUE 
+#&gt; <span style='color: #BCBCBC;'> 4</span> normal_col_low      A1LO                             TRUE 
+#&gt; <span style='color: #BCBCBC;'> 5</span> normal_col_high     A1HI                             TRUE 
+#&gt; <span style='color: #BCBCBC;'> 6</span> studyday_col        ADY                              TRUE 
+#&gt; <span style='color: #BCBCBC;'> 7</span> visit_col           VISIT                            TRUE 
+#&gt; <span style='color: #BCBCBC;'> 8</span> visitn_col          VISITNUM                         TRUE 
+#&gt; <span style='color: #BCBCBC;'> 9</span> measure_values--ALT Alanine Aminotransferase (U/L)   TRUE 
+#&gt; <span style='color: #BCBCBC;'>10</span> measure_values--AST Aspartate Aminotransferase (U/L) TRUE 
+#&gt; <span style='color: #BCBCBC;'>11</span> measure_values--TB  Bilirubin (umol/L)               TRUE 
+#&gt; <span style='color: #BCBCBC;'>12</span> measure_values--ALP Alkaline Phosphatase (U/L)       TRUE 
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jeremy Wildfire, Becca Krouse, Preston Burns, Xiao Ni, James Buchanan, Susan Duke, Interactive Safety Graphics Working Group.</p>
+  <p>Developed by Jeremy Wildfire, Becca Krouse, Preston Burns, Xiao Ni, James Buchanan, Susan Duke.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

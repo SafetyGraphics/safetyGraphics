@@ -1,4 +1,5 @@
-#' UI for the default safetyGraphics shiny app
+#' UI for the core safetyGraphics app including Home, Mapping, Filter, Charts and Settings modules.  
+#'
 #'
 #' @param id module ID
 #' @param meta data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}. 
@@ -7,7 +8,6 @@
 #' @param standards a list of information regarding data standards. Each list item should use the format returned by safetyGraphics::detectStandard.
 #'
 #' @importFrom shinyjs useShinyjs
-#' @importFrom shinybusy add_busy_spinner 
 #' 
 #' @export
 
@@ -29,11 +29,16 @@ safetyGraphicsUI <- function(id, meta, domainData, mapping, standards){
             header.append('<div id=\"population-header\" class=\"badge\" title=\"Selected Participants\" ><span id=\"header-count\"></span>/<span id=\"header-total\"></span></div>');"
         )
     )
-    
+    if(isNamespaceLoaded("shinybusy")){
+        spinner<-shinybusy::add_busy_spinner(spin = "atom", position="bottom-right")
+    }else{
+        spinner<-NULL
+    }
+
     #app UI using calls to modules
     ui<-tagList(
         shinyjs::useShinyjs(),
-        add_busy_spinner(spin = "atom", position="bottom-right"),
+        spinner,
         tags$head(
             tags$style(app_css),
             tags$link(

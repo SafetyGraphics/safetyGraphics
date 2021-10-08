@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_mappingSelect.R
 \name{mappingSelectUI}
 \alias{mappingSelectUI}
-\title{Mapping Select UI}
+\title{UI that facilitates the mapping of a single data element (column or field) with a simple select UI}
 \usage{
 mappingSelectUI(id, label, choices = NULL, default = NULL)
 }

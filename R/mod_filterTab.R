@@ -1,5 +1,4 @@
-#' @title  filterTabUI 
-#' @description  UI that facilitates the filtering data with datamods::filter_data_ui
+#' @title UI for the filter module in datamods::filter_data_ui
 #'
 #' @param id module id
 #' 
@@ -10,7 +9,13 @@
 
 filterTabUI <- function(id){  
     ns <- NS(id)
-
+    if(isNamespaceLoaded("shinyWidgets")){
+        countObj<-  shinyWidgets::progressBar(
+            id = ns("pbar"), value = 100, 
+            total = 100, display_pct = TRUE
+        )
+    }
+    
     filter_ui<-list(
         h1(paste("Participant Selector")),
         span("This page dynamically filters participants across all data domains. Only the selected participants are included in charts."),
@@ -21,10 +26,7 @@ filterTabUI <- function(id){
             ),
             column(
                 width = 9,
-                progressBar(
-                    id = ns("pbar"), value = 100, 
-                    total = 100, display_pct = TRUE
-                ),
+                countObj,
                 DT::dataTableOutput(outputId = ns("table")),
                 tags$p("Code dplyr:"),
                 verbatimTextOutput(outputId = ns("code_dplyr")),
@@ -39,8 +41,7 @@ filterTabUI <- function(id){
 }
 
 
-#' @title  filter module server
-#' @description  server function that facilitates the data filtering with the datamods::filter_data_server module
+#' @title Server for the filter module in datamods::filter_data_ui
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object
@@ -54,7 +55,6 @@ filterTabUI <- function(id){
 #' @return filtered data set
 #'
 #' @import datamods
-#' @importFrom shinyWidgets progressBar updateProgressBar
 #' @importFrom shinyjs show hide
 #' @importFrom shiny renderDataTable
 #' 
@@ -70,7 +70,6 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
         req(filterCheck())
         shinyjs::show(selector = paste0(".navbar li a[data-value=",tabID,"]"))
         shinyjs::show(selector = paste0(".navbar #population-header"))
-
         domainData[[filterDomain]]
     })
     
@@ -88,11 +87,13 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
     )  
 
     observeEvent(res_filter$filtered(), {
-        updateProgressBar(
-            session = session, 
-            id = "pbar", 
-            value = nrow(res_filter$filtered()), total = nrow(raw())
-        )
+        if(isNamespaceLoaded("shinyWidgets")){
+            shinyWidgets::updateProgressBar(
+                session = session, 
+                id = "pbar", 
+                value = nrow(res_filter$filtered()), total = nrow(raw())
+            )
+        }
 
         shinyjs::html(
             "header-count", 

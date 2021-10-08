@@ -2,7 +2,7 @@
 % Please edit documentation in R/safetyGraphicsApp.R
 \name{safetyGraphicsApp}
 \alias{safetyGraphicsApp}
-\title{Run the interactive safety graphics app}
+\title{Run the core safetyGraphics App}
 \usage{
 safetyGraphicsApp(
   domainData = list(labs = safetyData::adam_adlbc, aes = safetyData::adam_adae, dm =
@@ -29,10 +29,11 @@ safetyGraphicsApp(
 
 \item{filterDomain}{domain used for the data/filter tab. Demographics ("\code{dm}") is used by default. Using a domain that is not one record per participant is not recommended.}
 
-\item{chartSettingsPaths}{path(s) where customization functions are saved relative to your working directory. All charts can have itialization (e.g. myChart_Init.R) and static charts can have charting functions (e.g. myGraphic_Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details.}
+\item{chartSettingsPaths}{path(s) where customization functions are saved relative to your working directory. All charts can have initialization (e.g. myChart_Init.R) and static charts can have charting functions (e.g. myGraphic_Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details.}
 
 \item{runNow}{Should the shiny app object created be run directly? Helpful when writing  functions to dispatch to shinyapps, rsconnect, or shinyproxy.}
+                                                                                                 
 }
 \description{
-Run the interactive safety graphics app
+Run the core safetyGraphics App
 }

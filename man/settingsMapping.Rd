@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_settingsMapping.R
 \name{settingsMapping}
 \alias{settingsMapping}
-\title{Settings view of Metadata/Mapping - server}
+\title{Server for settings tab showing current mapping}
 \usage{
 settingsMapping(input, output, session, metadata, mapping)
 }
@@ -18,5 +18,5 @@ settingsMapping(input, output, session, metadata, mapping)
 \item{mapping}{reactive data frame representing the current metadata mapping. columns = "domain", "text_id" and "current"}
 }
 \description{
-server for the display of the data mapping metadata.
+Server for settings tab showing current mapping
 }

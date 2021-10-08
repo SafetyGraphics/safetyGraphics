@@ -1,7 +1,5 @@
-#' Mapping Select UI 
+#' @title UI that facilitates the mapping of a single data element (column or field) with a simple select UI
 #' 
-#' UI that facilitates the mapping of a single data element (column or field) with a simple select UI
-#'
 #' @param id unique id for the UI
 #' @param label label associated with the control  
 #' @param choices a list of options for the control
@@ -33,8 +31,7 @@ mappingSelectUI <- function(id, label, choices=NULL, default=NULL){
     )
 }
 
-#' @title  mappingSelect
-#' @description  server function that facilitates the mapping of a single data element (column of field) with a simple select UI
+#' @title Server that facilitates the mapping of a single data element (column or field) with a simple select UI
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_homeTab.R
 \name{homeTabUI}
 \alias{homeTabUI}
-\title{Home Tab}
+\title{UI for the home module}
 \usage{
 homeTabUI(id)
 }
@@ -10,5 +10,5 @@ homeTabUI(id)
 \item{id}{module id}
 }
 \description{
-Home Tab - sub-module showing details for the data loaded in the app - UI
+UI for the home module
 }

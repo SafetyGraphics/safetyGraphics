@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_loadData.R
 \name{loadData}
 \alias{loadData}
-\title{loadDataServer}
+\title{Server for the data loading module used in safetyGraphicsInit()}
 \usage{
 loadData(input, output, session, domain)
 }
@@ -16,5 +16,5 @@ loadData(input, output, session, domain)
 \item{domain}{data domain to be loaded}
 }
 \description{
-UI that facilitates the mapping of a column data domain
+Server for the data loading module used in safetyGraphicsInit()
 }

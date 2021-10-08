@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_safetyGraphicsUI.R
 \name{safetyGraphicsUI}
 \alias{safetyGraphicsUI}
-\title{UI for the default safetyGraphics shiny app}
+\title{UI for the core safetyGraphics app including Home, Mapping, Filter, Charts and Settings modules.}
 \usage{
 safetyGraphicsUI(id, meta, domainData, mapping, standards)
 }
@@ -18,5 +18,5 @@ safetyGraphicsUI(id, meta, domainData, mapping, standards)
 \item{standards}{a list of information regarding data standards. Each list item should use the format returned by safetyGraphics::detectStandard.}
 }
 \description{
-UI for the default safetyGraphics shiny app
+UI for the core safetyGraphics app including Home, Mapping, Filter, Charts and Settings modules.
 }

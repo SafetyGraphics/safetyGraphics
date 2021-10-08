@@ -2,15 +2,15 @@
 % Please edit documentation in R/mod_chartsTab.R
 \name{chartsTabUI}
 \alias{chartsTabUI}
-\title{Charts Tab}
+\title{UI for chart module, designed to be re-used for each chart generated.}
 \usage{
 chartsTabUI(id, chart)
 }
 \arguments{
 \item{id}{module id}
 
-\item{chart}{list containing chart specifications}
+\item{chart}{list containing chart specifications like those returned by \link{makeChartConfig}.}
 }
 \description{
-Charting module
+UI for chart module, designed to be re-used for each chart generated.
 }

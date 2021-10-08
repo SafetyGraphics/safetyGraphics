@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_settingsCharts.R
 \name{settingsChartsUI}
 \alias{settingsChartsUI}
-\title{Settings Module - chart details}
+\title{UI for settings tab showing details for the charts loaded in the app}
 \usage{
 settingsChartsUI(id)
 }
@@ -10,5 +10,5 @@ settingsChartsUI(id)
 \item{id}{module id}
 }
 \description{
-Settings Module - sub-module showing details for the charts loaded in the app - UI
+UI for settings tab showing details for the charts loaded in the app
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_settingsData.R
 \name{settingsDataUI}
 \alias{settingsDataUI}
-\title{Settings Module - data details}
+\title{UI for settings tab showing current data}
 \usage{
 settingsDataUI(id)
 }
@@ -10,5 +10,5 @@ settingsDataUI(id)
 \item{id}{module id}
 }
 \description{
-Settings Module - sub-module showing details for the data loaded in the app - UI
+UI for settings tab showing current data
 }

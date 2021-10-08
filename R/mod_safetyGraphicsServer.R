@@ -1,4 +1,4 @@
-#' Server for the default safetyGraphics shiny app
+#' Server for core safetyGraphics app including Home, Mapping, Filter, Charts and Settings modules.  
 #'
 #' This function returns a server function suitable for use in shiny::runApp()
 #' 

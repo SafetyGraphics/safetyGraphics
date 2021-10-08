@@ -16,3 +16,5 @@
 ^\.github$
 ^app\.R$
 ^rsconnect$
+^LICENSE\.md$
+
