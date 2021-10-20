@@ -27,7 +27,8 @@ makeMapping <- function(domainData, meta, autoMapping, customMapping ){
             }else{
                 return(standard$mapping)
             }
-        })        auto_mapping_df<-bind_rows(auto_mapping_list, .id = "domain") %>% select(-.data$valid)
+        })        
+        auto_mapping_df<-bind_rows(auto_mapping_list, .id = "domain") %>% select(-.data$valid)
     }else{
         # otherwise initialize NULL standards/mapping
         standards<-NULL 
