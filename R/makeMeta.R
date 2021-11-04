@@ -22,10 +22,11 @@
 makeMeta <- function(charts, package="safetyCharts"){
     meta<-tibble()
     # get a list of domains from the charts
-    domains <- charts %>% map(~.x$domains) %>% unlist %>% unique()
+    domains <- charts %>% map(~.x$domain) %>% unlist %>% unique()
     packagePath <- paste0('package:',package)
 
     # Find matching metadata files in safetyCharts (or safetyData?)
+    meta<-tibble()
     for(domain in domains){
         domain_name <- paste0('meta_',domain)
         domain_meta_found <- exists(
@@ -33,7 +34,6 @@ makeMeta <- function(charts, package="safetyCharts"){
             where=packagePath,
             inherits=FALSE
         )
-        meta<-tibble()
         if(domain_meta_found){
             meta<-rbind(meta, get(domain_name,pos=packagePath, inherits=FALSE))
         }
