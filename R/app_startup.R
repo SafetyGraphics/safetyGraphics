@@ -22,7 +22,7 @@
 #' 
 #' @export
 app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, autoMapping=NULL, filterDomain=NULL, chartSettingsPaths=NULL){
-    # Process charts metadata
+    # If charts are not provided, load them from chartSettingsPath or the safetyCharts package
     if(is.null(charts)){
         if(is.null(chartSettingsPaths)){
             charts <- makeChartConfig()
@@ -72,6 +72,11 @@ app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, aut
             message("No data found for specified filter domain of '",filterDomain,"', so filter functionality has been deactivated.")
             filterDomain<-NULL
         }
+    }
+
+    # generate a meta object if none is provided
+    if(is.null(meta)){
+        meta<-makeMeta(charts)
     }
 
     # generate mappings and data standards
