@@ -34,17 +34,14 @@ makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="conf
     if(!is.null(packages)){
         for(package in packages){
             packageFound<-FALSE
-            for(lib in .libPaths()){
-                
-                packageDir<-paste(lib,package,packageLocation, sep="/")               
-                if(file.exists(packageDir)) {
-                    loaded <- do.call(require,list(package))
-                    if(!loaded) do.call(library,list(package)) #Attach the library to the search list if it is installed
-                    message("- Found the {",package,"} package and added ", packageDir," to list of chart locations.")
-                    packageFound<-TRUE   
-                    dirs<-c(dirs, packageDir)
-                    break               
-                }
+            packageDir <- system.file(packageLocation, package = package)
+            if(file.exists(packageDir)) {
+                loaded <- do.call(require,list(package))
+                if(!loaded) do.call(library,list(package)) #Attach the library to the search list if it is installed
+                message("- Found the {",package,"} package and added ", packageDir," to list of chart locations.")
+                packageFound<-TRUE   
+                dirs<-c(dirs, packageDir)
+                break               
             }
             if(!packageFound){
                 message("{",package, "} package not found or '",packageLocation,"' folder does not exist, please install package and confirm that specified folder is found.")

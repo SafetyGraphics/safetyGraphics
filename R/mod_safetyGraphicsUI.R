@@ -8,13 +8,13 @@
 #' @param standards a list of information regarding data standards. Each list item should use the format returned by safetyGraphics::detectStandard.
 #'
 #' @importFrom shinyjs useShinyjs
-#' @importFrom devtools system.file
 #' 
 #' @export
 
 safetyGraphicsUI <- function(id, meta, domainData, mapping, standards){
-    #read css from pacakge
     ns<-NS(id)
+
+    #read css from package
     css_path <- system.file("www","index.css", package = "safetyGraphics")
     app_css <-  HTML(readLines(css_path))
 
