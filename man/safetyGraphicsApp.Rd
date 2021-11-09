@@ -32,7 +32,6 @@ safetyGraphicsApp(
 \item{chartSettingsPaths}{path(s) where customization functions are saved relative to your working directory. All charts can have initialization (e.g. myChart_Init.R) and static charts can have charting functions (e.g. myGraphic_Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details.}
 
 \item{runNow}{Should the shiny app object created be run directly? Helpful when writing  functions to dispatch to shinyapps, rsconnect, or shinyproxy.}
-                                                                                                 
 }
 \description{
 Run the core safetyGraphics App

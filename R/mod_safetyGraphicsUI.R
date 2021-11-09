@@ -8,20 +8,16 @@
 #' @param standards a list of information regarding data standards. Each list item should use the format returned by safetyGraphics::detectStandard.
 #'
 #' @importFrom shinyjs useShinyjs
+#' @importFrom devtools system.file
 #' 
 #' @export
 
 safetyGraphicsUI <- function(id, meta, domainData, mapping, standards){
     #read css from pacakge
     ns<-NS(id)
-    app_css <- NULL
-    for(lib in .libPaths()){
-        if(is.null(app_css)){
-            css_path <- paste(lib,'safetyGraphics', 'www','index.css', sep="/")
-            if(file.exists(css_path)) app_css <-  HTML(readLines(css_path))
-        }
-    }
-    
+    css_path <- system.file("www","index.css", package = "safetyGraphics")
+    app_css <-  HTML(readLines(css_path))
+
     #script to append population badge nav bar
     participant_badge<-tags$script(
         HTML(
