@@ -1,6 +1,6 @@
 Package: safetyGraphics
 Title: Interactive Graphics for Monitoring Clinical Trial Safety
-Version: 2.0.1
+Version: 2.1.0
 Authors@R: c(
 	person("Jeremy", "Wildfire", email = "jwildfire@gmail.com", role = c("cre","aut")),
 	person("Becca", "Krouse", role="aut"),
