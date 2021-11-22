@@ -3,7 +3,7 @@
 #' Prepare inputs for safetyGraphics app - run before app is initialized. 
 #' 
 #' @param domainData named list of data.frames to be loaded in to the app. Sample AdAM data from the safetyData package used by default
-#' @param meta data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}. 
+#' @param meta data frame containing the metadata for use in the app.
 #' @param charts list of charts in the format produced by safetyGraphics::makeChartConfig()
 #' @param mapping list specifying the initial mapping values for each data mapping for each domain (e.g. list(aes= list(id_col='USUBJID', seq_col='AESEQ')). 
 #' @param autoMapping boolean indicating whether the app should attempt to automatically detect data standards and generate mappings for the data provided. Values specified in the `mapping` parameter overwrite automatically generated mappings when both are found. Defaults to true.
@@ -31,13 +31,8 @@ app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, aut
         }
     }
 
-    # Attempt to bind chart functions if none are provided
-    charts <- charts %>% map(function(chart){
-        if(!hasName(chart,"functions")){
-            chart <- prepareChart(chart)
-        } 
-        return(chart)
-    })
+    # Prepare charts - fill in defaults, build metadata, bind functions 
+    charts <- charts %>% map(prepareChart)
 
     # Drop charts where order is negative
     orderDrops <- charts[purrr::map_lgl(charts, function(chart) chart$order < 0)]
@@ -74,10 +69,11 @@ app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, aut
         }
     }
 
-    # generate a meta object if none is provided
-    if(is.null(meta)){
-        meta<-makeMeta(charts)
-    }
+    # generate a full list of metadata
+    meta <- charts %>% map(~.x$meta) %>% rbind  %>% distinct  
+
+    # warning if there are duplicate rows in a domain 
+    # TODO 
 
     # generate mappings and data standards
     mappingObj <- makeMapping(domainData, meta, autoMapping, mapping)

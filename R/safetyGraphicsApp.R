@@ -1,7 +1,7 @@
 #' Run the core safetyGraphics App
 #'
 #' @param domainData named list of data.frames to be loaded in to the app. Sample AdAM data from the safetyData package used by default
-#' @param meta data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}. 
+#' @param meta data frame containing the metadata for use in the app. 
 #' @param charts list of charts in the format produced by safetyGraphics::makeChartConfig()
 #' @param mapping list specifying the initial mapping values for each data mapping for each domain (e.g. list(aes= list(id_col='USUBJID', seq_col='AESEQ')). 
 #' @param autoMapping boolean indicating whether the app should attempt to automatically detect data standards and generate mappings for the data provided. Values specified in the `mapping` parameter overwrite automatically generated mappings when both are found. Defaults to true.
@@ -19,7 +19,7 @@ safetyGraphicsApp <- function(
     aes=safetyData::adam_adae, 
     dm=safetyData::adam_adsl
   ),
-  meta = safetyGraphics::meta, 
+  meta = NULL, 
   charts=NULL,
   mapping=NULL,
   autoMapping=TRUE,
