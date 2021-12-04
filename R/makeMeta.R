@@ -29,25 +29,26 @@ makeMeta <- function(chart){
         }else if(typeof(chart$domain) == "list"){
             domains <- names(chart$domain)
         } 
-        # process metadata for all values of chart$domains 
-        all_meta <- tibble()
-        for(domain in domains){
-            # get chart level meta
-            domain_meta_found <- exists(
-                paste0("meta_",domain),
-                where=packagePath,
+        
+        # check for chart level metadata
+        chart_meta_found <- exists(
+            paste0("meta_",chart$name),
+            where=packagePath,
+            inherits=FALSE
+        )
+        if(chart_meta_found) {
+            chart_meta <-  get(
+                paste0("meta_",chart$name),
+                pos=packagePath, 
                 inherits=FALSE
             )
-            if(domain_meta_found) {
-                chart_meta <-  get(
-                    paste0("meta_",domain),
-                    pos=packagePath, 
-                    inherits=FALSE
-                )
-            }else{
-                chart_meta <- tibble()
-            }
+        }else{
+            chart_meta <- tibble()
+        }
 
+        # check for domain-level metadata
+        domain_meta <- tibble()
+        for(domain in domains){
             # get domains level meta
             domain_meta_found <- exists(
                 paste0("meta_",domain),
@@ -55,23 +56,22 @@ makeMeta <- function(chart){
                 inherits=FALSE
             )
             if(domain_meta_found) {
-                domain_meta <-  get(
+                this_meta <-  get(
                     paste0("meta_",domain),
                     pos=packagePath, 
                     inherits=FALSE
                 )
             }else{
-                domain_meta <- tibble()
+                this_meta <- tibble()
             }
-            dup_keys <- intersect(chart_meta$text_key, domain_meta$text_key)
-            this_meta<-rbind(chart_meta, domain_meta)
-
-            if(any(duplicated(this_meta$text_key))){
-                dups <- meta$text_key[duplicated(this_meta$text_key)]
-                message("Caution: Found ", length(dups) ," duplicate text_key(s) in the ",domain, " domain for the ",chart$name," chart: ", paste(dups,collapse=", "))
-            }
-            all_meta <- rbind(all_meta, this_meta)
-        }      
+            domain_meta <- rbind(domain_meta, this_meta)
+        }
+        
+        # Drop domain-level metadata found in charts
+        chart_ids <- paste0(chart_meta$domain,"-",chart_meta$text_key)
+        domain_meta <- domain_meta %>% 
+            filter(!(paste0(domain_meta$domain,"-",domain_meta$text_key) %in% chart_ids))
+        all_meta <- rbind(chart_meta, domain_meta)
     }
 
     return(all_meta)
