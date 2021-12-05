@@ -71,8 +71,7 @@ makeMeta <- function(chart){
         chart_ids <- paste0(chart_meta$domain,"-",chart_meta$text_key)
         domain_meta <- domain_meta %>% 
             filter(!(paste0(domain_meta$domain,"-",domain_meta$text_key) %in% chart_ids))
-        all_meta <- rbind(chart_meta, domain_meta)
+        chart$meta <- rbind(chart_meta, domain_meta)
     }
-
-    return(all_meta)
+    return(chart)
 }
