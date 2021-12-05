@@ -27,5 +27,5 @@ test_that("Charts with exisitng meta objects are not modified. A message is prin
     metaChart <- testChart
     metaChart$meta <- "JustAPlaceholder"
     expect_message(makeMeta(chart=metaChart))
-    expect_equal(metaChart$Meta, "JustAPlaceholder")
+    expect_equal(metaChart$meta, "JustAPlaceholder")
 })
