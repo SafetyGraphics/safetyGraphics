@@ -22,6 +22,7 @@ makeMeta <- function(chart){
     stopifnot(typeof(chart$domain) %in% c('list','character'))
     if(hasName(chart, 'meta')){
         message(chart$name, " already has `meta` defined. Skipping makeMeta() processing.")
+        all_meta <- NULL
     }else{
         packagePath <- paste0('package:',chart$package)
         if(typeof(chart$domain) == "character"){
@@ -41,7 +42,8 @@ makeMeta <- function(chart){
                 paste0("meta_",chart$name),
                 pos=packagePath, 
                 inherits=FALSE
-            )
+            )%>%
+            mutate(source = paste0(packagePath, ":meta_", chart$name))
         }else{
             chart_meta <- tibble()
         }
@@ -60,18 +62,25 @@ makeMeta <- function(chart){
                     paste0("meta_",domain),
                     pos=packagePath, 
                     inherits=FALSE
-                )
+                ) %>% 
+                mutate(source = paste0(packagePath, ":meta_", domain))    
             }else{
                 this_meta <- tibble()
             }
             domain_meta <- rbind(domain_meta, this_meta)
         }
         
-        # Drop domain-level metadata found in charts
-        chart_ids <- paste0(chart_meta$domain,"-",chart_meta$text_key)
-        domain_meta <- domain_meta %>% 
-            filter(!(paste0(domain_meta$domain,"-",domain_meta$text_key) %in% chart_ids))
-        chart$meta <- rbind(chart_meta, domain_meta)
+
+        all_meta <- rbind(chart_meta, domain_meta) 
+
+        # Remove duplicate meta data
+        dupes <- duplicated(all_meta%>%select(domain, text_key))
+        if(any(dupes)){
+            dup_meta <- all_meta[dupes,] 
+            message("Removed ",sum(dupes)," duplicate metadata records for ", chart$name,".")
+            all_meta <- all_meta[!dupes,]
+        }
     }
-    return(chart)
+
+    return(all_meta)
 }
