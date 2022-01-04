@@ -8,7 +8,7 @@ makeChartConfig(
   dirs,
   packages = "safetyCharts",
   packageLocation = "config",
-  sourceFiles = TRUE
+  sourceFiles = FALSE
 )
 }
 \arguments{

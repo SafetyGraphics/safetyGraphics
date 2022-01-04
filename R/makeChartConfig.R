@@ -27,7 +27,7 @@
 #' }
 #' @export
 
-makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="config", sourceFiles=TRUE){
+makeChartConfig <- function(dirs, packages="safetyCharts", packageLocation="config", sourceFiles=FALSE){
     if(missing(dirs)) dirs<-NULL
 
     # add local package installation to dirs if specified in packages
