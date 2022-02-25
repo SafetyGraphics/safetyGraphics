@@ -18,9 +18,12 @@
 #'    \item{standard_sdtm}{Default values for the SDTM data standard}
 #' }   
 #' 
+#' @importFrom tidyr replace_na starts_with
 #' @export
 
 makeMeta <- function(charts){
+    message(paste0("-Generating meta data for ",length(charts), " charts."))
+    # Check each chart to see if {package}::meta_{domain} or {package}::meta_{name} exists
     sources <- charts %>% map(function(chart){
         pkg<-ifelse(is.null(chart$package), 'safetyCharts',chart$package)
         files<-paste0('meta_',c(chart$name, chart$domain)) %>% map(~list(file=.x, pkg=pkg))
@@ -29,7 +32,7 @@ makeMeta <- function(charts){
     flatten %>%
     unique
 
-    dfs<-sources %>% map(function(src){
+    pkg_dfs<-sources %>% map(function(src){
         packagePath <- paste0('package:',src$pkg)
         file_found <- exists(
             src$file,
@@ -45,24 +48,55 @@ makeMeta <- function(charts){
 
             if(is.data.frame(this_meta)){
                 this_meta <- this_meta%>%            
-                    mutate(source = paste0(src$pkg, ":",src$file))
+                    mutate(source = paste0(src$pkg, "::",src$file))
                 return(this_meta) 
             } 
         }
     })
 
-    meta<-bind_rows(dfs)
-    
-    # Throw error if duplicate records are found
-    dupes <- duplicated(meta%>%select(.data$domain, .data$text_key))
-    if(any(dupes)){
-        dupeIDs <- meta[dupes]%>%
-            mutate(domain_text_key=paste(.data$domain,.data$text_key,sep="-"))%>%
-            pull(.data$domain_text_key)%>%
-            paste(collapse="\n")
-        stop(paste("Duplicate rows in metadata for:\n",dupeIDs))
-    } 
+    ## check for meta bound directly to the charts
+    chart_dfs <- charts %>% map(function(chart){
+        if(is.data.frame(chart$meta)){
+            this_meta <- chart$meta %>% mutate(source = paste0('charts$', chart$name, "$meta"))
+            return(this_meta)
+        }else{
+            if(!is.null(chart$meta)) warning(paste0("Ignoring non-data.frame object found in charts$", chart$name, "$meta"))
+        }
+    })
 
-    return(meta)
+    ## make sure dfs have required columns
+    dfs<-c(pkg_dfs,chart_dfs)
+    required_cols <- c("domain","text_key","col_key","type")
+    dfs <- dfs%>%
+        keep(is.data.frame)%>%
+        keep(function(df){
+            has_cols <- all(required_cols %in% names(df))
+            if(!has_cols) warning(paste(df[1,'source'],"dropped from meta because of missing required columns.")) 
+            return(has_cols)
+        })
+
+    ## combine list of dfs into single df
+    if(length(dfs)>0){
+        meta<-bind_rows(dfs) %>% 
+        mutate_at(vars(tidyr::starts_with('standard_')), ~tidyr::replace_na(., ""))
+        
+        # Throw error if duplicate records are found
+        dupes <- duplicated(meta%>%select(.data$domain, .data$text_key))
+        if(any(dupes)){
+            dupeIDs <- meta[dupes,]%>%
+                mutate(domain_text_key=paste(.data$domain,.data$text_key,sep="-"))%>%
+                pull(.data$domain_text_key)%>%
+                unique%>%
+                paste(collapse="\n")
+            stop(paste("Duplicate rows in metadata for:\n",dupeIDs))
+        } 
+        
+        sources <- meta %>% pull(source) %>% unique %>% paste(collapse=" ")
+        message(paste0("-Meta object created using the following source(s): ",sources))
+        return(meta)
+    } else {
+        stop("No metadata found. ")
+    }
+    
 }
 
