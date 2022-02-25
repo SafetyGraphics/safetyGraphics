@@ -8,6 +8,13 @@ skip_on_cran()
 app <- ShinyDriver$new("./module_examples/mappingColumn")
 initial<-app$getAllValues()
 
+meta <- rbind(
+  safetyCharts::meta_labs,
+  safetyCharts::meta_aes,
+  safetyCharts::meta_dm,
+  safetyCharts::meta_hepExplorer
+)
+
 test_that("UI function stops with invalid inputs (non-data.frame)",{
   skip_on_cran()
   id_meta <- meta%>%filter(domain=="labs")%>%filter(col_key=="id_col")

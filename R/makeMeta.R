@@ -77,8 +77,8 @@ makeMeta <- function(charts){
 
     ## combine list of dfs into single df
     if(length(dfs)>0){
-        meta<-bind_rows(dfs) %>% 
-        mutate_at(vars(tidyr::starts_with('standard_')), ~tidyr::replace_na(., ""))
+        meta<-bind_rows(dfs) 
+        #%>% mutate_at(vars(tidyr::starts_with('standard_')), ~tidyr::replace_na(., ""))
         
         # Throw error if duplicate records are found
         dupes <- duplicated(meta%>%select(.data$domain, .data$text_key))

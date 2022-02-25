@@ -13,7 +13,7 @@
 #' # Match is TRUE
 #' evaluateStandard(
 #'  data=safetyData::adam_adlbc, 
-#'  meta=meta, 
+#'  meta=safetyCharts::meta_labs, 
 #'  domain="labs", 
 #'  standard="adam"
 #' ) 
@@ -21,7 +21,7 @@
 #' # Match is FALSE
 #' evaluateStandard(
 #'  data=safetyData::adam_adlbc, 
-#'  meta=meta, 
+#'  meta=safetyCharts::meta_labs, 
 #'  domain="labs", 
 #'  standard="sdtm"
 #' ) 

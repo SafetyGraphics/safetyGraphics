@@ -25,7 +25,7 @@ Determines whether the required data elements in a data standard are found in a 
 # Match is TRUE
 evaluateStandard(
  data=safetyData::adam_adlbc, 
- meta=meta, 
+ meta=safetyCharts::meta_labs, 
  domain="labs", 
  standard="adam"
 ) 
@@ -33,7 +33,7 @@ evaluateStandard(
 # Match is FALSE
 evaluateStandard(
  data=safetyData::adam_adlbc, 
- meta=meta, 
+ meta=safetyCharts::meta_labs, 
  domain="labs", 
  standard="sdtm"
 ) 

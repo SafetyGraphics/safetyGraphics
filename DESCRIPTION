@@ -44,6 +44,7 @@ Imports:
     shinyjs (>= 2.0.0),
     sortable (>= 0.4.4),
     stringr (>= 1.4.0),
+    tidyr,
     yaml (>= 2.2.1)
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
