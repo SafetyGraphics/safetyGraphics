@@ -36,8 +36,6 @@ prepareChart <- function(chart){
         FALSE,
         tolower(chart$env)=="safetygraphics"
     )
-    #### Make Chart-level meta-data ####
-    chart$meta <- makeMeta(chart)
 
     #### Bind Workflow functions to chart object ####
     if(!hasName(chart,"functions")){

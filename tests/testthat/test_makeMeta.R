@@ -3,14 +3,12 @@ library(safetyGraphics)
 library(safetyCharts)
 
 # User Requirements
-# [*] Charts with exisiting meta objects are not modified. A message is printed.
-# [*] Chart-level metadata (e.g. meta_hepExplorer) is loaded when found
-# [ ] If no metadata is found for a chart, a warning message is printed. 
-# [ ] If a chart doesn't have name or domain property no metadata is added and a message is printed. 
-# [*] Domain-level metadata is loaded for a single domain when found
-# [*] Domain-level metadata for multiple domains is loaded when found
-# [ ] Domain-level metadata is loaded as expected when chart domain is a named list or a character vector
-# [ ] Chart-level takes precedence over domain-level metadata when both are found
+# [ ] Chart-level metadata (e.g. meta_hepExplorer) is loaded when found
+# [ ] Domain-level metadata is loaded for a single domain when found
+# [ ] Domain-level metadata for multiple domains is loaded when found
+# [ ] If no metadata is found for a chart, a warning message is printed.
+# [ ] An error is thrown if duplicate rows of metadata are found
+
 
 testChart <-list(
     env="safetyGraphics",
@@ -24,22 +22,15 @@ testChart <-list(
     )
 )
 
-test_that("Charts with exisiting meta objects are not modified. A message is printed.",{
-    metaChart <- testChart
-    metaChart$meta <- "JustAPlaceholder"
-    expect_message(makeMeta(chart=metaChart))
-    expect_null(makeMeta(chart=metaChart))
-})
-
 test_that("Domain-level metadata is loaded for a single domain when found.",{
-    testMeta <- makeMeta(testChart) %>% select(-source)
+    testMeta <- makeMeta(list(testChart)) %>% select(-source)
     expect_equal(testMeta, safetyCharts::meta_dm)
 })
 
 test_that("Domain-level metadata for multiple domains is loaded when found",{
     multiDomainChart <- testChart
     multiDomainChart$domain <- c("dm","aes")
-    multiDomainMeta <- makeMeta(multiDomainChart) %>% select(-source)
+    multiDomainMeta <- makeMeta(list(multiDomainChart)) %>% select(-source)
     expect_equal(multiDomainMeta, rbind(safetyCharts::meta_dm, safetyCharts::meta_aes))
 })
 
@@ -50,12 +41,21 @@ test_that("Chart-level metadata (e.g. meta_hepExplorer) is loaded when found",{
         package="safetyCharts",
         domain="none"
     )
-    chartMeta <- makeMeta(testChart) %>% select(-source)
+    chartMeta <- makeMeta(list(testChart)) %>% select(-source)
     expect_equal(chartMeta, safetyCharts::meta_hepExplorer)
 
     #Chart that chart-level and domain-level metadata stack
     testChart$domain="labs"
-    chartMeta <- makeMeta(testChart) %>% select(-source)
+    chartMeta <- makeMeta(list(testChart)) %>% select(-source)
     expect_equal(chartMeta, rbind(safetyCharts::meta_hepExplorer, safetyCharts::meta_labs))
+})
+
+test_that("metadata for multiple charts loads when found",{
+    testCharts <-list(
+        list(name='chart1', domain=c('aes','dm'),package='safetyCharts'),
+        list(name='chart2', domain=c('labs','dm')) #package defaults to safetyCharts if not specified
+    )
+    chartMeta <- makeMeta(testCharts) %>% select(-source)
+    expect_equal(chartMeta, rbind(safetyCharts::meta_aes, safetyCharts::meta_dm, safetyCharts::meta_labs))
 })
 

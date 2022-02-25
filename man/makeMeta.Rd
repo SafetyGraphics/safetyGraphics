@@ -2,14 +2,12 @@
 % Please edit documentation in R/makeMeta.R
 \name{makeMeta}
 \alias{makeMeta}
-\title{Create a metadata object based on the selected charts}
+\title{Create a metadata object table for a set of charts}
 \usage{
-makeMeta(charts, package = "safetyCharts")
+makeMeta(charts)
 }
 \arguments{
-\item{charts}{list of charts for which metadata is needed}
-
-\item{package}{package containing needed metadata}
+\item{charts}{list of safetyGraphics chart objects for which to create metadata}
 }
 \value{
 tibble of metadata with the following columns:
@@ -27,5 +25,5 @@ tibble of metadata with the following columns:
 }
 }
 \description{
-Create a metadata object based on the selected charts
+Generates metadata object for a list charts. makeMeta() looks in chart$package namespace for files called meta_{chart$name} and meta_{chart$domain} for all charts, and then stacks all files. If duplicate metadata rows (domain + text_key) are found an error is thrown.
 }

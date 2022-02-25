@@ -15,3 +15,5 @@
 ^customSettings$
 ^\.github$
 ^LICENSE\.md$
+^rsconnect$
+

@@ -1,6 +1,8 @@
-#' Create a metadata object table for a chart
+#' Create a metadata object table for a set of charts
 #' 
-#' @param chart safetyGraphics chart object for which to create metadata
+#' Generates metadata object for a list charts. makeMeta() looks in chart$package namespace for files called meta_{chart$name} and meta_{chart$domain} for all charts, and then stacks all files. If duplicate metadata rows (domain + text_key) are found an error is thrown. 
+#' 
+#' @param charts list of safetyGraphics chart objects for which to create metadata
 #' 
 #' @return tibble of metadata with the following columns:
 #' \describe{
@@ -18,69 +20,49 @@
 #' 
 #' @export
 
-makeMeta <- function(chart){
-    stopifnot(typeof(chart$domain) %in% c('list','character'))
-    if(hasName(chart, 'meta')){
-        message(chart$name, " already has `meta` defined. Skipping makeMeta() processing.")
-        all_meta <- NULL
-    }else{
-        packagePath <- paste0('package:',chart$package)
-        if(typeof(chart$domain) == "character"){
-            domains <- chart$domain
-        }else if(typeof(chart$domain) == "list"){
-            domains <- names(chart$domain)
-        } 
-        
-        # check for chart level metadata
-        chart_meta_found <- exists(
-            paste0("meta_",chart$name),
+makeMeta <- function(charts){
+    sources <- charts %>% map(function(chart){
+        pkg<-ifelse(is.null(chart$package), 'safetyCharts',chart$package)
+        files<-paste0('meta_',c(chart$name, chart$domain)) %>% map(~list(file=.x, pkg=pkg))
+        return(files)
+    }) %>% 
+    flatten %>%
+    unique
+
+    dfs<-sources %>% map(function(src){
+        packagePath <- paste0('package:',src$pkg)
+        file_found <- exists(
+            src$file,
             where=packagePath,
             inherits=FALSE
         )
-        if(chart_meta_found) {
-            chart_meta <-  get(
-                paste0("meta_",chart$name),
+        if(file_found){
+            this_meta <-  get(
+                src$file,
                 pos=packagePath, 
                 inherits=FALSE
-            )%>%
-            mutate(source = paste0(packagePath, ":meta_", chart$name))
-        }else{
-            chart_meta <- tibble()
-        }
-
-        # check for domain-level metadata
-        domain_meta <- tibble()
-        for(domain in domains){
-            # get domains level meta
-            domain_meta_found <- exists(
-                paste0("meta_",domain),
-                where=packagePath,
-                inherits=FALSE
             )
-            if(domain_meta_found) {
-                this_meta <-  get(
-                    paste0("meta_",domain),
-                    pos=packagePath, 
-                    inherits=FALSE
-                ) %>% 
-                mutate(source = paste0(packagePath, ":meta_", domain))    
-            }else{
-                this_meta <- tibble()
-            }
-            domain_meta <- rbind(domain_meta, this_meta)
+
+            if(is.data.frame(this_meta)){
+                this_meta <- this_meta%>%            
+                    mutate(source = paste0(src$pkg, ":",src$file))
+                return(this_meta) 
+            } 
         }
-        
+    })
 
-        all_meta <- rbind(chart_meta, domain_meta) 
+    meta<-bind_rows(dfs)
+    
+    # Throw error if duplicate records are found
+    dupes <- duplicated(meta%>%select(.data$domain, .data$text_key))
+    if(any(dupes)){
+        dupeIDs <- meta[dupes]%>%
+            mutate(domain_text_key=paste(.data$domain,.data$text_key,sep="-"))%>%
+            pull(.data$domain_text_key)%>%
+            paste(collapse="\n")
+        stop(paste("Duplicate rows in metadata for:\n",dupeIDs))
+    } 
 
-        # Remove duplicate meta data
-        dupes <- duplicated(all_meta%>%select(domain, text_key))
-        if(any(dupes)){
-            dup_meta <- all_meta[dupes,] 
-            message("Removed ",sum(dupes)," duplicate metadata records for ", chart$name,".")
-            all_meta <- all_meta[!dupes,]
-        }
-    }
-
-    return(all_meta)
+    return(meta)
 }
+
