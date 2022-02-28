@@ -2,6 +2,15 @@ library(shiny)
 library(safetyGraphics)
 library(dplyr)
 
+
+meta <- rbind(
+  safetyCharts::meta_labs,
+  safetyCharts::meta_aes,
+  safetyCharts::meta_dm,
+  safetyCharts::meta_hepExplorer
+)
+
+
 #reactlogReset()
 allData <- list(labs=safetyData::adam_adlbc, aes=safetyData::adam_adae)
 labs_default <- meta %>% 
