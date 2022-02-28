@@ -14,6 +14,9 @@
 ^CRAN-RELEASE$
 ^customSettings$
 ^\.github$
-^LICENSE\.md$
+^app\.R$
 ^rsconnect$
+^LICENSE\.md$
+
+
 
