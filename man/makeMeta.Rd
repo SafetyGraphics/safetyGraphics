@@ -25,5 +25,11 @@ tibble of metadata with the following columns:
 }
 }
 \description{
-Generates metadata object for a list of charts. makeMeta() looks in chart$package namespace for files called meta_{chart$name} and meta_{chart$domain} for all charts, and then stacks all files. If duplicate metadata rows (domain + text_key) are found an error is thrown.
+Generates metadata object for a list of charts. \code{makeMeta()} looks for metadata in 3 locations for each \code{chart} object:
+\itemize{
+\item Domain-level metadata saved as meta_{chart$name} in the chart$package namespace
+\item Chart-specific metadata saved as meta_{chart$domain} in the chart$package namespace
+\item Chart-specific metadata saved directly to the chart object as chart$meta
+After checking all charts, all metadata files are stacked in to a single dataframe and returned. If duplicate metadata rows (domain + text_key) are found, an error is thrown.
+}
 }
