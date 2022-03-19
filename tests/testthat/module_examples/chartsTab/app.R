@@ -15,7 +15,7 @@ domainData <- list(
 )
 
 
-meta <- meta <- rbind(
+meta <- rbind(
   safetyCharts::meta_labs,
   safetyCharts::meta_aes,
   safetyCharts::meta_dm,
