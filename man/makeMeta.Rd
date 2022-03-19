@@ -25,5 +25,5 @@ tibble of metadata with the following columns:
 }
 }
 \description{
-Generates metadata object for a list charts. makeMeta() looks in chart$package namespace for files called meta_{chart$name} and meta_{chart$domain} for all charts, and then stacks all files. If duplicate metadata rows (domain + text_key) are found an error is thrown.
+Generates metadata object for a list of charts. makeMeta() looks in chart$package namespace for files called meta_{chart$name} and meta_{chart$domain} for all charts, and then stacks all files. If duplicate metadata rows (domain + text_key) are found an error is thrown.
 }
