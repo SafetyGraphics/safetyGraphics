@@ -118,7 +118,7 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000, maxFile
       shinyjs::show(id="sg-app")
       config<- app_startup(
         domainData = domainData() %>% keep(~!is.null(.x)),
-        meta = safetyGraphics::meta, 
+        meta = NULL, 
         charts= charts(),
         #mapping=NULL, 
         filterDomain="dm", 

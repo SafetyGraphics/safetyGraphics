@@ -14,7 +14,15 @@ domainData <- list(
   dm=safetyData::adam_adsl
 )
 
-mapping <- makeMapping(domainData, meta=safetyGraphics::meta, autoMapping=TRUE, customMapping=NULL)
+
+meta <- rbind(
+  safetyCharts::meta_labs,
+  safetyCharts::meta_aes,
+  safetyCharts::meta_dm,
+  safetyCharts::meta_hepExplorer
+)
+
+mapping <- makeMapping(domainData, meta=meta, autoMapping=TRUE, customMapping=NULL)
 dataR<-reactive({domainData})
 mappingR<-reactive({mapping$mapping})
 

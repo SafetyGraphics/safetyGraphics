@@ -38,70 +38,72 @@ prepareChart <- function(chart){
     )
 
     #### Bind Workflow functions to chart object ####
-    
-    all_functions <- as.character(utils::lsf.str(".GlobalEnv"))
-    
-    if(utils::hasName(chart, "package")){
-        package_functions <- as.character(utils::lsf.str(paste0("package:",chart$package)))
-        all_functions<-c(all_functions,package_functions)
-    }
+    if(!hasName(chart,"functions")){
 
-    #search functions that include the charts name or the workflow function names
-    chart_function_names <- c()
-    for(query in c(chart$name, unlist(chart$workflow)) ){
-        matches<-all_functions[str_detect(query, all_functions)]
-        chart_function_names <- c(chart_function_names, matches)
-    }
+        all_functions <- as.character(utils::lsf.str(".GlobalEnv"))
+        
+        if(utils::hasName(chart, "package")){
+            package_functions <- as.character(utils::lsf.str(paste0("package:",chart$package)))
+            all_functions<-c(all_functions,package_functions)
+        }
 
-    chart$functions <- lapply(chart_function_names, match.fun)
-    names(chart$functions) <- chart_function_names
+        #search functions that include the charts name or the workflow function names
+        chart_function_names <- c()
+        for(query in c(chart$name, unlist(chart$workflow)) ){
+            matches<-all_functions[str_detect(query, all_functions)]
+            chart_function_names <- c(chart_function_names, matches)
+        }
 
-    # Define UI function unless one is provided
-    if(chart$type=="plot"){
-        chart$functions$ui<-plotOutput
-        chart$functions$server<-renderPlot
-        chart$functions$main<-chart$functions[[chart$workflow$main]]
-    }else if(chart$type=="html"){
-        chart$functions$ui<-htmlOutput
-        chart$functions$server<-renderText
-        chart$functions$main<-chart$functions[[chart$workflow$main]]
-    }else if(chart$type=="table"){
-        chart$functions$ui<-DT::dataTableOutput
-        chart$functions$server<-function(expr){
-            DT::renderDataTable(
-                expr, 
-                rownames = FALSE,
-                options = list(
-                    pageLength = 20,
-                    ordering = FALSE,
-                    searching = FALSE
+        chart$functions <- lapply(chart_function_names, match.fun)
+        names(chart$functions) <- chart_function_names
+
+        # Define UI function unless one is provided
+        if(chart$type=="plot"){
+            chart$functions$ui<-plotOutput
+            chart$functions$server<-renderPlot
+            chart$functions$main<-chart$functions[[chart$workflow$main]]
+        }else if(chart$type=="html"){
+            chart$functions$ui<-htmlOutput
+            chart$functions$server<-renderText
+            chart$functions$main<-chart$functions[[chart$workflow$main]]
+        }else if(chart$type=="table"){
+            chart$functions$ui<-DT::dataTableOutput
+            chart$functions$server<-function(expr){
+                DT::renderDataTable(
+                    expr, 
+                    rownames = FALSE,
+                    options = list(
+                        pageLength = 20,
+                        ordering = FALSE,
+                        searching = FALSE
+                    )
                 )
-            )
-        }
-        chart$functions$main<-chart$functions[[chart$workflow$main]]
-    }else if(chart$type=="htmlwidget"){
-        # Helper functions for html widget render
-        widgetOutput <- function(outputId, width = "100%", height = "400px") {
-            htmlwidgets::shinyWidgetOutput(outputId, chart$workflow$widget, width, height, package=chart$package)
-        }
+            }
+            chart$functions$main<-chart$functions[[chart$workflow$main]]
+        }else if(chart$type=="htmlwidget"){
+            # Helper functions for html widget render
+            widgetOutput <- function(outputId, width = "100%", height = "400px") {
+                htmlwidgets::shinyWidgetOutput(outputId, chart$workflow$widget, width, height, package=chart$package)
+            }
 
-        renderWidget <- function(expr, env = parent.frame(), quoted = FALSE) {
-            if (!quoted) { expr <- substitute(expr) } # force quoted
-            htmlwidgets::shinyRenderWidget(expr, widgetOutput, env, quoted = TRUE)
+            renderWidget <- function(expr, env = parent.frame(), quoted = FALSE) {
+                if (!quoted) { expr <- substitute(expr) } # force quoted
+                htmlwidgets::shinyRenderWidget(expr, widgetOutput, env, quoted = TRUE)
+            }
+            
+            chart$functions$ui<-widgetOutput
+            chart$functions$server<-renderWidget
+            chart$functions$main<-htmlwidgets::createWidget 
+            chart$workflow$main <- "htmlwidgets::createWidget"
+        }else if(chart$type=="module"){
+            chart$functions$ui<-chart$functions[[chart$workflow$ui]]
+            chart$functions$server<-callModule
+            chart$functions$main <- chart$functions[[chart$workflow$server]]
         }
         
-        chart$functions$ui<-widgetOutput
-        chart$functions$server<-renderWidget
-        chart$functions$main<-htmlwidgets::createWidget 
-        chart$workflow$main <- "htmlwidgets::createWidget"
-    }else if(chart$type=="module"){
-        chart$functions$ui<-chart$functions[[chart$workflow$ui]]
-        chart$functions$server<-callModule
-        chart$functions$main <- chart$functions[[chart$workflow$server]]
+        # Print a message summarizing 
+        message<-paste0(chart$name,": Loaded ", length(chart$functions)," functions: ", paste(names(chart$functions),collapse=","))
+        message(message)
     }
-    
-    # Print a message summarizing 
-    message<-paste0(chart$name,": Loaded ", length(chart$functions)," functions: ", paste(names(chart$functions),collapse=","))
-    
     return(chart)
 }

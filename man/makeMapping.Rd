@@ -9,7 +9,7 @@ makeMapping(domainData, meta, autoMapping, customMapping)
 \arguments{
 \item{domainData}{named list of data.frames to be loaded in to the app. Sample AdAM data from the safetyData package used by default}
 
-\item{meta}{data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}.}
+\item{meta}{data frame containing the metadata for use in the app.}
 
 \item{autoMapping}{boolean indicating whether the app should use \code{safetyGraphics::detectStandard()} to detect data standards and automatically generate mappings for the data provided. Values specified in the \code{customMapping} parameter overwrite auto-generated mappings when both are found. Defaults to true.}
 

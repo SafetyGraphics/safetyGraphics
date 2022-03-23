@@ -7,6 +7,13 @@ partialMapping <- data.frame(
     current=c("ID","myID","measure")
 )
 
+meta <- rbind(
+  safetyCharts::meta_labs,
+  safetyCharts::meta_aes,
+  safetyCharts::meta_dm,
+  safetyCharts::meta_hepExplorer
+)
+
 fullMapping<-read.csv('custom_mapping.csv')
 
 ui <- tagList(
@@ -27,9 +34,9 @@ ui <- tagList(
     )  
 )
 server <- function(input,output,session){
- callModule(settingsMapping, "NoMapping", metaIn = safetyGraphics::meta)
- callModule(settingsMapping, "PartialMapping", metaIn = safetyGraphics::meta,  mapping=reactive({partialMapping}) )
- callModule(settingsMapping, "FullMapping", metaIn = safetyGraphics::meta,   mapping=reactive({fullMapping}))
+ callModule(settingsMapping, "NoMapping", metaIn = meta)
+ callModule(settingsMapping, "PartialMapping", metaIn = meta,  mapping=reactive({partialMapping}) )
+ callModule(settingsMapping, "FullMapping", metaIn = meta,   mapping=reactive({fullMapping}))
 }
 
 shinyApp(ui, server)

@@ -9,15 +9,22 @@ testData<- list(
     dm=safetyData::adam_adsl
 )
 
+meta <- rbind(
+  safetyCharts::meta_labs,
+  safetyCharts::meta_aes,
+  safetyCharts::meta_dm,
+  safetyCharts::meta_hepExplorer
+)
+
 myCustomMapping<-list(
   aes = list(id_col='USUBJID', seq_col='MY_SEQ'),
   labs = list(id_col='customID')
   )
 
-ex1<-makeMapping(testData, safetyGraphics::meta, TRUE, NULL)
-ex2<-makeMapping(testData, safetyGraphics::meta, FALSE, NULL)
-ex3<-makeMapping(testData, safetyGraphics::meta, TRUE,  myCustomMapping)
-ex4<-makeMapping(testData, safetyGraphics::meta, FALSE, myCustomMapping)
+ex1<-makeMapping(testData, meta, TRUE, NULL)
+ex2<-makeMapping(testData, meta, FALSE, NULL)
+ex3<-makeMapping(testData, meta, TRUE,  myCustomMapping)
+ex4<-makeMapping(testData, meta, FALSE, myCustomMapping)
 
 test_that("object with the correct properties is returned",{
   expect_named(ex1, c("standard", "mapping"))
@@ -77,7 +84,7 @@ test_that("customMapping overwrites autoMapping values",{
 test_that("unique domains in customMapping are added",{
   myCustomMapping2 <- myCustomMapping
   myCustomMapping2$customDomain <- list(id_col="customID", other_col="other")
-  ex5<-makeMapping(testData, safetyGraphics::meta, TRUE,  myCustomMapping2)
+  ex5<-makeMapping(testData, meta, TRUE,  myCustomMapping2)
   expect_equal(unique(ex5$mapping$domain), c("aes", "labs", "customDomain", "dm"))
 
   #2 rows added
@@ -93,7 +100,7 @@ test_that("unique domains in customMapping are added",{
 test_that("unique mapping values for existing domains in customMapping are added",{
   myCustomMapping3 <- myCustomMapping
   myCustomMapping3$aes$other_col <- "other"
-  ex6<-makeMapping(testData, safetyGraphics::meta, TRUE,  myCustomMapping3)
+  ex6<-makeMapping(testData, meta, TRUE,  myCustomMapping3)
 
   #1 row added
   expect_equal(nrow(ex6$mapping), nrow(ex1$mapping)+1)
@@ -106,7 +113,7 @@ test_that("nested values in custom mapping work as expected",{
   myCustomMapping4$labs$measure_values$ALT <- "AnotherAlt"
   myCustomMapping4$labs$measure_values$OTHER <- "Other"
   myCustomMapping4$aes$fake_values <- list(other1="Other1", other2="other2")
-  ex7<-makeMapping(testData, safetyGraphics::meta, TRUE,  myCustomMapping4)
+  ex7<-makeMapping(testData, meta, TRUE,  myCustomMapping4)
 
   #1 row added
   expect_equal(nrow(ex7$mapping), nrow(ex1$mapping)+3)
