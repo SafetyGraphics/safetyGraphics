@@ -116,7 +116,12 @@ settingsCode <- function(input, output, session, mapping, charts, domainData){
   })
   output$mappingText <- renderText({mappingString()})
   output$mappingCopy <- renderUI({
-    rclipboard::rclipButton("clipbtn", "Copy to Clipboard", mappingString(), icon("clipboard"))
+    rclipboard::rclipButton(
+      inputId="clipbtn", 
+      label="Copy to Clipboard", 
+      clipText=mappingString(), 
+      icon=icon("clipboard")
+    )
   })
   output$mappingDownload <- downloadHandler(
     filename = "mapping.yaml",
@@ -134,7 +139,12 @@ settingsCode <- function(input, output, session, mapping, charts, domainData){
   chartsString <- as.yaml(charts_raw)
   output$chartsText <- renderText({chartsString})
   output$chartsCopy <- renderUI({
-    rclipboard::rclipButton("clipbtn", "Copy to Clipboard", chartsString, icon("clipboard"))
+    rclipboard::rclipButton(
+      inputId="clipbtn", 
+      label="Copy to Clipboard", 
+      clipText=chartsString, 
+      icon=icon("clipboard")
+    )
   })
   output$chartsDownload <- downloadHandler(
     filename = "charts.yaml",
@@ -167,7 +177,12 @@ settingsCode <- function(input, output, session, mapping, charts, domainData){
   ) 
   output$initText <- renderText(initString)
   output$initCopy <- renderUI({
-    rclipboard::rclipButton("clipbtn2", "Copy to Clipboard", initString, icon("clipboard"))
+    rclipboard::rclipButton(
+      inputId="clipbtn2", 
+      label="Copy to Clipboard", 
+      clipText=initString, 
+      icon=icon("clipboard")
+    )
   })
   output$initDownload <- downloadHandler(
     filename = "initApp.R",
