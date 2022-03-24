@@ -138,7 +138,7 @@
 <a href="#charts-tab" class="anchor"></a>Charts Tab</h2>
 <p>Clicking the Charts tab opens a dropdown menu containing a series of charts related to clinical trial safety. Clicking the <a href="https://github.com/safetyGraphics/hep-explorer">Hepatic Safety Explorer</a> opens this page:</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/129057688-14ed7de8-66c3-432e-840c-641eb0c29f27.png" style="max-width:700px"></p>
-<p>safetyGraphics supports many different kinds of charts including web-based interactive graphics using {htmlwidgets} (like the chart shown above), static plots, plotly plots and custom shiny modules. Each chart has a header that provides details about the chart, links to chart-specific resources and buttons that allow users to download a stand-alone html report or a .R file that reproduces the chart. See the <a href="ChartConfiguration">Chart Configuration Vignette</a> for more detail about the safetyGraphics charting framework.</p>
+<p>safetyGraphics supports many different kinds of charts including web-based interactive graphics using {htmlwidgets} (like the chart shown above), static plots, plotly plots and custom shiny modules. Each chart has a header that provides details about the chart, links to chart-specific resources and buttons that allow users to download a stand-alone html report or a .R file that reproduces the chart. See the <a href="ChartConfiguration.html">Chart Configuration Vignette</a> for more detail about the safetyGraphics charting framework.</p>
 </div>
 <div id="settings-tab" class="section level2">
 <h2 class="hasAnchor">
@@ -150,7 +150,7 @@
 <div id="loading-study-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#loading-study-data" class="anchor"></a>Loading Study Data</h1>
-<p>safetyGraphics supports a wide range of data formats and standards. Generally speaking, any clinical data can be loaded as long it meets the minimal data requirements described in <a href="Intro#appendix-2---minimum-data-requirements">appendix 2</a>.</p>
+<p>safetyGraphics supports a wide range of data formats and standards. Generally speaking, any clinical data can be loaded as long it meets the minimal data requirements described in <a href="Intro.html#appendix-2---minimum-data-requirements">appendix 2</a>.</p>
 <p>There are 2 primary ways to load your study data in to the safetyGraphics shiny app:</p>
 <ol style="list-style-type: decimal">
 <li>Using <code><a href="../reference/safetyGraphicsInit.html">safetyGraphicsInit()</a></code> shiny interface</li>
@@ -187,18 +187,18 @@ sdtm &lt;- list(
 )
 
 safetyGraphics::safetyGraphicsApp(domainData=sdtm)</a></code></pre>
-<p>This example and other use cases are described in <a href="cookbook">cookbook vignette</a>.</p>
+<p>This example and other use cases are described in <a href="Cookbook.html">cookbook vignette</a>.</p>
 </div>
 <div id="large-data-sets" class="section level2">
 <h2 class="hasAnchor">
 <a href="#large-data-sets" class="anchor"></a>Large Data sets</h2>
-<p>Use the <code>maxFileSize</code> option to load data sets larger than 5 mb in <code>safetyGraphicsInit</code> (e.g. <code>safetyGraphicsinit(maxFileSize=100)</code>). <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> does not have size limits for data files, but note that large data (&gt;100 mb) <a href="TechnicalFAQ#q-how-do-i-avoid-r-not-choking-on-the-huge-volume-of-lab-data-from-albrechtdurer">may cause performance issues</a>.</p>
+<p>Use the <code>maxFileSize</code> option to load data sets larger than 5 mb in <code>safetyGraphicsInit</code> (e.g. <code>safetyGraphicsinit(maxFileSize=100)</code>). <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> does not have size limits for data files, but note that large data (&gt;100 mb) <a href="TechnicalFAQ.html#q-how-do-i-avoid-r-not-choking-on-the-huge-volume-of-lab-data-from-albrechtdurer">may cause performance issues</a>.</p>
 </div>
 </div>
 <div id="additional-resources" class="section level1">
 <h1 class="hasAnchor">
 <a href="#additional-resources" class="anchor"></a>Additional Resources</h1>
-<p>Several additional vignettes are available for more advanced topics: - <a href="ChartConfiguration">Chart Configuration Vignette</a> - details about the charting process including technical specifications and step-by-step instructions - <a href="Cookbook">Cookbook Vignette</a> - a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios - <a href="TechnicalFAQ">Technical FAQ Vignette</a> - vignette discussing security, validation and other technical issues</p>
+<p>Several additional vignettes are available for more advanced topics: - <a href="ChartConfiguration.html">Chart Configuration Vignette</a> - details about the charting process including technical specifications and step-by-step instructions - <a href="Cookbook.html">Cookbook Vignette</a> - a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios - <a href="TechnicalFAQ.html">Technical FAQ Vignette</a> - vignette discussing security, validation and other technical issues</p>
 <p>The {safetyGraphics} app is maintained by the Interactive Safety Graphics (ISG) subteam of the ASA Biopharm-DIA Safety Working Group. You can learn more about the team and find links to recent presentations and publications at our <a href="https://safetygraphics.github.io/">home page</a>.</p>
 </div>
 <div id="appendix-1---initialization-code" class="section level1">

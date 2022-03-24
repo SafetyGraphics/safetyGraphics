@@ -47,7 +47,7 @@ Clicking the Charts tab opens a dropdown menu containing a series of charts rela
 
 <img src="https://user-images.githubusercontent.com/3680095/129057688-14ed7de8-66c3-432e-840c-641eb0c29f27.png" style='max-width:700px'>
 
-safetyGraphics supports many different kinds of charts including web-based interactive graphics using {htmlwidgets} (like the chart shown above), static plots, plotly plots and custom shiny modules. Each chart has a header that provides details about the chart, links to chart-specific resources and buttons that allow users to download a stand-alone html report or a .R file that reproduces the chart. See the [Chart Configuration Vignette](ChartConfiguration) for more detail about the safetyGraphics charting framework. 
+safetyGraphics supports many different kinds of charts including web-based interactive graphics using {htmlwidgets} (like the chart shown above), static plots, plotly plots and custom shiny modules. Each chart has a header that provides details about the chart, links to chart-specific resources and buttons that allow users to download a stand-alone html report or a .R file that reproduces the chart. See the [Chart Configuration Vignette](ChartConfiguration.html) for more detail about the safetyGraphics charting framework. 
 
 ## ⚙️ (Settings) Tab
 
@@ -57,7 +57,7 @@ Finally, the Settings tab - shown as a gear icon ⚙️ -  contains technical de
 
 # Loading Study Data
 
-safetyGraphics supports a wide range of data formats and standards. Generally speaking, any clinical data can be loaded as long it meets the minimal data requirements described in [appendix 2](Intro#appendix-2---minimum-data-requirements).  
+safetyGraphics supports a wide range of data formats and standards. Generally speaking, any clinical data can be loaded as long it meets the minimal data requirements described in [appendix 2](Intro.html#appendix-2---minimum-data-requirements).  
 
 There are 2 primary ways to load your study data in to the safetyGraphics shiny app: 
 
@@ -99,18 +99,18 @@ sdtm <- list(
 safetyGraphics::safetyGraphicsApp(domainData=sdtm)
 ```
 
-This example and other use cases are described in [cookbook vignette](cookbook).
+This example and other use cases are described in [cookbook vignette](Cookbook.html).
 
 ## Large Data sets
 
-Use the `maxFileSize` option to load data sets larger than 5 mb in `safetyGraphicsInit` (e.g. `safetyGraphicsinit(maxFileSize=100)`).  `safetyGraphicsApp()` does not have size limits for data files, but note that large data (>100 mb) [may cause performance issues](TechnicalFAQ#q-how-do-i-avoid-r-not-choking-on-the-huge-volume-of-lab-data-from-albrechtdurer).
+Use the `maxFileSize` option to load data sets larger than 5 mb in `safetyGraphicsInit` (e.g. `safetyGraphicsinit(maxFileSize=100)`).  `safetyGraphicsApp()` does not have size limits for data files, but note that large data (>100 mb) [may cause performance issues](TechnicalFAQ.html#q-how-do-i-avoid-r-not-choking-on-the-huge-volume-of-lab-data-from-albrechtdurer).
 
 # Additional Resources
 
 Several additional vignettes are available for more advanced topics: 
-- [Chart Configuration Vignette](ChartConfiguration) - details about the charting process including technical specifications and step-by-step instructions
-- [Cookbook Vignette](Cookbook) - a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios
-- [Technical FAQ Vignette](TechnicalFAQ) - vignette discussing security, validation and other technical issues
+- [Chart Configuration Vignette](ChartConfiguration.html) - details about the charting process including technical specifications and step-by-step instructions
+- [Cookbook Vignette](Cookbook.html) - a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios
+- [Technical FAQ Vignette](TechnicalFAQ.html) - vignette discussing security, validation and other technical issues
 
 The {safetyGraphics} app is maintained by the Interactive Safety Graphics (ISG) subteam of the ASA Biopharm-DIA Safety Working Group. You can learn more about the team and find links to recent presentations and publications at our [home page](https://safetygraphics.github.io/).  
 

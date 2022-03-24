@@ -24,7 +24,7 @@ Most of the customization shown here is done by changing 4 key parameters in the
 
 `domainData` and `mapping` generally change for every study, while `charts` and `meta` can generally be re-used across many studies. 
 
-The examples here are generally provided with minimal explanation. For a more detailed discussion of the logic behind these examples see the [Chart Configuration Vignette](ChartConfiguration) or our [2021 R/Pharma Workshop](https://github.com/SafetyGraphics/RPharma2021-Workshop)
+The examples here are generally provided with minimal explanation. For a more detailed discussion of the logic behind these examples see the [Chart Configuration Vignette](ChartConfiguration.html) or our [2021 R/Pharma Workshop](https://github.com/SafetyGraphics/RPharma2021-Workshop)
 
 #  Setup and installation
 
@@ -133,7 +133,7 @@ Note, that for more complex customizations, the setting page also provides a `.z
 
 # Custom Charts 
 
-The remaining examples focus on creating charts that are reusable across many studies. For extensive details on adding and customizing different types of charts, see this [vignette](chartConfiguration).
+The remaining examples focus on creating charts that are reusable across many studies. For extensive details on adding and customizing different types of charts, see this [vignette](chartConfiguration.html).
 
 ## Example 7 - Drop Unwanted Charts
 

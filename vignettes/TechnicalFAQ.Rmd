@@ -45,7 +45,7 @@ Whenever new questions come in, we'll update the version of [this FAQ in our wik
 
 ## Q: Is the safetyGraphics app ready for "production" use? 
 
-A: As of the v2 release, safetyGraphics is mostly used in an exploratory fashion for a [variety of use cases](https://github.com/SafetyGraphics/safetyGraphics/wiki/TechnicalFAQ#q-what-are-some-common-use-cases-for-safetygraphics). The details of a 'production' implementation of safetyGraphics in a GxP environment would largely be dictated the intended use of the tool. For example, using safetyGraphics as your primary safety oversight platform would likely require more work than using it as a supplemental exploratory tool for biostatisticians. 
+A: As of the v2 release, safetyGraphics is mostly used in an exploratory fashion for a [variety of use cases](TechnicalFAQ.html#q-what-are-some-common-use-cases-for-safetygraphics). The details of a 'production' implementation of safetyGraphics in a GxP environment would largely be dictated the intended use of the tool. For example, using safetyGraphics as your primary safety oversight platform would likely require more work than using it as a supplemental exploratory tool for biostatisticians. 
 
 That said, the issues surrounding a 'production' deployment are mostly technical and operational at this point and could likely be overcome by a motivated organization with ample technical expertise. Some of the issues that would need to be addressed in a production deployment: 
 
@@ -55,7 +55,7 @@ That said, the issues surrounding a 'production' deployment are mostly technical
 - Data pipeline for study set-up and customization (Organization-specific)
 - Issues with big data set performance in htmlwidget renderers
 
-Many of these issues aren't specific to safetyGraphics and may be easier to address for an organization that has experience using R and Shiny in production. [As discussed above](https://github.com/SafetyGraphics/safetyGraphics/wiki/TechnicalFAQ#q-is-the-safetygraphics-package-validated), there is a significant push towards using R for many aspects of clinical trials. We plan to keep safetyGraphics up to date with emerging best practices and will provide supporting documentation whenever possible. 
+Many of these issues aren't specific to safetyGraphics and may be easier to address for an organization that has experience using R and Shiny in production. [As discussed above](https://github.com/SafetyGraphics/safetyGraphics/wiki/TechnicalFAQ.html#q-is-the-safetygraphics-package-validated), there is a significant push towards using R for many aspects of clinical trials. We plan to keep safetyGraphics up to date with emerging best practices and will provide supporting documentation whenever possible. 
 
 Finally, it is worth noting "Productionize” and “Validate” are slightly different. Joe Cheng (the primary author of Shiny) has a [nice talk](https://www.rstudio.com/resources/rstudioconf-2019/shiny-in-production-principles-practices-and-tools/) on this topic from a software engineering perspective.
 
@@ -79,23 +79,23 @@ As an open source tool with a flexible data pipeline, many other use cases have 
 
 ## Q: Do I have to use a certain data standard with safetyGraphics? 
 
-**A**: No. Any standard (or non-standard) data can be loaded as long as it meets the [minimum data requirements](Intro#appendix-2---minimum-data-requirements) for the selected data domain. Metadata capturing default CDISC standards are included with the app (see `?safetyGraphics::meta`) so that data mappings can be automatically populated when AdAM and SDTM data are loaded. Other data standards require the user to manually complete the data mapping in the mapping tab - see the [cookbook vignette](cookbook) for examples. 
+**A**: No. Any standard (or non-standard) data can be loaded as long as it meets the [minimum data requirements](Intro.html#appendix-2---minimum-data-requirements) for the selected data domain. Metadata capturing default CDISC standards are included with the app (see `?safetyGraphics::meta`) so that data mappings can be automatically populated when AdAM and SDTM data are loaded. Other data standards require the user to manually complete the data mapping in the mapping tab - see the [cookbook vignette](cookbook) for examples. 
 
 ## Q: What data sources does safetyGraphics support? How do I load custom data? 
 
-**A**: This topic is covered in detail in the [Loading data section of the Introductory vignette](Intro#loading-study-data). `safetyGraphics` is designed to support a flexible data pipeline that supports many data types.  In short, data can be loaded using the `dataDomains` parameter in the `safetyGraphicsApp()` function or via the `safetyGraphicsInit()` graphical user interface. 
+**A**: This topic is covered in detail in the [Loading data section of the Introductory vignette](Intro.html#loading-study-data). `safetyGraphics` is designed to support a flexible data pipeline that supports many data types.  In short, data can be loaded using the `dataDomains` parameter in the `safetyGraphicsApp()` function or via the `safetyGraphicsInit()` graphical user interface. 
 
-`safetyGraphicsApp()` - custom data can be loaded via the `dataDomains` parameter, which should be a list containing `dataframes` or `tibbles` for each clinical domain; that list can be populated by importing data from any number of sources including databases, sas files or [any number of other sources](https://r4ds.had.co.nz/data-import.html). See the [cookbook vignette](cookbook) for some basic examples of loading custom data.
+`safetyGraphicsApp()` - custom data can be loaded via the `dataDomains` parameter, which should be a list containing `dataframes` or `tibbles` for each clinical domain; that list can be populated by importing data from any number of sources including databases, sas files or [any number of other sources](https://r4ds.had.co.nz/data-import.html). See the [cookbook vignette](cookbook.html) for some basic examples of loading custom data.
 
 `safetyGraphicsInit()` - allows users to load tabular data from a variety of sources using the point-and-click interface provided in the {datamods} package. 
 
-More detail is provided in the [Loading data section of the Introductory vignette](Intro#loading-study-data)
+More detail is provided in the [Loading data section of the Introductory vignette](Intro.html#loading-study-data)
 
 ## Is data loaded in to the safetyGraphics app secure? 
 
 Since the safetyGraphics app typically uses data subject to GxP regulations, data security is extremely important and should always be discussed with your organizations IT and regulatory departments before loading any study data in to the application. No warranty or guarantees are included as part of the package. 
 
-Just like the discussion regarding [Validation and Quality Control](https://github.com/SafetyGraphics/safetyGraphics/wiki/TechnicalFAQ#validation-quality-control-and-testing), data security requirements are dictated by the intended use of the app and should be fit for purpose. There are many different ways to run shiny applications, and the security implications of each approach varies. For example, having statisticians run the app locally using R Studio is quite different than deploying the app on a service like shinyapps.io. This complexity is all the more reason to discuss with IT. There are many resources - related to data security for clinical trials in general ([1](https://www.hhs.gov/ohrp/sites/default/files/report-privacy-and-health-10-31-19.pdf), [2](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4943495/), [3](https://www.d-wise.com/blog/detailing-the-de-identification-and-data-transparency-boundaries-of-ema-policy-70-and-gdpr)) and discussing data security in shiny ([4](https://www.youtube.com/watch?v=5odJxZj9LE4),
+Just like the discussion regarding [Validation and Quality Control](https://github.com/SafetyGraphics/safetyGraphics/wiki/TechnicalFAQ.html#validation-quality-control-and-testing), data security requirements are dictated by the intended use of the app and should be fit for purpose. There are many different ways to run shiny applications, and the security implications of each approach varies. For example, having statisticians run the app locally using R Studio is quite different than deploying the app on a service like shinyapps.io. This complexity is all the more reason to discuss with IT. There are many resources - related to data security for clinical trials in general ([1](https://www.hhs.gov/ohrp/sites/default/files/report-privacy-and-health-10-31-19.pdf), [2](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4943495/), [3](https://www.d-wise.com/blog/detailing-the-de-identification-and-data-transparency-boundaries-of-ema-policy-70-and-gdpr)) and discussing data security in shiny ([4](https://www.youtube.com/watch?v=5odJxZj9LE4),
 [5](https://mastering-shiny.org/scaling-security.html#data), [6](https://support.rstudio.com/hc/en-us/articles/360042593974-R-and-R-Package-Security)) - that could help to facilitate these discussion.
 
 ## Q: How can the safetyGraphics app be shared? 
