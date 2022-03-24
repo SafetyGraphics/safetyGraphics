@@ -1,13 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/404.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/articles/Cookbook.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/articles/TechnicalFAQ.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/articles/chartConfiguration.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/articles/customWorkflows.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/articles/intro.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/articles/shinyUserGuide.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/authors.html</loc>
+  </url>
+  <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/index.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/news/index.html</loc>
   </url>
   <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/SafetyGraphics.html</loc>
   </url>
   <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/addChart.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/addSetting.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/adlbc.html</loc>
+  </url>
+  <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/app_startup.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/chartRenderer-shiny.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/chartRenderer.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/chartsMetadata.html</loc>
   </url>
   <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/chartsNav.html</loc>
@@ -17,6 +71,21 @@
   </url>
   <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/chartsTabUI.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/checkColumn.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/checkField.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/checkNumeric.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/checkRequired.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/createChart.html</loc>
   </url>
   <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/detectStandard.html</loc>
@@ -37,6 +106,24 @@
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/generateMappingList.html</loc>
   </url>
   <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/generateSettings.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/generateShell.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/getRequiredSettings.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/getSettingKeys.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/getSettingValue.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/getSettingsMetadata.html</loc>
+  </url>
+  <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/hasColumn.html</loc>
   </url>
   <url>
@@ -47,6 +134,9 @@
   </url>
   <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/homeTabUI.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/index.html</loc>
   </url>
   <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/loadCharts.html</loc>
@@ -103,7 +193,16 @@
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/mappingTabUI.html</loc>
   </url>
   <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/meta.html</loc>
+  </url>
+  <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/prepareChart.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/removeCharts.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/removeSettings.html</loc>
   </url>
   <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/safetyGraphicsApp.html</loc>
@@ -119,6 +218,9 @@
   </url>
   <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/setMappingListValue.html</loc>
+  </url>
+  <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/setSettingsValue.html</loc>
   </url>
   <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/settingsCharts.html</loc>
@@ -145,24 +247,27 @@
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/settingsMappingUI.html</loc>
   </url>
   <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/settingsMetadata.html</loc>
+  </url>
+  <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/settingsTab.html</loc>
   </url>
   <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/settingsTabUI.html</loc>
   </url>
   <url>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/standardsMetadata.html</loc>
+  </url>
+  <url>
     <loc>https://safetygraphics.github.io/safetyGraphics/reference/textKeysToList.html</loc>
   </url>
   <url>
-    <loc>https://safetygraphics.github.io/safetyGraphics/articles/Cookbook.html</loc>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/trimData.html</loc>
   </url>
   <url>
-    <loc>https://safetygraphics.github.io/safetyGraphics/articles/TechnicalFAQ.html</loc>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/trimSettings.html</loc>
   </url>
   <url>
-    <loc>https://safetygraphics.github.io/safetyGraphics/articles/chartConfiguration.html</loc>
-  </url>
-  <url>
-    <loc>https://safetygraphics.github.io/safetyGraphics/articles/intro.html</loc>
+    <loc>https://safetygraphics.github.io/safetyGraphics/reference/validateSettings.html</loc>
   </url>
 </urlset>

@@ -108,6 +108,7 @@ Use the `maxFileSize` option to load data sets larger than 5 mb in `safetyGraphi
 # Additional Resources
 
 Several additional vignettes are available for more advanced topics: 
+
 - [Chart Configuration Vignette](ChartConfiguration.html) - details about the charting process including technical specifications and step-by-step instructions
 - [Cookbook Vignette](Cookbook.html) - a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios
 - [Technical FAQ Vignette](TechnicalFAQ.html) - vignette discussing security, validation and other technical issues
@@ -149,6 +150,7 @@ safetyGraphicsApp() #or safetyGraphicsInit()
 Since the `safetyGraphics` framework supports adding custom charts (that may have custom settings), there are no universal data requirements for the app. However, the charts included by default version of the app are built to share requirements whenever possible. These requirements are captured in an included metadata file called `safetyGraphics::meta`. 
 
 The most basic requirements for the 3 default domains are: 
+
 - **Lab results** (`labs`) domain - Expects one record per person per visit per lab measurement with columns for: Participant ID, lab result, lab name, lower limit of normal, upper limit of normal, study day, study visit (numeric), study visit (character). See `safetyGraphics::meta %>% filter(domain=="labs")` for additional details and optional columns used by some charts. 
 - **Adverse Event** (`aes`) domain - Expects one record per adverse event with columns for: Participant ID, AE Sequence, Study Day, AE Start day, AE end day, AE preferred term and AE body system. See `safetyGraphics::meta %>% filter(domain=="aes")`
 - **Demographics** (`dm`) domain - Expects one record per person with columns for: Participant ID, Sex, Race, Age and Study Treatment (optional) . See `safetyGraphics::meta %>% filter(domain=="dm")` for additional details. 

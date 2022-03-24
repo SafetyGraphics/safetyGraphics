@@ -314,6 +314,7 @@ Alternatively, metadata can be saved as a data object in the `chart$package` nam
 <img src="https://user-images.githubusercontent.com/3680095/130678922-1c499817-f3a4-4fa5-847a-cec6c6ade95e.png" style='max-width:700px'>
 
 The diagram above summarizes the various components of the safetyGraphics charting framework: 
+
 - The `safetyGraphicsApp()` function allows users to specify which charts to include in the shiny app via the `charts` parameter, which expects a `list` of charts. 
 - Each item in `charts` is itself defined as a `list` that provides configuration details for a single chart. These configuration lists have several required parameters, which are described in the technical specification below. 
 - Configuration lists are typically saved as YAML files, but can be also be loaded directly as list objects as shown in the Hello World example above. 
@@ -322,6 +323,7 @@ The diagram above summarizes the various components of the safetyGraphics charti
 ## Chart Specification
 
 Each item in the `charts` list should be a list() with the following parameters: 
+
 - `env`: Environment for the chart. Must be set to "safetyGraphics" or the chart is dropped. Type: *character*. **Required**
 - `name`: Name of the chart. Type: *character*. **Required**
 - `type:`: Type of chart. Valid options are: "plot","htmlwidget","html","table" and "module". Type: *character*. **Required**

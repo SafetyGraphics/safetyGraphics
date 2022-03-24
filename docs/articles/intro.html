@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -73,7 +75,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/SafetyGraphics/safetyGraphics">
+  <a href="https://github.com/SafetyGraphics/safetyGraphics" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
@@ -88,68 +90,68 @@
 
       
 
-      </header><script src="intro_files/header-attrs-2.13/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Intro to Shiny App</h1>
-                        <h4 class="author">Jeremy Wildfire</h4>
+                        <h4 data-toc-skip class="author">Jeremy Wildfire</h4>
             
-            <h4 class="date">2022-03-24</h4>
+            <h4 data-toc-skip class="date">2022-03-24</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/HEAD/vignettes/intro.Rmd" class="external-link"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
 
     </div>
 
     
     
-<div id="intro-vignette" class="section level1">
-<h1 class="hasAnchor">
-<a href="#intro-vignette" class="anchor"></a>Intro Vignette</h1>
+<div class="section level2">
+<h2 id="intro-vignette">Intro Vignette<a class="anchor" aria-label="anchor" href="#intro-vignette"></a>
+</h2>
 <p>The <code>safetyGraphics</code> shiny app provides an easy-to-use shiny interface for creating shareable safety graphics for any study. This vignette provides an overview of the app’s functionality, shows how to initialize the app with your own study data, and provides links to technical resources explaining how to customize the app.</p>
 </div>
-<div id="safetygraphics-demo" class="section level1">
-<h1 class="hasAnchor">
-<a href="#safetygraphics-demo" class="anchor"></a>safetyGraphics Demo</h1>
-<p>A demo of shiny application using data from the <a href="https://github.com/SafetyGraphics/safetyData">{safetyData} package</a> is hosted <a href="https://jwildfire.shinyapps.io/safetyGraphics/">here</a>. The app can also be initialized with the <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> function in the R console - see Appendix 1 for details.</p>
+<div class="section level2">
+<h2 id="safetygraphics-demo">safetyGraphics Demo<a class="anchor" aria-label="anchor" href="#safetygraphics-demo"></a>
+</h2>
+<p>A demo of shiny application using data from the <a href="https://github.com/SafetyGraphics/safetyData" class="external-link">{safetyData} package</a> is hosted <a href="https://jwildfire.shinyapps.io/safetyGraphics/" class="external-link">here</a>. The app can also be initialized with the <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> function in the R console - see Appendix 1 for details.</p>
 <p>Let’s take a quick look at the various pages in the app.</p>
-<div id="home-tab" class="section level2">
-<h2 class="hasAnchor">
-<a href="#home-tab" class="anchor"></a>Home Tab</h2>
+<div class="section level3">
+<h3 id="home-tab">Home Tab<a class="anchor" aria-label="anchor" href="#home-tab"></a>
+</h3>
 <p>A home page has a basic overview of the app.</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/129045822-da67d223-bc25-42ee-81c5-3c07bfcac2bd.png" style="max-width:700px"></p>
 </div>
-<div id="mapping-tab" class="section level2">
-<h2 class="hasAnchor">
-<a href="#mapping-tab" class="anchor"></a>Mapping Tab</h2>
+<div class="section level3">
+<h3 id="mapping-tab">Mapping Tab<a class="anchor" aria-label="anchor" href="#mapping-tab"></a>
+</h3>
 <p>The Mapping tab is used to tell charts which data columns and fields to use for various chart components.</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/129053835-117fc779-0bda-4b8c-8ffe-0df8f5316a06.png" style="max-width:700px"></p>
 <p>This mapping process makes it easy to re-use charts across many different studies. You can see previews of the loaded data using the checkbox at the top of the page. The demo data has 3 data domains (labs, adverse events (aes) and demographics (dm)), but others can be added as well. The mapping tab is automatically filled in for common data standards, like the ADaM data shown here, but can also be filled in manually for non-standard data.</p>
 </div>
-<div id="filtering-tab" class="section level2">
-<h2 class="hasAnchor">
-<a href="#filtering-tab" class="anchor"></a>Filtering Tab</h2>
+<div class="section level3">
+<h3 id="filtering-tab">Filtering Tab<a class="anchor" aria-label="anchor" href="#filtering-tab"></a>
+</h3>
 <p>The Filtering tab allows users to interactively select which participants to include in charts.</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/129056678-2e1dc2e0-15f9-435c-abff-326076ed3c8d.png" style="max-width:700px"></p>
-<p>This tab is created using the filter functionality included in the <a href="https://github.com/dreamRs/datamods#filter">{datamods} package</a>. Whenever data is filtered in this tab, those filtered data are used in all charts (across all data domains). Note that the number of participants selected is always shown in the upper right hand corner of the app.</p>
+<p>This tab is created using the filter functionality included in the <a href="https://github.com/dreamRs/datamods#filter" class="external-link">{datamods} package</a>. Whenever data is filtered in this tab, those filtered data are used in all charts (across all data domains). Note that the number of participants selected is always shown in the upper right hand corner of the app.</p>
 </div>
-<div id="charts-tab" class="section level2">
-<h2 class="hasAnchor">
-<a href="#charts-tab" class="anchor"></a>Charts Tab</h2>
-<p>Clicking the Charts tab opens a dropdown menu containing a series of charts related to clinical trial safety. Clicking the <a href="https://github.com/safetyGraphics/hep-explorer">Hepatic Safety Explorer</a> opens this page:</p>
+<div class="section level3">
+<h3 id="charts-tab">Charts Tab<a class="anchor" aria-label="anchor" href="#charts-tab"></a>
+</h3>
+<p>Clicking the Charts tab opens a dropdown menu containing a series of charts related to clinical trial safety. Clicking the <a href="https://github.com/safetyGraphics/hep-explorer" class="external-link">Hepatic Safety Explorer</a> opens this page:</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/129057688-14ed7de8-66c3-432e-840c-641eb0c29f27.png" style="max-width:700px"></p>
 <p>safetyGraphics supports many different kinds of charts including web-based interactive graphics using {htmlwidgets} (like the chart shown above), static plots, plotly plots and custom shiny modules. Each chart has a header that provides details about the chart, links to chart-specific resources and buttons that allow users to download a stand-alone html report or a .R file that reproduces the chart. See the <a href="ChartConfiguration.html">Chart Configuration Vignette</a> for more detail about the safetyGraphics charting framework.</p>
 </div>
-<div id="settings-tab" class="section level2">
-<h2 class="hasAnchor">
-<a href="#settings-tab" class="anchor"></a>⚙️ (Settings) Tab</h2>
+<div class="section level3">
+<h3 id="settings-tab">⚙️ (Settings) Tab<a class="anchor" aria-label="anchor" href="#settings-tab"></a>
+</h3>
 <p>Finally, the Settings tab - shown as a gear icon ⚙️ - contains technical details that can be used to customize/troubleshoot the app. Clicking on the “Code” sub-tab (shown below) allows you to download a zip file that can be used to re-open the app with with any customizations that have been made during your current session.</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/129060242-9da1cda2-ab27-4b7c-95c4-c1dc4a52523a.png" style="max-width:700px"></p>
 </div>
 </div>
-<div id="loading-study-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#loading-study-data" class="anchor"></a>Loading Study Data</h1>
+<div class="section level2">
+<h2 id="loading-study-data">Loading Study Data<a class="anchor" aria-label="anchor" href="#loading-study-data"></a>
+</h2>
 <p>safetyGraphics supports a wide range of data formats and standards. Generally speaking, any clinical data can be loaded as long it meets the minimal data requirements described in <a href="Intro.html#appendix-2---minimum-data-requirements">appendix 2</a>.</p>
 <p>There are 2 primary ways to load your study data in to the safetyGraphics shiny app:</p>
 <ol style="list-style-type: decimal">
@@ -157,21 +159,19 @@
 <li>Passing data directly to <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code>
 </li>
 </ol>
-<div id="loading-data-with-safetygraphicsinit" class="section level2">
-<h2 class="hasAnchor">
-<a href="#loading-data-with-safetygraphicsinit" class="anchor"></a>Loading data with <code>safetyGraphicsInit()</code>
-</h2>
+<div class="section level3">
+<h3 id="loading-data-with-safetygraphicsinit">Loading data with <code>safetyGraphicsInit()</code><a class="anchor" aria-label="anchor" href="#loading-data-with-safetygraphicsinit"></a>
+</h3>
 <p>The <code><a href="../reference/safetyGraphicsInit.html">safetyGraphicsInit()</a></code> function starts a simple app that allows users to select charts and then load the data required via a point-and-click interface as shown below:</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/129047100-9203201e-124c-456f-b9fc-0b5c79b47a52.png" style="max-width:700px"></p>
 <p>The app dynamically determines which data sets are required for the selected charts and updates the “Data Loader” UI when the charts selection changes. Below, we’ve selected 2 charts from the labs domain - so the other data domains are automatically hidden.</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/129047478-c1583ffa-2b3c-4e5c-9d51-2bd9c93e7c97.png" style="max-width:700px"></p>
-<p>Once you’ve picked charts, click the “Load” buttons in the “Data Loader” section to select data files for each domain. Data is loaded using the import functionality from the <a href="https://github.com/dreamRs/datamods#import"><code>{datamods}</code> package</a> which allows you to select data loaded in your R session or load data files directly from your file system. <a href="https://github.com/dreamRs/datamods">datamods</a> supports any file format that <a href="https://cran.r-project.org/package=rio">{rio}</a> can handle including text files, Excel, SAS and SPSS format.</p>
+<p>Once you’ve picked charts, click the “Load” buttons in the “Data Loader” section to select data files for each domain. Data is loaded using the import functionality from the <a href="https://github.com/dreamRs/datamods#import" class="external-link"><code>{datamods}</code> package</a> which allows you to select data loaded in your R session or load data files directly from your file system. <a href="https://github.com/dreamRs/datamods" class="external-link">datamods</a> supports any file format that <a href="https://cran.r-project.org/package=rio" class="external-link">{rio}</a> can handle including text files, Excel, SAS and SPSS format.</p>
 <p>Once you’ve loaded files for all of the active data domains, the “Run App” button will become active. Click it to initialize the app.</p>
 </div>
-<div id="passing-data-to-safetygraphicsapp" class="section level2">
-<h2 class="hasAnchor">
-<a href="#passing-data-to-safetygraphicsapp" class="anchor"></a>Passing data to <code>safetyGraphicsApp()</code>
-</h2>
+<div class="section level3">
+<h3 id="passing-data-to-safetygraphicsapp">Passing data to <code>safetyGraphicsApp()</code><a class="anchor" aria-label="anchor" href="#passing-data-to-safetygraphicsapp"></a>
+</h3>
 <p>You can also initialize the app with custom data directly from the R console. The basic workflow is as follows:</p>
 <ol style="list-style-type: decimal">
 <li>Load your data in to the R session</li>
@@ -179,53 +179,70 @@
 <li>Run <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> using the <code>domainData</code> to pass the list of data frames.</li>
 </ol>
 <p>Here is a simple example that starts the app with SDTM data from the safetyData library:</p>
-<pre><code><a href="https://rdrr.io/r/base/library.html">library(safetyData)
-sdtm &lt;- list(
-    dm=safetyData::sdtm_dm,
-    aes=safetyData::sdtm_ae,
-    labs=safetyData::sdtm_lb
-)
+<pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">safetyData</span><span class="op">)</span>
+<span class="va">sdtm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    dm<span class="op">=</span><span class="fu">safetyData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/safetyData/man/sdtm_dm.html" class="external-link">sdtm_dm</a></span>,
+    aes<span class="op">=</span><span class="fu">safetyData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/safetyData/man/sdtm_ae.html" class="external-link">sdtm_ae</a></span>,
+    labs<span class="op">=</span><span class="fu">safetyData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/safetyData/man/sdtm_lb.html" class="external-link">sdtm_lb</a></span>
+<span class="op">)</span>
 
-safetyGraphics::safetyGraphicsApp(domainData=sdtm)</a></code></pre>
+<span class="fu">safetyGraphics</span><span class="fu">::</span><span class="fu"><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span><span class="op">(</span>domainData<span class="op">=</span><span class="va">sdtm</span><span class="op">)</span></code></pre>
 <p>This example and other use cases are described in <a href="Cookbook.html">cookbook vignette</a>.</p>
 </div>
-<div id="large-data-sets" class="section level2">
-<h2 class="hasAnchor">
-<a href="#large-data-sets" class="anchor"></a>Large Data sets</h2>
+<div class="section level3">
+<h3 id="large-data-sets">Large Data sets<a class="anchor" aria-label="anchor" href="#large-data-sets"></a>
+</h3>
 <p>Use the <code>maxFileSize</code> option to load data sets larger than 5 mb in <code>safetyGraphicsInit</code> (e.g. <code>safetyGraphicsinit(maxFileSize=100)</code>). <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> does not have size limits for data files, but note that large data (&gt;100 mb) <a href="TechnicalFAQ.html#q-how-do-i-avoid-r-not-choking-on-the-huge-volume-of-lab-data-from-albrechtdurer">may cause performance issues</a>.</p>
 </div>
 </div>
-<div id="additional-resources" class="section level1">
-<h1 class="hasAnchor">
-<a href="#additional-resources" class="anchor"></a>Additional Resources</h1>
-<p>Several additional vignettes are available for more advanced topics: - <a href="ChartConfiguration.html">Chart Configuration Vignette</a> - details about the charting process including technical specifications and step-by-step instructions - <a href="Cookbook.html">Cookbook Vignette</a> - a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios - <a href="TechnicalFAQ.html">Technical FAQ Vignette</a> - vignette discussing security, validation and other technical issues</p>
-<p>The {safetyGraphics} app is maintained by the Interactive Safety Graphics (ISG) subteam of the ASA Biopharm-DIA Safety Working Group. You can learn more about the team and find links to recent presentations and publications at our <a href="https://safetygraphics.github.io/">home page</a>.</p>
+<div class="section level2">
+<h2 id="additional-resources">Additional Resources<a class="anchor" aria-label="anchor" href="#additional-resources"></a>
+</h2>
+<p>Several additional vignettes are available for more advanced topics:</p>
+<ul>
+<li>
+<a href="ChartConfiguration.html">Chart Configuration Vignette</a> - details about the charting process including technical specifications and step-by-step instructions</li>
+<li>
+<a href="Cookbook.html">Cookbook Vignette</a> - a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios</li>
+<li>
+<a href="TechnicalFAQ.html">Technical FAQ Vignette</a> - vignette discussing security, validation and other technical issues</li>
+</ul>
+<p>The {safetyGraphics} app is maintained by the Interactive Safety Graphics (ISG) subteam of the ASA Biopharm-DIA Safety Working Group. You can learn more about the team and find links to recent presentations and publications at our <a href="https://safetygraphics.github.io/" class="external-link">home page</a>.</p>
 </div>
-<div id="appendix-1---initialization-code" class="section level1">
-<h1 class="hasAnchor">
-<a href="#appendix-1---initialization-code" class="anchor"></a>Appendix 1 - Initialization code</h1>
+<div class="section level2">
+<h2 id="appendix-1---initialization-code">Appendix 1 - Initialization code<a class="anchor" aria-label="anchor" href="#appendix-1---initialization-code"></a>
+</h2>
 <p>We suggest running the app in RStudio with R version 4.0 or higher. The following code installs the {safetyGraphics} package and initializes the app demo:</p>
-<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages('safetyGraphics')
-library(safetyGraphics)
-safetyGraphicsApp() </a></code></pre>
+<pre><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'safetyGraphics'</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SafetyGraphics/safetyGraphics" class="external-link">safetyGraphics</a></span><span class="op">)</span>
+<span class="fu"><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span><span class="op">(</span><span class="op">)</span></code></pre>
 <p>Or to use the initialization workflow:</p>
-<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages('safetyGraphics')
-library(safetyGraphics)
-safetyGraphicsInit() </a></code></pre>
+<pre><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'safetyGraphics'</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SafetyGraphics/safetyGraphics" class="external-link">safetyGraphics</a></span><span class="op">)</span>
+<span class="fu"><a href="../reference/safetyGraphicsInit.html">safetyGraphicsInit</a></span><span class="op">(</span><span class="op">)</span></code></pre>
 <p>Or you can install the most recent development version of {safetyGraphics} and the companion package {safetyCharts} directly from GitHub:</p>
-<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("devtools")
-library(devtools)
-devtools::install_github("safetyGraphics/safetyGraphics") 
-library(safetyGraphics)
-devtools::install_github("safetyGraphics/safetyCharts") 
-library(safetyCharts)
-safetyGraphicsApp() #or safetyGraphicsInit()</a></code></pre>
+<pre><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"safetyGraphics/safetyGraphics"</span><span class="op">)</span> 
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SafetyGraphics/safetyGraphics" class="external-link">safetyGraphics</a></span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"safetyGraphics/safetyCharts"</span><span class="op">)</span> 
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SafetyGraphics/safetyCharts" class="external-link">safetyCharts</a></span><span class="op">)</span>
+<span class="fu"><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span><span class="op">(</span><span class="op">)</span> <span class="co">#or safetyGraphicsInit()</span></code></pre>
 </div>
-<div id="appendix-2---minimum-data-requirements" class="section level1">
-<h1 class="hasAnchor">
-<a href="#appendix-2---minimum-data-requirements" class="anchor"></a>Appendix 2 - Minimum Data Requirements</h1>
+<div class="section level2">
+<h2 id="appendix-2---minimum-data-requirements">Appendix 2 - Minimum Data Requirements<a class="anchor" aria-label="anchor" href="#appendix-2---minimum-data-requirements"></a>
+</h2>
 <p>Since the <code>safetyGraphics</code> framework supports adding custom charts (that may have custom settings), there are no universal data requirements for the app. However, the charts included by default version of the app are built to share requirements whenever possible. These requirements are captured in an included metadata file called <code>safetyGraphics::meta</code>.</p>
-<p>The most basic requirements for the 3 default domains are: - <strong>Lab results</strong> (<code>labs</code>) domain - Expects one record per person per visit per lab measurement with columns for: Participant ID, lab result, lab name, lower limit of normal, upper limit of normal, study day, study visit (numeric), study visit (character). See <code>safetyGraphics::meta %&gt;% filter(domain=="labs")</code> for additional details and optional columns used by some charts. - <strong>Adverse Event</strong> (<code>aes</code>) domain - Expects one record per adverse event with columns for: Participant ID, AE Sequence, Study Day, AE Start day, AE end day, AE preferred term and AE body system. See <code>safetyGraphics::meta %&gt;% filter(domain=="aes")</code> - <strong>Demographics</strong> (<code>dm</code>) domain - Expects one record per person with columns for: Participant ID, Sex, Race, Age and Study Treatment (optional) . See <code>safetyGraphics::meta %&gt;% filter(domain=="dm")</code> for additional details.</p>
+<p>The most basic requirements for the 3 default domains are:</p>
+<ul>
+<li>
+<strong>Lab results</strong> (<code>labs</code>) domain - Expects one record per person per visit per lab measurement with columns for: Participant ID, lab result, lab name, lower limit of normal, upper limit of normal, study day, study visit (numeric), study visit (character). See <code>safetyGraphics::meta %&gt;% filter(domain=="labs")</code> for additional details and optional columns used by some charts.</li>
+<li>
+<strong>Adverse Event</strong> (<code>aes</code>) domain - Expects one record per adverse event with columns for: Participant ID, AE Sequence, Study Day, AE Start day, AE end day, AE preferred term and AE body system. See <code>safetyGraphics::meta %&gt;% filter(domain=="aes")</code>
+</li>
+<li>
+<strong>Demographics</strong> (<code>dm</code>) domain - Expects one record per person with columns for: Participant ID, Sex, Race, Age and Study Treatment (optional) . See <code>safetyGraphics::meta %&gt;% filter(domain=="dm")</code> for additional details.</li>
+</ul>
 </div>
   </div>
 
@@ -240,11 +257,13 @@ safetyGraphicsApp() #or safetyGraphicsInit()</a></code></pre>
 
 
       <footer><div class="copyright">
-  <p>Developed by Jeremy Wildfire, Becca Krouse, Preston Burns, Xiao Ni, James Buchanan, Susan Duke.</p>
+  <p></p>
+<p>Developed by Jeremy Wildfire, Becca Krouse, Preston Burns, Xiao Ni, James Buchanan, Susan Duke.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -252,6 +271,8 @@ safetyGraphicsApp() #or safetyGraphicsInit()</a></code></pre>
 
   
 
+
+  
 
   </body>
 </html>
