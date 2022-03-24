@@ -17,8 +17,8 @@ The {safetyGraphics} shiny app can be used to display a wide variety of charts. 
 
 While this is technically a vignette for {safetyGraphics}, the {safetyCharts} package is just as important here. The roles of the packages can be summarized in just a few words: 
 
- **The {safetyGraphics} platform displays charts from {safetyCharts}.**
- 
+**The {safetyGraphics} platform displays charts from {safetyCharts}.**
+
 This relationship is central to the technical framework for the safetyGraphics app. By itself, the `safetyGraphics` **platform** really doesn't do much! In fact, none of the content on the Charts tab is actually found in the `safetyGraphics` package; it's all imported from elsewhere! As you've probably guessed, the default charts live in the `safetyCharts` package. `safetyCharts` has over a dozen charts that are configured to work with {safetyGraphics}, but can also easily be used independently. 
 
 While {safetyGraphics} and {safetyCharts} are designed to work seamlessly together, users can also add charts from other packages. In fact, several charts in {safetyCharts} are just wrappers that load charts from other packages for use in {safetyGraphics}. The rest of this vignette provides a series of step-by-step examples detailing how this process works for different types of charts. 
@@ -95,17 +95,17 @@ settings <- list(
 # Define a plotting function that takes data and settings as inputs 
 spaghettiPlot <- function( data, settings ){
     # define plot aes - note use of standard evaluation! 
-    plot_aes <- aes_(
-        x=as.name(settings$studyday_col), 
-        y=as.name(settings$value_col), 
-        group=as.name(settings$id_col)
+    plot_aes <- aes(
+        x=.data[[settings$studyday_col]], 
+        y=.data[[settings$value_col]], 
+        group=.data[[settings$id_col]]
     )
 
     #create the plot
     p<-ggplot(data = data, plot_aes) +
         geom_path(alpha=0.15) + 
         facet_wrap(
-            as.name(settings$measure_col),
+            settings$measure_col,
             scales="free_y"
         )
     return(p)
@@ -127,13 +127,14 @@ With minor modifications, this chart can be added to the {safetyGraphics} shiny 
 ```
 env: safetyGraphics
 label: Spaghetti Plot
+name: spaghettiPlot
 type: plot
 domain: 
-  - labs
+    - labs
 workflow:
-  main: spaghettiPlot
+    main: spaghettiPlot
 links:
-  safetyCharts: https://github.com/SafetyGraphics/safetycharts
+    safetyCharts: https://github.com/SafetyGraphics/safetycharts
 ```
 
 With the charting function loaded in to our session and the configuration file saved in our working directory as `spaghetti.yaml`, we can add the chart to the app as follows: 
@@ -150,10 +151,13 @@ Under the charts tab, you'll see:
 
 If you look closely at the `spaghettiPlot()` code above, you'll noticed some details that make the chart work in the app:  
 
- - The chart function is written as a function taking `data` and `settings` as inputs. This is the expected parameterization for most charts in {safetyGraphics}. 
+- The chart function is written as a function taking `data` and `settings` as inputs. This is the expected parameterization for most charts in {safetyGraphics}. 
 - The references to `settings` use parameters that are defined on the mapping tab. Behind the scenes, these are defined in the `safetyGraphics::meta`.
 - The `spaghettiPlot` function is referenced in the `main` item the YAML `workflow`. This tells the app which function to use to draw the chart.
-
+- We're using the `.data[[]]` pronoun in the chart function to access columns in the data based on the current settings. See these references for a lot more detail about functional programming in the tidyverse:
+    - [Using ggplot2 in packages](https://cran.r-project.org/web/packages/ggplot2/vignettes/ggplot2-in-packages.html)
+    - [Programming with dplyr](https://dplyr.tidyverse.org/articles/programming.html) 
+    - [Functional programming chapters in Advanced R](https://adv-r.hadley.nz/fp.html)
 These details allow users to dynamically define data attributes for any labs data set, allowing the chart to be reused across many different types of data. 
 
 This example is inspired by `safetyCharts::safety_outlier_explorer` - the [charting function](https://github.com/SafetyGraphics/safetyCharts/blob/dev/R/safety_outlier_explorer.R) and [yaml configuration file](https://github.com/SafetyGraphics/safetyCharts/blob/dev/inst/config/safetyOutlierExplorerStatic.yaml) on are GitHub.
@@ -190,7 +194,7 @@ safetyOutlierExplorer_ui <- function(id) {
 }
 ``` 
 
-Next we define a server function that populates the control for selecting measurements and then draws the plot using [`safetyCharts::safety_outlier_explorer()`](https://github.com/SafetyGraphics/safetyCharts/blob/dev/R/safety_outlier_explorer.R) charting function - which is based on the `spaghetti()` function ! Note that the server function takes a single reactive `params` object containing the data (`params$data`) and settings (`param$settings`) as input. 
+Next we define a server function that populates the control for selecting measurements and then draws the plot using [`safetyCharts::safety_outlier_explorer()`](https://github.com/SafetyGraphics/safetyCharts/blob/dev/R/safety_outlier_explorer.R) charting function - which is based on the `spaghetti()` function! Note that the server function takes a single reactive `params` object containing the data (`params$data`) and settings (`param$settings`) as input. 
 
 ``` 
 safetyOutlierExplorer_server <- function(input, output, session, params) {
@@ -225,15 +229,16 @@ Finally, the YAML configuration file looks like this  - just the workflow and la
 ```
 env: safetyGraphics
 label: Outlier Explorer - Module
+name: outlierExplorerMod
 type: module
 package: safetyCharts
 domain: 
-  - labs
+    - labs
 workflow:
-  ui: safetyOutlierExplorer_ui
-  server: safetyOutlierExplorer_server
+    ui: safetyOutlierExplorer_ui
+    server: safetyOutlierExplorer_server
 links:
-  safetyCharts: https://github.com/SafetyGraphics/safetycharts
+    safetyCharts: https://github.com/SafetyGraphics/safetycharts
 ``` 
 
 Initializing the app as usual by adding it to the chart list: 
@@ -257,7 +262,51 @@ Items 1 and 2 above are simple enough, but #3 is likely to create problems unles
 Fortunately, there's a workaround built in to safetyGraphics in the form of `init` workflow functions. Init functions run before the chart is drawn, and can be used to create custom parameterizations. The init function should take `data` and `settings` as inputs and return `params` which should be a list which is then provided to the chart (see the appendix for more details). The [init function](https://github.com/SafetyGraphics/safetyCharts/blob/dev/R/init_aeExplorer.R) for the the interactive [AE Explorer](https://github.com/RhoInc/aeexplorer) is a good example. It starts by [merging demographics and adverse event data](https://github.com/SafetyGraphics/safetyCharts/blob/c37f3ac7883b15ab3d8a36e597dec85728657fd7/R/init_aeExplorer.R#L16-L18) and then proceeds to [create a customized settings object](https://github.com/SafetyGraphics/safetyCharts/blob/c37f3ac7883b15ab3d8a36e597dec85728657fd7/R/init_aeExplorer.R#L20-L43) to match [the configuration requirements](https://github.com/RhoInc/aeexplorer/wiki/Configuration) of the javascript chart renderer. This init function is then saved under `workflow$init` in the chart config object. 
 
 The rest of the [chart configuration YAML](https://github.com/SafetyGraphics/safetyCharts/blob/dev/inst/config/aeExplorer.yaml) is similar to the examples above, and the chart is once again by passing the chart config object to `safetyGraphicsApp()`
- 
+
+# Example 5 - Adding a Chart in a New Data Domain
+
+All of our examples so far have been focused on creating charts in our 3 default data domains (labs, adverse events and demographics), but there is no requirement that limits charts to these three data types. The data domains in the app are determined by a `meta` data frame that defines the columns and fields used in safetyGraphics charts, and customizing `meta` allows us to create charts for any desired data domains. 
+
+Generally speaking there are 3 steps to add a chart in a new domain: 
+
+1. Create Metadata for a new data domain. 
+2. Define a chart using the new domain - like the examples above
+3. Load data for the new domain
+
+Consider the following example, that modifies a chart from the `labs` domain for use on ECG data: 
+
+```
+adeg <- readr::read_csv("https://physionet.org/files/ecgcipa/1.0.0/adeg.csv?download")
+
+ecg_meta <-tibble::tribble(
+    ~text_key, ~domain,                      ~label,                               ~description, ~standard_adam, ~standard_sdtm,
+    "id_col",   "custom_ecg",                 "ID column", "Unique subject identifier variable name.",      "USUBJID",      "USUBJID",
+    "value_col",   "custom_ecg",              "Value column",                 "QT result variable name.",         "AVAL",     "EGSTRESN",
+    "measure_col",   "custom_ecg",            "Measure column",                 "QT measure variable name",        "PARAM",       "EGTEST",
+    "studyday_col",   "custom_ecg",          "Study Day column",                  "Visit day variable name",          "ADY",         "EGDY",
+    "visit_col",   "custom_ecg",              "Visit column",                      "Visit variable name",         "ATPT",        "EGTPT",
+    "visitn_col",   "custom_ecg",       "Visit number column",               "Visit number variable name",        "ATPTN",             NA,
+    "period_col",   "custom_ecg",             "Period column",                     "Period variable name",      "APERIOD",             NA,
+    "unit_col",   "custom_ecg",               "Unit column",            "Unit of measure variable name",        "AVALU",     "EGSTRESU"
+) %>% mutate(
+    col_key = text_key,
+    type="column"
+)
+
+qtOutliers<-prepare_chart(read_yaml('https://raw.githubusercontent.com/SafetyGraphics/safetyCharts/dev/inst/config/safetyOutlierExplorer.yaml') )
+qtOutliers$label <- "QT Outlier explorer"
+qtOutliers$domain <- "custom_ecg"
+qtOutliers$meta <- ecg_meta
+
+safetyGraphicsApp(
+    domainData=list(custom_ecg=adeg), 
+    charts=list(qtOutliers)
+)
+```
+
+As of safetyGraphics v2.1, metadata can be saved directly to the chart object using `chart$meta` as shown in the example above.  
+Alternatively, metadata can be saved as a data object in the `chart$package` namespace. Chart-specific metadata should be saved as  `meta_{chart$name}` while domain-level metadata should be named `meta_{chart$domain}`. It's fine to use a combination of these approaches as appropriate for your chart. See `?safetyGraphics::makeMeta` for more detail.
+
 # Appendix #1 - Chart Framework Technical Specifications 
 
 ## Configuration Overview
@@ -279,6 +328,7 @@ Each item in the `charts` list should be a list() with the following parameters:
 - `label`: A short description of the chart. chart$name is used if not provided. Type: *character*. *Optional*
 - `domain`: The data domain(s) used in the chart. Type: *character*. **Required**
 - `package`: The package where the {htmlwidget} is saved. Type: *character*. **Required** when `chart$type` is "htmlwidget"
+- `meta`: Table of chart-specific metadata. Metadata can also be saved as `{package}::meta_{chart}` or `{package::meta_{domain}`. See `?safetyGraphics::makeMeta` for more detail. 
 - `order`: Order in which to display the chart. If order is a negative number, the chart is dropped. Defaults to 999999. Type: *Integer*. *Optional*
 - `links`:  Named list of link names/urls to be shown in the chart header. Type: *list of character*. *Optional*
 - `path`: Full path of the YAML file. Auto-generated by `makeChartConfig()` Type: *character* *optional*
@@ -288,7 +338,7 @@ Each item in the `charts` list should be a list() with the following parameters:
    - `workflow$widget`: name or widget saved in `chart$package` to be passed to `htmlwidgets::createWidget` **Required** when `chart$type` is "htmlwidget"
    - `workflow$ui` and `workflow$server`: names of functions to render shiny ui and server. Automatically generated in `prepareChart()` unless `chart$type` is "module". **Required** when `chart$type` is 'module'
 - `functions`: a list of functions used to create the chart. Typically generated at runtime by `prepareChart()` using information in `chart$workflow`, `chart$type` and `chart$package`. Not recommended to generate manually. Type: *list of functions*. **Required**
- 
+
 ## Default Technical workflow
 
 This appendix describe the technical process used to render a chart when safetyGraphicsApp() is called with the default parameters. 
@@ -299,16 +349,17 @@ This appendix describe the technical process used to render a chart when safetyG
 4. `makeChartConfig` loads YAML configuration files in the specified directories and saves them to a list. `name` and `path` parameters are added. 
 5. `makeChartConfig` calls `prepareChart` for each chart configuration. `prepareChart` sets default values for `order`, `name` and `export`, and then binds relevant functions to a `chart$functions` list based on the chart's `type`, `workflow` and `package`.
 6. That list of charts is then returned to `app_startup()` which runs a few actions on each chart: 
-   - If `chart$functions` is missing, `prepareChart` is called (not relevant in the default workflow, but useful for adding custom charts)
-   - If `chart$order` is negative, the chart is dropped with a message.
-   - If `chart$env` is not "safetyGraphics", the chart is dropped with a message. 
-   - If `chart$domains` has elements not found in the `dataDomains` passed to `app_startup(), the chart is dropped with a message.
-   - `charts` are re-ordered based on `chart$order`
-7. `app_startup` returns the list of charts to `safetyGraphicsApp` which then then passes them along to `safetyGraphicsServer` as the `charts` parameter. 
-8. `safetyGraphicsServer` then creates modules for each chart.  First, `UIs` are created via `chartsNav()` which then calls:
+    - If `chart$functions` is missing, `prepareChart` is called (not relevant in the default workflow, but useful for adding custom charts)
+    - If `chart$order` is negative, the chart is dropped with a message.
+    - If `chart$env` is not "safetyGraphics", the chart is dropped with a message. 
+    - If `chart$domains` has elements not found in the `dataDomains` passed to `app_startup(), the chart is dropped with a message.
+    - `charts` are re-ordered based on `chart$order`
+7. `app_startup` passes the updated list of charts to `makeMeta` assuming no `meta` object was provided. `makeMeta` combines metadata from all charts in to a single data.frame. Charts can save metadata as `chart.meta`, `{package}::meta_{chart}` or `{package}::meta_{domain}`.
+8. `app_startup` returns the list of charts and associated metadata to `safetyGraphicsApp` which then then passes them along to `safetyGraphicsServer` as the `charts` parameter. 
+9. `safetyGraphicsServer` then creates modules for each chart.  First, `UIs` are created via `chartsNav()` which then calls:
     -  `makeChartSummary` to create the chart header with links and metadata and ...
     -  `ChartsTabUI` which then calls `chart$functions$ui` to create the proper UI element based on `chart$type`. 
-8. Next, `safetyGraphicsServer` draws the charts using `chartsTab()` which: 
+10. Next, `safetyGraphicsServer` draws the charts using `chartsTab()` which: 
     - Creates a reactive `params` object containing mappings and data using `makeChartParams()` which:
         - Subsets `domainData` based on `chart$domain`
         - Calls `charts$functions$init` if provided
@@ -316,4 +367,4 @@ This appendix describe the technical process used to render a chart when safetyG
     - Chart is drawn using `chart$functions$server` and `chart$functions$main`
     - Button to download R script is added to header. Script is created by `makeChartExport()`
     - Button to download html report is added to header unless type="module". Report template is at "inst/reports/safetyGraphicsReport.Rmd"
-9. Finally, `safetyGraphicsServer` passes the charts to `settingsTab`, which uses them to help populate the `charts` and `code` subtabs. 
+11. Finally, `safetyGraphicsServer` passes the charts to `settingsTab`, which uses them to help populate the `charts` and `code` subtabs. 

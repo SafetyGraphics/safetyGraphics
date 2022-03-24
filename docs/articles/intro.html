@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safetyGraphics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
       </span>
     </div>
 
@@ -44,7 +44,7 @@
   </a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
@@ -88,13 +88,13 @@
 
       
 
-      </header><script src="intro_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><script src="intro_files/header-attrs-2.13/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Intro to Shiny App</h1>
                         <h4 class="author">Jeremy Wildfire</h4>
             
-            <h4 class="date">2021-09-21</h4>
+            <h4 class="date">2022-03-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/master/vignettes/intro.Rmd"><code>vignettes/intro.Rmd</code></a></small>
       <div class="hidden name"><code>intro.Rmd</code></div>
@@ -138,7 +138,7 @@
 <a href="#charts-tab" class="anchor"></a>Charts Tab</h2>
 <p>Clicking the Charts tab opens a dropdown menu containing a series of charts related to clinical trial safety. Clicking the <a href="https://github.com/safetyGraphics/hep-explorer">Hepatic Safety Explorer</a> opens this page:</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/129057688-14ed7de8-66c3-432e-840c-641eb0c29f27.png" style="max-width:700px"></p>
-<p>safetyGraphics supports many different kinds of charts including web-based interactive graphics using {htmlwidgets} (like the chart shown above), static plots, plotly plots and custom shiny modules. Each chart has a header that provides details about the chart, links to chart-specific resources and buttons that allow users to download a stand-alone html report or a .R file that reproduces the chart. See the <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration">Chart Configuration Vignette</a> for more detail about the safetyGraphics charting framework.</p>
+<p>safetyGraphics supports many different kinds of charts including web-based interactive graphics using {htmlwidgets} (like the chart shown above), static plots, plotly plots and custom shiny modules. Each chart has a header that provides details about the chart, links to chart-specific resources and buttons that allow users to download a stand-alone html report or a .R file that reproduces the chart. See the <a href="ChartConfiguration">Chart Configuration Vignette</a> for more detail about the safetyGraphics charting framework.</p>
 </div>
 <div id="settings-tab" class="section level2">
 <h2 class="hasAnchor">
@@ -150,6 +150,7 @@
 <div id="loading-study-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#loading-study-data" class="anchor"></a>Loading Study Data</h1>
+<p>safetyGraphics supports a wide range of data formats and standards. Generally speaking, any clinical data can be loaded as long it meets the minimal data requirements described in <a href="Intro#appendix-2---minimum-data-requirements">appendix 2</a>.</p>
 <p>There are 2 primary ways to load your study data in to the safetyGraphics shiny app:</p>
 <ol style="list-style-type: decimal">
 <li>Using <code><a href="../reference/safetyGraphicsInit.html">safetyGraphicsInit()</a></code> shiny interface</li>
@@ -186,13 +187,18 @@ sdtm &lt;- list(
 )
 
 safetyGraphics::safetyGraphicsApp(domainData=sdtm)</a></code></pre>
-<p>This example and other use cases are described in the <code>safetyGraphics Cookbook - Advanced Examples</code> Vignette.</p>
+<p>This example and other use cases are described in <a href="cookbook">cookbook vignette</a>.</p>
+</div>
+<div id="large-data-sets" class="section level2">
+<h2 class="hasAnchor">
+<a href="#large-data-sets" class="anchor"></a>Large Data sets</h2>
+<p>Use the <code>maxFileSize</code> option to load data sets larger than 5 mb in <code>safetyGraphicsInit</code> (e.g. <code>safetyGraphicsinit(maxFileSize=100)</code>). <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> does not have size limits for data files, but note that large data (&gt;100 mb) <a href="TechnicalFAQ#q-how-do-i-avoid-r-not-choking-on-the-huge-volume-of-lab-data-from-albrechtdurer">may cause performance issues</a>.</p>
 </div>
 </div>
 <div id="additional-resources" class="section level1">
 <h1 class="hasAnchor">
 <a href="#additional-resources" class="anchor"></a>Additional Resources</h1>
-<p>Several additional vignettes are available for more advanced topics: - <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration">Chart Configuration Vignette</a> - details about the charting process including technical specifications and step-by-step instructions - <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Cookbook">Cookbook Vignette</a> - a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios - <a href="https://github.com/SafetyGraphics/safetyGraphics/wiki/TechnicalFAQ">Technical FAQ Vignette</a> Vignette - vignette discussing security, validation and other technical issues</p>
+<p>Several additional vignettes are available for more advanced topics: - <a href="ChartConfiguration">Chart Configuration Vignette</a> - details about the charting process including technical specifications and step-by-step instructions - <a href="Cookbook">Cookbook Vignette</a> - a series of examples showing how to initialize the safetyGraphics Shiny app in different scenarios - <a href="TechnicalFAQ">Technical FAQ Vignette</a> - vignette discussing security, validation and other technical issues</p>
 <p>The {safetyGraphics} app is maintained by the Interactive Safety Graphics (ISG) subteam of the ASA Biopharm-DIA Safety Working Group. You can learn more about the team and find links to recent presentations and publications at our <a href="https://safetygraphics.github.io/">home page</a>.</p>
 </div>
 <div id="appendix-1---initialization-code" class="section level1">
@@ -214,6 +220,12 @@ library(safetyGraphics)
 devtools::install_github("safetyGraphics/safetyCharts") 
 library(safetyCharts)
 safetyGraphicsApp() #or safetyGraphicsInit()</a></code></pre>
+</div>
+<div id="appendix-2---minimum-data-requirements" class="section level1">
+<h1 class="hasAnchor">
+<a href="#appendix-2---minimum-data-requirements" class="anchor"></a>Appendix 2 - Minimum Data Requirements</h1>
+<p>Since the <code>safetyGraphics</code> framework supports adding custom charts (that may have custom settings), there are no universal data requirements for the app. However, the charts included by default version of the app are built to share requirements whenever possible. These requirements are captured in an included metadata file called <code>safetyGraphics::meta</code>.</p>
+<p>The most basic requirements for the 3 default domains are: - <strong>Lab results</strong> (<code>labs</code>) domain - Expects one record per person per visit per lab measurement with columns for: Participant ID, lab result, lab name, lower limit of normal, upper limit of normal, study day, study visit (numeric), study visit (character). See <code>safetyGraphics::meta %&gt;% filter(domain=="labs")</code> for additional details and optional columns used by some charts. - <strong>Adverse Event</strong> (<code>aes</code>) domain - Expects one record per adverse event with columns for: Participant ID, AE Sequence, Study Day, AE Start day, AE end day, AE preferred term and AE body system. See <code>safetyGraphics::meta %&gt;% filter(domain=="aes")</code> - <strong>Demographics</strong> (<code>dm</code>) domain - Expects one record per person with columns for: Participant ID, Sex, Race, Age and Study Treatment (optional) . See <code>safetyGraphics::meta %&gt;% filter(domain=="dm")</code> for additional details.</p>
 </div>
   </div>
 

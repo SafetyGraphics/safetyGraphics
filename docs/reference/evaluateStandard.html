@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safetyGraphics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
   </a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
@@ -172,7 +172,7 @@
     <pre class="examples"><div class='input'><span class='co'># Match is TRUE</span>
 <span class='fu'>evaluateStandard</span><span class='op'>(</span>
  data<span class='op'>=</span><span class='fu'>safetyData</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/safetyData/man/adam_adlbc.html'>adam_adlbc</a></span>, 
- meta<span class='op'>=</span><span class='va'>meta</span>, 
+ meta<span class='op'>=</span><span class='fu'>safetyCharts</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/safetyCharts/man/meta_labs.html'>meta_labs</a></span>, 
  domain<span class='op'>=</span><span class='st'>"labs"</span>, 
  standard<span class='op'>=</span><span class='st'>"adam"</span>
 <span class='op'>)</span> 
@@ -180,28 +180,24 @@
 #&gt; [1] "adam"
 #&gt; 
 #&gt; $mapping
-#&gt; <span style='color: #949494;'># A tibble: 12 × 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 8 × 3</span>
 #&gt; <span style='color: #949494;'># Rowwise: </span>
-#&gt;    text_key            current                          valid
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>               <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                            <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span> id_col              USUBJID                          TRUE 
-#&gt; <span style='color: #BCBCBC;'> 2</span> value_col           AVAL                             TRUE 
-#&gt; <span style='color: #BCBCBC;'> 3</span> measure_col         PARAM                            TRUE 
-#&gt; <span style='color: #BCBCBC;'> 4</span> normal_col_low      A1LO                             TRUE 
-#&gt; <span style='color: #BCBCBC;'> 5</span> normal_col_high     A1HI                             TRUE 
-#&gt; <span style='color: #BCBCBC;'> 6</span> studyday_col        ADY                              TRUE 
-#&gt; <span style='color: #BCBCBC;'> 7</span> visit_col           VISIT                            TRUE 
-#&gt; <span style='color: #BCBCBC;'> 8</span> visitn_col          VISITNUM                         TRUE 
-#&gt; <span style='color: #BCBCBC;'> 9</span> measure_values--ALT Alanine Aminotransferase (U/L)   TRUE 
-#&gt; <span style='color: #BCBCBC;'>10</span> measure_values--AST Aspartate Aminotransferase (U/L) TRUE 
-#&gt; <span style='color: #BCBCBC;'>11</span> measure_values--TB  Bilirubin (umol/L)               TRUE 
-#&gt; <span style='color: #BCBCBC;'>12</span> measure_values--ALP Alkaline Phosphatase (U/L)       TRUE 
+#&gt;   text_key        current  valid
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> id_col          USUBJID  TRUE 
+#&gt; <span style='color: #BCBCBC;'>2</span> value_col       AVAL     TRUE 
+#&gt; <span style='color: #BCBCBC;'>3</span> measure_col     PARAM    TRUE 
+#&gt; <span style='color: #BCBCBC;'>4</span> normal_col_low  A1LO     TRUE 
+#&gt; <span style='color: #BCBCBC;'>5</span> normal_col_high A1HI     TRUE 
+#&gt; <span style='color: #BCBCBC;'>6</span> studyday_col    ADY      TRUE 
+#&gt; <span style='color: #BCBCBC;'>7</span> visit_col       VISIT    TRUE 
+#&gt; <span style='color: #BCBCBC;'>8</span> visitn_col      VISITNUM TRUE 
 #&gt; 
 #&gt; $total_count
-#&gt; [1] 12
+#&gt; [1] 8
 #&gt; 
 #&gt; $valid_count
-#&gt; [1] 12
+#&gt; [1] 8
 #&gt; 
 #&gt; $invalid_count
 #&gt; [1] 0
@@ -218,7 +214,7 @@
 <span class='co'># Match is FALSE</span>
 <span class='fu'>evaluateStandard</span><span class='op'>(</span>
  data<span class='op'>=</span><span class='fu'>safetyData</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/safetyData/man/adam_adlbc.html'>adam_adlbc</a></span>, 
- meta<span class='op'>=</span><span class='va'>meta</span>, 
+ meta<span class='op'>=</span><span class='fu'>safetyCharts</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/safetyCharts/man/meta_labs.html'>meta_labs</a></span>, 
  domain<span class='op'>=</span><span class='st'>"labs"</span>, 
  standard<span class='op'>=</span><span class='st'>"sdtm"</span>
 <span class='op'>)</span> 
@@ -226,35 +222,31 @@
 #&gt; [1] "sdtm"
 #&gt; 
 #&gt; $mapping
-#&gt; <span style='color: #949494;'># A tibble: 13 × 3</span>
+#&gt; <span style='color: #949494;'># A tibble: 9 × 3</span>
 #&gt; <span style='color: #949494;'># Rowwise: </span>
-#&gt;    text_key            current  valid
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>               <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span> id_col              USUBJID  TRUE 
-#&gt; <span style='color: #BCBCBC;'> 2</span> value_col           LBSTRESN TRUE 
-#&gt; <span style='color: #BCBCBC;'> 3</span> measure_col         <span style='color: #BB0000;'>NA</span>       FALSE
-#&gt; <span style='color: #BCBCBC;'> 4</span> normal_col_low      <span style='color: #BB0000;'>NA</span>       FALSE
-#&gt; <span style='color: #BCBCBC;'> 5</span> normal_col_high     <span style='color: #BB0000;'>NA</span>       FALSE
-#&gt; <span style='color: #BCBCBC;'> 6</span> studyday_col        <span style='color: #BB0000;'>NA</span>       FALSE
-#&gt; <span style='color: #BCBCBC;'> 7</span> visit_col           VISIT    TRUE 
-#&gt; <span style='color: #BCBCBC;'> 8</span> visitn_col          VISITNUM TRUE 
-#&gt; <span style='color: #BCBCBC;'> 9</span> measure_values--ALT <span style='color: #BB0000;'>NA</span>       FALSE
-#&gt; <span style='color: #BCBCBC;'>10</span> measure_values--AST <span style='color: #BB0000;'>NA</span>       FALSE
-#&gt; <span style='color: #BCBCBC;'>11</span> measure_values--TB  <span style='color: #BB0000;'>NA</span>       FALSE
-#&gt; <span style='color: #BCBCBC;'>12</span> measure_values--ALP <span style='color: #BB0000;'>NA</span>       FALSE
-#&gt; <span style='color: #BCBCBC;'>13</span> unit_col            <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt;   text_key        current  valid
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>           <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> id_col          USUBJID  TRUE 
+#&gt; <span style='color: #BCBCBC;'>2</span> value_col       LBSTRESN TRUE 
+#&gt; <span style='color: #BCBCBC;'>3</span> measure_col     <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'>4</span> normal_col_low  <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'>5</span> normal_col_high <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'>6</span> studyday_col    <span style='color: #BB0000;'>NA</span>       FALSE
+#&gt; <span style='color: #BCBCBC;'>7</span> visit_col       VISIT    TRUE 
+#&gt; <span style='color: #BCBCBC;'>8</span> visitn_col      VISITNUM TRUE 
+#&gt; <span style='color: #BCBCBC;'>9</span> unit_col        <span style='color: #BB0000;'>NA</span>       FALSE
 #&gt; 
 #&gt; $total_count
-#&gt; [1] 13
+#&gt; [1] 9
 #&gt; 
 #&gt; $valid_count
 #&gt; [1] 4
 #&gt; 
 #&gt; $invalid_count
-#&gt; [1] 9
+#&gt; [1] 5
 #&gt; 
 #&gt; $match_percent
-#&gt; [1] 0.3076923
+#&gt; [1] 0.4444444
 #&gt; 
 #&gt; $match
 #&gt; [1] "partial"
@@ -263,7 +255,7 @@
 #&gt; [1] "Partial SDTM"
 #&gt; 
 #&gt; $details
-#&gt; [1] "(4/13 cols/fields matched)"
+#&gt; [1] "(4/9 cols/fields matched)"
 #&gt; </div><div class='input'>
 </div></pre>
   </div>

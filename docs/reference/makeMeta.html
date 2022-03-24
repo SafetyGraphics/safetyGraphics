@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Authors • safetyGraphics</title>
+<title>Create a metadata object table for a set of charts — makeMeta • safetyGraphics</title>
 
 
 <!-- jquery -->
@@ -18,8 +18,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
-<link rel="stylesheet" href="bootstrap-toc.css">
-<script src="bootstrap-toc.js"></script>
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
@@ -33,13 +33,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script>
+<link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="Authors" />
+<meta property="og:title" content="Create a metadata object table for a set of charts — makeMeta" />
+<meta property="og:description" content="Generates metadata object for a list of charts. makeMeta() looks for metadata in 3 locations for each chart object:
+Domain-level metadata saved as meta_chart$name in the chart$package namespace
+Chart-specific metadata saved as meta_chart$domain in the chart$package namespace
+Chart-specific metadata saved directly to the chart object as chart$meta
+After checking all charts, all metadata files are stacked in to a single dataframe and returned. If duplicate metadata rows (domain + text_key) are found, an error is thrown.
+
+" />
 
 
 
@@ -58,7 +65,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-authors">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -70,7 +77,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">safetyGraphics</a>
+        <a class="navbar-link" href="../index.html">safetyGraphics</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
       </span>
     </div>
@@ -78,7 +85,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -91,24 +98,24 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="articles/intro.html">Intro to Shiny App</a>
+      <a href="../articles/intro.html">Intro to Shiny App</a>
     </li>
     <li>
-      <a href="articles/chartConfiguration.html">Chart Configuration</a>
+      <a href="../articles/chartConfiguration.html">Chart Configuration</a>
     </li>
     <li>
-      <a href="articles/cookbook.html">Examples Cookbook</a>
+      <a href="../articles/cookbook.html">Examples Cookbook</a>
     </li>
     <li>
-      <a href="articles/technicalFAQ.html">Technical FAQ</a>
+      <a href="../articles/technicalFAQ.html">Technical FAQ</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="reference/index.html">Functions</a>
+  <a href="../reference/index.html">Functions</a>
 </li>
 <li>
-  <a href="news/index.html">News</a>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -129,42 +136,58 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Authors</h1>
+    <h1>Create a metadata object table for a set of charts</h1>
+    <small class="dont-index">Source: <a href='https://github.com/SafetyGraphics/safetyGraphics/blob/master/R/makeMeta.R'><code>R/makeMeta.R</code></a></small>
+    <div class="hidden name"><code>makeMeta.Rd</code></div>
     </div>
 
-    <ul class="list-unstyled">
-      <li>
-        <p><strong>Jeremy Wildfire</strong>. Maintainer, author. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Becca Krouse</strong>. Author. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Preston Burns</strong>. Author. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Xiao Ni</strong>. Author. 
-        </p>
-      </li>
-      <li>
-        <p><strong>James Buchanan</strong>. Author. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Susan Duke</strong>. Author. 
-        </p>
-      </li>
-    </ul>
+    <div class="ref-description">
+    <p>Generates metadata object for a list of charts. <code>makeMeta()</code> looks for metadata in 3 locations for each <code>chart</code> object:</p><ul>
+<li><p>Domain-level metadata saved as meta_chart$name in the chart$package namespace</p></li>
+<li><p>Chart-specific metadata saved as meta_chart$domain in the chart$package namespace</p></li>
+<li><p>Chart-specific metadata saved directly to the chart object as chart$meta
+After checking all charts, all metadata files are stacked in to a single dataframe and returned. If duplicate metadata rows (domain + text_key) are found, an error is thrown.</p></li>
+</ul>
+
+    </div>
+
+    <pre class="usage"><span class='fu'>makeMeta</span><span class='op'>(</span><span class='va'>charts</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>charts</th>
+      <td><p>list of safetyGraphics chart objects for which to create metadata</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>tibble of metadata with the following columns:</p><dl>
+<dt>domain</dt><dd><p>Data domain</p></dd>
+<dt>text_key</dt><dd><p>Text key indicating the setting name. <code>'--'</code> delimiter indicates a field level data mapping</p></dd>
+<dt>col_key</dt><dd><p>Key for the column mapping</p></dd>
+<dt>field_key</dt><dd><p>Key for the field mapping (if any)</p></dd>
+<dt>type</dt><dd><p>type of mapping - "field" or "column"</p></dd>
+<dt>label</dt><dd><p>Label</p></dd>
+<dt>description</dt><dd><p>Description</p></dd>
+<dt>multiple</dt><dd><p>Mapping supports multiple columns/fields</p></dd>
+<dt>standard_adam</dt><dd><p>Default values for the ADaM data standard</p></dd>
+<dt>standard_sdtm</dt><dd><p>Default values for the SDTM data standard</p></dd>
+
+</dl>
+
 
   </div>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
+  </div>
 </div>
-
 
 
       <footer>
