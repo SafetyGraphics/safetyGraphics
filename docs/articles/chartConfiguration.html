@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safetyGraphics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
       </span>
     </div>
 
@@ -44,7 +46,7 @@
   </a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
@@ -73,7 +75,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/SafetyGraphics/safetyGraphics">
+  <a href="https://github.com/SafetyGraphics/safetyGraphics" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
@@ -88,244 +90,346 @@
 
       
 
-      </header><script src="chartConfiguration_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Chart Configuration</h1>
-                        <h4 class="author">Jeremy Wildfire</h4>
+                        <h4 data-toc-skip class="author">Jeremy Wildfire</h4>
             
-            <h4 class="date">2021-09-21</h4>
+            <h4 data-toc-skip class="date">2022-03-24</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/master/vignettes/chartConfiguration.Rmd"><code>vignettes/chartConfiguration.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/HEAD/vignettes/chartConfiguration.Rmd" class="external-link"><code>vignettes/chartConfiguration.Rmd</code></a></small>
       <div class="hidden name"><code>chartConfiguration.Rmd</code></div>
 
     </div>
 
     
     
-<div id="chart-configuration-vignette" class="section level1">
-<h1 class="hasAnchor">
-<a href="#chart-configuration-vignette" class="anchor"></a>Chart Configuration Vignette</h1>
+<div class="section level2">
+<h2 id="chart-configuration-vignette">Chart Configuration Vignette<a class="anchor" aria-label="anchor" href="#chart-configuration-vignette"></a>
+</h2>
 <p>The {safetyGraphics} shiny app can be used to display a wide variety of charts. This vignette provides details about the charting process including step-by-step instructions for adding new charts and technical specifications, but first we need to talk about a 2nd package …</p>
 </div>
-<div id="introducing-safetycharts" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introducing-safetycharts" class="anchor"></a>Introducing {safetyCharts}</h1>
+<div class="section level2">
+<h2 id="introducing-safetycharts">Introducing {safetyCharts}<a class="anchor" aria-label="anchor" href="#introducing-safetycharts"></a>
+</h2>
 <p>While this is technically a vignette for {safetyGraphics}, the {safetyCharts} package is just as important here. The roles of the packages can be summarized in just a few words:</p>
 <p><strong>The {safetyGraphics} platform displays charts from {safetyCharts}.</strong></p>
 <p>This relationship is central to the technical framework for the safetyGraphics app. By itself, the <code>safetyGraphics</code> <strong>platform</strong> really doesn’t do much! In fact, none of the content on the Charts tab is actually found in the <code>safetyGraphics</code> package; it’s all imported from elsewhere! As you’ve probably guessed, the default charts live in the <code>safetyCharts</code> package. <code>safetyCharts</code> has over a dozen charts that are configured to work with {safetyGraphics}, but can also easily be used independently.</p>
 <p>While {safetyGraphics} and {safetyCharts} are designed to work seamlessly together, users can also add charts from other packages. In fact, several charts in {safetyCharts} are just wrappers that load charts from other packages for use in {safetyGraphics}. The rest of this vignette provides a series of step-by-step examples detailing how this process works for different types of charts.</p>
 </div>
-<div id="safetygraphics-chart-components" class="section level1">
-<h1 class="hasAnchor">
-<a href="#safetygraphics-chart-components" class="anchor"></a>{safetyGraphics} Chart Components</h1>
+<div class="section level2">
+<h2 id="safetygraphics-chart-components">{safetyGraphics} Chart Components<a class="anchor" aria-label="anchor" href="#safetygraphics-chart-components"></a>
+</h2>
 <p>To add a chart to safetyGraphics, two components are required:</p>
 <ol style="list-style-type: decimal">
 <li>A Configuration Object</li>
 <li>A Chart Function</li>
 </ol>
-<p>The configuration file captures metadata about the chart for use in the app and is typically saved as a YAML file. Several example configuration files are provided in the examples below, and YAML Configuration files for {safetyCharts} are saved <a href="https://github.com/SafetyGraphics/safetyCharts/tree/dev/inst/config">here</a>.</p>
+<p>The configuration file captures metadata about the chart for use in the app and is typically saved as a YAML file. Several example configuration files are provided in the examples below, and YAML Configuration files for {safetyCharts} are saved <a href="https://github.com/SafetyGraphics/safetyCharts/tree/dev/inst/config" class="external-link">here</a>.</p>
 <p>The chart function typically takes a list of <code>settings</code> and a list of <code>data</code> as inputs and returns a chart object ready to be displayed in the app. Details of charting functions vary somewhat for different chart types, as explained in the examples below.</p>
 <p>A full technical specification of this chart configuration framework is provided in Appendix 1.</p>
 </div>
-<div id="example-1---hello-world" class="section level1">
-<h1 class="hasAnchor">
-<a href="#example-1---hello-world" class="anchor"></a>Example 1 - Hello World</h1>
+<div class="section level2">
+<h2 id="example-1---hello-world">Example 1 - Hello World<a class="anchor" aria-label="anchor" href="#example-1---hello-world"></a>
+</h2>
 <p>Once you’ve created the configuration and chart functions, the chart can be added to the app via the <code>charts</code> parameter in <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code>. Consider this simple “Hello World” example:</p>
-<pre><code># Chart Function
-helloWorld &lt;- function(data, settings){
-    plot(-1:1, -1:1)
-    text(runif(20, -1,1),runif(20, -1,1),"Hello World")
-}
+<pre><code><span class="co"># Chart Function</span>
+<span class="va">helloWorld</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">settings</span><span class="op">)</span><span class="op">{</span>
+    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">20</span>, <span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">20</span>, <span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,<span class="st">"Hello World"</span><span class="op">)</span>
+<span class="op">}</span>
 
-# Chart Configuration
-helloworld_chart&lt;-list(
-    env="safetyGraphics",
-    name="HelloWorld",
-    label="Hello World!",
-    type="plot",
-    domain="aes",
-    workflow=list(
-        main="helloWorld"
-    )
-)
+<span class="co"># Chart Configuration</span>
+<span class="va">helloworld_chart</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    env<span class="op">=</span><span class="st">"safetyGraphics"</span>,
+    name<span class="op">=</span><span class="st">"HelloWorld"</span>,
+    label<span class="op">=</span><span class="st">"Hello World!"</span>,
+    type<span class="op">=</span><span class="st">"plot"</span>,
+    domain<span class="op">=</span><span class="st">"aes"</span>,
+    workflow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+        main<span class="op">=</span><span class="st">"helloWorld"</span>
+    <span class="op">)</span>
+<span class="op">)</span>
 
-safetyGraphicsApp(charts=list(helloworld_chart))</code></pre>
+<span class="fu"><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span><span class="op">(</span>charts<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">helloworld_chart</span><span class="op">)</span><span class="op">)</span></code></pre>
 <p>It’s also easy to add a custom chart to the default charts provided in {safetyCharts} using the <code><a href="../reference/makeChartConfig.html">makeChartConfig()</a></code> function:</p>
-<pre><code>charts &lt;- makeChartConfig(packages="safetyCharts") # or just makeChartConfig() since safetyCharts is included by default
-charts$helloworld&lt;-helloworld_chart
-safetyGraphicsApp(charts=charts)</code></pre>
+<pre><code><span class="va">charts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/makeChartConfig.html">makeChartConfig</a></span><span class="op">(</span>packages<span class="op">=</span><span class="st">"safetyCharts"</span><span class="op">)</span> <span class="co"># or just makeChartConfig() since safetyCharts is included by default</span>
+<span class="va">charts</span><span class="op">$</span><span class="va">helloworld</span><span class="op">&lt;-</span><span class="va">helloworld_chart</span>
+<span class="fu"><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span><span class="op">(</span>charts<span class="op">=</span><span class="va">charts</span><span class="op">)</span></code></pre>
 <p>Here’s our Hello World the chart running in the app:</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/129573224-0164a7ca-bb40-4c2a-af7e-83fa3750f6c8.png" style="max-width:700px"></p>
 </div>
-<div id="example-2---static-outlier-explorer" class="section level1">
-<h1 class="hasAnchor">
-<a href="#example-2---static-outlier-explorer" class="anchor"></a>Example 2 - Static Outlier Explorer</h1>
+<div class="section level2">
+<h2 id="example-2---static-outlier-explorer">Example 2 - Static Outlier Explorer<a class="anchor" aria-label="anchor" href="#example-2---static-outlier-explorer"></a>
+</h2>
 <p>Now let’s consider a more complex example that makes use of the <code>data</code> and <code>settings</code> provided in <code>safetyGraphics</code>. In this section, we use {ggplot2} to create a spaghetti plot for tracking outliers in lab data. First, consider the following code which creates a stand-alone plot for a single data set:</p>
-<pre><code><a href="https://rdrr.io/r/base/library.html"># Use sample clinical trial data sets from the {safetyData} package
-library(safetyData) 
-library(ggplot2)
-library(dplyr)
+<pre><code><span class="co"># Use sample clinical trial data sets from the {safetyData} package</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">safetyData</span><span class="op">)</span> 
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
 
-# Define data mapping using a format similar to a reactive safetyGraphics mapping 
-settings &lt;- list(
-    id_col="USUBJID",
-    value_col="LBSTRESN",
-    measure_col="LBTEST",
-    studyday_col="LBDY"
-)
+<span class="co"># Define data mapping using a format similar to a reactive safetyGraphics mapping </span>
+<span class="va">settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+    id_col<span class="op">=</span><span class="st">"USUBJID"</span>,
+    value_col<span class="op">=</span><span class="st">"LBSTRESN"</span>,
+    measure_col<span class="op">=</span><span class="st">"LBTEST"</span>,
+    studyday_col<span class="op">=</span><span class="st">"LBDY"</span>
+<span class="op">)</span>
 
-# Define a plotting function that takes data and settings as inputs 
-spaghettiPlot &lt;- function( data, settings ){
-    # define plot aes - note use of standard evaluation! 
-    plot_aes &lt;- aes_(
-        x=as.name(settings$studyday_col), 
-        y=as.name(settings$value_col), 
-        group=as.name(settings$id_col)
-    )
+<span class="co"># Define a plotting function that takes data and settings as inputs </span>
+<span class="va">spaghettiPlot</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span> <span class="va">data</span>, <span class="va">settings</span> <span class="op">)</span><span class="op">{</span>
+    <span class="co"># define plot aes - note use of standard evaluation! </span>
+    <span class="va">plot_aes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
+        x<span class="op">=</span><span class="va">.data</span><span class="op">[[</span><span class="va">settings</span><span class="op">$</span><span class="va">studyday_col</span><span class="op">]</span><span class="op">]</span>, 
+        y<span class="op">=</span><span class="va">.data</span><span class="op">[[</span><span class="va">settings</span><span class="op">$</span><span class="va">value_col</span><span class="op">]</span><span class="op">]</span>, 
+        group<span class="op">=</span><span class="va">.data</span><span class="op">[[</span><span class="va">settings</span><span class="op">$</span><span class="va">id_col</span><span class="op">]</span><span class="op">]</span>
+    <span class="op">)</span>
 
-    #create the plot
-    p&lt;-ggplot(data = data, plot_aes) +
-        geom_path(alpha=0.15) + 
-        facet_wrap(
-            as.name(settings$measure_col),
-            scales="free_y"
-        )
-    return(p)
-}
+    <span class="co">#create the plot</span>
+    <span class="va">p</span><span class="op">&lt;-</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, <span class="va">plot_aes</span><span class="op">)</span> <span class="op">+</span>
+        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_path</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.15</span><span class="op">)</span> <span class="op">+</span> 
+        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span>
+            <span class="va">settings</span><span class="op">$</span><span class="va">measure_col</span>,
+            scales<span class="op">=</span><span class="st">"free_y"</span>
+        <span class="op">)</span>
+    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>
+<span class="op">}</span>
 
-spaghettiPlot(
-    safetyData::sdtm_lb %&gt;% 
-        filter(LBTEST %in% c("Albumin","Bilirubin","Calcium","Chloride")), 
-    settings
-)</a></code></pre>
+<span class="fu">spaghettiPlot</span><span class="op">(</span>
+    <span class="fu">safetyData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/safetyData/man/sdtm_lb.html" class="external-link">sdtm_lb</a></span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">LBTEST</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Albumin"</span>,<span class="st">"Bilirubin"</span>,<span class="st">"Calcium"</span>,<span class="st">"Chloride"</span><span class="op">)</span><span class="op">)</span>, 
+    <span class="va">settings</span>
+<span class="op">)</span></code></pre>
 <p>Running the code above should create a plot with 4 panels:</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/133291550-8f008f42-5ac8-41dd-8f6c-d8c8004e7336.jpg" style="max-width:700px"></p>
-<p>With minor modifications, this chart can be added to the {safetyGraphics} shiny app, which allows us to create the chart with any mappings/data combination loaded in the app. The <code>spaghettiPlot()</code> function above is already written to work with safetyGraphics, so we just need to create the chart configuration object. This time we’ll capture the configuration in a <a href="https://yaml.org/">YAML</a> file.</p>
+<p>With minor modifications, this chart can be added to the {safetyGraphics} shiny app, which allows us to create the chart with any mappings/data combination loaded in the app. The <code>spaghettiPlot()</code> function above is already written to work with safetyGraphics, so we just need to create the chart configuration object. This time we’ll capture the configuration in a <a href="https://yaml.org/" class="external-link">YAML</a> file.</p>
 <pre><code>env: safetyGraphics
 label: Spaghetti Plot
+name: spaghettiPlot
 type: plot
 domain: 
-  - labs
+    - labs
 workflow:
-  main: spaghettiPlot
+    main: spaghettiPlot
 links:
-  safetyCharts: https://github.com/SafetyGraphics/safetycharts</code></pre>
+    safetyCharts: https://github.com/SafetyGraphics/safetycharts</code></pre>
 <p>With the charting function loaded in to our session and the configuration file saved in our working directory as <code>spaghetti.yaml</code>, we can add the chart to the app as follows:</p>
-<pre><code><a href="https://github.com/viking/r-yaml/">library(yaml)
-charts &lt;- makeChartConfig()
-charts$spaghetti&lt;-prepareChart(read_yaml('spaghetti.yaml'))
-safetyGraphicsApp(charts=charts)</a></code></pre>
+<pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vubiostat/r-yaml/" class="external-link">yaml</a></span><span class="op">)</span>
+<span class="va">charts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/makeChartConfig.html">makeChartConfig</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">charts</span><span class="op">$</span><span class="va">spaghetti</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/prepareChart.html">prepareChart</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/yaml/man/read_yaml.html" class="external-link">read_yaml</a></span><span class="op">(</span><span class="st">'spaghetti.yaml'</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span><span class="op">(</span>charts<span class="op">=</span><span class="va">charts</span><span class="op">)</span></code></pre>
 <p>Under the charts tab, you’ll see:</p>
 <p><img src="https://user-images.githubusercontent.com/3680095/133292056-6a76836c-a7dc-4532-95ca-de12bd00ca2c.jpg" style="max-width:700px"></p>
 <p>If you look closely at the <code>spaghettiPlot()</code> code above, you’ll noticed some details that make the chart work in the app:</p>
 <ul>
 <li>The chart function is written as a function taking <code>data</code> and <code>settings</code> as inputs. This is the expected parameterization for most charts in {safetyGraphics}.</li>
-<li>The references to <code>settings</code> use parameters that are defined on the mapping tab. Behind the scenes, these are defined in the <code><a href="../reference/meta.html">safetyGraphics::meta</a></code>.</li>
+<li>The references to <code>settings</code> use parameters that are defined on the mapping tab. Behind the scenes, these are defined in the <code>safetyGraphics::meta</code>.</li>
 <li>The <code>spaghettiPlot</code> function is referenced in the <code>main</code> item the YAML <code>workflow</code>. This tells the app which function to use to draw the chart.</li>
+<li>We’re using the <code>.data[[]]</code> pronoun in the chart function to access columns in the data based on the current settings. See these references for a lot more detail about functional programming in the tidyverse:
+<ul>
+<li><a href="https://cran.r-project.org/web/packages/ggplot2/vignettes/ggplot2-in-packages.html" class="external-link">Using ggplot2 in packages</a></li>
+<li><a href="https://dplyr.tidyverse.org/articles/programming.html" class="external-link">Programming with dplyr</a></li>
+<li>
+<a href="https://adv-r.hadley.nz/fp.html" class="external-link">Functional programming chapters in Advanced R</a> These details allow users to dynamically define data attributes for any labs data set, allowing the chart to be reused across many different types of data.</li>
 </ul>
-<p>These details allow users to dynamically define data attributes for any labs data set, allowing the chart to be reused across many different types of data.</p>
-<p>This example is inspired by <code><a href="https://rdrr.io/pkg/safetyCharts/man/safety_outlier_explorer.html">safetyCharts::safety_outlier_explorer</a></code> - the <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/R/safety_outlier_explorer.R">charting function</a> and <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/inst/config/safetyOutlierExplorerStatic.yaml">yaml configuration file</a> on are GitHub.</p>
+</li>
+</ul>
+<p>This example is inspired by <code><a href="https://rdrr.io/pkg/safetyCharts/man/safety_outlier_explorer.html" class="external-link">safetyCharts::safety_outlier_explorer</a></code> - the <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/R/safety_outlier_explorer.R" class="external-link">charting function</a> and <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/inst/config/safetyOutlierExplorerStatic.yaml" class="external-link">yaml configuration file</a> on are GitHub.</p>
 </div>
-<div id="example-3---shiny-module" class="section level1">
-<h1 class="hasAnchor">
-<a href="#example-3---shiny-module" class="anchor"></a>Example 3 - Shiny Module</h1>
-<p>{safetyGraphics} also supports defining charts as Shiny Modules. Once you’re <a href="https://shiny.rstudio.com/articles/modules.html">familiar</a> <a href="https://mastering-shiny.org/scaling-modules.html">with</a> <a href="https://emilyriederer.netlify.app/post/shiny-modules/">modules</a>, they are relatively straightforward to use with safetyGraphics.</p>
-<p>Let’s take a look at a simple module that extends the functionality of the static chart from the example above. Once again, this example is based upon <code>safetyCharts</code>, and you can see the <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/R/mod_safetyOutlierExplorer.R">code</a> and <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/inst/config/safetyOutlierExplorerModule.yaml">config</a> on GitHub.</p>
+<div class="section level2">
+<h2 id="example-3---shiny-module">Example 3 - Shiny Module<a class="anchor" aria-label="anchor" href="#example-3---shiny-module"></a>
+</h2>
+<p>{safetyGraphics} also supports defining charts as Shiny Modules. Once you’re <a href="https://shiny.rstudio.com/articles/modules.html" class="external-link">familiar</a> <a href="https://mastering-shiny.org/scaling-modules.html" class="external-link">with</a> <a href="https://emilyriederer.netlify.app/post/shiny-modules/" class="external-link">modules</a>, they are relatively straightforward to use with safetyGraphics.</p>
+<p>Let’s take a look at a simple module that extends the functionality of the static chart from the example above. Once again, this example is based upon <code>safetyCharts</code>, and you can see the <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/R/mod_safetyOutlierExplorer.R" class="external-link">code</a> and <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/inst/config/safetyOutlierExplorerModule.yaml" class="external-link">config</a> on GitHub.</p>
 <p>The config object for a module differs from a static chart is that the workflow section of the YAML file must specify <code>ui</code> and <code>server</code> functions instead of a <code>main</code> charting function. This example defines a simple UI function that allows users to select which lab measurements should be included in the spaghetti plot from example 1:</p>
-<pre><code>safetyOutlierExplorer_ui &lt;- function(id) {
-    ns &lt;- NS(id) 
-    sidebar&lt;-sidebarPanel(
-        selectizeInput(
-            ns("measures"), 
-            "Select Measures", 
-            multiple=TRUE, 
-            choices=c("")
-        )
-    )
-    main&lt;-mainPanel(plotOutput(ns("outlierExplorer")))
-    ui&lt;-fluidPage(
-        sidebarLayout(
-            sidebar,
-            main,
-            position = c("right"),
-            fluid=TRUE
-        )
-    )
-    return(ui)
-}</code></pre>
-<p>Next we define a server function that populates the control for selecting measurements and then draws the plot using <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/R/safety_outlier_explorer.R"><code>safetyCharts::safety_outlier_explorer()</code></a> charting function - which is based on the <code>spaghetti()</code> function ! Note that the server function takes a single reactive <code>params</code> object containing the data (<code>params$data</code>) and settings (<code>param$settings</code>) as input.</p>
-<pre><code>safetyOutlierExplorer_server &lt;- function(input, output, session, params) {
+<pre><code><span class="va">safetyOutlierExplorer_ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu">NS</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> 
+    <span class="va">sidebar</span><span class="op">&lt;-</span><span class="fu">sidebarPanel</span><span class="op">(</span>
+        <span class="fu">selectizeInput</span><span class="op">(</span>
+            <span class="fu">ns</span><span class="op">(</span><span class="st">"measures"</span><span class="op">)</span>, 
+            <span class="st">"Select Measures"</span>, 
+            multiple<span class="op">=</span><span class="cn">TRUE</span>, 
+            choices<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span>
+        <span class="op">)</span>
+    <span class="op">)</span>
+    <span class="va">main</span><span class="op">&lt;-</span><span class="fu">mainPanel</span><span class="op">(</span><span class="fu">plotOutput</span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"outlierExplorer"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">ui</span><span class="op">&lt;-</span><span class="fu">fluidPage</span><span class="op">(</span>
+        <span class="fu">sidebarLayout</span><span class="op">(</span>
+            <span class="va">sidebar</span>,
+            <span class="va">main</span>,
+            position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"right"</span><span class="op">)</span>,
+            fluid<span class="op">=</span><span class="cn">TRUE</span>
+        <span class="op">)</span>
+    <span class="op">)</span>
+    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">ui</span><span class="op">)</span>
+<span class="op">}</span></code></pre>
+<p>Next we define a server function that populates the control for selecting measurements and then draws the plot using <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/R/safety_outlier_explorer.R" class="external-link"><code>safetyCharts::safety_outlier_explorer()</code></a> charting function - which is based on the <code>spaghetti()</code> function! Note that the server function takes a single reactive <code>params</code> object containing the data (<code>params$data</code>) and settings (<code>param$settings</code>) as input.</p>
+<pre><code><span class="va">safetyOutlierExplorer_server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">params</span><span class="op">)</span> <span class="op">{</span>
 
-    ns &lt;- session$ns
-    # Populate control with measures and select all by default
-    observe({
-        measure_col &lt;- params()$settings$measure_col
-        measures &lt;- unique(params()$data[[measure_col]])
-        updateSelectizeInput(
-            session, 
-            "measures",
-            choices = measures,
-            selected = measures
-        )
-    })
+    <span class="va">ns</span> <span class="op">&lt;-</span> <span class="va">session</span><span class="op">$</span><span class="va">ns</span>
+    <span class="co"># Populate control with measures and select all by default</span>
+    <span class="fu">observe</span><span class="op">(</span><span class="op">{</span>
+        <span class="va">measure_col</span> <span class="op">&lt;-</span> <span class="fu">params</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">measure_col</span>
+        <span class="va">measures</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu">params</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">data</span><span class="op">[[</span><span class="va">measure_col</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+        <span class="fu">updateSelectizeInput</span><span class="op">(</span>
+            <span class="va">session</span>, 
+            <span class="st">"measures"</span>,
+            choices <span class="op">=</span> <span class="va">measures</span>,
+            selected <span class="op">=</span> <span class="va">measures</span>
+        <span class="op">)</span>
+    <span class="op">}</span><span class="op">)</span>
 
-    # customize selected measures based on input
-    settingsR &lt;- reactive({
-        settings &lt;- params()$settings
-        settings$measure_values &lt;- input$measures
-        return(settings)
-    })
+    <span class="co"># customize selected measures based on input</span>
+    <span class="va">settingsR</span> <span class="op">&lt;-</span> <span class="fu">reactive</span><span class="op">(</span><span class="op">{</span>
+        <span class="va">settings</span> <span class="op">&lt;-</span> <span class="fu">params</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">settings</span>
+        <span class="va">settings</span><span class="op">$</span><span class="va">measure_values</span> <span class="op">&lt;-</span> <span class="va">input</span><span class="op">$</span><span class="va">measures</span>
+        <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">settings</span><span class="op">)</span>
+    <span class="op">}</span><span class="op">)</span>
 
-    #draw the chart
-    output$outlierExplorer &lt;- renderPlot({safety_outlier_explorer(params()$data, settingsR())})
-}</code></pre>
+    <span class="co">#draw the chart</span>
+    <span class="va">output</span><span class="op">$</span><span class="va">outlierExplorer</span> <span class="op">&lt;-</span> <span class="fu">renderPlot</span><span class="op">(</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/pkg/safetyCharts/man/safety_outlier_explorer.html" class="external-link">safety_outlier_explorer</a></span><span class="op">(</span><span class="fu">params</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">data</span>, <span class="fu">settingsR</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">}</span><span class="op">)</span>
+<span class="op">}</span></code></pre>
 <p>Finally, the YAML configuration file looks like this - just the workflow and label changes from Example 1:</p>
 <pre><code>env: safetyGraphics
 label: Outlier Explorer - Module
+name: outlierExplorerMod
 type: module
 package: safetyCharts
 domain: 
-  - labs
+    - labs
 workflow:
-  ui: safetyOutlierExplorer_ui
-  server: safetyOutlierExplorer_server
+    ui: safetyOutlierExplorer_ui
+    server: safetyOutlierExplorer_server
 links:
-  safetyCharts: https://github.com/SafetyGraphics/safetycharts</code></pre>
+    safetyCharts: https://github.com/SafetyGraphics/safetycharts</code></pre>
 <p>Initializing the app as usual by adding it to the chart list: <code>charts$outlierMod&lt;-prepareChart(read_yaml('outlierMod.yaml'))</code></p>
 <p>Unselecting a few measures gives the following display: <img src="https://user-images.githubusercontent.com/3680095/133292396-6c51500a-5a59-4887-a8e8-1904a7f23860.jpg" style="max-width:700px"></p>
 </div>
-<div id="example-4---htmlwidgets-and-init-functions" class="section level1">
-<h1 class="hasAnchor">
-<a href="#example-4---htmlwidgets-and-init-functions" class="anchor"></a>Example 4 - htmlwidgets and init functions</h1>
-<p>You can also add custom htmlwidgets to safetyGraphics. In fact, many of the <a href="https://github.com/SafetyGraphics/safetyCharts/tree/dev/inst/htmlwidgets">default charts</a> imported from safetyCharts are javascript libraries that are imported as htmlwidgets. Like shiny modules, htmlwidgets are relatively simple to use once you are <a href="https://www.htmlwidgets.org/">familiar with the basics</a>.</p>
+<div class="section level2">
+<h2 id="example-4---htmlwidgets-and-init-functions">Example 4 - htmlwidgets and init functions<a class="anchor" aria-label="anchor" href="#example-4---htmlwidgets-and-init-functions"></a>
+</h2>
+<p>You can also add custom htmlwidgets to safetyGraphics. In fact, many of the <a href="https://github.com/SafetyGraphics/safetyCharts/tree/dev/inst/htmlwidgets" class="external-link">default charts</a> imported from safetyCharts are javascript libraries that are imported as htmlwidgets. Like shiny modules, htmlwidgets are relatively simple to use once you are <a href="https://www.htmlwidgets.org/" class="external-link">familiar with the basics</a>.</p>
 <p>The biggest differences between widgets and other charts in safetyGraphics are:</p>
 <ol style="list-style-type: decimal">
 <li>The widget must be contained in a package, which must be specified in the YAML file.</li>
 <li>The widget expects a <code>widget</code> item giving the name of the widget in the YAML workflow.</li>
-<li>By default, the data and settings for a widget are passed in a list (<code><a href="https://rdrr.io/r/base/list.html">list(data=data, settings=settings)</a></code>) to the <code>x</code> parameter in <code>htmlwidget::createWidget</code>.</li>
+<li>By default, the data and settings for a widget are passed in a list (<code>list(data=data, settings=settings)</code>) to the <code>x</code> parameter in <code>htmlwidget::createWidget</code>.</li>
 </ol>
 <p>Items 1 and 2 above are simple enough, but #3 is likely to create problems unless the widget is designed specifically for usage with safetyGraphics. That is, if the widget isn’t expecting <code>x$settings</code> to be a list that it uses to configure the chart, it probably isn’t going to work as expected.</p>
-<p>Fortunately, there’s a workaround built in to safetyGraphics in the form of <code>init</code> workflow functions. Init functions run before the chart is drawn, and can be used to create custom parameterizations. The init function should take <code>data</code> and <code>settings</code> as inputs and return <code>params</code> which should be a list which is then provided to the chart (see the appendix for more details). The <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/R/init_aeExplorer.R">init function</a> for the the interactive <a href="https://github.com/RhoInc/aeexplorer">AE Explorer</a> is a good example. It starts by <a href="https://github.com/SafetyGraphics/safetyCharts/blob/c37f3ac7883b15ab3d8a36e597dec85728657fd7/R/init_aeExplorer.R#L16-L18">merging demographics and adverse event data</a> and then proceeds to <a href="https://github.com/SafetyGraphics/safetyCharts/blob/c37f3ac7883b15ab3d8a36e597dec85728657fd7/R/init_aeExplorer.R#L20-L43">create a customized settings object</a> to match <a href="https://github.com/RhoInc/aeexplorer/wiki/Configuration">the configuration requirements</a> of the javascript chart renderer. This init function is then saved under <code>workflow$init</code> in the chart config object.</p>
-<p>The rest of the <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/inst/config/aeExplorer.yaml">chart configuration YAML</a> is similar to the examples above, and the chart is once again by passing the chart config object to <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code></p>
+<p>Fortunately, there’s a workaround built in to safetyGraphics in the form of <code>init</code> workflow functions. Init functions run before the chart is drawn, and can be used to create custom parameterizations. The init function should take <code>data</code> and <code>settings</code> as inputs and return <code>params</code> which should be a list which is then provided to the chart (see the appendix for more details). The <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/R/init_aeExplorer.R" class="external-link">init function</a> for the the interactive <a href="https://github.com/RhoInc/aeexplorer" class="external-link">AE Explorer</a> is a good example. It starts by <a href="https://github.com/SafetyGraphics/safetyCharts/blob/c37f3ac7883b15ab3d8a36e597dec85728657fd7/R/init_aeExplorer.R#L16-L18" class="external-link">merging demographics and adverse event data</a> and then proceeds to <a href="https://github.com/SafetyGraphics/safetyCharts/blob/c37f3ac7883b15ab3d8a36e597dec85728657fd7/R/init_aeExplorer.R#L20-L43" class="external-link">create a customized settings object</a> to match <a href="https://github.com/RhoInc/aeexplorer/wiki/Configuration" class="external-link">the configuration requirements</a> of the javascript chart renderer. This init function is then saved under <code>workflow$init</code> in the chart config object.</p>
+<p>The rest of the <a href="https://github.com/SafetyGraphics/safetyCharts/blob/dev/inst/config/aeExplorer.yaml" class="external-link">chart configuration YAML</a> is similar to the examples above, and the chart is once again by passing the chart config object to <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code></p>
 </div>
-<div id="appendix-1---chart-framework-technical-specifications" class="section level1">
-<h1 class="hasAnchor">
-<a href="#appendix-1---chart-framework-technical-specifications" class="anchor"></a>Appendix #1 - Chart Framework Technical Specifications</h1>
-<div id="configuration-overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#configuration-overview" class="anchor"></a>Configuration Overview</h2>
+<div class="section level2">
+<h2 id="example-5---adding-a-chart-in-a-new-data-domain">Example 5 - Adding a Chart in a New Data Domain<a class="anchor" aria-label="anchor" href="#example-5---adding-a-chart-in-a-new-data-domain"></a>
+</h2>
+<p>All of our examples so far have been focused on creating charts in our 3 default data domains (labs, adverse events and demographics), but there is no requirement that limits charts to these three data types. The data domains in the app are determined by a <code>meta</code> data frame that defines the columns and fields used in safetyGraphics charts, and customizing <code>meta</code> allows us to create charts for any desired data domains.</p>
+<p>Generally speaking there are 3 steps to add a chart in a new domain:</p>
+<ol style="list-style-type: decimal">
+<li>Create Metadata for a new data domain.</li>
+<li>Define a chart using the new domain - like the examples above</li>
+<li>Load data for the new domain</li>
+</ol>
+<p>Consider the following example, that modifies a chart from the <code>labs</code> domain for use on ECG data:</p>
+<pre><code><span class="va">adeg</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="st">"https://physionet.org/files/ecgcipa/1.0.0/adeg.csv?download"</span><span class="op">)</span>
+
+<span class="va">ecg_meta</span> <span class="op">&lt;-</span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span>
+    <span class="op">~</span><span class="va">text_key</span>, <span class="op">~</span><span class="va">domain</span>,                      <span class="op">~</span><span class="va">label</span>,                               <span class="op">~</span><span class="va">description</span>, <span class="op">~</span><span class="va">standard_adam</span>, <span class="op">~</span><span class="va">standard_sdtm</span>,
+    <span class="st">"id_col"</span>,   <span class="st">"custom_ecg"</span>,                 <span class="st">"ID column"</span>, <span class="st">"Unique subject identifier variable name."</span>,      <span class="st">"USUBJID"</span>,      <span class="st">"USUBJID"</span>,
+    <span class="st">"value_col"</span>,   <span class="st">"custom_ecg"</span>,              <span class="st">"Value column"</span>,                 <span class="st">"QT result variable name."</span>,         <span class="st">"AVAL"</span>,     <span class="st">"EGSTRESN"</span>,
+    <span class="st">"measure_col"</span>,   <span class="st">"custom_ecg"</span>,            <span class="st">"Measure column"</span>,                 <span class="st">"QT measure variable name"</span>,        <span class="st">"PARAM"</span>,       <span class="st">"EGTEST"</span>,
+    <span class="st">"studyday_col"</span>,   <span class="st">"custom_ecg"</span>,          <span class="st">"Study Day column"</span>,                  <span class="st">"Visit day variable name"</span>,          <span class="st">"ADY"</span>,         <span class="st">"EGDY"</span>,
+    <span class="st">"visit_col"</span>,   <span class="st">"custom_ecg"</span>,              <span class="st">"Visit column"</span>,                      <span class="st">"Visit variable name"</span>,         <span class="st">"ATPT"</span>,        <span class="st">"EGTPT"</span>,
+    <span class="st">"visitn_col"</span>,   <span class="st">"custom_ecg"</span>,       <span class="st">"Visit number column"</span>,               <span class="st">"Visit number variable name"</span>,        <span class="st">"ATPTN"</span>,             <span class="cn">NA</span>,
+    <span class="st">"period_col"</span>,   <span class="st">"custom_ecg"</span>,             <span class="st">"Period column"</span>,                     <span class="st">"Period variable name"</span>,      <span class="st">"APERIOD"</span>,             <span class="cn">NA</span>,
+    <span class="st">"unit_col"</span>,   <span class="st">"custom_ecg"</span>,               <span class="st">"Unit column"</span>,            <span class="st">"Unit of measure variable name"</span>,        <span class="st">"AVALU"</span>,     <span class="st">"EGSTRESU"</span>
+<span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
+    col_key <span class="op">=</span> <span class="va">text_key</span>,
+    type<span class="op">=</span><span class="st">"column"</span>
+<span class="op">)</span>
+
+<span class="va">qtOutliers</span><span class="op">&lt;-</span><span class="fu">prepare_chart</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/yaml/man/read_yaml.html" class="external-link">read_yaml</a></span><span class="op">(</span><span class="st">'https://raw.githubusercontent.com/SafetyGraphics/safetyCharts/dev/inst/config/safetyOutlierExplorer.yaml'</span><span class="op">)</span> <span class="op">)</span>
+<span class="va">qtOutliers</span><span class="op">$</span><span class="va">label</span> <span class="op">&lt;-</span> <span class="st">"QT Outlier explorer"</span>
+<span class="va">qtOutliers</span><span class="op">$</span><span class="va">domain</span> <span class="op">&lt;-</span> <span class="st">"custom_ecg"</span>
+<span class="va">qtOutliers</span><span class="op">$</span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="va">ecg_meta</span>
+
+<span class="fu"><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span><span class="op">(</span>
+    domainData<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>custom_ecg<span class="op">=</span><span class="va">adeg</span><span class="op">)</span>, 
+    charts<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">qtOutliers</span><span class="op">)</span>
+<span class="op">)</span></code></pre>
+<p>As of safetyGraphics v2.1, metadata can be saved directly to the chart object using <code>chart$meta</code> as shown in the example above.<br>
+Alternatively, metadata can be saved as a data object in the <code>chart$package</code> namespace. Chart-specific metadata should be saved as <code>meta_{chart$name}</code> while domain-level metadata should be named <code>meta_{chart$domain}</code>. It’s fine to use a combination of these approaches as appropriate for your chart. See <code><a href="../reference/makeMeta.html">?safetyGraphics::makeMeta</a></code> for more detail.</p>
+</div>
+<div class="section level2">
+<h2 id="appendix-1---chart-framework-technical-specifications">Appendix #1 - Chart Framework Technical Specifications<a class="anchor" aria-label="anchor" href="#appendix-1---chart-framework-technical-specifications"></a>
+</h2>
+<div class="section level3">
+<h3 id="configuration-overview">Configuration Overview<a class="anchor" aria-label="anchor" href="#configuration-overview"></a>
+</h3>
 <p><img src="https://user-images.githubusercontent.com/3680095/130678922-1c499817-f3a4-4fa5-847a-cec6c6ade95e.png" style="max-width:700px"></p>
-<p>The diagram above summarizes the various components of the safetyGraphics charting framework: - The <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> function allows users to specify which charts to include in the shiny app via the <code>charts</code> parameter, which expects a <code>list</code> of charts. - Each item in <code>charts</code> is itself defined as a <code>list</code> that provides configuration details for a single chart. These configuration lists have several required parameters, which are described in the technical specification below. - Configuration lists are typically saved as YAML files, but can be also be loaded directly as list objects as shown in the Hello World example above. - Needed functions are bound to the chart object via the prepareChart() function. See the documentation for <code>chart$functions</code> below for full details.</p>
+<p>The diagram above summarizes the various components of the safetyGraphics charting framework:</p>
+<ul>
+<li>The <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code> function allows users to specify which charts to include in the shiny app via the <code>charts</code> parameter, which expects a <code>list</code> of charts.</li>
+<li>Each item in <code>charts</code> is itself defined as a <code>list</code> that provides configuration details for a single chart. These configuration lists have several required parameters, which are described in the technical specification below.</li>
+<li>Configuration lists are typically saved as YAML files, but can be also be loaded directly as list objects as shown in the Hello World example above.</li>
+<li>Needed functions are bound to the chart object via the prepareChart() function. See the documentation for <code>chart$functions</code> below for full details.</li>
+</ul>
 </div>
-<div id="chart-specification" class="section level2">
-<h2 class="hasAnchor">
-<a href="#chart-specification" class="anchor"></a>Chart Specification</h2>
-<p>Each item in the <code>charts</code> list should be a list() with the following parameters: - <code>env</code>: Environment for the chart. Must be set to “safetyGraphics” or the chart is dropped. Type: <em>character</em>. <strong>Required</strong> - <code>name</code>: Name of the chart. Type: <em>character</em>. <strong>Required</strong> - <code>type:</code>: Type of chart. Valid options are: “plot”,“htmlwidget”,“html”,“table” and “module”. Type: <em>character</em>. <strong>Required</strong> - <code>label</code>: A short description of the chart. chart<span class="math inline">\(name is used if not provided. Type: *character*. *Optional* - `domain`: The data domain(s) used in the chart. Type: *character*. **Required** - `package`: The package where the {htmlwidget} is saved. Type: *character*. **Required** when `chart\)</span>type<code>is "htmlwidget" -</code>order<code>: Order in which to display the chart. If order is a negative number, the chart is dropped. Defaults to 999999. Type: *Integer*. *Optional* -</code>links<code>:  Named list of link names/urls to be shown in the chart header. Type: *list of character*. *Optional* -</code>path<code>: Full path of the YAML file. Auto-generated by</code>makeChartConfig()<code>Type: *character* *optional* -</code>workflow<code>: Names of functions used to create the chart. Should be loaded in global environment or included in</code>chart<span class="math inline">\(package` before calling `prepareChart()`. Supported parameters are listed below. Type: *list of character*. **Required**  - `workflow\)</span>main<code>: name of the function to draw the chart. The function should take</code>data<code>and</code>settings<code>parameters unless the input parameters are customized by an</code>init<code>function. **Required**, unless</code>chart<span class="math inline">\(type` is "htmlwidget" or "module")  - `workflow\)</span>init: name of initialization function that runs before chart is drawn via the <code>main</code> function. Should take <code>data</code> and <code>settings</code> as input and return a list of parameters accepted by the <code>main</code> function. <em>Optional</em> - <code>workflow$widget</code>: name or widget saved in <code>chart$package</code> to be passed to <code><a href="https://rdrr.io/pkg/htmlwidgets/man/createWidget.html">htmlwidgets::createWidget</a></code> <strong>Required</strong> when <code>chart$type</code> is “htmlwidget” - <code>workflow$ui</code> and <code>workflow$server</code>: names of functions to render shiny ui and server. Automatically generated in <code><a href="../reference/prepareChart.html">prepareChart()</a></code> unless <code>chart$type</code> is “module”. <strong>Required</strong> when <code>chart$type</code> is ‘module’ - <code>functions</code>: a list of functions used to create the chart. Typically generated at runtime by <code><a href="../reference/prepareChart.html">prepareChart()</a></code> using information in <code>chart$workflow</code>, <code>chart$type</code> and <code>chart$package</code>. Not recommended to generate manually. Type: <em>list of functions</em>. <strong>Required</strong></p>
+<div class="section level3">
+<h3 id="chart-specification">Chart Specification<a class="anchor" aria-label="anchor" href="#chart-specification"></a>
+</h3>
+<p>Each item in the <code>charts</code> list should be a list() with the following parameters:</p>
+<ul>
+<li>
+<code>env</code>: Environment for the chart. Must be set to “safetyGraphics” or the chart is dropped. Type: <em>character</em>. <strong>Required</strong>
+</li>
+<li>
+<code>name</code>: Name of the chart. Type: <em>character</em>. <strong>Required</strong>
+</li>
+<li>
+<code>type:</code>: Type of chart. Valid options are: “plot”,“htmlwidget”,“html”,“table” and “module”. Type: <em>character</em>. <strong>Required</strong>
+</li>
+<li>
+<code>label</code>: A short description of the chart. chart$name is used if not provided. Type: <em>character</em>. <em>Optional</em>
+</li>
+<li>
+<code>domain</code>: The data domain(s) used in the chart. Type: <em>character</em>. <strong>Required</strong>
+</li>
+<li>
+<code>package</code>: The package where the {htmlwidget} is saved. Type: <em>character</em>. <strong>Required</strong> when <code>chart$type</code> is “htmlwidget”</li>
+<li>
+<code>meta</code>: Table of chart-specific metadata. Metadata can also be saved as <code>{package}::meta_{chart}</code> or <code>{package::meta_{domain}</code>. See <code><a href="../reference/makeMeta.html">?safetyGraphics::makeMeta</a></code> for more detail.</li>
+<li>
+<code>order</code>: Order in which to display the chart. If order is a negative number, the chart is dropped. Defaults to 999999. Type: <em>Integer</em>. <em>Optional</em>
+</li>
+<li>
+<code>links</code>: Named list of link names/urls to be shown in the chart header. Type: <em>list of character</em>. <em>Optional</em>
+</li>
+<li>
+<code>path</code>: Full path of the YAML file. Auto-generated by <code><a href="../reference/makeChartConfig.html">makeChartConfig()</a></code> Type: <em>character</em> <em>optional</em>
+</li>
+<li>
+<code>workflow</code>: Names of functions used to create the chart. Should be loaded in global environment or included in <code>chart$package</code> before calling <code><a href="../reference/prepareChart.html">prepareChart()</a></code>. Supported parameters are listed below. Type: <em>list of character</em>. <strong>Required</strong>
+<ul>
+<li>
+<code>workflow$main</code>: name of the function to draw the chart. The function should take <code>data</code> and <code>settings</code> parameters unless the input parameters are customized by an <code>init</code> function. <strong>Required</strong>, unless <code>chart$type</code> is “htmlwidget” or “module”)</li>
+<li>
+<code>workflow$init: name of initialization function that runs before chart is drawn via the</code>main<code>function. Should take</code>data<code>and</code>settings<code>as input and return a list of parameters accepted by the</code>main` function. <em>Optional</em>
+</li>
+<li>
+<code>workflow$widget</code>: name or widget saved in <code>chart$package</code> to be passed to <code><a href="https://rdrr.io/pkg/htmlwidgets/man/createWidget.html" class="external-link">htmlwidgets::createWidget</a></code> <strong>Required</strong> when <code>chart$type</code> is “htmlwidget”</li>
+<li>
+<code>workflow$ui</code> and <code>workflow$server</code>: names of functions to render shiny ui and server. Automatically generated in <code><a href="../reference/prepareChart.html">prepareChart()</a></code> unless <code>chart$type</code> is “module”. <strong>Required</strong> when <code>chart$type</code> is ‘module’</li>
+</ul>
+</li>
+<li>
+<code>functions</code>: a list of functions used to create the chart. Typically generated at runtime by <code><a href="../reference/prepareChart.html">prepareChart()</a></code> using information in <code>chart$workflow</code>, <code>chart$type</code> and <code>chart$package</code>. Not recommended to generate manually. Type: <em>list of functions</em>. <strong>Required</strong>
+</li>
+</ul>
 </div>
-<div id="default-technical-workflow" class="section level2">
-<h2 class="hasAnchor">
-<a href="#default-technical-workflow" class="anchor"></a>Default Technical workflow</h2>
+<div class="section level3">
+<h3 id="default-technical-workflow">Default Technical workflow<a class="anchor" aria-label="anchor" href="#default-technical-workflow"></a>
+</h3>
 <p>This appendix describe the technical process used to render a chart when safetyGraphicsApp() is called with the default parameters.</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -333,7 +437,7 @@ links:
 <li>
 <code>app_startup</code> is called, which then immediately calls <code><a href="../reference/makeChartConfig.html">makeChartConfig()</a></code>.</li>
 <li>
-<code><a href="../reference/makeChartConfig.html">makeChartConfig()</a></code> looks for charts in the safetyCharts package (the default) since no path was specified. The function looks for the package in all current <code><a href="https://rdrr.io/r/base/libPaths.html">.libPaths()</a></code> and then looks in the <code>inst/config</code> folder once the package is found.</li>
+<code><a href="../reference/makeChartConfig.html">makeChartConfig()</a></code> looks for charts in the safetyCharts package (the default) since no path was specified. The function looks for the package in all current <code><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths()</a></code> and then looks in the <code>inst/config</code> folder once the package is found.</li>
 <li>
 <code>makeChartConfig</code> loads YAML configuration files in the specified directories and saves them to a list. <code>name</code> and <code>path</code> parameters are added.</li>
 <li>
@@ -350,7 +454,9 @@ links:
 </ul>
 </li>
 <li>
-<code>app_startup</code> returns the list of charts to <code>safetyGraphicsApp</code> which then then passes them along to <code>safetyGraphicsServer</code> as the <code>charts</code> parameter.</li>
+<code>app_startup</code> passes the updated list of charts to <code>makeMeta</code> assuming no <code>meta</code> object was provided. <code>makeMeta</code> combines metadata from all charts in to a single data.frame. Charts can save metadata as <code>chart.meta</code>, <code>{package}::meta_{chart}</code> or <code>{package}::meta_{domain}</code>.</li>
+<li>
+<code>app_startup</code> returns the list of charts and associated metadata to <code>safetyGraphicsApp</code> which then then passes them along to <code>safetyGraphicsServer</code> as the <code>charts</code> parameter.</li>
 <li>
 <code>safetyGraphicsServer</code> then creates modules for each chart. First, <code>UIs</code> are created via <code><a href="../reference/chartsNav.html">chartsNav()</a></code> which then calls:
 <ul>
@@ -394,11 +500,13 @@ links:
 
 
       <footer><div class="copyright">
-  <p>Developed by Jeremy Wildfire, Becca Krouse, Preston Burns, Xiao Ni, James Buchanan, Susan Duke.</p>
+  <p></p>
+<p>Developed by Jeremy Wildfire, Becca Krouse, Preston Burns, Xiao Ni, James Buchanan, Susan Duke.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -406,6 +514,8 @@ links:
 
   
 
+
+  
 
   </body>
 </html>

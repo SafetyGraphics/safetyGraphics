@@ -1,4 +1,4 @@
-url: https://pages.github.com/SafetyGraphics/safetyGraphics
+url: https://safetygraphics.github.io/safetyGraphics
 
 template:
   params:
@@ -68,10 +68,6 @@ reference:
       - settingsMappingUI
       - settingsCode
       - settingsCodeUI
-  - title: Data
-    desc: Data sets used in the apps
-    contents:
-      - meta
   - title: Helper Functions
     desc: Utility functions used in the apps
     contents:
@@ -86,4 +82,5 @@ reference:
       - makeChartParams
       - makeChartSummary
       - makeMapping
+      - makeMeta
       - prepareChart
