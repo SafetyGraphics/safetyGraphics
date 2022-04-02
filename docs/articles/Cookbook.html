@@ -96,7 +96,7 @@
       <h1 data-toc-skip>Cookbook</h1>
                         <h4 data-toc-skip class="author">Jeremy Wildfire</h4>
             
-            <h4 data-toc-skip class="date">2022-03-24</h4>
+            <h4 data-toc-skip class="date">2022-04-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/HEAD/vignettes/Cookbook.Rmd" class="external-link"><code>vignettes/Cookbook.Rmd</code></a></small>
       <div class="hidden name"><code>Cookbook.Rmd</code></div>
@@ -182,7 +182,7 @@
 <h3 id="example-5---non-standard-data">Example 5 - Non-standard data<a class="anchor" aria-label="anchor" href="#example-5---non-standard-data"></a>
 </h3>
 <p>Next, let’s initialize the the app with non-standard data. {safetyGraphics} automatically detects AdAM and SDTM data when possible, but for non-standard data, the user must provide a data mapping. This can be done in the app using the data/mapping tab, or can be done when the app is initialized by passing a <code>mapping</code> list to <code><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp()</a></code>. For example:</p>
-<pre><code><span class="va">notAdAM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>labs<span class="op">=</span><span class="fu">safetyData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/safetyData/man/adam_adlbc.html" class="external-link">adam_adlbc</a></span> <span class="op">%&gt;%</span> <span class="fu">rename</span><span class="op">(</span>id <span class="op">=</span> <span class="va">USUBJID</span><span class="op">)</span><span class="op">)</span>
+<pre><code><span class="va">notAdAM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>labs<span class="op">=</span><span class="fu">safetyData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/safetyData/man/adam_adlbc.html" class="external-link">adam_adlbc</a></span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">rename</span><span class="op">(</span>id <span class="op">=</span> <span class="va">USUBJID</span><span class="op">)</span><span class="op">)</span>
 <span class="va">idMapping</span><span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>labs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id_col<span class="op">=</span><span class="st">"id"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span><span class="op">(</span>domainData<span class="op">=</span><span class="va">notAdAM</span>, mapping<span class="op">=</span><span class="va">idMapping</span><span class="op">)</span></code></pre>
 </div>
@@ -215,7 +215,7 @@
 <p>Users can also generate a list of charts and then drop charts that they don’t want to include. For example, if you wanted to drop charts with <code>type</code> of “htmlwidgets” you could run this code.</p>
 <pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org" class="external-link">purrr</a></span><span class="op">)</span>
 <span class="va">charts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/makeChartConfig.html">makeChartConfig</a></span><span class="op">(</span><span class="op">)</span> <span class="co">#gets charts from safetyCharts pacakge by default</span>
-<span class="va">notWidgets</span> <span class="op">&lt;-</span> <span class="va">charts</span> <span class="op"><a href="https://purrr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/keep.html" class="external-link">keep</a></span><span class="op">(</span><span class="op">~</span><span class="va">.x</span><span class="op">$</span><span class="va">type</span> <span class="op">!=</span> <span class="st">"htmlwidget"</span><span class="op">)</span>
+<span class="va">notWidgets</span> <span class="op">&lt;-</span> <span class="va">charts</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/keep.html" class="external-link">keep</a></span><span class="op">(</span><span class="op">~</span><span class="va">.x</span><span class="op">$</span><span class="va">type</span> <span class="op">!=</span> <span class="st">"htmlwidget"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span><span class="op">(</span>charts<span class="op">=</span><span class="va">notWidgets</span><span class="op">)</span></code></pre>
 </div>
 <div class="section level3">
@@ -282,7 +282,7 @@
     <span class="op">~</span><span class="va">text_key</span>, <span class="op">~</span><span class="va">domain</span>, <span class="op">~</span><span class="va">label</span>,       <span class="op">~</span><span class="va">standard_hello</span>, <span class="op">~</span><span class="va">description</span>,
     <span class="st">"x_col"</span>,   <span class="st">"hello"</span>, <span class="st">"x position"</span>, <span class="st">"x"</span>,             <span class="st">"x position for points in hello world chart"</span>,   
     <span class="st">"y_col"</span>,   <span class="st">"hello"</span>, <span class="st">"y position"</span>, <span class="st">"y"</span>,             <span class="st">"y position for points in hello world chart"</span>   
-<span class="op">)</span> <span class="op"><a href="https://purrr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">mutate</span><span class="op">(</span>
+<span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">mutate</span><span class="op">(</span>
     col_key <span class="op">=</span> <span class="va">text_key</span>,
     type<span class="op">=</span><span class="st">"column"</span>
 <span class="op">)</span>
@@ -339,7 +339,7 @@
     <span class="st">"visitn_col"</span>,   <span class="st">"custom_ecg"</span>,       <span class="st">"Visit number column"</span>,               <span class="st">"Visit number variable name"</span>,        <span class="st">"ATPTN"</span>,             <span class="cn">NA</span>,
     <span class="st">"period_col"</span>,   <span class="st">"custom_ecg"</span>,             <span class="st">"Period column"</span>,                     <span class="st">"Period variable name"</span>,      <span class="st">"APERIOD"</span>,             <span class="cn">NA</span>,
     <span class="st">"unit_col"</span>,   <span class="st">"custom_ecg"</span>,               <span class="st">"Unit column"</span>,            <span class="st">"Unit of measure variable name"</span>,        <span class="st">"AVALU"</span>,     <span class="st">"EGSTRESU"</span>
-<span class="op">)</span> <span class="op"><a href="https://purrr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">mutate</span><span class="op">(</span>
+<span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">mutate</span><span class="op">(</span>
     col_key <span class="op">=</span> <span class="va">text_key</span>,
     type<span class="op">=</span><span class="st">"column"</span>
 <span class="op">)</span>

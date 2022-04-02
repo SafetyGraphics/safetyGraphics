@@ -73,6 +73,12 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="2.1.0" id="safetygraphics-v210">safetyGraphics v2.1.0<a class="anchor" aria-label="anchor" href="#safetygraphics-v210"></a></h2>
+<p>This release focuses on updates the safetyGraphics metadata framework:</p>
+<ul><li>The default metadata table has been migrated to safetyCharts and modularized. In short,<code>safetyGraphics::meta</code> is now saved as <code><a href="https://rdrr.io/pkg/safetyCharts/man/meta_aes.html" class="external-link">safetyCharts::meta_aes</a></code>, <code><a href="https://rdrr.io/pkg/safetyCharts/man/meta_labs.html" class="external-link">safetyCharts::meta_labs</a></code> and <code><a href="https://rdrr.io/pkg/safetyCharts/man/meta_dm.html" class="external-link">safetyCharts::meta_dm</a></code>.</li>
+<li>A new <code>makeMeta</code> function has been created and integrated in to the default workflow for the Shiny app. <code>makeMeta</code> provides a much more flexible framework for creating and storing metadata. See <code><a href="../reference/makeMeta.html">?makeMeta</a></code> and the Cookbook and Chart Configuration vignettes for more details.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0.0" id="safetygraphics-v200">safetyGraphics v2.0.0<small>2021-09-22</small><a class="anchor" aria-label="anchor" href="#safetygraphics-v200"></a></h2>
 <p>Version 2 of {safetyGraphics} is a major update that adds the following features:</p>
 <ul><li>Added support for multiple data domains</li>
@@ -81,7 +87,7 @@
 <li>Single filtering module for all charts</li>
 <li>New “Config” tab summarizing app configuration</li>
 <li>Created new <code><a href="../reference/safetyGraphicsInit.html">safetyGraphicsInit()</a></code> app with a simple UI that can initialize the app with custom data/charts</li>
-</ul><p>For more details, see the fully updated vingettes.</p>
+</ul><p>For more details, see the fully updated vignettes.</p>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.0" id="safetygraphics-v110">safetyGraphics v1.1.0<small>2020-01-15</small><a class="anchor" aria-label="anchor" href="#safetygraphics-v110"></a></h2>

@@ -96,7 +96,7 @@
       <h1 data-toc-skip>Chart Configuration</h1>
                         <h4 data-toc-skip class="author">Jeremy Wildfire</h4>
             
-            <h4 data-toc-skip class="date">2022-03-24</h4>
+            <h4 data-toc-skip class="date">2022-04-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/HEAD/vignettes/chartConfiguration.Rmd" class="external-link"><code>vignettes/chartConfiguration.Rmd</code></a></small>
       <div class="hidden name"><code>chartConfiguration.Rmd</code></div>
@@ -197,7 +197,7 @@
 <span class="op">}</span>
 
 <span class="fu">spaghettiPlot</span><span class="op">(</span>
-    <span class="fu">safetyData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/safetyData/man/sdtm_lb.html" class="external-link">sdtm_lb</a></span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+    <span class="fu">safetyData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/safetyData/man/sdtm_lb.html" class="external-link">sdtm_lb</a></span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
         <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">LBTEST</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Albumin"</span>,<span class="st">"Bilirubin"</span>,<span class="st">"Calcium"</span>,<span class="st">"Chloride"</span><span class="op">)</span><span class="op">)</span>, 
     <span class="va">settings</span>
 <span class="op">)</span></code></pre>
@@ -228,7 +228,7 @@ links:
 <li>The <code>spaghettiPlot</code> function is referenced in the <code>main</code> item the YAML <code>workflow</code>. This tells the app which function to use to draw the chart.</li>
 <li>We’re using the <code>.data[[]]</code> pronoun in the chart function to access columns in the data based on the current settings. See these references for a lot more detail about functional programming in the tidyverse:
 <ul>
-<li><a href="https://cran.r-project.org/web/packages/ggplot2/vignettes/ggplot2-in-packages.html" class="external-link">Using ggplot2 in packages</a></li>
+<li><a href="https://cran.r-project.org/package=ggplot2/vignettes/ggplot2-in-packages.html" class="external-link">Using ggplot2 in packages</a></li>
 <li><a href="https://dplyr.tidyverse.org/articles/programming.html" class="external-link">Programming with dplyr</a></li>
 <li>
 <a href="https://adv-r.hadley.nz/fp.html" class="external-link">Functional programming chapters in Advanced R</a> These details allow users to dynamically define data attributes for any labs data set, allowing the chart to be reused across many different types of data.</li>
@@ -343,7 +343,7 @@ links:
     <span class="st">"visitn_col"</span>,   <span class="st">"custom_ecg"</span>,       <span class="st">"Visit number column"</span>,               <span class="st">"Visit number variable name"</span>,        <span class="st">"ATPTN"</span>,             <span class="cn">NA</span>,
     <span class="st">"period_col"</span>,   <span class="st">"custom_ecg"</span>,             <span class="st">"Period column"</span>,                     <span class="st">"Period variable name"</span>,      <span class="st">"APERIOD"</span>,             <span class="cn">NA</span>,
     <span class="st">"unit_col"</span>,   <span class="st">"custom_ecg"</span>,               <span class="st">"Unit column"</span>,            <span class="st">"Unit of measure variable name"</span>,        <span class="st">"AVALU"</span>,     <span class="st">"EGSTRESU"</span>
-<span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
+<span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
     col_key <span class="op">=</span> <span class="va">text_key</span>,
     type<span class="op">=</span><span class="st">"column"</span>
 <span class="op">)</span>
