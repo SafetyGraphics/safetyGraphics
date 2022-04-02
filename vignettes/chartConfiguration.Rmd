@@ -155,7 +155,7 @@ If you look closely at the `spaghettiPlot()` code above, you'll noticed some det
 - The references to `settings` use parameters that are defined on the mapping tab. Behind the scenes, these are defined in the `safetyGraphics::meta`.
 - The `spaghettiPlot` function is referenced in the `main` item the YAML `workflow`. This tells the app which function to use to draw the chart.
 - We're using the `.data[[]]` pronoun in the chart function to access columns in the data based on the current settings. See these references for a lot more detail about functional programming in the tidyverse:
-    - [Using ggplot2 in packages](https://cran.r-project.org/web/packages/ggplot2/vignettes/ggplot2-in-packages.html)
+    - [Using ggplot2 in packages](https://cran.r-project.org/package=ggplot2/vignettes/ggplot2-in-packages.html)
     - [Programming with dplyr](https://dplyr.tidyverse.org/articles/programming.html) 
     - [Functional programming chapters in Advanced R](https://adv-r.hadley.nz/fp.html)
 These details allow users to dynamically define data attributes for any labs data set, allowing the chart to be reused across many different types of data. 

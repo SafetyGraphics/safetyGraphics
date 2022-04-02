@@ -23,6 +23,8 @@
 #' }   
 #' 
 #' @importFrom tidyr replace_na starts_with
+#' @import safetyCharts
+#' 
 #' @export
 
 makeMeta <- function(charts){

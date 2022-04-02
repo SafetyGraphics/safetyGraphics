@@ -1,3 +1,10 @@
+# safetyGraphics v2.1.0
+
+This release focuses on updates the safetyGraphics metadata framework:
+
+- The default metadata table has been migrated to safetyCharts and modularized. In short,`safetyGraphics::meta` is now saved as `safetyCharts::meta_aes`, `safetyCharts::meta_labs` and `safetyCharts::meta_dm`.
+- A new `makeMeta` function has been created and integrated in to the default workflow for the Shiny app. `makeMeta` provides a much more flexible framework for creating and storing metadata. See `?makeMeta` and the Cookbook and Chart Configuration vignettes for more details.
+
 # safetyGraphics v2.0.0
 
 Version 2 of {safetyGraphics} is a major update that adds the following features: 
