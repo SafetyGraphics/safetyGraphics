@@ -1,0 +1,13 @@
+pandoc: 2.11.4
+pkgdown: 2.0.2
+pkgdown_sha: ~
+articles:
+  ChartConfiguration: ChartConfiguration.html
+  Cookbook: Cookbook.html
+  Intro: Intro.html
+  TechnicalFAQ: TechnicalFAQ.html
+last_built: 2022-04-08T09:33Z
+urls:
+  reference: https://safetygraphics.github.io/safetyGraphics/reference
+  article: https://safetygraphics.github.io/safetyGraphics/articles
+
