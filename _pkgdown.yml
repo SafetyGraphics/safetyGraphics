@@ -12,13 +12,13 @@ navbar:
     - text: Vignettes
       menu:
         - text: Intro to Shiny App
-          href: articles/intro.html
+          href: articles/Intro.html
         - text: Chart Configuration
-          href: articles/chartConfiguration.html
+          href: articles/ChartConfiguration.html
         - text: Examples Cookbook
-          href: articles/cookbook.html
+          href: articles/Cookbook.html
         - text: Technical FAQ
-          href: articles/technicalFAQ.html
+          href: articles/TechnicalFAQ.html
     - text: Functions
       href: reference/index.html
     - text: News

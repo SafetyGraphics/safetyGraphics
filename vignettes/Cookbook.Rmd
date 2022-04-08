@@ -133,7 +133,7 @@ Note, that for more complex customizations, the setting page also provides a `.z
 
 # Custom Charts 
 
-The remaining examples focus on creating charts that are reusable across many studies. For extensive details on adding and customizing different types of charts, see this [vignette](chartConfiguration.html).
+The remaining examples focus on creating charts that are reusable across many studies. For extensive details on adding and customizing different types of charts, see this [vignette](ChartConfiguration.html).
 
 ## Example 7 - Drop Unwanted Charts
 

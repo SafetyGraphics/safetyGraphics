@@ -57,7 +57,7 @@ Finally, the Settings tab - shown as a gear icon ⚙️ -  contains technical de
 
 # Loading Study Data
 
-safetyGraphics supports a wide range of data formats and standards. Generally speaking, any clinical data can be loaded as long it meets the minimal data requirements described in [appendix 2](Intro.html#appendix-2---minimum-data-requirements).  
+safetyGraphics supports a wide range of data formats and standards. Generally speaking, any clinical data can be loaded as long it meets the minimal data requirements described in [appendix 2](#appendix-2---minimum-data-requirements).  
 
 There are 2 primary ways to load your study data in to the safetyGraphics shiny app: 
 
