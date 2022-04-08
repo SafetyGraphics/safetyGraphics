@@ -4,14 +4,14 @@
 \alias{detectStandard}
 \title{Detect the data standard used for a data set}
 \usage{
-detectStandard(data, domain = NULL, meta = safetyGraphics::meta)
+detectStandard(data, domain = NULL, meta = NULL)
 }
 \arguments{
 \item{data}{A data frame in which to detect the data standard - required.}
 
 \item{domain}{the domain to evaluate - should match a value of \code{meta$domain}. Uses the first value in \code{meta$domain} if no value is provided.}
 
-\item{meta}{the metadata containing the data standards. - default = safetyGraphics::meta}
+\item{meta}{the metadata containing the data standards.}
 }
 \value{
 A data frame describing the detected standard for each \code{"text_key"} in the provided metadata. Columns are \code{"domain"}, \code{"text_key"}, \code{"column"} and \code{"standard"}.
@@ -23,7 +23,7 @@ This function attempts to detect the clinical data standard used in a given R da
 This function compares the columns in the provided \code{"data"} with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and ADaM CDISC(\url{https://www.cdisc.org/}) standards for clinical trial data by default. Additional standards can be added by modifying the \code{"meta"} data set included as part of this package.
 }
 \examples{
-detectStandard(data=safetyData::adam_adae)  #aes domain evaluated by default
-detectStandard(data=safetyData::adam_adlbc,domain="labs" ) 
+detectStandard(data=safetyData::adam_adae, meta=safetyCharts::meta_aes) 
+detectStandard(data=safetyData::adam_adlbc,meta=safetyCharts::meta_labs, domain="labs" ) 
 
 }

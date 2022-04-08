@@ -21,14 +21,8 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000, maxFile
     }
   }
 
-
-  app_css <- NULL
-  for(lib in .libPaths()){
-    if(is.null(app_css)){
-      css_path <- paste(lib,'safetyGraphics', 'www','index.css', sep="/")
-      if(file.exists(css_path)) app_css <-  HTML(readLines(css_path))
-    }
-  }
+    css_path <- system.file("www","index.css", package = "safetyGraphics")
+    app_css <-  HTML(readLines(css_path))
     
   ui<-fluidPage(
     useShinyjs(),
@@ -124,7 +118,7 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000, maxFile
       shinyjs::show(id="sg-app")
       config<- app_startup(
         domainData = domainData() %>% keep(~!is.null(.x)),
-        meta = safetyGraphics::meta, 
+        meta = NULL, 
         charts= charts(),
         #mapping=NULL, 
         filterDomain="dm", 

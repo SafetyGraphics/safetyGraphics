@@ -1,7 +1,7 @@
 #' Create data mapping based on data standards and user input
 #' 
 #' @param domainData named list of data.frames to be loaded in to the app. Sample AdAM data from the safetyData package used by default
-#' @param meta data frame containing the metadata for use in the app. See the preloaded file (\code{?safetyGraphics::meta}) for more data specifications and details. Defaults to \code{safetyGraphics::meta}. 
+#' @param meta data frame containing the metadata for use in the app. 
 #' @param customMapping optional list specifying initial mapping values within each data mapping (e.g. list(aes= list(id_col='USUBJID', seq_col='AESEQ')). 
 #' @param autoMapping boolean indicating whether the app should use `safetyGraphics::detectStandard()` to detect data standards and automatically generate mappings for the data provided. Values specified in the `customMapping` parameter overwrite auto-generated mappings when both are found. Defaults to true.
 #' 
@@ -21,7 +21,13 @@ makeMapping <- function(domainData, meta, autoMapping, customMapping ){
         })
         names(standards)<-names(domainData)
         
-        auto_mapping_list <- standards %>% map(~.x$mapping)
+        auto_mapping_list <- standards %>% map(function(standard){
+            if(standard$standard=="none"){
+                return(data.frame(domain=character(), text_key=character(), current=character(), valid=logical()))
+            }else{
+                return(standard$mapping)
+            }
+        })        
         auto_mapping_df<-bind_rows(auto_mapping_list, .id = "domain") %>% select(-.data$valid)
     }else{
         # otherwise initialize NULL standards/mapping

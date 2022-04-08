@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">safetyGraphics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
       </span>
     </div>
 
@@ -44,23 +46,23 @@
   </a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/intro.html">Intro to Shiny App</a>
+      <a href="articles/Intro.html">Intro to Shiny App</a>
     </li>
     <li>
-      <a href="articles/chartConfiguration.html">Chart Configuration</a>
+      <a href="articles/ChartConfiguration.html">Chart Configuration</a>
     </li>
     <li>
-      <a href="articles/cookbook.html">Examples Cookbook</a>
+      <a href="articles/Cookbook.html">Examples Cookbook</a>
     </li>
     <li>
-      <a href="articles/technicalFAQ.html">Technical FAQ</a>
+      <a href="articles/TechnicalFAQ.html">Technical FAQ</a>
     </li>
   </ul>
 </li>
@@ -73,7 +75,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/SafetyGraphics/safetyGraphics">
+  <a href="https://github.com/SafetyGraphics/safetyGraphics" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
@@ -91,54 +93,62 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<p><!-- badges: start --> <a href="https://github.com/SafetyGraphics/safetyGraphics/actions"><img src="https://www.github.com/safetyGraphics/safetyGraphics/workflows/R-CMD-check-main/badge.svg" alt="R build status"></a> <!-- badges: end --></p>
-<div id="safetygraphics-clinical-trial-monitoring-with-r-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#safetygraphics-clinical-trial-monitoring-with-r-" class="anchor"></a>safetyGraphics: Clinical Trial Monitoring with R <img src="https://raw.githubusercontent.com/SafetyGraphics/safetyGraphics/master/inst/safetyGraphicsHex/safetyGraphicsHex.png" width="175" height="200" align="right">
+<p><!-- badges: start --> <a href="https://github.com/SafetyGraphics/safetyGraphics/actions" class="external-link"><img src="https://www.github.com/safetyGraphics/safetyGraphics/workflows/R-CMD-check-main/badge.svg" alt="R build status"></a> <!-- badges: end --></p>
+<div class="section level1">
+<div class="page-header"><h1 id="safetygraphics-clinical-trial-monitoring-with-r-">safetyGraphics: Clinical Trial Monitoring with R <img src="https://raw.githubusercontent.com/SafetyGraphics/safetyGraphics/master/inst/safetyGraphicsHex/safetyGraphicsHex.png" width="175" height="200" align="right"><a class="anchor" aria-label="anchor" href="#safetygraphics-clinical-trial-monitoring-with-r-"></a>
 </h1></div>
-<p>The {safetyGraphics} package provides a framework for evaluating of clinical trial safety in R using a flexible data pipeline. The package includes a shiny application that allows users to explore safety data using a series of interactive graphics, including the hepatic safety explorer shown below. The package has been developed as part of the <a target="_blank" href="https://safetygraphics.github.io/">Interactive Safety Graphics (ISG) workstream</a> of the ASA Biopharm-DIA Safety Working Group.</p>
-<p><img src="https://user-images.githubusercontent.com/3680095/45834450-02b3a000-bcbc-11e8-8172-324c2fe43521.gif" alt="edishgif"></p>
-<div id="using-the-app" class="section level2">
-<h2 class="hasAnchor">
-<a href="#using-the-app" class="anchor"></a>Using the app</h2>
-<p>A demo of the app using sample data is available <a href="https://jwildfire.shinyapps.io/safetyGraphics/">here</a> or can be initialized as follows:</p>
+<p>The {safetyGraphics} package provides a framework for evaluating of clinical trial safety in R using a flexible data pipeline. The package includes a shiny application that allows users to explore safety data using a series of interactive graphics, including the hepatic safety explorer shown below. The package has been developed as part of the <a target="_blank" href="https://safetygraphics.github.io/" class="external-link">Interactive Safety Graphics (ISG) workstream</a> of the ASA Biopharm-DIA Safety Working Group.</p>
+<div class="figure">
+<img src="https://user-images.githubusercontent.com/3680095/45834450-02b3a000-bcbc-11e8-8172-324c2fe43521.gif" alt=""><p class="caption">edishgif</p>
+</div>
+<div class="section level2">
+<h2 id="using-the-app">Using the app<a class="anchor" aria-label="anchor" href="#using-the-app"></a>
+</h2>
+<p>A demo of the app using sample data is available <a href="https://jwildfire.shinyapps.io/safetyGraphics/" class="external-link">here</a> or can be initialized as follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"safetyGraphics"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/SafetyGraphics/safetyGraphics">"safetyGraphics"</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"safetyGraphics"</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/SafetyGraphics/safetyGraphics" class="external-link">"safetyGraphics"</a></span><span class="op">)</span>
 <span class="fu"><a href="reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span><span class="op">(</span><span class="op">)</span> <span class="co">#open the shiny application</span></code></pre></div>
 <p>The most common workflow is for a user to initialize the app with their data, adjust settings as needed, and view the interactive charts. Finally, the user can share any chart by exporting its source code or by generating a self-contained, fully reproducible report that can be shared with others.</p>
-<p>Instructions for loading study data are provided in the <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Intro">introductory vignette</a> and more complex customizations are provided in the <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Cookbook">cookbook vignette</a>.</p>
+<p>Instructions for loading study data are provided in the <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Intro" class="external-link">introductory vignette</a> and more complex customizations are provided in the <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics/wiki/Cookbook" class="external-link">cookbook vignette</a>.</p>
 </div>
 </div>
-<div id="charts" class="section level1">
-<h1 class="hasAnchor">
-<a href="#charts" class="anchor"></a>Charts</h1>
-<p>The app is built to support a wide variety of chart types including static plots (e.g. from <a target="_blank" href="https://cran.r-project.org/package=ggplot2">{ggplot2}</a>), shiny modules, <a target="_blank" href="https://cran.r-project.org/package=htmlwidgets">{htmlwidgets}</a> and even static outputs like RTFs. Several pre-configured charts are included in the companion <a target="_blank" href="https://github.com/safetyGraphics/safetyCharts">{safetyCharts}</a> R Package, and are available by default in the app. Other charts can be added using the process descibed in <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration">this vignette</a>.</p>
+<div class="section level1">
+<h1 id="charts">Charts<a class="anchor" aria-label="anchor" href="#charts"></a>
+</h1>
+<p>The app is built to support a wide variety of chart types including static plots (e.g. from <a target="_blank" href="https://cran.r-project.org/package=ggplot2" class="external-link">{ggplot2}</a>), shiny modules, <a target="_blank" href="https://cran.r-project.org/package=htmlwidgets" class="external-link">{htmlwidgets}</a> and even static outputs like RTFs. Several pre-configured charts are included in the companion <a target="_blank" href="https://github.com/safetyGraphics/safetyCharts" class="external-link">{safetyCharts}</a> R Package, and are available by default in the app. Other charts can be added using the process descibed in <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration" class="external-link">this vignette</a>.</p>
 </div>
 
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=safetyGraphics">https://​cloud.r-project.org/​package=safetyGraphics</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/SafetyGraphics/safetyGraphics/">https://​github.com/​SafetyGraphics/​safetyGraphics/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/SafetyGraphics/safetyGraphics/issues">https://​github.com/​SafetyGraphics/​safetyGraphics/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=safetyGraphics" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/SafetyGraphics/safetyGraphics/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/SafetyGraphics/safetyGraphics/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing safetyGraphics</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Jeremy Wildfire <br><small class="roles"> Maintainer, author </small>  </li>
 <li>Becca Krouse <br><small class="roles"> Author </small>  </li>
@@ -149,16 +159,20 @@
 </ul>
 </div>
 
+
+
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Jeremy Wildfire, Becca Krouse, Preston Burns, Xiao Ni, James Buchanan, Susan Duke.</p>
+  <p></p>
+<p>Developed by Jeremy Wildfire, Becca Krouse, Preston Burns, Xiao Ni, James Buchanan, Susan Duke.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -166,6 +180,8 @@
 
   
 
+
+  
 
   </body>
 </html>

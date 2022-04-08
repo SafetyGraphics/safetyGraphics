@@ -4,6 +4,14 @@ library(dplyr)
 
 reactlogReset()
 
+meta <- rbind(
+  safetyCharts::meta_labs,
+  safetyCharts::meta_aes,
+  safetyCharts::meta_dm,
+  safetyCharts::meta_hepExplorer
+)
+
+
 id_meta <- meta%>%filter(domain=="labs")%>%filter(col_key=="id_col")
 measure_meta <- meta%>%filter(domain=="labs")%>%filter(col_key=="measure_col")
 id_default<-data.frame(

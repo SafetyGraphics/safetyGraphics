@@ -13,7 +13,7 @@
 #' # Match is TRUE
 #' evaluateStandard(
 #'  data=safetyData::adam_adlbc, 
-#'  meta=meta, 
+#'  meta=safetyCharts::meta_labs, 
 #'  domain="labs", 
 #'  standard="adam"
 #' ) 
@@ -21,7 +21,7 @@
 #' # Match is FALSE
 #' evaluateStandard(
 #'  data=safetyData::adam_adlbc, 
-#'  meta=meta, 
+#'  meta=safetyCharts::meta_labs, 
 #'  domain="labs", 
 #'  standard="sdtm"
 #' ) 
@@ -74,32 +74,43 @@ evaluateStandard <- function(data, meta, domain, standard){
     )%>%
     select(.data$text_key, .data$current, .data$valid)
   
-  stopifnot(nrow(compare_summary[["mapping"]])>0)
-  
-  # count valid/invalid data elements
-  compare_summary[["total_count"]] <- compare_summary[["mapping"]] %>% nrow()
-  compare_summary[["valid_count"]] <- compare_summary[["mapping"]] %>% filter(.data$valid) %>% nrow()
-  compare_summary[["invalid_count"]] <- compare_summary[["mapping"]] %>% filter(!.data$valid) %>% nrow()
-  compare_summary[["match_percent"]] <- compare_summary[["valid_count"]] / compare_summary[["total_count"]]
-  
-  standard_formatted <- standard
+    standard_formatted <- standard
   if(standard=="adam"){
     standard_formatted = "ADaM"
   }else if(standard=="sdtm"){
     standard_formatted="SDTM"
   }
   
-  if (compare_summary[["invalid_count"]]==0) {
-     compare_summary[["match"]] <- "full"
-     compare_summary[["label"]] <- standard_formatted
-  } else if(compare_summary[["valid_count"]]>0) {
-    compare_summary[["match"]] <- "partial"
-    compare_summary[["label"]] <- paste0("Partial ",standard_formatted)
-    compare_summary[["details"]]<-paste0("(", compare_summary[["valid_count"]], "/" ,compare_summary[["total_count"]], " cols/fields matched)")
-  } else {
+  if(nrow(compare_summary[["mapping"]])>0){
+    # count valid/invalid data elements
+    compare_summary[["total_count"]] <- compare_summary[["mapping"]] %>% nrow()
+    compare_summary[["valid_count"]] <- compare_summary[["mapping"]] %>% filter(.data$valid) %>% nrow()
+    compare_summary[["invalid_count"]] <- compare_summary[["mapping"]] %>% filter(!.data$valid) %>% nrow()
+    compare_summary[["match_percent"]] <- compare_summary[["valid_count"]] / compare_summary[["total_count"]]
+
+    if (compare_summary[["invalid_count"]]==0) {
+      compare_summary[["match"]] <- "full"
+      compare_summary[["label"]] <- standard_formatted
+    } else if(compare_summary[["valid_count"]]>0) {
+      compare_summary[["match"]] <- "partial"
+      compare_summary[["label"]] <- paste0("Partial ",standard_formatted)
+      compare_summary[["details"]]<-paste0("(", compare_summary[["valid_count"]], "/" ,compare_summary[["total_count"]], " cols/fields matched)")
+    } else {
+      compare_summary[["match"]] <- "none"
+      compare_summary[["label"]] <- "No Match"
+    }
+  }else{
+    # No values provided for standard in this domain
+    compare_summary[["total_count"]] <- 0
+    compare_summary[["valid_count"]] <- NA
+    compare_summary[["invalid_count"]] <- NA
+    compare_summary[["match_percent"]] <- 0
     compare_summary[["match"]] <- "none"
     compare_summary[["label"]] <- "No Match"
   }
+  
+  
+
 
   return(compare_summary)
 }

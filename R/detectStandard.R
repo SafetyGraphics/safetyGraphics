@@ -5,19 +5,19 @@
 #' This function compares the columns in the provided \code{"data"} with the required columns for a given data standard/domain combination. The function is designed to work with the SDTM and ADaM CDISC(<https://www.cdisc.org/>) standards for clinical trial data by default. Additional standards can be added by modifying the \code{"meta"} data set included as part of this package.
 #'
 #' @param data A data frame in which to detect the data standard - required.
-#' @param meta the metadata containing the data standards. - default = safetyGraphics::meta
+#' @param meta the metadata containing the data standards.
 #' @param domain the domain to evaluate - should match a value of \code{meta$domain}. Uses the first value in \code{meta$domain} if no value is provided. 
 #'
 #' @return A data frame describing the detected standard for each \code{"text_key"} in the provided metadata. Columns are \code{"domain"}, \code{"text_key"}, \code{"column"} and \code{"standard"}.
 #' @examples 
-#' detectStandard(data=safetyData::adam_adae)  #aes domain evaluated by default
-#' detectStandard(data=safetyData::adam_adlbc,domain="labs" ) 
+#' detectStandard(data=safetyData::adam_adae, meta=safetyCharts::meta_aes) 
+#' detectStandard(data=safetyData::adam_adlbc,meta=safetyCharts::meta_labs, domain="labs" ) 
 #'
 #' @importFrom stringr str_detect 
 #' 
 #' @export
 
-detectStandard <- function(data, domain=NULL, meta=safetyGraphics::meta){
+detectStandard <- function(data, domain=NULL, meta=NULL){
   if(is.null(domain)){
     domain<-unique(meta$domain)[1]
   }
