@@ -33,7 +33,7 @@ safetyGraphicsServer <- function(input, output, session, meta, mapping, domainDa
     
     callModule(homeTab, "home")
 
-    #Initialize Chart UI - Adds subtabs to chart menu - this initializes initializes chart UIs
+    #Initialize Chart UI - Adds subtabs to chart menu - this initializes the chart UIs
     charts %>% purrr::map(~chartsNav(.x,session$ns))
 
     #Initialize Chart Servers
