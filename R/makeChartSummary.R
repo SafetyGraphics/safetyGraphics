@@ -24,9 +24,9 @@ makeChartSummary<- function(chart, showLinks=TRUE, class="chart-header"){
         links<-NULL
     }
     
-    labelDiv<-div(tags$small("Chart"),chart$label)
-    typeDiv<-div(tags$small("Type"), chart$type)
-    dataDiv<-div(tags$small("Data Domain"), paste(chart$domain,collapse=" "))
+    labelDiv<-div(class="name", tags$small("Chart"),chart$label)
+    typeDiv<-div(class="type", tags$small("Type"), chart$type)
+    dataDiv<-div(class="domain", tags$small("Data Domain"), paste(chart$domain,collapse=" "))
 
     if(showLinks){
         summary<-div(

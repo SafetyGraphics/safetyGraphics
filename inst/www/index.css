@@ -149,3 +149,19 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
 }
 
 
+/* chart validation formatting */
+#sg-safetyGraphicsApp li.dropdown ul li a.valid div div.name:before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f00c";
+  color: green;
+  padding-left: 0.3em;
+}
+
+#sg-safetyGraphicsApp li.dropdown ul li a.invalid div div.name:before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f00d";
+  color: red;
+  padding-left: 0.3em;
+}

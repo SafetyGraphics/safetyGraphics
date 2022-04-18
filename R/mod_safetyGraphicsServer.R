@@ -14,15 +14,15 @@
 #' @import shiny
 #' @import dplyr
 #' @importFrom purrr map
-#' @importFrom shinyjs html
+#' @importFrom shinyjs html toggleClass
 #' 
 #' @export
 
 safetyGraphicsServer <- function(input, output, session, meta, mapping, domainData, charts, filterDomain){
-    #Initialize modules
-    current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
+    # Initialize the Home tab
+    callModule(homeTab, "home")
     
-    # Initialize the filter tab 
+    # Initialize the Filter tab - returns list of filtered data as a reactive
     filtered_data<-callModule(
         filterTab, 
         "filter", 
@@ -30,14 +30,15 @@ safetyGraphicsServer <- function(input, output, session, meta, mapping, domainDa
         filterDomain=filterDomain, 
         current_mapping=current_mapping
     )
-    
-    callModule(homeTab, "home")
 
-    #Initialize Chart UI - Adds subtabs to chart menu - this initializes the chart UIs
+    # Initialize the Mapping tab - returns the current mapping as a reactive
+    current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
+
+    # Initialize Charts tab
+    # Initialize Chart UI - adds subtabs to chart menu and initializes the chart UIs
     charts %>% purrr::map(~chartsNav(.x,session$ns))
 
-    #Initialize Chart Servers
-    validDomains <- tolower(names(mapping))
+    # Initialize Chart Servers
     charts %>% purrr::map(
         ~callModule(
             module=chartsTab,
@@ -48,7 +49,28 @@ safetyGraphicsServer <- function(input, output, session, meta, mapping, domainDa
         )
     )
 
-    #Setting tab
+    # Keep chart status updated
+    charts_status <- reactive({
+        charts %>% purrr::map(function(chart){
+            if(hasName(chart, 'dataSpec')){
+                getChartStatus(chart,current_mapping())
+            }else{
+                list(chart=chart$name,status="missing")
+            }
+        })
+    })
+
+    observeEvent(charts_status(),{
+        for (check in charts_status()){
+            ## code to toggle css for chart-specific tab here
+            shinyjs::toggleClass(selector= paste0("#sg-safetyGraphicsApp li.dropdown ul li a[data-value='", check$chart, "']"), class="valid", condition=check$status=="valid")
+            shinyjs::toggleClass(selector= paste0("#sg-safetyGraphicsApp li.dropdown ul li a[data-value='", check$chart, "']"), class="invalid", condition=check$status=="invalid")
+            shinyjs::toggleClass(selector= paste0("#sg-safetyGraphicsApp li.dropdown ul li a[data-value='", check$chart, "']"), class="missing", condition=check$status=="missing")
+
+        }
+    })
+
+    # Initialize the Setting tab
     callModule(settingsTab, "settings", domains = domainData,  metadata=meta, mapping=current_mapping, charts = charts)
 }
 

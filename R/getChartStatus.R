@@ -8,7 +8,7 @@
 #' - `columns`  a list that matches the structure of chart$dataSpec and indicates which variables are available. 
 #'
 #' @param chart chart object
-#' @param mapping the current mapping data.frame
+#' @param mapping the current mapping data.frame 
 #' 
 #' @return a list with `status`, `domains` and `columns` properties
 #'
@@ -63,7 +63,7 @@ getChartStatus <- function(chart, mapping){
         set_names(names(colStatus))
 
     # check to see whether all columns in all domains were valid
-    status <- all(unlist(domainStatus))
+    status <- ifelse(all(unlist(domainStatus)),"valid","invalid")
 
-    return(list(columns=colStatus, domains=domainStatus, status=status))
+    return(list(chart=chart$name, columns=colStatus, domains=domainStatus, status=status))
 }
