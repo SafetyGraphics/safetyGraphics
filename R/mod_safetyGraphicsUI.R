@@ -20,10 +20,16 @@ safetyGraphicsUI <- function(id, meta, domainData, mapping, standards){
 
     #script to append population badge nav bar
     participant_badge<-tags$script(
-        HTML(
-            "var header = $('.navbar> .container-fluid');
-            header.append('<div id=\"population-header\" class=\"badge\" title=\"Selected Participants\" ><span id=\"header-count\"></span>/<span id=\"header-total\"></span></div>');"
-        )
+        HTML(paste0(
+            "var header = $('.navbar > .container-fluid');",
+            "header.append(\"",
+            "<div id='population-header' class='badge' title='Selected Participants'>",
+            "<span id='header-count'></span>",
+            "/",
+            "<span id='header-total'></span> participants",
+            "</div>",
+            "\");"
+        ))
     )
     if(isNamespaceLoaded("shinybusy")){
         spinner<-shinybusy::add_busy_spinner(spin = "atom", position="bottom-right")
