@@ -95,18 +95,27 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
             )
         }
 
+        n <- nrow(res_filter$filtered())
+        N <- nrow(raw())
+
         shinyjs::html(
             "header-count", 
-            nrow(res_filter$filtered()),
+            n,
             asis=TRUE    
         )
 
         shinyjs::html(
             "header-total", 
-            nrow(raw()),
+            N,
             asis=TRUE
         )
 
+        # Emphasize population header when subset is applied.
+        shinyjs::toggleClass(
+          selector = "#population-header",
+          class = "subset",
+          condition = n < N
+        )
     })
 
     observe({
