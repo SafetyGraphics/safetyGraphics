@@ -63,7 +63,7 @@ getChartStatus <- function(chart, mapping){
         set_names(names(colStatus))
 
     # check to see whether all columns in all domains were valid
-    status <- ifelse(all(unlist(domainStatus)),"valid","invalid")
+    status <- ifelse(all(unlist(domainStatus)),TRUE, FALSE)
 
     return(list(chart=chart$name, columns=colStatus, domains=domainStatus, status=status))
 }
