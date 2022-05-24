@@ -36,39 +36,18 @@ safetyGraphicsServer <- function(input, output, session, meta, mapping, domainDa
 
     # Initialize Charts tab
     # Initialize Chart UI - adds subtabs to chart menu and initializes the chart UIs
-    charts %>% purrr::map(~chartsNav(.x,session$ns))
+    #charts %>% purrr::map(~chartsNavUI(.x$name,.x))
 
     # Initialize Chart Servers
     charts %>% purrr::map(
         ~callModule(
-            module=chartsTab,
+            module=chartsNav,
             id=.x$name,
             chart=.x,
             data=filtered_data,
-            mapping=current_mapping    
+            mapping=current_mapping 
         )
     )
-
-    # Keep chart status updated
-    charts_status <- reactive({
-        charts %>% purrr::map(function(chart){
-            if(hasName(chart, 'dataSpec')){
-                getChartStatus(chart,current_mapping())
-            }else{
-                list(chart=chart$name,status="missing")
-            }
-        })
-    })
-
-    observeEvent(charts_status(),{
-        for (check in charts_status()){
-            ## code to toggle css for chart-specific tab here
-            shinyjs::toggleClass(selector= paste0("#sg-safetyGraphicsApp li.dropdown ul li a[data-value='", check$chart, "']"), class="valid", condition=check$status=="valid")
-            shinyjs::toggleClass(selector= paste0("#sg-safetyGraphicsApp li.dropdown ul li a[data-value='", check$chart, "']"), class="invalid", condition=check$status=="invalid")
-            shinyjs::toggleClass(selector= paste0("#sg-safetyGraphicsApp li.dropdown ul li a[data-value='", check$chart, "']"), class="missing", condition=check$status=="missing")
-
-        }
-    })
 
     # Initialize the Setting tab
     callModule(settingsTab, "settings", domains = domainData,  metadata=meta, mapping=current_mapping, charts = charts)

@@ -10,7 +10,7 @@
 
 chartsTabUI <- function(id, chart){
   ns <- shiny::NS(id)    
-  header<-div(class=ns("header"), makeChartSummary(chart))
+  header<- uiOutput(ns("chart-header"))
   chartWrap<-chart$functions$ui(ns("chart-wrap"))
 
   return(list(header, chartWrap))
@@ -30,6 +30,11 @@ chartsTabUI <- function(id, chart){
 chartsTab <- function(input, output, session, chart, data, mapping){  
   ns <- session$ns
   
+  print(paste("running chartsTab in:", ns('')))
+
+  # Draw the header
+  output$`chart-header` <- renderUI({makeChartSummary(chart)})
+
   # Initialize chart-specific parameters  
   params <- reactive({ 
     makeChartParams(
