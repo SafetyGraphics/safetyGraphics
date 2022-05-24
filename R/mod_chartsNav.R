@@ -21,23 +21,31 @@ chartsNavUI <- function(id, chart){
 
 #' Server for  a navbar tab 
 #'
-#' @param chart  chart metadata 
+#' @param chart chart metadata 
 #' 
 #' @export 
 #' 
 
 chartsNav<-function(input, output, session, chart, data, mapping){
-    #status <- getChartStatus(chart,current_mapping)
+    chartStatus <- reactive({
+        if(hasName(chart, 'dataSpec')){
+            status<-getChartStatus(chart, mapping())
+        }else{
+            status<-NULL
+        }
+        return(status)
+    })    
 
     ns <- session$ns
     print(paste("running chartsNav() in:", ns('')))
-    output$tabTitle <- renderUI({makeChartSummary(chart, showLinks=FALSE, class="chart-nav")})
+    output$tabTitle <- renderUI({makeChartSummary(chart, status=chartStatus(), showLinks=FALSE, class="chart-nav")})
 
     callModule(
         module=chartsTab,
         id='chart',
         chart=chart,
         data=data,
-        mapping=mapping 
+        mapping=mapping,
+        status=chartStatus
     )
 }

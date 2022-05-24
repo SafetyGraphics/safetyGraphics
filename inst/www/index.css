@@ -130,7 +130,7 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   display:inline-block;
 }
 
-.chart-nav div:not(:first-child){
+.chart-nav div:not(.name){
   font-size:0.8em;
   color: #999;
 }
@@ -150,22 +150,4 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   color: #0c5460;
   background-color: #d1ecf1;
   border:1px solid #bee5eb;
-}
-
-
-/* chart validation formatting */
-#sg-safetyGraphicsApp li.dropdown ul li a.valid div div.name:before {
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  content: "\f00c";
-  color: green;
-  padding-left: 0.3em;
-}
-
-#sg-safetyGraphicsApp li.dropdown ul li a.invalid div div.name:before {
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  content: "\f00d";
-  color: red;
-  padding-left: 0.3em;
 }

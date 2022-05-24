@@ -7,7 +7,18 @@
 #' 
 #' @export
 
-makeChartSummary<- function(chart, showLinks=TRUE, class="chart-header"){
+makeChartSummary<- function(chart, status=NULL, showLinks=TRUE, class="chart-header"){
+
+    if(!is.null(status)){
+        if(status$status){
+            status <- div(class="status", tags$i(class="fa fa-check-circle", style="color: green"))
+        }else{
+            status <- div(class="status", tags$i(class="fa fa-times-circle", style="color: red"))
+        }
+    }else{
+        status <- NULL
+    }
+    
     if(utils::hasName(chart,"links")){
         links<-purrr::map2(
             chart$links, 
@@ -23,13 +34,14 @@ makeChartSummary<- function(chart, showLinks=TRUE, class="chart-header"){
     }else{
         links<-NULL
     }
-    
+
     labelDiv<-div(class="name", tags$small("Chart"),chart$label)
     typeDiv<-div(class="type", tags$small("Type"), chart$type)
     dataDiv<-div(class="domain", tags$small("Data Domain"), paste(chart$domain,collapse=" "))
 
     if(showLinks){
         summary<-div(
+            status,
             labelDiv,
             typeDiv,
             dataDiv, 
@@ -38,6 +50,7 @@ makeChartSummary<- function(chart, showLinks=TRUE, class="chart-header"){
         )
     } else {
         summary<-div(
+            status,
             labelDiv,
             typeDiv,
             dataDiv, 
