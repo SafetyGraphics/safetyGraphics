@@ -33,22 +33,22 @@ safetyGraphicsApp <- function(
 
   app <- shinyApp(
     ui =  safetyGraphicsUI(
-      "sg",
-      config$meta, 
-      config$charts, 
-      config$domainData, 
-      config$mapping, 
-      config$standards
+      id="sg",
+      meta=config$meta, 
+      charts=config$charts, 
+      domainData=config$domainData, 
+      mapping=config$mapping, 
+      standards=config$standards
     ),
     server = function(input,output,session){
       callModule(
         safetyGraphicsServer,
-        "sg",
-        config$meta, 
-        config$mapping, 
-        config$domainData, 
-        config$charts, 
-        config$filterDomain
+        id="sg",
+        meta=config$meta, 
+        mapping=config$mapping, 
+        domainData=config$domainData, 
+        charts=config$charts, 
+        filterDomain=config$filterDomain
       )
     }
   )
