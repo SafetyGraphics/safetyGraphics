@@ -4,10 +4,17 @@
 \alias{makeChartSummary}
 \title{html chart summary}
 \usage{
-makeChartSummary(chart, showLinks = TRUE, class = "chart-header")
+makeChartSummary(
+  chart,
+  status = NULL,
+  showLinks = TRUE,
+  class = "chart-header"
+)
 }
 \arguments{
 \item{chart}{list containing chart specifications}
+
+\item{status}{(optional) chart status from \code{getChartStatus}. Default is NULL.}
 
 \item{showLinks}{boolean indicating whether to include links}
 

@@ -27,7 +27,7 @@
 #'     current=c("myID","AEcol","myID","dmCol")
 #' )
 #' 
-#' check <- getChartStatus(chart=ae_chart, mapping=mapping) 
+#' check <- safetyGraphics:::getChartStatus(chart=sample_chart, mapping=sample_mapping) 
 #' # check$status=TRUE
 #'
 #' @importFrom purrr map_lgl set_names

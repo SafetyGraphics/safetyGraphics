@@ -1,7 +1,7 @@
 #' Adds a navbar tab that initializes the Chart Module UI
 #'
-#' @param id
-#' @param chart  chart metadata 
+#' @param id module id
+#' @param chart chart metadata 
 #' 
 #' @export 
 #' 
@@ -21,7 +21,12 @@ chartsNavUI <- function(id, chart){
 
 #' Server for  a navbar tab 
 #'
-#' @param chart chart metadata 
+#' @param input Input objects from module namespace
+#' @param output Output objects from module namespace
+#' @param session An environment that can be used to access information and functionality relating to the session
+#' @param chart list containing a safetyGraphics chart object like those returned by \link{makeChartConfig}.
+#' @param data named list of current data sets (Reactive).
+#' @param mapping tibble capturing the current data mappings (Reactive).
 #' 
 #' @export 
 #' 

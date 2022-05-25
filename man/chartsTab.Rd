@@ -4,7 +4,7 @@
 \alias{chartsTab}
 \title{Server for chart module, designed to be re-used for each chart generated.}
 \usage{
-chartsTab(input, output, session, chart, data, mapping)
+chartsTab(input, output, session, chart, data, mapping, status)
 }
 \arguments{
 \item{input}{Input objects from module namespace}
@@ -18,6 +18,8 @@ chartsTab(input, output, session, chart, data, mapping)
 \item{data}{named list of current data sets (Reactive).}
 
 \item{mapping}{tibble capturing the current data mappings (Reactive).}
+
+\item{status}{chart status (Reactive)}
 }
 \description{
 Server for chart module, designed to be re-used for each chart generated.

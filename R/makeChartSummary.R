@@ -2,6 +2,7 @@
 #' @description  makes a nicely formatted html summary for a chart object
 #'
 #' @param chart list containing chart specifications
+#' @param status (optional) chart status from `getChartStatus`. Default is NULL. 
 #' @param showLinks boolean indicating whether to include links
 #' @param class character to include as class
 #' 

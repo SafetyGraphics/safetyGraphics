@@ -40,7 +40,7 @@ sample_mapping <- data.frame(
     current=c("myID","AEcol","myID","dmCol")
 )
 
-check <- getChartStatus(chart=ae_chart, mapping=mapping) 
+check <- safetyGraphics:::getChartStatus(chart=sample_chart, mapping=sample_mapping) 
 # check$status=TRUE
 
 }

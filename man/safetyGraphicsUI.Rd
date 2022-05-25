@@ -4,10 +4,12 @@
 \alias{safetyGraphicsUI}
 \title{UI for the core safetyGraphics app including Home, Mapping, Filter, Charts and Settings modules.}
 \usage{
-safetyGraphicsUI(id, meta, domainData, mapping, standards)
+safetyGraphicsUI(id, charts, meta, domainData, mapping, standards)
 }
 \arguments{
 \item{id}{module ID}
+
+\item{charts}{list of charts in the format produced by safetyGraphics::makeChartConfig()}
 
 \item{meta}{data frame containing the metadata for use in the app.}
 

@@ -1,6 +1,5 @@
 #' UI for the core safetyGraphics app including Home, Mapping, Filter, Charts and Settings modules.  
 #'
-#'
 #' @param id module ID
 #' @param charts list of charts in the format produced by safetyGraphics::makeChartConfig()
 #' @param meta data frame containing the metadata for use in the app. 
@@ -12,7 +11,7 @@
 #' 
 #' @export
 
-safetyGraphicsUI <- function(id, meta, charts, domainData, mapping, standards){
+safetyGraphicsUI <- function(id, charts, meta, domainData, mapping, standards){
     ns<-NS(id)
 
     #read css from package
