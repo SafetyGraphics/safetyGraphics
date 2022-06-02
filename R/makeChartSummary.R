@@ -11,10 +11,11 @@
 makeChartSummary<- function(chart, status=NULL, showLinks=TRUE, class="chart-header"){
 
     if(!is.null(status)){
+        print(status)
         if(status$status){
-            status <- div(class="status", tags$i(class="fa fa-check-circle", style="color: green"))
+            status <- div(class="status", tags$small("Status"), tags$i(class="fa fa-check-circle", style="color: green"),title=status$summary)
         }else{
-            status <- div(class="status", tags$i(class="fa fa-times-circle", style="color: red"))
+            status <- div(class="status", tags$small("Status"), tags$i(class="fa fa-times-circle", style="color: red"),title=status$summary)
         }
     }else{
         status <- NULL
@@ -40,21 +41,23 @@ makeChartSummary<- function(chart, status=NULL, showLinks=TRUE, class="chart-hea
     typeDiv<-div(class="type", tags$small("Type"), chart$type)
     dataDiv<-div(class="domain", tags$small("Data Domain"), paste(chart$domain,collapse=" "))
 
+    class <- c('chart-summary',class)
+    
     if(showLinks){
         summary<-div(
-            status,
             labelDiv,
             typeDiv,
             dataDiv, 
             links,
+            status,
             class=class
         )
     } else {
         summary<-div(
-            status,
             labelDiv,
             typeDiv,
             dataDiv, 
+            status,
             class=class
         )
     }

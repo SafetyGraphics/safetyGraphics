@@ -39,6 +39,7 @@ getChartStatus <- function(chart, mapping){
     )
 
     # check to see whether each individual column has a mapping defined
+    missingCols<-c()
     colStatus <- names(chart$dataSpec) %>% map(function(domain){
         domainMapping <- generateMappingList(settingsDF=mapping, domain=domain)
         requiredCols <- chart$dataSpec[[domain]]
@@ -51,7 +52,7 @@ getChartStatus <- function(chart, mapping){
                 )
             } else{
                 status<-FALSE
-            }
+            }            
             return(status)
         }) %>% set_names(requiredCols)
         return(colStatus)    
@@ -65,5 +66,23 @@ getChartStatus <- function(chart, mapping){
     # check to see whether all columns in all domains were valid
     status <- ifelse(all(unlist(domainStatus)),TRUE, FALSE)
 
-    return(list(chart=chart$name, columns=colStatus, domains=domainStatus, status=status))
+    # make a text summary
+    if(status){
+        summary <- "All required mappings found"
+    }else{
+        missingCols <- colStatus %>% imap(function(cols,domain){
+            missingDomainCols <- cols %>% imap(function(status, col){
+                if(status){
+                    return(NULL)
+                }else{
+                    return(paste0(domain,"$",col))
+                }
+            })
+            return(missingDomainCols)
+        })
+        print(missingCols)
+        summary<- paste0("Missing Mappings: ",paste(unlist(missingCols),collapse=","))
+    }
+
+    return(list(chart=chart$name, columns=colStatus, domains=domainStatus, status=status, summary=summary))
 }

@@ -33,7 +33,7 @@ mappingColumnUI <- function(id, meta, data, mapping=NULL){
     col_meta <- meta %>% filter(.data$type=="column")
     
     # Exactly one column mapping provided
-    stopifnot(nrow(col_meta)==1)
+    stopifnot(msg = nrow(col_meta)==1)
     
     col_ui[[1]] <- mappingSelectUI(
       ns(col_meta$text_key), 
