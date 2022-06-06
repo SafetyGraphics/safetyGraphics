@@ -43,3 +43,9 @@ test_that("invalid options throw errors",{
   expect_error(evaluateStandard(data=safetyData::adam_adlbc,domain="labs", meta=list(), standard="sdtm"))
   expect_error(evaluateStandard(data=safetyData::adam_adlbc,domain="labs", meta=safetyData::adam_adlbc, standard="sdtm"))
 })
+
+
+test_that("upper case domain names are supported",{
+  uppermeta <- safetyCharts::meta_labs %>% mutate(domain="LaBs")
+  expect_equal(evaluateStandard(data=safetyData::adam_adlbc,  domain="lAbS", meta= uppermeta, standard="adam")[["match"]],"full")
+})
