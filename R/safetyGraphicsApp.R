@@ -30,7 +30,7 @@ safetyGraphicsApp <- function(
   appName = 'safetyGraphics',
   hexPath = system.file("resources/safetyGraphicsHex.png", package = "safetyGraphics"),
   homeTabPath = system.file('resources/safetyGraphicsHomeTab.html', package = 'safetyGraphics'),
-  launchBrowser = NULL
+  launchBrowser = FALSE
 ){
   message("Initializing safetyGraphicsApp")
 
@@ -80,8 +80,13 @@ safetyGraphicsApp <- function(
     }
   )
 
-  if(runNow)
-    runApp(app, launch.browser = launchBrowser)
-  else
-    app
+  if (runNow) {
+    if (launchBrowser == TRUE) {
+      runApp(app, launch.browser = TRUE)
+    } else {
+      runApp(app)
+    }
+  }
+
+  app
 }
