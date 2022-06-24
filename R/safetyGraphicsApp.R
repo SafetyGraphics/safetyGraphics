@@ -15,25 +15,58 @@
 #' @export
 
 safetyGraphicsApp <- function(
-  domainData=list(
-    labs=safetyData::adam_adlbc, 
-    aes=safetyData::adam_adae, 
-    dm=safetyData::adam_adsl
+  domainData = list(
+    labs = safetyData::adam_adlbc, 
+    aes = safetyData::adam_adae, 
+    dm = safetyData::adam_adsl
   ),
   meta = NULL, 
-  charts=NULL,
-  mapping=NULL,
-  autoMapping=TRUE,
-  filterDomain="dm",
+  charts = NULL,
+  mapping = NULL,
+  autoMapping = TRUE,
+  filterDomain = "dm",
   chartSettingsPaths = NULL,
-  runNow = TRUE
+  runNow = TRUE,
+  appName = 'safetyGraphics',
+  hexPath = system.file("resources/safetyGraphicsHex.png", package = "safetyGraphics"),
+  homeTabPath = system.file('resources/safetyGraphicsHomeTab.html', package = 'safetyGraphics'),
+  launchBrowser = NULL
 ){
   message("Initializing safetyGraphicsApp")
-  config <- app_startup(domainData, meta, charts, mapping, autoMapping, filterDomain, chartSettingsPaths)
+
+  if (!is.character(appName))
+    appName <- 'safetyGraphics'
+
+  if (!is.character(hexPath) || !file.exists(hexPath))
+    hexPath <- system.file("resources/safetyGraphicsHex.png", package = "safetyGraphics")
+
+  if (!is.character(homeTabPath) || !file.exists(homeTabPath))
+    homeTabPath <- system.file('resources/safetyGraphicsHomeTab.html', package = 'safetyGraphics')
+
+  config <- app_startup(
+    domainData,
+    meta,
+    charts,
+    mapping,
+    autoMapping,
+    filterDomain,
+    chartSettingsPaths
+  )
+  config$appName <- appName
+  config$hexPath <- hexPath
+  config$homeTabPath <- homeTabPath
+  config$launchBrowser <- launchBrowser
 
   app <- shinyApp(
-    ui =  safetyGraphicsUI("sg",config$meta, config$domainData, config$mapping, config$standards),
-    server = function(input,output,session){
+    ui =  safetyGraphicsUI(
+        "sg",
+        config$meta,
+        config$domainData,
+        config$mapping,
+        config$standards,
+        config
+    ),
+    server = function(input, output, session) {
       callModule(
         safetyGraphicsServer,
         "sg",
@@ -41,13 +74,14 @@ safetyGraphicsApp <- function(
         config$mapping, 
         config$domainData, 
         config$charts, 
-        config$filterDomain
+        config$filterDomain,
+        config
       )
     }
   )
-  
+
   if(runNow)
-    runApp(app)
+    runApp(app, launch.browser = launchBrowser)
   else
     app
 }
