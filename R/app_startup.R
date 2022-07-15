@@ -21,7 +21,15 @@
 #' }
 #'
 #' @export
-app_startup <- function(domainData = NULL, meta = NULL, charts = NULL, mapping = NULL, autoMapping = NULL, filterDomain = NULL, chartSettingsPaths = NULL) {
+app_startup <- function(
+  domainData = NULL,
+  meta = NULL,
+  charts = NULL,
+  mapping = NULL,
+  autoMapping = NULL,
+  filterDomain = NULL,
+  chartSettingsPaths = NULL
+) {
   # If charts are not provided, load them from chartSettingsPath or the safetyCharts package
   if (is.null(charts)) {
     if (is.null(chartSettingsPaths)) {

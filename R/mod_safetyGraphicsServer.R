@@ -18,7 +18,16 @@
 #'
 #' @export
 
-safetyGraphicsServer <- function(input, output, session, meta, mapping, domainData, charts, filterDomain) {
+safetyGraphicsServer <- function(
+  input,
+  output,
+  session,
+  meta,
+  mapping,
+  domainData,
+  charts,
+  filterDomain
+) {
   # Initialize modules
   current_mapping <- callModule(mappingTab, "mapping", meta, domainData)
 
