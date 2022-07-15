@@ -8,37 +8,37 @@
 #' @return logical scalar. TRUE if field_value is found. FALSE otherwise
 #'
 #' @examples
-#' #TRUE
+#' # TRUE
 #' safetyGraphics:::hasField(
-#'  fieldValue="Bilirubin (umol/L)",
-#'  columnName="PARAM",
-#'  data=safetyData::adam_adlbc
+#'   fieldValue = "Bilirubin (umol/L)",
+#'   columnName = "PARAM",
+#'   data = safetyData::adam_adlbc
 #' )
-#' 
-#' #FALSE
+#'
+#' # FALSE
 #' safetyGraphics:::hasField(
-#'  fieldValue="Not_a_real_value",
-#'  columnName="",
-#'  data=safetyData::adam_adlbc
+#'   fieldValue = "Not_a_real_value",
+#'   columnName = "",
+#'   data = safetyData::adam_adlbc
 #' )
 #'
 #' @keywords internal
 
-hasField<- function(fieldValue, columnName, data){
+hasField <- function(fieldValue, columnName, data) {
   stopifnot(
-    length(fieldValue)==1,
-    typeof(columnName)=="character" || is.null(columnName),
-    length(columnName)==1  || is.null(columnName), 
+    length(fieldValue) == 1,
+    typeof(columnName) == "character" || is.null(columnName),
+    length(columnName) == 1 || is.null(columnName),
     is.data.frame(data)
   )
 
-  if(is.null(columnName)){
+  if (is.null(columnName)) {
     return(FALSE)
   } else {
-    columnFound <- hasColumn(columnName=columnName, data=data)
-    if(columnFound){
+    columnFound <- hasColumn(columnName = columnName, data = data)
+    if (columnFound) {
       validFields <- unique(data[[columnName]])
-    } else{
+    } else {
       validFields <- c()
     }
 

@@ -13,9 +13,9 @@ ui <- tagList(
   )
 )
 
-server <- function(input,output,session){
-  charts<-callModule(loadCharts, "ex1") #charts reactive
-  output$ex1Out<-renderPrint(ex1_data())
+server <- function(input, output, session) {
+  charts <- callModule(loadCharts, "ex1") # charts reactive
+  output$ex1Out <- renderPrint(ex1_data())
 }
 
 # options(shiny.reactlog = TRUE)

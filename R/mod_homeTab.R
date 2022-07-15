@@ -1,15 +1,15 @@
 #' @title UI for the home module
 #'
 #' @param id module id
-#' 
+#'
 #' @export
 
-homeTabUI <- function(id){
+homeTabUI <- function(id) {
   ns <- NS(id)
   fluidRow(
-    column(width=8, style='font-size:20px', uiOutput(outputId = ns("about"))),
-    column(width=4, imageOutput(outputId = ns("hex")))
-  )  
+    column(width = 8, style = "font-size:20px", uiOutput(outputId = ns("about"))),
+    column(width = 4, imageOutput(outputId = ns("hex")))
+  )
 }
 
 #' @title Server for the filter module in datamods::filter_data_ui
@@ -17,10 +17,10 @@ homeTabUI <- function(id){
 #' @param input mod input
 #' @param output mod output
 #' @param session mod session
-#' 
+#'
 #' @export
 
-homeTab <- function(input, output, session){
+homeTab <- function(input, output, session) {
   ns <- session$ns
   output$about <- renderUI({
     HTML('
@@ -41,19 +41,22 @@ homeTab <- function(input, output, session){
       <p>
         The app is built to support a wide variety of chart types including static plots (e.g. from <a target="_blank" href="https://cran.r-project.org/web/packages/ggplot2/index.html">{ggplot2}</a>), shiny modules, <a target="_blank" href="https://cran.r-project.org/web/packages/htmlwidgets/index.html">{htmlwidgets}</a> and even static outputs like RTFs.
         Several pre-configured charts are included in the companion <a target="_blank" href="https://github.com/safetyGraphics/safetyCharts">{safetyCharts}</a> R Package, and are available by default in the app.
-        Other charts can be added using the process descibed in <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration">this vignette</a>. 
+        Other charts can be added using the process descibed in <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics/wiki/ChartConfiguration">this vignette</a>.
       </p>
-      
+
       <p>
         For more information about {safetyGraphics}, please visit our <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics">GitHub repository</a>.
         We also welcome your suggestions in our <a target="_blank" href="https://github.com/SafetyGraphics/safetyGraphics/issues">issue tracker</a>.
       </p>
     ')
   })
-  
-  output$hex <- renderImage({
-    list(
-      src = system.file("safetyGraphicsHex/safetyGraphicsHex.png", package = "safetyGraphics"), width="60%")
-  }, deleteFile = FALSE
+
+  output$hex <- renderImage(
+    {
+      list(
+        src = system.file("safetyGraphicsHex/safetyGraphicsHex.png", package = "safetyGraphics"), width = "60%"
+      )
+    },
+    deleteFile = FALSE
   )
 }

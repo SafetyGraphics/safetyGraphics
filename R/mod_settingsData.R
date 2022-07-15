@@ -1,21 +1,21 @@
 #' @title UI for settings tab showing current data
-#' 
+#'
 #' @param id module id
-#' 
+#'
 #' @importFrom DT renderDT
 
 #' @export
 
-settingsDataUI <- function(id){
+settingsDataUI <- function(id) {
   ns <- NS(id)
   list(
     br(),
     p(
       icon("info-circle"),
       "Previews of the data for each domain are provided below. The current data (saved as an .RDS) can be exported for re-use on the settings/code tab.",
-      class="info"
+      class = "info"
     ),
-    uiOutput(ns('previews'))
+    uiOutput(ns("previews"))
   )
 }
 
@@ -25,32 +25,33 @@ settingsDataUI <- function(id){
 #' @param output  Shiny output object
 #' @param session Shiny session object
 #' @param domains named list of the data.frames for each domain
-#' 
+#'
 #' @export
 
-settingsData <- function(input, output, session, domains){
+settingsData <- function(input, output, session, domains) {
   ns <- session$ns
-  #Set up tabs
+  # Set up tabs
   output$previews <- renderUI({
-    tabs <- lapply(names(domains),function(domain){
-        tabPanel(domain,
-          div(
-            #h3(paste0("Note: Showing filtered data. X of X rows displayed for the X selected participants.")),
-            DT::DTOutput(ns(domain))
-          )
+    tabs <- lapply(names(domains), function(domain) {
+      tabPanel(
+        domain,
+        div(
+          # h3(paste0("Note: Showing filtered data. X of X rows displayed for the X selected participants.")),
+          DT::DTOutput(ns(domain))
         )
+      )
     })
     do.call(tabsetPanel, tabs)
   })
-  
+
   # Draw the tables
-  lapply(names(domains), function(domain){
+  lapply(names(domains), function(domain) {
     output[[domain]] <- renderDT({
       DT::datatable(
-        domains[[domain]], 
+        domains[[domain]],
         rownames = FALSE,
         options = list(),
-        class="compact"
+        class = "compact"
       )
     })
   })

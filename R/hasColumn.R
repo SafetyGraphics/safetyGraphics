@@ -7,22 +7,21 @@
 #' @return logical scalar. TRUE if the column is found. FALSE otherwise
 #'
 #' @examples
-#' safetyGraphics:::hasColumn(columnName="PARAM",data=safetyData::adam_adlbc) #TRUE
-#' safetyGraphics:::hasColumn(columnName="Not_a_column",data=safetyData::adam_adlbc) #FALSE
+#' safetyGraphics:::hasColumn(columnName = "PARAM", data = safetyData::adam_adlbc) # TRUE
+#' safetyGraphics:::hasColumn(columnName = "Not_a_column", data = safetyData::adam_adlbc) # FALSE
 #'
 #' @keywords internal
 
-hasColumn <- function(columnName, data){
+hasColumn <- function(columnName, data) {
   stopifnot(
-    typeof(columnName)=="character" || is.null(columnName),
-    length(columnName)==1  || is.null(columnName),
+    typeof(columnName) == "character" || is.null(columnName),
+    length(columnName) == 1 || is.null(columnName),
     is.data.frame(data)
   )
-  
-  if(is.null(columnName)){
+
+  if (is.null(columnName)) {
     return(FALSE)
   } else {
-    return(toupper(columnName) %in% toupper(colnames(data)))  
+    return(toupper(columnName) %in% toupper(colnames(data)))
   }
-  
 }

@@ -1,22 +1,22 @@
-#' @title UI for chart module, designed to be re-used for each chart generated. 
+#' @title UI for chart module, designed to be re-used for each chart generated.
 #'
 #' @param id module id
-#' @param chart list containing chart specifications like those returned by \link{makeChartConfig}. 
-#' 
+#' @param chart list containing chart specifications like those returned by \link{makeChartConfig}.
+#'
 #' @importFrom stringr str_to_title
 #' @importFrom purrr map2
-#' 
+#'
 #' @export
 
-chartsTabUI <- function(id, chart){
-  ns <- shiny::NS(id)    
-  header<-div(class=ns("header"), makeChartSummary(chart))
-  chartWrap<-chart$functions$ui(ns("chart-wrap"))
+chartsTabUI <- function(id, chart) {
+  ns <- shiny::NS(id)
+  header <- div(class = ns("header"), makeChartSummary(chart))
+  chartWrap <- chart$functions$ui(ns("chart-wrap"))
 
   return(list(header, chartWrap))
 }
 
-#' @title Server for chart module, designed to be re-used for each chart generated. 
+#' @title Server for chart module, designed to be re-used for each chart generated.
 #'
 #' @param input Input objects from module namespace
 #' @param output Output objects from module namespace
@@ -24,14 +24,14 @@ chartsTabUI <- function(id, chart){
 #' @param chart list containing a safetyGraphics chart object like those returned by \link{makeChartConfig}.
 #' @param data named list of current data sets (Reactive).
 #' @param mapping tibble capturing the current data mappings (Reactive).
-#' 
+#'
 #' @export
 
-chartsTab <- function(input, output, session, chart, data, mapping){  
+chartsTab <- function(input, output, session, chart, data, mapping) {
   ns <- session$ns
-  
-  # Initialize chart-specific parameters  
-  params <- reactive({ 
+
+  # Initialize chart-specific parameters
+  params <- reactive({
     makeChartParams(
       data = data(),
       mapping = mapping(),
@@ -40,9 +40,9 @@ chartsTab <- function(input, output, session, chart, data, mapping){
   })
 
   # Draw the chart
-  if(chart$type=="module"){
+  if (chart$type == "module") {
     callModule(chart$functions$main, "chart-wrap", params)
-  }else{
+  } else {
     output[["chart-wrap"]] <- chart$functions$server(
       do.call(
         chart$functions$main,
@@ -52,53 +52,53 @@ chartsTab <- function(input, output, session, chart, data, mapping){
   }
   # Download R script
   insertUI(
-    paste0(".",ns("header"), " .chart-header"), 
-    where="beforeEnd",
-    ui=downloadButton(ns("scriptDL"), "R script", class="pull-right btn-xs dl-btn")
+    paste0(".", ns("header"), " .chart-header"),
+    where = "beforeEnd",
+    ui = downloadButton(ns("scriptDL"), "R script", class = "pull-right btn-xs dl-btn")
   )
-  
-  mapping_list<-reactive({
+
+  mapping_list <- reactive({
     mapping_list <- generateMappingList(mapping() %>% filter(.data$domain %in% chart$domain))
-    if(length(mapping_list)==1){
+    if (length(mapping_list) == 1) {
       mapping_list <- mapping_list[[1]]
     }
     return(mapping_list)
   })
 
   output$scriptDL <- downloadHandler(
-    filename = paste0("sg-",chart$name,".R"),
+    filename = paste0("sg-", chart$name, ".R"),
     content = function(file) {
       writeLines(makeChartExport(chart, mapping_list()), file)
     }
   )
 
-  if(chart$type !="module"){
+  if (chart$type != "module") {
     # Set up chart export button
     insertUI(
-      paste0(".",ns("header"), " .chart-header"), 
-      where="beforeEnd",
-      ui=downloadButton(ns("reportDL"), "html report", class="pull-right btn-primary btn-xs")
+      paste0(".", ns("header"), " .chart-header"),
+      where = "beforeEnd",
+      ui = downloadButton(ns("reportDL"), "html report", class = "pull-right btn-primary btn-xs")
     )
 
     output$reportDL <- downloadHandler(
-      filename = paste0("sg-",chart$name,".html"),
+      filename = paste0("sg-", chart$name, ".html"),
       content = function(file) {
         # Copy the report file to a temporary directory before processing it, in case we don't
         # have write permissions to the current working dir (which can happen when deployed).
-        templateReport <- system.file("report","safetyGraphicsReport.Rmd", package = "safetyGraphics")
+        templateReport <- system.file("report", "safetyGraphicsReport.Rmd", package = "safetyGraphics")
         tempReport <- file.path(tempdir(), "report.Rmd")
         file.copy(templateReport, tempReport, overwrite = TRUE)
         report_params <- list(
-          data = data(), 
-          mapping = mapping(), 
+          data = data(),
+          mapping = mapping(),
           chart = chart
         )
-        
+
         rmarkdown::render(
           tempReport,
           output_file = file,
-          params = report_params,  ## pass in params
-          envir = new.env(parent = globalenv())  ## eval in child of global env
+          params = report_params, ## pass in params
+          envir = new.env(parent = globalenv()) ## eval in child of global env
         )
       }
     )
