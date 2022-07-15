@@ -26,7 +26,8 @@ safetyGraphicsServer <- function(
   mapping,
   domainData,
   charts,
-  filterDomain
+  filterDomain,
+  config
 ) {
   # Initialize modules
   current_mapping <- callModule(mappingTab, "mapping", meta, domainData)
@@ -40,7 +41,7 @@ safetyGraphicsServer <- function(
     current_mapping = current_mapping
   )
 
-  callModule(homeTab, "home")
+  callModule(homeTab, "home", config)
 
   # Initialize Chart UI - Adds subtabs to chart menu - this initializes initializes chart UIs
   charts %>% purrr::map(~ chartsNav(.x, session$ns))

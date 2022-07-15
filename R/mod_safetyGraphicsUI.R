@@ -11,7 +11,7 @@
 #'
 #' @export
 
-safetyGraphicsUI <- function(id, meta, domainData, mapping, standards) {
+safetyGraphicsUI <- function(id, meta, domainData, mapping, standards, config) {
   ns <- NS(id)
 
   # read css from package
@@ -50,7 +50,7 @@ safetyGraphicsUI <- function(id, meta, domainData, mapping, standards) {
       )
     ),
     navbarPage(
-      "safetyGraphics",
+      config$appName,
       id = ns("safetyGraphicsApp"),
       tabPanel("Home", icon = icon("home"), homeTabUI(ns("home"))),
       tabPanel("Mapping", icon = icon("map"), mappingTabUI(ns("mapping"), meta, domainData, mapping, standards)),
@@ -60,5 +60,6 @@ safetyGraphicsUI <- function(id, meta, domainData, mapping, standards) {
     ),
     participant_badge
   )
+
   return(ui)
 }

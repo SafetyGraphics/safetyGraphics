@@ -26,29 +26,67 @@ safetyGraphicsApp <- function(
   autoMapping = TRUE,
   filterDomain = "dm",
   chartSettingsPaths = NULL,
-  runNow = TRUE
+  runNow = TRUE,
+  appName = 'safetyGraphics',
+  hexPath = system.file("resources/safetyGraphicsHex.png", package = "safetyGraphics"),
+  homeTabPath = system.file('resources/safetyGraphicsHomeTab.html', package = 'safetyGraphics'),
+  launchBrowser = FALSE
 ) {
   message("Initializing safetyGraphicsApp")
-  config <- app_startup(domainData, meta, charts, mapping, autoMapping, filterDomain, chartSettingsPaths)
+
+  if (!is.character(appName))
+    appName <- 'safetyGraphics'
+
+  if (!is.character(hexPath) || !file.exists(hexPath))
+    hexPath <- system.file("resources/safetyGraphicsHex.png", package = "safetyGraphics")
+
+  if (!is.character(homeTabPath) || !file.exists(homeTabPath))
+    homeTabPath <- system.file('resources/safetyGraphicsHomeTab.html', package = 'safetyGraphics')
+
+  config <- app_startup(
+    domainData,
+    meta,
+    charts,
+    mapping,
+    autoMapping,
+    filterDomain,
+    chartSettingsPaths
+  )
+  config$appName <- appName
+  config$hexPath <- hexPath
+  config$homeTabPath <- homeTabPath
+  config$launchBrowser <- launchBrowser
 
   app <- shinyApp(
-    ui = safetyGraphicsUI("sg", config$meta, config$domainData, config$mapping, config$standards),
+    ui =  safetyGraphicsUI(
+        "sg",
+        config$meta,
+        config$domainData,
+        config$mapping,
+        config$standards,
+        config
+    ),
     server = function(input, output, session) {
       callModule(
         safetyGraphicsServer,
         "sg",
-        config$meta,
-        config$mapping,
-        config$domainData,
-        config$charts,
-        config$filterDomain
+        config$meta, 
+        config$mapping, 
+        config$domainData, 
+        config$charts, 
+        config$filterDomain,
+        config
       )
     }
   )
 
   if (runNow) {
-    runApp(app)
-  } else {
-    app
+    if (launchBrowser == TRUE) {
+      runApp(app, launch.browser = TRUE)
+    } else {
+      runApp(app)
+    }
   }
+
+  app
 }
