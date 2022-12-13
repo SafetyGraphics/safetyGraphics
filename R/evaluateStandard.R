@@ -46,7 +46,7 @@ evaluateStandard <- function(data, meta, domain, standard){
   compare_summary<-list()
   compare_summary[["standard"]]<-standard
   
-  domainMeta<-meta %>% filter(domain==!!domain)
+  domainMeta<-meta %>% filter(tolower(domain)==!!domain)
   standardMap <- domainMeta%>%pull(paste0("standard_",!!standard))
   names(standardMap)<-domainMeta%>%pull(.data$text_key)
   compare_summary[["mapping"]] <- domainMeta %>% 

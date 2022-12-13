@@ -50,7 +50,7 @@ chart<-params$chart
 header <- makeChartSummary(chart, class="chart-md")
 chart_params <- makeChartParams(data, chart, mapping)
 
-mapping_list<-generateMappingList(mapping %>% filter(domain %in% chart$domain))
+mapping_list<-generateMappingList(mapping %>% dplyr::filter(domain %in% chart$domain))
 if(length(mapping_list)==1){
   mapping_list <- mapping_list[[1]]
 }
