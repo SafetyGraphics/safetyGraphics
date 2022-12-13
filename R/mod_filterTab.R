@@ -78,12 +78,13 @@ filterTab <- function(input, output, session, domainData, filterDomain, current_
         shinyjs::hide(selector = paste0(".navbar li a[data-value=",tabID,"]"))
         shinyjs::hide(selector = paste0(".navbar #population-header"))
     })
-
+    
     res_filter <- filter_data_server(
         id = "filtering", 
         data = raw,
         name = reactive({filterDomain}),
-        vars = reactive({filterVars})
+        vars = reactive({filterVars}),
+        widget_char="select"
     )  
 
     observeEvent(res_filter$filtered(), {
