@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safetyGraphics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
       </span>
     </div>
 
@@ -96,7 +96,7 @@
       <h1 data-toc-skip>Technical FAQ</h1>
                         <h4 data-toc-skip class="author">Jeremy Wildfire</h4>
             
-            <h4 data-toc-skip class="date">2022-04-08</h4>
+            <h4 data-toc-skip class="date">2022-12-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/HEAD/vignettes/TechnicalFAQ.Rmd" class="external-link"><code>vignettes/TechnicalFAQ.Rmd</code></a></small>
       <div class="hidden name"><code>TechnicalFAQ.Rmd</code></div>
@@ -200,16 +200,16 @@
 <div class="section level3">
 <h3 id="q-do-you-recommend-deploying-the-app-to-a-dedicated-server-for-internal-usage">Q: Do you recommend deploying the app to a dedicated server for internal usage?<a class="anchor" aria-label="anchor" href="#q-do-you-recommend-deploying-the-app-to-a-dedicated-server-for-internal-usage"></a>
 </h3>
-<p><strong>A</strong>: It depends a bit on your use-case and how the app is hosted. For example, analysts using the data in an exploratory fashion can probably just run it from RStudio, but if multiple medical monitors using the app for medical monitoring in active studies probably need a more robust (and possibly validated) set up using <a href="https://github.com/rstudio/shiny-server/blob/master/README.md" class="external-link">Shiny Server</a>, <a href="https://www.rstudio.com/products/connect/" class="external-link">RStudio Connect</a> or something similar.</p>
+<p><strong>A</strong>: It depends a bit on your use-case and how the app is hosted. For example, analysts using the data in an exploratory fashion can probably just run it from RStudio, but if multiple medical monitors using the app for medical monitoring in active studies probably need a more robust (and possibly validated) set up using <a href="https://github.com/rstudio/shiny-server/blob/master/README.md" class="external-link">Shiny Server</a>, <a href="https://posit.co/products/enterprise/connect/" class="external-link">RStudio Connect</a> or something similar.</p>
 </div>
 <div class="section level3">
 <h3 id="q-can-i-deploy-safetygraphics-to-shinyapps-io-to-explore-trial-data-from-my-organization">Q: Can I deploy <code>safetyGraphics</code> to shinyapps.io to explore trial data from my organization?<a class="anchor" aria-label="anchor" href="#q-can-i-deploy-safetygraphics-to-shinyapps-io-to-explore-trial-data-from-my-organization"></a>
 </h3>
-<p><strong>A</strong>: We advise against loading non-authorized, private, or non-deidentified patient data outside of your organization’s firewall. Consult with your IT and QA first. There is huge risk associated with confidentiality, IP, and patient privacy. Also refer to <a href="https://docs.rstudio.com/shinyapps.io/security-and-compliance.html" class="external-link">ShinyApps.io Chapter 8 Security and Compliance</a>.</p>
+<p><strong>A</strong>: We advise against loading non-authorized, private, or non-deidentified patient data outside of your organization’s firewall. Consult with your IT and QA first. There is huge risk associated with confidentiality, IP, and patient privacy. Also refer to <a href="https://docs.posit.co/shinyapps.io/security-and-compliance.html" class="external-link">ShinyApps.io Chapter 8 Security and Compliance</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="q-can-i-deploy-safetygraphics-to-an-internal-rstudio-connect-server">
-<strong>Q</strong>: Can I deploy <code>safetyGraphics</code> to an internal <a href="https://www.rstudio.com/products/connect/" class="external-link">RStudio Connect</a> server?<a class="anchor" aria-label="anchor" href="#q-can-i-deploy-safetygraphics-to-an-internal-rstudio-connect-server"></a>
+<strong>Q</strong>: Can I deploy <code>safetyGraphics</code> to an internal <a href="https://posit.co/products/enterprise/connect/" class="external-link">RStudio Connect</a> server?<a class="anchor" aria-label="anchor" href="#q-can-i-deploy-safetygraphics-to-an-internal-rstudio-connect-server"></a>
 </h3>
 <p><strong>A</strong>: Yes. The <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/dev/inst/deploy/app.R" class="external-link">script below</a> should be easy to deploy via the RStudio interface or by running <code><a href="https://rdrr.io/pkg/rsconnect/man/deployApp.html" class="external-link">rsconnect::deployApp()</a></code> and can easily be customized to support custom data and charts.</p>
 <pre><code><span class="co"># Launch the ShinyApp (Do not remove this comment)</span>
@@ -245,7 +245,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

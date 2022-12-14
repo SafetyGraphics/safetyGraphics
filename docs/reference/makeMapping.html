@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safetyGraphics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
       </span>
     </div>
 
@@ -85,16 +85,25 @@
     <h2>Arguments</h2>
     <dl><dt>domainData</dt>
 <dd><p>named list of data.frames to be loaded in to the app. Sample AdAM data from the safetyData package used by default</p></dd>
+
+
 <dt>meta</dt>
 <dd><p>data frame containing the metadata for use in the app.</p></dd>
+
+
 <dt>autoMapping</dt>
 <dd><p>boolean indicating whether the app should use <code><a href="detectStandard.html">safetyGraphics::detectStandard()</a></code> to detect data standards and automatically generate mappings for the data provided. Values specified in the <code>customMapping</code> parameter overwrite auto-generated mappings when both are found. Defaults to true.</p></dd>
+
+
 <dt>customMapping</dt>
 <dd><p>optional list specifying initial mapping values within each data mapping (e.g. list(aes= list(id_col='USUBJID', seq_col='AESEQ')).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>List containing data standard information and mapping</p><ul><li><p>"mapping" Initial Data Mapping</p></li>
+    
+
+<p>List containing data standard information and mapping</p><ul><li><p>"mapping" Initial Data Mapping</p></li>
 <li><p>"standards" List of domain level data standards (or NULL if autoMapping is false)</p></li>
 </ul></div>
 
@@ -110,7 +119,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
