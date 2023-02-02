@@ -19,10 +19,13 @@
 #' @export
 
 safetyGraphicsServer <- function(input, output, session, meta, mapping, domainData, charts, filterDomain){
-    #Initialize modules
+    #--- Home Tab ---#
+    callModule(homeTab, "home")
+
+    #--- Mapping Tab ---#
     current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
     
-    # Initialize the filter tab 
+    #--- Filter tab ---#
     filtered_data<-callModule(
         filterTab, 
         "filter", 
@@ -30,10 +33,22 @@ safetyGraphicsServer <- function(input, output, session, meta, mapping, domainDa
         filterDomain=filterDomain, 
         current_mapping=current_mapping
     )
-    
-    callModule(homeTab, "home")
 
-    #Initialize Chart UI - Adds subtabs to chart menu - this initializes initializes chart UIs
+    #--- Profile Tab ---#
+    callModule(
+        profileTab, 
+        "profile", 
+        params=reactive({
+            list(
+                data=filtered_data(), 
+                settings=safetyGraphics::generateMappingList(current_mapping())
+            )
+        })
+    )
+    
+    
+    #--- Chart Tab ---# 
+    # Note: Adds subtabs to chart menu - this initializes initializes chart UIs
     charts %>% purrr::map(~chartsNav(.x,session$ns))
 
     #Initialize Chart Servers
@@ -48,7 +63,7 @@ safetyGraphicsServer <- function(input, output, session, meta, mapping, domainDa
         )
     )
 
-    #Setting tab
+    #--- Setting tab ---#
     callModule(settingsTab, "settings", domains = domainData,  metadata=meta, mapping=current_mapping, charts = charts)
 }
 

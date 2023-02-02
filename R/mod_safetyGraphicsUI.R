@@ -55,6 +55,7 @@ safetyGraphicsUI <- function(id, meta, domainData, mapping, standards){
             tabPanel("Home", icon=icon("home"),homeTabUI(ns("home"))),
             tabPanel("Mapping", icon=icon("map"), mappingTabUI(ns("mapping"), meta, domainData, mapping, standards)),
             tabPanel("Filtering", icon=icon("filter"), filterTabUI(ns("filter"))),
+            tabPanel("Profile", icon=icon("person"), profileTabUI(ns("profile"))),
             navbarMenu('Charts', icon=icon("chart-bar")),
             tabPanel('',icon=icon("cog"), settingsTabUI(ns("settings")))
         ),
