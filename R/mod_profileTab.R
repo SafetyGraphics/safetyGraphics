@@ -37,9 +37,9 @@ profileTabUI <- function(id){
 
 profileTab <- function(input, output, session, params){
     observe({
-        print(names(params()$data))
-        print(names(params()$settings))
+        #print(names(params()$data))
+        #print(names(params()$settings))
     })
 
-    callModule(safetyProfile::profile_server, "profile", params)
+    safetyProfile::profile_server("profile", params)
 }
