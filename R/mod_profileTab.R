@@ -19,7 +19,7 @@ profileTabUI <- function(id){
 }
 
 
-#' @title Server for the filter module in safetyProfile::profile_server
+#' @title Server for the patient profile in safetyProfile::profile_server
 #'
 #' @param input Shiny input object
 #' @param output  Shiny output object
@@ -40,6 +40,21 @@ profileTab <- function(input, output, session, params){
         #print(names(params()$data))
         #print(names(params()$settings))
     })
+    
+    id<-safetyProfile::profile_server("profile", params)
 
-    safetyProfile::profile_server("profile", params)
+    observe({
+        shinyjs::html(
+            "pt-header", 
+            id(),
+            asis=TRUE    
+        )
+
+        shinyjs::toggleClass(
+            selector = "#pt-header",
+            class = "active",
+            condition = !is.null(id())
+        )
+    })
+    return(id)
 }

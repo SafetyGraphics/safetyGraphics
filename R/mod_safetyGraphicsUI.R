@@ -31,6 +31,18 @@ safetyGraphicsUI <- function(id, meta, domainData, mapping, standards){
             "\");"
         ))
     )
+
+    pt_selected<-tags$script(
+        HTML(paste0(
+            "var header = $('.navbar > .container-fluid');",
+            "header.append(\"",
+            "<div id='pt-header' class='badge' title='Selected Participant'>",
+            "None",
+            "</div>",
+            "\");"
+        ))
+    )
+    
     if(isNamespaceLoaded("shinybusy")){
         spinner<-shinybusy::add_busy_spinner(spin = "atom", position="bottom-right")
     }else{
@@ -59,7 +71,8 @@ safetyGraphicsUI <- function(id, meta, domainData, mapping, standards){
             navbarMenu('Charts', icon=icon("chart-bar")),
             tabPanel('',icon=icon("cog"), settingsTabUI(ns("settings")))
         ),
-        participant_badge
+        participant_badge,
+        pt_selected
     )
     return(ui)
 }
