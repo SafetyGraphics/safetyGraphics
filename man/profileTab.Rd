@@ -2,7 +2,7 @@
 % Please edit documentation in R/mod_profileTab.R
 \name{profileTab}
 \alias{profileTab}
-\title{Server for the filter module in safetyProfile::profile_server}
+\title{Server for the patient profile in safetyProfile::profile_server}
 \usage{
 profileTab(input, output, session, params)
 }
@@ -21,5 +21,5 @@ profileTab(input, output, session, params)
 current_id
 }
 \description{
-Server for the filter module in safetyProfile::profile_server
+Server for the patient profile in safetyProfile::profile_server
 }
