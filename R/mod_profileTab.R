@@ -35,13 +35,11 @@ profileTabUI <- function(id){
 #' 
 #' @export
 
-profileTab <- function(input, output, session, params){
-    observe({
-        #print(names(params()$data))
-        #print(names(params()$settings))
-    })
-    
-    id<-safetyProfile::profile_server("profile", params)
+profileTab <- function(input, output, session, params) {
+    id <- safetyProfile::profile_server(
+        "profile",
+        params
+    )
 
     observe({
         shinyjs::html(
@@ -56,5 +54,6 @@ profileTab <- function(input, output, session, params){
             condition = !is.null(id())
         )
     })
+
     return(id)
 }

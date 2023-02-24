@@ -46,6 +46,23 @@ safetyGraphicsServer <- function(input, output, session, meta, mapping, domainDa
         })
     )
     
+    observeEvent(input$participants_selected, {
+        cli::cli_alert_info('Selected participant ID: {input$participants_selected}')
+
+        # Navigate to patient profile.
+        #updateNavbarPage(
+        #    session,
+        #    "safetyGraphicsApp",
+        #    selected = 'profile'
+        #)
+
+        # Update selected participant.
+        updateSelectizeInput(
+            session,
+            inputId = 'profile-profile-idSelect',
+            selected = input$participants_selected
+        )
+    })
     
     #--- Chart Tab ---# 
     # Note: Adds subtabs to chart menu - this initializes initializes chart UIs
