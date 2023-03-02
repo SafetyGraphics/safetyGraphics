@@ -57,28 +57,34 @@ safetyGraphicsApp <- function(
   config$homeTabPath <- homeTabPath
   config$launchBrowser <- launchBrowser
 
-  app <- shinyApp(
-    ui =  safetyGraphicsUI(
+    ui <- safetyGraphicsUI(
         "sg",
         config$meta,
         config$domainData,
         config$mapping,
         config$standards,
         config
-    ),
-    server = function(input, output, session) {
-      callModule(
-        safetyGraphicsServer,
-        "sg",
-        config$meta, 
-        config$mapping, 
-        config$domainData, 
-        config$charts, 
-        config$filterDomain,
-        config
-      )
+    )
+
+    server <- function(input, output, session) {
+        module_outputs <- callModule(
+            safetyGraphicsServer,
+            "sg",
+            config$meta, 
+            config$mapping, 
+            config$domainData, 
+            config$charts, 
+            config$filterDomain,
+            config
+        )
+
+        return(module_outputs)
     }
-  )
+
+    app <- shinyApp(
+        ui = ui,
+        server = server
+    )
 
   if (runNow) {
     if (launchBrowser == TRUE) {
