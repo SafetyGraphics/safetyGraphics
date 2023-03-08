@@ -18,13 +18,6 @@
 #' 
 #' @export
 
-<<<<<<< HEAD
-safetyGraphicsServer <- function(input, output, session, meta, mapping, domainData, charts, filterDomain){
-    #--- Home Tab ---#
-    callModule(homeTab, "home")
-
-    #--- Mapping Tab ---#
-=======
 safetyGraphicsServer <- function(
     input,
     output,
@@ -37,7 +30,10 @@ safetyGraphicsServer <- function(
     config
 ) {
     #Initialize modules
->>>>>>> dev
+    #--- Home Tab ---#
+    callModule(homeTab, "home", config)
+
+    #--- Mapping Tab ---#
     current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
     
     #--- Filter tab ---#
@@ -61,7 +57,6 @@ safetyGraphicsServer <- function(
         })
     )
     
-<<<<<<< HEAD
     observeEvent(input$participants_selected, {
         cli::cli_alert_info('Selected participant ID: {input$participants_selected}')
 
@@ -71,9 +66,6 @@ safetyGraphicsServer <- function(
         #    "safetyGraphicsApp",
         #    selected = 'profile'
         #)
-=======
-    callModule(homeTab, "home", config)
->>>>>>> dev
 
         # Update selected participant.
         updateSelectizeInput(
