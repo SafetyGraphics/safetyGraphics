@@ -7,6 +7,10 @@
 #' @param autoMapping boolean indicating whether the app should attempt to automatically detect data standards and generate mappings for the data provided. Values specified in the `mapping` parameter overwrite automatically generated mappings when both are found. Defaults to true.
 #' @param filterDomain domain used for the data/filter tab. Demographics ("`dm`") is used by default. Using a domain that is not one record per participant is not recommended. 
 #' @param chartSettingsPaths path(s) where customization functions are saved relative to your working directory. All charts can have initialization (e.g. myChart_Init.R) and static charts can have charting functions (e.g. myGraphic_Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details. 
+#' @param appName character string defining the name of the app (default = "safetyGraphics")
+#' @param hexPath path to image file with a hex or other logo. safetyGraphics hex used by default.
+#' @param homeTabPath path to html content to be used on the home page. default is a summary of the safetyGraphics framework.
+#' @param launchBrowser boolean indicating whether to launch the app in a browser. default is false
 #' @param runNow Should the shiny app object created be run directly? Helpful when writing  functions to dispatch to shinyapps, rsconnect, or shinyproxy.
 #'
 #' @import shiny
@@ -26,36 +30,26 @@ safetyGraphicsApp <- function(
   autoMapping = TRUE,
   filterDomain = "dm",
   chartSettingsPaths = NULL,
-  runNow = TRUE,
   appName = 'safetyGraphics',
   hexPath = system.file("resources/safetyGraphicsHex.png", package = "safetyGraphics"),
   homeTabPath = system.file('resources/safetyGraphicsHomeTab.html', package = 'safetyGraphics'),
-  launchBrowser = FALSE
+  launchBrowser = FALSE,
+  runNow = TRUE
 ){
   message("Initializing safetyGraphicsApp")
 
-  if (!is.character(appName))
-    appName <- 'safetyGraphics'
-
-  if (!is.character(hexPath) || !file.exists(hexPath))
-    hexPath <- system.file("resources/safetyGraphicsHex.png", package = "safetyGraphics")
-
-  if (!is.character(homeTabPath) || !file.exists(homeTabPath))
-    homeTabPath <- system.file('resources/safetyGraphicsHomeTab.html', package = 'safetyGraphics')
-
   config <- app_startup(
-    domainData,
-    meta,
-    charts,
-    mapping,
-    autoMapping,
-    filterDomain,
-    chartSettingsPaths
+    domainData=domainData,
+    meta=meta,
+    charts=charts,
+    mapping=mapping,
+    autoMapping=autoMapping,
+    filterDomain=filterDomain,
+    chartSettingsPaths=chartSettingsPaths,
+    appName=appName,
+    hexPath=hexPath,
+    homeTabPath=homeTabPath
   )
-  config$appName <- appName
-  config$hexPath <- hexPath
-  config$homeTabPath <- homeTabPath
-  config$launchBrowser <- launchBrowser
 
     ui <- safetyGraphicsUI(
         "sg",

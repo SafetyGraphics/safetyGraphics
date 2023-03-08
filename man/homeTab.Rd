@@ -4,7 +4,7 @@
 \alias{homeTab}
 \title{Server for the filter module in datamods::filter_data_ui}
 \usage{
-homeTab(input, output, session)
+homeTab(input, output, session, config)
 }
 \arguments{
 \item{input}{mod input}

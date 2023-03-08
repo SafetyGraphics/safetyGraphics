@@ -104,13 +104,13 @@ Just like the discussion regarding [Validation and Quality Control](#validation-
 
 ## Q: Do you recommend deploying the app to a dedicated server for internal usage?
 
-**A**: It depends a bit on your use-case and how the app is hosted. For example, analysts using the data in an exploratory fashion can probably just run it from RStudio, but if multiple medical monitors using the app for medical monitoring in active studies probably need a more robust (and possibly validated) set up using [Shiny Server](https://github.com/rstudio/shiny-server/blob/master/README.md), [RStudio Connect](https://www.rstudio.com/products/connect/) or something similar.
+**A**: It depends a bit on your use-case and how the app is hosted. For example, analysts using the data in an exploratory fashion can probably just run it from RStudio, but if multiple medical monitors using the app for medical monitoring in active studies probably need a more robust (and possibly validated) set up using [Shiny Server](https://github.com/rstudio/shiny-server/blob/master/README.md), [RStudio Connect](https://posit.co/products/enterprise/connect/) or something similar.
 
 ## Q: Can I deploy `safetyGraphics` to shinyapps.io to explore trial data from my organization? 
 
-**A**: We advise against loading non-authorized, private, or non-deidentified patient data outside of your organization's firewall. Consult with your IT and QA first. There is huge risk associated with confidentiality, IP, and patient privacy. Also refer to [ShinyApps.io Chapter 8 Security and Compliance](https://docs.rstudio.com/shinyapps.io/security-and-compliance.html). 
+**A**: We advise against loading non-authorized, private, or non-deidentified patient data outside of your organization's firewall. Consult with your IT and QA first. There is huge risk associated with confidentiality, IP, and patient privacy. Also refer to [ShinyApps.io Chapter 8 Security and Compliance](https://docs.posit.co/shinyapps.io/security-and-compliance.html). 
 
-## **Q**: Can I deploy `safetyGraphics` to an internal [RStudio Connect](https://www.rstudio.com/products/connect/) server?
+## **Q**: Can I deploy `safetyGraphics` to an internal [RStudio Connect](https://posit.co/products/enterprise/connect/) server?
 
 **A**: Yes. The [script below](https://github.com/SafetyGraphics/safetyGraphics/blob/dev/inst/deploy/app.R) should be easy to deploy via the RStudio interface or by running `rsconnect::deployApp()` and can easily be customized to support custom data and charts. 
 

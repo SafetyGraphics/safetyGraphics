@@ -4,7 +4,7 @@
 \alias{safetyGraphicsUI}
 \title{UI for the core safetyGraphics app including Home, Mapping, Filter, Charts and Settings modules.}
 \usage{
-safetyGraphicsUI(id, meta, domainData, mapping, standards)
+safetyGraphicsUI(id, meta, domainData, mapping, standards, config)
 }
 \arguments{
 \item{id}{module ID}

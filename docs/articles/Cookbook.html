@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safetyGraphics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
       </span>
     </div>
 
@@ -96,7 +96,7 @@
       <h1 data-toc-skip>Cookbook</h1>
                         <h4 data-toc-skip class="author">Jeremy Wildfire</h4>
             
-            <h4 data-toc-skip class="date">2022-04-08</h4>
+            <h4 data-toc-skip class="date">2022-12-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SafetyGraphics/safetyGraphics/blob/HEAD/vignettes/Cookbook.Rmd" class="external-link"><code>vignettes/Cookbook.Rmd</code></a></small>
       <div class="hidden name"><code>Cookbook.Rmd</code></div>
@@ -213,7 +213,7 @@
 <h3 id="example-7---drop-unwanted-charts">Example 7 - Drop Unwanted Charts<a class="anchor" aria-label="anchor" href="#example-7---drop-unwanted-charts"></a>
 </h3>
 <p>Users can also generate a list of charts and then drop charts that they don’t want to include. For example, if you wanted to drop charts with <code>type</code> of “htmlwidgets” you could run this code.</p>
-<pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org" class="external-link">purrr</a></span><span class="op">)</span>
+<pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span>
 <span class="va">charts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/makeChartConfig.html">makeChartConfig</a></span><span class="op">(</span><span class="op">)</span> <span class="co">#gets charts from safetyCharts pacakge by default</span>
 <span class="va">notWidgets</span> <span class="op">&lt;-</span> <span class="va">charts</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/keep.html" class="external-link">keep</a></span><span class="op">(</span><span class="op">~</span><span class="va">.x</span><span class="op">$</span><span class="va">type</span> <span class="op">!=</span> <span class="st">"htmlwidget"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/safetyGraphicsApp.html">safetyGraphicsApp</a></span><span class="op">(</span>charts<span class="op">=</span><span class="va">notWidgets</span><span class="op">)</span></code></pre>
@@ -375,7 +375,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
