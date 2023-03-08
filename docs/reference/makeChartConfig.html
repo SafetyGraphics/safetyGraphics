@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safetyGraphics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
       </span>
     </div>
 
@@ -90,16 +90,25 @@
     <h2>Arguments</h2>
     <dl><dt>dirs</dt>
 <dd><p>path to one or more directories containing yaml config files (relative to working directory)</p></dd>
+
+
 <dt>packages</dt>
 <dd><p>installed packages names containing yaml config files in the /inst/packageLocation folder</p></dd>
+
+
 <dt>packageLocation</dt>
 <dd><p>inst folder where yaml config files (and possibly R functions referenced in yaml workflow) are located in <code>packages</code></p></dd>
+
+
 <dt>sourceFiles</dt>
 <dd><p>boolean indicating whether to source all R files found in dirs.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>returns a named list of charts derived from YAML files. Each element of the list contains information about a single chart, and has the following parameters:</p><ul><li><p>"env" Environment for the chart. Must be set to "safetyGraphics" or the chart is dropped.</p></li>
+    
+
+<p>returns a named list of charts derived from YAML files. Each element of the list contains information about a single chart, and has the following parameters:</p><ul><li><p>"env" Environment for the chart. Must be set to "safetyGraphics" or the chart is dropped.</p></li>
 <li><p>"name" Name of the chart. Also the name of the element in the list - e.g. charts$aeExplorer$name is "aeExplorer"</p></li>
 <li><p>"label" Short description of the chart</p></li>
 <li><p>"type" Type of chart; options are: 'htmlwidget', 'module', 'plot', 'table', 'html' or 'plotly'.</p></li>
@@ -125,7 +134,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
