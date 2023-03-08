@@ -13,6 +13,11 @@ safetyGraphicsApp(
   autoMapping = TRUE,
   filterDomain = "dm",
   chartSettingsPaths = NULL,
+  appName = "safetyGraphics",
+  hexPath = system.file("resources/safetyGraphicsHex.png", package = "safetyGraphics"),
+  homeTabPath = system.file("resources/safetyGraphicsHomeTab.html", package =
+    "safetyGraphics"),
+  launchBrowser = FALSE,
   runNow = TRUE
 )
 }
@@ -30,6 +35,14 @@ safetyGraphicsApp(
 \item{filterDomain}{domain used for the data/filter tab. Demographics ("\code{dm}") is used by default. Using a domain that is not one record per participant is not recommended.}
 
 \item{chartSettingsPaths}{path(s) where customization functions are saved relative to your working directory. All charts can have initialization (e.g. myChart_Init.R) and static charts can have charting functions (e.g. myGraphic_Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details.}
+
+\item{appName}{character string defining the name of the app (default = "safetyGraphics")}
+
+\item{hexPath}{path to image file with a hex or other logo. safetyGraphics hex used by default.}
+
+\item{homeTabPath}{path to html content to be used on the home page. default is a summary of the safetyGraphics framework.}
+
+\item{launchBrowser}{boolean indicating whether to launch the app in a browser. default is false}
 
 \item{runNow}{Should the shiny app object created be run directly? Helpful when writing  functions to dispatch to shinyapps, rsconnect, or shinyproxy.}
 }
