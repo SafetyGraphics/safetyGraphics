@@ -46,34 +46,40 @@ safetyGraphicsServer <- function(
     )
 
     #--- Profile Tab ---#
-    callModule(
-        profileTab, 
-        "profile", 
-        params=reactive({
-            list(
-                data=filtered_data(), 
-                settings=safetyGraphics::generateMappingList(current_mapping())
+    
+    if(isNamespaceLoaded("safetyProfile")){
+        callModule(
+            profileTab, 
+            "profile", 
+            params=reactive({
+                list(
+                    data=filtered_data(), 
+                    settings=safetyGraphics::generateMappingList(current_mapping())
+                )
+            })
+        )
+    
+        observeEvent(input$participants_selected, {
+            cli::cli_alert_info('Selected participant ID: {input$participants_selected}')
+
+            # Navigate to patient profile.
+            #updateNavbarPage(
+            #    session,
+            #    "safetyGraphicsApp",
+            #    selected = 'profile'
+            #)
+
+            # Update selected participant.
+            updateSelectizeInput(
+                session,
+                inputId = 'profile-profile-idSelect',
+                selected = input$participants_selected
             )
         })
-    )
-    
-    observeEvent(input$participants_selected, {
-        cli::cli_alert_info('Selected participant ID: {input$participants_selected}')
-
-        # Navigate to patient profile.
-        #updateNavbarPage(
-        #    session,
-        #    "safetyGraphicsApp",
-        #    selected = 'profile'
-        #)
-
-        # Update selected participant.
-        updateSelectizeInput(
-            session,
-            inputId = 'profile-profile-idSelect',
-            selected = input$participants_selected
-        )
-    })
+    } else {
+        shinyjs::hide(selector = paste0(".navbar li a[data-value='profile']"))
+        shinyjs::hide(selector = paste0(".navbar #pt-header"))
+    }
     
     #--- Chart Tab ---# 
     # Note: Adds subtabs to chart menu - this initializes initializes chart UIs

@@ -2,19 +2,20 @@
 #'
 #' @param id module id
 #' 
-#' @import safetyProfile
-#' 
 #' @export
 
 profileTabUI <- function(id){  
     ns <- NS(id)
     
-    profile_ui<-list(
-        h1(paste("Participant Profile")),
-        span("This page shows details for a selected participant."),
-        profile_ui(ns("profile"))
-    )
-    
+    if(isNamespaceLoaded("safetyProfile")){
+        profile_ui<-list(
+            h1(paste("Participant Profile")),
+            span("This page shows details for a selected participant."),
+            profile_ui(ns("profile"))
+        )
+    }else{
+        profile_ui<-NULL
+    }
     return(profile_ui) 
 }
 

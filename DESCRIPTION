@@ -21,6 +21,7 @@ Suggests:
     ggplot2 (>= 3.3.0),
     knitr (>= 1.34),
     rmarkdown (>= 2.10),
+    safetyProfile, 
     shinydashboard (>= 0.7.1),
     shinytest (>= 1.5.0),
     testthat (>= 3.0.4),
