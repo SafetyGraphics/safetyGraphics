@@ -12,7 +12,8 @@ safetyGraphicsServer(
   mapping,
   domainData,
   charts,
-  filterDomain
+  filterDomain,
+  config
 )
 }
 \arguments{
