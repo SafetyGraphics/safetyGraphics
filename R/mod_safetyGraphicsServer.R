@@ -58,16 +58,12 @@ safetyGraphicsServer <- function(
                 )
             })
         )
-    
+
         observeEvent(input$participants_selected, {
             cli::cli_alert_info('Selected participant ID: {input$participants_selected}')
 
             # Navigate to patient profile.
-            #updateNavbarPage(
-            #    session,
-            #    "safetyGraphicsApp",
-            #    selected = 'profile'
-            #)
+
 
             # Update selected participant.
             updateSelectizeInput(

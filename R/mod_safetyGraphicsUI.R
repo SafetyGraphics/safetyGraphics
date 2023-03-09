@@ -39,7 +39,13 @@ safetyGraphicsUI <- function(id, meta, domainData, mapping, standards, config) {
             "<div id='pt-header' class='badge' title='Selected Participant'>",
             "None",
             "</div>",
-            "\");"
+            "\");",
+            "var ptheader = $('.navbar > .container-fluid > #pt-header');",
+            "ptheader.on('click',function(){",
+            "$('",
+            '[data-value="profile"]',
+            "').tab('show');",
+            "})"
         ))
     )
     

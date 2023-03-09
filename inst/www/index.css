@@ -66,6 +66,8 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
 
 #pt-header.active {
     background:#4B9CD3;
+    text-decoration:underline;
+    cursor:pointer;
 }
 
 #pt-header {
