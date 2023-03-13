@@ -46,9 +46,20 @@ safetyGraphicsUI <- function(id,
 
     #Set up ChartNav
     #trick for navbar menu: https://stackoverflow.com/questions/34846469/for-loops-lapply-navbarpage-within-in-ui-r
+    chartList <- charts %>%
+        purrr::map(function(chart) {
+            chartsNavUI(ns(chart$name), chart)
+        }) %>%
+        unname
 
-    chartList <- charts %>% purrr::map(~chartsNavUI(ns(.x$name),.x)) %>% unname
-    navParams<-c(list(title='Charts', icon=icon("chart-bar")), chartList)
+    navParams<-c(
+        list(
+            title='Charts',
+            icon=icon("chart-bar")
+        ),
+        chartList
+    )
+
     chartNav <- do.call(navbarMenu, navParams)
 
     #app UI using calls to modules

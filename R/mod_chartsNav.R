@@ -6,8 +6,9 @@
 #' @export 
 #' 
 
-chartsNavUI <- function(id, chart){
+chartsNavUI <- function(id, chart) {
     ns <- NS(id)
+
     panel<-tabPanel(
         title = uiOutput(ns("tabTitle")), 
         value = chart$name, 
@@ -16,6 +17,7 @@ chartsNavUI <- function(id, chart){
             chart=chart
         )
     )
+
     return(panel)
 }
 
@@ -32,6 +34,8 @@ chartsNavUI <- function(id, chart){
 #' 
 
 chartsNav<-function(input, output, session, chart, data, mapping){
+    ns <- session$ns
+
     chartStatus <- reactive({
         if(hasName(chart, 'dataSpec')){
             status<-getChartStatus(chart, mapping())
@@ -41,9 +45,14 @@ chartsNav<-function(input, output, session, chart, data, mapping){
         return(status)
     })    
 
-    ns <- session$ns
-    print(paste("running chartsNav() in:", ns('')))
-    output$tabTitle <- renderUI({makeChartSummary(chart, status=chartStatus(), showLinks=FALSE, class="chart-nav")})
+    output$tabTitle <- renderUI({
+        makeChartSummary(
+            chart,
+            status=chartStatus(),
+            showLinks=FALSE,
+            class="chart-nav"
+        )
+    })
 
     callModule(
         module=chartsTab,

@@ -56,7 +56,7 @@ safetyGraphicsApp <- function(
       meta = config$meta,
       mapping = config$mapping,
       domainData = config$domainData,
-      charts = charts,
+      charts = config$charts,
       standards = config$standards,
       config = config
     ),
