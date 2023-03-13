@@ -43,7 +43,12 @@ safetyGraphicsServer <- function(input, output, session,
 
     # Initialize Charts tab
     # Initialize Chart UI - adds subtabs to chart menu and initializes the chart UIs
-    #charts %>% purrr::map(~chartsNavUI(.x$name,.x))
+    charts %>% purrr::map(
+        ~chartsNavUI(
+            .x$name,
+            .x
+        )
+    )
 
     # Initialize Chart Servers
     charts %>% purrr::map(

@@ -39,16 +39,16 @@ safetyGraphicsApp <- function(
   message("Initializing safetyGraphicsApp")
 
   config <- app_startup(
-    domainData=domainData,
-    meta=meta,
-    charts=charts,
-    mapping=mapping,
-    autoMapping=autoMapping,
-    filterDomain=filterDomain,
-    chartSettingsPaths=chartSettingsPaths,
-    appName=appName,
-    hexPath=hexPath,
-    homeTabPath=homeTabPath
+    domainData = domainData,
+    meta = meta,
+    charts = charts,
+    mapping = mapping,
+    autoMapping = autoMapping,
+    filterDomain = filterDomain,
+    chartSettingsPaths = chartSettingsPaths,
+    appName = appName,
+    hexPath = hexPath,
+    homeTabPath = homeTabPath
   )
 
   app <- shinyApp(
@@ -61,7 +61,7 @@ safetyGraphicsApp <- function(
       config = config
     ),
     server = function(input, output, session) {
-      callModule(safetyGraphicsServer,
+      callModule(safetyGraphicsServer, id = 'sg',
         meta = config$meta, 
         mapping = config$mapping, 
         domainData = config$domainData, 
