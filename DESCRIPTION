@@ -1,6 +1,6 @@
 Package: safetyGraphics
 Title: Interactive Graphics for Monitoring Clinical Trial Safety
-Version: 2.2.0
+Version: 2.1.1
 Authors@R: c(
 	person("Jeremy", "Wildfire", email = "jwildfire@gmail.com", role = c("cre","aut")),
 	person("Becca", "Krouse", role="aut"),
@@ -16,7 +16,7 @@ Depends: R (>= 4.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.3
 Suggests:
     ggplot2 (>= 3.3.0),
     knitr (>= 1.34),

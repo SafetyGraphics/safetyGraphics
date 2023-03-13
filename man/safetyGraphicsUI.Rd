@@ -4,18 +4,18 @@
 \alias{safetyGraphicsUI}
 \title{UI for the core safetyGraphics app including Home, Mapping, Filter, Charts and Settings modules.}
 \usage{
-safetyGraphicsUI(id, charts, meta, domainData, mapping, standards)
+safetyGraphicsUI(id, meta, mapping, domainData, charts, standards, config)
 }
 \arguments{
 \item{id}{module ID}
 
-\item{charts}{list of charts in the format produced by safetyGraphics::makeChartConfig()}
-
 \item{meta}{data frame containing the metadata for use in the app.}
+
+\item{mapping}{data.frame specifying the initial values for each data mapping. If no mapping is provided, the app will attempt to generate one via \code{detectStandard()}}
 
 \item{domainData}{named list of data.frames to be loaded in to the app.}
 
-\item{mapping}{data.frame specifying the initial values for each data mapping. If no mapping is provided, the app will attempt to generate one via \code{detectStandard()}}
+\item{charts}{list of charts in the format produced by safetyGraphics::makeChartConfig()}
 
 \item{standards}{a list of information regarding data standards. Each list item should use the format returned by safetyGraphics::detectStandard.}
 }

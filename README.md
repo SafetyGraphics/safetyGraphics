@@ -2,7 +2,7 @@
   [![R build status](https://www.github.com/safetyGraphics/safetyGraphics/workflows/R-CMD-check-main/badge.svg)](https://github.com/SafetyGraphics/safetyGraphics/actions)
   <!-- badges: end -->
   
-# safetyGraphics: Clinical Trial Monitoring with R  <img src="https://raw.githubusercontent.com/SafetyGraphics/safetyGraphics/master/inst/safetyGraphicsHex/safetyGraphicsHex.png" width = "175" height = "200" align="right" />
+# safetyGraphics: Clinical Trial Monitoring with R  <img src="https://raw.githubusercontent.com/SafetyGraphics/safetyGraphics/master/inst/resources/safetyGraphicsHex.png" width = "175" height = "200" align="right" />
 
 The {safetyGraphics} package provides a framework for evaluating of clinical trial safety in R using a flexible data pipeline. The package includes a shiny application that allows users to explore safety data using a series of interactive graphics, including the hepatic safety explorer shown below.  The package has been developed as part of the <a target="_blank" href="https://safetygraphics.github.io/">Interactive Safety Graphics (ISG) workstream</a> of the ASA Biopharm-DIA Safety Working Group. 
 

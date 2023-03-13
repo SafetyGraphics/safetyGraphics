@@ -18,10 +18,20 @@
 #' 
 #' @export
 
-safetyGraphicsServer <- function(input, output, session, meta, mapping, domainData, charts, filterDomain){
+safetyGraphicsServer <- function(input, output, session,
+    meta,
+    mapping,
+    domainData,
+    charts,
+    filterDomain,
+    config
+) {
     # Initialize the Home tab
-    callModule(homeTab, "home")
-    
+    callModule(homeTab, "home", config)
+
+    # Initialize the Mapping tab - returns the current mapping as a reactive
+    current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
+
     # Initialize the Filter tab - returns list of filtered data as a reactive
     filtered_data<-callModule(
         filterTab, 
@@ -30,9 +40,6 @@ safetyGraphicsServer <- function(input, output, session, meta, mapping, domainDa
         filterDomain=filterDomain, 
         current_mapping=current_mapping
     )
-
-    # Initialize the Mapping tab - returns the current mapping as a reactive
-    current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
 
     # Initialize Charts tab
     # Initialize Chart UI - adds subtabs to chart menu and initializes the chart UIs

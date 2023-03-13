@@ -1,3 +1,7 @@
+# safetyGraphics v2.1.1
+
+Resolves a bug that was causing unexpected data filters on initial load. 
+
 # safetyGraphics v2.1.0
 
 This release focuses on updates the safetyGraphics metadata framework:

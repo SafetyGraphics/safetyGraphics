@@ -11,7 +11,10 @@ app_startup(
   mapping = NULL,
   autoMapping = NULL,
   filterDomain = NULL,
-  chartSettingsPaths = NULL
+  chartSettingsPaths = NULL,
+  appName = NULL,
+  hexPath = NULL,
+  homeTabPath = NULL
 )
 }
 \arguments{
@@ -28,6 +31,12 @@ app_startup(
 \item{filterDomain}{domain used for the data/filter tab. Demographics ("\code{dm}") is used by default. Using a domain that is not one record per participant is not recommended.}
 
 \item{chartSettingsPaths}{path(s) where customization functions are saved relative to your working directory. All charts can have initialization (e.g. myChart_Init.R) and static charts can have charting functions (e.g. myGraphic_Chart.R).   All R files in this folder are sourced and files with the correct naming convention are linked to the chart. See the Custom Charts vignette for more details.}
+
+\item{appName}{character string defining the name of the app (default = "safetyGraphics")}
+
+\item{hexPath}{path to image file with a hex or other logo. safetyGraphics hex used by default.}
+
+\item{homeTabPath}{path to html content to be used on the home page. default is a summary of the safetyGraphics framework.}
 }
 \value{
 List of elements for used to initialize the shiny app with the following parameters
