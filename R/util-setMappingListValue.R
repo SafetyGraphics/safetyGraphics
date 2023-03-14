@@ -17,7 +17,6 @@
 
 
 setMappingListValue <- function(key, value, settings, forceCreate=FALSE){
-
   if(typeof(settings)!="list"){
     if(forceCreate){
       settings=list()  

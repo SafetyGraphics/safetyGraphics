@@ -11,7 +11,6 @@
 makeChartSummary<- function(chart, status=NULL, showLinks=TRUE, class="chart-header"){
 
     if(!is.null(status)){
-        print(status)
         if(status$status){
             status <- div(class="status", tags$small("Status"), tags$i(class="fa fa-check-circle", style="color: green"),title=status$summary)
         }else{

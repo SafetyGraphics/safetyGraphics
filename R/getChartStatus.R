@@ -113,7 +113,6 @@ getChartStatus <- function(chart, mapping){
             })
             return(missingDomainCols)
         })
-        print(missingCols)
         summary<- paste0("Missing Mappings: ",paste(unlist(missingCols),collapse=","))
     }
 
