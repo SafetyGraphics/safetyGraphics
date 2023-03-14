@@ -27,7 +27,6 @@ setMappingListValue <- function(key, value, settings, forceCreate=FALSE){
   }
   
   firstKey <- key[[1]]
-  browser()
   if(length(key)==1){
     if(is.null(value)){
       settings[firstKey]<-list(NULL)

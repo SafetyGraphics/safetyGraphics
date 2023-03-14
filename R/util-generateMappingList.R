@@ -7,12 +7,15 @@
 #' @importFrom stringr str_split 
 #' @export
 
-generateMappingList <- function(settingsDF, domain=NULL, pull=FALSE){
+generateMappingList <- function(settingsDF, domain=NULL, pull=FALSE) {
+  if ('tbl_df' %in% class(settingsDF))
+    pull <- TRUE
+
   settingsList <- list()
   
   settingsDF$domain_key <- paste0(settingsDF$domain, "--", settingsDF$text_key)
   domain_keys <- settingsDF$domain_key %>% textKeysToList()
-browser()
+
   settingsList<-list()
   for (i in 1:length(domain_keys) ) {
     settingsList<-setMappingListValue(
@@ -27,7 +30,7 @@ browser()
       forceCreate=TRUE
     )
   }
-browser()
+
   if(is.null(domain)){
     return(settingsList)
   }else if(length(domain)>1){

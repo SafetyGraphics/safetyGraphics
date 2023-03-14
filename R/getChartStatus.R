@@ -31,7 +31,7 @@
 #' check <- safetyGraphics:::getChartStatus(chart=sample_chart, mapping=sample_mapping) 
 #' # check$status=TRUE
 #'
-#' # Add data spec to 
+#' # Add data spec to each chart.
 #' charts <- makeChartConfig() %>%
 #'     map(function(chart) {
 #'         chart$mapping <- chart$domain %>%
@@ -59,6 +59,8 @@
 #' 
 #'         chart
 #'     })
+#'
+#' checks <- map(charts, ~getChartStatus(.x, .x$mapping))
 #' 
 #' @importFrom purrr imap map
 #' @importFrom rlang set_names
@@ -74,7 +76,6 @@ getChartStatus <- function(chart, mapping){
     colStatus <- names(chart$dataSpec) %>% map(function(domain){
         domainMapping <- generateMappingList(settingsDF=mapping, domain=domain)
         requiredCols <- chart$dataSpec[[domain]]
-        browser()
         colStatus <- requiredCols %>% map(function(col){
             if(hasName(domainMapping,col)){
                 status<-case_when(
