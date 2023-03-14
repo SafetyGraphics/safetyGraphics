@@ -12,17 +12,22 @@ generateMappingList <- function(settingsDF, domain=NULL, pull=FALSE){
   
   settingsDF$domain_key <- paste0(settingsDF$domain, "--", settingsDF$text_key)
   domain_keys <- settingsDF$domain_key %>% textKeysToList()
-  
+browser()
   settingsList<-list()
   for (i in 1:length(domain_keys) ) {
     settingsList<-setMappingListValue(
       key=domain_keys[[i]],
-      value=ifelse(pull, settingsDF[i,"current"]%>%pull(), settingsDF[i,"current"]), 
+      value=ifelse(
+        pull,
+        settingsDF[i,"current"] %>%
+          pull(),
+        settingsDF[i,"current"]
+      ), 
       settings=settingsList,
       forceCreate=TRUE
     )
   }
-
+browser()
   if(is.null(domain)){
     return(settingsList)
   }else if(length(domain)>1){

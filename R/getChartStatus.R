@@ -1,16 +1,17 @@
 #' Check the status of a chart based on the current mapping
 #'
-#' Checks a chart's status when column-level chart specifications are provided in chart$dataSpec. Note that safetyGraphicsApp() does not allow a `mapping` value that is not found in `domainData`, so this function only needs to check that an expected parameter exists in `mapping` (not that the specified column is found in the loaded data). 
+#' Checks a chart's status when column-level chart specifications are provided in chart$dataSpec.
+#' Note that safetyGraphicsApp() does not allow a `mapping` value that is not found in `domainData`,
+#' so this function only needs to check that an expected parameter exists in `mapping` (not that the
+#' specified column is found in the loaded data). 
 #' 
-#' Returns a list, with:
-#' - `status` (TRUE, FALSE)
-#' - `domains` a list specifying wheter all columns are specified in each domain
-#' - `columns`  a list that matches the structure of chart$dataSpec and indicates which variables are available. 
-#'
-#' @param chart chart object
-#' @param mapping the current mapping data.frame 
+#' @param chart `list` chart object
+#' @param mapping `data.frame` current mapping
 #' 
-#' @return a list with `status`, `domains` and `columns` properties
+#' @return `list` Named list with properties:
+#' - status `logical`
+#' - domains `list` list specifying whether all columns are specified in each domain
+#' - columns `list`  list that matches the structure of chart$dataSpec and indicates which variables are available. 
 #'
 #' @examples
 #' sample_chart <- list(
@@ -30,9 +31,39 @@
 #' check <- safetyGraphics:::getChartStatus(chart=sample_chart, mapping=sample_mapping) 
 #' # check$status=TRUE
 #'
-#' @importFrom purrr map_lgl set_names
+#' # Add data spec to 
+#' charts <- makeChartConfig() %>%
+#'     map(function(chart) {
+#'         chart$mapping <- chart$domain %>%
+#'             map_dfr(function(domain) {
+#'                 do.call(
+#'                     `::`,
+#'                     list(
+#'                         'safetyCharts',
+#'                         paste0('meta_', domain)
+#'                     )
+#'                 )
+#'             }) %>%
+#'             distinct(domain, col_key, current = standard_adam) %>%
+#'             filter(!is.na(current)) %>%
+#'             select(domain, text_key = col_key, current)
+#' 
+#'         chart$dataSpec <- chart$domain %>%
+#'             map(function(domain) {
+#'                 chart$mapping %>%
+#'                     filter(.data$domain == !!domain) %>%
+#'                     pull(text_key) %>%
+#'                     unique()
+#'             }) %>%
+#'             set_names(chart$domain)
+#' 
+#'         chart
+#'     })
+#' 
+#' @importFrom purrr imap map
+#' @importFrom rlang set_names
+#'
 #' @keywords internal
-
 getChartStatus <- function(chart, mapping){
     stopifnot(
         "Can't get status since chart does not have dataSpec associated."=hasName(chart, 'dataSpec')
@@ -43,6 +74,7 @@ getChartStatus <- function(chart, mapping){
     colStatus <- names(chart$dataSpec) %>% map(function(domain){
         domainMapping <- generateMappingList(settingsDF=mapping, domain=domain)
         requiredCols <- chart$dataSpec[[domain]]
+        browser()
         colStatus <- requiredCols %>% map(function(col){
             if(hasName(domainMapping,col)){
                 status<-case_when(

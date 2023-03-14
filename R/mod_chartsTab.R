@@ -30,8 +30,6 @@ chartsTabUI <- function(id, chart){
 
 chartsTab <- function(input, output, session, chart, data, mapping, status){  
   ns <- session$ns
-  
-  print(paste("running chartsTab in:", ns('')))
 
   # Draw the header
   output$`chart-header` <- renderUI({makeChartSummary(chart, status=status())})
@@ -62,7 +60,7 @@ chartsTab <- function(input, output, session, chart, data, mapping, status){
     where="beforeEnd",
     ui=downloadButton(ns("scriptDL"), "R script", class="pull-right btn-xs dl-btn")
   )
-  
+
   mapping_list<-reactive({
     mapping_list <- generateMappingList(mapping() %>% filter(.data$domain %in% chart$domain))
     if(length(mapping_list)==1){
@@ -99,7 +97,7 @@ chartsTab <- function(input, output, session, chart, data, mapping, status){
           mapping = mapping(), 
           chart = chart
         )
-        
+
         rmarkdown::render(
           tempReport,
           output_file = file,
