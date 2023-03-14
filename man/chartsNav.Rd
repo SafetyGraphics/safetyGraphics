@@ -2,15 +2,23 @@
 % Please edit documentation in R/mod_chartsNav.R
 \name{chartsNav}
 \alias{chartsNav}
-\title{Adds a navbar tab that initializes the Chart Module UI}
+\title{Server for  a navbar tab}
 \usage{
-chartsNav(chart, ns)
+chartsNav(input, output, session, chart, data, mapping)
 }
 \arguments{
-\item{chart}{chart metadata}
+\item{input}{Input objects from module namespace}
 
-\item{ns}{namespace}
+\item{output}{Output objects from module namespace}
+
+\item{session}{An environment that can be used to access information and functionality relating to the session}
+
+\item{chart}{list containing a safetyGraphics chart object like those returned by \link{makeChartConfig}.}
+
+\item{data}{named list of current data sets (Reactive).}
+
+\item{mapping}{tibble capturing the current data mappings (Reactive).}
 }
 \description{
-Adds a navbar tab that initializes the Chart Module UI
+Server for  a navbar tab
 }
