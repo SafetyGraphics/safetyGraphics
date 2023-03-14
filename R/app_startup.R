@@ -55,18 +55,18 @@ app_startup<-function(domainData=NULL, meta=NULL, charts=NULL, mapping=NULL, aut
         message("- Dropped ", length(envDrops), " chart(s) with `env` paramter missing or not set to 'safetyGraphics': ",paste(names(envDrops), collapse=", "))
     }
     charts <- charts %>% purrr::keep(~.x$envValid)
-    
+
     #Drop charts if data for required domain(s) is not found
     domainDrops <- charts %>% purrr::keep(~(!all(.x$domain %in% names(domainData))))
     if(length(domainDrops)>0){
         message("- Dropped ", length(domainDrops), " chart(s) with missing data domains: ", paste(names(domainDrops), collapse=", "))
     }
     charts <- charts %>% purrr::keep(~all(.x$domain %in% names(domainData)))
-    
+
     # sort charts based on order  
     chartOrder <- order(charts %>% map_dbl(~.x$order) %>% unlist())
     charts <- charts[chartOrder]
-    
+
     message("- Initializing app with ",length(charts), " chart(s).")
 
     # Set filterDomain to NULL if specified domain doesn't exist

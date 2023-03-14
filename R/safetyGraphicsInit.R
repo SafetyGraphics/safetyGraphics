@@ -130,6 +130,7 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000, maxFile
         safetyGraphicsUI(
           "sg",
           config$meta, 
+          config$charts,
           config$domainData, 
           config$mapping, 
           config$standards

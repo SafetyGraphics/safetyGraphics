@@ -14,14 +14,11 @@
 #' @import shiny
 #' @import dplyr
 #' @importFrom purrr map
-#' @importFrom shinyjs html
+#' @importFrom shinyjs html toggleClass
 #' 
 #' @export
 
-safetyGraphicsServer <- function(
-    input,
-    output,
-    session,
+safetyGraphicsServer <- function(input, output, session,
     meta,
     mapping,
     domainData,
@@ -29,10 +26,22 @@ safetyGraphicsServer <- function(
     filterDomain,
     config
 ) {
-    #Initialize modules
-    current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
-    
-    # Initialize the filter tab 
+    # Initialize the Home tab
+    callModule(
+        homeTab,
+        "home",
+        config
+    )
+
+    # Initialize the Mapping tab - returns the current mapping as a reactive
+    current_mapping<-callModule(
+        mappingTab,
+        "mapping",
+        meta,
+        domainData
+    )
+
+    # Initialize the Filter tab - returns list of filtered data as a reactive
     filtered_data<-callModule(
         filterTab, 
         "filter", 
@@ -40,25 +49,35 @@ safetyGraphicsServer <- function(
         filterDomain=filterDomain, 
         current_mapping=current_mapping
     )
-    
-    callModule(homeTab, "home", config)
 
-    #Initialize Chart UI - Adds subtabs to chart menu - this initializes initializes chart UIs
-    charts %>% purrr::map(~chartsNav(.x,session$ns))
+    # Initialize Charts tab
+    # Initialize Chart UI - adds subtabs to chart menu and initializes the chart UIs
+    #charts %>% purrr::map(
+    #    ~chartsNav(
+    #        .x,
+    #        session$ns
+    #    )
+    #)
 
-    #Initialize Chart Servers
-    validDomains <- tolower(names(mapping))
-    charts %>% purrr::map(
+    # Initialize Chart Servers
+    charts %>% purrr::walk(
         ~callModule(
-            module=chartsTab,
+            module=chartsNav,
             id=.x$name,
             chart=.x,
             data=filtered_data,
-            mapping=current_mapping    
+            mapping=current_mapping 
         )
     )
 
-    #Setting tab
-    callModule(settingsTab, "settings", domains = domainData,  metadata=meta, mapping=current_mapping, charts = charts)
+    # Initialize the Setting tab
+    callModule(
+        settingsTab,
+        "settings",
+        domains = domainData,
+        metadata=meta,
+        mapping=current_mapping,
+        charts = charts
+    )
 }
 
