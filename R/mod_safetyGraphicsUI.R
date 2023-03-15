@@ -38,6 +38,24 @@ safetyGraphicsUI <- function(id,
             "\");"
         ))
     )
+
+    pt_selected<-tags$script(
+        HTML(paste0(
+            "var header = $('.navbar > .container-fluid');",
+            "header.append(\"",
+            "<div id='pt-header' class='badge' title='Selected Participant'>",
+            "None",
+            "</div>",
+            "\");",
+            "var ptheader = $('.navbar > .container-fluid > #pt-header');",
+            "ptheader.on('click',function(){",
+            "$('",
+            '[data-value="profile"]',
+            "').tab('show');",
+            "})"
+        ))
+    )
+    
     if(isNamespaceLoaded("shinybusy")){
         spinner<-shinybusy::add_busy_spinner(spin = "atom", position="bottom-right")
     }else{
@@ -80,10 +98,17 @@ safetyGraphicsUI <- function(id,
             tabPanel("Home", icon=icon("home"), homeTabUI(ns("home"))),
             tabPanel("Mapping", icon=icon("map"), mappingTabUI(ns("mapping"), meta, domainData, mapping, standards)),
             tabPanel("Filtering", icon=icon("filter"), filterTabUI(ns("filter"))),
+            tabPanel(
+                "Profile",
+                icon=icon("person"),
+                value='profile',
+                profileTabUI(ns("profile"))
+            ),
             chartNav,
             tabPanel('',icon=icon("cog"), settingsTabUI(ns("settings")))
         ),
-        participant_badge
+        participant_badge,
+        pt_selected
     )
     return(ui)
 }
