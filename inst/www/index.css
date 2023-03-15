@@ -64,8 +64,20 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   margin-top:1em;
 }
 
+#pt-header.active {
+    background:#4B9CD3;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+#pt-header {
+  float: right;
+  margin-top: 1em;
+  margin-right:1em;
+}
+
 #population-header.subset {
-    background: blue;
+  background: green;
 }
 
 #dataSettings-previews .nav-tabs{

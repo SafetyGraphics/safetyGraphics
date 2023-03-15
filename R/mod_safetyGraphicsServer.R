@@ -26,14 +26,14 @@ safetyGraphicsServer <- function(input, output, session,
     filterDomain,
     config
 ) {
-    # Initialize the Home tab.
+    #--- Home tab ---#
     callModule(
         homeTab,
         "home",
         config
     )
 
-    # Initialize the Mapping tab: returns the current mapping as a reactive.
+    #--- Mapping tab ---#
     current_mapping<-callModule(
         mappingTab,
         "mapping",
@@ -41,7 +41,7 @@ safetyGraphicsServer <- function(input, output, session,
         domainData
     )
 
-    # Initialize the Filter tab: returns a list of filtered data as a reactive.
+    #--- Filter tab ---#
     filtered_data<-callModule(
         filterTab, 
         "filter", 
@@ -50,7 +50,35 @@ safetyGraphicsServer <- function(input, output, session,
         current_mapping=current_mapping
     )
 
-    #Initialize Chart Servers
+    #--- Profile tab ---#
+    if(isNamespaceLoaded("safetyProfile")){
+        callModule(
+            profileTab, 
+            "profile", 
+            params = reactive({
+                list(
+                    data=filtered_data(), 
+                    settings=safetyGraphics::generateMappingList(current_mapping())
+                )
+            })
+        )
+
+        observeEvent(input$participants_selected, {
+            cli::cli_alert_info('Selected participant ID: {input$participants_selected}')
+
+            # Update selected participant.
+            updateSelectizeInput(
+                session,
+                inputId = 'profile-profile-idSelect',
+                selected = input$participants_selected
+            )
+        })
+    } else {
+        shinyjs::hide(selector = paste0(".navbar li a[data-value='profile']"))
+        shinyjs::hide(selector = paste0(".navbar #pt-header"))
+    }
+
+    #--- Charts tab ---# 
     module_outputs <- reactiveValues()
     charts %>%
         purrr::walk(function(chart) {
@@ -64,11 +92,9 @@ safetyGraphicsServer <- function(input, output, session,
             )
 
             module_outputs[[ chart$name ]] <- module_output
-
-            return(module_output)
         })
 
-    # Initialize the Setting tab.
+    #--- Settings tab ---#
     callModule(
         settingsTab,
         "settings",
