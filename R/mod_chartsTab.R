@@ -28,11 +28,22 @@ chartsTabUI <- function(id, chart){
 #' 
 #' @export
 
-chartsTab <- function(input, output, session, chart, data, mapping, status, module_outputs) {
+chartsTab <- function(input, output, session,
+    chart,
+    data,
+    mapping,
+    status,
+    module_outputs
+) {
   ns <- session$ns
 
   # Draw the header
-  output$`chart-header` <- renderUI({makeChartSummary(chart, status=status())})
+  output$`chart-header` <- renderUI({
+    makeChartSummary(
+      chart,
+      status=status()
+    )
+  })
 
   # Initialize chart-specific parameters  
   params <- reactive({ 

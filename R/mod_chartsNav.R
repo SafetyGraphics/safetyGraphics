@@ -42,6 +42,7 @@ chartsNav<-function(input, output, session, chart, data, mapping, module_outputs
         }else{
             status<-NULL
         }
+
         return(status)
     })    
 
