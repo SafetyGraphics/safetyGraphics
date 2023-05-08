@@ -39,12 +39,12 @@ safetyGraphicsApp <- function(
   message("Initializing safetyGraphicsApp")
 
   config <- app_startup(
-    domainData = domainData,
     meta = meta,
-    charts = charts,
     mapping = mapping,
-    autoMapping = autoMapping,
+    domainData = domainData,
+    charts = charts,
     filterDomain = filterDomain,
+    autoMapping = autoMapping,
     chartSettingsPaths = chartSettingsPaths,
     appName = appName,
     hexPath = hexPath,

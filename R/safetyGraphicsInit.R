@@ -116,38 +116,39 @@ safetyGraphicsInit <- function(charts=makeChartConfig(), delayTime=1000, maxFile
     observeEvent(input$runApp,{
       shinyjs::hide(id="init")
       shinyjs::show(id="sg-app")
-      config<- app_startup(
-        domainData = domainData() %>% keep(~!is.null(.x)),
+
+      config <- app_startup(
         meta = NULL, 
-        charts= charts(),
         #mapping=NULL, 
-        filterDomain="dm", 
-        autoMapping=TRUE, 
+        domainData = domainData() %>%
+            keep(~!is.null(.x)),
+        charts = charts(),
+        filterDomain = "dm", 
+        autoMapping = TRUE, 
         #chartSettingsPaths = NULL
       )
           
       output$sg <- renderUI({
-        safetyGraphicsUI(
-          "sg",
-          config$meta, 
-          config$charts,
-          config$domainData, 
-          config$mapping, 
-          config$standards
+        safetyGraphicsUI("sg",
+          meta = config$meta, 
+          mapping = config$mapping, 
+          domainData = config$domainData, 
+          charts = config$charts,
+          standards = config$standards,
+          config = config
         )    
       })
 
       # delay is needed to get the appendTab in mod_chartsNav to trigger properly 
       shinyjs::delay(
         delayTime,
-        callModule(
-          safetyGraphicsServer,
-          "sg",
-          config$meta, 
-          config$mapping, 
-          config$domainData, 
-          config$charts, 
-          config$filterDomain
+        callModule(safetyGraphicsServer, "sg",
+          meta = config$meta, 
+          mapping = config$mapping, 
+          domainData = config$domainData, 
+          charts = config$charts, 
+          filterDomain = config$filterDomain,
+          config = config
         )
       )
     })
