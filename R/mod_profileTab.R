@@ -8,11 +8,7 @@ profileTabUI <- function(id){
     ns <- NS(id)
     
     if(isNamespaceLoaded("safetyProfile")){
-        profile_ui<-list(
-            h1(paste("Participant Profile")),
-            span("This page shows details for a selected participant."),
-            profile_ui(ns("profile"))
-        )
+        profile_ui<-profile_ui(ns("profile"))
     }else{
         profile_ui<-NULL
     }
