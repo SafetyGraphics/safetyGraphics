@@ -69,7 +69,7 @@ safetyGraphicsServer <- function(input, output, session,
             # Update selected participant.
             updateSelectizeInput(
                 session,
-                inputId = 'profile-profile-idSelect',
+                inputId = 'profile-profile-id-idSelect',
                 selected = input$participants_selected
             )
         })
