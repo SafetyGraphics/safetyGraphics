@@ -28,11 +28,22 @@ chartsTabUI <- function(id, chart){
 #' 
 #' @export
 
-chartsTab <- function(input, output, session, chart, data, mapping, status){  
+chartsTab <- function(input, output, session,
+    chart,
+    data,
+    mapping,
+    status,
+    module_outputs
+) {
   ns <- session$ns
 
   # Draw the header
-  output$`chart-header` <- renderUI({makeChartSummary(chart, status=status())})
+  output$`chart-header` <- renderUI({
+    makeChartSummary(
+      chart,
+      status=status()
+    )
+  })
 
   # Initialize chart-specific parameters  
   params <- reactive({ 
@@ -44,16 +55,22 @@ chartsTab <- function(input, output, session, chart, data, mapping, status){
   })
 
   # Draw the chart
-  if(chart$type=="module"){
-    callModule(chart$functions$main, "chart-wrap", params)
-  }else{
-    output[["chart-wrap"]] <- chart$functions$server(
+  if(chart$type=="module") {
+    module_output <- callModule(
+        chart$functions$main,
+        "chart-wrap",
+        params,
+        module_outputs
+    )
+  } else {
+    module_output <- output[["chart-wrap"]] <- chart$functions$server(
       do.call(
         chart$functions$main,
         params()
       )
     )
   }
+
   # Download R script
   insertUI(
     paste0(".",ns("header"), " .chart-header"), 
@@ -107,4 +124,6 @@ chartsTab <- function(input, output, session, chart, data, mapping, status){
       }
     )
   }
+
+  return(module_output)
 }

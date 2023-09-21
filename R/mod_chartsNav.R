@@ -33,7 +33,7 @@ chartsNavUI <- function(id, chart) {
 #' @export 
 #' 
 
-chartsNav<-function(input, output, session, chart, data, mapping){
+chartsNav<-function(input, output, session, chart, data, mapping, module_outputs) {
     ns <- session$ns
 
     chartStatus <- reactive({
@@ -42,6 +42,7 @@ chartsNav<-function(input, output, session, chart, data, mapping){
         }else{
             status<-NULL
         }
+
         return(status)
     })    
 
@@ -54,12 +55,15 @@ chartsNav<-function(input, output, session, chart, data, mapping){
         )
     })
 
-    callModule(
+    module_output <- callModule(
         module=chartsTab,
         id='chart',
         chart=chart,
         data=data,
         mapping=mapping,
-        status=chartStatus
+        status=chartStatus,
+        module_outputs = module_outputs
     )
+
+    module_output
 }

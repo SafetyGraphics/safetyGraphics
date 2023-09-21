@@ -77,17 +77,22 @@ safetyGraphicsServer <- function(input, output, session,
         shinyjs::hide(selector = paste0(".navbar li a[data-value='profile']"))
         shinyjs::hide(selector = paste0(".navbar #pt-header"))
     }
-    
+
     #--- Charts tab ---# 
-    charts %>% purrr::walk(
-        ~callModule(
-            module=chartsNav,
-            id=.x$name,
-            chart=.x,
-            data=filtered_data,
-            mapping=current_mapping 
-        )
-    )
+    module_outputs <- reactiveValues()
+    charts %>%
+        purrr::walk(function(chart) {
+            module_output <- callModule(
+                module=chartsNav,
+                id=chart$name,
+                chart=chart,
+                data=filtered_data,
+                mapping=current_mapping,
+                module_outputs=module_outputs
+            )
+
+            module_outputs[[ chart$name ]] <- module_output
+        })
 
     #--- Settings tab ---#
     callModule(
