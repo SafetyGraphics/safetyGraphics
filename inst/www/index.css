@@ -64,8 +64,20 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   margin-top:1em;
 }
 
+#pt-header.active {
+    background:#4B9CD3;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+#pt-header {
+  float: right;
+  margin-top: 1em;
+  margin-right:1em;
+}
+
 #population-header.subset {
-    background: blue;
+  background: green;
 }
 
 #dataSettings-previews .nav-tabs{
@@ -130,12 +142,12 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   display:inline-block;
 }
 
-.chart-nav div:not(:first-child){
+.chart-nav div:not(.name){
   font-size:0.8em;
   color: #999;
 }
 
-.chart-nav div:last-child::before{
+.chart-nav div.domain::before{
   content: "/";
 }
 
@@ -152,4 +164,9 @@ table.metatable.dataTable tr > td:last-of-type, table.metatable.trdataTable tr >
   border:1px solid #bee5eb;
 }
 
+/* Right align chart status */
+div.chart-header div.status{
+  float:right;
+  cursor:help
+}
 

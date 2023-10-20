@@ -37,6 +37,14 @@ prepareChart <- function(chart){
         tolower(chart$env)=="safetygraphics"
     )
 
+    # check to see if data specifications are provided in domain
+    if(typeof(chart$domain)=="list"){
+        if(!hasName(chart,"dataSpec")){
+            chart$dataSpec <- chart$domain
+        }
+        chart$domain <- names(chart$domain)
+    }
+
     #### Bind Workflow functions to chart object ####
     if(!hasName(chart,"functions")){
 

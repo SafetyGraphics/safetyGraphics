@@ -14,15 +14,34 @@
 #' @import shiny
 #' @import dplyr
 #' @importFrom purrr map
-#' @importFrom shinyjs html
+#' @importFrom shinyjs html toggleClass
 #' 
 #' @export
 
-safetyGraphicsServer <- function(input, output, session, meta, mapping, domainData, charts, filterDomain){
-    #Initialize modules
-    current_mapping<-callModule(mappingTab, "mapping", meta, domainData)
-    
-    # Initialize the filter tab 
+safetyGraphicsServer <- function(input, output, session,
+    meta,
+    mapping,
+    domainData,
+    charts,
+    filterDomain,
+    config
+) {
+    #--- Home tab ---#
+    callModule(
+        homeTab,
+        "home",
+        config
+    )
+
+    #--- Mapping tab ---#
+    current_mapping<-callModule(
+        mappingTab,
+        "mapping",
+        meta,
+        domainData
+    )
+
+    #--- Filter tab ---#
     filtered_data<-callModule(
         filterTab, 
         "filter", 
@@ -30,25 +49,54 @@ safetyGraphicsServer <- function(input, output, session, meta, mapping, domainDa
         filterDomain=filterDomain, 
         current_mapping=current_mapping
     )
+
+    #--- Profile tab ---#
+    if(isNamespaceLoaded("safetyProfile")){
+        callModule(
+            profileTab, 
+            "profile", 
+            params = reactive({
+                list(
+                    data=filtered_data(), 
+                    settings=safetyGraphics::generateMappingList(current_mapping())
+                )
+            })
+        )
+
+        observeEvent(input$participants_selected, {
+            cli::cli_alert_info('Selected participant ID: {input$participants_selected}')
+
+            # Update selected participant.
+            updateSelectizeInput(
+                session,
+                inputId = 'profile-profile-id-idSelect',
+                selected = input$participants_selected
+            )
+        })
+    } else {
+        shinyjs::hide(selector = paste0(".navbar li a[data-value='profile']"))
+        shinyjs::hide(selector = paste0(".navbar #pt-header"))
+    }
     
-    callModule(homeTab, "home")
-
-    #Initialize Chart UI - Adds subtabs to chart menu - this initializes initializes chart UIs
-    charts %>% purrr::map(~chartsNav(.x,session$ns))
-
-    #Initialize Chart Servers
-    validDomains <- tolower(names(mapping))
-    charts %>% purrr::map(
+    #--- Charts tab ---# 
+    charts %>% purrr::walk(
         ~callModule(
-            module=chartsTab,
+            module=chartsNav,
             id=.x$name,
             chart=.x,
             data=filtered_data,
-            mapping=current_mapping    
+            mapping=current_mapping 
         )
     )
 
-    #Setting tab
-    callModule(settingsTab, "settings", domains = domainData,  metadata=meta, mapping=current_mapping, charts = charts)
+    #--- Settings tab ---#
+    callModule(
+        settingsTab,
+        "settings",
+        domains = domainData,
+        metadata=meta,
+        mapping=current_mapping,
+        charts = charts
+    )
 }
 

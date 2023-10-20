@@ -10,7 +10,7 @@
 
 chartsTabUI <- function(id, chart){
   ns <- shiny::NS(id)    
-  header<-div(class=ns("header"), makeChartSummary(chart))
+  header<- uiOutput(ns("chart-header"))
   chartWrap<-chart$functions$ui(ns("chart-wrap"))
 
   return(list(header, chartWrap))
@@ -24,12 +24,16 @@ chartsTabUI <- function(id, chart){
 #' @param chart list containing a safetyGraphics chart object like those returned by \link{makeChartConfig}.
 #' @param data named list of current data sets (Reactive).
 #' @param mapping tibble capturing the current data mappings (Reactive).
+#' @param status chart status (Reactive)
 #' 
 #' @export
 
-chartsTab <- function(input, output, session, chart, data, mapping){  
+chartsTab <- function(input, output, session, chart, data, mapping, status){  
   ns <- session$ns
-  
+
+  # Draw the header
+  output$`chart-header` <- renderUI({makeChartSummary(chart, status=status())})
+
   # Initialize chart-specific parameters  
   params <- reactive({ 
     makeChartParams(
@@ -56,7 +60,7 @@ chartsTab <- function(input, output, session, chart, data, mapping){
     where="beforeEnd",
     ui=downloadButton(ns("scriptDL"), "R script", class="pull-right btn-xs dl-btn")
   )
-  
+
   mapping_list<-reactive({
     mapping_list <- generateMappingList(mapping() %>% filter(.data$domain %in% chart$domain))
     if(length(mapping_list)==1){
@@ -93,7 +97,7 @@ chartsTab <- function(input, output, session, chart, data, mapping){
           mapping = mapping(), 
           chart = chart
         )
-        
+
         rmarkdown::render(
           tempReport,
           output_file = file,
